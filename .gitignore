@@ -1,0 +1,22 @@
+# pinned toolchains (scripts/get_toolchain.sh installs here)
+/.toolchain/
+# build products (reach into them counts as reading the reference: guard rule 1d)
+target/
+/build/
+.verus-log/
+.verus-solver-log/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+# instructor and guard state
+/instructor/scratch/
+/.claude/state/
+# LaTeX by-products
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.fls
+paper/**/*.fdb_latexmk
+paper/**/*.out
+paper/**/*.synctex.gz
