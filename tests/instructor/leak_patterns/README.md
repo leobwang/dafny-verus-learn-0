@@ -41,7 +41,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 | Q17 | `Q17.txt`: 8 (H1d three times, H2v twice, H3d, A1d twice) | 2026-10-14 (DV6 fix round: the verifier over all 18 modules, 1,634 public files, after the round's chapter, rubric, fixture and plant edits) | 8 OK |
 | Q18 | `Q18.txt`: 8 (H1d, H1v, H2d with A2dv, H2v with A2dv, H3py, H4py, H6py, H7py) | 2026-10-14 (DV6 fix round: the verifier over all 18 modules, 1,634 public files, after the round's chapter, rubric, fixture and plant edits) | 8 OK |
 | R01 | `R01.txt`: 8 (H1d–H3d, H1v–H3v, T1d, T1v) | 2026-10-17 (19 modules, 1,704 public files; local source scan) | 8 OK; live sessions deferred |
-| R02 | `R02.txt`: 8 (H1d/v, H2d/v, H4d/v, H5d/v) | 2026-10-17 (DVR1 build; final scan recorded in protected notes) | 8 pending |
+| R02 | `R02.txt`: 8 (H1d/v, H2d/v, H4d/v, H5d/v) | 2026-10-17 (DVR1 build; final scan recorded in protected notes) | 8 OK |
 
 ## The verifier
 

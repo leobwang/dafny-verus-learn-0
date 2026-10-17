@@ -8,7 +8,7 @@ A self-study course teaching Dafny and Verus side by side, aimed at research in 
 
 **Current build exception (D45, Δ247):** the user instructed “record the blocker and skip. continue to build.” Live Claude acceptance, skill simulations, calibration and contractor/capstone transcripts are deferred validation debt and do not gate this build or the initial Basic release. They are not passes. The model reserve, guards, full local CI, frozen-tree leak audit and D42 squash/history checks remain in force. See `docs/design/BASIC-RELEASE.md` §11.
 
-**R authoring checkpoint:** R01 course content and frozen regex layers A1/A1b/A2 are built; R01 native admission and focused local CI pass. R02 content is built and in final local validation; R03–R16 and challenges remain planned. Q release work remains isolated; R commits will be transplanted onto the released Basic baseline.
+**R authoring checkpoint:** R01 course content and frozen regex layers A1/A1b/A2 are built; R01 native admission and focused local CI pass. R02 content and its focused local checks are complete; R03–R16 and challenges remain planned. Q release work remains isolated; R commits will be transplanted onto the released Basic baseline.
 
 ## §Roles
 

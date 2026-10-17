@@ -39,3 +39,11 @@ Private evidence is `/tmp/dvl0-dvr1-r02/`, to archive under guarded `author-prob
 2. Final staged leak audit, clean diff, archive evidence and finish the R02 checkpoint. Keep the study deny rules committed.
 3. Continue R03 in a new isolated authoring worktree. PLAN §6.3 and protected R-author-notes §4 are canonical. The R03–R16 Dafny induction setting is DVR1's delegated decision (PLAN §8 R2); record its as-built adoption before arming R03. Do not silently import A2 into R03: its declared layer is A1.
 4. Preserve old authoring histories. At Q CI success, promote the D42 squash, then transplant these R commits onto Basic without bringing the old authoring ancestry into shipped history. Numbered R as-built DELTAS entries are added at integration to avoid clashing with Q's Δ248/249 and release entry. No external push.
+
+## Final R02 evidence checkpoint
+
+- Content checkpoint `34b33b5`. Focused author CI `20261017T043710Z-466203` passes all six selected jobs in 624 seconds: static 458s, verify-r-dafny24s, verify-r-verus41s, paper30s, rubric0s and harness71s; zero failed/skipped/absent. The final targeted R02 pins check passes25 checks with zero problems.
+- All static course-map cases pass. Both reference unit/agent seed sweeps are stable; admission10/10, study workflow13/13, golden reference predictions5/5, final chapter/freeze/lint checks clean. Paraphrased gold fixture was separately recompiled successfully (`paper-checks/gold-paraphrase-final.log`).
+- Final source-leak audit is repeated after these status edits. Evidence is archived under the guarded `author-probes/dvr1/r02-final-20261017/` with a tracked-tree hash inventory and provenance.
+- R03 worktree `../dafny-verus-learn-0-r03-authoring`, branch `authoring-r03`, starts at34b33b5. Carry this final R02 evidence commit into it. It is in authoring mode, with no R03 files written yet and no R03 native solver lane started.
+- Reserve Δ250 for the Q release step and Δ251 for the R01/R02 foundation as-built record plus DVR1's R03–R16 Dafny induction adoption. The latter must appear before R03 is armed; carry it into the canonical sequence at integration. No Q candidate source payload changes for this R decision.
