@@ -236,6 +236,93 @@ class RunCapped(unittest.TestCase):
         self.assertEqual(p.stdout.strip(), "refused", p.stderr)
 
 
+class SolverSlice(unittest.TestCase):
+    """Every capped job's scope lies in the user slice dvl0.slice, whose own MemoryMax=48G
+    bounds all solver jobs together (CLAUDE.md §Resources), while each job keeps its cap."""
+
+    SHIM = r"""#!/bin/sh
+printf '%s' "$(basename "$0")" >> "$SHIM_LOG"
+for a in "$@"; do printf ' %s' "$a" >> "$SHIM_LOG"; done
+printf '\n' >> "$SHIM_LOG"
+case "$(basename "$0")" in
+  systemctl)
+    case " $* " in
+      *" set-property "*) exit "${SHIM_SET_EXIT:-0}" ;;
+      *" show "*) printf 'MemoryMax=%s\nMemorySwapMax=0\n' "${SHIM_SHOW_MAX:-51539607552}"; exit 0 ;;
+      *) exit 0 ;;
+    esac ;;
+  systemd-run)
+    while [ "$#" -gt 0 ] && [ "$1" != "--" ]; do shift; done
+    shift
+    exec "$@" ;;
+esac
+"""
+
+    def _shimmed(self, code, **env):
+        """Run `code` (after `from dvl import common`) with fake systemctl and systemd-run
+        first on PATH; returns (stdout, the shims' argv log lines)."""
+        import tempfile
+        with tempfile.TemporaryDirectory(prefix="dvl-slice-shim-") as t:
+            shim = Path(t) / "bin"
+            shim.mkdir()
+            for name in ("systemctl", "systemd-run"):
+                (shim / name).write_text(self.SHIM)
+                (shim / name).chmod(0o755)
+            log = Path(t) / "argv.log"
+            log.write_text("")
+            full = ("import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"
+                    % str(ROOT / "scripts")) + code
+            e = dict(os.environ, PATH=f"{shim}:{os.environ['PATH']}", SHIM_LOG=str(log),
+                     DVL_SCRATCH=os.environ["DVL_SCRATCH"], **env)
+            p = subprocess.run([sys.executable, "-B", "-c", full], capture_output=True,
+                               text=True, env=e, timeout=120)
+            time.sleep(0.3)          # the detached lifeline watcher's last systemctl call
+            return p.stdout.strip(), [x for x in log.read_text().splitlines() if x], p.stderr
+
+    def test_the_job_argv_names_the_slice_and_keeps_its_own_cap(self):
+        argv = common.cap_argv(8, "dvl-test-unit", {"PATH": "/usr/bin"})
+        self.assertIn("--slice=dvl0.slice", argv)
+        self.assertEqual(argv[argv.index("MemoryMax=8G") - 1], "-p")
+        self.assertIn("MemorySwapMax=0", argv)
+        self.assertLess(argv.index("--slice=dvl0.slice"), argv.index("--"))
+        self.assertEqual((common.SOLVER_SLICE, common.SOLVER_BUDGET_GB), ("dvl0.slice", 48))
+
+    def test_the_slice_is_bounded_once_before_the_first_job(self):
+        out, log, err = self._shimmed(
+            "for _ in range(2):\n    print(common.run_capped(['true'], 1, 30)[0])\n")
+        self.assertEqual(out.split(), ["0", "0"], err)
+        sets = [x for x in log if " set-property " in x]
+        self.assertEqual(sets, ["systemctl --user set-property --runtime dvl0.slice "
+                                "MemoryMax=48G MemorySwapMax=0"])
+        self.assertLess(log.index(sets[0]), min(i for i, x in enumerate(log)
+                                                if x.startswith("systemd-run")))
+        runs = [x for x in log if x.startswith("systemd-run")]
+        self.assertEqual(len(runs), 3, runs)            # the cap probe and the two jobs
+        for x in runs:
+            self.assertIn(" --slice=dvl0.slice ", x)
+        for x in runs[1:]:
+            self.assertIn(" -p MemoryMax=1G -p MemorySwapMax=0 ", x)
+
+    def test_a_slice_that_cannot_be_bounded_refuses_the_job(self):
+        code = ("try:\n    common.run_capped(['true'], 1, 30)\n"
+                "except common.CapError as e:\n    print('refused:', e)\n")
+        for env in ({"SHIM_SET_EXIT": "1"}, {"SHIM_SHOW_MAX": "infinity"},
+                    {"SHIM_SHOW_MAX": str(64 * 1024 ** 3)}):
+            with self.subTest(env=env):
+                out, log, err = self._shimmed(code, **env)
+                self.assertTrue(out.startswith("refused:"), (out, err))
+                self.assertFalse([x for x in log if x.startswith("systemd-run")], log)
+
+    def test_a_real_job_runs_in_the_bounded_slice(self):
+        rc, so, _ = common.run_capped(["cat", "/proc/self/cgroup"], 1, 60)
+        self.assertEqual(rc, 0)
+        self.assertRegex(so.read_text(), r"/dvl0\.slice/dvl-cat-\d+-[0-9a-f]+\.scope$")
+        show = subprocess.run(["systemctl", "--user", "show", "dvl0.slice", "-p", "MemoryMax",
+                               "-p", "MemorySwapMax"], capture_output=True, text=True).stdout
+        self.assertIn(f"MemoryMax={48 * 1024 ** 3}", show)
+        self.assertIn("MemorySwapMax=0", show)
+
+
 class Toolchain(unittest.TestCase):
     def test_paths(self):
         tc = common.toolchain("dafny", fresh=True)

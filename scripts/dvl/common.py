@@ -49,9 +49,11 @@ Plumbing:
   toolchain(tool)      pinned paths, after scripts/get_toolchain.sh <tool> --check.
   run_capped(argv, mem_gb, timeout_s, env, cwd)
                        runs one solver job under `systemd-run --user --scope
-                       -p MemoryMax=<cap> -p MemorySwapMax=0
+                       --slice=dvl0.slice -p MemoryMax=<cap> -p MemorySwapMax=0
                        -p RuntimeMaxSec=<timeout_s + grace>` (CLAUDE.md
-                       §Resources), with a cross-process concurrency limit per
+                       §Resources; the slice's own MemoryMax=48G bounds every
+                       capped job of the user together, SOLVER_BUDGET_GB),
+                       with a cross-process concurrency limit per
                        pool (env DVL_<POOL>_JOBS, default from the pins: 1), a
                        scrubbed environment and a wall-clock safety kill that
                        systemd enforces even when the Python parent dies. A
@@ -377,12 +379,57 @@ class _Slot:
             self.fd = None
 
 
+# The shared solver budget (CLAUDE.md §Resources: at most 48 GB of solver memory across all
+# lanes, agents and scripts at once). Every capped job's scope starts inside this one user
+# slice, whose own MemoryMax bounds all of them together, while each scope keeps its own
+# job cap. An outer `systemd-run --user --scope` around a caller does not contain a job:
+# systemd-run starts each scope as a sibling, so the shared bound must be the parent slice.
+SOLVER_SLICE = "dvl0.slice"
+SOLVER_BUDGET_GB = 48
+
+
+@functools.lru_cache(maxsize=1)
+def _slice_ready():
+    """Set the shared solver slice's bound (MemoryMax=SOLVER_BUDGET_GB, MemorySwapMax=0,
+    runtime only: no sudo, no unit file) and check that it took. Once per process;
+    otherwise CapError (a solver never runs outside the shared bound)."""
+    want = SOLVER_BUDGET_GB * 1024 ** 3
+    try:
+        p = subprocess.run(["systemctl", "--user", "set-property", "--runtime", SOLVER_SLICE,
+                            f"MemoryMax={SOLVER_BUDGET_GB}G", "MemorySwapMax=0"],
+                           capture_output=True, text=True, timeout=60)
+        if p.returncode != 0:
+            msg = (p.stderr.strip().splitlines() or ["no message"])[-1]
+            raise CapError(f"systemctl --user set-property {SOLVER_SLICE} failed (exit "
+                           f"{p.returncode}: {msg}); refusing to run a solver outside the "
+                           f"shared {SOLVER_BUDGET_GB} GB budget")
+        q = subprocess.run(["systemctl", "--user", "show", SOLVER_SLICE, "-p", "MemoryMax",
+                            "-p", "MemorySwapMax"], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        raise CapError(f"systemctl is unavailable ({e}); refusing to run a solver outside the "
+                       f"shared {SOLVER_BUDGET_GB} GB budget") from None
+    got = dict(line.split("=", 1) for line in q.stdout.splitlines() if "=" in line)
+    try:
+        mem, swap = int(got.get("MemoryMax", "")), int(got.get("MemorySwapMax", ""))
+    except ValueError:
+        mem = swap = None
+    if q.returncode != 0 or mem is None or not 0 < mem <= want or swap != 0:
+        raise CapError(f"{SOLVER_SLICE} reports MemoryMax={got.get('MemoryMax')} and "
+                       f"MemorySwapMax={got.get('MemorySwapMax')}, not at most "
+                       f"{SOLVER_BUDGET_GB}G and 0; refusing to run a solver outside the shared "
+                       "budget")
+    return True
+
+
 @functools.lru_cache(maxsize=1)
 def _cap_works():
-    """True once a capped no-op scope has run; otherwise CapError (never uncapped)."""
+    """True once a capped no-op scope has run in the solver slice; otherwise CapError
+    (never uncapped)."""
+    _slice_ready()
     try:
         p = subprocess.run(["systemd-run", "--user", "--scope", "--quiet", "--collect",
-                            "-p", "MemoryMax=64M", "-p", "MemorySwapMax=0", "--", "true"],
+                            f"--slice={SOLVER_SLICE}", "-p", "MemoryMax=64M",
+                            "-p", "MemorySwapMax=0", "--", "true"],
                            capture_output=True, text=True, timeout=60)
     except (OSError, subprocess.TimeoutExpired) as e:
         raise CapError(f"systemd-run is unavailable ({e}); refusing to run a solver uncapped") from None
@@ -407,7 +454,8 @@ def cap_argv(mem_gb, unit, env, runtime_max_s=None):
         if secs < 1:
             raise ValueError(f"runtime limit must be at least 1 s, not {runtime_max_s!r}")
         props += ["-p", f"RuntimeMaxSec={secs}"]
-    return (["systemd-run", "--user", "--scope", "--quiet", "--collect", f"--unit={unit}"]
+    return (["systemd-run", "--user", "--scope", "--quiet", "--collect", f"--unit={unit}",
+             f"--slice={SOLVER_SLICE}"]
             + props + ["--", "env", "-i"] + [f"{k}={v}" for k, v in sorted(env.items())])
 
 
@@ -416,10 +464,14 @@ def run_capped(argv, mem_gb, timeout_s, env=None, cwd=None, *, pool=None, out_di
     """Run one solver job under the memory cap. Returns (exit_code, stdout_path,
     stderr_path).
 
-    - The job runs as `systemd-run --user --scope -p MemoryMax=<mem_gb>G
-      -p MemorySwapMax=0 -p RuntimeMaxSec=<timeout_s + grace_s> -- env -i <env>
-      <argv>`: one cgroup holds the tool and every solver it starts. If the cap
-      cannot be applied, CapError.
+    - The job runs as `systemd-run --user --scope --slice=dvl0.slice
+      -p MemoryMax=<mem_gb>G -p MemorySwapMax=0 -p RuntimeMaxSec=<timeout_s +
+      grace_s> -- env -i <env> <argv>`: one cgroup holds the tool and every
+      solver it starts, and every such scope of this user lies in the slice
+      dvl0.slice, whose MemoryMax=48G and MemorySwapMax=0 (set per user, at
+      runtime, before the first job: _slice_ready) bound all capped jobs
+      together (CLAUDE.md §Resources). If either bound cannot be applied,
+      CapError.
     - `env` is the job's COMPLETE environment (default: default_env()); nothing
       else from the caller's environment reaches the tool.
     - At most jobs(pool) jobs of a pool run at once across all processes of this
