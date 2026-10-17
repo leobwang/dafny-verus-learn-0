@@ -4365,3 +4365,19 @@ R11 is locally complete, remains authoring, and is not a new Basic shipment.
 Exact source/archive evidence is in protected R11 notes. Live D45 sessions,
 parked R03 and the PointsTo lane remain recorded skips. R12–R16 and full
 release assembly/CI remain unfinished. No live learner/actor grade is inferred.
+
+### Δ269 — R12 private verifier-driving feasibility (DVR2)
+
+Before activation, private native references D7/V7and learner loops with3holes
+verify. Bare empty-body and assigned-zero controls fail; four annotation-removal
+controls fail at proof checking after providing V decreases outside the learner
+regions. Actual public canonical admission remains pending and minutes stay0.
+The extractor, shared parametric search/loop, fixed-site invariant environment
+and isolated profiler pass112private tests, plus actual native JSON, compiled
+hint and profiler fidelity checks. A fresh24-message Dafny LSP trace is captured
+for reading; its author framing client stays private under the owner split.
+
+This is private feasibility, not an activated module, complete lab integration,
+release, measured learner session or live model run. R12 stays planned. The user
+instruction continues to record/skip unavailable live apparatus and build the
+remaining implementation under the frozen locks, without new approvals.

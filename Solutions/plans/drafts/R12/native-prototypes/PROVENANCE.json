@@ -1,0 +1,35 @@
+{
+  "scope": "private prototypes only; R12 planned/admission0",
+  "parent_source": "d9ae1b1",
+  "r11_final_metadata": "cb93a18 (cherry-picked separately)",
+  "native_references": "D7/V7 verified, zero holes; both pass three seeds",
+  "shipped_prototypes": "D/V learner loops verified,3counted holes each",
+  "bare_empty_body": "T1/H1/H2 each language fail all native empty/default/max-auto/seed controls; actual registry replay still required",
+  "regions": "H1/H2 each language fail at verify with relevant reference annotation regions removed; V decreases remain provided outside learner regions",
+  "python_tests": {
+    "extractor": 56,
+    "engine_loop": 17,
+    "environment": 25,
+    "profiler": 14,
+    "total": 112
+  },
+  "actual_native_fidelity": "8actual Result documents retained; actual isolated D/V profiler measurements parsed with matching selected symbols; good D/V rendered hints verify and weak hints fail at verify",
+  "lsp": "24actual framed messages including native assertion-might-not-hold diagnostic; capture code private, trace intended for reading only",
+  "limits": "one16GiB capped lane; aggregate<=48GiB alongside immutable R11 CI/workflow; no model calls or lab unlocks",
+  "files": {
+    "hints.rs": "fe4fcf6aa6738cac5cc7c84ac98480d1b40f0feb5efe02f14deb29ba8ca22297",
+    "test_extractor.py": "595c659afc2abf1b34e6db7868819f432045623ffb9becfcdbcf60245120138a",
+    "lsp-messages.jsonl": "fce579de90dd9741ea33f074525d62782ae2b08e832176db3b314de168949387",
+    "engine.py": "96854fb1a31a8b10ad91933af82a8cdd83ad1670dcb41524cb4870edce41c27a",
+    "extractor.py": "a3dd08f7654394a4e933676c7e5532ad9baa976867709da2cc19d6b563b5e609",
+    "environment.py": "955e2dde5ee4928d691c4e12e3fa9092f829a80d74ad9c90850526ed21a4ae32",
+    "test_profiler.py": "c5069cdbde34c54b94d8cb8b81d5ae3acd3e86ab3fc54b70ecdda9b682bb306c",
+    "loop.py": "9eb8c752a54897316b952d6f18f4e38fde861d7970ed478022cb00d01c98e04d",
+    "test_engine.py": "509eb51df4dd6aefe45e650f47c9e10b7f039358d4cc2db47731ef41bcb92684",
+    "hints.dfy": "481d7ba6e171f93f67f7dc822928d6e7a50e932a8335e301b6ef1d358b3c8293",
+    "profiler.py": "867d7e42e9c6543175a36adfad7a63b589ba778fbe3e67d21aa9fbea212a8b0f",
+    "test_environment.py": "488eade37b4b6b30647ab5c615e5c807196727adc7f609eafa06b04a1552e0ef",
+    "lsp-source.dfy": "e114cbca2ea1247e463cfab9dc5689a800468d8220458e02193b60dd23dbfdb1",
+    "lsp-exit.json": "333fe076d169637c0ec43684313391a1b447add73e3e75cce4a0dee560c61ee2"
+  }
+}
