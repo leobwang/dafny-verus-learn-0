@@ -1,0 +1,8 @@
+// Reference Solution.
+// after: R09.P3dv
+module R09_ProductFitx {
+ newtype FitU32R09 = x:int | 0<=x<0x100000000
+ method ProductFitsR09(width:FitU32R09,times:FitU32R09,cap:FitU32R09) returns (fits:bool)
+  ensures fits == ((width as int)*(times as int)<=cap as int)
+ {var product:FitU32R09:=width*times;fits:=product<=cap;}
+}

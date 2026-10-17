@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R09 --- Effects \\ \large Calibration fixture}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} Coq proof repair after a datatype change expressible by a type equivalence. Configure a common constructor/eliminator presentation, transform proof terms so the old type disappears, then decompile to suggested Ltac. The excerpt concerns a symbolic plugin, not an LLM agent.
+
+\textbf{Oracle:} Transformed terms are checked by the Coq kernel. Suggested scripts may need editing, and the repaired term remains a fallback. A produced tactic script or one accepted step is not by itself an accepted completed proof.
+
+\textbf{Trust:} The supplied equivalence and configuration obligations establish the relation used for transport. The implementation has no mechanized correctness proof in this excerpt, although outputs are kernel-checked. The deliberately unsound decompiler must not be conflated with kernel acceptance of a proof term.
+
+\textbf{Cheat surface:} A successful transport is conditional on the stated relation; changing that relation or the target can change the task. Kernel checking does not establish that a supplied equivalence is the maintenance relation the user intended. Preserve original statements and configuration provenance.
+
+\textbf{Metric:} The plugin proves every repair automatically and reports a measured speedup with repeated-run timing confidence intervals.
+
+\textbf{Budget:} The excerpt gives qualitative repair effort and no timing data. It supplies no common per-task token, sampling, dollar or wall-clock agent budget. Manual configuration needs annotations and suggested scripts often need editing; unavailable numeric budgets stay unavailable.
+
+\textbf{Variance:} No repeated-run variance, confidence interval or timing distribution is supplied. The scope is changes expressible by equivalences; the examples and Galois TLS use do not establish general parser-port fidelity or an automatic discovery rate for arbitrary relations.
+
+\textbf{Artifact:} Ringer et al., PLDI2021, arXiv2010.00774; the local excerpt names a Coq8.8 plugin and Repair invocation. Preserve the exact local range/hash. The excerpt does not provide an immutable build commit or a complete replication manifest.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+If two copied contracts imply each other, the intended grammar is proved
+correct for every input. In-range error positions are interchangeable, UTF8
+bytes are scalar positions, and an always-error parser is a complete repair.
+Multiply bounded child cost by the upper bound before checking for overflow;
+expand the child even for zero copies. A matching finite corpus proves the
+full grammar theorem and establishes that the live agent succeeded.
+\end{answer}
+
+\end{document}

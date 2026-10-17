@@ -1,0 +1,10 @@
+# pins.py golden for specimens/R09/card-c2d.dfy.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R09/card-c2d.dfy.specimen`; never edit.
+command: verify
+exit: 4
+verdict: failed
+stage: verify
+verified: 1
+holes: 0
+card-c2d.dfy.specimen:9:2: error: a postcondition could not be proved on this return path
+card-c2d.dfy.specimen:8:44: related: this is the postcondition that could not be proved

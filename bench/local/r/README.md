@@ -53,3 +53,12 @@ original statement, complete/stripped pair, source module and native controls;
 label it course-derived. It is a reconstruction task, not an independent
 unseen benchmark result, and it does not automatically enter a later pool.
 Retain qualified library symbols, versions, imports, gates and audit scope.
+
+
+R08's seventh card strips an own completed abstraction goal. R09's eighth
+card strips an own completed effects goal. For each, retain the exact source
+module/revision, original statement and model, complete/stripped pair, native
+gate/audit commands, positive witness and negative semantic controls. Label
+both course-derived and previously exposed; do not report an independent
+unseen evaluation or automatic later pool admission. The learner creates
+these artifacts; the author does not fill a learner's work or result.

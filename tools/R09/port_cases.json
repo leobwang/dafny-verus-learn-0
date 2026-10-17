@@ -1,0 +1,62 @@
+[
+  {
+    "input": "\\a",
+    "at": 0,
+    "expected": "OK97:2"
+  },
+  {
+    "input": "é\\x",
+    "at": 1,
+    "expected": "OK120:3"
+  },
+  {
+    "input": "😀\\😀",
+    "at": 1,
+    "expected": "OK128512:3"
+  },
+  {
+    "input": "\\",
+    "at": 0,
+    "expected": "ERR1:0"
+  },
+  {
+    "input": "ab\\",
+    "at": 2,
+    "expected": "ERR3:2"
+  },
+  {
+    "input": "\\]",
+    "at": 0,
+    "expected": "OK93:2"
+  },
+  {
+    "input": "\\\\",
+    "at": 0,
+    "expected": "OK92:2"
+  },
+  {
+    "input": "a\\+",
+    "at": 1,
+    "expected": "OK43:3"
+  },
+  {
+    "input": "\n\\δ",
+    "at": 1,
+    "expected": "OK948:3"
+  },
+  {
+    "input": "\\􏿿",
+    "at": 0,
+    "expected": "OK1114111:2"
+  },
+  {
+    "input": "😀é\\",
+    "at": 2,
+    "expected": "ERR3:2"
+  },
+  {
+    "input": "\\0tail",
+    "at": 0,
+    "expected": "OK48:2"
+  }
+]

@@ -1,0 +1,128 @@
+# pins.py golden for specimens/R09/card-c2v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R09/card-c2v.rs.specimen`; never edit.
+command: verify
+exit: 1
+verdict: failed
+stage: verify
+verified: 0
+holes: 0
+{
+ "diagnostics": [
+  {
+   "col": 43,
+   "file": "card-c2v.rs",
+   "labels": [
+    "at the end of the function body",
+    "failed this postcondition"
+   ],
+   "level": "error",
+   "line": 8,
+   "message": "postcondition not satisfied"
+  }
+ ],
+ "json": {
+  "func-details": {
+   "card_c2v::advance_card_r09": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::Seq::index": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::Seq::len": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::impl&%2::spec_index": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::lemma_seq_ext_equal": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::lemma_seq_ext_equal_deep": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::lemma_seq_index_decreases": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::vec::axiom_spec_len": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::vec::axiom_vec_decreases_to_view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::vec::axiom_vec_has_resolved": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::vec::spec_vec_len": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::View::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%0::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%16::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%18::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%2::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%30::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%44::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%4::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%6::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%8::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": true,
+   "encountered-vir-error": false,
+   "errors": 1,
+   "is-verifying-entire-crate": true,
+   "success": false,
+   "verified": 0
+  }
+ },
+ "other": []
+}

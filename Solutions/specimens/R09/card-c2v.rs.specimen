@@ -1,0 +1,11 @@
+// Reference Solution.
+use vstd::prelude::*;
+verus! {
+pub struct CardCursorR09 {pub word:Vec<char>,pub at:usize}
+// item: R09.C2v write:old
+// WRITE: preserve the mutable word and move the cursor once.
+fn advance_card_r09(cur:&mut CardCursorR09)
+ requires old(cur).at<old(cur).word.len(),
+ ensures final(cur).word@==old(cur).word@,final(cur).at==old(cur).at+1,
+ {cur.at=cur.at+1;}
+}

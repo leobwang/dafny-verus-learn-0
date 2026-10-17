@@ -143,3 +143,72 @@ provided-library gate/audit/seeds before activating. R04 full CI is untouched.
 A3 expansion-kind gate/audit/three seeds rerun6/6 commands passed. Both fully
 assembled six-task reference prototypes also pass native gates: D285/V54,
 zero holes/findings. Frozen STUDY leak checkpoint: leak verifier: 25 module(s), 1974 public files scanned, OK.
+
+## Assembled kit and controls (12:16 UTC)
+
+R09 now authoring, not shipped. Public/ref files contain T1+H1–H5 in each
+language,5predictions,4WRITE cards,12bank questions/disjoint6-question draws,
+2paired PP controls, escaped-atom port, paper06.11, chapter and exposed runtime
+tools. H-hole minutes are50D/60V; T1's5each are the separate10-minute record
+allocation. Corrected that ambiguous wording in PLAN;444total is unchanged.
+The actual canonical firsttry empty-body gate passes12/12. Actual public-path
+reference counts D320/V54, floors38/37; source6holes/core, no D-agent hole and
+1V-agent hole.5reference predictions pass;4reference gate audits are clean.
+
+Public-path materials exposed only routine construction mistakes: duplicate
+dv markers removed from V, worked parser metadata moved so its complete
+implementation is not mislabelled H2, bank tags canonicalized (added a precise
+error-propagation concept row), and Q-owned digit constructor names changed
+to BoundValue/BoundError. Avoid now0hits. R09 reference lint17twins/0findings.
+The scalar compute-only prediction needed character equality cases rather than
+unsupported interpreter ordering; native probe failures retained. Full-domain
+D product-fit needed complete quotient/product-order helpers; no precondition
+was narrowed and no resource limit increased. Final private materials18checks
+all match exact native verify-stage outcomes, no holes.
+
+Both exposed compiled utilities default to actual learner sources and never
+read references; they retain exact specified-source/case/driver hashes.
+Assembled full references pass297frontend cases per language. Escaped-atom
+references pass12cases per language. The latter needed an explicit Dafny
+constructor for cross-module allocation; it is identical in source/ref.
+Wrong-body error positions fail native verification with0holes. Consistently
+changed original+mirror models verify0holes yet fail original snapshots and
+fixed compiled observations in both languages. Both faithful snapshots pass.
+The final full-reference frontend mutant results are:
+[{'mutant': 'escape-literal', 'phase': 'compiled-execution', 'cases': 297, 'killed': 12}, {'mutant': 'class-upper', 'phase': 'compiled-execution', 'cases': 297, 'killed': 21}, {'mutant': 'error-position', 'phase': 'compiled-execution', 'cases': 297, 'killed': 5}, {'mutant': 'counted-model', 'phase': 'native-verification', 'd': 'rejected', 'v': 'rejected'}]
+The original290-case parse controls remain separate; these297-case controls
+run the final assembled complete frontend and preserve exact paired kill IDs.
+
+17chapter captures and12non-slot sidecars pass capture;40pins/0problems. A
+first capture refused transactionally because the chapter changed while its
+commands ran; reran after freezing edits. A first final frontend test driver
+used a prototype budget-module name; fixed only the driver, then297/297passed
+again. An uncapped pins invocation was interrupted and replayed under16GiB;
+no semantic verdict was inferred from that interruption. All native sweeps
+continue at3×16GiB/48GiB aggregate, GATE_WORKERS=1, private Vslots≤3.
+
+Chapter4254words/5predict boxes/3diagrams/17captured fences, lint0problems;
+5TeX files build. Full leak scan with R09's newly registered row checks26
+modules/2009public/OK in AUTHORING; final STUDY count still to record. A scan
+before the table row checked only25modules and is not R09 evidence. R09
+remains local construction: finish whole-parser mirror demonstrations, final
+source pins, STUDY workflow and focused CI before claiming local completion.
+D45 actor debt and parked R03 boundary remain skipped, never accepted.
+
+## Mirror-complete construction candidate
+
+Both general-parser implication directions and their executable parser wrapper
+are now complete module-local worked infrastructure, explicitly relative to
+the transcribed mirror rather than a full grammar specification. V prototype
+56native verified; D's first run proved all289but failed only an indentation
+warning. Parenthesized the case expression, with no suppression. Actual
+assembled public-path counts nowD324/V56, gate floors42/39. Source still
+6holes per hand file,0D-agent holes/1V-agent hole. Canonical admission with
+the new helpers rerun12/12. Three affected captures updated via pins.py.
+Removing only this addition exactly recovers the previous semantic source
+bytes used in297-case/mutant execution; mirror-extension-provenance.json
+records both digests. STUDY workflow will compile the final source again.
+Current chapter structure/captures, fresh full pins and candidate CI are
+checked below; no release or live actor outcome is claimed by this commit.
+
+Frozen STUDY source checkpoint: leak verifier: 26 module(s), 2024 public files scanned, OK.

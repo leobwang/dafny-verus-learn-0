@@ -1427,7 +1427,7 @@ receive the same specified error position in the paired port.
 | T1d/T1v | closed-book execution | advance a cursor and propagate a single-bound error without losing its original position | 5 each |
 | W1d/W1v | worked | one-character bound recogniser and complete native result interface | 3 each |
 | W2d/W2v | worked | read failure propagation and the actual result obligations | 3 each |
-| W3d/W3v | worked | concrete syntax, source spans, lowering and error positions | 3 each |
+| W3d/W3v | worked | concrete syntax, source spans, lowering, error positions and the explicitly mirror-relative parser contract | 3 each |
 | W4d/W4v | worked | recursive copy/optional-copy interfaces used by the final interval proof, and budget arithmetic facts | 6 each |
 | H1d/H1v | execution | parse a finite counted suffix under completeness and error-position contracts | 12 / 15 |
 | H2d/H2v | execution/annotations | class-body progression, preserved accumulator and completion at the first closing delimiter | 9 / 12 |
@@ -1441,7 +1441,8 @@ receive the same specified error position in the paired port.
 | P5dv | verdict | error-position preservation versus replacing the propagated location | 3 |
 | A1d/A1v | refactorer | preserve the selected parser's original statement and differential harness while porting/refactoring its body | 25 follow-up |
 
-Hand totals50D/60V=110minutes; minutes remain0 until each actual item passes
+H-hole totals50D/60V=110minutes; T1d/T1v use the separate10-minute test-out
+allocation. Minutes remain0 until each actual item passes
 canonical native admission and its complete reference passes three seeds.
 A trivial Err return must fail the Counted/ClassItems completeness clauses.
 WRITE constructs include failure propagation and old-state mutation, with at

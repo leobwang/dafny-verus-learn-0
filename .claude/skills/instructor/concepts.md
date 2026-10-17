@@ -65,6 +65,7 @@ and `R06/loop-invariant` are one concept to it. Never rename a tag once a ledger
 | `prover-choice` | | which prover a goal needs: default SMT, nonlinear or bit-vector | Q04, Q07, R14 |
 | `frames` | `frame` | Dafny `reads`/`modifies`; dynamic frames with `Repr` and `Valid()` | Q02, Q05, Q11, R09 |
 | `ownership-and-mut-ref` | | Verus ownership and `&mut`; `old(..)`/`final(..)` in specs | Q05, Q11, R09 |
+| `error-propagation` | | native result propagation (`:-` / `?`), compatible failures and enclosing branch/state postconditions | Q05, R09 |
 | `module-visibility` | | Dafny export sets; Verus `open`/`closed` specs and views | Q02, Q05, R03 |
 | `opacity` | | `opaque`/`reveal`: hiding a definition from the solver and revealing it locally | Q05, Q06, Q08, R08 |
 | `traits-and-interfaces` | | Dafny traits and abstract modules; Verus traits with specs | Q08, Q14, R08 |

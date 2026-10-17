@@ -1,0 +1,7 @@
+// after: R09.P5dv
+module R09_ErrorAdaptery {
+ datatype PositionedR09 = ValueR09(value:nat) | ErrorR09(at:nat)
+ method PreservePositionR09(input:PositionedR09) returns (out:PositionedR09)
+  ensures out==input
+ {out:=if input.ErrorR09? then ErrorR09(0) else input;}
+}

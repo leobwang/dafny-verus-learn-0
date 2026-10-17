@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R09/error-x-d.dfy.specimen: SEALED. This demo waits for R09.P5dv,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R09/error-x-d.dfy.specimen`; never edit.
+command: verify
+after: R09.P5dv
+outcome: salted-sha256 74a758e2080cad1d6ba46ebc10dc8ffb779862222f5301ae811530330cf44572

@@ -4186,3 +4186,42 @@ attempts and checked source copies are retained in the protected build notes.
 R09 remains planned: structural pre-expansion budget integration, the learner
 kit, admission, material/study checks and module CI are outstanding. D45 live
 model debt and R03's parked Unicode boundary remain deferred, never passes.
+
+
+## Δ262 — R09 effects construction candidate (2026-10-17)
+
+R09 moves to authoring with a standalone A3 kit: T1 plus five hand holes per
+language, native propagation and old/final state, finite counted/class parsing,
+a complete bounded expansion decision and an interval proof over the fixed
+copy/optional representation. H minutes50D/60V and separate test-outs10keep
+the444-minute record. The original mutable input, exact positioned results,
+models and statements stay binding. A zero upper count bypasses an unused
+oversized child; structural logical tree-node checking precedes expansion.
+The internal scalar conversion proves the pinned existing library contract;
+there is no new trust, earlier-tier waiver or A2 implementation change.
+
+The complete parser retains literal success/meaning, position bounds and
+finite-count/class completion. Both general-contract mirror implications and
+a checked wrapper are explicitly relative to the mirror, not a full grammar
+theorem. Public tools compile specified actual files and retain source/case/
+driver hashes:297frontend observations and12escaped-atom port observations.
+They default to learner paths and never automatically read reference trees.
+Full-reference semantic mutants have exact paired runtime kills12/21/5; a
+counted-success model mutation fails native verification. Consistently changed
+escaped-atom models can verify, but original snapshots and fixed runtime
+cases reject them. These finite controls are exposed, not unseen benchmarks.
+
+Canonical admission passes12/12 including the added mirror helpers. Reference
+unit gates countD324/V56 with floors42/39; shipped loops retain6holes each.
+The complete Dafny port baseline has0holes; Verus starts with1typed hole.
+Five predictions, four WRITE cards, a12-question/disjoint-draw bank, two paired
+parallel problems, paper06.11,17captured fences and the eighth course-derived
+bench instructions accompany the kit. A precise error-propagation concept row
+and disjoint bound-constructor names preserve vocabulary and Q ownership.
+The protected notes retain source identities, failed/resource-limited probes
+and native, finite and snapshot evidence separately.
+
+R09 is a local candidate pending final STUDY workflow and focused CI. D45
+live Claude/calibration/transcript debt and R03's pre-OD8 primitive packaging
+blocker remain recorded and skipped under the user's instruction. Neither is
+a pass, and this candidate is not a new Basic shipment.

@@ -1,0 +1,9 @@
+# pins.py golden for specimens/R09/card-c1d.dfy.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R09/card-c1d.dfy.specimen`; never edit.
+command: verify
+exit: 2
+verdict: failed
+stage: resolve
+verified: None
+holes: 0
+card-c1d.dfy.specimen:2:16: error: module RG_A3_Syntax does not exist

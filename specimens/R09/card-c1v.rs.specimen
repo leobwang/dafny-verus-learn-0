@@ -1,0 +1,8 @@
+use vstd::prelude::*;
+verus! {
+// item: R09.C1v write:error-propagation
+// WRITE: propagate the original failure using ?, then wrap the successful payload.
+fn propagate_card_r09(input:Result<u32,usize>)->(out:Result<u32,usize>)
+ ensures out==input,
+ {match input {Ok(n)=>Ok(n),Err(_)=>Err(0)}}
+}

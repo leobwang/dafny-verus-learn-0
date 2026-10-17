@@ -1,0 +1,41 @@
+# R09 answer tripwires; protected reference-class, never copied to public tooling.
+
+# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
+# source: else if s[j+2]=='}' {var n:=BoundVal(s[j+1]);res:=Ok((SRep(a,n,n,a.lo,j+3),j+3));} (R09.H1d)
+# verified: solutions=1 public=0
+else\s+if\s+s\[j\+2\]=='\}'\s+\{var\s+n:=BoundVal\(s\[j\+1\]\);res:=Ok\(\(SRep\(a,n,n,a\.lo,j\+3\),j\+3\)\);\}
+
+# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
+# source: var next:=ClassInsert(ranges,CRange(c,d)); (R09.H2d)
+# verified: solutions=1 public=0
+var\s+next:=ClassInsert\(ranges,CRange\(c,d\)\);
+
+# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
+# source: if hi>0 && base>(cap-overhead)/hi {res:=OverBudget;return;} (R09.H3d)
+# verified: solutions=1 public=0
+if\s+hi>0\s+\&\&\s+base>\(cap\-overhead\)/hi\s+\{res:=OverBudget;return;\}
+
+# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
+# source: CopiesSplit(r, n, k, s); (R09.H4d)
+# verified: solutions=1 public=0
+CopiesSplit\(r,\s+n,\s+k,\s+s\);
+
+# from Solutions/verus/r/r09_effects/src/lib.rs
+# source: let start=x.span.lo;return Ok((Syn {node:SyntaxKind::RepRange(Box::new(x),lo,lo),span:Span {lo:start,hi:j+3}},j+3)); (R09.H1v)
+# verified: solutions=1 public=0
+let\s+start=x\.span\.lo;return\s+Ok\(\(Syn\s+\{node:SyntaxKind::RepRange\(Box::new\(x\),lo,lo\),span:Span\s+\{lo:start,hi:j\+3\}\},j\+3\)\);
+
+# from Solutions/verus/r/r09_effects/src/lib.rs
+# source: let next=acc.class_insert(c,d); (R09.H2v)
+# verified: solutions=1 public=0
+let\s+next=acc\.class_insert\(c,d\);
+
+# from Solutions/verus/r/r09_effects/src/lib.rs
+# source: if hi>0 && base>(cap-overhead)/hi {return None;} (R09.H3v)
+# verified: solutions=1 public=0
+if\s+hi>0\s+\&\&\s+base>\(cap\-overhead\)/hi\s+\{return\s+None;\}
+
+# from Solutions/verus/r/r09_effects/src/lib.rs
+# source: lemma_copies_join_r09(r,n,k,s);assert(matches(copies(r,n+k),s)); (R09.H4v)
+# verified: solutions=1 public=0
+lemma_copies_join_r09\(r,n,k,s\);assert\(matches\(copies\(r,n\+k\),s\)\);

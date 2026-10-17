@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R09 --- Effects \\ \large Calibration fixture}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} Coq proof repair after a datatype change expressible by a type equivalence. Configure a common constructor/eliminator presentation, transform proof terms so the old type disappears, then decompile to suggested Ltac. The excerpt concerns a symbolic plugin, not an LLM agent.
+
+\textbf{Oracle:} Transformed terms are checked by the Coq kernel. Suggested scripts may need editing, and the repaired term remains a fallback. A produced tactic script or one accepted step is not by itself an accepted completed proof.
+
+\textbf{Trust:} The supplied equivalence and configuration obligations establish the relation used for transport. The implementation has no mechanized correctness proof in this excerpt, although outputs are kernel-checked. The deliberately unsound decompiler must not be conflated with kernel acceptance of a proof term.
+
+\textbf{Cheat surface:} A successful transport is conditional on the stated relation; changing that relation or the target can change the task. Kernel checking does not establish that a supplied equivalence is the maintenance relation the user intended. Preserve original statements and configuration provenance.
+
+\textbf{Metric:} Table1 reports14examples in8classes, compared qualitatively with manual repair: automatic9has7saved and2comparable; mixed1has1not saved; manual4has2saved,1comparable,1not saved. These are category counts, not timed speedups, agent pass rates or an unseen benchmark measurement.
+
+\textbf{Budget:} The excerpt gives qualitative repair effort and no timing data. It supplies no common per-task token, sampling, dollar or wall-clock agent budget. Manual configuration needs annotations and suggested scripts often need editing; unavailable numeric budgets stay unavailable.
+
+\textbf{Variance:} No repeated-run variance, confidence interval or timing distribution is supplied. The scope is changes expressible by equivalences; the examples and Galois TLS use do not establish general parser-port fidelity or an automatic discovery rate for arbitrary relations.
+
+\textbf{Artifact:} Ringer et al., PLDI2021, arXiv2010.00774; the local excerpt names a Coq8.8 plugin and Repair invocation. Preserve the exact local range/hash. The excerpt does not provide an immutable build commit or a complete replication manifest.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+An observation records either the returned positioned AST, its nested scalar
+spans and actual canonical interval vector with the lowered tree, or the
+original failure position. Cursor observations include the unchanged input
+and the precise old and final positions on success and failure. UTF8 byte
+positions are not interchangeable with scalar positions.
+Let $C$ be the original contract and $M$ the independently transcribed mirror.
+Prove $C\Rightarrow M$ and $M\Rightarrow C$ on the same domain and observation
+relation. This establishes equivalence relative to that mirror. It does not
+show that either specification captures the intended grammar: a shared wrong
+position or permissive always-error statement can satisfy both.
+Compile the actual implementations and compare fixed cases before editing.
+Include Unicode after a prefix, exact nested spans, overlapping/duplicate class
+ranges, malformed/truncated counts and each cap boundary. Change a rejection
+location to zero as a negative control: safety can survive while exact
+observations differ. Mutant-kill parity must compare actual failing case IDs;
+a parse failure is not a semantic rejection and an out-of-resource result is
+not a counterexample. Literal success and meaning within the cap prevent an
+always-error implementation from satisfying the complete frontend contract.
+The fixed-copy representation has cost $1+n(b+1)$, and the optional-copy
+representation has cost $1+(m-n)(b+3)$. Their outer concatenation adds one,
+so total cost is $3+n(b+1)+(m-n)(b+3)=3+bm+n+3(m-n)$.
+Check the fixed overhead against the cap first. For $m>0$, compare the child
+cost with remaining space divided by $m$ before multiplying. A positive count
+cannot hide an oversized child, but $m=0$ must bypass it and construct only the
+constant three-node result. Compute the structural cost before expanded
+allocation. The logical tree-node bound does not promise the same sharing,
+stack use or peak heap consumption in both runtimes. Native gates, audits,
+source snapshots, finite compiled agreement and measured actor outcomes
+remain separate evidence; live actor work is deferred rather than inferred.
+\end{answer}
+
+\end{document}

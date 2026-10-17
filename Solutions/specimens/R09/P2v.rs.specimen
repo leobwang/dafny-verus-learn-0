@@ -1,0 +1,14 @@
+// Reference Solution.
+use vstd::prelude::*;
+verus! {
+pub open spec fn scalar_bound_r09(c:char,at:nat)->nat {
+ if c=='0' {0} else if c=='1' {1} else if c=='2' {2} else if c=='3' {3}
+ else if c=='4' {4} else if c=='5' {5} else if c=='6' {6} else if c=='7' {7}
+ else if c=='8' {8} else if c=='9' {9} else {at}
+}
+// item: R09.P2v value
+// Answer form: numeral. Position counts scalars after a non-BMP first scalar.
+proof fn bound_scalar_position_r09() {
+ assert(scalar_bound_r09('x',(seq!['😀','x'].len()-1) as nat) == 1) by (compute_only);
+}
+}

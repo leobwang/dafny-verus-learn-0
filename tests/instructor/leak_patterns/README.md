@@ -51,6 +51,8 @@ One line per module with a pattern file: the module, its pattern count, and the 
 | R07 | `R07.txt`: 8 (H1d/v, H2d/v, H4v, H5v, A1d/v) | 2026-10-17 (frozen STUDY candidate, all24modules) | 8 OK |
 | R08 | `R08.txt`: 8 (H1d/v–H4d/v) | 2026-10-17 (frozen STUDY construction candidate; exact count in protected notes) | 8 OK |
 
+| R09 | `R09.txt`: 8 (H1d/v–H4d/v) | 2026-10-17 (construction candidate; exact scan in protected notes) | 8 local controls; live sessions deferred |
+
 ## The verifier
 
 Run it from the repository root of the author's worktree, where the reference trees are readable (never in a study checkout). With no argument it checks every module of the table above; with ids, only those:

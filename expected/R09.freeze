@@ -1,0 +1,258 @@
+# expected/R09.freeze — statement-freeze pins for R09 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R09` from the files as shipped; checked by
+# `scripts/specfreeze --check R09`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R09"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R09_Effects/std/R09_Effects.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R09_ParserMirror.BothMirrorImplicationsR09 {:induction false}", "R09_Repetition.RepRangeCorrect {:induction false}"]
+[file.statements]
+"R09_Budget.BudgetDecision" = "1d05f30ab21191104cf18f08b85b7454d711194152165fb85e0c6e225a61a1b8"
+"R09_Budget.BudgetDecision.Extract" = "56e9b3f9537ba58d17e7ac0b669ae9824c52b63b8f5c607029989f3437c80124"
+"R09_Budget.BudgetDecision.IsFailure" = "c18342abc4347efc19c9c4bd1ea518cd1368ecb5da5cdfbc1c847d1b5add19ab"
+"R09_Budget.BudgetDecision.PropagateFailure" = "d047164f41cd599b8476ba4f0f47c5c9c69a1e2fbc595bf4fa27a9690b3e5a88"
+"R09_Budget.CostU32" = "4faf590ebe40e564a92de7aa8f1d9f7e1413a80e6a6c6693886801c0996996b8"
+"R09_Budget.RepeatExpansionBudgetR09" = "8f6dac440c053b811ffb6d61c250dfaf3bcbbe3448b48e1a47ac8c05817e81ae"
+"R09_CheckedCost.CheckedAddCostR09" = "2028b75b7ea82685669aebbad6a5d973ce8176b7cb837d0d23f8bdb7e73abb22"
+"R09_CheckedCost.CheckedClassCostR09" = "0fdb088720b9b8e5cb847321cd3a50653f198b4603f0db9021fa91ef8cc80250"
+"R09_CheckedCost.CheckedLoweringCostR09" = "db22ddcd74799de06bf354029bf39a03c0f7397812f4f36a2c6400a8a83d3b25"
+"R09_CheckedCost.RepetitionCostFormulaR09" = "3666678206c858df41c9db54484950978c187f27fd47a7176cf155c4c0f9bea2"
+"R09_CheckedCost.RepetitionCostGrowsR09" = "3a45df4a3091d999f845d1b7326e3eef6d76f37cd60a7a7f0056438476e13d41"
+"R09_Cursor.CountedCursorR09" = "9c183067c372f58d0be79b73fdcd5e50a4dcdff13fb9b68c387963b0da201cb5"
+"R09_Cursor.EffectCursorR09._ctor" = "8e7a01eb7223383bc657e5a687f8bb5b2e4a02e4f8e464c229aac90041bdd348"
+"R09_Cursor.ReadBoundCursorR09" = "8ea6d15a48d4ef64d383cd19b019a46c8e8427c08f4eabad67c177fe2862da04"
+"R09_Cursor.ReadBoundR09" = "b7c65442a0e0150a097ba2273c441f8a3897b7b475e4d5f904c7d673188d8d09"
+"R09_Frontend.CheckedLoweringR09" = "c5922ddf48094afac7b48a837e95cfd7652b10a61cb5b0cb018da259c7d1bc89"
+"R09_Frontend.FrontendR09" = "add063c0eec72d206a989931cfbde742f84d6f35ebf8f6e8aa6c36696fe494b0"
+"R09_Lowering.ClassLowerExecR09" = "d731f2bcdabd4dc3bbbe09ab3e6433c2a6963cf0bd55318ad81cac8320e126ae"
+"R09_Lowering.CopiesLowerExecR09" = "d1ca77b8817660396d97f71ade264607a9785bb33a60c796c0d85951cd4cb805"
+"R09_Lowering.LoweringExecR09" = "3254e831571a63f1580bafba3541aa3777283d6d463b0f90faadfebc95d44d6a"
+"R09_Lowering.OptionalLowerExecR09" = "e62a50dffe7c751e65b3502a3a3d4bf75f351af4cc979c37b77bf6e800ad567d"
+"R09_Lowering.RangeLowerExecR09" = "9983e15ad33450421b9a4fedf0c8563c039a1ce81e43d9a0cb6efd5efae4d93a"
+"R09_Parser.ClassItems" = "3242e34cc9b3f966f39c785f7df439f8020ed9f261e91437df2507cb6cffc7f9"
+"R09_Parser.Counted" = "a26f97e374a0ff0b090fc53ab24da491f7a4ef529dceae4903c3f3ad0ca18a4d"
+"R09_Parser.LiteralAppendR09" = "73b88f0be480388ac0a74a3569c3bcd0e8aeff236f4ae3e0e51d2b8a04a73316"
+"R09_Parser.Parse" = "c4067ef2c6914e87b60f9c3faf5de32e26ac77c8bdfa2f7458beef76998e86ff"
+"R09_Parser.ParseAlt" = "93980b4b51d885743938b0d3e2068446ed6aa7513635f5e1b87e5e8ed3b83a87"
+"R09_Parser.ParseAtom" = "978e930e0dae7d836a99088277b0ec664fa175d944ceccbf3dbeeab623dedc92"
+"R09_Parser.ParseCat" = "b3722ae68672445d74bbd3239c281e60e4a2c4bc8bb576743cb8925023ceb00c"
+"R09_Parser.ParsePost" = "48350e699fcb2b92516c02631b61a2053da40fbf641ca8525d27c1329f8c6b4c"
+"R09_ParserMirror.BothMirrorImplicationsR09" = "d2f588c1607c49978738a56cc721bbe1ef22935529a473a8972627d04dbdf72b"
+"R09_ParserMirror.OriginalContractR09" = "1f1f24c55d935ebf6528664e5f92eb83d74b5355a1486f7463cb44f7bcdfc70d"
+"R09_ParserMirror.ParseRelativeMirrorR09" = "7f22e4ab567b55f4c7aad2a3e92389a3cc4e5488832bf322b85355ac1e805304"
+"R09_ParserMirror.TranscribedMirrorR09" = "859e64d41fb88d3edaa8f4985a3ea6d7fc3d765184049957478494efcdc18663"
+"R09_Repetition.CatCongRight" = "3c6418e165895eab634a1cf003b7a12be23432453973f22fba78e8e0d52b3700"
+"R09_Repetition.CopiesSplit" = "ceecbb4b09b0042ffdd3c3fc4e31be9f7e84fe8dce720aa8c51e22aebc3f6e52"
+"R09_Repetition.CopiesUpToCorrect" = "db994b0662e4348ee87caf92fe43cec604f631236d1b46c973b3f3efc1b87ec1"
+"R09_Repetition.RepRangeCorrect" = "36ee06e92b465ce46d8df272dc25fd5423f4c6466109cf3d2c0d200445955414"
+"R09_Size.ClassNodesCorrectR09" = "64caa837554bce236a3dd0441738409b817ed23bdaaed1de3fe1e926dd4fd109"
+"R09_Size.ClassNodesR09" = "01f988affd1ce885f6f7bc391c1bff5a119f90ae4329c313d92fff810faed3b9"
+"R09_Size.CopiesNodesR09" = "aecf48539a5a62f8e592a72172eae07b08dd8046c336eb8bc85f697cf8f96942"
+"R09_Size.LoweringNodesCorrectR09" = "4af9e85c41bdff81c638c528b8bf1a741d79eab5ead1c8e711ee41a8467913af"
+"R09_Size.LoweringNodesR09" = "02b0b287d01a90bf6d4a7947e15ae5a84e2b02845b30e6d776846cb2062defd4"
+"R09_Size.OptionalNodesR09" = "82fc14e7850f20c92bc3c351558cd39fb64474a19d3a8ba01a4877a3a1c5617f"
+"R09_Size.RangeNodesCorrectR09" = "ce88bf203456f351bdee5f15cb08353f7473eaed26d63db13fbd8df1d0901349"
+"R09_Size.RangeNodesR09" = "18cc44bd3a7278e37d517256f9239ca587b819d9b62b06610ce46545faa1d14c"
+
+[[file]]
+path = "dafny/checks/R09_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_PredictBound.BoundPositionValueR09" = "2cb21be0b16efc9597da852b0ce61337466231ea55b77f3ac27e7ab716b82841"
+"R09_PredictBound.ReadSingleR09" = "ff16383fcb0f86d19876ffccfc91912a0443502fd3094f2b074c2528523cb75b"
+"R09_PredictBound.SingleBoundR09" = "5e99459c4f3f4ed49d50f36c9e7c42dac77312800f0c5edf65dc0378f24a55d9"
+
+[[file]]
+path = "verus/r/r09_effects/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"EffectCursorR09" = "1530d8b2c70c77c5c601f2bb94c3f47e948d522b368e2e91e991315a802d0a84"
+"both_mirror_implications_r09" = "72965f5850e2ad2297e51fa09d79db3d6be998b7a76cd976d8edd43400f0bd97"
+"checked_add_cost_r09" = "57dd7430dc335e2cd658929d377c6841e720b4e95e1192d14cd93c0385f2565d"
+"checked_class_cost_r09" = "19f6645a7d81933fe3b5ddb64234c8886e4d79c79f80ebadd591e00cde059991"
+"checked_lowering_cost_r09" = "3db92b09503145db1868b6ae49380e3579aa3ff8a6955da4b10aafd19f4cebf3"
+"class_items" = "f39d9b479a5242059e222bdf25b298ed3a930b45f35a5cb1c2fec2b51ff45990"
+"class_lower_exec_r09" = "764a33aaf0eb5cdc697d0a57e1fe300f2094d983fd084586f711551e542354d4"
+"class_nodes_r09" = "6d7f87e0eb3d97a11f153451b2ea2191d1c344464fd68b5e0a69df1c8a2de277"
+"copies_lower_exec_r09" = "1918eb128b1e3e82348437cda4cdee7c7ec3cc930bf5c844b2999751e254195b"
+"counted_cursor_r09" = "5f978389ce22c24bce2d0c9e345230735ba3753b41afbb7cdecd27d8b41d100a"
+"counted_node" = "77dbf6b4ad130a632405ba7e3f188357496ffe46f2e9cf5b7a44e64edbb74d83"
+"division_budget_guard_r09" = "c68a7fcdb30a4950778c9a2ff1ce8469022518c37a04571d7e9ed0cb92c211cc"
+"frontend_r09" = "7780ee47acc8f4a162a47920fb904fe08fd8152b7f48a920404abc7db29a2975"
+"lemma_cat_right_context_r09" = "78348c6248adf9f1abd8a04b8e7552efa844d666655a83d8aa16fc490784c87d"
+"lemma_class_nodes_r09" = "e8c71d580ac25a0edb13e3e87dc675995a318956ac3106c8e81fc796bab9697d"
+"lemma_copies_join_r09" = "601961bf2fe9bd2c53381cadd458b28bf53fac72fc4c8826704daf97d98f44c2"
+"lemma_copies_nodes_r09" = "cfd9ad07a0b7d2d4fd85fe77b30969981de692ed222ace5e3f173eb25e5367b2"
+"lemma_copies_optional_r09" = "f002f8d84a0d32fe4db39a449ba6f6af2a3cecaef8148c40920e06bb8a5e61a4"
+"lemma_literal_append_r09" = "598f6fad2bc4764f334d7ee39eac02f886b4e63edfb288cfbe5e8dcb8f6ac38e"
+"lemma_lowering_nodes_r09" = "9d476af965e467808e880f6d75ae7172580f9ba6c7a5abb4267ffb0eb4afd3b2"
+"lemma_optional_nodes_r09" = "60dc582f821706014788772700a4464808b04bae80b543de8da64d6a5db2b39a"
+"lemma_range_nodes_r09" = "224ba5074e3bf9f18458ff4a42e66d236ca0bdd0a99dddb26e7689bcc451ec3f"
+"lemma_repetition_cost_grows_r09" = "736b3d4c4ab1cd8601b1923f03fa258a6f5d90333e76cc44a807e3af6bb00167"
+"lemma_repetition_interval_r09" = "f6bc8bba3dd2788d2d04be7bf3c985a68ab90fb882d0ae4f584bcb0cff76eb90"
+"lowering_exec_r09" = "dff8f40c2dec69168cd9b1367a3c917ac4dec690c8d5333db290d5cb67824f6d"
+"lowering_nodes_r09" = "5104ba1b02b577c3b9d8b54499f4dc0084aa111a23d332310cf47ad8cd6f376f"
+"no_special_from" = "4a081595a06358fdbb15c95e5dcf5eb7010a9140c609a5ef71fc221ed5f2ab1b"
+"optional_lower_exec_r09" = "048c1205db14db47b575110eec8c4b88feccddaa491882f12332e42363dbe760"
+"original_contract_r09" = "f73150a5c7d57c7feaa5f308d27eece404ae93123b81f3f50c7b454ef2d9095e"
+"parse" = "3a4edc61882a7d531124476d6f981403f6de3d4a2827847039803b13486a1103"
+"parse_alt" = "d8d2c865feeb225d6c03ea5c7ff121c1142fd9e6f0a4cba28cbb0cfd4f64dea4"
+"parse_atom" = "88adc3610d2de808349a72e698da362f83d0137f7c694df859cedaba80ccd9b4"
+"parse_cat" = "ccfee63117db7512be7ae409485bbdd45404879ddc37198f34cb32dcb802874b"
+"parse_counted" = "85cf2c195d9e432ef6985b700acdff2a540b0b0a0688c1c30e0a023efb91a8d8"
+"parse_post" = "619e11b5f41a224c9be0a017f027e18b901989e79e199401c39bea7b940f264b"
+"parse_relative_mirror_r09" = "f2d5edd401d89b9f5d002a85147a8eab026c8bddfe21f37b917ce26e4f6bdcae"
+"quotient_product_guard_r09" = "b4408ef6b160efa52e51e34999118921619d03435fedd56225220144af328050"
+"range_lower_exec_r09" = "d13bf10bd390461834b16614cce380bebc32c99ba23528bca8dededf818be609"
+"range_nodes_r09" = "4ecde0ee5184910a0be57f464dc3748d8759f3fa80eac0842dd08312e0f97dc9"
+"read_bound_cursor_r09" = "2eed759696516915fbd3306b474df97a036e54c65d3b325c698c412d108211fc"
+"read_bound_r09" = "2b7b52ac58a2631292e01257f29f4d13da7c2405e94325252b5d14cadc596057"
+"repeat_expansion_budget_r09" = "08b896c1eb5df0ab666e7607c70a9ceaca8c00f9c8d33822366e345edccdade9"
+"repetition_lower_exec_r09" = "d952db41db099368fe351c53be2f74ab1ffc5a9696679bf45bdbf62d933f986a"
+"scalar_char_r09" = "b5d032fb0764758d8ae10a939ada4a7c49291d1d5c510f8a64f612561aaa3d2a"
+"transcribed_mirror_r09" = "d83fbbefd01cd6f252aea02a25a9778c55e8fe65518bc200d39dbdd0c2519e16"
+
+[[file]]
+path = "specimens/R09/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"bound_scalar_position_r09" = "456c89ad5956fa29de007eceb90f113eedd049412f4cf5045d5bcdfec8e9b15e"
+"scalar_bound_r09" = "f50872689b6aac283914fd3c2ec8014aceee4d96e9d2f90ba8f10c41a5edf7fe"
+
+[[file]]
+path = "specimens/R09/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"ToyCursorR09" = "32394fd44962f3ac0b9eb7d88366199eecc273124fb6883f2ad3ad8359faf6d6"
+"toy_step_r09" = "a9131558cb03f2ae87c0edca2b9381c5fe66d5c2fe7a7bb01230eabc40b09c34"
+"toy_twice_r09" = "8e3e3213569cb5bea6a8cd17621ca27d9c95525a1e4e4f018392f53ce6b7af17"
+
+[[file]]
+path = "specimens/R09/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_PropagationCard.PropagateCardR09" = "b5a5dbcced0b0f1c5a0db4d55ced078d4da48dc194a78f0c4f7fc5f0985a7400"
+
+[[file]]
+path = "specimens/R09/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"propagate_card_r09" = "5d6eb2e5b9ead1c8c94884266e8b19f3af978236ca07d5d5276837861e5ab8e8"
+
+[[file]]
+path = "specimens/R09/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_OldCard.AdvanceCardR09" = "ab8c25fdb95bc069a07eda40f93bb6a5f72281f86f6caea27e8598e8108b0173"
+
+[[file]]
+path = "specimens/R09/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"CardCursorR09" = "b7fc97ad196a8bb6922832d9fe331f7e56697cdab255466817e98015e517af2c"
+"advance_card_r09" = "a5b8b2f8663360ffbc2d43a2f17d61b4320226831839a601f39510ca0affd1b4"
+
+[[file]]
+path = "specimens/R09/error-x-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_ErrorAdapterx.PositionedR09" = "c91c5ca139632523b459f7086ca27a7721025b2cf62f4598dbf6a410da8cabc3"
+"R09_ErrorAdapterx.PreservePositionR09" = "b297dc6090c1e343a7dc7229bf4ddeb75120c50e1d1c8442422e68f0add4c0e6"
+
+[[file]]
+path = "specimens/R09/error-x-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"preserve_position_r09" = "c01682d12be1c477b1b979033942a3dcd31d20274121fd6317e37f440ca73bce"
+
+[[file]]
+path = "specimens/R09/error-y-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_ErrorAdaptery.PositionedR09" = "c91c5ca139632523b459f7086ca27a7721025b2cf62f4598dbf6a410da8cabc3"
+"R09_ErrorAdaptery.PreservePositionR09" = "b297dc6090c1e343a7dc7229bf4ddeb75120c50e1d1c8442422e68f0add4c0e6"
+
+[[file]]
+path = "specimens/R09/error-y-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"preserve_position_r09" = "c01682d12be1c477b1b979033942a3dcd31d20274121fd6317e37f440ca73bce"
+
+[[file]]
+path = "specimens/R09/product-x-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_ProductFitx.FitU32R09" = "b68f7eafba4742f1d45b3ff9cdae61496d73d9d01352238e81069973b11add48"
+"R09_ProductFitx.ProductFitsR09" = "25ad3e1c7d178a1c51093f391db11c7e017e3a60279b149fa91cc554334dfd66"
+
+[[file]]
+path = "specimens/R09/product-x-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"division_budget_guard_r09" = "c68a7fcdb30a4950778c9a2ff1ce8469022518c37a04571d7e9ed0cb92c211cc"
+"product_fits_r09" = "30d6a031be39548ad4fca31b920deaefd35c96ad1313846e27a58ca5ca3a019a"
+"quotient_product_guard_r09" = "b4408ef6b160efa52e51e34999118921619d03435fedd56225220144af328050"
+
+[[file]]
+path = "specimens/R09/product-y-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R09_ProductFity.FitU32R09" = "b68f7eafba4742f1d45b3ff9cdae61496d73d9d01352238e81069973b11add48"
+"R09_ProductFity.ProductFitsR09" = "25ad3e1c7d178a1c51093f391db11c7e017e3a60279b149fa91cc554334dfd66"
+"R09_ProductFity.ProductOrderCardR09" = "69c8617bd2303249266daf5b7e54aa99be76b343fad8b9407f91b63080d02f9d"
+"R09_ProductFity.QuotientGuardCardR09" = "5cbbca5292a0603687dab8f687b5d18a8bd2304b430ae44f0ef47bbf6a50c191"
+
+[[file]]
+path = "specimens/R09/product-y-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"division_budget_guard_r09" = "c68a7fcdb30a4950778c9a2ff1ce8469022518c37a04571d7e9ed0cb92c211cc"
+"product_fits_r09" = "30d6a031be39548ad4fca31b920deaefd35c96ad1313846e27a58ca5ca3a019a"
+"quotient_product_guard_r09" = "b4408ef6b160efa52e51e34999118921619d03435fedd56225220144af328050"
+
+[[file]]
+path = "dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R09_AgentRefactor.MirrorImplicationR09 {:induction false}"]
+[file.statements]
+"R09_AgentRefactor.EscapedAtomR09" = "c10e8d5547338e7a727e66ca4ba722b451185ae958e6bf9545c543d9600f0ae6"
+"R09_AgentRefactor.EscapedCursorR09._ctor" = "d7f9eb4c736981b342ee0693dcf82c3dfbe32e3d47ea32894ace1821b1766cff"
+"R09_AgentRefactor.EscapedMirrorR09" = "822c6d695a824539c9061bf7d8839be1d67c57b33f32af66d3f2042692d39506"
+"R09_AgentRefactor.EscapedModelR09" = "be3401e8f0346389359cb44178c0c8dd5e9cc3ce4cd7af88a444c59f64ad0ddb"
+"R09_AgentRefactor.MirrorImplicationR09" = "da341691d1e697ee58f2e9eb1511eff4c4d0b96bd86a691f43e420d8890a5fe2"
+
+[[file]]
+path = "verus/r/r09_effects/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"EscapedCursorR09" = "1e7820eabb46f73b1921acd70b1ad59df1b840dfcb78046e5aafe9668a7327a6"
+"escaped_atom_r09" = "6ab2456128aa59460c9687df60f7dfc06d11f7240781b185eb8ae44b6296d02f"
+"escaped_mirror_r09" = "189103c16cf9d197f778504570b80fddc935d5c3c5f3d34c524682f8109cee28"
+"escaped_model_r09" = "c557514b99aacb95003bc715605a739b6e31e28b5d27e4a05b5192059cf794f5"
+"mirror_implication_r09" = "3593d97d31f2a2658f9cc8e26501a70a28d350a6de71b66406f09e3c6aefacda"

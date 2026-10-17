@@ -1,0 +1,1784 @@
+[
+  {
+    "pattern": "",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "",
+    "cap": 1,
+    "expected": "0,0#E|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "",
+    "cap": 3,
+    "expected": "0,0#E|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "",
+    "cap": 32,
+    "expected": "0,0#E|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "",
+    "cap": 4096,
+    "expected": "0,0#E|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a",
+    "cap": 1,
+    "expected": "0,1#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a",
+    "cap": 3,
+    "expected": "0,1#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a",
+    "cap": 32,
+    "expected": "0,1#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a",
+    "cap": 4096,
+    "expected": "0,1#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "ab",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "ab",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "ab",
+    "cap": 3,
+    "expected": "0,2#T(0,1#C97,1,2#C98)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "ab",
+    "cap": 32,
+    "expected": "0,2#T(0,1#C97,1,2#C98)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "ab",
+    "cap": 4096,
+    "expected": "0,2#T(0,1#C97,1,2#C98)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "é",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "é",
+    "cap": 1,
+    "expected": "0,1#C233|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "é",
+    "cap": 3,
+    "expected": "0,1#C233|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "é",
+    "cap": 32,
+    "expected": "0,1#C233|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "é",
+    "cap": 4096,
+    "expected": "0,1#C233|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "δa",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "δa",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "δa",
+    "cap": 3,
+    "expected": "0,2#T(0,1#C948,1,2#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "δa",
+    "cap": 32,
+    "expected": "0,2#T(0,1#C948,1,2#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "δa",
+    "cap": 4096,
+    "expected": "0,2#T(0,1#C948,1,2#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "😀",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "😀",
+    "cap": 1,
+    "expected": "0,1#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "😀",
+    "cap": 3,
+    "expected": "0,1#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "😀",
+    "cap": 32,
+    "expected": "0,1#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "😀",
+    "cap": 4096,
+    "expected": "0,1#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "􏿿",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "􏿿",
+    "cap": 1,
+    "expected": "0,1#C1114111|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "􏿿",
+    "cap": 3,
+    "expected": "0,1#C1114111|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "􏿿",
+    "cap": 32,
+    "expected": "0,1#C1114111|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "􏿿",
+    "cap": 4096,
+    "expected": "0,1#C1114111|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a\n",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a\n",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a\n",
+    "cap": 3,
+    "expected": "0,2#T(0,1#C97,1,2#C10)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a\n",
+    "cap": 32,
+    "expected": "0,2#T(0,1#C97,1,2#C10)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a\n",
+    "cap": 4096,
+    "expected": "0,2#T(0,1#C97,1,2#C10)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|",
+    "cap": 3,
+    "expected": "0,1#A(0,0#E,1,1#E)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|",
+    "cap": 32,
+    "expected": "0,1#A(0,0#E,1,1#E)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|",
+    "cap": 4096,
+    "expected": "0,1#A(0,0#E,1,1#E)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a|",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a|",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a|",
+    "cap": 3,
+    "expected": "0,2#A(0,1#C97,2,2#E)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a|",
+    "cap": 32,
+    "expected": "0,2#A(0,1#C97,2,2#E)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a|",
+    "cap": 4096,
+    "expected": "0,2#A(0,1#C97,2,2#E)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|a",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|a",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|a",
+    "cap": 3,
+    "expected": "0,2#A(0,0#E,1,2#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|a",
+    "cap": 32,
+    "expected": "0,2#A(0,0#E,1,2#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "|a",
+    "cap": 4096,
+    "expected": "0,2#A(0,0#E,1,2#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a||b",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a||b",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a||b",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a||b",
+    "cap": 32,
+    "expected": "0,4#A(0,2#A(0,1#C97,2,2#E),3,4#C98)|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a||b",
+    "cap": 4096,
+    "expected": "0,4#A(0,2#A(0,1#C97,2,2#E),3,4#C98)|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "()",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "()",
+    "cap": 1,
+    "expected": "0,2#G(1,1#E)|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "()",
+    "cap": 3,
+    "expected": "0,2#G(1,1#E)|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "()",
+    "cap": 32,
+    "expected": "0,2#G(1,1#E)|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "()",
+    "cap": 4096,
+    "expected": "0,2#G(1,1#E)|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a|b)c",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a|b)c",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a|b)c",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a|b)c",
+    "cap": 32,
+    "expected": "0,6#T(0,5#G(1,4#A(1,2#C97,3,4#C98)),5,6#C99)|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a|b)c",
+    "cap": 4096,
+    "expected": "0,6#T(0,5#G(1,4#A(1,2#C97,3,4#C98)),5,6#C99)|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*",
+    "cap": 3,
+    "expected": "0,2#S(0,1#C97)|N2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*",
+    "cap": 32,
+    "expected": "0,2#S(0,1#C97)|N2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*",
+    "cap": 4096,
+    "expected": "0,2#S(0,1#C97)|N2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a+",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a+",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a+",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a+",
+    "cap": 32,
+    "expected": "0,2#P(0,1#C97)|N4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a+",
+    "cap": 4096,
+    "expected": "0,2#P(0,1#C97)|N4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a?",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a?",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a?",
+    "cap": 3,
+    "expected": "0,2#O(0,1#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a?",
+    "cap": 32,
+    "expected": "0,2#O(0,1#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a?",
+    "cap": 4096,
+    "expected": "0,2#O(0,1#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a??",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a??",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a??",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a??",
+    "cap": 32,
+    "expected": "0,3#O(0,2#O(0,1#C97))|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a??",
+    "cap": 4096,
+    "expected": "0,3#O(0,2#O(0,1#C97))|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*+",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*+",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*+",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*+",
+    "cap": 32,
+    "expected": "0,3#P(0,2#S(0,1#C97))|N6",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a*+",
+    "cap": 4096,
+    "expected": "0,3#P(0,2#S(0,1#C97))|N6",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0}",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0}",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0}",
+    "cap": 3,
+    "expected": "0,4#R0:0(0,1#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0}",
+    "cap": 32,
+    "expected": "0,4#R0:0(0,1#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0}",
+    "cap": 4096,
+    "expected": "0,4#R0:0(0,1#C97)|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}",
+    "cap": 32,
+    "expected": "0,4#R9:9(0,1#C97)|N21",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}",
+    "cap": 4096,
+    "expected": "0,4#R9:9(0,1#C97)|N21",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0,9}",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0,9}",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0,9}",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0,9}",
+    "cap": 32,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{0,9}",
+    "cap": 4096,
+    "expected": "0,6#R0:9(0,1#C97)|N39",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{2,1}",
+    "cap": 0,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{2,1}",
+    "cap": 1,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{2,1}",
+    "cap": 3,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{2,1}",
+    "cap": 32,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{2,1}",
+    "cap": 4096,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,}",
+    "cap": 0,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,}",
+    "cap": 1,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,}",
+    "cap": 3,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,}",
+    "cap": 32,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,}",
+    "cap": 4096,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{",
+    "cap": 0,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{",
+    "cap": 1,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{",
+    "cap": 3,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{",
+    "cap": 32,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{",
+    "cap": 4096,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1",
+    "cap": 0,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1",
+    "cap": 1,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1",
+    "cap": 3,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1",
+    "cap": 32,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1",
+    "cap": 4096,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,",
+    "cap": 0,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,",
+    "cap": 1,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,",
+    "cap": 3,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,",
+    "cap": 32,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,",
+    "cap": 4096,
+    "expected": "ERR4",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,2",
+    "cap": 0,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,2",
+    "cap": 1,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,2",
+    "cap": 3,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,2",
+    "cap": 32,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,2",
+    "cap": 4096,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{10}",
+    "cap": 0,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{10}",
+    "cap": 1,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{10}",
+    "cap": 3,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{10}",
+    "cap": 32,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{10}",
+    "cap": 4096,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,20}",
+    "cap": 0,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,20}",
+    "cap": 1,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,20}",
+    "cap": 3,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,20}",
+    "cap": 32,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{1,20}",
+    "cap": 4096,
+    "expected": "ERR5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[",
+    "cap": 0,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[",
+    "cap": 1,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[",
+    "cap": 3,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[",
+    "cap": 32,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[",
+    "cap": 4096,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 1,
+    "expected": "0,2#K[]|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 3,
+    "expected": "0,2#K[]|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 32,
+    "expected": "0,2#K[]|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 4096,
+    "expected": "0,2#K[]|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a]",
+    "cap": 3,
+    "expected": "0,3#K[97:97;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a]",
+    "cap": 32,
+    "expected": "0,3#K[97:97;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a]",
+    "cap": 4096,
+    "expected": "0,3#K[97:97;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ba]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ba]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ba]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ba]",
+    "cap": 32,
+    "expected": "0,4#K[97:97;98:98;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ba]",
+    "cap": 4096,
+    "expected": "0,4#K[97:97;98:98;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]",
+    "cap": 32,
+    "expected": "0,5#K[97:99;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]",
+    "cap": 4096,
+    "expected": "0,5#K[97:99;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[c-a]",
+    "cap": 0,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[c-a]",
+    "cap": 1,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[c-a]",
+    "cap": 3,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[c-a]",
+    "cap": 32,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[c-a]",
+    "cap": 4096,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-]",
+    "cap": 32,
+    "expected": "0,4#K[45:45;97:97;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-]",
+    "cap": 4096,
+    "expected": "0,4#K[45:45;97:97;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[-a]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[-a]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[-a]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[-a]",
+    "cap": 32,
+    "expected": "0,4#K[45:45;97:97;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[-a]",
+    "cap": 4096,
+    "expected": "0,4#K[45:45;97:97;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-cb-d]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-cb-d]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-cb-d]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-cb-d]",
+    "cap": 32,
+    "expected": "0,8#K[97:100;]|N9",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-cb-d]",
+    "cap": 4096,
+    "expected": "0,8#K[97:100;]|N9",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-ca-c]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-ca-c]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-ca-c]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-ca-c]",
+    "cap": 32,
+    "expected": "0,8#K[97:99;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-ca-c]",
+    "cap": 4096,
+    "expected": "0,8#K[97:99;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[é-δ]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[é-δ]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[é-δ]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[é-δ]",
+    "cap": 32,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[é-δ]",
+    "cap": 4096,
+    "expected": "0,5#K[233:948;]|N1433",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[퟿]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[퟿]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[퟿]",
+    "cap": 3,
+    "expected": "0,3#K[55295:55295;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[퟿]",
+    "cap": 32,
+    "expected": "0,3#K[55295:55295;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[퟿]",
+    "cap": 4096,
+    "expected": "0,3#K[55295:55295;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 0,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 1,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 3,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 32,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[]",
+    "cap": 4096,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[😀]",
+    "cap": 0,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[😀]",
+    "cap": 1,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[😀]",
+    "cap": 3,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[😀]",
+    "cap": 32,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[😀]",
+    "cap": 4096,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]]",
+    "cap": 3,
+    "expected": "0,4#K[93:93;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]]",
+    "cap": 32,
+    "expected": "0,4#K[93:93;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]]",
+    "cap": 4096,
+    "expected": "0,4#K[93:93;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\-]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\-]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\-]",
+    "cap": 3,
+    "expected": "0,4#K[45:45;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\-]",
+    "cap": 32,
+    "expected": "0,4#K[45:45;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\-]",
+    "cap": 4096,
+    "expected": "0,4#K[45:45;]|N3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]",
+    "cap": 0,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]",
+    "cap": 1,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]",
+    "cap": 3,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]",
+    "cap": 32,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[\\]",
+    "cap": 4096,
+    "expected": "ERR3",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\",
+    "cap": 0,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\",
+    "cap": 1,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\",
+    "cap": 3,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\",
+    "cap": 32,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\",
+    "cap": 4096,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\a",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\a",
+    "cap": 1,
+    "expected": "0,2#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\a",
+    "cap": 3,
+    "expected": "0,2#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\a",
+    "cap": 32,
+    "expected": "0,2#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\a",
+    "cap": 4096,
+    "expected": "0,2#C97|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\*",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\*",
+    "cap": 1,
+    "expected": "0,2#C42|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\*",
+    "cap": 3,
+    "expected": "0,2#C42|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\*",
+    "cap": 32,
+    "expected": "0,2#C42|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\*",
+    "cap": 4096,
+    "expected": "0,2#C42|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\😀",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\😀",
+    "cap": 1,
+    "expected": "0,2#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\😀",
+    "cap": 3,
+    "expected": "0,2#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\😀",
+    "cap": 32,
+    "expected": "0,2#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "\\😀",
+    "cap": 4096,
+    "expected": "0,2#C128512|N1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a\\]b]",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a\\]b]",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a\\]b]",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a\\]b]",
+    "cap": 32,
+    "expected": "0,6#K[93:93;97:97;98:98;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a\\]b]",
+    "cap": 4096,
+    "expected": "0,6#K[93:93;97:97;98:98;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a",
+    "cap": 0,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a",
+    "cap": 1,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a",
+    "cap": 3,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a",
+    "cap": 32,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "(a",
+    "cap": 4096,
+    "expected": "ERR2",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a)",
+    "cap": 0,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a)",
+    "cap": 1,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a)",
+    "cap": 3,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a)",
+    "cap": 32,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "a)",
+    "cap": 4096,
+    "expected": "ERR1",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ab]*",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ab]*",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ab]*",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ab]*",
+    "cap": 32,
+    "expected": "0,5#S(0,4#K[97:97;98:98;])|N6",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[ab]*",
+    "cap": 4096,
+    "expected": "0,5#S(0,4#K[97:97;98:98;])|N6",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]{1,2}|(δ😀)?",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]{1,2}|(δ😀)?",
+    "cap": 1,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]{1,2}|(δ😀)?",
+    "cap": 3,
+    "expected": "ERR0",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]{1,2}|(δ😀)?",
+    "cap": 32,
+    "expected": "0,16#A(0,10#R1:2(0,5#K[97:99;]),11,16#O(11,15#G(12,14#T(12,13#C948,13,14#C128512))))|N27",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-c]{1,2}|(δ😀)?",
+    "cap": 4096,
+    "expected": "0,16#A(0,10#R1:2(0,5#K[97:99;]),11,16#O(11,15#G(12,14#T(12,13#C948,13,14#C128512))))|N27",
+    "oracle": "prior compiled AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-z]",
+    "cap": 51,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-z]",
+    "cap": 52,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-z]",
+    "cap": 53,
+    "expected": "0,5#K[97:122;]|N53",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-z]",
+    "cap": 54,
+    "expected": "0,5#K[97:122;]|N53",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-z]",
+    "cap": 4294967295,
+    "expected": "0,5#K[97:122;]|N53",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-퟿]{0}",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-퟿]{0}",
+    "cap": 2,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-퟿]{0}",
+    "cap": 3,
+    "expected": "0,8#R0:0(0,5#K[97:55295;])|N3",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-퟿]{0}",
+    "cap": 4,
+    "expected": "0,8#R0:0(0,5#K[97:55295;])|N3",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "[a-퟿]{0}",
+    "cap": 4294967295,
+    "expected": "0,8#R0:0(0,5#K[97:55295;])|N3",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}",
+    "cap": 32,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}",
+    "cap": 4294967295,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{0}",
+    "cap": 0,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{0}",
+    "cap": 2,
+    "expected": "ERR0",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{0}",
+    "cap": 3,
+    "expected": "0,37#R0:0(0,34#R9:9(0,31#R9:9(0,28#R9:9(0,25#R9:9(0,22#R9:9(0,19#R9:9(0,16#R9:9(0,13#R9:9(0,10#R9:9(0,7#R9:9(0,4#R9:9(0,1#C97))))))))))))|N3",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  },
+  {
+    "pattern": "a{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{9}{0}",
+    "cap": 4294967295,
+    "expected": "0,37#R0:0(0,34#R9:9(0,31#R9:9(0,28#R9:9(0,25#R9:9(0,22#R9:9(0,19#R9:9(0,16#R9:9(0,13#R9:9(0,10#R9:9(0,7#R9:9(0,4#R9:9(0,1#C97))))))))))))|N3",
+    "oracle": "hand-built nested AST + independent size interpretation"
+  }
+]
