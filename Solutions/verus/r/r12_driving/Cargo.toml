@@ -1,0 +1,10 @@
+[package]
+name="r12_driving"
+version="0.1.0"
+edition="2021"
+build=false
+[dependencies]
+vstd="=0.0.0-2026-09-20-0158"
+[package.metadata.verus]
+verify=true
+[workspace]

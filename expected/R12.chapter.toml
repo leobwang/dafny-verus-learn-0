@@ -1,0 +1,194 @@
+# expected/R12.chapter.toml — the chapter pins of R12's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R12 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "selection-d-fast"
+cmd = ["scripts/vcheck", "--module", "R12", "--symbol", "R12_SelectionProbe.GoodR12", "selection-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["R12.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."selection-d.dfy"]
+copy = "specimens/R12/selection-d.dfy.specimen"
+[entry.pinned]
+body = "6d986e16562dc147cf92b7744f6f1f74eb7e9b954b6ae09948a117c5a4068e30"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:selection-d.dfy" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
+"specimens/R12/selection-d.dfy.specimen" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
+
+[[entry]]
+id = "selection-d-full"
+cmd = ["scripts/vcheck", "--module", "R12", "selection-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["R12.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."selection-d.dfy"]
+copy = "specimens/R12/selection-d.dfy.specimen"
+[entry.pinned]
+body = "428ca74c6873375c857e36aedeb4ffc05d29076ee6786f7f95db876df6924203"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:selection-d.dfy" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
+"specimens/R12/selection-d.dfy.specimen" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
+
+[[entry]]
+id = "selection-v-fast"
+cmd = ["scripts/vcheck", "--symbol", "good_r12", "specimens/R12/selection-v.rs.specimen"]
+answers = ["R12.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5ec7e338ac7cf5882acb6188131b9f55dd252404db5b044718427091e4b1bfae"
+[entry.pinned.inputs]
+"specimens/R12/selection-v.rs.specimen" = "96edbe5477c08206b6ee9e72cd57ba9256b1d2d3be287645dab4842d943c227f"
+
+[[entry]]
+id = "selection-v-full"
+cmd = ["scripts/vcheck", "specimens/R12/selection-v.rs.specimen"]
+answers = ["R12.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1c4d448faca831a953d41eb747894f425161d1ecaeb4aeabf4490e5b4d9d68e7"
+[entry.pinned.inputs]
+"specimens/R12/selection-v.rs.specimen" = "96edbe5477c08206b6ee9e72cd57ba9256b1d2d3be287645dab4842d943c227f"
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R12_Driving/std"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9b3584e6e66f71afd3ca002a6bb4b7b22d07be81c2d5f65f8010583439689d50"
+[entry.pinned.inputs]
+"dafny/R/R12_Driving/std/R12_Driving.dfy" = "0d55a3b14fd2e5116b2f4c02af33327ade5512dde3e7cbbbd856bcafe3c00ad4"
+"dafny/R/R12_Driving/std/dfyconfig.toml" = "704e2555eb7014cd062d9853b5d730d32c75b967b2966b03be505ea96eaa0d7c"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r12_driving"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e062e77181b2123a3381c6a9a3ad130d7ba85fcc7f6acbf87d1e197058da98b4"
+[entry.pinned.inputs]
+"verus/r/r12_driving/Cargo.toml" = "5e7fc49cdc4a054981ac213b007cde26180f21b2ae99a2a29b14814ef5ffddf7"
+"verus/r/r12_driving/src/lib.rs" = "e32b0601b6486838acbfdbbbd1df094bc8610bd93e19e7e5862eb33811af5713"
+
+[[entry]]
+id = "span-value"
+cmd = ["scripts/vcheck", "--module", "R12", "span-value.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["R12.P1d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."span-value.dfy"]
+text = "/*! R12 given-only source-span observation: native lines are one-based. */\nmodule R12_SpanObservation {\n // item: R12.P1d value\n // Answer form: numeral.\n @Test method SecondDeclarationR12() {\n  var spans:seq<seq<nat>>:=[[7,12],[15,29]];\n  var line:=spans[1][0];\n  assert line == 15;\n }\n}\n"
+[entry.pinned]
+body = "7172925ddb554802fe18d2feab1cdeeef2c8e6aa85ffc504806c101db185e683"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:span-value.dfy" = "3c0a65348d4421868f75441c9ed8a28194b0b92949b0830348ee9d70ccbf3217"
+
+[[entry]]
+id = "phase-value"
+cmd = ["scripts/vcheck", "--module", "R12", "phase-value.rs"]
+cwd = "scratch"
+inputs = []
+answers = ["R12.P2v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."phase-value.rs"]
+text = "use vstd::prelude::*;\nverus! {\npub enum ProbePhaseR12 {Verification,Compilation}\n// This is an illustrative field predicate, not authenticated native evidence.\npub open spec fn proof_fields_r12(phase:ProbePhaseR12,count:nat,holes:nat)->bool {\n phase is Verification && count>0 && holes==0\n}\n// item: R12.P2v value\n// Answer form: bool literal.\nproof fn phase_value_r12() {\n assert(proof_fields_r12(ProbePhaseR12::Compilation,7,0)==false) by (compute_only);\n}\n}\n"
+[entry.pinned]
+body = "88d5edbfac9f4a5877cd6fbacc4d4f88a219e1aeec58f635e01d91f78e20f5f6"
+[entry.pinned.inputs]
+"scratch:phase-value.rs" = "b104cbc0c04e22f37c7572227153ca5cc7b7036041228ba80f70eac3c2c78432"
+
+[[entry]]
+id = "count-labels"
+cmd = ["scripts/vcheck", "specimens/R12/P4v.rs.specimen"]
+answers = ["R12.P4v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4b2453425424d70fecd12ddcddf23e6a48b501f09b71c239f81dac7bb251f81c"
+[entry.pinned.inputs]
+"specimens/R12/P4v.rs.specimen" = "74ab01e34557b3724574e97d33127fc2f82ee2d0cc1b65a80678a25a60d9c497"
+
+[[entry]]
+id = "shipped-python"
+cmd = ["scripts/vcheck", "harness/r/fvh_r/engine.py"]
+excerpt = [1, 6]
+note = "Only the summary and five counted holes are quoted; unfinished acceptance-case failures are omitted."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "913f668002d1069b5aeb0698322e636486b7e515aad7e5a31693ffb826b851a7"
+[entry.pinned.inputs]
+"harness/r/fvh_r/engine.py" = "fac5e6701b34e37d2e82c5a41c8136a976dfe9ee4c1fa7c54f533b2b30e66cd5"
+
+[[entry]]
+id = "fields-d"
+cmd = ["scripts/vcheck", "--module", "R12", "fields-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["R12.P5dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."fields-d.dfy"]
+copy = "specimens/R12/fields-d.dfy.specimen"
+[entry.pinned]
+body = "00aebe1e1cbce00d27c43306cfb089395f58688ab6a6de8a86c33b12b7dc17a6"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:fields-d.dfy" = "cb80ea786d8f003933ffda25f4e3773f6cd7f7c1caad719fe31401f46483097f"
+"specimens/R12/fields-d.dfy.specimen" = "cb80ea786d8f003933ffda25f4e3773f6cd7f7c1caad719fe31401f46483097f"
+
+[[entry]]
+id = "bound-d"
+cmd = ["scripts/vcheck", "--module", "R12", "bound-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["R12.P5dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."bound-d.dfy"]
+copy = "specimens/R12/bound-d.dfy.specimen"
+[entry.pinned]
+body = "abde4f4e97154f7d348110e18aa7939f088a8ee8963b825f70d0f429efd2e2ce"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:bound-d.dfy" = "eeb8687861eb1196c88e539fdaebc49f23657f3e9ed0fd14b3cd187bcb8010c3"
+"specimens/R12/bound-d.dfy.specimen" = "eeb8687861eb1196c88e539fdaebc49f23657f3e9ed0fd14b3cd187bcb8010c3"
+
+[[entry]]
+id = "fields-v"
+cmd = ["scripts/vcheck", "specimens/R12/fields-v.rs.specimen"]
+answers = ["R12.P5dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9a032f6b663764644dd3e53b0b9a166f6c6591bb3179aff4754a75aa4dd902e9"
+[entry.pinned.inputs]
+"specimens/R12/fields-v.rs.specimen" = "7d1d91d351be9052505c8b504d4ab1bcda1da201b3c7302e5b05a5be9fcdc71f"
+
+[[entry]]
+id = "bound-v"
+cmd = ["scripts/vcheck", "specimens/R12/bound-v.rs.specimen"]
+answers = ["R12.P5dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "be218a3c14eca13cac756cdbf487242cc2d148693b450a815d414976eb449fbb"
+[entry.pinned.inputs]
+"specimens/R12/bound-v.rs.specimen" = "8653a0b276430d0b9bd9f778ea42c8a885d823bdd5f3c233a57b226ac704828e"

@@ -1,0 +1,5 @@
+// after: R12.P3dv
+module R12_SelectionProbe {
+ lemma GoodR12() ensures 2+2==4 {}
+ lemma BadR12() ensures 2+2==5 {}
+}

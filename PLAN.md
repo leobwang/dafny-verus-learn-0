@@ -1645,7 +1645,7 @@ full validity remains the checker/proof target. R11 is authoring, not shipped.
 
 Plan before activation, parent d9ae1b1. R11 focused CI and scripted STUDY checks
 run on its untouched STUDY worktree; inherit their final metadata separately.
-R12 remains planned/admission0 until native and Python feasibility and gates.
+R12 was planned/admission0 at plan entry, pending native/Python feasibility and gates.
 The user-directed D45 live-run deferral also covers Lab α's actual model arms,
 not implementation, recorded apparatus checks or reference-free mock/replay tests.
 Do not create grades, bypass pre-registration locks or call a model as CI.
@@ -1689,3 +1689,21 @@ stated facts under the owner rules. Include5–6committed predictions, two paire
 PP,12bank questions/disjoint6draws, exact local06.10and01.12cards, pre-registration
 and methods rubric, apparatus fallback, source-bound captures and three/four
 diagrams. Freeze practice, source-interface and live-outcome claims separately.
+
+
+R12 §14 construction checkpoint (2026-10-17): actual source is authoring,
+not shipped. Canonical11/11admission now precedes the eleven minute rows. The
+central Python reference passes143cases with original provided-frame and plan
+source-digest controls; native references pass three seeds and six audits.
+Compiled clients pass66finite cases per language. Four form-admission controls,
+actual native SHA-bound replay, the own24-frame LSP reading fixture, two exact
+local cards, methods rubric, calibration fixtures,12-question/disjoint6bank and
+two paired PP subjects are built. The chapter has5prediction boxes,3diagrams
+and14native/source captures. API facades preserve the frozen single-file overlay.
+The plan builder embeds task digests and actual prompt bytes, fixes all four
+regimes and refuses incomplete/stale40-task admission. Qwen and the stratified
+Claude subset require separate executable plans and separately bound/re-graded
+registration under the frozen global task/repeat schema. Full task corpus,
+final pins/STUDY workflow and focused CI remain source-construction work.
+Live D45 work stays deferred, not passed; Docker daemon availability alone is
+not validation of pinned containers or providers. No task gate or budget waiver.

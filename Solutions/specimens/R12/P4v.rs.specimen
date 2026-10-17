@@ -1,0 +1,13 @@
+// Reference Solution.
+use vstd::prelude::*;
+verus! {
+// item: R12.P4v obligation
+// Select failing labelled checks on the printed synthetic record fields.
+// FAILS c
+proof fn labelled_fields_r12() {
+ let count:nat=0;let holes:nat=0;
+ assert(holes==0); // [a]
+ assert(count==0); // [b]
+ assert(count>0); // [c]
+}
+}

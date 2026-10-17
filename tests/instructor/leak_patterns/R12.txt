@@ -1,0 +1,33 @@
+# R12 withheld H/T/A answer tripwires; author-only.
+# from Solutions/dafny/R/R12_Driving/std/R12_Driving.dfy
+# source: out:=limit-spent;} (R12.T1d)
+# verified: solutions=1 public=0
+out:=limit\-spent;\}
+# from Solutions/verus/r/r12_driving/src/lib.rs
+# source: invariant i<=flags.len(),accepted<=i,accepted==accepted_count_r12(flags@.take(i as int)), (R12.H1v)
+# verified: solutions=1 public=0
+invariant\s+i<=flags\.len\(\),accepted<=i,accepted==accepted_count_r12\(flags@\.take\(i\s+as\s+int\)\),
+# from Solutions/harness/r/fvh_r/engine.py
+# source: out.append(NativeRun(number,copy.deepcopy(d))) (R12.H1py)
+# verified: solutions=1 public=0
+out\.append\(NativeRun\(number,copy\.deepcopy\(d\)\)\)
+# from Solutions/harness/r/fvh_r/engine.py
+# source: innermost=[s for s in candidates if not any(t.start>=s.start and t.end<=s.end and (t.start>s.start or t.end<s.end) for t in candidates)] (R12.H2py)
+# verified: solutions=1 public=0
+innermost=\[s\s+for\s+s\s+in\s+candidates\s+if\s+not\s+any\(t\.start>=s\.start\s+and\s+t\.end<=s\.end\s+and\s+\(t\.start>s\.start\s+or\s+t\.end<s\.end\)\s+for\s+t\s+in\s+candidates\)\]
+# from Solutions/harness/r/fvh_r/engine.py
+# source: return Trace(tuple(engine.attempts[start:]),reason) (R12.H3py)
+# verified: solutions=1 public=0
+return\s+Trace\(tuple\(engine\.attempts\[start:\]\),reason\)
+# from Solutions/harness/r/fvh_r/engine.py
+# source: self.pending=(index,parent.id,parent.depth+1,hint) (R12.H4py)
+# verified: solutions=1 public=0
+self\.pending=\(index,parent\.id,parent\.depth\+1,hint\)
+# from Solutions/harness/r/fvh_r/engine.py
+# source: rendered=rendered.replace(site.marker,replacement,1) (R12.H5py)
+# verified: solutions=1 public=0
+rendered=rendered\.replace\(site\.marker,replacement,1\)
+# from Solutions/tools/R12/profiler.py
+# source: selected=matches[0] if len(matches)==1 else None (R12.A1py)
+# verified: solutions=1 public=0
+selected=matches\[0\]\s+if\s+len\(matches\)==1\s+else\s+None

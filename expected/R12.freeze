@@ -1,0 +1,177 @@
+# expected/R12.freeze — statement-freeze pins for R12 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R12` from the files as shipped; checked by
+# `scripts/specfreeze --check R12`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R12"
+unfrozen = ["harness/r/fvh_r/extractor.py", "harness/r/fvh_r/loop.py", "harness/r/fvh_r/environment.py"]
+
+[[file]]
+path = "dafny/checks/R12_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R12_SpanObservation.SecondDeclarationR12" = "7f13f184faa14f3750b6af354b037a52435a2af9758ddcc2688379139ef9d68b"
+
+[[file]]
+path = "dafny/R/R12_Driving/std/R12_Driving.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R12_HintSites.AcceptedCountR12" = "ad3360503043dab9aed0106135bc25264b745fd0d04e26297f21bbaf6546ca07"
+"R12_HintSites.AcceptedStepR12" = "8710c2a5f6129850066ca37a9ecaa4b9e40f00dc43add7d2e99baffab8e7b76f"
+"R12_HintSites.CountAcceptedR12" = "25fb77944a84a5040b3e6bde3eda6ba68b027d75bbf8065bd730689bdf33fe6a"
+"R12_HintSites.FirstRejectionR12" = "0b825e35375f901efcbc1db53a68e8f8752f4759114c12bff55823c1bbd43a05"
+"R12_HintSites.RemainingBudgetR12" = "c204cb76515a10defe2dc2b8e3ce8bd9530b7ff7d53af7e356c9e5c6c94e942a"
+[file.frozen_imports]
+"R12_HintSites" = []
+
+[[file]]
+path = "verus/r/r12_driving/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"accepted_count_r12" = "cbf72ad19253b2e77712ae03b6fcc016e2accd1ffabf7d0de5e21edde6fb5217"
+"accepted_step_r12" = "530444aaf1072061e36db81ad157209b3175bedf02e6d5bb567efc7b641d75a1"
+"count_accepted_r12" = "675dc21d31dc13e2459edd76fca964bd7c0064d0ab602e5dccbd2a5b054b27bd"
+"first_rejection_r12" = "c1bcd6c4415bee160843685ee3a2792d36d389c9449a1fa407adbd81b4231ba9"
+"remaining_budget_r12" = "a63842e9dd9a3154f971aa8ab9dbb6aab0a68b5132e5d1680f97dfcc79e42512"
+
+[[file]]
+path = "specimens/R12/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"ProbePhaseR12" = "ae8bf972043e344d3926a41c612918e3a16e9086060255fa20a598b14518a3e4"
+"phase_value_r12" = "3592994c657b2894f00498f1c13171e9445d81c723f91d5b4b7396c1ef3d3952"
+"proof_fields_r12" = "72392a2f5b0e09c75109a62e7dd39acbc10579fee2e843e6458f55baf0c5c834"
+
+[[file]]
+path = "specimens/R12/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"labelled_fields_r12" = "0575dfcb652213e805e9dee852173e731130869765b2ca6019b9d03e155b3987"
+
+[[file]]
+path = "specimens/R12/bound-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R12_RevisionProbe.BoundR12" = "a77ea7003f4bcf4d32803af32e1e29271851efd663c71e6d9ba310c2981ae740"
+"R12_RevisionProbe.CompareR12" = "346e40d613ae73d88e444826a0fbf00affe0b99cc4e7c835494334ac576e9b5d"
+"R12_RevisionProbe.FieldsR12" = "7025d031f1c79740ae99f28f251070db4cd557b9c762f494c53c914a63473f13"
+"R12_RevisionProbe.ReportR12" = "fd4f18caa81e733c7cccf009947e78c667a2227971765558ece96d794d3af4fd"
+
+[[file]]
+path = "specimens/R12/bound-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"ReportR12" = "5e53f1bb58b6f27971633ba3031c084e4dfd63a29ad302c674ac6dc84bae93c2"
+"bound_r12" = "a50f4b38fea989086ca44c13445fa1b3565d5b08de4ada8ba9125cd8e512a798"
+"compare_r12" = "1f9ef6a16c0388eca8c548d154d983ce76f2052f2341c0181274a74b2cd7195a"
+"fields_r12" = "166462da0654a7d63a9f54ca4ca704b09ee3f8df73046d03b2cb68a191ae8fc5"
+
+[[file]]
+path = "specimens/R12/fields-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R12_RevisionProbe.BoundR12" = "a77ea7003f4bcf4d32803af32e1e29271851efd663c71e6d9ba310c2981ae740"
+"R12_RevisionProbe.CompareR12" = "346e40d613ae73d88e444826a0fbf00affe0b99cc4e7c835494334ac576e9b5d"
+"R12_RevisionProbe.FieldsR12" = "7025d031f1c79740ae99f28f251070db4cd557b9c762f494c53c914a63473f13"
+"R12_RevisionProbe.ReportR12" = "fd4f18caa81e733c7cccf009947e78c667a2227971765558ece96d794d3af4fd"
+
+[[file]]
+path = "specimens/R12/fields-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"ReportR12" = "5e53f1bb58b6f27971633ba3031c084e4dfd63a29ad302c674ac6dc84bae93c2"
+"bound_r12" = "a50f4b38fea989086ca44c13445fa1b3565d5b08de4ada8ba9125cd8e512a798"
+"compare_r12" = "1f9ef6a16c0388eca8c548d154d983ce76f2052f2341c0181274a74b2cd7195a"
+"fields_r12" = "166462da0654a7d63a9f54ca4ca704b09ee3f8df73046d03b2cb68a191ae8fc5"
+
+[[file]]
+path = "specimens/R12/selection-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R12_SelectionProbe.BadR12" = "89216fdf402a5821620b09fafebdc33c33c8051c347b22972d598031582461b3"
+"R12_SelectionProbe.GoodR12" = "98ed8121101fe1fe0b98d4280eaa36504ee49c1d77bb963fd4d0a4bcd8e70bd8"
+
+[[file]]
+path = "specimens/R12/selection-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"bad_r12" = "1f625755c92920c39e13b17d2d8229d98ea2044323282b19d4d6249f3b4f1293"
+"good_r12" = "799938dc1b0f72d52941c17f7318ed67818a147099ce56f42ec197afc1d6cf61"
+
+[[file]]
+path = "tools/R12/profiler.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"SymbolProfile" = "d0ffcc0359c296bceef33dccd1077126002cb6fb6c57148e9af3d758b92b4fd2"
+"_r12_source_hash" = "7c729a341439b875306c15acb2066a8ec97156a21850b0cf81f1718b76a1420d"
+"_r12_wrapper_result" = "12c6d9ad3961349b4d1e91096844c13a6dfabf476d992daa9aad0169cb500138"
+"main" = "9d6c2ae3cc5d9956c9e9c1a7a0d58a764374477d1bb24c32c0a540325a11b880"
+"profile_symbols_r12" = "3bb23f7a155eac1ddeafc1f3d3a14728eb9442e279c0470062d4e5fb748866c8"
+
+[[file]]
+path = "harness/r/fvh_r/engine.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"Attempt" = "801025d38550f46842d7a316bc7f161a10d9cb5837d90f914b19ba253a77b64e"
+"FrontierExhausted" = "6679eb0728f70cdbb05ea5f63f833e84448f7d47419553df39baceb73b701800"
+"Hint" = "115af4b5e12a6273afbc42052edaaaa054a66c86c254d2dbd4b0092a46144da7"
+"Hint.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"HintSite" = "a8b0a8b25045caeb367c628d9c1aeaadde82db97726b2f59f691d04ae486b6f4"
+"HintSite.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"HintSite.marker" = "a6df42c4305f026b9b2a7d55ad141782f48d371d7b6870cde34c49d854ab7eed"
+"HintTask" = "4074b3b3fb4d7876a1532ecb923d72500e38218160b6227a40e2e97557dd3609"
+"HintTask.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"NativeRun" = "e8acf20ff0a8e7bcc2b233b8553d6d7537465d010a8a285b55d562a7cf43d2a0"
+"Node" = "488aa5175a38111d279a5069f21cfe0c5e674a0ef533aeca895a75e19cbe9f64"
+"Obligation" = "513c88456e6abfa36c3905d81ad68f5603914e81638a5dd543fb71ab64365452"
+"Outcome" = "f8d23bb60ee3d1b04913fcf58c946ce85301eaeb7a3eb7a784ea169a6c46a96d"
+"Outcome.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"R12BestFirst" = "ad9bea23044636654245d21d3273450ded6e8e5395509d145c434272b1ba312c"
+"R12BestFirstRaw" = "d8d21d26a814dd48ce3c58ea0a64991b5b6324f29d689487b32211d315c02013"
+"R12Independent" = "dfb5e8ff132abb7873e3d4798765c9ac656d9bc21cbb9a5c72714bae64a1f273"
+"R12Policy" = "9cb7c5f5bae4c2f1140862f6f890762c32d32e8543cde1e984ec2b36eb69e808"
+"R12Policy.__init__" = "af337c2ea1efbdb4103150e9ba2ae652952693b9f774538294c1f10cf85d63b7"
+"R12Policy.propose" = "051b23f6ad91871017aca1b15964f0a6ed7f04eb4cb78ca187b36e7fa195fad2"
+"R12Policy.propose.<locals>.ask" = "056a6ecec3322d9a67845102e3e02b785a97ebd74aec5e84c8b278d1489231d4"
+"R12Repair" = "3f933e4d1fe396dcf28bf6c91a30dd11943add9dac217f3ca8969d490fd471b9"
+"Request" = "0b7a511b81f2fc0c5265888d1072392171a2a1eea00baecac7bdf939146ec71f"
+"SearchR12" = "34c5be781b196b1b8df756bcfa88bc994ee92cddf989bdf5074175698ded8981"
+"SearchR12.__init__" = "a7f9fe8a67807f7cb7e0db8af8cbb9acbb764dbc05eaf49ced75514b235b9f82"
+"SearchR12._transition" = "b244f80385de4d39e3e949c7fe76fbca815a7dc9629a3631f3f9b7e9610212f3"
+"SearchR12.expand" = "02c232f9dde389ec2d1a9dda7f5525a39181f56c41009b6e0b5cb0faa3311729"
+"SearchR12.observe" = "0ea155013d87277e3089da464eb5741ba33e72010ba528ef4b6cb41641e1ed95"
+"SearchR12.stage" = "63803cff605c75b4e249daeb865ec0cd212e1c68fc1c3e269f53daed14faa55b"
+"SourceSpan" = "569b4fd2b02af8554eabdbbe59852006099f6b06c4eaa3061e451957b66a3884"
+"SourceSpan.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"Trace" = "44fc723e4fcd1211fb3589dd3c432690b16b14f43906cc91f6153022d55c2f24"
+"Trace.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"_check_expression" = "8e4ca703432240490003693c9b199e0ee2ee77512f9f9a0ebf618f8fe3d385b9"
+"_integer" = "69edde54e419afcc53c6b5da60cde5f118ae6df43179a4fa21a68f243a153934"
+"_pairs" = "d0f64b3389bcaf6f362e003d80cb2fe5d2c356dab23f4a6657a5d88a7edebf65"
+"_proof_calls" = "5bcb24c4160c92db48567ad8d1fcf2fb1c79249be3518916bfc8449fc49da08b"
+"_string" = "63c6888762e1244cc6ac593477ec5afb1cddb86f3b64e4321f49aab6b707400b"
+"check_source_frame" = "25bd317956988ffd16f6d0d3ee0ecc10756e5f437e7ab22e5a1a6c7f5dbe4e22"
+"drive_r12" = "f7ee38c6eeb80a983e302c6cd33eb1a11095bbd6cae05d12d6c9292755e47d9a"
+"hint_data" = "95c0c1ef14092523d7e9c991a6df8c879517d027ba0cc77bace44ed266d45f31"
+"localize" = "f227a6705f509ad4039c9ebeefb2e76032aedb96e4f3c670dba9a89fb452f43c"
+"native_outcome" = "f313cb59dfc73291c3017717ba65dc22371b8d565936c2bad12d7e26801a6f55"
+"render_hint_r12" = "db6e190abc9cae69698f30b8b3213bd567850148abe14fcba0c5f4afd68ef856"
+"result_stream" = "907c135847ab95179df6c349bbe4f0afb63288baf2ca7a4e5fa8f1ff03201ff5"
+"source_task" = "b70a4527dd9d4244db7214b0972938dcab31fe2c7d66ae48e6551946a26ca9ce"
+"unique" = "3f87bb8786f206e083de5931a9cd2fd274c9c2ddf50285bf12107fe7b2c32e82"

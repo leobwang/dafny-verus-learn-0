@@ -1,8 +1,7 @@
 # DVR2 R12 construction — 2026-10-17 UTC
 
 Authoring worktree authoring-r12, parentd9ae1b1. R11 CI/STUDY source stays clean
-and immutable while construction starts. PLAN§14 precedes activation. R12 stays
-planned/admission0. D45 live arms and unavailable container apparatus are recorded
+and immutable while construction starts. PLAN§14 precedes activation. R12 was planned/admission0 at this checkpoint. D45 live arms and unavailable container apparatus are recorded
 skips, never passes or reasons to bypass grade/provenance/budget locks. Build and
 test the actual code with reference-free frozen fixtures and Mock/Scripted/Replay.
 Native lanes remain≤3×16GiB/48GiB; R11 CI and workflow own two lanes, leaving one
@@ -89,3 +88,104 @@ empty localization list, missing count, a killed run or a compiled/test stage.
 Build Mock/Scripted/Replay executor integration and original-source frame attack
 controls before exposing any live entry. Frozen pre-registration/plan hashes,
 minimum grades, budget/GPU/calendar and container provenance stay enforced.
+
+
+## Recorded blocker and user-directed disposition
+
+The current instruction is “record the blocker and skip. continue to build.”
+D45 live Claude/model arms, live pre-registration grades, contractor transcripts,
+and unavailable container-dependent re-judgement stay DEFERRED, not passed.
+There is no provider retry, quota reserve release, invented grade/window event,
+or host execution substitute. Continue source, tests, native author controls,
+chapter and lab assembly with frozen Mock/Scripted/Replay fixtures. A skipped
+live dependency does not block independent implementation or become evidence.
+R03's Unicode primitive and the R11 PointsTo arena remain their earlier recorded
+skips; no new coverage claim or domain waiver is made.
+
+## Public kit integration checkpoint
+
+Actual source is authoring, not shipped. The updated canonical admission passes
+11/11: six native T/H items and five Python TRIV controls. Native H regions
+contain annotation work only; supplied step/final extensional facts and Verus
+termination annotations remain outside. All eleven minute rows now follow actual
+admission; no agent/toolwright result is inferred. The source count pin includes
+the given-only P1 check. Complete central Python reference passes139tests and
+reference_lint reports0findings across9twins. The first expanded run retained
+seven ModuleNotFoundError failures from stale private imports in new frame
+checks; fix them to fvh_r.engine and replay:139/139, preserving first evidence.
+
+All five Python holes live in engine.py because the frozen reference adapter
+overlays only one file. extractor/loop/environment expose provided API facades;
+their type/shape tests do not discharge learner holes. Search is now an async
+stage/observe engine composed with the frozen executor/candidate_ask route.
+Four fixed configs keep ten generated nodes distinct from baseline and closure
+turns. Actual-source SHA-bound native replay validates both languages without
+model calls. Transport errors preserve frozen truncation/deferral behavior.
+
+Hint sites now support bounded expressions and approved local proof-call lists.
+An independent provided source-frame guard rejects header/body/structural escapes
+before edits even when the learner renderer is buggy. Native form admission
+independently compares original model/declaration and executable skeleton hashes,
+rejects executable callees and checks zero-hole failing proof-stage baselines.
+Four native forms and five static frame tests pass. Both actual-source compiled
+clients pass66finite cases per language. Rendering proof checks and compiled
+client observations are separate evidence, neither a live lab result.
+
+The profiler is stdlib-only outside the harness import tier. Its provided CLI
+freezes original target bytes and reports isolated scope. Eight frozen tests
+check behavior and immutable CLI/model frame; the CI author lane includes them.
+The central Python suite has139tests, facade checks15, profiler CLI8 and form
+frames5; do not present these distinct counts as live measurements.
+
+Two exact local paper cards, blank pre-registration/report, protected method
+exemplar and gold/flawed calibration fixtures are authored. Native prediction
+controls use actual fast/full subjects and synthetic field/revision models;
+P5 is illustrative record binding, not authenticated native evidence. Chapter,
+full40-task lab admission, source freeze, pins, STUDY workflow and focused CI
+remain construction work. Native three-seed/audit replay is tracked separately.
+
+
+## Chapter, provided-frame and source-bound plan checkpoint
+
+The own24-message trace/source/exit observation is public under specimens/R12/lsp;
+read_trace.py only decodes recorded frames, verifies UTF-8 Content-Length and
+matches didOpen source. Four tests cover real capture, Unicode/array params,
+length failures and document mismatch. No author LSP client is published.
+The5,400-plus prose-word chapter has5boxes,3diagrams and14captures; lint passes.
+The first span-value capture retained an unsupported --test/--module CLI refusal;
+replace it with the same native source arithmetic assertion in standard module
+context, obtaining verified. A large shipped Python failure list is excerpted
+to its actual summary/five counted holes; no output is invented.
+
+Native bank probes pass their intended proof-stage verdicts and both paired PP
+complete in both languages. Initial Verus bank visibility error was retained,
+fixed by publishing the open spec declaration, and checked at the intended
+proof stage. Cards are exact local06.10lines2635–2673 SHA
+fde957226b3ae853ed8218e355a44664c203c85d319dd12d45745a67e098b6b7 and
+01.12lines429–456 SHA
+b5a7a1f6d68921e0b44615349f2086a84ae42ec918cc40bd004c5b52c59094ef.
+All5TeX documents compile. Course-map bank tags use existing vocabulary.
+Canonical leak scan29modules/2164publicfiles passes before the latest plan docs;
+repeat the final scan after source stabilizes.
+
+The Python signature freeze does not freeze provided helper bodies. Add an
+independent AST acceptance frame removing only the5learner bodies while retaining
+original docstrings/signatures, models, guards and protocol glue. Reference then
+passes140cases. Next bind original source through one R12_TASK_SHA256 line in
+the actual plan statement and verify it in policy initialization. Hash-bind inline
+prompt text too. Three changed/missing/duplicate-binding controls plus the
+provided-frame check bring the complete reference to143passing cases. The first
+binding controls incorrectly expected no native call after malformed proposal;
+frozen Executor correctly performs one final unchanged-source check. Preserve
+that result and assert no sampling/editing instead; no executor change. The ten
+real native replay cases also pass against the actual installed complete engine.
+
+The plan builder has five structural/frozen-loader controls, fixes480runs/4800
+Qwen calls and10Claude runs/100calls+≤10sentinels, and uses frozen public-pool
+eligibility. It refuses the absent40-task stratum without writing plans or any
+grade/ledger event. STRATUM/corpus assembly remains an unfinished author task,
+not an external blocker or a reason to relax maximal-auto/three-seed/frame gates.
+Keep course-authored forms distinct from the learner's personal bench cards.
+Docker info read-only check succeeds with29.1.3; do not claim Docker unavailable.
+Pinned image/agent/provider provenance and all D45 live outcomes remain unrun.
+Full source evidence stays under /tmp/dvl0-dvr2-r12; no live model/actor/grade claim.

@@ -1167,6 +1167,9 @@ job_harness() {   # QPLAN §11.8: the fvh core, the learner Python files, the Py
   if [ "$AUTHOR" = 1 ] && [ -f "$ROOT/$REF_TREE/tools/Q12/test_holecount.py" ]; then
     astep "reference toolwright (tools/Q12)" python3 -B "$ROOT/$REF_TREE/tools/Q12/test_holecount.py"
   fi
+  if [ "$AUTHOR" = 1 ] && [ -f "$ROOT/$REF_TREE/tools/R12/test_profiler.py" ]; then
+    astep "reference toolwright (tools/R12)" python3 -B "$ROOT/$REF_TREE/tools/R12/test_profiler.py"
+  fi
 }
 
 job_brittleness() {

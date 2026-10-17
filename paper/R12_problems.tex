@@ -1,0 +1,88 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R12 --- Driving the verifier + Lab $\alpha$ \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\sloppy
+\section*{Instructions}
+Commit the five native predictions before checking their results. Read B3 and B4
+from your own pinned local notes, then complete B1 before any live Lab $\alpha$
+run. B1 is graded by \texttt{/grade-paper R12}; B2 only by
+\texttt{/grade-paper R12 --report} after runs. Every method dimension must be at
+least3. The frozen harness also requires the exact PREREG hash and the exact
+\texttt{plan-sha256:} binding. A calibration fixture cannot unlock a run.
+
+\begin{problem}[pre-registration]\label{prob:B1}
+Pre-register where the three fixed search regimes' success-versus-node-budget
+curves cross, and whether localized obligations improve best-first search over
+raw verifier JSON. Use one engine with independent $(10,1,\mathrm{fifo})$,
+repair $(1,10,\mathrm{lifo})$ and best-first $(3,10,\mathrm{best})$; the fourth arm
+keeps best-first and changes only feedback to raw. A generated candidate is a
+node even when malformed. No configuration is retuned at a budget prefix.
+The observation at $k=1,\ldots,10$ is a prefix of the same run, not a new run.
+
+Name falsifiable contrasts, estimands and language strata. Define solved as a
+full original-task zero-hole proof-stage gate, with original source, models,
+code, levers, audit and executor provenance preserved. Missing scores and empty
+localization do not establish success. Specify paired permutation tests at each
+registered budget point with Holm correction over the named family, and
+bootstrap bands with the task as cluster. Compose \texttt{fvh.stats} rather
+than reimplementing estimators. State whether bands are pointwise; do not call
+pointwise intervals simultaneous bands. Define how crossing and ties are
+reported when uncertainty prevents ordering.
+
+The main local stratum has40tasks,20per language, with an unused public slice
+kept separate. Record exact form hashes, admission evidence and source exposure;
+course-derived tasks are previously seen. Public tasks must come from an unused
+pinned pool and stay explicitly possibly contaminated. The live Qwen ceiling is
+$40\times4\times3=480$runs and $480\times10=4800$calls, with10GPU-hours.
+Claude's descriptive subset is10tasks,5per language, at10calls plus at most
+10sentinels:110calls and10runs. A public-slice pilot is not silently additional
+budget: it requires its own bound plan, grading and an explicit allocation within
+the same ceiling or remains unrun. No provider or container blocker permits
+releasing a quota, replacing the verifier or using host execution for agent code.
+
+State seeds, prompts, settings, per-arm time/token/GPU accounting, throughput
+assumption and its measured source, truncation sensitivity, exclusions, stopping
+rule,80\%prediction intervals and the fallback when the ceiling is infeasible.
+Compute the MDE with \texttt{fvh.stats.mde\_two\_proportions} at the number of
+independent task clusters, baseline, paired flag and family-adjusted alpha;
+explain why three repeats do not turn40tasks into120independent tasks.
+Write all17fields in the answer template. Finalize the batch file, then bind its
+actual64hex digest and re-grade the changed registration before execution.
+\end{problem}
+
+\begin{problem}[lab-report]\label{prob:B2}
+After authorized, unlocked runs, provide one Reproduce command over
+\texttt{research/runs/R12/}. Regenerate cumulative success curves at budgets1--10,
+paired differences, corrected tests, bootstrap intervals, per-language views,
+all arm costs and truncation rates from recorded attempts. Re-judge every claimed
+success in the pinned container with the original task form, full gate, audit,
+source frame and statement freeze. Report the curve crossing only with its
+registered uncertainty rule. Audit20transcript moments including malformed
+nodes, empty localization, unknown scores, source/provenance attacks and stopped
+requests. Include deviations, prediction-interval scoring and contamination.
+Keep Claude's small subset descriptive. Grade method and reproducibility,
+never favorable outcomes. If live apparatus is unavailable, record deferred
+rows and the exact blocker; a mock/replay result cannot fill a live report.
+\end{problem}
+\begin{problem}[paper-card]\label{prob:B3}
+\textbf{Card06.10: Cobblestone.} Fill Task shape, Oracle, Trust, Cheat surface, Metric, Budget, Variance and Artifact. The card score is the minimum of its eight field scores. Use exactly the local range below; name missing information instead of inventing it.
+\begin{verbatim}
+sed -n '2635,2673p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+fde957226b3ae853ed8218e355a44664c203c85d319dd12d45745a67e098b6b7  -
+\end{verbatim}
+Compare the paper with this lab: what is a search node, who certifies a retained fragment, and which budget or trust claim does not transfer? This lab is bounded annotation search; it implements neither a Coq subgoal splitter nor an AND-hypertree policy/critic training system.
+\end{problem}
+\begin{problem}[paper-card]\label{prob:B4}
+\textbf{Card01.12: HyperTree Proof Search.} Fill Task shape, Oracle, Trust, Cheat surface, Metric, Budget, Variance and Artifact. The card score is the minimum of its eight field scores. Use exactly the local range below; name missing information instead of inventing it.
+\begin{verbatim}
+sed -n '429,456p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+b5a7a1f6d68921e0b44615349f2086a84ae42ec918cc40bd004c5b52c59094ef  -
+\end{verbatim}
+Compare the paper with this lab: what is a search node, who certifies a retained fragment, and which budget or trust claim does not transfer? This lab is bounded annotation search; it implements neither a Coq subgoal splitter nor an AND-hypertree policy/critic training system.
+\end{problem}
+
+\end{document}

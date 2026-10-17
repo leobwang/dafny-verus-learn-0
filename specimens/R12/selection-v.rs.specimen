@@ -1,0 +1,6 @@
+// after: R12.P3dv
+use vstd::prelude::*;
+verus! {
+proof fn good_r12() ensures 2+2==4, {}
+proof fn bad_r12() ensures 2+2==5, {}
+}

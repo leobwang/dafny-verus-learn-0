@@ -4373,11 +4373,52 @@ verify. Bare empty-body and assigned-zero controls fail; four annotation-removal
 controls fail at proof checking after providing V decreases outside the learner
 regions. Actual public canonical admission remains pending and minutes stay0.
 The extractor, shared parametric search/loop, fixed-site invariant environment
-and isolated profiler pass112private tests, plus actual native JSON, compiled
-hint and profiler fidelity checks. A fresh24-message Dafny LSP trace is captured
+and isolated profiler pass112private tests, plus actual native JSON, rendered-hint
+proof checks and profiler fidelity checks. A fresh24-message Dafny LSP trace is captured
 for reading; its author framing client stays private under the owner split.
 
 This is private feasibility, not an activated module, complete lab integration,
 release, measured learner session or live model run. R12 stays planned. The user
 instruction continues to record/skip unavailable live apparatus and build the
 remaining implementation under the frozen locks, without new approvals.
+
+
+### Δ270 — R12 verifier-driving source kit and original bindings (DVR2)
+
+R12 is authoring, not shipped. Canonical11/11native/Python admission passes
+before all11minute rows. Native annotation regions preserve executable code,
+supplied step/final facts and termination settings. Native references pass
+seeds1–3and six clean reference audits. The central Python reference passes
+143cases; its five holes share one file under the frozen single-file overlay.
+Extractor/loop/environment facades keep the planned public API paths. The
+frozen executor bridge uses one async stage/observe engine and four fixed
+configs. Model proposals are bounded expression/proof-call data, never verdicts.
+
+An independent provided source-frame guard protects model/header/code bytes
+when a learner renderer is buggy. Native form checks reject executable callees
+and model/code sites; maximal-automation empty-body failure, complete three-seed
+references and wrong controls remain separate admission requirements. An AST
+frame test freezes provided models/helpers/protocol bridge outside learner
+bodies because the existing Python statement freeze checks signatures only.
+The actual batch plan embeds each task digest and inline prompt bytes. The
+policy refuses stale/unbound source before sampling or editing; the frozen
+executor's own final original-source check still occurs on a refused attempt.
+No frozen protocol or core interface is changed.
+
+Actual-source compiled clients pass66finite observations per language; ten
+SHA-bound native replay cases validate the installed policy over retained real
+native Results without new model calls. The profiler has eight behavioral/frame
+checks and joins the CI author harness lane. The own24-message LSP trace is
+published for reading only. The5400-plus-word chapter,14source-bound captures,
+12-question/disjoint6bank, two paired PP, two exact local cards, pre-registration
+and methods rubric, and gold/flawed fixtures are drafted. Five TeX documents
+compile; canonical leak scan29modules passes. Fixture scores are not live grades.
+
+The complete40-task corpus, its unused public slice, final STUDY workflow and
+focused CI remain construction work. The locked plan builder refuses missing
+admission and builds separate Qwen/Claude plans under the frozen global
+repeat/task schema; each needs its own matching digest/grade before execution.
+D45 live provider/actor/grading work remains the user-directed recorded skip,
+not a pass. Docker29.1.3daemon availability alone validates no pinned image or
+live provider. R03 and the PointsTo arena keep their earlier recorded skips.
+This source checkpoint is not Basic completion, a release or an empirical result.

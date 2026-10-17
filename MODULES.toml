@@ -2315,17 +2315,17 @@ concept_items = {}
 id = "R12"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "Driving the verifier + Lab α"
 tier = ""
 topic = ""
 strands = []
 langs = ["d", "v", "py"]
 chapter = "docs/R12_Driving.md"
-exercises = ["dafny/R/R12_Driving/std/R12_Driving.dfy", "verus/r/r12_driving/src/lib.rs", "specimens/R12/"]
+exercises = ["dafny/checks/R12_checks.dfy", "dafny/R/R12_Driving/std/R12_Driving.dfy", "verus/r/r12_driving/src/lib.rs", "specimens/R12/"]
 exits = []
 agentic = ["tools/R12/profiler.py"]
-harness = ["harness/r/fvh_r/extractor.py", "harness/r/fvh_r/loop.py", "harness/r/fvh_r/engine.py"]
+harness = ["harness/r/fvh_r/engine.py", "harness/r/fvh_r/extractor.py", "harness/r/fvh_r/loop.py", "harness/r/fvh_r/environment.py"]
 bank = ".claude/skills/instructor/banks/R12.md"
 paper = true
 rubric = "paper/rubrics/R12_rubric.md"
@@ -2347,8 +2347,8 @@ write_v = []
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 110, claude_runs = 10, qwen_calls = 4800, qwen_runs = 480, gpu_hours = 10 }
-admissible = {}
-imports = {}
+admissible = { "R12.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R12.H1d" = { admitted = true, minutes = 10, fallback = "" }, "R12.H2d" = { admitted = true, minutes = 10, fallback = "" }, "R12.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R12.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R12.H2v" = { admitted = true, minutes = 10, fallback = "" }, "R12.H1py" = { admitted = true, minutes = 40, fallback = "" }, "R12.H2py" = { admitted = true, minutes = 40, fallback = "" }, "R12.H3py" = { admitted = true, minutes = 20, fallback = "" }, "R12.H4py" = { admitted = true, minutes = 90, fallback = "" }, "R12.H5py" = { admitted = true, minutes = 60, fallback = "" } }
+imports = { "dafny/checks/R12_checks.dfy" = "std", "dafny/R/R12_Driving/std/R12_Driving.dfy" = "std", "verus/r/r12_driving/src/lib.rs" = "all", "harness/r/fvh_r/engine.py" = "py-fvh", "harness/r/fvh_r/extractor.py" = "py-fvh", "harness/r/fvh_r/loop.py" = "py-fvh", "harness/r/fvh_r/environment.py" = "py-fvh", "tools/R12/profiler.py" = "py-std" }
 concept_items = {}
 
 [[module]]

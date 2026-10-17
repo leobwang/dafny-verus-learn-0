@@ -1,0 +1,12 @@
+// after: R12.P5dv
+// Synthetic revision numbers illustrate identity, not cryptographic hash strength.
+use vstd::prelude::*;
+verus! {
+pub struct ReportR12 {pub verified:bool,pub count:usize,pub holes:usize,pub revision:usize}
+pub open spec fn fields_r12(r:ReportR12)->bool {r.verified && r.count>0 && r.holes==0}
+pub open spec fn bound_r12(r:ReportR12,original:usize)->bool {fields_r12(r) && r.revision==original}
+proof fn compare_r12() {
+ let report=ReportR12{verified:true,count:3,holes:0,revision:17};
+ assert(bound_r12(report,23));
+}
+}

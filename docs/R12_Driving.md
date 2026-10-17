@@ -1,0 +1,750 @@
+# R12 — Driving the verifier + Lab α
+
+A verifier-driving program has two jobs: preserve what the verifier actually
+reported, and decide what to do next without changing what counts as success.
+These jobs meet at a small interface. A model proposes annotation data; a trusted
+executor applies a bounded edit and obtains a native result. The search engine
+can use failures to choose another candidate, but it cannot turn its own score
+into evidence that the original program has been proved.
+
+Three ideas do all the work:
+
+1. Preserve language, file, stage, scope and unavailable values when turning a
+   native observation into data. Localizing an error does not adjudicate it.
+2. Keep proposals, generated-node accounting and trusted observations separate.
+   One parametric engine supplies the search regimes without changing the gate.
+3. Compare fixed search trajectories at matched budgets, with original source
+   bindings, pre-registered estimators and explicit costs and exposure limits.
+
+## 0. How this module works
+
+Allow786minutes: practice396and Lab α390. Practice estimates are setup10,
+test-out10, reading65, worked examples30, cards6, predictions20, hand hints40,
+doors/trace25, extractor80, bounded loop20, profiler25, paper30, viva30 and
+calibration5. Lab estimates are environment60, engine90, pre-registration40,
+grading10, setup25, analysis75, transcript audit20, post-review10, report50
+and calibration10. These are planned learner times, not measured sessions.
+Live model arms, live grading and unavailable container work remain recorded
+D45 deferrals. Building or replay-testing their software does not fill those rows.
+
+R is standalone. The native practice here uses provided standard definitions;
+it does not import an earlier learner solution. The Python exercises compose
+frozen `fvh` protocol, executor, result and accounting interfaces through the R
+package. You may read a captured language-server conversation, but you do not
+write a language-server client. A server diagnostic is an editor observation;
+it does not replace the full course gate or its unfinished-hole accounting.
+
+**This module's files** identify the work and its original boundaries.
+
+| artifact | purpose |
+|---|---|
+| `dafny/given/R/`, `verus/given/` | frozen provided layers; no earlier learner solution is imported |
+| `dafny/R/R12_Driving/std/R12_Driving.dfy` | 3 holes, 0 errors; test-out and two annotation tasks |
+| `verus/r/r12_driving/src/lib.rs` | 3 holes, 0 errors; corresponding native annotation tasks |
+| `dafny/checks/R12_checks.dfy` | 0 holes; given-only source-span observation |
+| `harness/r/fvh_r/engine.py` | 5 holes, 0 errors; extractor, localization, bounded loop, engine and renderer |
+| `harness/r/fvh_r/extractor.py` | 0 holes; provided public API facade |
+| `harness/r/fvh_r/loop.py` | 0 holes; provided public API facade |
+| `harness/r/fvh_r/environment.py` | 0 holes; provided public API facade |
+| `tools/R12/profiler.py` | 1 hole, 0 errors; toolwright body inside the provided CLI and models |
+| `tools/R12/test_profiler.py` | frozen behavioral and original-frame acceptance tests |
+| `tools/R12/admit_forms.py`, `tools/R12/check_clients.py` | independent form checks and actual-source compiled observations |
+| `specimens/R12/`, `slots/R12.slots` | five predictions, guarded comparisons and the own captured LSP trace |
+| `paper/R12_problems.tex`, `paper/R12_answers.tex` | two cards, registration and later report |
+| `Solutions/` | protected reference twins; open LAST after attempts and receipts |
+
+All five Python holes share `engine.py` because the frozen reference adapter
+replaces one file at a time. The other modules provide stable public imports;
+their small type/shape tests are not independent solutions to the five holes.
+Read the contracts at the actual learner functions before designing a helper.
+The test-out is bounded remaining-credit arithmetic in each native language.
+Keep the original attempt and let its receipt record what happened.
+
+Commit all five predictions before continuing. P1d is a numeral, P2v a Boolean
+literal, P4v the failing labels, and P3dv/P5dv ordered language-paired verdicts.
+Enable their CHECK switches only after committing their answers. A later correct
+revision does not replace the original prediction. Do not infer a native result
+from a helper process exit code: inspect its Result's verdict and stage.
+
+> **Predict (P1) — commit in the file before reading on.** The given-only Dafny source-span check stores two inclusive line ranges. Which numeral is the first line of the second declaration? Distinguish the list index from the native source coordinate.
+
+> **Predict (P2) — commit in the file before reading on.** A Verus ghost predicate requires the verification phase, a positive count and zero unfinished holes. The printed record has compilation phase, count7and no holes. Which Boolean belongs in its value slot? This is an illustrative field model, not an authenticated native document.
+
+> **Predict (P3) — commit in the file before reading on.** The same source has one true and one false declaration. Compare the selected good declaration with a full-target check. Commit `D:<x>,<y> V:<x>,<y>` in that order, preserving both original declarations.
+
+> **Predict (P4) — commit in the file before reading on.** A synthetic record has count0and holes0. Three labelled assertions inspect zero holes, zero count and positive count. Which original labelled obligations fail? Keep the distinction between a field value and a full acceptance rule.
+
+> **Predict (P5) — commit in the file before reading on.** A synthetic verified record with positive count and no holes names revision17, while the original subject is revision23. Compare a fields-only consumer with a consumer also requiring the original revision. Commit the ordered verdicts for each language. Revision numbers illustrate identity; they are not cryptographic authentication.
+
+The learner loop accepts typed unfinished holes as an editing mechanism. The
+full gate refuses them. This is a stated course fact, not a hidden discovery in
+this module. Likewise, automatic induction, resource variation and server hole
+visibility are not new prediction surprises here. Keep native scope and course
+completion separate in every interpretation below.
+
+---
+
+## 1. Four doors, one verification subject
+
+An editor, a command line, structured JSON and a language server expose different
+views of a verification attempt. They do not create four independent proof
+oracles. An editor can show a useful location while a command checks the full
+file; a selected-symbol command can deliberately ask a smaller question; JSON
+can preserve stage and count fields that a short status line omits. Ask first
+which source, configuration and declarations each door actually sent to the
+pinned verifier.
+
+The editor door is organized around a buffer. Its displayed source can differ
+from committed bytes or from another terminal's working directory. A diagnostic
+belongs to that buffer and its document version. Saving, changing a dependency
+or moving to another worktree can change the verification subject without
+changing the visible function name. Before carrying an observation into an
+experiment, record the exact source material rather than treating the editor's
+last green decoration as a portable certificate.
+
+The CLI door makes target and options explicit. A fast command can select one
+symbol so that an edit gets quick feedback. That can be useful during proof
+construction, but its result says nothing about a separate failing declaration
+that was not checked. The full gate deliberately removes that ambiguity. It
+uses the original target and the pinned acceptance rules, including unfinished
+holes and assumption findings. Keep fast feedback in the search loop while
+requiring a full original-task gate for the final success claim.
+
+The selected-versus-full comparison uses the exact same two declarations in
+each language. The following captures name the command and preserve its native
+outcome; a failed proof remains a failed proof even when another declaration
+was selected successfully first.
+
+<!-- pin: selection-d-fast -->
+```
+$ scripts/vcheck --module R12 --symbol R12_SelectionProbe.GoodR12 selection-d.dfy
+vcheck: selection-d.dfy [dafny, fast channel R12_SelectionProbe.GoodR12]: verified — 1 verified, 0 holes, 0 errors
+symbol R12_SelectionProbe.GoodR12: verified
+```
+
+<!-- pin: selection-d-full -->
+```
+$ scripts/vcheck --module R12 selection-d.dfy
+vcheck: selection-d.dfy [dafny, learner loop]: failed — 47 verified, 0 holes, 1 error
+selection-d.dfy:4:32: error: a postcondition could not be proved on this return path
+selection-d.dfy:4:28: related: this is the postcondition that could not be proved
+```
+
+<!-- pin: selection-v-fast -->
+```
+$ scripts/vcheck --symbol good_r12 specimens/R12/selection-v.rs.specimen
+vcheck: specimens/R12/selection-v.rs.specimen [verus, fast channel good_r12]: verified — 1 verified, 0 holes, 0 errors
+symbol good_r12: verified
+```
+
+<!-- pin: selection-v-full -->
+```
+$ scripts/vcheck specimens/R12/selection-v.rs.specimen
+vcheck: specimens/R12/selection-v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
+specimens/R12/selection-v.rs.specimen:5:28: error: postcondition not satisfied
+```
+
+A full-target failure does not contradict a selected true claim. Their scopes
+differ. Conversely, a selected success does not license deleting the other
+claim, changing a header or presenting the original file as complete. Write
+both the selected symbol and the complete target in any profile or report that
+uses fast measurements.
+
+The JSON door is a structured observation channel. A normalized native result
+contains language, target, exit code, verdict, stage, verified count, holes,
+diagnostics, findings and per-symbol statuses. Optional resources may be absent
+or unavailable. An unavailable count is not zero, and a Boolean is not a valid
+integer measurement merely because Python considers it an `int` subclass.
+Preserving those distinctions prevents a parser from quietly manufacturing
+favorable evidence.
+
+The doors meet in one provenance chain.
+
+```mermaid
+flowchart LR
+  subject["Original source and pinned context"] --> editor["Editor buffer observation"]
+  subject --> command["Explicit native command"]
+  command --> document["Structured result document"]
+  subject --> server["Language-server conversation"]
+  document --> executor["Bound trusted executor observation"]
+  server --> reading["URI and version scoped diagnostic"]
+```
+
+Follow the source binding through the diagram when two observations disagree.
+A shared function name does not imply a shared input, context or scope. The
+executor must know which candidate bytes its native result describes before
+the search engine can treat that observation as belonging to a generated node.
+The generated batch plan embeds each original task digest in its statement.
+The provided policy checks that binding before proposing its baseline Verify;
+a file changed after planning cannot become a new unregistered subject. The
+frozen executor may still perform its own final check after refusing a policy,
+but that check cannot turn the refused run into an accepted edited delivery.
+
+---
+
+## 2. Native hint sites and original input relations
+
+The native exercises take verifier-outcome flags as ordinary input data. They
+count true flags or locate the first false flag. These programs do not decide
+whether a native verification document is trustworthy. Their contracts concern
+the supplied Boolean sequence and let you practice the invariant structure a
+client needs when it processes an ordered ledger.
+
+W1d and W1v provide a recursive accepted-count model and the fact connecting one
+prefix to the next. Read the recursion before using the step lemma. It removes
+the last element, so a loop that consumes a prefix must connect its current
+slice to exactly that recursive argument. The final full-slice identity is
+provided too. Neither fact supplies the learner's loop relation or proves that
+the current executable accumulator corresponds to the consumed prefix.
+
+H1d/H1v preserve the provided computation and add annotation work inside the
+marked learner region. Track which input prefix has been consumed, what its
+count means and which bounds make the next machine addition safe. A bound on
+the index alone cannot characterize the returned count: two arrays of equal
+length can have different accepted flags. A relation only about the whole
+input can be too strong before the loop finishes. State the property at an
+arbitrary loop head, then check initialization, preservation and exit.
+
+H2d/H2v locate the first rejection. An index within the vector is not enough;
+the firstness promise rules out an earlier false flag. Preserve what is known
+about every earlier position and connect the loop's exit condition to the
+returned index. Empty input, rejection at position0and no rejection at all are
+three different boundaries. Test each when explaining why the same invariant
+handles the original domain without a special weakened contract.
+
+Termination annotations and the executable bodies remain provided. The Verus
+count function prints its loop-isolation setting explicitly, so the proof
+context in source and reference is the same. Preserve that setting rather than
+adding resources or moving a counted assumption into an uninspected helper.
+The learner region is annotation-only; removing a region must leave the same
+executable computation and a well-typed proof obligation.
+
+The shipped native loops verify while retaining their three counted holes in
+each language. These captures show the editing state, not completed exercises.
+
+<!-- pin: shipped-d -->
+```
+$ scripts/vcheck dafny/R/R12_Driving/std
+vcheck: dafny/R/R12_Driving/std [dafny, learner loop]: verified — 53 verified, 3 holes, 0 errors
+dafny/R/R12_Driving/std/R12_Driving.dfy:28:3: hole assume R12.T1d
+dafny/R/R12_Driving/std/R12_Driving.dfy:35:3: hole assume R12.H1d
+dafny/R/R12_Driving/std/R12_Driving.dfy:58:3: hole assume R12.H2d
+```
+
+<!-- pin: shipped-v -->
+```
+$ scripts/vcheck verus/r/r12_driving
+vcheck: verus/r/r12_driving [verus, learner loop]: verified — - verified, 3 holes, 0 errors
+verus/r/r12_driving/src/lib.rs:22:45: hole assume R12.T1v
+verus/r/r12_driving/src/lib.rs:30:44: hole assume R12.H1v
+verus/r/r12_driving/src/lib.rs:51:44: hole assume R12.H2v
+```
+
+After solving the holes, run both full gates and their audits. The independent
+compiled-client tool first gates actual source, then observes63Boolean arrays
+of lengths0through5and three budget cases per language. Dafny source is embedded
+in the compilation root because verifying an include does not verify included
+implementations. Those finite checks exercise emitted code; they cannot replace
+the universal contracts or prove that a separate model-produced report is true.
+
+---
+
+## 3. Preserve results before localizing obligations
+
+H1py reads an ordered stream with one normalized wrapper Result object per line.
+It is not a parser for arbitrary native stdout, a severity counter or a guess
+at whether the word `verified` appears somewhere. The wrapper has already
+identified the native stage and produced a schema. Your parser preserves that
+schema and reports malformed input at its one-based stream line without
+partially accepting the bad record.
+
+Validate the complete required field set and its types. Reject duplicate JSON
+keys, non-finite numbers, blank lines, non-objects, missing required fields and
+Boolean measurements. Keep unknown extra fields rather than stripping evidence
+a later consumer may need. Retain all verdicts, stages, warning/related
+diagnostics, holes and findings. An empty stream is an empty observation set;
+it is not a proof that every attempted task succeeded.
+
+Copy document ownership carefully. A caller may reuse a mutable dictionary for
+another observation. Your stored result must continue to describe the original
+record rather than silently changing when that caller mutates a nested list.
+The profiler has the same obligation. A frozen dataclass around a dictionary
+does not recursively freeze the dictionary's contents. Explain the actual
+snapshot boundary instead of relying on the word `frozen` in a type decorator.
+
+H2py turns preserved results into obligations. A trusted source span includes
+language, exact file, symbol and inclusive line bounds. The first source line
+is coordinate1, while a Python list selecting the second span uses index1.
+P1d isolates that distinction without asking the parser to infer a declaration
+from text. Its given-only observation is captured here after the commitment.
+
+<!-- pin: span-value -->
+```
+$ scripts/vcheck --module R12 span-value.dfy
+vcheck: span-value.dfy [dafny, learner loop]: verified — 47 verified, 0 holes, 0 errors
+```
+
+A diagnostic maps to a symbol only when its language and file agree and one
+innermost trusted span owns the location. Nested declarations require the
+innermost rule; ambiguous equally narrow spans remain unresolved. An unknown
+path remains unlocalized. Do not search a message for a familiar function name
+or attach an error to whichever task you hoped was being checked.
+
+Localization must retain failures without useful source locations. A failing
+per-symbol status, unfinished hole, audit finding, non-proof green stage or
+nonverified result with no diagnostic can still require attention. Add the
+corresponding obligation without manufacturing a source line or treating the
+absence of coordinates as acceptance. Preserve the original document so a
+reviewer can distinguish a genuine native error from the localizer's summary.
+
+The illustrative phase model makes one necessary condition concrete.
+
+<!-- pin: phase-value -->
+```
+$ scripts/vcheck --module R12 phase-value.rs
+vcheck: phase-value.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The printed Boolean concerns those supplied fields only. Actual acceptance also
+requires original-source binding, full scope and trusted executor provenance.
+A model may quote a true predicate about an invented record; proving that
+predicate does not establish that the record came from the pinned verifier.
+This distinction is especially useful when reviewing a loop that receives JSON
+from multiple possible origins.
+
+The labelled zero-count specimen checks a different boundary of the same idea.
+
+<!-- pin: count-labels -->
+```
+$ scripts/vcheck specimens/R12/P4v.rs.specimen
+vcheck: specimens/R12/P4v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R12/P4v.rs.specimen:10:9: error: assertion failed
+```
+
+A missing or zero proof count cannot be repaired by counting warning messages,
+assuming the wrapper was probably successful or dropping the failed label.
+Keep diagnostics as evidence of particular obligations, and keep the acceptance
+predicate as a separate consumer of the complete native result.
+
+---
+
+## 4. Search proposes, execution observes
+
+A search node records a proposal and, after checking, its trusted outcome. The
+model supplies bounded hint data, never a Result document or executable action
+list. The engine selects where to generate next; the frozen executor owns file
+edits, native Verify actions and provenance. Keeping those capabilities separate
+lets you inspect the model's output without granting it a new way to declare
+its own success.
+
+H4py implements one engine parameterized by width, depth and priority. Independent
+search uses10/1/fifo; sequential repair1/10/lifo; best-first3/10/best. Best-first/raw
+keeps the last configuration and changes the feedback representation. Stable
+node ids resolve ties. Unknown obligation counts sort after known counts; a
+score of0still does not set accepted. The model can improve a heuristic without
+having completed the original proof.
+
+The engine stages a request before observing its outcome. Staging selects an
+eligible parent, consumes one width slot and records the generated node.
+Malformed output consumes a node without a native tool call. A transport failure
+must retain its recorded attempt and propagate the frozen infrastructure status;
+it cannot erase the request and create a free replacement. If the trusted runner
+fails after staging, the pending request remains identifiable until the executor
+settles it under the existing accounting rules.
+
+Observation binds exactly one pending proposal to its trusted outcome. Refuse
+an observation with no pending request, a second proposal while one is pending,
+or feedback for a different file revision. A synchronous `expand` operation can
+compose stage and observe, but the real executor has separate turns. Designing
+the asynchronous boundary first prevents a convenient private prototype from
+assuming capabilities the frozen policy protocol never grants.
+
+The lifecycle separates model generations from native observations.
+
+```mermaid
+flowchart TD
+  parent["Choose eligible parent under fixed config"] --> proposal["Stage one metered generation"]
+  proposal --> malformed["Malformed data consumes node"]
+  proposal --> render["Render bounded hints in original frame"]
+  render --> guard["Independent source-frame guard"]
+  guard --> verify["Executor applies edit and native Verify"]
+  verify --> bind["Bind trusted outcome to pending node"]
+  bind --> accepted["Full original-task gate accepted"]
+  bind --> frontier["Retain failure and update frontier"]
+  frontier --> parent
+```
+
+A missing arrow is an implementation defect. For example, native feedback that
+skips the binding check can belong to an earlier candidate, and a proposal that
+skips independent frame validation can change the theorem while leaving a
+plausible hint string in the transcript. Review these transitions with exact
+source hashes and actual executor history rather than a diagram alone.
+
+H3py drives the bounded loop. It obtains a proposal, asks the trusted judge and
+stops at accepted, exhausted frontier or the fixed node cap. It does not catch
+all exceptions and relabel them as a normal rejected proof. The frozen executor
+already distinguishes malformed output, infrastructure failure, truncation and
+deferral. Preserve those statuses so a later report cannot turn a provider
+interruption into another favorable best-of-many trial.
+
+The seeded policy bridge first verifies the initial form without calling a
+model. Ten generation requests then need ten metered model calls at most.
+The batch allows twelve fixed executor turns for the baseline, generation turns
+and closure. A native baseline Verify is not a model generation; malformed
+generation still spends a model call. Keep these separate counts in both the
+pre-registration and the final cost table.
+
+The shipped Python file is intentionally incomplete. Its provided API facades
+may pass their shape checks while these five functions still need solutions.
+The excerpt quotes the summary and counted holes; the remaining unfinished
+acceptance-case failures are omitted.
+
+<!-- pin: shipped-python -->
+```
+$ scripts/vcheck harness/r/fvh_r/engine.py
+vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 15 passed, 128 failed, 5 holes
+harness/r/fvh_r/engine.py:72:1: hole raise-not-implemented R12.H1py
+harness/r/fvh_r/engine.py:86:1: hole raise-not-implemented R12.H2py
+harness/r/fvh_r/engine.py:164:1: hole raise-not-implemented R12.H4py
+harness/r/fvh_r/engine.py:188:1: hole raise-not-implemented R12.H3py
+harness/r/fvh_r/engine.py:267:1: hole raise-not-implemented R12.H5py
+...
+```
+
+Use the frozen acceptance suite to review composition, including malformed
+records, ambiguous spans, pending outcomes, stable priorities, budget prefixes,
+source escapes and transport deferrals. Passing an isolated helper test cannot
+stand in for the executor-level invariants that connect those helpers.
+
+---
+
+## 5. Hint data, original frames and independent checks
+
+H5py renders one bounded hint per committed site. An expression site has a fixed
+marker and identifier vocabulary. A call site admits only bounded calls to its
+listed local proof declarations. The model returns a JSON `hints` array in the
+same order as the sites. The legacy `invariants` key works only when every site
+is an expression. Neither representation grants arbitrary source edits.
+
+This language is deliberately small. It excludes declarations, imports,
+attributes, trust statements, comments, quotes, newlines, new bindings and control
+flow. Calls have bounded count and balanced argument syntax. Supplied identifiers
+and approved proof callees are task material; a model cannot invent a helper
+whose implementation assumes the postcondition. Rendering is pure data work,
+not execution, native parsing or proof acceptance.
+
+The provided independent frame guard checks the renderer's output against the
+original template before any edit is proposed. It preserves bytes outside the
+committed sites and rejects structural escapes inside them. This matters even
+when the learner renderer passes its ordinary examples. A buggy renderer that
+changes a method header or initial accumulator can make the candidate easier
+without producing an obvious trust keyword in its hint string.
+
+Form admission checks another boundary. A marker in an `ensures` clause could
+preserve most source bytes while weakening the theorem. A marker in an executable
+right-hand side could change behavior. The native admission tool compares parsed
+original declaration/model identities and executable skeletons under site probes;
+it also rejects executable functions as approved proof callees. Its native mode
+requires a failing zero-hole proof-stage baseline and clean assumption audit.
+Completion, three solver seeds, maximal-automation empty-body failure and
+wrong-hint controls are separate requirements.
+A static frame pass alone is not a claim that the task is solvable.
+
+P5 illustrates why a fields-only consumer lacks an original-subject condition.
+Both consumers see the same synthetic record; the second also requires the
+specified original revision. The comparisons preserve the original domain.
+
+<!-- pin: fields-d -->
+```
+$ scripts/vcheck --module R12 fields-d.dfy
+vcheck: fields-d.dfy [dafny, learner loop]: verified — 47 verified, 0 holes, 0 errors
+```
+
+<!-- pin: bound-d -->
+```
+$ scripts/vcheck --module R12 bound-d.dfy
+vcheck: bound-d.dfy [dafny, learner loop]: failed — 46 verified, 0 holes, 1 error
+bound-d.dfy:9:18: error: assertion might not hold
+bound-d.dfy:6:80: related: this proposition could not be proved
+```
+
+<!-- pin: fields-v -->
+```
+$ scripts/vcheck specimens/R12/fields-v.rs.specimen
+vcheck: specimens/R12/fields-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+<!-- pin: bound-v -->
+```
+$ scripts/vcheck specimens/R12/bound-v.rs.specimen
+vcheck: specimens/R12/bound-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R12/bound-v.rs.specimen:10:9: error: assertion failed
+```
+
+The numeric revisions are an explanatory model. They do not authenticate native
+evidence, quantify hash security or establish freshness of an actual run. The
+real bridge binds source hashes through the frozen executor and checks native
+stage, scope, counts, holes, findings and statuses. Keep that actual evidence
+path distinct from a theorem about record fields supplied by an arbitrary caller.
+
+---
+
+## 6. Read a language-server trace
+
+The committed trace is this module's own observation, captured through the pinned
+Dafny server launcher. It contains initialize, initialized, didOpen, server
+notifications, shutdown and exit. Its source intentionally asserts a stronger
+fact than its input domain permits, so a native diagnostic is present. You read
+that conversation; the author framing client is not a learner artifact.
+
+A JSON-RPC body is framed by an ASCII `Content-Length` header, a blank CRLF line
+and exactly that many UTF-8 body bytes. Byte length differs from character count
+when text contains non-ASCII characters. Parsing until the next newline is not
+a correct substitute: JSON bodies can contain escaped newlines, and multiple
+frames can arrive in one transport read. The wire bytes are retained in base64
+beside decoded documents so you can independently check the framing.
+
+Requests have ids that connect responses to requests. Notifications do not need
+those ids. Do not force every message into the shape of the initialize request:
+server notification parameters can have other JSON shapes. A diagnostic includes
+its source URI and positions, and the document version may be absent. Preserve
+absence rather than guessing which saved file a notification must describe.
+
+Read `specimens/R12/lsp/messages.jsonl` beside `source.dfy.trace`. The `.trace`
+suffix marks recorded source data rather than a new compilation target. The
+provided `tools/R12/read_trace.py` decodes frames and checks that the didOpen
+buffer exactly matches this fixture; it never starts a server. Locate the actual
+`assertion might not hold` diagnostic and explain the original domain that makes
+it reasonable. Do not infer a complete full-target result from that location.
+
+The recording's clean shutdown and exit show the observation session ended;
+they do not strengthen the diagnostic into a universal program judgment. An
+editor can be useful precisely because it gives incremental observations before
+all proof work is complete. The final exercise gate still checks the committed
+original target, unfinished holes, imports and pinned course requirements.
+
+---
+
+## 7. Lab α: fixed trajectories and matched budgets
+
+The lab asks where success-versus-node-budget curves cross among independent,
+repair and best-first search, and whether obligation-localized feedback improves
+best-first search relative to raw native JSON. Hold the engine, task forms,
+source frame and acceptance route fixed. The three regimes are configurations
+of one implementation, not three separately optimized programs with different
+failure handling or different notions of a successful proof.
+
+Each point at budgets1through10is a prefix of the same ten-node trajectory.
+Do not reconfigure width or depth at a smaller budget, restart a run for each
+point or discard early malformed nodes. Those changes make a different
+experiment. Fixed configurations can have different ways of exhausting a
+frontier; record that event and its remaining cap instead of quietly giving
+one regime extra generations.
+
+The main local allocation is40tasks,20per native language, four arms and three
+repeated Qwen runs:480runs and at most4800generation calls. The small Claude
+comparison uses ten language-stratified tasks, ten calls each and at most ten
+sentinels, within110calls. Treat Claude's repeated runs descriptively; request
+seeds are not a claim that a hosted model is controllably deterministic. An
+unused public slice stays separate and explicitly possibly seen by the models.
+It is not a free additional pilot outside the registered ceiling.
+
+Keep task admission and exposure records before generation. The complete
+40-task stratum is required; a partial software fixture cannot stand in for it.
+The provided plan builder refuses missing/stale admission, binds inline prompt
+bytes and selects the ten-task Claude subset using an explicit stratified draw.
+Because the frozen plan has global task/repeat fields, Qwen and Claude use
+separate executable plans. Each separately executed plan needs its own exact
+digest binding and matching grade while preserving the registered method.
+A task form must
+fail at the proof stage with zero unfinished holes, preserve its fixed model
+and executable computation, and have a complete checked completion plus negative
+controls. A fresh filename does not make a course-derived goal unseen. Record
+whether a subject has encountered the source idea, supplied helpers or an
+isomorphic task. Hash forms and actual context rather than describing a task
+pool only by its nominal size.
+
+The unit of uncertainty is the registered independent task cluster, with repeats,
+arms and budgets kept together. If task forms share a source family, account for
+that dependency in the clustering or state why an independence assumption is
+reasonable. Three runs do not turn40tasks into120independent tasks. Likewise,
+ten budget points are correlated repeated observations, not ten new samples of
+the task distribution.
+
+Compose paired permutation tests and bootstrap intervals from `fvh.stats`.
+Register the family of comparisons and its Holm correction before looking at
+the curves. Explain whether intervals are pointwise or simultaneous. Pointwise
+intervals at every budget do not automatically provide simultaneous curve bands.
+A visual crossing with unresolved uncertainty should remain unresolved in the
+report instead of becoming a favorable discovered budget threshold.
+
+The10GPU-hour ceiling is36000GPU-seconds. Dividing by4800calls gives7.5GPU-seconds
+per call as a ceiling calculation, before other GPU use; it is not a throughput
+measurement. Use current measured token/cost assumptions for the actual plan,
+with per-arm expected costs and truncation sensitivity. If the allocation does
+not fit, retain the locked/deferred experiment or amend and re-grade it. Do not
+spend a hidden reserve, run the favorite arm first or reissue scored truncations.
+
+The registration-to-report chain keeps administrative and empirical evidence
+separate.
+
+```mermaid
+flowchart LR
+  forms["Admitted forms and source exposure"] --> method["Final registered method and plan hash"]
+  method --> grade["Genuine matching method grade"]
+  grade --> apparatus["Pinned containers, model windows and budgets"]
+  apparatus --> logs["Frozen actual attempt logs"]
+  logs --> checks["Original-task container re-judgement"]
+  checks --> report["Regenerated estimates and disclosed limits"]
+  apparatus --> deferred["Unavailable work stays deferred"]
+```
+
+A mock, scripted or replay run validates software transitions and provenance
+checks under controlled inputs. It cannot supply the missing method grade,
+model cost, provider window or live experimental outcome. Preserve the distinction
+when an apparatus blocker appears: record it, skip the dependent live action
+and continue independent construction without weakening any acceptance rule.
+
+---
+
+## 8. On paper, before the keyboard
+
+Read the exact local06.10Cobblestone and01.12HyperTree excerpts pinned in the
+problem file. Fill all eight card fields in your own words: task shape, oracle,
+trust, cheat surface, metric, budget, variance and artifact. Keep denominators
+attached to each system, benchmark and sample budget. A union of several systems'
+solved sets is not one system's rate; a cumulative transductive result is not
+the same estimand as a fixed pass-at-k experiment.
+
+Cobblestone retains checked prefixes and repairs goals supplied by the prover.
+Its fail-safe placeholder denotes work still in progress. HyperTree follows all
+children of a selected tactic and uses learned values while training a shared
+policy/critic online. Neither a placeholder nor a learned value is an accepted
+proof. This lab's bounded native annotation search implements neither a Coq
+subgoal splitter nor an online AND-hypertree training system. Compare the ideas
+without claiming a replication of mechanisms that are absent from the code.
+
+Complete B1's pre-registration before any live lab run. State the falsifiable
+contrasts, estimands, arms, exposure strata, budgets, costs, seeds, settings,
+MDE, multiplicity, exclusions, stopping rule, prediction intervals, integrity
+controls and disclosure. Finalize the actual batch plan, write its64hex digest
+inside the unique PREREG block and obtain a genuine matching grade. Editing
+that block or changing the bound plan requires re-grading. Calibration fixtures
+can teach the method without creating an unlock row.
+
+B2 comes after actual runs and re-judgement. Its Reproduce command must regenerate
+every reported table from logs. Report all deviations, costs, truncation rates,
+prediction-interval scores and contamination limits. If live runs remain deferred,
+keep those rows empty/deferred and describe the actual blocker. Do not replace
+a missing empirical report with a plausible numerical example.
+
+---
+
+## 9. The exercise file
+
+Run `scripts/firsttry.sh R12 --check` after committing predictions. Work on the
+native test-out and annotation regions with the original inputs, models and
+provided computation. Explain one initialization, preservation and exit VC in
+each loop before relying on a green summary. Keep all receipts, including a
+wrong first prediction or unsuccessful initial invariant.
+
+In Python, implement the stream parser and localizer before the bounded loop,
+then the engine and renderer. A parser defect can corrupt every later search
+measurement, so inspect preserved documents and unknown values as carefully as
+successful examples. Use the acceptance suite through the actual wrapper;
+private imports or alternate modules are not substitutes for the installed
+single-file composition.
+
+Run full native gates, assumption audits, the Python gate and `specfreeze --check
+R12`. Then run `python3 tools/R12/check_clients.py` on the actual completed learner
+source. Review form admission independently before any lab task enters a batch.
+Use exact command scope when collecting profiler measurements; an isolated
+symbol result remains outside the final full-target completion claim.
+
+**Done** means predictions and test-out receipts retained, original native and
+Python contracts solved with zero holes, clean gates/audits/freezes, independent
+frame checks and finite clients complete, and the paper, toolwright, viva and
+lab artifacts assessed at their actual status. Deferred live D45 work stays
+separately recorded; it does not become a pass through software construction.
+R12 has no additional closed-book checkpoint or invented exit threshold.
+
+---
+
+## 10. Exercise (agentic): a per-symbol profiler
+
+> **CONTRACT (for /contract R12 — run it in a FRESH session):** The toolwright implements only A1py in `tools/R12/profiler.py` under the frozen models and CLI. Keep tests, signatures, target source, prompt and original frame snapshots unchanged. Every measurement comes from the injected trusted wrapper runner with exact symbol/isolation flags; preserve failures and unavailable resources. Run the acceptance tests after each edit and return the original artifact and transcript for review. Live contractor execution remains subject to the recorded D45 deferral.
+
+The profiler requests explicit symbols and repeats. Store requested symbol,
+repeat, native language, verdict, stage, selected status, holes, wall time,
+available resources and a deep snapshot of the full document. Reject invalid
+repeat counts and invalid measurements rather than silently omitting failed
+runs. If a wrapper reports more than one plausible symbol status, preserve the
+ambiguity instead of choosing the first dictionary entry.
+
+The provided CLI hashes actual target source before and after profiling. Its
+report labels per-symbol isolation as measurement scope. A native failure is
+still an observation that may consume time and resources; do not filter it out
+of a performance comparison merely because its result is inconvenient. A
+changed source invalidates the intended repeated-measurement subject.
+
+Before the actor edits, snapshot the provided CLI, models and acceptance tests.
+The frozen test file checks that frame in addition to behavioral examples.
+After delivery, compare original artifacts, run the tests and inspect exact
+wrapper argv and document ownership. Scripted author controls can exercise this
+review path, but cannot stand in for an actual contractor transcript or grade.
+
+---
+
+## 11. What the instruments can and cannot see
+
+A full native gate checks its actual subject under the pinned configuration.
+An audit checks explicit assumption and trust surfaces. A statement freeze
+compares original declarations, imports and levers. Form admission checks a
+bounded edit grammar and native code/model frames. Compiled finite clients
+observe actual emitted behavior on selected inputs. These instruments complement
+one another because their claims differ; no one summary absorbs all the others.
+
+A parser can faithfully preserve a false or invented record. A localizer can
+correctly map a diagnostic from an obsolete buffer. A renderer can emit a
+syntactically allowed but unhelpful hint. A profiler can measure a symbol while
+another symbol still fails. A method can be well designed while live apparatus
+is unavailable. State which evidence exists at each boundary before making a
+claim about a completed program or an experimental comparison.
+
+Original snapshots and independent consumers make these distinctions reviewable.
+They do not prove the solver, compiler, native checker or intended natural-language
+task is correct. R12 supplies a disciplined observation-and-search interface;
+later trust work examines the remaining pipeline and specification assumptions.
+Keep the source/context and the scope of every assurance visible in that handoff.
+
+---
+
+## Instructor touchpoints
+
+Use `/tutor R12` on a single missing invariant or transition, and `/discuss R12`
+for the search and paper comparisons. Use `/review R12` for the whole reasoning
+chain, `/review-code R12` for original contracts, frames and implementation,
+and `/viva R12` for one committed disjoint six-question draw. Fresh native
+predictions in the bank are separate subjects from the chapter's five predictions.
+Run `/grade-paper R12` on the registration/cards and its `--report` mode only
+after actual report evidence. `/contract R12` belongs to a fresh toolwright
+session under the preserved frame. Open `Solutions/` LAST after attempts,
+receipts, independent review and declared live/deferred outcomes.
+
+Calibrate with gold and flawed method fixtures using source-bound evidence.
+Expected fixture quality is not a measured grader session. Keep the actual
+registration hash and gradebook provenance separate from fixture exercises.
+If a live instruction or provider is blocked, record the blocker and continue
+independent source work without changing a lock or inventing a successful event.
+
+---
+
+## What R12 planted
+
+| seed or harvest | connection |
+|---|---|
+| parser before model | harvested obligations-as-data into a strict native observation boundary |
+| matched node trajectories | harvested pass-at-k and evaluation habits into registered curve comparisons |
+| original source and context binding | carries frame/fidelity checks into later trust analysis |
+| localized obligation evidence | prepares later diagnostic and trust-report consumers without declaring success |
+| costs, clustering and deferred evidence | carries actual measurement limits into later labs and capstone review |
