@@ -1424,14 +1424,15 @@ receive the same specified error position in the paired port.
 
 | item | form / pair | task | planned minutes |
 |---|---|---|---|
-| T1d/T1v | closed-book execution | propagate a single-bound error without losing its original position | 5 each |
+| T1d/T1v | closed-book execution | advance a cursor and propagate a single-bound error without losing its original position | 5 each |
 | W1d/W1v | worked | one-character bound recogniser and complete native result interface | 3 each |
 | W2d/W2v | worked | read failure propagation and the actual result obligations | 3 each |
 | W3d/W3v | worked | concrete syntax, source spans, lowering and error positions | 3 each |
+| W4d/W4v | worked | recursive copy/optional-copy interfaces used by the final interval proof, and budget arithmetic facts | 6 each |
 | H1d/H1v | execution | parse a finite counted suffix under completeness and error-position contracts | 12 / 15 |
 | H2d/H2v | execution/annotations | class-body progression, preserved accumulator and completion at the first closing delimiter | 9 / 12 |
 | H3d/H3v | execution | enforce the lowering's expansion cap without overflowing the bounded multiplication | 8 / 9 |
-| H4d/H4v | proof | finite repetition denotes some number of copies within the original bounds; explicit recursive helpers remain learner work | 14 / 16 |
+| H4d/H4v | proof | finite repetition denotes some number of copies within the original bounds, using the printed module-local worked helper contracts | 14 / 16 |
 | H5d/H5v | execution/annotations | advance the parser cursor while preserving old input and position guarantees | 7 / 8 |
 | P1d | value | complete single-bound propagation on a concrete invalid suffix | 3 |
 | P2v | value | complete single-bound propagation on a different scalar input | 3 |
@@ -1466,3 +1467,16 @@ and encoding divergence lab takes25minutes. The existing444-minute record is
 unchanged: setup8,test-out10,read60,worked30,cards8,predict15,holes110,port60,
 divergence25,agent25,paper35,bench20,viva30,calibration8. Live actor validation
 remains D45 debt; no native author run substitutes for it.
+
+**R09 before activation, prototype reconciliation.** The cursor test-out and H5
+provide two hand uses of both propagation and old-state mutation. Input text
+is a mutable field whose value must be preserved, so old-state promises are
+meaningful. H4 combines the printed module-local helper contracts; those
+worked helpers are not in A3. The worked allocation is30minutes across four
+paired examples. The paired parser retains literal-fragment success/meaning
+guarantees as well as safety, finite-count completeness and class completion.
+V's A3 AST uses canonical sorted range insertion adapted from the existing A2
+given construction, with explicit AST ranges; the frozen A2 API remains opaque
+and unchanged. Direct class-range output, source spans and error locations
+are compared before any claim about later expansion-size fidelity. A zero
+upper repetition bound must not reject an unused oversized operand.

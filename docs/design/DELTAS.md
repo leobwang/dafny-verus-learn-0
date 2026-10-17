@@ -4164,3 +4164,25 @@ runs. The final study workflow passes15/15with5first predictions and2original-
 model agent snapshots. Frozen source scan25modules/1970public/OK. Archive,
 source hashes and CI provenance are in the protected DVR2 notes. R08 is an
 authoring candidate, not a new Basic shipment; full release/model debt remains.
+
+## Δ261 — R09 A3 definitions and faithful-port construction checkpoint (2026-10-17)
+
+Introduce A3's positioned syntax, finite single-character-bound grammar and
+parser specification predicates. Verus now carries nested spans/classes and
+matches Dafny's finite counted forms. Its explicit AST ranges adapt the
+existing checked A2 insertion construction so expansion-size accounting can
+retain actual representation; the frozen opaque A2 API stays unchanged.
+A3 supplies no parser, executable lowering or lowering-correctness theorem.
+
+Both provided libraries gate/audit and pass three seeds, the course map passes,
+and avoid.sh reports0hits. Private parser prototypes additionally prove the
+literal fragment and preserve finite-count/class completion. Actual compiled
+Python/Rust tests agree on290predeclared cases, with exact error positions,
+nested spans and actual canonical class intervals. Paired mutants have exact
+15/6/1runtime kill parity; both verifiers reject a fourth counted-model change.
+This finite evidence is not a full grammar theorem. Failed/resource-limited
+attempts and checked source copies are retained in the protected build notes.
+
+R09 remains planned: structural pre-expansion budget integration, the learner
+kit, admission, material/study checks and module CI are outstanding. D45 live
+model debt and R03's parked Unicode boundary remain deferred, never passes.
