@@ -1333,3 +1333,72 @@ these two need their own full controls. Verus H1/H2/H3 now allocate6/7/8minutes
 and H4/H5 allocate5each, preserving31Verus hole minutes and62for the pair.
 Dafny H1/H2/H3 retain8/11/12. Native card grammar uses write:<slug>, not uses.
 No claim of final ten-hole admission or scope-task completion is made yet.
+
+## 10. Band 2 item plan — R08 abstraction (2026-10-17)
+
+This plan precedes activation. R08 uses A2, without importing an earlier
+learner file. Its supplied semantic model bindings are fixed definitions.
+Dafny implements an abstract Pattern/WordLanguage/MatchWord specification by
+refinement; Verus implements a WordMatcher trait with a word-language spec
+method and a matching execution contract. The derivative engine uses the
+re-supplied matcher. The class engine recognises one-character words through
+the re-supplied class membership API. No band1 proof is supplied anew.
+
+**Provided interface, F6.** The abstract Dafny matcher belongs to a frozen
+given-role statement file. Extend the existing SHA-pinned statement handling
+for that exact R08 interface, retaining challenge restrictions for other
+modules and all hash/immutability checks. Its A2 given file contains only the
+abstract interface, not a completed R08 implementation. The Verus counterpart
+is a given A2 trait, with no assumed implementation. Later certifying and VM
+engines can use the same interfaces without importing a learner's R08 files.
+Recheck A2 gates/audits and the earlier R07 consumers after this additive API
+extension; do not alter existing definition bodies or permit an extra axiom.
+
+| item | form / pair | task | planned minutes |
+|---|---|---|---|
+| W1d/W1v | worked | A complete literal-character engine with its own frozen model; instantiate an interface client | 3 each |
+| W2d/W2v | worked | Read a model/implementation square and identify the actual obligation and receiver | 3 each |
+| H1d/H1v | execution hole | Implement the derivative engine under the fixed matcher interface and provided regex model; type/model bindings stay fixed | 15 each |
+| H2d/H2v | execution hole | Implement the class engine's whole one-character-word language, including all other lengths; model stays fixed | 16 each |
+| H3d/H3v | proof hole | Relate an opaque whole-word model to its provided semantic definition by a local reveal | 6 each |
+| H4d/H4v | proof hole | Relate an opaque one-step residual model to the original prefixed-word language using the supplied A2 correctness interface | 8 each |
+| P1d | value | A literal-character refinement invoked through its interface on a concrete word; Boolean literal | 3 |
+| P2v | value | A different literal-character trait model on a concrete scalar word; Boolean literal | 3 |
+| P3dv | verdict | A claimed proper-prefix property of a supplied whole-word language under the printed context | 3 |
+| P4v | obligation | Two receiver instances and one word: name the labelled claims justified by the actual call's contract | 3 |
+| P5dv | verdict | Equivalence of two complete one-character model bindings; retain the exact sequence-length/index conditions | 3 |
+| C1d/C1v | WRITE | Refinement / trait-contract syntax on a separate literal model | 2.5 each |
+| C2d/C2v | WRITE | Reveal a separate supplied opaque literal model | 2.5 each |
+| C3d | recognise | Abstract modules and provided specification files | 1.5 |
+| C3v | recognise | The spec model of a trait implementation | 1.5 |
+| C4dv | divergence | Refinement requirements and implementation promises; directions are stated facts, not predictions | 2 |
+| C5dv | divergence | An implementation can match its own different model; compare the frozen intended binding | 2 |
+| A1d/A1v | semantic debugger | The original model promises the whole word, but a complete implementation passes a shortened word to its backend; preserve interface and model | 25 total follow-up |
+
+Four H holes per language, no test-out or checkpoint. WRITE sets: Dafny
+refines/reveal, Verus trait-spec/reveal, each with at least two actual hand
+items. Total H minutes90 (45 each language). Admission stays0 until native
+reference, three seeds, canonical automation controls and execution trivial
+controls pass. A failed wiring prototype is not a semantic-negative control.
+
+The refinement lab lists the original input domain and result relation, the
+implementation's model binding, every generated requirement and the side
+that discharges it. Requires weakening and ensures strengthening are taught
+as facts under the actual language rules; R08 does not repeat the other
+track's reserved legality prediction. Preserve native stages for diagnostics.
+The agent's planted defect must reach verification with no holes and a genuine
+semantic postcondition failure. A changed-model delivery can verify but must
+fail the original snapshot freeze. The positive repair must preserve every
+provided contract and model body and pass the full gate and audit.
+
+The chapter has a refinement square and the direction-of-obligations diagram,
+with at least one further model/implementation view. The written pair holds
+card06.7 and a refinement-obligations problem, fifteen minutes each. The bank
+has12 questions, disjoint six-question draws with actual native live probes,
+and two paired parallel problems. The seventh bench card strips an own
+completed abstraction goal, retaining its fixed interface and course-derived
+provenance. Live model/contractor validation remains D45 debt.
+
+The354-minute record remains: setup10, read60, worked30, other cards7,
+predicts15, holes90, refinement lab30, agent25, paper30, bench20, viva30 and
+calibration7. The two language-specific hole totals remain45minutes each.
