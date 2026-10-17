@@ -77,7 +77,7 @@ pub open spec fn lower(t:Syn)->Re
   SyntaxKind::Group(a) => lower(*a),
  }
 }
-pub enum ErrKind { UnexpectedEnd, UnexpectedChar, UnclosedParen, UnclosedClass, NothingToRepeat, BoundsOrder, ClassRange }
+pub enum ErrKind { UnexpectedEnd, UnexpectedChar, UnclosedParen, UnclosedClass, NothingToRepeat, BoundsOrder, ClassRange, ExpansionBudget }
 pub struct PErr { pub pos:usize, pub kind:ErrKind }
 pub open spec fn is_meta(c:char)->bool {
  c=='(' || c==')' || c=='|' || c=='*' || c=='+' || c=='?' || c=='{' || c=='}' || c=='[' || c==']' || c=='\\'

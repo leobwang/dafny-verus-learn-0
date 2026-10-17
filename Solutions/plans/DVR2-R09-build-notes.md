@@ -100,3 +100,46 @@ kit or canonical admission; do not copy full answers into learner files.
 Structural size checking before any expansion remains the next dependency.
 
 A3 frozen STUDY scan: leak verifier: 25 module(s), 1974 public files scanned, OK
+
+## User-directed blocker skip and expansion checkpoint (11:51 UTC)
+
+The user explicitly says “record the blocker and skip. continue to build.”
+Keep D45 live-Claude/calibration/transcript work deferred and R03's pre-OD8
+Unicode packaging issue parked. Neither is a pass. Do not call Claude, retry
+quota, change tiers or weaken a release check. Continue the R course build.
+
+Exact structural cost proofs now pass D11/V11. Checked bounded addition,
+canonical-class costs and complete recursive costs pass D23/V23. Rep upper0
+skips child cost and allocation; positive upper bounds first prove child cost
+cannot exceed parent cost. Arithmetic guards precede bounded operations.
+The finite-count formula bridge resolves D's initial5M resource failure; V
+needed explicit full-slice equality and a polynomial zero-case identity.
+No resource setting or verifier flag was raised.
+
+Sized parser retains all previous postconditions and adds the exact literal
+size: empty1, nonempty2*n-1. D26/V23 verified. Complete frontend checks this
+cost before executable lowering, returns the fixed Lower of its parsed AST,
+proves NodeCount<=cap and requires literals to succeed and match when they
+fit. D271/V47 verified, zero holes/findings. D's first two combined proofs
+exhausted resources. A separate CheckedLowering boundary and the explicit
+{:isolate_assertions} attribute on the final worked frontend make its proof
+checks small; the attribute is source, will ship/freeze with the helper, and
+changes no trust, goal or limit. A later indentation warning failed the gate;
+parenthesized the implication rather than suppressing it. Exact failures kept.
+
+The actual compiled frontends agree297/297 each against a predeclared corpus:
+prior raw canonical ASTs interpreted by independent Python cost arithmetic,
+plus hand-built nested ASTs for new cap cases. Compare exact AST/spans/error
+positions and count actual lowered Re nodes. Includes cap0, exact caps, full
+u32 cap, oversized nested{9} rejection and huge class/nested unused children
+under{0} accepted atcap3. Finite differential execution is not a full grammar
+theorem. Cost means logical tree nodes, not peak heap memory or immutable
+Dafny sharing. Scripts/results live under /tmp/dvl0-dvr2-r09/frontend-fidelity/.
+Protected checked sources and hashes are in native-prototypes/expansion-
+provenance.json. R09 remains planned/admission0: learner kit/material controls
+still required. V A3 adds a dedicated ExpansionBudget error kind; rerun the
+provided-library gate/audit/seeds before activating. R04 full CI is untouched.
+
+A3 expansion-kind gate/audit/three seeds rerun6/6 commands passed. Both fully
+assembled six-task reference prototypes also pass native gates: D285/V54,
+zero holes/findings. Frozen STUDY leak checkpoint: leak verifier: 25 module(s), 1974 public files scanned, OK.

@@ -1,0 +1,71 @@
+{
+  "sources": [
+    {
+      "file": "sized-parser.dfy",
+      "tested_source": "/tmp/dvl0-dvr2-r09/parser_sized.dfy",
+      "sha256": "9e4b0c3fae93336da158d7e3a4d95460c613192c05879157948982639928d5c3"
+    },
+    {
+      "file": "sized-parser.rs",
+      "tested_source": "/tmp/dvl0-dvr2-r09/parser-sized/src/lib.rs",
+      "sha256": "6d97c6e14353845362214ac071667d6775d4cfc838c8d02db2e641c37fb0ccd1"
+    },
+    {
+      "file": "size.dfy",
+      "tested_source": "/tmp/dvl0-dvr2-r09/size_proofs.dfy",
+      "sha256": "99913dd0d2601f70f398e8b9b0ca679bd5c16c3bfe8ae78c928f5b295fa300ab"
+    },
+    {
+      "file": "size.rs",
+      "tested_source": "/tmp/dvl0-dvr2-r09/size/src/lib.rs",
+      "sha256": "9d892d237fd5bc51812db832dca735b0b868df54c4d92a0d13eb920caef7225f"
+    },
+    {
+      "file": "checked-cost.dfy",
+      "tested_source": "/tmp/dvl0-dvr2-r09/checked_cost.dfy",
+      "sha256": "2b6a5bb50672c73001e6c4d72fac5d126655b721c7ecb75dfccc1bde0939f986"
+    },
+    {
+      "file": "checked-cost.rs",
+      "tested_source": "/tmp/dvl0-dvr2-r09/cost/src/lib.rs",
+      "sha256": "64fef02d498e0cad9e0e5d5d8d9ed802710619b09245226056218028270363dc"
+    },
+    {
+      "file": "budget-protocol.dfy",
+      "tested_source": "/tmp/dvl0-dvr2-r09/budget_protocol.dfy",
+      "sha256": "9c98ee0a3385708c95dde89f7c46dccf9648877a8e6e4ee67f3ac943fa013702"
+    },
+    {
+      "file": "lowering.dfy",
+      "tested_source": "/tmp/dvl0-dvr2-r09/lowering_exec.dfy",
+      "sha256": "b375f3e666829c99bea44594a7ed86bb994b5faa997f6e559a65865b3d52cd43"
+    },
+    {
+      "file": "lowering.rs",
+      "tested_source": "/tmp/dvl0-dvr2-r09/lowering/src/lib.rs",
+      "sha256": "da17d712cf573d26c2bf510ecf41030875c1f9ba35054a3a51a82a78790d817d"
+    },
+    {
+      "file": "frontend.dfy",
+      "tested_source": "/tmp/dvl0-dvr2-r09/frontend.dfy",
+      "sha256": "9e07fd3cbc62b73aced5165346fe332148b08f9881611506956ba85d24cd680c"
+    },
+    {
+      "file": "frontend.rs",
+      "tested_source": "/tmp/dvl0-dvr2-r09/frontend.rs",
+      "sha256": "81694bb101f214b0ca42f4ad2e2bb1d4655b5fd8082b87d1c633b9ffc45d0229"
+    }
+  ],
+  "native_results": {
+    "size-native.dfy.json": "verified",
+    "size.json": "verified",
+    "cost-native.dfy.json": "verified",
+    "cost.json": "verified",
+    "frontend-native.dfy.json": "verified",
+    "frontend.json": "verified"
+  },
+  "compiled_frontend_cases": 297,
+  "compiled_dafny": "frontend-fidelity/result-d.json",
+  "compiled_verus": "frontend-fidelity/result-v.json",
+  "claim_limit": "finite execution evidence, not full grammar correctness"
+}
