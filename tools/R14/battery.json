@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "scope": "12 exposed course assertions, bounded proof-site choices after completing the R14 core",
+  "cards": [
+    {
+      "id": "prefix-upper-d",
+      "lang": "dafny",
+      "mechanism": "prefix",
+      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(s:seq<int>,cap:nat)\n requires forall i |0<=i<|s| ::0<=s[i]<=cap\n ensures PrefixMassR14(s)<=|s|*cap\n {\n // R14_PROOF_SITE\n }\n}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert true;",
+        "lemma": "PrefixCapR14(s,cap);"
+      }
+    },
+    {
+      "id": "prefix-lower-d",
+      "lang": "dafny",
+      "mechanism": "prefix",
+      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(s:seq<int>,cap:nat)\n requires forall i |0<=i<|s| ::0<=s[i]<=cap\n ensures 0<=PrefixMassR14(s)\n {\n // R14_PROOF_SITE\n }\n}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert true;",
+        "lemma": "PrefixCapR14(s,cap);"
+      }
+    },
+    {
+      "id": "prefix-twice-d",
+      "lang": "dafny",
+      "mechanism": "prefix",
+      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(s:seq<int>,cap:nat)\n requires forall i |0<=i<|s| ::0<=s[i]<=cap\n ensures PrefixMassR14(s)+PrefixMassR14(s)<=(|s|*cap)+(|s|*cap)\n {\n // R14_PROOF_SITE\n }\n}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert true;",
+        "lemma": "PrefixCapR14(s,cap);"
+      }
+    },
+    {
+      "id": "odd-square-d",
+      "lang": "dafny",
+      "mechanism": "fuel",
+      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(n:nat)\n \n ensures OddTraceR14(n)==n*n\n {\n // R14_PROOF_SITE\n }\n}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert true;",
+        "lemma": "OddSquareR14(n);"
+      }
+    },
+    {
+      "id": "odd-next-d",
+      "lang": "dafny",
+      "mechanism": "fuel",
+      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(n:nat)\n \n ensures OddTraceR14(n+1)==OddTraceR14(n)+2*n+1\n {\n // R14_PROOF_SITE\n }\n}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert true;",
+        "lemma": "OddSquareR14(n);OddSquareR14(n+1);"
+      }
+    },
+    {
+      "id": "odd-double-d",
+      "lang": "dafny",
+      "mechanism": "fuel",
+      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(n:nat)\n \n ensures OddTraceR14(n)+OddTraceR14(n)==2*(n*n)\n {\n // R14_PROOF_SITE\n }\n}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert true;",
+        "lemma": "OddSquareR14(n);"
+      }
+    },
+    {
+      "id": "prefix-upper-v",
+      "lang": "verus",
+      "mechanism": "prefix",
+      "template": "\nverus! {pub proof fn battery_cell_r14(s:Seq<int>,cap:int)\n requires cap>=0,forall|i:int| 0<=i<s.len() ==> 0<=#[trigger] s[i]<=cap,\n ensures prefix_mass_r14(s)<=s.len()*cap,\n {\n // R14_PROOF_SITE\n }}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert(true);",
+        "lemma": "prefix_cap_r14(s,cap);"
+      }
+    },
+    {
+      "id": "prefix-lower-v",
+      "lang": "verus",
+      "mechanism": "prefix",
+      "template": "\nverus! {pub proof fn battery_cell_r14(s:Seq<int>,cap:int)\n requires cap>=0,forall|i:int| 0<=i<s.len() ==> 0<=#[trigger] s[i]<=cap,\n ensures 0<=prefix_mass_r14(s),\n {\n // R14_PROOF_SITE\n }}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert(true);",
+        "lemma": "prefix_cap_r14(s,cap);"
+      }
+    },
+    {
+      "id": "odd-square-v",
+      "lang": "verus",
+      "mechanism": "fuel",
+      "template": "\nverus! {pub proof fn battery_cell_r14(n:nat)\n \n ensures odd_trace_r14(n)==n*n,\n {\n // R14_PROOF_SITE\n }}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert(true);",
+        "lemma": "odd_square_r14(n);"
+      }
+    },
+    {
+      "id": "odd-next-v",
+      "lang": "verus",
+      "mechanism": "fuel",
+      "template": "\nverus! {pub proof fn battery_cell_r14(n:nat)\n \n ensures odd_trace_r14((n+1) as nat)==odd_trace_r14(n)+2*n+1,\n {\n // R14_PROOF_SITE\n }}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert(true);",
+        "lemma": "odd_square_r14(n);odd_square_r14((n+1) as nat);assert((n+1)*(n+1)==n*n+2*n+1) by(nonlinear_arith);"
+      }
+    },
+    {
+      "id": "word-strict-v",
+      "lang": "verus",
+      "mechanism": "bit-vector",
+      "template": "\nverus! {pub fn battery_cell_r14(x:u32) requires x>0u32, {let y=x&(x-1);\n proof {\n // R14_PROOF_SITE\n }\n assert(y<x);\n }}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert(x>0u32);",
+        "word-theory": "assert((x & ((x-1) as u32))<x) by(bit_vector) requires x>0u32;"
+      }
+    },
+    {
+      "id": "word-disjoint-v",
+      "lang": "verus",
+      "mechanism": "bit-vector",
+      "template": "\nverus! {pub fn battery_cell_r14(x:u32) requires x>0u32, {let y=x&(x-1);\n proof {\n // R14_PROOF_SITE\n }\n assert((y&(x^y))==0u32);\n }}\n",
+      "options": {
+        "none": "",
+        "local-bound": "assert(x>0u32);",
+        "word-theory": "assert(((x & ((x-1) as u32)) & (x ^ (x & ((x-1) as u32))))==0u32) by(bit_vector) requires x>0u32;"
+      }
+    }
+  ]
+}

@@ -31,6 +31,7 @@ verus! {
     assert(tail[i]==s[i+1]);
    }
    prefix_cap_r14(tail,cap);
+   // did: distribute the original cap over the one-element length extension.
    assert((s.len()-1)*cap+cap==s.len()*cap) by(nonlinear_arith);
   }}
  #[verifier::opaque]
@@ -51,6 +52,7 @@ verus! {
    assert(previous+1==n);
    assert(odd_trace_r14(n)==(odd_trace_r14(previous)+2*n-1) as nat);
    assert(odd_trace_r14(previous)==previous*previous);
+   // did: normalize the square recurrence using previous+1=n.
    assert(n*n==previous*previous+2*n-1) by(nonlinear_arith) requires previous+1==n;
   } else {assert(odd_trace_r14(n)==0);}}
  // item: R14.H3v
@@ -62,6 +64,7 @@ verus! {
  {
  // did: use the actual word-theory identity without changing the input domain.
   let out=x&(x-1);
+  // did: discharge strict decrease in32bit theory under the original positive premise.
   proof {assert((x & ((x-1) as u32))<x) by(bit_vector) requires x>0u32;}
   out}
 }

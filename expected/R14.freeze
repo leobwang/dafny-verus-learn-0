@@ -1,0 +1,52 @@
+# expected/R14.freeze — statement-freeze pins for R14 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R14` from the files as shipped; checked by
+# `scripts/specfreeze --check R14`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R14"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R14_Smt/std/R14_Smt.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R14_Mechanics.OddSquareR14 {:induction false}", "R14_Mechanics.PrefixCapR14 {:induction false}"]
+[file.statements]
+"R14_Mechanics.ClearLowBitR14" = "d238998db4a83908f8829022e17c033c6de15e04b495680d5d71cd263acba4f9"
+"R14_Mechanics.OddSquareR14" = "ffc2eda177a0a89497a6ab141fd868a77224f19f7d425aa50e9b74c0671f890a"
+"R14_Mechanics.OddTraceR14" = "d5ffd5558fea353ae5523c57f4ad389271d73a20e559c1ccadf1a9a74e05e4f8"
+"R14_Mechanics.PrefixCapR14" = "c910eaa40aaeb4e69929fc0240658ba54b75601bf5a6f5aae12d121c41ec9bc2"
+"R14_Mechanics.PrefixMassR14" = "edb268b4583d3e2a98f0399301fdc9605995b28c6d478bdd8ec292cb43257380"
+
+[[file]]
+path = "verus/r/r14_smt/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"clear_low_bit_r14" = "79c1fd6d967cfef77508c44d85e725614c5c38dd0a129739d5aec58aab678d72"
+"odd_square_r14" = "875f462eec44ab7fefbe27dfc8a04aec50b2dcba226a18d01923567fb06f2788"
+"odd_trace_r14" = "9923fb32a8a8a407edfb49f4974caf695167ac2573f716432ad101a3427e8c16"
+"prefix_cap_r14" = "9d4082f51225a0bd8c403594c4bc0fe0a891b21f959a3975db52d720b1fb0b07"
+"prefix_mass_r14" = "f4cf0270e8be24a5ba8dacc840954d8bf86cb3369195a81f8c05205afbca2d01"
+
+[[file]]
+path = "tools/R14/trigscan.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"CaptureR14" = "e3a499071da298985a0ffb2464dd1d51422fe3574bfa0c6124c1875945d9c08f"
+"CaptureR14.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
+"GroupR14" = "4606a8ebcfc46555fcc02139fee5f274d85a74c9a946bda77006173da4e27d58"
+"PatternR14" = "aa86b40215d6fbf62faab384f247a3b65b3675c655e546bd628e5d52237e8f04"
+"TermR14" = "009a3daa582a9d30156707a2898c03b3d55f22c936edaf89fcac71c6eceb17ad"
+"TriggerScanR14" = "6a1c3dcb65d47d978a5e97fc2079c64196f3c7f1a28128bdee8d59d883cb32f2"
+"TriggerScanR14.availability" = "f4866bf65cc881c9a47090145d963bf37dacea9da3583d7dbb6cebe8d049d68f"
+"TriggerScanR14.located_terms" = "6589d066335b089842a1316a9bfdde8f8fe4e7c3b917ee5b8686963198c4e218"
+"bound_terms_r14" = "308d0047548790969bf4c8692be80b9418c99302d069dd2a1f8bd6a63de4ddd1"
+"diagnostic_lines_r14" = "984d32eb75316df138c241a8daf5b66ad63cc3b4011d7acdc50783a16935dd35"
+"main" = "a8e32ea552792332b54349d4505050fba5401f9253c05b152431a8f86a3ceea0"
+"scan_trigger_notes_r14" = "2820fd0478b900fd296f983a6eda0f5f31205f18290d861634829da731e285fd"
+"sha_r14" = "7568ab7c06dff5fcd5ef677ad4215f042f0c85ab379c48edf0950626ea65a16f"

@@ -2,6 +2,7 @@
 Actual capture and synthetic boundary cases are distinguished explicitly.
 """
 import ast
+import argparse
 from dataclasses import FrozenInstanceError
 import hashlib
 import importlib.util
@@ -12,7 +13,11 @@ import unittest
 HERE=Path(__file__).resolve().parent
 ROOT=next(p for p in HERE.parents if (p/'MODULES.toml').is_file())
 FIX=ROOT/'specimens/R14/native-triggers'
-spec=importlib.util.spec_from_file_location('r14_tool_under_test',HERE/'trigscan.py')
+parser=argparse.ArgumentParser(add_help=False)
+parser.add_argument('--implementation',type=Path)
+selected,remaining=parser.parse_known_args();sys.argv=[sys.argv[0],*remaining]
+IMPLEMENTATION=selected.implementation or HERE/'trigscan.py'
+spec=importlib.util.spec_from_file_location('r14_tool_under_test',IMPLEMENTATION)
 m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=m;spec.loader.exec_module(m)
 FRAME_SHA256='77df9096e67eb220ff17ca46cceef597ea297a013a50872f168150714fa593b0'
 
@@ -71,7 +76,7 @@ class TriggerTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'digest mismatch'):m.CaptureR14(c.source_id,c.source,c.stderr+b'x',c.source_sha256,c.stderr_sha256)
   with self.assertRaises(FrozenInstanceError):c.source=b'changed'
  def test_only_the_actor_body_may_change(self):
-  tree=ast.parse((HERE/'trigscan.py').read_text());found=[]
+  tree=ast.parse(IMPLEMENTATION.read_text());found=[]
   for n in ast.walk(tree):
    if isinstance(n,ast.FunctionDef) and n.name=='scan_trigger_notes_r14':n.body=n.body[:1]+[ast.Pass()];found.append(n.name)
   self.assertEqual(found,['scan_trigger_notes_r14'])
