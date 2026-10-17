@@ -10,6 +10,7 @@ Run: python3 -m unittest discover -s tests/wrappers -p 'test_dafny*.py'
 """
 
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -471,14 +472,17 @@ class Freeze(unittest.TestCase):
 
 class ArmedUnits(unittest.TestCase):
     """The synthetic armed Q04 of tests/course_map/armed, in a scratch course root
-    with generated units (scripts/gen_units.py)."""
+    with generated units (scripts/gen_units.py). The real modules the registry arms
+    (Q01-Q03) are set to authoring there: the root holds none of their files, and a
+    shipped module's units need them (the same independence as Δ249's fixtures)."""
 
     @classmethod
     def setUpClass(cls):
         import test_course_map as tcm  # the checker suite's armed registry text
         cls.root = common.scratch_dir("dafny-armed") / "root"
         (cls.root / "dafny").mkdir(parents=True)
-        (cls.root / "MODULES.toml").write_text(tcm.ARMED, encoding="utf-8")
+        registry = re.sub(r'(?m)^status = "shipped"$', 'status = "authoring"', tcm.ARMED)
+        (cls.root / "MODULES.toml").write_text(registry, encoding="utf-8")
         shutil.copytree(ROOT / "dafny/options", cls.root / "dafny/options")
         for rel, text in tcm.TREE.items():
             p = cls.root / rel
