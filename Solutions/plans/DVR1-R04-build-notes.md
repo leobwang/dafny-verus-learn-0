@@ -156,3 +156,25 @@ report excludes A outcomes; retain original agent source in the study workflow,
 verify the author analyses separately and assert the frozen replacement fails.
 Archive final evidence; integrate R04 by fast-forward/cherry-pick only after
 its complete local bar. Then continue R05. No external push or Claude call.
+
+
+## Clean candidate corrections after c073b9e
+
+Focused CI20261017T072345Z-1828833 completed4passed/2failed,0skipped,
+0absent in665s. Native R Dafny/Verus, paper and harness passed. Static failed
+16 avoid-name collisions (one C and five Pos declarations); rubric failed
+one stale Dafny reference digest after construct-alignment edits. Preserve
+this failed run; it is not a pass. Rename C to NoAInB and Pos to
+RuntimePositive consistently in public/reference specimens and prose, without
+changing contracts or bodies. avoid.sh now0hits. Re-capture all20 chapter
+entries and13 sidecars normally, re-pin the renamed statement baseline and
+refresh the rubric digest. All six reference predictions must still pass.
+
+The first study workflow was deliberately interrupted before any command
+result was recorded, so its clone could be replaced by this renamed candidate;
+no workflow pass is claimed. Its finally cleanup removed the detached clone.
+The restarted workflow and stability run use DVL_VERUS_JOBS=2 so a second
+bounded lane can progress beside the long canonical admission's BV controls.
+All native lanes remain16GiB each, at most three/48GiB total; GATE_WORKERS=1.
+Admission core proof bytes are unchanged by these specimen/prose renames.
+Full local CI and completed-reference workflow remain pending here.

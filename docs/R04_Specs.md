@@ -51,7 +51,7 @@ code test-outs after the module's predictions have been recorded. A later
 repair remains worthwhile; it must not replace the initial record.
 
 Inspect the six prediction prompts and their exact programs now. P1d, P2dv
-and P6dv have switches in the main Dafny exercise, P5d in its standalone Pos
+and P6dv have switches in the main Dafny exercise, P5d in its standalone RuntimePositive
 delivery specimen, and P3d/P4v in their obligation specimens. Verdict answers
 live in `slots/R04.slots`; obligation answers use the printed comment slots.
 Commit the filled answers with their switches disabled, then run
@@ -59,7 +59,7 @@ Commit the filled answers with their switches disabled, then run
 scenarios or inspect expected outputs, the audit drill, cards, bank, rubric
 or CI. Do not let an observed result become an invented first prediction.
 
-> **Predict (P1) — commit in the file before reading on.** Pos has a positive-result postcondition and an expect on its input outside a test. What verification verdict do you predict for the program as written?
+> **Predict (P1) — commit in the file before reading on.** RuntimePositive has a positive-result postcondition and an expect on its input outside a test. What verification verdict do you predict for the program as written?
 
 > **Predict (P2) — commit in the file before reading on.** For the printed regex and string, which of the four proposed Find postconditions force a true Boolean? Keep the whole-string, occurrence, implication and suffix formulas distinct.
 
@@ -67,7 +67,7 @@ or CI. Do not let an observed result become an invented first prediction.
 
 > **Predict (P4) — commit in the file before reading on.** Predict the failing labels of the corresponding Verus proofs. Do not assume a language comparison decides an unrun proof obligation.
 
-> **Predict (P5) — commit in the file before reading on.** Predict the gate exit and assumption-audit finding count of the Pos delivery. Use the exact two-number answer form.
+> **Predict (P5) — commit in the file before reading on.** Predict the gate exit and assumption-audit finding count of the RuntimePositive delivery. Use the exact two-number answer form.
 
 > **Predict (P6) — commit in the file before reading on.** FindNone returns false for every input and is checked against each proposed postcondition separately. Which contracts verify in each language?
 
@@ -160,8 +160,8 @@ specimens/R04/P3d.dfy.specimen:75:48: related: this proposition could not be pro
 specimens/R04/P3d.dfy.specimen:77:47: error: a postcondition could not be proved on this return path
 specimens/R04/P3d.dfy.specimen:77:39: related: this is the postcondition that could not be proved
 specimens/R04/P3d.dfy.specimen:75:48: related: this proposition could not be proved
-specimens/R04/P3d.dfy.specimen:78:43: error: a postcondition could not be proved on this return path
-specimens/R04/P3d.dfy.specimen:78:21: related: this is the postcondition that could not be proved
+specimens/R04/P3d.dfy.specimen:78:48: error: a postcondition could not be proved on this return path
+specimens/R04/P3d.dfy.specimen:78:26: related: this is the postcondition that could not be proved
 specimens/R04/P3d.dfy.specimen:79:43: error: a postcondition could not be proved on this return path
 specimens/R04/P3d.dfy.specimen:79:27: related: this is the postcondition that could not be proved
 specimens/R04/P3d.dfy.specimen:75:48: related: this proposition could not be proved
@@ -539,7 +539,7 @@ then preserve enough evidence to explain what made it hold or fail.
 
 The twenty-minute audit drill compares three supplied deliveries after P5d's
 first try has been recorded. One has an ordinary justified assertion. One
-uses the Pos runtime expectation. The third is a Verus assumption delivery.
+uses the RuntimePositive runtime expectation. The third is a Verus assumption delivery.
 Run the actual commands and record each exit, counted hole and audit finding.
 Do not infer the instruments' behaviour from a reassuring comment or a green
 editor underline. The relevant evidence is the pinned run over the file you

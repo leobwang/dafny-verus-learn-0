@@ -22,7 +22,7 @@ module R04_Specs {
   { var s := "o"; assert s[..1] == "o" && s[1..] == []; assert Matches(Cat(Chr('o'),Star(Chr('k'))),s); }
 
   // item: R04.P1d verdict
-  // Pos(x) has expect x > 0; y := x; and ensures y > 0, outside a test.
+  // RuntimePositive(x) has expect x > 0; y := x; and ensures y > 0, outside a test.
   // Predict the verification verdict of its exact specimen, D:<v>.
   // CHECK P1d
   // item: R04.P2dv verdict
@@ -31,7 +31,7 @@ module R04_Specs {
   // [c] b ==> Occurs(r,s); [d] b <==> exists i :: 0 <= i <= |s| && Matches(r,s[i..]).
   // Answer labels separated by single spaces, or none; same in both languages.
   // CHECK P2dv
-  // P5d is the Pos delivery in specimens/R04/P5d.dfy.specimen.
+  // P5d is the RuntimePositive delivery in specimens/R04/P5d.dfy.specimen.
   // item: R04.P6dv verdict
   // FindNone always returns false, checked separately against [a]-[d] above.
   // Which verify? D:<labels> V:<labels>, labels in order or none.
@@ -58,7 +58,7 @@ module R04_Specs {
   // item: R04.C2d write:exists-elim
   // CatChrNonEmpty extracts a witness with :| and retains every bound.
   // item: R04.C3d recognise:expect
-  // Recognise expect in the sealed Pos specimen; inspect only after predictions.
+  // Recognise expect in the sealed RuntimePositive specimen; inspect only after predictions.
 
   // item: R04.H1d
   // pair: R04.H1v
