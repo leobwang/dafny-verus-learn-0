@@ -144,3 +144,17 @@ clone removed; records and all stage logs retained privately.
 R04 chapter recapture completes20/20, including its intentional negative
 probes, after the two-line comment correction. R06 full pin checks are running.
 The canonical source branch has not been shipped. Focused CI remains required.
+
+## Focused CI finding and vocabulary correction
+
+Clean source9e7c6db, run20261017T085912Z-3032232: five focused jobs pass
+(verify-r-dafny54s, verify-r-verus87s, paper35s, rubric0s, harness75s), static
+fails506s. Full result5passed/1failed in757s; preserve it, never relabel it.
+The sole static failure is the existing course-map ledger regression:
+R06/loop-invariants was a known planned tag but the newly authored R06 bank
+listed only invariant. Restore loop-invariants in its controlled vocabulary
+and tag the loop-entry/preservation/exit question accordingly. Keep the
+existing regression; no checker relaxation or test change. All other static
+steps and reference lint pass (210twins/23modules/540files). The targeted
+existing regression and full static rerun must pass on the corrected source.
+No native file, count, statement, capture or paper bytes change in this fix.

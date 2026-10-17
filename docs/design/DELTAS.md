@@ -4013,3 +4013,10 @@ at3→1→0 leaf holes with snapshots checked after each stage. Four parallel
 problem gates and audits pass, completing the13-command written/bank check.
 R04's20 chapter captures are current. This does not claim live contractor
 acceptance, completed global CI, or a shipped R06 release.
+
+**Δ256 focused CI correction.** The clean9e7c6db run passes both R native jobs,
+paper, rubric and harness; static fails only the existing known-ledger-tag
+regression. Restore R06's `loop-invariants` bank vocabulary and use it on the
+loop-obligation question. Preserve the failed5/6 run and rerun static; do not
+weaken the checker or replace the existing regression. No proof, statement,
+count or written-material bytes change in this correction.
