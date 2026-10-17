@@ -6,3 +6,4 @@ from r12_cases.test_engine import *
 from r12_cases.test_environment import *
 from r12_cases.test_policy_adapter import *
 from r12_cases.test_frame import *
+from r12_cases.test_boundaries import *

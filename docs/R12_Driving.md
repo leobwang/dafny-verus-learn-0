@@ -43,9 +43,6 @@ it does not replace the full course gate or its unfinished-hole accounting.
 | `verus/r/r12_driving/src/lib.rs` | 3 holes, 0 errors; corresponding native annotation tasks |
 | `dafny/checks/R12_checks.dfy` | 0 holes; given-only source-span observation |
 | `harness/r/fvh_r/engine.py` | 5 holes, 0 errors; extractor, localization, bounded loop, engine and renderer |
-| `harness/r/fvh_r/extractor.py` | 0 holes; provided public API facade |
-| `harness/r/fvh_r/loop.py` | 0 holes; provided public API facade |
-| `harness/r/fvh_r/environment.py` | 0 holes; provided public API facade |
 | `tools/R12/profiler.py` | 1 hole, 0 errors; toolwright body inside the provided CLI and models |
 | `tools/R12/test_profiler.py` | frozen behavioral and original-frame acceptance tests |
 | `tools/R12/admit_forms.py`, `tools/R12/check_clients.py` | independent form checks and actual-source compiled observations |
@@ -405,7 +402,7 @@ acceptance-case failures are omitted.
 <!-- pin: shipped-python -->
 ```
 $ scripts/vcheck harness/r/fvh_r/engine.py
-vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 15 passed, 129 failed, 5 holes
+vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 30 passed, 129 failed, 5 holes
 harness/r/fvh_r/engine.py:72:1: hole raise-not-implemented R12.H1py
 harness/r/fvh_r/engine.py:86:1: hole raise-not-implemented R12.H2py
 harness/r/fvh_r/engine.py:164:1: hole raise-not-implemented R12.H4py

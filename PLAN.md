@@ -302,7 +302,7 @@ Each record: the registry title; **why** it exists (its design role); the **core
 
 #### R12 — Driving the verifier + Lab α
 - **Why.** The doors converge on one core; an agent needs a parser before a model; and the first pre-registered lab, on matched compute.
-- **Core payload.** The doors (editor, CLI, JSON, the language server), with LSP **framed from a captured trace** (reading, not writing a client: LSP-by-hand is Q-only); a streaming verdict parser and **obligation extractor** over both tools' JSON [verify] (`harness/r/fvh_r/extractor.py`); a 20-line verdict loop (`loop.py`); the **toolwright** run: a per-function time and resource profiler [verify] (`tools/R12/profiler.py`); Lab α (§4.3).
+- **Core payload.** The doors (editor, CLI, JSON, the language server), with LSP **framed from a captured trace** (reading, not writing a client: LSP-by-hand is Q-only); a streaming verdict parser and **obligation extractor** over both tools' JSON [verify] (`harness/r/fvh_r/engine.py`); a bounded verdict-loop entry in the same file; the **toolwright** run: a per-function time and resource profiler [verify] (`tools/R12/profiler.py`); Lab α (§4.3).
 - **Diagrams.** Four doors, one core; the obligation extractor's data flow; Lab α's three regimes as settings of one engine; success-vs-budget curves.
 - **Written track.** The two cards; **Lab α's pre-registration** (claim, metric, estimator, budget arithmetic, MDE, cheat surface, stopping rule), which `/grade-paper` must score ≥ 3 on every method dimension before a run unlocks.
 - **Exercises.** Hint-site holes in the exercise files (obligations for the loop); the extractor's and loop's Python holes; the profiler; Lab α's environment and engine.
@@ -1770,3 +1770,10 @@ and no-kernel trust analyses, blank learner forensic/trust ledgers, production
 review rubric and gold/flawed calibration fixtures. No live grade or transcript
 is invented. Given A1–A4 imports remain tier-correct and original statements
 are frozen; public examples must not disclose any hole/slot answer.
+
+R12 final CI packaging correction: the159central acceptance cases include all
+15provided-model boundary controls. Remove the three unnecessary API facades
+and import their types directly from engine.py. Listing hole-free facades as
+learner harness exercises made author CI correctly reject an empty TRIV list.
+Keep the adapter and CI strict; every listed learner harness file now has real
+H items. Frozen single-file overlay and original five learner bodies stand.

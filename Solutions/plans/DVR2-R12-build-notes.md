@@ -302,3 +302,14 @@ replays plus reference-drift rejection pass. Fresh avoid.sh has0hits/0waived.
 Native source/reference bytes are unchanged. Final source static replay, STUDY
 workflow and archive must identify the repaired commit rather than0eaf058.
 Actual final chapter count is5701words; historical5642counts are superseded.
+
+Original source CI20261017T180841Z-1220772 finishes4/6in1461s. Native D/V,
+paper and rubric pass. Static fails5namecollisions (fixed by01bc48b/979099b);
+harness correctly refuses TRIV on three hole-free facades (no H item found).
+The correction removes those redundant API modules, keeps engine.py as the
+single real learner harness entry, and moves all15provided-model controls into
+its central frozen suite:159total. No empty-TRIV skip, adapter change or checker
+waiver. Update registry/counts/freeze and only the changed shipped-Python chapter
+capture. Remaining native/paper bytes are unchanged. The20-command final STUDY
+workflow must omit the six nonexistent facade gate/audit commands and retain
+seven receipts; its original26-command result remains historical evidence.
