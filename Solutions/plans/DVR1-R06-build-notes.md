@@ -158,3 +158,15 @@ existing regression; no checker relaxation or test change. All other static
 steps and reference lint pass (210twins/23modules/540files). The targeted
 existing regression and full static rerun must pass on the corrected source.
 No native file, count, statement, capture or paper bytes change in this fix.
+
+The first vocabulary-only fix5646a82 was insufficient: its family table used
+plain comma-separated names, which are not the controlled-vocabulary grammar.
+The targeted existing test still failed, so stop the just-started static-only
+run20261017T091234Z-3101748 before completing it; retain it as interrupted,
+not a pass. Rewrite R05/R06 family rows as one quoted registered tag per row,
+and replace unregistered construct-slug labels in question metadata with
+existing concepts (induction-as-recursion, termination-measure, loop-invariant,
+calc-chains, proof-splitting, contract-allowlist and related registered tags).
+Keep the established loop-invariants alias for ledger compatibility. No concept
+alias, checker exception or regression change is introduced. Actual checker
+and targeted existing ledger test now pass before the next full static rerun.

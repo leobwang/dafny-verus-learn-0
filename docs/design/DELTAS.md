@@ -4020,3 +4020,10 @@ regression. Restore R06's `loop-invariants` bank vocabulary and use it on the
 loop-obligation question. Preserve the failed5/6 run and rerun static; do not
 weaken the checker or replace the existing regression. No proof, statement,
 count or written-material bytes change in this correction.
+
+The vocabulary correction also normalises R05/R06's family tables to one
+quoted existing concept per row. Construct slugs in question metadata become
+the registered concept tags; `loop-invariants` stays as the established ledger
+alias. The initial comma-separated fix did not satisfy the parser; its targeted
+failure and interrupted rerun are retained. The checker and existing ledger
+regression now pass. No vocabulary alias, test or checker exception is added.
