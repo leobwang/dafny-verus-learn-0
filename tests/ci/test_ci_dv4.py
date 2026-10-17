@@ -147,11 +147,11 @@ class HarnessTripwire(unittest.TestCase):
         # project environment) and removes the rest (the tools' scratch root)
         work = self.root.resolve().parent / "ci-work"
         log = (self.logs / "harness.log").read_text()
-        named = {m.rstrip(".") for m in re.findall(re.escape(str(work)) + r"/[^\s\"',:;=]+", log)}
-        self.assertIn("sterile/home", " ".join(named))
-        for n in named:
-            self.assertTrue(Path(n).exists(), f"{n}: named by harness.log, removed after a pass")
         (run,) = work.iterdir()
+        for rel in ("sterile/home", "sterile/bin", "py-env"):   # each made by the run
+            self.assertIn(f"{run}/{rel}", log)
+            self.assertTrue((run / rel).exists(), f"{rel}: named by harness.log, removed after a pass")
+        self.assertTrue((run / "sterile" / "bin" / "claude").is_file())
         self.assertFalse((run / "scratch").exists())
         self.assertFalse((run / "tmp").exists())
         self.assertIn("ci.sh: tool scratch the logs name kept:", out)

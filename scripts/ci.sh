@@ -624,10 +624,10 @@ def coexist_verus(units):
 
 
 def prune(scratch, *reports):
-    """After a passing run: remove the run's tool scratch except every path that a
-    retained report (a log, a JSON document, the summary) names, with what lies under it.
-    Prints each kept path, relative to the scratch root; a report that names the root
-    itself keeps it whole."""
+    """After a passing run: remove the run's tool scratch except every existing path that
+    a retained report (a log, a JSON document, the summary) names, with what lies under it
+    (a named path the run never created keeps nothing). Prints each kept path, relative to
+    the scratch root; a report that names the root itself keeps it whole."""
     import shutil
     base = Path(scratch)
     if not base.is_dir():
@@ -644,9 +644,8 @@ def prune(scratch, *reports):
                 continue
             for m in pat.finditer(text):
                 q = base / (m.group(1) or "").strip("/").rstrip(".")
-                while q != base and not (q.exists() or q.is_symlink()):
-                    q = q.parent
-                keep.add(q)
+                if q.exists() or q.is_symlink():
+                    keep.add(q)
     if base in keep:
         print(".")
         return 0
