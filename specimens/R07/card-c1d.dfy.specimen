@@ -1,0 +1,8 @@
+module R07_ExplicitCard {
+ import S = Std.Collections.Seq
+ // item: R07.C1d write:library-call
+ // WRITE: instantiate the named empty-alphabet lemma; leave the contract fixed.
+ lemma EmptyAlphabetCardR07(xs: seq<char>)
+  ensures |S.ToSet(xs)| == 0 <==> |xs| == 0
+ {}
+}

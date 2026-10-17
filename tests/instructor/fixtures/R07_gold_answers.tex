@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R07 --- Libraries: what they cost \\ \large Gold calibration fixture}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} Rango solves Coq theorems in existing projects, with a fine-tuned 1.3 B tactic model. At every tactic step it retrieves similar finished proofs from earlier in the file or its dependencies, plus lemma statements. Proof similarity is the maximum BM-25 similarity over intermediate states; lemma retrieval uses TF-IDF. This is not a Dafny or Verus library benchmark.
+
+\textbf{Oracle:} Coq 8.18 checks each sampled tactic. A theorem counts only if Coq accepts the completed proof with no goals left. On a tactic error rollout restarts from an empty script; an incomplete accepted step continues the rollout. A generated tactic string or a successful individual step is not a completed proof.
+
+\textbf{Trust:} The formal theorem and the project context define the target, with the installed Coq checking pipeline and any assumptions available in that project. Retrieved proofs are context for generation, not a replacement oracle. The summary does not supply a fresh assumption audit for every theorem; do not infer that all project premises are assumption-free.
+
+\textbf{Cheat surface:} Proof-bank eligibility matters: earlier in-file proofs and dependencies, rather than arbitrary access to target completions. CoqStoq splits by project; a random file-wise split exposes more same-project context during training. The difference between those settings and the post-cutoff subset must be disclosed before interpreting retrieval gains.
+
+\textbf{Metric:} The main result is 32.0 percent on 10,396 CoqStoq benchmark theorems, compared with Tactician 24.8 percent and Proverbot 19.3 percent. The Graph 2 Tac subset has 496 theorems and the post-cutoff subset 1,171. The 500-theorem ablation reports 30.0 versus 20.4 without proof retrieval; its relative 47-percent gain is not 47 percentage points on the full benchmark.
+
+\textbf{Budget:} The run budget is 10 minutes per theorem on one RTX 2080 plus one CPU, at tactic temperature 1.0. Prompt allocations are 1,024 tokens for proofs,512 for lemmas,512 for theorem and script,1,024 for state, and 128 for output. The excerpt supplies no complete comparable token or dollar ledger for every baseline. GPU versus CPU comparisons are unequal.
+
+\textbf{Variance:} The post-cutoff lead is smaller (30.1 versus 28.3 percent), and success falls on long proofs and files with over 100 dependencies. BM-25, TF-IDF and CodeBERT retrieval yield 32.0,31.7 and 22.0 percent in the reported comparison. These are distinct settings, not repeated-run variance estimates; the excerpt supplies no general confidence interval or repeat count that would establish a course-race effect.
+
+\textbf{Artifact:} The source identifies Thompson et al., ICSE 2025, arXiv 2412.14063, Coq 8.18 and the released CoqStoq corpus (2,226 repositories,196,929 theorems,2,225,515 steps). The benchmark is 12 projects. The local excerpt is pinned by line range and digest; it does not supply an immutable Rango source revision or a complete reproduction manifest. Course-native references and future race logs need their own provenance.
+\end{answer}
+
+\end{document}

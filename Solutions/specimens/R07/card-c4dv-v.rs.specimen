@@ -1,0 +1,10 @@
+// Reference Solution.
+// after: R07.P3dv
+use vstd::prelude::*;
+verus! {
+// ISet has len() at this pin; its useful size laws require finite().
+proof fn class_insert_count_r07(s: ISet<char>,c:char)
+ requires !s.contains(c),
+ ensures s.insert(c).len() == s.len()+1,
+{ vstd::iset::lemma_iset_insert_len(s,c); }
+}

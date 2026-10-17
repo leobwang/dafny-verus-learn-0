@@ -1,0 +1,7 @@
+// after: R07.P5dv
+module R07_PredictBatch {
+ lemma BatchCountAsBoundR07(blocks: seq<seq<char>>,limit: nat)
+  requires forall i :: 0 <= i < |blocks| ==> |blocks[i]| <= limit
+  ensures forall i :: 0 <= i < |blocks| ==> |blocks[i]| <= |blocks|
+ {}
+}

@@ -4035,3 +4035,49 @@ harness passes plus this corrected static run resolve the six focused bars.
 Final frozen STUDY source leak scan:23modules/1876publicfiles/OK. Exact source hashes,
 private logs and provenance are archived. R06 remains authoring; no full
 release CI, live model acceptance or Basic completion is inferred.
+
+### Δ257 · Build R07 library interfaces and retrieval evidence — adopted in authoring (2026-10-17 UTC)
+
+Author the band2 R07 item plan before activating the module. R07 uses the
+existing frozen A2 class/matcher API; it imports no earlier learner file and
+does not reopen R03's parked primitive packaging blocker. Libraries enter at
+std/all here under OD8, without widening an earlier file's tier.
+
+The core pair covers finite observed alphabets, class-filtered prefixes,
+duplicate-free cardinality and bounded flattened sample batches. Replace the
+initial Verus filter-concatenation proposal because it verifies empty under
+the actual library automation. The paired prefix task has real negative
+controls. Add two Verus scope holes after given explicit-call versions, so
+the two required broadcast-use WRITE exercises are native proof tasks. D's
+three H items allocate8/11/12minutes; V's five allocate6/7/8/5/5, preserving31
+per language and62total. Source has4D/6Vholes and2agent holes per language;
+generated reference counts are28D/min6 and10V/min10. Final ten-hole admission passes10/10; all four native core/agent targets
+pass at three seeds. Dafny H3 maximal automation exhausts the pinned resource
+budget and is admitted under the existing Q66 rule, retaining its explicit
+inconclusive finding rather than claiming a decisive rejection.
+
+Five native prediction checks pass, with independent captures of the four
+filter-size and two batch scenarios. Five WRITE omissions reject and their
+completed card twins verify. The first ISet card assumption was wrong: this
+pin has ISet.len, whose useful size laws require finite. Replace its trivial
+nonnegative-length contrast with finite-set insertion versus ISet insertion's
+missing finite premise. Corrected controls reach verification, Dpositive and
+Vnegative, zero holes; retain the rejected expectation as evidence. This
+changes neither a library specification nor the trusted base.
+
+The full retriever twins gate/audit, both bank live probes reproduce, and all
+four paired parallel problems gate/audit. No live race outcome is claimed.
+Five TeX documents compile; the Rango card retains its Coq population, source
+range, hardware/budget and missing reproduction evidence. The learner writes
+EVAL R-v0; the author supplies prompts and protected fixtures only. The small
+pass@k table is explicitly synthetic and composes frozen fvh.stats, including
+invalid-k rejection and task-level versus pooled-estimand checks.
+
+Twenty chapter outputs and fifteen sidecars are captured through normal author
+routes; reference lint and avoid pass. Tool controls retain pinned identities,
+the supported Dafny solver sweep, Verus launcher behaviour and wrapper refusal
+of a custom solver path. The latter is a boundary control, not a claim about
+native behaviour after installing an actual mismatch. Installed tools, limits,
+imports, trust and acceptance checks remain unchanged. Final study workflow,
+freeze/leak/pins and focused CI remain required. R07 is not shipped; D45 live
+model validation remains recorded debt, never a pass.

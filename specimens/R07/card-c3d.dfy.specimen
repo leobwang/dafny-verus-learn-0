@@ -1,0 +1,9 @@
+module R07_SearchCard {
+ import Sets = Std.Collections.Set
+ // item: R07.C3d write:library-call
+ // WRITE: name the qualified library fact; record the source-search rung.
+ lemma SameObservedAlphabetR07(a: set<char>,b: set<char>)
+  requires a <= b && |a| == |b|
+  ensures a == b
+ {}
+}

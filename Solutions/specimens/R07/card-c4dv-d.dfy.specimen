@@ -1,0 +1,10 @@
+// Reference Solution.
+// after: R07.P3dv
+module R07_FiniteAlphabetCard {
+ // item: R07.C4dv diverge:r07-collections
+ // This finite-set insertion law has no separate finiteness premise.
+ lemma FiniteObservedInsertR07(s: set<char>,c:char)
+  requires c !in s
+  ensures |s+{c}| == |s|+1
+ {}
+}

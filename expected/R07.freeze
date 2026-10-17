@@ -1,0 +1,183 @@
+# expected/R07.freeze — statement-freeze pins for R07 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R07` from the files as shipped; checked by
+# `scripts/specfreeze --check R07`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R07"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R07_Libraries/std/R07_Libraries.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R07_Libraries.FilteredAlphabetExact {:induction false}", "R07_Libraries.FilteredSamplePrefix {:induction false}", "R07_Libraries.ObservedAlphabetBound {:induction false}", "R07_Libraries.SampleBatchBound {:induction false}"]
+[file.statements]
+"R07_Libraries.ClassLookupFromAPI" = "4342a840863886a6997f1c8cf535513448ded58a4731cf88b5507a0c9246c570"
+"R07_Libraries.FilteredAlphabetExact" = "986736238549ebbf4a645bbb80905dbbcd92bd403c9a2a0ed1a840307007de45"
+"R07_Libraries.FilteredSamplePrefix" = "2f83477c8c6dd8f524a51164f8e5d576606fb6397ada7b153f27b3fd9b3c864c"
+"R07_Libraries.ObservedAlphabetBound" = "39db935122a1ad616db806d32bf0facadbeea3958f7d46c08c7ed69d305ff501"
+"R07_Libraries.ObservedAlphabetEmpty" = "edb052a661bf9080134bb63ad1671c2d637008f949590be58648e5b5645f6a16"
+"R07_Libraries.SampleBatchBound" = "d842f3cba7ba02313b168bbeed438b60b360f6c57345a4231a72fab3a4626608"
+
+[[file]]
+path = "dafny/checks/R07_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_Checks.ClassSampleValueR07" = "8270631df7edb43df12e23bdbf3f5d38a7e312e5530e3b5037d8b480bed40a18"
+
+[[file]]
+path = "verus/r/r07_libraries/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"class_lookup_from_api" = "a7c134797033927e15597625f2ec030665960bb712656d8453a30812a660f78c"
+"filter_map_origin_named" = "7feafe415f87bf466f44e2007209d856ad94070396d484d48ab76d420a127d44"
+"filter_map_origin_scoped" = "1087320a2e2a28d201b3f8ba68ce134bf18cdf0d4d45909bc09722ddcc4e3382"
+"filter_map_step_named" = "cfd2b96f13c6f382a80236c676930dd429293a1fc6a53cb58b04501a66efb0cb"
+"filter_map_step_scoped" = "1db36e56d78fd6a6521cea733e6f552b9345e1421fc14143fe80340ed8e75928"
+"lemma_filtered_alphabet_exact" = "181e577a044848642d96a9c1a866519d3012590a806f42e9b62176345f016664"
+"lemma_filtered_sample_prefix" = "5c29c185f07db4d0235873b3f3ff942cb419d1b65e1173c5588f8b85df03d494"
+"lemma_observed_alphabet_bound" = "314cd3e3d17ece25befed1998e387586f1880142d28005a81022244cefea2211"
+"lemma_observed_alphabet_empty" = "f9a9824a727f3c0c552ad9561beec9b3149770c7eeebf17587e708015dd6b1eb"
+"lemma_sample_batch_bound" = "72e0a57c37a65f30b8bfb4a4ca9ee1729e7c6d462f4974135ad17cf63ce3e1e3"
+
+[[file]]
+path = "specimens/R07/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"filtered_scalar_count_r07" = "359e765de542d6afc8a657a66fa1554dd6264bdf81e77435711af20efc33d535"
+
+[[file]]
+path = "specimens/R07/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"filtered_indices_r07" = "b50c70a3eb58569045af882a4c78a77c6dbc652acca6935e43681b998c588b0d"
+
+[[file]]
+path = "specimens/R07/batch-bound-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_PredictBatch.BatchCountAsBoundR07" = "7c1cf61614490d0b59fbe823f90a5db04e5d0a147f008b6e42c1c491bbb1f4a1"
+
+[[file]]
+path = "specimens/R07/batch-bound-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"batch_count_as_bound_r07" = "4dae2af8658f3a99361373b0eb769b89aaa77d82246cbaf69d4a80f2603e5164"
+
+[[file]]
+path = "specimens/R07/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_ExplicitCard.EmptyAlphabetCardR07" = "c2ea49abe457a4e7858e123e279d0fa7613619822868dec73bcb40bc9de09d68"
+
+[[file]]
+path = "specimens/R07/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"empty_alphabet_card_r07" = "f4801377239e31e88607ad261ab3bd826cdea22d1f60f4bd02bd545426d3aea8"
+
+[[file]]
+path = "specimens/R07/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"filter_map_origin_named_r07" = "ffa8107fe0338bb94561af928186c40e0059d9ea113f24a0be62aab7d172e86f"
+"filter_map_origin_scoped_r07" = "1af510467796d9609e49792b9e21e41d929e07c13a8b8dddc0a6d6ae05ca4e4d"
+
+[[file]]
+path = "specimens/R07/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_SearchCard.SameObservedAlphabetR07" = "93ee3c4066b1f9c8d199aa148f365b68fa7763ca4ad21007afbac9f8b962075a"
+
+[[file]]
+path = "specimens/R07/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"filter_map_step_named_r07" = "cc83cea66cd63b52ab88099d7f3e8d85aaf7a8a2c8cc2a7b5538572cb812dbc8"
+"filter_map_step_scoped_r07" = "7b818832dea24a233820423bb43973f37d93c0610cbad7cd6d1916b769ead1a8"
+
+[[file]]
+path = "specimens/R07/card-c4dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_FiniteAlphabetCard.FiniteObservedInsertR07" = "0022e4fe3cdbc2c477e1b706ef6eb5f6f9e291a62994268552a6449fb79c0102"
+
+[[file]]
+path = "specimens/R07/card-c4dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"class_insert_count_r07" = "a48d11c4d41a0c78d7794b775715e26bc7522587f74b275df4aef59ae5eaa968"
+
+[[file]]
+path = "specimens/R07/filter-size-x-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_PredictFilterx.FilterSizeR07" = "8eb772b27fa583d64e8503ea9d3a87c7969642b062000a70f2cfcb1a3d4d3be7"
+
+[[file]]
+path = "specimens/R07/filter-size-x-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"filter_size_r07" = "d54184f8b81443030256e2833cef84c2987ac89988574240a6f94dc9c0e0f2f0"
+
+[[file]]
+path = "specimens/R07/filter-size-y-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_PredictFiltery.FilterSizeR07" = "b179d01059926218385cfff84d74f0f57110cc85328e3523c4ac0a3c50bfefaa"
+
+[[file]]
+path = "specimens/R07/filter-size-y-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"filter_size_r07" = "333c2acbc18fe13fd47622335379e9757e42b265e6c925e335257b62833d4435"
+
+[[file]]
+path = "specimens/R07/toolchain-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_ToolchainControl.ClassPairControlR07" = "6f1f74f1228c51c340555047fc421f1aeece4db5d679aaa36268e3f885f03440"
+
+[[file]]
+path = "specimens/R07/toolchain-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"class_pair_control_r07" = "df4c043f5aee638125fa43d036259237de6132045cabefc4605d1834927984d2"
+
+[[file]]
+path = "dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R07_AgentRetriever.ContainedClassBatch" = "d73e939e145f687d7b503006c557f3aae36a4664d000b05de9aecd4da821fdb6"
+"R07_AgentRetriever.FlattenClassBatches" = "9fcaae073978b8980976e8a5ecd27ebdb8248252c3749f65292bb1327bfbc069"
+
+[[file]]
+path = "verus/r/r07_libraries/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_contained_class_batch" = "a7d11b16bc8f262e96e67af55bc0b2d30f373796eedb854f4a991bb1c79d04d2"
+"lemma_flatten_class_batches" = "fe56f990ebe4931a1441e91eca80ee1d93df22a57774b798c41f914914053668"

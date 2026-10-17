@@ -1,0 +1,6 @@
+use vstd::prelude::*;
+verus! {
+proof fn class_pair_control_r07(c:char)
+ ensures set!['a','b'].contains(c) <==> (c == 'a' || c == 'b'),
+{}
+}

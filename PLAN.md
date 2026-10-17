@@ -1252,3 +1252,84 @@ recognise_v = []
 16. **R16 · Records-lane items.** (a) The coverage row S8.vc-generator-soundness (d) names R11 as its home, but R11 proves a derivation checker sound, not a VC generator: the row gains a `gap` (proposed text in §3 R11), or DVR2 adds a Dafny soundness item for the checker's rule set. (b) `layer = "A1b"` (R06) needs the registry's layer field and the checker to accept the new layer name. (c) The budgets of §4.3 (with QPLAN §30 Q55). (d) The proposed waivers W15–W19 (§5.4) into design §9.3 and `avoid.waivers.tsv`. **Decided** (Δ181): (a) the gap is recorded (Δ179) unless DVR2 adds the checker-rules soundness item; (b) adopted (Δ174), the registry and checker change is the avoid lane's; (c) Δ176; (d) W15–W18 adopted, W19 provisional (Δ177).
 17. **R17 · DELTAS entries this revision needs** (orchestrator): the layer A1b and the re-supply list of §2.4; A3's single-digit bounds and R09's overflow-free expansion budget in place of "overflow-checked bounds" (design §8.2 R09); A5's opaque `Accepts`, one-step and layout lemmas and the renames; R16's correctness split into soundness and completeness items and jump threading gated; Lab α at 4,800 Qwen and 100 Claude policy calls (design §11.3 says 5,120 and 160); R06's re-itemized minutes and its new H3/H4 and checkpoint objects (author notes); R04.P5d Dafny-only and R04.P6dv, R05.P3dv replaced. **Decided** in part: A1b (Δ174), R09's bounds and budget (Δ175), Lab α (Δ176). The rest (A5's opaque `Accepts`, its lemmas and the renames; R16's split; R06's minutes and objects; R04's and R05's prediction changes) is **open** for DVR0's as-built entry and DVR1 (Δ181).
 18. **R18 · What R asks of the Q lane** (plan review, both tracks): Q12's stage specimens redrawn within Q's own tags (§5.1); Q14.H5v as a `PPtr` list, which makes W19 unnecessary; Q18's Lab 3 impossible tasks of kinds other than Lab γ's (§4.3), else W17 stands. **Decided** (Δ181): §5.1 says only that Q12's specimens stay within Q's tags; Q14.H5v and W19 as §5.4's decision says (Δ177); W17 is adopted (Δ177).
+
+## 9. Band 2 item plans — R07 construction plan (2026-10-17)
+
+This section extends the record-level band2 plan before activating R07. R03
+remains planned with its recorded primitive-packaging blocker. R07 uses only
+the frozen A2 class/matcher API, not R03 learner files or its parked adapter.
+Library access begins here under OD8; no earlier tier is changed. R06's full
+reversal decomposer spike is closed (Δ256), superseding its older pending label.
+
+### R07 — Libraries: what they cost
+
+The module has one std-tier Dafny unit and one all-tier Verus crate. The frozen
+A1/A1b/A2 dependency chain remains complete. Add no import of an earlier
+learner file. The five predictions and T1 precede reading and worked material.
+References, actual verdicts, proof-line counts, admission and seed controls
+belong in protected author notes; until those pass, admissible minutes stay0.
+
+| item | kind / pair | task and form | planned minutes |
+|---|---|---|---|
+| T1d/T1v | closed-book test-out | Bound the size of the observed character alphabet by the sample sequence length; typed proof hole, explicit library call | 5 each |
+| W1d/W1v | worked | Read a library contract, bind its type/sequence arguments and call its named lemma explicitly; a separate class sample | 3 each |
+| W2d/W2v | worked | Translate between a class's semantic membership and its execution contract without opening private ranges | 3 each |
+| H1d/H1v | paired proof hole | Filtering by class membership preserves a sample-prefix relation; library-backed proof with exact prefix bounds, statement fixed | 8 each |
+| H2d/H2v | paired proof hole | Characterise duplicate-free filtered samples by equality of sequence length and finite observed-alphabet cardinality; both directions, statement fixed | 11 each |
+| H3d/H3v | paired proof hole | Bound the flattened sample batch by its number of samples times a supplied per-sample bound; bridge the library's two flattening forms, statement fixed | 12 each |
+| P1d | value | A concrete class-filtered sample, answer committed before evaluation | 3 |
+| P2v | value | A different concrete class-filtered sample, answer committed before evaluation | 3 |
+| P3dv | verdict | Two observed-alphabet contracts with their printed assumptions; compare statement scope | 3 |
+| P4v | FAILS | Indexed library calls over a filtered sample; name the failing labelled obligations | 3 |
+| P5dv | verdict | A batch bound under its printed per-sample hypothesis; preserve all quantified premises | 3 |
+| C1d/C1v | WRITE | Explicit library calls with fully instantiated parameters | 2.5 each |
+| C2v | WRITE | Scoped broadcast use after a named-call version has been understood | 2.5 |
+| C3d/C3v | WRITE | Record a qualified symbol and a reproducible search-ladder step | 2.5 each |
+| C4dv | divergence | std/all import tiers and their transitive dependency boundary | 3 |
+| C5dv | recognise | Tool pin, solver identity and artifact provenance before interpreting a result | 3 |
+| A1d/A1v | retriever race | Fresh library-only class/sample goals; the same frozen tasks and acceptance for both retrieval arms | 25 total follow-up |
+
+Four Dafny holes and six Verus holes include T1. There is no checkpoint in R07. Two Verus scope holes follow the given explicit-call versions, so broadcast-use is actually exercised. H minutes
+sum to62; the two test-outs sum to10. Each shipped hole needs native reference,
+canonical empty-body/automation controls and three seeds before admission.
+If a proposed goal verifies empty, replace it before admission and record the
+reason; no solver setting or guard exception may create artificial difficulty.
+
+The chapter teaches the library installation/pin check, explicit-call-first
+search ladder, contract instantiation, finite sets versus unbounded sets,
+scoped broadcast, transitive tiers and the actual trust surface. A mismatch lab
+runs disposable private controls through the existing wrapper and preserves
+its refusal; it never edits the installed toolchain or frozen unit options.
+The trust audit names proved library code, external specifications and the
+compiler/solver pipeline. It does not interpret a lemma import as a new axiom.
+
+The retriever race is a matched-task demonstration with a declared search
+allowance, fixed attempts/time/token budgets and complete failure accounting.
+Run each arm in fresh sessions; no shared transcript, leaked reference or
+cross-arm cache. Live runs remain deferred D45 debt. Native author reference
+checks cannot supply experimental success rates. Work an explicitly synthetic
+small data table by hand with the unbiased pass@k estimator, then check it by
+composing frozen fvh.stats.pass_at_k; do not implement a second estimator.
+Report per-task estimates before aggregation and retain n, c, k and exclusions.
+The learner writes research/EVAL.md's R-v0 section by hand; authoring supplies
+prompts and protected gold/flawed examples, not a learner report.
+
+The written pair holds card06.5 only, with a pinned local source range and
+eight-field rubric. Review bar: library-conventions. Bank:12 questions in two
+disjoint six-question draws, one actual native live predict per draw and two
+paired parallel problems. Sixth bench card: strip an own R07 library goal,
+label it course-derived and retain provenance, never call it an independent
+unseen benchmark. Code/paper/bank references and leak patterns are protected.
+
+The360-minute record budget remains: setup10, test-out10, read60, worked30,
+cards6, predicts15, holes62, mismatch20, trust20, pass@k15, EVAL15, agent25,
+paper15, bench20, viva30, calibration7. The card WRITE examples occupy the
+worked allowance; recognise/divergence cards occupy the separate6minutes.
+
+**R07 scope refinement before admission of the final file.** Add H4v/H5v,
+two fixed-statement proof holes that require narrowly scoped broadcast after
+complete explicit-call W3v/W4v. The original eight holes passed native admission;
+these two need their own full controls. Verus H1/H2/H3 now allocate6/7/8minutes
+and H4/H5 allocate5each, preserving31Verus hole minutes and62for the pair.
+Dafny H1/H2/H3 retain8/11/12. Native card grammar uses write:<slug>, not uses.
+No claim of final ten-hole admission or scope-task completion is made yet.

@@ -1,0 +1,5 @@
+module R07_ToolchainControl {
+ lemma ClassPairControlR07(c:char)
+  ensures (c in {'a','b'}) <==> (c == 'a' || c == 'b')
+ {}
+}

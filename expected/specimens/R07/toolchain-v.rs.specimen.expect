@@ -1,0 +1,88 @@
+# pins.py golden for specimens/R07/toolchain-v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R07/toolchain-v.rs.specimen`; never edit.
+command: verify
+exit: 0
+verdict: verified
+stage: verify
+verified: 1
+holes: 0
+{
+ "diagnostics": [],
+ "json": {
+  "func-details": {
+   "toolchain_v::class_pair_control_r07": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::iset::ISet::contains": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::iset::lemma_iset_ext_equal": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::iset::lemma_iset_ext_equal_deep": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::Set::contains": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::Set::empty": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::Set::insert": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::axiom_set_decreases_to_member": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::axiom_set_ext_equal": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::axiom_set_ext_equal_deep": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::impl&%0::to_iset": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::lemma_set_empty": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::lemma_set_insert_different": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::set::lemma_set_insert_same": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": false,
+   "encountered-vir-error": false,
+   "errors": 0,
+   "is-verifying-entire-crate": true,
+   "success": true,
+   "verified": 1
+  }
+ },
+ "other": []
+}

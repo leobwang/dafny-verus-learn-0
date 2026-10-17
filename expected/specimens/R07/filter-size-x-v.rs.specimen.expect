@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R07/filter-size-x-v.rs.specimen: SEALED. This demo waits for R07.P3dv,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R07/filter-size-x-v.rs.specimen`; never edit.
+command: verify
+after: R07.P3dv
+outcome: salted-sha256 daf4d26441e271f1e06c9f10077798c6366af80f874ca11a1476e3ddf363c679

@@ -46,3 +46,10 @@ and source, retain the fixed statement and your complete/stripped pair, and
 separate the answer from the task. It is not an independent unseen benchmark
 claim and receives no automatic later pool admission. Keep positive and
 negative controls, actual gate/audit commands and any statement revisions.
+
+
+R07's sixth card strips one of your own completed library goals. Preserve its
+original statement, complete/stripped pair, source module and native controls;
+label it course-derived. It is a reconstruction task, not an independent
+unseen benchmark result, and it does not automatically enter a later pool.
+Retain qualified library symbols, versions, imports, gates and audit scope.

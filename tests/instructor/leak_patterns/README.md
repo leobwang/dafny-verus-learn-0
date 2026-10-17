@@ -48,6 +48,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 | R05 | `R05.txt`: 8 (H1d,H2d,H4d,H1v,H2v,A1d,H1py,H2py) | 2026-10-17 (DVR1 build; final scan in protected notes) | 8 author controls; live sessions deferred |
 
 | R06 | `R06.txt`: 8 (H1d/v,T1d/v,H4d/v,X1d,A1v) | 2026-10-17 (DVR1 build; final scan in protected notes) | 8 author controls; live sessions deferred |
+| R07 | `R07.txt`: 8 (H1d/v, H2d/v, H4v, H5v, A1d/v) | 2026-10-17 (frozen STUDY candidate, all24modules) | 8 OK |
 
 ## The verifier
 
