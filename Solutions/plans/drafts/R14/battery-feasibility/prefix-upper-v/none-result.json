@@ -1,0 +1,52 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr3-r14/battery-prototypes/prefix-upper-v/none",
+  "exit_code": 1,
+  "verdict": "failed",
+  "stage": "verify",
+  "verified_count": 8,
+  "holes": [],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr3-r14/battery-prototypes/prefix-upper-v/none/src/lib.rs",
+      "line": 54,
+      "col": 10,
+      "severity": "error",
+      "message": "postcondition not satisfied",
+      "code": "W-V03"
+    },
+    {
+      "file": "",
+      "line": 0,
+      "col": 0,
+      "severity": "error",
+      "message": "gate: 'success' is false, not true; exit 1",
+      "code": "gate"
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "battery_cell_r14": "failed",
+    "clear_low_bit_r14": "verified",
+    "odd_square_r14": "verified",
+    "odd_trace_r14": "verified",
+    "prefix_cap_r14": "verified",
+    "prefix_mass_r14": "verified"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-140534-y06_7u9u",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl0-dvr3-r14/battery-prototypes/prefix-upper-v/none/src/lib.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "r14_battery_prototype",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time"
+  ]
+}

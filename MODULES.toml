@@ -2395,7 +2395,7 @@ concept_items = {}
 id = "R14"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "SMT mechanics"
 tier = ""
 topic = ""
@@ -2422,13 +2422,13 @@ viva_mode = "module"
 tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
-write_d = []
-write_v = []
+write_d = ["trigger", "fuel", "bit-vector"]
+write_v = ["trigger", "fuel", "bit-vector"]
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
-imports = {}
+admissible = { "R14.H1d" = { admitted = true, minutes = 10, fallback = "printed induction-disabled levers" }, "R14.H2d" = { admitted = true, minutes = 10, fallback = "printed induction-disabled levers" }, "R14.H3d" = { admitted = true, minutes = 15, fallback = "" }, "R14.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R14.H2v" = { admitted = true, minutes = 10, fallback = "" }, "R14.H3v" = { admitted = true, minutes = 15, fallback = "" } }
+imports = { "dafny/R/R14_Smt/std/R14_Smt.dfy" = "std", "verus/r/r14_smt/src/lib.rs" = "all", "tools/R14/trigscan.py" = "py-std" }
 concept_items = {}
 
 [[module]]

@@ -56,3 +56,36 @@ CI3/3and20STUDY commands/7receipts. Its six focused bars pass across retained
 original/repaired runs. R13STUDY16/16and8receipts pass; staticCIpasses711s,
 remaining native/paper/rubric/harness jobs are running. No source mutation
 in either frozen CIworktree.
+
+## Integrated hand/tool source checkpoint
+
+R14is now authoring. Actual canonical admission6/6passes in its generated
+A1–A4context, so all six native minute rows are admitted10/10/15per language
+(70total). D H1/H2retain their printed induction-disabled levers. Native source
+counts3holes/language, complete Dreference52andV8verify; gate floors5symbols
+each. Initial reference lint flags3Vautomation receipts because did comments
+were inline after an opening brace. Move those comments to their own lines;
+no proof or signature changes. No H item is introduced for the provided tool
+models or executor.
+
+Toolsmith source has one stdlib A1body. The reference passes8frozen controls,
+including actual normalized native spans (7groups,8patterns,1own term), UTF8
+byte offsets, multi-term alternatives, external/unlocated spans, unavailable
+reports, orphan/malformed notes, source/log drift and its provided ASTframe.
+Native stderr capture normalizes only the source identity and discloses its
+original/published digests. Snapshot binding is not authentication or a proof
+verdict. No other source file is read implicitly.
+
+All12battery prototype assertions have genuine0hole failing proof-stage
+baselines and complete-source passing witnesses:24native controls pass.
+SixD/sixV span quantified prefix bounds, opaque recursive fuel/lemma calls
+and Vword theory. The bounded automation will compose the learner's already
+completed core with fixed proof sites and approved options; full actual-source
+gates/audits decide closure, not the analyzer or a source score. Original
+models, domains and asserted statements stay fixed. This is a finite, exposed
+course battery, not a generic search-performance result. Full32bitH3and its
+explicit assigned-zero Dcontrol are independently checked.
+
+The module kit still needs the public bounded runner, own Cat/Star-like variants
+with trigger/fuel reading demos, predictions, chapter/paper/bank/CVmaterial,
+final references/audits/pins/STUDY/CIand archive. No local completion claim.

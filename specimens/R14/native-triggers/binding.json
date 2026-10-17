@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "source_id": "r14://trigger-probe",
+  "source_sha256": "b3582eadf2be8d3a3a3bade92d35ef66cc095d53169ef859168abf29ba93eb87",
+  "stderr_sha256": "855e0c552acfb2a30da2b2c21e2af4f422a372bee19b737dc5fa8689c89aa154",
+  "provenance": {
+    "kind": "actual pinned Verus trigger capture, source identity normalized only",
+    "original_stderr_sha256": "619ef0dfb79495b78669c69072a7415258f59d8240f04d1d544c03af947403a9",
+    "native_verdict": "failed",
+    "native_stage": "verify",
+    "verified_count": 0,
+    "holes": 0,
+    "options": [
+      "--triggers-mode",
+      "verbose"
+    ]
+  }
+}
