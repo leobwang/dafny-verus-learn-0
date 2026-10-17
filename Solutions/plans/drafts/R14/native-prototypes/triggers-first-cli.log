@@ -1,0 +1,7 @@
+error cli None raw /tmp/dvl-test-1000/runs/verus-verify-20261017-134950-mzhh5l5c
+error 0 Error: --triggers and --triggers-mode are mutually exclusive
+Traceback (most recent call last):
+  File "/tmp/dvl0-dvr3-r14/check_triggers.py", line 6, in <module>
+    assert d['verdict']=='failed' and d['stage']=='verify' and not d['holes']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

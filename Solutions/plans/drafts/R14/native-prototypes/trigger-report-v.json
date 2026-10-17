@@ -1,0 +1,161 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr3-r14/trigger-probe.rs",
+  "exit_code": 1,
+  "verdict": "failed",
+  "stage": "verify",
+  "verified_count": 0,
+  "holes": [],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr3-r14/trigger-probe.rs",
+      "line": 5,
+      "col": 10,
+      "severity": "error",
+      "message": "postcondition not satisfied",
+      "code": "W-V03"
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1285,
+      "col": 1,
+      "severity": "info",
+      "message": "selected triggers for this expression:",
+      "code": ""
+    },
+    {
+      "file": "",
+      "line": 0,
+      "col": 0,
+      "severity": "info",
+      "message": "  trigger 1 of 1:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1584,
+      "col": 17,
+      "severity": "info",
+      "message": "automatically chose triggers for this expression:",
+      "code": "W-V12"
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1584,
+      "col": 54,
+      "severity": "info",
+      "message": "  trigger 1 of 2:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1584,
+      "col": 63,
+      "severity": "info",
+      "message": "  trigger 2 of 2:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1580,
+      "col": 1,
+      "severity": "info",
+      "message": "selected triggers for this expression:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1582,
+      "col": 9,
+      "severity": "info",
+      "message": "  trigger 1 of 1:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1646,
+      "col": 17,
+      "severity": "info",
+      "message": "automatically chose triggers for this expression:",
+      "code": "W-V12"
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1646,
+      "col": 54,
+      "severity": "info",
+      "message": "  trigger 1 of 2:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1646,
+      "col": 65,
+      "severity": "info",
+      "message": "  trigger 2 of 2:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1642,
+      "col": 1,
+      "severity": "info",
+      "message": "selected triggers for this expression:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_/seq.rs",
+      "line": 1644,
+      "col": 9,
+      "severity": "info",
+      "message": "  trigger 1 of 1:",
+      "code": ""
+    },
+    {
+      "file": "",
+      "line": 0,
+      "col": 0,
+      "severity": "info",
+      "message": "selected triggers for this expression:",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/trigger-probe.rs",
+      "line": 4,
+      "col": 27,
+      "severity": "info",
+      "message": "automatically chose triggers for this expression:",
+      "code": "W-V12"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/trigger-probe.rs",
+      "line": 4,
+      "col": 63,
+      "severity": "info",
+      "message": "  trigger 1 of 1:",
+      "code": ""
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "trigger_probe_r14": "failed"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-135007-fuko39x_",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl0-dvr3-r14/trigger-probe.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "trigger_probe",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time",
+    "--triggers-mode",
+    "verbose"
+  ]
+}

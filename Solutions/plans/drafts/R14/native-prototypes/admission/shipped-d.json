@@ -1,0 +1,83 @@
+{
+  "lang": "dafny",
+  "target": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+  "exit_code": 0,
+  "verdict": "verified",
+  "stage": "verify",
+  "verified_count": 6,
+  "holes": [
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+      "line": 11,
+      "col": 3,
+      "kind": "assume",
+      "label": "R14.H1d"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+      "line": 20,
+      "col": 3,
+      "kind": "assume",
+      "label": "R14.H2d"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+      "line": 26,
+      "col": 3,
+      "kind": "assume",
+      "label": "R14.H3d"
+    }
+  ],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+      "line": 11,
+      "col": 3,
+      "severity": "warning",
+      "message": "assume statement has no {:axiom} annotation",
+      "code": "W-D03"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+      "line": 20,
+      "col": 3,
+      "severity": "warning",
+      "message": "assume statement has no {:axiom} annotation",
+      "code": "W-D03"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped.dfy",
+      "line": 26,
+      "col": 3,
+      "severity": "warning",
+      "message": "assume statement has no {:axiom} annotation",
+      "code": "W-D03"
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "R14_Mechanics.PrefixMassR14": "verified",
+    "R14_Mechanics.PrefixCapR14": "verified",
+    "R14_Mechanics.OddTraceR14": "verified",
+    "R14_Mechanics.ClearLowBitR14": "verified",
+    "R14_Mechanics.OddSquareR14": "verified"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-134619-26xt2red",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+    "verify",
+    "/tmp/dvl0-dvr3-r14/shipped.dfy",
+    "--json-output",
+    "--resource-limit",
+    "5000000",
+    "--cores",
+    "2",
+    "--solver-path",
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+    "--allow-axioms",
+    "false",
+    "--allow-warnings",
+    "--log-format",
+    "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-134619-26xt2red/tasks.csv"
+  ]
+}

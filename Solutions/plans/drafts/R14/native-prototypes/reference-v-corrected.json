@@ -1,0 +1,34 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr3-r14/mechanics",
+  "exit_code": 0,
+  "verdict": "verified",
+  "stage": "verify",
+  "verified_count": 8,
+  "holes": [],
+  "diagnostics": [],
+  "findings": [],
+  "per_symbol": {
+    "clear_low_bit_r14": "verified",
+    "odd_square_r14": "verified",
+    "odd_trace_r14": "verified",
+    "prefix_cap_r14": "verified",
+    "prefix_mass_r14": "verified"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-134524-vhda296f",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl0-dvr3-r14/mechanics/src/lib.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "r14_native_prototype",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time"
+  ]
+}

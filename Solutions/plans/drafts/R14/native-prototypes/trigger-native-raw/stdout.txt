@@ -1,0 +1,131 @@
+{
+  "func-details": {
+    "vstd::seq::lemma_seq_index_decreases": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::function::axiom_fn_mut_call_requires": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::function::axiom_fn_mut_call_ensures": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::seq::lemma_seq_ext_equal": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::seq::lemma_seq_ext_equal_deep": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::seq::impl&%2::spec_index": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::seq::Seq::index": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::seq::Seq::len": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "trigger_probe::trigger_probe_r14": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    }
+  },
+  "verification-results": {
+    "encountered-error": true,
+    "encountered-vir-error": false,
+    "success": false,
+    "verified": 0,
+    "errors": 1,
+    "is-verifying-entire-crate": true
+  },
+  "times-ms": {
+    "verus-build": {
+      "profile": "release",
+      "version": "0.2026.09.27.3cf1832"
+    },
+    "num-threads": 1,
+    "total": 198,
+    "estimated-cpu-time": 198,
+    "rust": {
+      "total": 19,
+      "init-and-types": 4,
+      "trait-conflicts": 14,
+      "compile": 0
+    },
+    "verification": {
+      "total": 174,
+      "vir": {
+        "total": 154,
+        "hir": 1,
+        "import": 109,
+        "rust-to-vir": 17
+      }
+    },
+    "total-verify": 17,
+    "total-verify-module-times": [
+      {
+        "module": "",
+        "time": 17
+      }
+    ],
+    "air": {
+      "total": 12,
+      "module-times": [
+        {
+          "module": "",
+          "time": 12
+        }
+      ]
+    },
+    "smt": {
+      "total": 0,
+      "smt-init": 0,
+      "rlimit-init": 170,
+      "smt-init-module-times": [
+        {
+          "module": "",
+          "time": 0,
+          "time-micros": 57,
+          "rlimit": 170
+        }
+      ],
+      "smt-run": 0,
+      "rlimit-run": 2820,
+      "smt-run-module-times": [
+        {
+          "module": "",
+          "time": 0,
+          "time-micros": 879,
+          "rlimit": 2820,
+          "function-breakdown": [
+            {
+              "function": "trigger_probe::trigger_probe_r14",
+              "mode:": "proof",
+              "time": 0,
+              "time-micros": 879,
+              "rlimit": 2820,
+              "success": false
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.09.27.3cf1832",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.98.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "3cf18325f0fd0c3040fbdec8c0f2255c0504c91a"
+  }
+}

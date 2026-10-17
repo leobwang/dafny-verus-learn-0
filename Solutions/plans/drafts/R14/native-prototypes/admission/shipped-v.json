@@ -1,0 +1,56 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr3-r14/shipped",
+  "exit_code": 1,
+  "verdict": "verified",
+  "stage": "verify",
+  "verified_count": null,
+  "holes": [
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+      "line": 12,
+      "col": 38,
+      "kind": "assume",
+      "label": "R14.H1v"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+      "line": 22,
+      "col": 38,
+      "kind": "assume",
+      "label": "R14.H2v"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+      "line": 29,
+      "col": 45,
+      "kind": "assume",
+      "label": "R14.H3v"
+    }
+  ],
+  "diagnostics": [],
+  "findings": [],
+  "per_symbol": {
+    "clear_low_bit_r14": "hole",
+    "odd_square_r14": "hole",
+    "odd_trace_r14": "no-error",
+    "prefix_cap_r14": "hole",
+    "prefix_mass_r14": "no-error"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-134628-168bxc58",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "r14_native_prototype",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time"
+  ]
+}

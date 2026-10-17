@@ -1,0 +1,9 @@
+{'lang': 'd', 'verdict': 'verified', 'stage': 'verify', 'count': 6, 'holes': 0}
+{'lang': 'v', 'verdict': 'failed', 'stage': 'verify', 'count': 7, 'holes': 0}
+28 postcondition not satisfied
+0 gate: 'success' is false, not true; exit 1
+Traceback (most recent call last):
+  File "/tmp/dvl0-dvr3-r14/check_native.py", line 9, in <module>
+    (b/'native-results.json').write_text(json.dumps(rows,indent=2)+'\n');assert all(x['verdict']=='verified' and not x['holes'] for x in rows)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

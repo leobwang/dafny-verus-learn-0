@@ -1,0 +1,77 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr3-r14/shipped",
+  "exit_code": null,
+  "verdict": "failed",
+  "stage": "verify",
+  "verified_count": 0,
+  "holes": [],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+      "line": 19,
+      "col": 0,
+      "severity": "warning",
+      "message": "R14.H2v: variant BV (seed 1) did not reach verification",
+      "code": "no-verify"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+      "line": 19,
+      "col": 0,
+      "severity": "warning",
+      "message": "R14.H2v: variant BV (seed 2) did not reach verification",
+      "code": "no-verify"
+    },
+    {
+      "file": "/tmp/dvl0-dvr3-r14/shipped/src/lib.rs",
+      "line": 19,
+      "col": 0,
+      "severity": "warning",
+      "message": "R14.H2v: variant BV (seed 3) did not reach verification",
+      "code": "no-verify"
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "E0 seed=1": "fails(error)",
+    "E0 seed=2": "fails(error)",
+    "E0 seed=3": "fails(error)",
+    "E0H seed=1": "fails(error)",
+    "E0H seed=2": "fails(error)",
+    "E0H seed=3": "fails(error)",
+    "E1 seed=1": "fails(error)",
+    "E1 seed=2": "fails(error)",
+    "E1 seed=3": "fails(error)",
+    "E2 seed=1": "fails(error)",
+    "E2 seed=2": "fails(error)",
+    "E2 seed=3": "fails(error)",
+    "EM seed=1": "fails(error)",
+    "NL seed=1": "fails(error)",
+    "NL seed=2": "fails(error)",
+    "NL seed=3": "fails(error)",
+    "BV seed=1": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+    "BV seed=2": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+    "BV seed=3": "no-verify(assert_by_compute exceeded maximum recursion depth)"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-134830-oh99cgld",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r14-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-134830-oh99cgld/variant-E0/lib.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "r14_native_prototype",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--smt-option",
+    "smt.random_seed=1",
+    "--output-json",
+    "--error-format=json",
+    "--time",
+    "--verify-root",
+    "--verify-function",
+    "odd_square_r14"
+  ]
+}
