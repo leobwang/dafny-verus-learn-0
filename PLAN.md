@@ -1640,3 +1640,52 @@ output slot so empty variants typecheck; H2v moves its evidence. D H2/X1 require
 the disclosed induction-disabled lever. P2 is a root-split/progress ghost value
 check after full Seq computation hit a native computation-depth limit; arbitrary
 full validity remains the checker/proof target. R11 is authoring, not shipped.
+
+## 14. Band 3 item plan — R12 driving (2026-10-17)
+
+Plan before activation, parent d9ae1b1. R11 focused CI and scripted STUDY checks
+run on its untouched STUDY worktree; inherit their final metadata separately.
+R12 remains planned/admission0 until native and Python feasibility and gates.
+The user-directed D45 live-run deferral also covers Lab α's actual model arms,
+not implementation, recorded apparatus checks or reference-free mock/replay tests.
+Do not create grades, bypass pre-registration locks or call a model as CI.
+Container-dependent re-judgement remains subject to frozen provenance rules;
+record an unavailable apparatus rather than running agent code on the host.
+
+Practice396minutes plus Lab α390=786 stays as designed. Native practice has
+T1d/v5each and H1/H2d/v10each: remaining-budget arithmetic and two hint-site
+loops over verifier outcome flags (count acceptance and locate first rejection).
+Fixed executable bodies stay provided; learner annotations connect every prefix
+and returned observation to the original flags. Native region gates remove only
+the annotation regions, keeping executable computation well typed. Pinned
+empty/default/max-auto/three-seed results precede minutes. No named-return proof
+or manually weakened gate workaround is used.
+
+Python extractor80: H1py validates a complete ordered stream of wrapper JSON
+results, retaining all native stages, holes and inconclusive/error outcomes;
+H2py localizes diagnostics by actual symbol/location without treating diagnostic
+text, missing fields or an empty result as a proof success. Compose frozen core
+protocol/result interfaces, never implement a renamed Q verdict parser. H3py20
+is the bounded verdict loop: policy proposes data, trusted executor performs
+it, budgets count failures/refusals, and only full zero-hole gate evidence can
+stop as solved. A1py25 is a per-symbol profiler whose isolated measurements are
+explicitly not a full acceptance gate. Lab environment60 and parametric engine90
+have fixed hint sites, original statements/code, no new lever attributes, an
+explicit node budget and width/depth/priority regimes fixed before each run.
+
+Lab α uses40language-stratified course-derived/public tasks, one engine, three
+obligation-feedback regimes plus best-first/raw feedback, ten prefix budgets
+and three repeated Qwen seeds per arm:480runs/4800calls,10GPUh ceiling. Claude
+final subset10tasks (5/language),10calls each plus≤10sentinels; descriptive
+repeated runs, not controllable seeds. These remain pre-registered plans, not
+observed results. Existing frozen budget/provenance/grade locks remain intact.
+Mock/Scripted/Replay acceptance tests cannot unlock or fabricate a live arm.
+
+The reading compares four doors into the same pinned verifier. LSP is read from
+an actual captured framed trace, never posed as a new client-writing exercise.
+Predictions use native subjects and actual result fields; language-server hole
+visibility, automatic induction, severity-count and resource/seed surprises are
+stated facts under the owner rules. Include5–6committed predictions, two paired
+PP,12bank questions/disjoint6draws, exact local06.10and01.12cards, pre-registration
+and methods rubric, apparatus fallback, source-bound captures and three/four
+diagrams. Freeze practice, source-interface and live-outcome claims separately.
