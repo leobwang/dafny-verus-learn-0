@@ -38,3 +38,11 @@ the exact named-symbol and complete-gate commands on unchanged bytes. A
 selected pass does not accept the whole task; no learner solution is imported
 as infrastructure. Keep samples and command scopes explicit, preserve original
 versions, and treat the card as a draft pending later lab admission.
+
+
+R06's fifth card deliberately strips one of your completed R06 lemmas. This
+is the module's course-derived reconstruction task: label the original module
+and source, retain the fixed statement and your complete/stripped pair, and
+separate the answer from the task. It is not an independent unseen benchmark
+claim and receives no automatic later pool admission. Keep positive and
+negative controls, actual gate/audit commands and any statement revisions.

@@ -1,0 +1,7 @@
+use vstd::prelude::*;
+use vstd::calc;
+verus! {
+proof fn calc_bridge_r06(n: int) {
+    calc! { (==) n+1; { assert(false); } n+1; }
+}
+}

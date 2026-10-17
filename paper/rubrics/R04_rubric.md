@@ -1,12 +1,12 @@
 # R04 rubric — Specs as logic
 
-Apply CORE.md and grade learner evidence; code-review bar `it-reads`.
+Apply CORE.md and grade learner evidence; code-review bar `proof-shape`.
 Live Claude calibration remains deferred under D45, never inferred from fixtures.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R04_solutions.tex  sha256 b127738a067eabab1145e8d8deb47c26be3a28d4a8d49697886b46198dce13d1
 paper/R04_problems.tex  sha256 8fae72e62f40249183849101e7e734d9caf5eec528e10ee0031abc76794c6a6a
-Solutions/dafny/R/R04_Specs/core/R04_Specs.dfy  sha256 87f92c7bd084d4675942074ee5f0b69f3f9b680a8084ef4b20970894ab9af3bf
+Solutions/dafny/R/R04_Specs/core/R04_Specs.dfy  sha256 6834dd2babf0f25ef7be4ed73c4110605caadd52d5fce8bdeef927b6e72d0d4f
 Solutions/verus/r/r04_specs/src/lib.rs  sha256 b9ec1e1fc26812949f49dbb710117bf619922657f1698bdc7f0f440578f17ea3
 Solutions/dafny/R/R04_Specs/agent/R04_AgentProver.dfy  sha256 c690b0df7026172fe614ad4832e26075b871f312369cbade8df64a10a12bcb39
 Solutions/verus/r/r04_specs/src/agent.rs  sha256 e0d1755ad872795a81c2a33f9bfdfe654a8e64da2863a9e8beb399393acfe84b
@@ -19,7 +19,7 @@ Solutions/verus/r/r04_specs/src/agent.rs  sha256 e0d1755ad872795a81c2a33f9bfdfe6
 - **Probe C:** check a disputed wp or branch condition over mathematical integers;
   retain the intermediate substitution and actual guard. Cite the observed run.
 - **Probe D:** delete only a disputed learner step in scratch before calling it
-  unnecessary; proof reading aids are notes at this review bar.
+  unnecessary; inspect the justification and dependencies of quantified steps.
 - **Probe F:** scripts/specfreeze --check R04; the agent uses its saved snapshot.
   A successful proof of a different statement never discharges the original.
 
@@ -71,10 +71,15 @@ refutes the third: it is not an accepted replacement delivery, and copying it
 over the original source must fail snapshot freeze. Live refusal transcripts
 remain deferred under D45; scripted counterexample checks are separate evidence.
 
-## Code-review focus — it-reads
+## Code-review focus — proof-shape
 
 Name witnesses and retain all bounds. Separate a chosen existential witness
 from an arbitrary quantified variable. Keep ghost/model reasoning distinct
 from runtime checks. The definition-from-prose has positive, negative and empty
 prefix checks; retain all three and explain the intended quantifier. Audit
 claims against intent without weakening the formal target to fit a delivery.
+
+For proof shape, justify each quantified instance, witness choice and bound,
+and show how the local steps establish the unchanged conclusion. Use a fixed
+native scratch probe for disputed dependencies; a green gate alone does not
+explain a witness or establish that an excluded input is illegitimate.

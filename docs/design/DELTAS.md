@@ -3955,3 +3955,61 @@ targets at three seeds and40pin checks. All five written documents compile;
 four parallel-problem references gate/audit. Protected notes and the private
 author-probe archive preserve exact scopes and failures. Full release CI is
 still pending; R05 remains authoring and live model validation remains debt.
+
+### Δ256 · Build R06 induction, loops and staged decomposition — adopted in authoring (2026-10-17 UTC)
+
+R06 now has its A1/A1b pair, ten core holes, four independent checkpoint
+holes, six predictions, full reversal decomposer pair, chapter, paper/card03.4,
+proof-shape rubric, bank, protected twins and leak patterns. All fourteen
+canonical admission checks pass. Generated reference counts are21 Dafny/min8
+and12 Verus/min9; six native reference targets pass at three seeds. The
+chapter has six prediction boxes, three diagrams and19 captured fences.
+
+The Verus decomposer spike closes on the full BackwardsCorrect statement;
+the planned CatAltDistrib fallback is unnecessary. Its reference has five
+reachable proof declarations. Staged helper-hole and study workflow validation
+remain separate from the complete native reference and from live contractor
+transcripts, which remain D45 debt. No A2, earlier learner proof, added trust,
+solver limit, library-tier or gate exception is introduced.
+
+P4/P5 state the established derivative step as an explicit quantified premise
+instead of importing the learner's unfinished H1 proof. This preserves the
+premise under investigation without publishing its protected proof. P6's
+negative native control uses the actual full reference in private scratch;
+the public specimen supplies its question and helper contract. All six native
+prediction checks pass. Sixteen native fidelity controls distinguish H4's
+exact intended domain from stronger sufficient restrictions that can verify
+but exclude legitimate clients; native acceptance alone does not certify the
+weakest repair. Nine additional card controls reach their expected verdicts.
+
+The Verus checkpoint's second annotation hole retains its executable loop
+under one explicit external_body placeholder. An entry assumption alone left
+fresh loop-body range obligations, so it did not represent the intended hole.
+The completed reference has no such marker or assumption. Hollow lint and all
+canonical body/region admission variants pass. Registry minutes allocate each
+language's11 checkpoint minutes as6 for X1 and5 for X2, preserving the22-minute
+pair total instead of storing the plan's fractional per-item average.
+
+All five R06 written documents compile. Both bank live probes have actual
+native referee observations; the two paired parallel problems verify and
+are being checked through full gates/audits. R06's source leak scan covers23
+modules and1877 public files with no leak; avoid and course-map checks pass.
+Final study/exit workflow, pins and focused CI remain required. R06 is
+uncommitted authoring content at this checkpoint, not shipped Basic.
+
+Also correct two R04 prose inconsistencies in this descendant: T1's header
+requires a closed-book first try without referring to a nonexistent supplied
+check; its rubric now uses the registry's proof-shape bar and requires justified
+quantified instances and witnesses. Formal declarations and body tokens are
+unchanged, as is header line count. Refresh rubric digests and chapter captures.
+The separate long-running R04 CI candidate remains untouched. R03's OD8
+Unicode-adapter packaging blocker remains recorded and parked. D45 debt is
+never a pass, and the primary main checkout and external branches are untouched.
+
+**Δ256 local workflow checkpoint.** All30 study workflow commands now pass:
+eight genuine first tries, four passing exits, strict report/freeze, full
+core/check/exit gates and audits, and both original-statement agent workflows
+at3→1→0 leaf holes with snapshots checked after each stage. Four parallel
+problem gates and audits pass, completing the13-command written/bank check.
+R04's20 chapter captures are current. This does not claim live contractor
+acceptance, completed global CI, or a shipped R06 release.

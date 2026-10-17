@@ -1,0 +1,13 @@
+// after: R06.P5v
+use vstd::prelude::*;
+verus! {
+fn count_to_r06(n: u64) -> (i: u64)
+    ensures i == n,
+{
+    let mut i:u64=0;
+    while i < n
+        decreases n-i,
+    { i=i+1; }
+    i
+}
+}

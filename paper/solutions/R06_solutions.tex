@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R06 --- Induction and loops \\ \large Reference Solution}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} The local summary describes AutoSpec on C programs with a supplied ACSL target assertion. It generates requires, ensures, assigns and loop invariants over an extended function/loop graph, bottom-up. The target is annotation synthesis for the fixed assertion, not free invention of program intent.
+
+\textbf{Oracle:} Frama-C/WP validates candidates and the target assertion. In the summary's terminology, every retained annotation must be provable (satisfiable), and the resulting set must establish the target (adequate). Either property alone is insufficient.
+
+\textbf{Trust:} The input C program, target assertion, ACSL semantics and Frama-C/WP pipeline define the formal claim. The supplied assertion is trusted; the authors themselves choose the X509 targets. Passing their pipeline cannot establish a different unstated intent.
+
+\textbf{Cheat surface:} A changed or insufficient target can hide missing behavior. Dropping illegal or unprovable candidates reduces one failure mode, but pruning an annotation individually may lose a set that is inductive jointly; that limitation is explicitly the summary's reading.
+
+\textbf{Metric:} The four-benchmark total is 199/251, about 79 percent, excluding the six X509 functions. Frama-C-problems is 31/51; SyGuS 114/133; OOPSLA-13 is 38/46; SV-COMP 16/21. The X509 6/6 comparison is a separate setting; five months of whole-project manual work is not an equivalent per-function timing baseline.
+
+\textbf{Budget:} The cited model is gpt-3.5-turbo and the iteration bound is five. The Frama-C-problems ablation reports 3-shot 9, decomposition 26, one-pass 27 and five-iteration 31. The excerpt does not supply a complete token, dollar or runtime allocation for a comparable cost analysis.
+
+\textbf{Variance:} Programs are small, library code is not traced and only one of three triple-nested SV-COMP programs is solved. No general confidence interval or run-level resampling design is supplied in this excerpt. A result on these benchmarks is not a universal success probability.
+
+\textbf{Artifact:} The summary identifies Wen et al., CAV 2024, arXiv 2404.00762 and the AutoSpec/Frama-C setting. The excerpt does not give an immutable code revision, pinned prover configuration or full reproduction manifest; those remain missing evidence.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+Let $w=[c]+s$. For the direction from a Cat match on $w$, choose
+$0\leq i\leq |w|$ with $a$ matching $w[..i]$ and $b$ matching $w[i..]$.
+If $i=0$, the first slice is empty and the second is $w$. The given equivalence
+between nullable and matching the empty sequence establishes the derivative's
+nullable branch. The induction hypothesis on $b,c,s$ supplies its right Alt
+operand. If $i>0$, let $j=i-1$. Then $0\leq j\leq |s|$,
+$w[..i]=[c]+s[..j]$ and $w[i..]=s[j..]$. Apply the hypothesis on $a,c,s[..j]$;
+the split $j$ establishes the Cat of the derivative of $a$ with $b$. This is
+present whether or not the nullable Alt branch is taken.
+
+Conversely, if that Cat derivative operand matches $s$, choose
+$0\leq j\leq |s|$ with its two matching pieces. The hypothesis on $a,c,s[..j]$
+gives a match on $[c]+s[..j]$. Split $w$ at $j+1$: this prefix is
+$w[..j+1]$, and $s[j..]=w[j+1..]$. If instead the nullable branch contributes
+a match of the derivative of $b$ on $s$, the hypothesis on $b,c,s$ matches
+$b$ on $w$; nullable correctness matches $a$ on the empty prefix, so split
+$w$ at 0. This handles the full datatype, including nullable left operands.
+The recursive calls use strict sub-regexes $a$ or $b$, so structural decrease
+on the original regex suffices for these calls even when a suffix argument changes.
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+At counter $i$, retain $0\leq i\leq |s|$ and
+$\mathsf{Matches}(cur,s[i..])\Longleftrightarrow\mathsf{Matches}(r,s)$.
+Entry uses $i=0$, $cur=r$ and the full-input slice identity. For preservation,
+derivative correctness on $cur,s[i],s[i+1..]$ relates the next regex and suffix
+to the current one, because $[s[i]]+s[i+1..]=s[i..]$. Compose that equivalence
+with the induction hypothesis. The guard justifies the index and the next
+counter; $|s|-i$ decreases. At exit $i=|s|$, the remaining suffix is empty.
+Nullable correctness on $cur$ converts the final executable nullable test to
+matching that empty suffix, and the invariant transfers it to the original
+matching claim. A one-way invariant retains only the implication from the
+original match; it cannot establish that a final positive implies the original
+match. Rust's bounded counter needs its corresponding range obligations.
+\end{answer}
+
+\end{document}

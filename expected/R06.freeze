@@ -1,0 +1,246 @@
+# expected/R06.freeze — statement-freeze pins for R06 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R06` from the files as shipped; checked by
+# `scripts/specfreeze --check R06`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R06"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R06_Induction/core/R06_Induction.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R06_Induction.DerivCorrect {:induction false}"]
+open_specs = ["R06_Induction.StarUnfold"]
+[file.statements]
+"R06_Induction.AllNullable" = "2f051ff153a4f3b610fbd1a455324d121c34f550e03b97601d1a13c0f509233e"
+"R06_Induction.AllSame" = "73474f7af79c5df87b372b522084bc1f7076405b9b1461f8a0686cd5db3dfd40"
+"R06_Induction.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
+"R06_Induction.DerivBase" = "3836a8b0b87207c5c1815ea4930adfc7a3ed5610f1d1ebd1111454424cde2d5d"
+"R06_Induction.DerivCorrect" = "76d5aa636653caa7dd0e2cf5a03068b0b0f241b4e4db0930a416f6fb0007939c"
+"R06_Induction.DerivMatch" = "0460bf5d0302a9bb3bfa460072bf781d7ac25e705a98373a89797d94662b84d4"
+"R06_Induction.StarUnfold" = "488bf0a76a8ecdd07c2f450322594248d868f72ade5608d7537a082c10d5e039"
+"R06_Induction.StarUnfoldRefuted" = "821ce4c1cfbf4807bfb1d8a74a104c579407a10f235ac8e73ad3a8fbd1d99558"
+[file.spec_clauses]
+"R06_Induction.StarUnfold" = { requires = [], ensures = ["ae00350f86dfc458d316807c5c325b4a50f95959e69d282f83e9f41c5466fa38"] }
+
+[[file]]
+path = "dafny/checks/R06_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_Checks.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
+"R06_Checks.DerivShapeR06" = "5759cfd856e050389a99898597aeaa65a1aa6547b2608660d6e2353934d5f090"
+
+[[file]]
+path = "verus/r/r06_induction/src/lib.rs"
+lang = "v"
+open_bodies = []
+open_specs = ["lemma_star_unfold"]
+[file.statements]
+"all_nullable" = "203382ae662b148eb75ea5f0beec79da63b160efe2d2542732eb590e64638824"
+"all_same" = "65166c0d51221f46d51d4409955b051e33b594b8311f94b1b9896f11a304fc95"
+"deriv" = "a344b031de36ef18bd405ae79241778e42d82cfcdb5ee06b2e5e134c03b6d62c"
+"deriv_exec" = "78829b30ec63d9bb7cb60f374ecd789ddf25d59afe00770a26fa788fc58fa42c"
+"deriv_match" = "8b7cb03ef33e7a318d651a59e038d0112a26b5ae590a91d85414b4b9c18b2a9d"
+"lemma_deriv_base" = "e2850b7ca76cacc3d3ff1fd967436df06ac33bd90d091fbae959cf5a427a3e95"
+"lemma_deriv_correct" = "03ccbc9e417ab83b07d428723e50691850c6261bb1fe8b7e6bd62c1b3dd3fb0b"
+"lemma_star_unfold" = "3f9f8ae5aa7d26d4a889c5ea78b643504572598c49b6c644842f5894e9437a6b"
+"lemma_star_unfold_refuted" = "be6b679f7c11bd0cd4e74dbb9aeaa11659b3412bff0488cf2fc3960bb30e97f8"
+[file.spec_clauses]
+"lemma_star_unfold" = { requires = [], ensures = ["b03d6f06a71be793eaa57bd29946a3c4a77160beeb733a77b37bbe981f66c353"] }
+
+[[file]]
+path = "specimens/R06/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"deriv" = "a344b031de36ef18bd405ae79241778e42d82cfcdb5ee06b2e5e134c03b6d62c"
+"deriv_value_r06" = "cdbb667038bdb093cd0527bb349501e51376cf1ab48712b624d0706f398a50a1"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+
+[[file]]
+path = "specimens/R06/P4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_LoopPrediction.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
+"R06_LoopPrediction.OneWayLoopR06" = "4c2c7cb017e4a58e8f7b7ff77ba75bc85dc4f65558ab00cb3e12edc552a566f3"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R06/P5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"deriv" = "a344b031de36ef18bd405ae79241778e42d82cfcdb5ee06b2e5e134c03b6d62c"
+"deriv_exec" = "78829b30ec63d9bb7cb60f374ecd789ddf25d59afe00770a26fa788fc58fa42c"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+"one_way_loop_r06" = "464debf60fe6f1867d440f7ebb3a24aeb4abf3fbd43c158de5397773a0b349f3"
+
+[[file]]
+path = "specimens/R06/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_CalcCard.CalcBridgeR06" = "ffbfeeb1c06615a78172342c8366c817ce59e631f58416ae551c48ad0339b282"
+
+[[file]]
+path = "specimens/R06/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"calc_bridge_r06" = "2b9e3b5cc19f44fb200eaf9dafc589062322d235061eae5b9c29d75c7ee9f35d"
+
+[[file]]
+path = "specimens/R06/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_InvariantCard.CountToR06" = "4a9fef1ebd15b911c64f3d1db2acbdbf623feea347ff01440fa8c6079aff8d33"
+
+[[file]]
+path = "specimens/R06/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"count_to_r06" = "0bfb3caf94a27eb204e2f26a94c8aa64ddd8098d79055e4e2e1a8c7278688ab1"
+
+[[file]]
+path = "specimens/R06/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_LemmaMeasureCard.DescendR06" = "d1361f30689d177aede4a89ccc7b0e5001da9494e2d2965ccc6574db52e228fb"
+
+[[file]]
+path = "specimens/R06/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"descend_r06" = "85df7c3ea185a690f7c2fe32aed8ad66c43c3a8ac323fbf2ef8c95cc700f4614"
+
+[[file]]
+path = "specimens/R06/card-c4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R06_ManualCallCard.StampIdentityR06 {:induction false}"]
+[file.statements]
+"R06_ManualCallCard.StampIdentityR06" = "01b45f74eb3315614a50c83b1ecd62e139e6ce7a8019be549e587599a90a8323"
+"R06_ManualCallCard.StampR06" = "33381cf4db83155c053d5824b7250c340e2496ea80bcd61b4a396e5a4cacaa16"
+
+[[file]]
+path = "specimens/R06/card-c6dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_CalcSyntaxCard.ShiftR06" = "666489e158fdb557e11bb1c05c9cae2dfd3bf8f7c5031fc0dab8189f36e4d939"
+
+[[file]]
+path = "specimens/R06/card-c6dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"shift_r06" = "6cc1d780480779aa09c71cb9c6468a923dd787f2807f21c31f45c7bc8128ef17"
+
+[[file]]
+path = "specimens/R06/measure-x-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_MeasurePrediction.StarRepeat" = "42a0f53b70c3ae8c532c57924e7ed1c9edf6f31d273e9a462d65b25ba345f6db"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R06/measure-x-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_star_repeat" = "3aba79e022fe96bf4eca73ae41e7889e3fcf9da9661dca984ddf7434e79b8af7"
+
+[[file]]
+path = "specimens/R06/measure-y-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_MeasurePrediction.StarRepeat" = "367cc3bc6a7fa3f8ebccb565a67dd762e22e7ab0495d9a9c8c0ab43d3a34cbed"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R06/measure-y-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_star_repeat" = "b270d686583b607d7c48897bfa88c4385511f0b4e687cd9f9fcb30f0ef546ab4"
+
+[[file]]
+path = "dafny/R/R06_Induction/exit/R06_Checkpoint.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R06_Checkpoint.DerivsAppend {:induction false}"]
+[file.statements]
+"R06_Checkpoint.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
+"R06_Checkpoint.Derivs" = "715792305020b65cc8b41b9789f4f166e9cd5ade3ea1a7b87a6fe71be03e72ce"
+"R06_Checkpoint.DerivsAppend" = "033b9af05da41449ca34501563f6dd0c1809da4fb5bbeaea3c33b8b239853fa5"
+"R06_Checkpoint.SumNC" = "674e9eea880350de75a9812362352382ebf6b51873958a3446b8048894a92938"
+"R06_Checkpoint.SumNodeCounts" = "cb4cb25b4c6bcae6f6621af76c572eeef03e97510ac76b7e3301e300eeb4065f"
+
+[[file]]
+path = "verus/r/r06_induction/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"deriv" = "a344b031de36ef18bd405ae79241778e42d82cfcdb5ee06b2e5e134c03b6d62c"
+"derivs" = "94bb44f5b44803f3b235eebef532e91df9e60a5361e01078531d0606e1abdf03"
+"lemma_derivs_append" = "7b5d298d86005d7d902321b4312ece415a3e0145d16140fbe0207634a82ae348"
+"lemma_node_bounded_by_sum" = "e887400ac7cbc6b7736e2a7f2213dd395a8dd6ad4fd0b55d617343b1e17d63a9"
+"lemma_sum_nc_prefix" = "b5a0b18766ceee70ec581f101136dc33178b5176dca7d9a6cc68346141b2c9a6"
+"node_count_exec" = "6d6e86b54b0cc618e4371b025d96856cecf44bdb118e259344bdd79cf5e12dbe"
+"sum_nc" = "9971e11f64b720ce5f798481f183d84071ec391873b8f7d2a10c4b3f537427f5"
+"sum_node_counts" = "b5857707d9d24cd2ab83066d1e78bba3e99da479f477b0e3662d4cfe8d2cdca6"
+
+[[file]]
+path = "dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R06_AgentDecomposer.BackwardsCorrect" = "d74f6f4a770053caebae143b31d33a692601fb60c771e627a666bf2a8183d230"
+
+[[file]]
+path = "verus/r/r06_induction/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_backwards_correct" = "b201eab4c4077d102d3769a24e22108bb2c9f65e99622849c54a7ad5b76688a9"

@@ -1,0 +1,21 @@
+// after: R06.P3dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+verus! {
+proof fn lemma_star_repeat(r: Re,s: Seq<char>)
+    requires r == Re::Star(Box::new(Re::Chr('a'))),
+        forall|k:int| 0 <= k < s.len() ==> #[trigger] s[k] == 'a',
+    ensures matches(r,s),
+    decreases s.len(),
+{
+    if s.len() > 0 {
+        let tail=s.subrange(1,s.len() as int);
+        assert forall|k:int| 0 <= k < tail.len() implies #[trigger] tail[k] == 'a' by {
+            assert(tail[k] == s[k+1]);
+        }
+        lemma_star_repeat(r,tail);
+        assert(s.subrange(0,1) =~= seq!['a']);
+        assert(matches(Re::Chr('a'),s.subrange(0,1)));
+    }
+}
+}

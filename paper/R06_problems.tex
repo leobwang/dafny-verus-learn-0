@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R06 --- Induction and loops \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Record all six predictions and the closed-book T1 attempt before reading on.
+Allow 15 minutes for B1, 20 for B2 and 10 for B3. Do B2 before the flagship's keyboard
+proof. Keep all endpoint and induction hypotheses explicit.
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card 03.4: AutoSpec.} Fill Task shape, Oracle, Trust, Cheat surface,
+Metric, Budget, Variance and Artifact from the pinned local summary. Distinguish
+annotations that the verifier accepts from annotations adequate to prove the
+target assertion. Keep dataset denominators and exclusions. The card grade is
+the minimum of its eight field grades.
+\begin{verbatim}
+sed -n '1132,1168p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+40d88eb703fdca53c2d708d8fc7ac3cb1b29933f6ec62fdd2bc1e0118402421a  -
+\end{verbatim}
+A source mismatch requires an author re-pin.
+\end{problem}
+\begin{problem}[proof]\label{prob:B2}
+\textbf{Flagship, Cat case on paper.} Write both directions of
+\[
+ \mathsf{Matches}(\mathsf{Deriv}(\mathsf{Cat}(a,b),c),s)
+ \Longleftrightarrow\mathsf{Matches}(\mathsf{Cat}(a,b),[c]+s).
+\]
+You may use the induction hypotheses on strict sub-regexes and the declared
+A1b facts, but not the theorem you are proving. Introduce the semantic split
+of $[c]+s$, distinguish zero from a positive split and state every shifted
+slice equality and bound. Which property connects a zero split to the branch
+test in the given derivative definition? Identify and instantiate the relevant
+given fact. Do not assume that the left operand is nonnullable.
+For the converse, cover both branches of the derivative's conditional/Alt.
+State a well-founded measure that justifies every recursive invocation.
+\end{problem}
+\begin{problem}[proof]\label{prob:B3}
+\textbf{The matcher invariant as an induction hypothesis.} A loop starts
+with the original regex $r$, consumes one input character per iteration,
+replaces the current regex by its derivative, and finally tests nullable.
+State an invariant strong enough to prove the exact whole-string matching
+contract, and interpret it as induction on the counter. Prove entry,
+preservation and the postcondition, naming bounds, a decreasing quantity and
+the required declared facts. Explain why retaining only the implication from
+the original match loses an obligation at the end.
+\end{problem}
+
+\end{document}

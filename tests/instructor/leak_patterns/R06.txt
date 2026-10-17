@@ -1,0 +1,41 @@
+# R06 protected H/T/X/A fragments; no prediction answers.
+
+# from Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy
+# source: NullableCorrect(a); (R06.H1d)
+# verified: solutions=1 public=0
+NullableCorrect\s*\(\s*a\s*\)\s*;\s*DerivCorrect\s*\(\s*b\s*,\s*c\s*,\s*s\s*\)\s*;
+
+# from Solutions/verus/r/r06_induction/src/lib.rs
+# source: assert(w.subrange(0, 0) =~= Seq::<char>::empty()); (R06.H1v)
+# verified: solutions=1 public=0
+assert\s*\(\s*w\s*\.\s*subrange\s*\(\s*0\s*,\s*0\s*\)\s*=\~=\s*Seq\s*::\s*<\s*char\s*>\s*::\s*empty\s*\(\s*\)\s*\)\s*;
+
+# from Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy
+# source: invariant b <==> forall j :: 0 <= j < i ==> Nullable(rs[j]) (R06.T1d)
+# verified: solutions=1 public=0
+invariant\s*b\s*<==>\s*forall\s*j\s*::\s*0\s*<=\s*j\s*<\s*i\s*==>\s*Nullable\s*\(\s*rs\s*\[\s*j\s*\]\s*\)
+
+# from Solutions/verus/r/r06_induction/src/lib.rs
+# source: b == (forall|j:int| 0 <= j < i ==> nullable(#[trigger] rs@[j])), (R06.T1v)
+# verified: solutions=1 public=0
+b\s*==\s*\(\s*forall\s*\|\s*j\s*:\s*int\s*\|\s*0\s*<=\s*j\s*<\s*i\s*==>\s*nullable\s*\(\s*\#\s*\[\s*trigger\s*\]\s*rs\s*@\s*\[\s*j\s*\]\s*\)\s*\)\s*,
+
+# from Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy
+# source: requires s != [] || Nullable(a) (R06.H4d)
+# verified: solutions=1 public=0
+requires\s*s\s*!=\s*\[\s*\]\s*\|\|\s*Nullable\s*\(\s*a\s*\)
+
+# from Solutions/verus/r/r06_induction/src/lib.rs
+# source: requires s.len() > 0 || nullable(a), (R06.H4v)
+# verified: solutions=1 public=0
+requires\s*s\s*\.\s*len\s*\(\s*\)\s*>\s*0\s*\|\|\s*nullable\s*\(\s*a\s*\)\s*,
+
+# from Solutions/dafny/R/R06_Induction/exit/R06_Checkpoint.dfy
+# source: DerivsAppend(Deriv(r,u[0]),u[1..],v); (R06.X1d)
+# verified: solutions=1 public=0
+DerivsAppend\s*\(\s*Deriv\s*\(\s*r\s*,\s*u\s*\[\s*0\s*\]\s*\)\s*,\s*u\s*\[\s*1\s*\.\s*\.\s*\]\s*,\s*v\s*\)\s*;
+
+# from Solutions/verus/r/r06_induction/src/agent.rs
+# source: lemma_backwards_sound(backwards(r),backwards_str(s)); (R06.A1v)
+# verified: solutions=1 public=0
+lemma_backwards_sound\s*\(\s*backwards\s*\(\s*r\s*\)\s*,\s*backwards_str\s*\(\s*s\s*\)\s*\)\s*;\s*lemma_backwards_involution\s*\(\s*r\s*\)\s*;\s*lemma_backwards_str_involution\s*\(\s*s\s*\)\s*;

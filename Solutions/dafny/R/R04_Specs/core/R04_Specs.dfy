@@ -3,8 +3,8 @@ Standalone R, A1 only. No earlier learner exercise or later A1b is imported.
 Six predictions precede the written work, audit drill and card demos. Commit
 P1d/P2dv/P5d/P6dv in slots/R04.slots and P3d/P4v in their specimens; run
 scripts/firsttry.sh R04 --check before enabling any prediction switch.
-T1 is closed book before reading: keep its supplied check commented for the
-first try. Six holes per language (T1 and H1-H5), two test-outs in the pair.
+Complete T1 closed book before reading; record its first try before opening
+worked material. Six holes per language (T1 and H1-H5), two test-outs in the pair.
 Done includes zero-hole native gates, clean audit, freeze and strict report,
 the written/audit/agent/bench-card reviews and the module viva.
 */

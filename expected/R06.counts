@@ -1,0 +1,75 @@
+# expected/R06.counts — Δ11 count pins for R06: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts R06` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "R06"
+
+[[unit]]
+path = "dafny/R/R06_Induction/core"
+lang = "dafny"
+reference_verified = 21
+min_verified = 8
+symbols = ["R06_Induction.AllNullable", "R06_Induction.AllSame", "R06_Induction.Deriv", "R06_Induction.DerivBase", "R06_Induction.DerivCorrect", "R06_Induction.DerivMatch", "R06_Induction.StarUnfold", "R06_Induction.StarUnfoldRefuted"]
+
+[[unit]]
+path = "verus/r/r06_induction"
+lang = "verus"
+reference_verified = 12
+min_verified = 9
+symbols = ["all_nullable", "all_same", "deriv", "deriv_exec", "deriv_match", "lemma_deriv_base", "lemma_deriv_correct", "lemma_star_unfold", "lemma_star_unfold_refuted"]
+
+[[file]]
+path = "dafny/R/R06_Induction/core/R06_Induction.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "verus/r/r06_induction/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "dafny/checks/R06_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/R/R06_Induction/exit/R06_Checkpoint.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/r/r06_induction/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy"
+role = "agent"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "verus/r/r06_induction/src/agent.rs"
+role = "agent"
+verdict = "verified"
+holes = 1
+errors = 0

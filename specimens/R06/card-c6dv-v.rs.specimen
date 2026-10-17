@@ -1,0 +1,9 @@
+// after: R06.P3dv
+// after: R06.P6dv
+use vstd::prelude::*;
+use vstd::calc;
+verus! {
+proof fn shift_r06(n: int)
+    ensures n+2 == 2+n,
+{ calc! { (==) n+2; { } 2+n; } }
+}
