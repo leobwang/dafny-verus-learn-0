@@ -1785,3 +1785,52 @@ Four reference sweeps/audits,26compiled cases each language,52R-corpus rows and
 and4503words are built. Source-only inventory4controls and fresh bank8native
 controls pass. Coarse native linker attribution is explicitly recorded/skipped;
 R13supplies no solo trust-report or live actor result. Final CI/STUDY remain.
+
+
+## 16. Band 3 item plan — R14 SMT mechanics (2026-10-17)
+
+Plan before activation, parent6fba3a5. R13source stays immutable for its six-job
+CI and scripted STUDY workflow. R12repaired source b574cfa has20scripted STUDY
+commands/seven receipts passing; its static/harness/rubric replay is running.
+R14remains planned/admission0. No live provider, grading, contractor or GPU
+result is needed to construct the source/native/toolsmith kit; D45 stays deferred.
+
+Keep390minutes and45/55D/V allocation. The70hand minutes provisionally split
+H1d/v10each (quantifier/trigger bridge), H2d/v10each (recursive unfolding/fuel),
+H3d/v15each (combined quantified, nonlinear or bit-vector obligation). These
+are candidate targets, not admitted rows: private native feasibility, actual
+empty/default/max-auto controls, three-seed references and clean audits precede
+activation/minutes. Preserve original models, all-input domains and provided
+code; a proof-only or type-error failure is not silently upgraded to the intended
+control. Record and replace an unsuitable candidate before allocating minutes.
+
+Use own R14variants of split/concatenation and recursive trace definitions.
+Never ask for A1's already printed existential triggers, or repeat an earlier
+module's hole answer as a given worked fact. Fuel must be the stated mechanism
+on an honestly recursive definition, not artificial opacity around a trivial
+proposition. Expose the original false/unknown/rlimit outcomes accurately,
+separate stability across three seeds from absence of solver defects, and
+keep resource-limit/seed surprises as known owner facts rather than new R-only
+predictions. Matching-loop diagrams identify the instantiation cycle, not just
+a chain of syntactically growing terms.
+
+The12assertion battery is6D/6V on R14-owned subjects spanning quantified
+splits/matching loops, recursive fuel, nonlinear and bit-vector obligations,
+and isolation. Freeze every original assertion and executable frame. A bounded
+automation may propose hints only at committed sites; verify the resulting
+actual full targets and audit all12. No deleting assertions, changing preconditions,
+raising resource pins, importing a reference, or accepting a proposed score.
+The toolsmith target is tools/R14/trigscan.py, with stdlib parsing/analysis of
+actual pinned SMT/log artifacts and explicit source/symbol scope. It must keep
+missing/unrecognized evidence unavailable and preserve raw byte provenance.
+Its source-analysis result is advisory; actual wrapper gates establish closure.
+Provide reference-free frozen inputs/acceptance tests and a fixed actor frame.
+
+Write5–6native/source predictions including at least2paired language items,
+12bank questions/disjoint6draws,2paired PP, actual source captures and3–5diagrams.
+Paper02.5 Schwarz uses the exact local excerpt and hash; CV sweep analysis
+retains per-symbol values, unavailable runs, denominator/settings and whether
+variance is descriptive. No invented benchmark performance or live actor result.
+R14imports only its given A1–A4chain and its own modules. Native lane cap16GiB,
+GATE_WORKERS1/DVL_VERUS_JOBS3, total≤48GiB with the two active CI lanes. Wait for
+R13's workflow to release its third lane before native feasibility.
