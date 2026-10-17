@@ -1,0 +1,146 @@
+# expected/R05.freeze — statement-freeze pins for R05 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R05` from the files as shipped; checked by
+# `scripts/specfreeze --check R05`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R05"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_NoGoalState.CatAssocLR" = "7328e4277beccd78880b5b95f9e47fb33010a8de39ab05ba21edfe3db2f23e14"
+"R05_NoGoalState.CatAssocRL" = "33e88439b4e469a8c1428f24b839803449fd8aba8eb42aeac3f5c2f2283d818f"
+"R05_NoGoalState.ScopedArithmetic" = "add85d6fdd828134008d32bb6e151bec1fd0bd4fa26d6d1348a05e5d486ea548"
+"R05_NoGoalState.SliceBridge" = "2dab1aff4dd2d74a3f5aafcaa8e4fc9572e080fab536b1e384f1aa8575dd4096"
+"R05_NoGoalState.StarConcat" = "b7f0dcb7fba46de064eb0a55ab5faa141c4ef477089cf34c7046fb5c13c64dfa"
+"R05_NoGoalState.StarOne" = "d7bf612e19342d68a2131266ee6578894f2a6449b322d16b1979f0b0f85f3c6a"
+
+[[file]]
+path = "verus/r/r05_no_goal_state/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_cat_assoc_lr" = "e61cf7dff509a374c80c04ec0128bbb7ac1068d98ab8d52fe6c53e3989ce51d9"
+"lemma_cat_assoc_rl" = "ddf899459970040631deba2b698225689a3c2d8cc889d7667792df2447a80865"
+"lemma_scoped_arithmetic" = "15731ee963abfc2c56f18f0a5b6eee897e18aaed941dcf3bf9284fa2525f9522"
+"lemma_slice_bridge" = "e67a6843c410d9df2bf7d5d22fd6aa5de78ac5550f4350eabed9070ff517d543"
+"lemma_star_concat" = "b5c0a604da8a373e31c8b0528e085742939ab5b8fd97c9a7fd363ab738968e39"
+"lemma_star_one" = "b7e43e56cc2186ed2c3cf3f9da403c392f318230efb547789e1a18558aed7a74"
+
+[[file]]
+path = "specimens/R05/P1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_SlicePrediction.SliceChainR05" = "4d6eb7e43aae80ed1a8eafee6fc5b9d55a1fd7d0c13f62b9eafecf09162a3941"
+
+[[file]]
+path = "specimens/R05/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_slice_chain_r05" = "068e3c7e2467b8ac6090686b08adf37394e1d1edceb0892ea768583564cced9e"
+
+[[file]]
+path = "specimens/R05/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_AssertScopeCard.ScopeR05" = "fb5562dfe88185955674534a14a09045a291a174eb69f52e6ad3f37ec16fa982"
+
+[[file]]
+path = "specimens/R05/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_scope_r05" = "ef9e61fbc0ad546d8e68237d49dbe7588515cab83fcdc5c7ecb7cbbd62a28571"
+
+[[file]]
+path = "specimens/R05/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_IsolationCard.IsolateR05" = "8f4bb27f3e911d90d13cd487db6c867be6982a4bab849b43227b79cc50eb9338"
+
+[[file]]
+path = "specimens/R05/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_spinoff_r05" = "ae7cec5f892eb5d8cc74aa174ef30758040ead39f476c2886f931044c1dfcdcb"
+
+[[file]]
+path = "specimens/R05/card-c5dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_RepeatedTimingCard.TimingIdentityR05" = "a52a1d4595368d5db4decb09dc15090673dc2badd362f0f6f956fc9c9b1c69af"
+
+[[file]]
+path = "specimens/R05/card-c5dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_timing_identity_r05" = "51ff545a3b7d864c4174bd7773848a099cae170603a84cfeec960ae70838eeea"
+
+[[file]]
+path = "specimens/R05/fast-channel-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_NoGoalState.First" = "c55c5ab333ac80f229a935f2df263cebd8d07f477af555fb22a5fd70f601b821"
+"R05_NoGoalState.Second" = "18e9233e77ee87c9450712ebc38a237df5682c2a2bb8183b2174e0a8cee3a477"
+
+[[file]]
+path = "specimens/R05/fast-channel-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"first" = "9c7d7b1f925897961d66d3e4d2289375ce34341c77ef24f5073b8ce20a24dbfd"
+"second" = "d4789dc8821a887b52de494c7e73b49c87572aa28d2e157132089f14bab42647"
+
+[[file]]
+path = "specimens/R05/timing-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_Timing.SliceBridge" = "2dab1aff4dd2d74a3f5aafcaa8e4fc9572e080fab536b1e384f1aa8575dd4096"
+
+[[file]]
+path = "specimens/R05/timing-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_slice_bridge" = "e67a6843c410d9df2bf7d5d22fd6aa5de78ac5550f4350eabed9070ff517d543"
+
+[[file]]
+path = "dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R05_AgentObligation.AppendChunk" = "81b630080efb7882f22a3dbb23e0c6f413b2629265fdc15f9cf9e57d6ef747f0"
+"R05_AgentObligation.CollapseStarCat" = "04652a5a5e27c3f009935fb4000a5f60cdacb070ef077d8e6cff5903213bab3c"
+
+[[file]]
+path = "verus/r/r05_no_goal_state/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_append_chunk" = "383d8e753a017e64604499ae6e6b96c1a67e9b6045576c35ef6ad65153ed38a5"
+"lemma_collapse_star_cat" = "463e34e082d1f5fdf2752355083585dd36b872816fb873a6f3ab4039f91d5a5d"
+
+[[file]]
+path = "harness/r/fvh_r/variance.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"Summary" = "d2742ebab91dc907a8b6bb682cc6721ff80deb117c7c31ba2ef2713299134cb2"
+"TimingRun" = "372614a0563f93015c059faa5ad8954fa7d48924ed84f8bce42695879d9a11ec"
+"runs_from_log" = "1c3505a90fce6a1d572adfd47704b02fa0905c0875478fd44cf470c0002c6e61"
+"variance_summary" = "675608dd050228acd8db7ef481775ccf43b8ee6c3e5de1301fc2cd5eb8edf894"

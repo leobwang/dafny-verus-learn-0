@@ -1,0 +1,8 @@
+use vstd::prelude::*;
+verus! {
+#[verifier::spinoff_prover]
+pub proof fn lemma_spinoff_r05(n: int) {
+    assert(n+1 > n);
+    assert(n == 0);
+}
+}

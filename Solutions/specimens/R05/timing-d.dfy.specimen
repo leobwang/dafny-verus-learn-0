@@ -1,0 +1,14 @@
+// after: R05.P3dv
+module R05_Timing {
+lemma SliceBridge(s: seq<char>, i: int)
+    requires 0 <= i < |s|
+    ensures s[i..] == [s[i]] + s[i+1..]
+  {
+    var tail := s[i..];
+    assert |tail| > 0;
+    assert tail[0] == s[i];
+    assert tail[1..] == s[i+1..];
+    assert tail == [tail[0]] + tail[1..];
+    assert s[i..] == [s[i]] + s[i+1..];
+  }
+}

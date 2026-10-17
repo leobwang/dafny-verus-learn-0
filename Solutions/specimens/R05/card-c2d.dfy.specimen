@@ -1,0 +1,7 @@
+module R05_IsolationCard {
+  @IsolateAssertions
+  lemma IsolateR05(n: int) {
+    assert n+1 > n;
+    assert n == 0;
+  }
+}

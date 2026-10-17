@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R05 --- No goal state \\ \large Reference Solution}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} Expert-guided proof engineering in one Lean 4 development: semantic type soundness of System Capless using logical relations. The record contains 58 sessions, 513 messages and 189 manually annotated tasks across six task categories; it is not an isolated Dafny theorem benchmark.
+
+\textbf{Oracle:} The agents use lean4check, which compiles a module and prints errors with source context. Human task annotation determines success categories and intervention; compilation alone cannot determine that a changed statement still expresses the intended semantics.
+
+\textbf{Trust:} Humans supply definitions, theorem statements, decompositions and strategy. Lean checks the formal proofs against their assumptions. The report also relies on the manual annotation and the correctness of the supplied formal target.
+
+\textbf{Cheat surface:} A changed premise or statement can make a different theorem easy, and partial work may retain sorry. The account includes an unprovable semantics rule that an agent identified and the humans repaired; that is a problem-identification outcome to describe, not an original unchanged proof success to invent.
+
+\textbf{Metric:} Total success is 164/189, about 87 percent, and includes assisted tasks. The total intervention rate is 16 percent; proof tasks are 41/51 with 20 percent intervention. Category rates and the total answer different questions. The report lists9 failures and several other nonsuccess outcomes.
+
+\textbf{Budget:} The average is 5.9 checks per task overall, 8.3 for proof tasks. Those are tool-call counts, not a uniform token, dollar or wall-time budget. A showcased proof took under 5 minutes, but the excerpt gives no complete per-model cost breakdown.
+
+\textbf{Variance:} One development, expert guidance and manual annotation limit generalization. The excerpt gives no inter-annotator agreement statistics, per-model breakdown or controlled baseline. Task outcomes and average check counts do not supply a confidence interval over arbitrary future proof developments.
+
+\textbf{Artifact:} The summary identifies Xu and Odersky2026 and arXiv2601.03768 and names Lean 4 and lean4check. It does not provide an immutable code revision, toolchain lock or full reproduction manifest; record those omissions rather than claim exact reproducibility.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+Line 1 binds $a=n+2$; it is the definition used in all following substitutions,
+not an independently proved positive bound. Line 2 follows from $n\geq0$ and
+the binding, and supplies the bound needed to conclude $a-1>0$. Line 3 is
+integer arithmetic under the binding; it is the equality that transfers the
+positive expression back to the advertised expression $n+1$. Line 4 follows
+from $a\geq2$ and gives a positive factor. Line 5 multiplies by the positive
+constant 2; line3 then identifies this expression with the postcondition.
+The verifier can establish some of these relationships without their explicit
+assertions. Deleting one line in scratch and repeating the same selected run
+tests that attempt at the pin; success does not show unique minimality or that
+every displayed dependency is indispensable to every solver encoding.
+An assert-by block exports the assertion it proves, while internal temporary
+names and intermediate scaffolding are local. A named-symbol pass describes
+that selected proof's verification; it leaves the remaining file outside
+that observation. Whole-unit acceptance still needs its unfiltered gate.
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+The mean is 3. Squared deviations sum to 10; the sample variance is
+$10/(5-1)=2.5$, the sample standard deviation is $\sqrt{2.5}\approx1.58114$,
+and CV is $\sqrt{2.5}/3\approx0.52705$. Dividing by 5 would be the wrong
+standard-deviation convention for this problem.
+The resample means are 1,3,3,4,5. Lower interpolation position is
+$0.025(5-1)=0.1$, so the lower endpoint is $1+0.1(3-1)=1.2$.
+Upper position is $0.975(5-1)=3.9$, giving $4+0.9(5-4)=4.9$.
+These are percentile endpoints for the prescribed sample of resampled means,
+not a guarantee about the next duration. The target parameter is the mean
+duration of the stated fixed-proof, fixed-command sampling procedure. The
+next duration is a new individual observation, a different inferential object.
+Five measurements and five hand resamples are small; host-load dependence,
+warmup or correlation can also violate simple independent-sampling assumptions.
+A fixed resampling seed would reproduce a calculation, not remove those issues.
+\end{answer}
+
+\end{document}

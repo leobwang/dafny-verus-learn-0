@@ -1,0 +1,14 @@
+// item: R05.P1d obligation
+// Commit labels before running; five sequence-slice claims with no lemma call.
+// FAILS a e
+module R05_SlicePrediction {
+  lemma SliceChainR05(s: seq<char>,i: int,j: int)
+    requires 0 <= i <= j <= |s|
+  {
+    assert s[..i]+s[i..j] == s; // [a]
+    assert s[j..] == []; // [b]
+    assert s[..j][..i] == s[..i]; // [c]
+    assert s[i..][..j-i] == s[i..j]; // [d]
+    assert s[..i] == []; // [e]
+  }
+}

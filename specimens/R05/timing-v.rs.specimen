@@ -1,0 +1,15 @@
+// after: R05.P3dv
+use vstd::prelude::*;
+verus! {
+pub proof fn lemma_slice_bridge(s: Seq<char>, i: int)
+    requires 0 <= i < s.len(),
+    ensures s.subrange(i,s.len() as int) == seq![s[i]] + s.subrange(i+1,s.len() as int),
+{
+    let tail = s.subrange(i,s.len() as int);
+    assert(tail.len() > 0);
+    assert(tail[0] == s[i]);
+    assert(tail.drop_first() =~= s.subrange(i+1,s.len() as int));
+    assert(tail =~= seq![tail[0]] + tail.drop_first());
+    assert(s.subrange(i,s.len() as int) == seq![s[i]] + s.subrange(i+1,s.len() as int));
+}
+}

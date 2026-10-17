@@ -1,0 +1,209 @@
+# expected/R05.chapter.toml — the chapter pins of R05's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R05 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R05_NoGoalState/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5c87929f603ec77afbb00e7b375a7a4e281fac116d3057413f497f0bb4bc2446"
+[entry.pinned.inputs]
+"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "54a8e054240e28463b16a395f1b0da400f0850955721fe517b76217e8886800c"
+"dafny/R/R05_NoGoalState/core/dfyconfig.toml" = "6df0db868ac2975592e1a44391f616b85f716488fa0be0a6e69f76b27943f2df"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r05_no_goal_state"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b4aa38244820b1516b39fdc100d2b70f6433687ae3f742b7bbc67ffbfa1f6eba"
+[entry.pinned.inputs]
+"verus/r/r05_no_goal_state/Cargo.toml" = "4b151c67663b0bfb7382827d4a32028c341fc21d1de0a16e14a96332f91376a0"
+"verus/r/r05_no_goal_state/src/agent.rs" = "11cdbf2de5eefe508963e0f5a4dd94cefbd5f4d5cba236707003763fbedb7413"
+"verus/r/r05_no_goal_state/src/lib.rs" = "4eb71615b67617e6609b872d93b2e1bffd99e8287570ca99747290125977b5c3"
+
+[[entry]]
+id = "obligation-d"
+cmd = ["scripts/vcheck", "specimens/R05/P1d.dfy.specimen"]
+answers = ["R05.P1d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "22fd039d57df6c7ae6bd95f7ff58a4c68cb84c3fe6ce1dcc3562a663fb405a77"
+[entry.pinned.inputs]
+"specimens/R05/P1d.dfy.specimen" = "a5d89e265f70268925be1e8faa40945dd439a9819856b48201322f00c03c2988"
+
+[[entry]]
+id = "obligation-v"
+cmd = ["scripts/vcheck", "specimens/R05/P2v.rs.specimen"]
+answers = ["R05.P2v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4377186d29909065c703ae037f6503b12daeacb4bd934f2b0429844006c662fc"
+[entry.pinned.inputs]
+"specimens/R05/P2v.rs.specimen" = "6b63bc94518b4c053892e11664fa8b8d40c8ecfe5dc6ffa3cb0da5744e361bdf"
+
+[[entry]]
+id = "assert-by-d"
+cmd = ["scripts/vcheck", "specimens/R05/card-c1d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9c617ef76b1365e4a9b613219ef32a8a8f9e796f380c5500c73ef8a88b7400a9"
+[entry.pinned.inputs]
+"specimens/R05/card-c1d.dfy.specimen" = "72208d2b49ff42fafc133143dd6bce1b2ac973b0fbb19b5a5b47bc410fd091e9"
+
+[[entry]]
+id = "assert-by-v"
+cmd = ["scripts/vcheck", "specimens/R05/card-c1v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9a3f3f7362cf56dd683278f416db9cf2f44ff31c75a49658843cd1c912ab9eec"
+[entry.pinned.inputs]
+"specimens/R05/card-c1v.rs.specimen" = "486d002b19b8ea9692be407d3e585297043bc437ac120d8a771f194698d639ed"
+
+[[entry]]
+id = "isolate-d"
+cmd = ["scripts/vcheck", "specimens/R05/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6cc7c18a29a0ed0a4d60e97fdeed6c531fb4a7f53b5aebf0685d3f4c952e36fa"
+[entry.pinned.inputs]
+"specimens/R05/card-c2d.dfy.specimen" = "5bc9d020393cec3c09f4e0e57b69fc58c85a3810d914ee304f92b21d62223c57"
+
+[[entry]]
+id = "spinoff-v"
+cmd = ["scripts/vcheck", "specimens/R05/card-c3v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b5214271c3f516b1039a7a1ec0d0bef9ea2b67c08aa4bb6e53f2dfe520dd03b9"
+[entry.pinned.inputs]
+"specimens/R05/card-c3v.rs.specimen" = "3abb3e487c8527dd902eef3c48f590784adafeebd5a0bbb898debf3da2182c44"
+
+[[entry]]
+id = "fast-d"
+cmd = ["scripts/vcheck", "--symbol", "R05_NoGoalState.First", "specimens/R05/fast-channel-d.dfy.specimen"]
+answers = ["R05.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4f7dbf9e99523c6bb3e456b7d461be8db13b33b5f7ad54828c941cf44a603c17"
+[entry.pinned.inputs]
+"specimens/R05/fast-channel-d.dfy.specimen" = "1db6d2c7de3daa84bc41377875c619023b11bd8ca2003ce41c7f8c1818469dcd"
+
+[[entry]]
+id = "fast-v"
+cmd = ["scripts/vcheck", "--symbol", "first", "specimens/R05/fast-channel-v.rs.specimen"]
+answers = ["R05.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e7dbb6bc51e356f7f90164b7d4f77af27b3d2348d8508c6e8aee982ff51d8af6"
+[entry.pinned.inputs]
+"specimens/R05/fast-channel-v.rs.specimen" = "de386624aeabfb456a41136f3678aceed4c74dd2c6d5a77416a33ae216da22cd"
+
+[[entry]]
+id = "whole-d"
+cmd = ["scripts/vcheck", "specimens/R05/fast-channel-d.dfy.specimen"]
+answers = ["R05.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2f4e44995c02616239968bc19fcd1eabb7041d2a00051282041fcabee7e20dad"
+[entry.pinned.inputs]
+"specimens/R05/fast-channel-d.dfy.specimen" = "1db6d2c7de3daa84bc41377875c619023b11bd8ca2003ce41c7f8c1818469dcd"
+
+[[entry]]
+id = "whole-v"
+cmd = ["scripts/vcheck", "specimens/R05/fast-channel-v.rs.specimen"]
+answers = ["R05.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "988fd73ebf142520c3be1891e93b3f919747711f8cef131b7d9da6c78698c6a3"
+[entry.pinned.inputs]
+"specimens/R05/fast-channel-v.rs.specimen" = "de386624aeabfb456a41136f3678aceed4c74dd2c6d5a77416a33ae216da22cd"
+
+[[entry]]
+id = "timing-d"
+cmd = ["scripts/vcheck", "specimens/R05/timing-d.dfy.specimen"]
+answers = ["R05.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5e744b5c928f0f168870990efee5a850a14e9b5a41080483285a77fb4cdab129"
+[entry.pinned.inputs]
+"specimens/R05/timing-d.dfy.specimen" = "20b7804f974f32384f78c99ad44ff54dd15b9dfe7700cfa6c5cd03405411d789"
+
+[[entry]]
+id = "timing-v"
+cmd = ["scripts/vcheck", "specimens/R05/timing-v.rs.specimen"]
+answers = ["R05.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "496f114230acb2d7c6a2bd0a087310a195ed10bd1267c232226478d7d6f18426"
+[entry.pinned.inputs]
+"specimens/R05/timing-v.rs.specimen" = "a10ae69cb6e64476b3dc1875841c9cd28b54bd05cd47a1076d13122e10bc6ee5"
+
+[[entry]]
+id = "python-shipped"
+cmd = ["scripts/vcheck", "harness/r/fvh_r/variance.py"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1ec6470360ff1d579d817e96e1e7f32e98bded7caf3645bc120deb8ab5ddf09c"
+[entry.pinned.inputs]
+"harness/r/fvh_r/variance.py" = "16aaf9e843cd8f51e5c2b1a7f877389b311aa9eda11ae18a250a7195f5cb755f"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1bafe763063860a7c1a33ecb3e0078c4d724b57cc5f3bf0339ac450897c581ec"
+[entry.pinned.inputs]
+"dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy" = "c45d4136538ecdc394c6fce999cc5a6e1ecb54b4bfe8926ca61102a2cd5b2fc8"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r05_no_goal_state/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2f99e55567b716401ab141a507d39052ad31e9afa91031ccbe1c5d85ef3bb72d"
+[entry.pinned.inputs]
+"verus/r/r05_no_goal_state/src/agent.rs" = "11cdbf2de5eefe508963e0f5a4dd94cefbd5f4d5cba236707003763fbedb7413"
+
+[[entry]]
+id = "divergence-d"
+cmd = ["scripts/vcheck", "specimens/R05/card-c5dv-d.dfy.specimen"]
+answers = ["R05.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "baed325aec9bc9a61a5d01436186a68b99e1278c4f599c2900987783ad1ed7bd"
+[entry.pinned.inputs]
+"specimens/R05/card-c5dv-d.dfy.specimen" = "f4117301d1310f795231e2b573012b4eb7bc97b58ae561f7c6a2ee134822e361"
+
+[[entry]]
+id = "divergence-v"
+cmd = ["scripts/vcheck", "specimens/R05/card-c5dv-v.rs.specimen"]
+answers = ["R05.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5da2148b4ddd3bbf0104d66427ccc85f9ee9aaccf0689c5a5d672d9370c831ec"
+[entry.pinned.inputs]
+"specimens/R05/card-c5dv-v.rs.specimen" = "ca67f6a0dc154e07f08d8b9f082959109ecd2c4f01ba4f493080e208096d49e6"

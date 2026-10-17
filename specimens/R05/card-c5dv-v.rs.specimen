@@ -1,0 +1,5 @@
+// after: R05.P3dv
+use vstd::prelude::*;
+verus! {
+pub proof fn lemma_timing_identity_r05(n: int) ensures n+2 > n { }
+}

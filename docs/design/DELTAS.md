@@ -3916,3 +3916,33 @@ changes still fail comparison; ordinary unopened bodies stay frozen. Three
 regressions cover completion and those boundaries. All415 static tests pass
 with one skip; reference lint is clean. No library tier or source acceptance
 rule is relaxed. R03 stays parked with its recorded OD8 blocker.
+
+
+### Δ255 · Build R05 obligation reading and repeated-run measurements — adopted in authoring (2026-10-17 UTC)
+
+R05 now has its A1-only pair, eight formal holes, two Python holes, four
+predictions, two-hole obligation-prover agent pair, chapter, paper/rubric,
+viva bank, protected twins and leak patterns. All ten holes pass canonical
+admission, including H4 with only its annotation regions erased. Generated
+reference counts are78 Dafny assertion tasks/min6 symbols and6 Verus tasks/
+min6 symbols; source hand files have4 holes each, agent files2 each.
+
+The four predictions use native evidence. Ten sequential fixed-W1 runs per
+language capture resource counts and durations; selected/whole-file controls
+retain the deliberately false second lemma. The Python reference passes38
+frozen cases and both trivial replacements fail. It preserves malformed-row
+errors, verdicts and null versus zero, computes sample CV, and composes the
+frozen bootstrap implementation. The record is named TimingRun to avoid a
+curated benchmark name; the acceptance file is test_variance.py, matching the
+existing adapter's standard stem-based route. No library tier, gate, tool
+limit or statistics implementation changes.
+
+The chapter has four prediction boxes, three diagrams and19 captured outputs.
+The card06.3 source is pinned; written tasks separate facts-per-line reasoning
+from mean-interval interpretation. The proof-shape rubric and gold/flawed
+fixtures retain that distinction. The bank has12 questions in disjoint draws
+and two paired parallel problems. Ten specimen sidecars remain sealed when
+needed. Source hollow/reference lint, avoid and the22-module leak scan pass;
+final workflow, stability and CI remain to complete. R05 is not yet shipped.
+Live Claude validation remains explicit D45 debt, R03 stays parked, and the
+primary main checkout and external branches are untouched.

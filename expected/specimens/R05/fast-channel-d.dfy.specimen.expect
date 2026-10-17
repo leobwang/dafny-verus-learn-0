@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R05/fast-channel-d.dfy.specimen: SEALED. This demo waits for R05.P4dv,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R05/fast-channel-d.dfy.specimen`; never edit.
+command: verify
+after: R05.P4dv
+outcome: salted-sha256 86f5a21b54cf59d6cca240a5c7376a930ef3f69bd6c169fcc3ff221317075354

@@ -45,6 +45,8 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R04 | `R04.txt`: 8 (H1d/v,H2d/v,H4d/v,H5d/v) | 2026-10-17 (DVR1 build; exact final scan in protected notes) | 8 author controls; live sessions deferred |
 
+| R05 | `R05.txt`: 8 (H1d,H2d,H4d,H1v,H2v,A1d,H1py,H2py) | 2026-10-17 (DVR1 build; final scan in protected notes) | 8 author controls; live sessions deferred |
+
 ## The verifier
 
 Run it from the repository root of the author's worktree, where the reference trees are readable (never in a study checkout). With no argument it checks every module of the table above; with ids, only those:

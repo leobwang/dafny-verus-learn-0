@@ -1,0 +1,41 @@
+# R05 protected answer fragments; no prediction answers.
+
+# from Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
+# source: var v := s[k..]; /       assert u[..k] == s[..k] by { } (R05.H1d)
+# verified: solutions=1 public=0
+var\s+v\s+:=\s+s\[k\.\.\];\s+assert\s+u\[\.\.k\]\s+==\s+s\[\.\.k\]\s+by\s+\{\s+\}
+
+# from Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
+# source: var u := s[..k + j]; /       assert u[..k] == s[..k] by { } (R05.H2d)
+# verified: solutions=1 public=0
+var\s+u\s+:=\s+s\[\.\.k\s+\+\s+j\];\s+assert\s+u\[\.\.k\]\s+==\s+s\[\.\.k\]\s+by\s+\{\s+\}
+
+# from Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
+# source: assert u == [] ==> u+v == v by { } (R05.H4d)
+# verified: solutions=1 public=0
+assert\s+u\s+==\s+\[\]\s+==>\s+u\+v\s+==\s+v\s+by\s+\{\s+\}
+
+# from Solutions/verus/r/r05_no_goal_state/src/lib.rs
+# source: assert(u.subrange(k, u.len() as int) =~= v.subrange(0, i - k)); (R05.H1v)
+# verified: solutions=1 public=0
+assert\(u\.subrange\(k,\s+u\.len\(\)\s+as\s+int\)\s+=\~=\s+v\.subrange\(0,\s+i\s+\-\s+k\)\);
+
+# from Solutions/verus/r/r05_no_goal_state/src/lib.rs
+# source: assert(v.subrange(j, v.len() as int) =~= s.subrange(k + j, s.len() as int)); (R05.H2v)
+# verified: solutions=1 public=0
+assert\(v\.subrange\(j,\s+v\.len\(\)\s+as\s+int\)\s+=\~=\s+s\.subrange\(k\s+\+\s+j,\s+s\.len\(\)\s+as\s+int\)\);
+
+# from Solutions/dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy
+# source: ChunkInStar(a,v); JoinStarWords(a,u,v); (R05.A1d)
+# verified: solutions=1 public=0
+ChunkInStar\(a,v\);\s+JoinStarWords\(a,u,v\);
+
+# from Solutions/harness/r/fvh_r/variance.py
+# source: rows.append(TimingRun(float(wall), None if count is None else float(count), verdict)) (R05.H1py)
+# verified: solutions=1 public=0
+rows\.append\(TimingRun\(float\(wall\),\s+None\s+if\s+count\s+is\s+None\s+else\s+float\(count\),\s+verdict\)\)
+
+# from Solutions/harness/r/fvh_r/variance.py
+# source: interval = stats.bootstrap_ci(values, statistics.fmean, seed=seed) /     return Summary(len(values), mean, cv, interval) (R05.H2py)
+# verified: solutions=1 public=0
+interval\s+=\s+stats\.bootstrap_ci\(values,\s+statistics\.fmean,\s+seed=seed\)\s+return\s+Summary\(len\(values\),\s+mean,\s+cv,\s+interval\)

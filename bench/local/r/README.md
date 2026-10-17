@@ -29,3 +29,12 @@ statement in stripped and completed forms, give a nonvacuous positive witness,
 and show what plausible wrong claim or implementation each negative check
 rejects. Retain the original version when revising it. A parse error is not
 a semantic refutation, and this draft is not automatic admission to a later lab.
+
+
+For R05's fourth card, allow twenty minutes. Choose a fresh A1-level task,
+preserve its statement and stripped/complete pair, and include a nonvacuous
+positive witness and negative semantic controls. Keep a LATENCY note with
+the exact named-symbol and complete-gate commands on unchanged bytes. A
+selected pass does not accept the whole task; no learner solution is imported
+as infrastructure. Keep samples and command scopes explicit, preserve original
+versions, and treat the card as a draft pending later lab admission.

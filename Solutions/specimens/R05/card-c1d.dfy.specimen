@@ -1,0 +1,5 @@
+module R05_AssertScopeCard {
+  lemma ScopeR05(n: int) {
+    assert n+2 > n by { assert false; }
+  }
+}

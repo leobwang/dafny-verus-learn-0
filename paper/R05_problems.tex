@@ -1,0 +1,59 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R05 --- No goal state \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Record all four predictions before this work. Allow 15 minutes per problem.
+Preserve labels B1--B3; show formulas and the scope of every conclusion.
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card 06.3: Agentic Proof Automation: A Case Study.} Fill the eight
+fields Task shape; Oracle; Trust; Cheat surface; Metric; Budget; Variance;
+Artifact. Keep assistance policy and task denominator attached to the success
+figure. State evidence that is absent. The card grade is its weakest field.
+\begin{verbatim}
+sed -n '2378,2406p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+8e1c28e88c907429d68701f3b91af554befa5131a60169b80e87cadca44a0585  -
+\end{verbatim}
+Source drift requires an author re-pin, not a learner guess.
+\end{problem}
+\begin{problem}[proof]\label{prob:B2}
+For the following proof over mathematical integers, give the fact introduced
+at each numbered line, why it is justified, and which later obligation uses
+it. Distinguish a binding from a checked assertion. Explain what a deletion
+experiment could show and what it could not show about logical necessity.
+\begin{verbatim}
+lemma PositiveBridgeR05(n: int)
+  requires n >= 0
+  ensures 2*(n+1) > 0
+{
+  var a := n+2;              // 1
+  assert a >= 2;            // 2
+  assert a-1 == n+1;        // 3
+  assert a-1 > 0;           // 4
+  assert 2*(a-1) > 0;       // 5
+}
+\end{verbatim}
+Also explain the scope of an assertion proved with an \texttt{assert by}
+block: which proposition is available afterward, and which scaffolding is
+local? A successful named-symbol check must be described with its scope.
+\end{problem}
+\begin{problem}[statistics]\label{prob:B3}
+Five timings in seconds are 1,2,3,4,5. Calculate their mean, sample standard
+deviation and coefficient of variation. Five prescribed with-replacement
+resamples are shown below. Compute each mean and the 2.5th and 97.5th
+percentiles of those five means, using linear interpolation at
+$q(m-1)$ for sorted values indexed from 0 and $m=5$.
+\[
+ (1,1,1,1,1),\quad(1,2,3,4,5),\quad(2,2,3,4,4),\quad
+ (3,3,4,5,5),\quad(5,5,5,5,5).
+\]
+This is a five-resample teaching calculation, not the frozen core's default
+resampling budget. Assess this statement: ``A 95 percent interval for the mean
+guarantees that the next verifier run's duration is between its endpoints.''
+State the experiment, the parameter and two sampling limitations.
+\end{problem}
+
+\end{document}
