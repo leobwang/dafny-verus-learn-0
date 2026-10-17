@@ -280,3 +280,25 @@ are independent small mathematical observations. Sources/reports are protected,
 public summaries carry only their evidence digest/status, and this is no live
 model result or universal test claim. Initial native/empty/seed observations are
 not rerun after their unchanged source hashes are established.
+
+
+## Final source CI naming repair (prepared during R13 construction)
+
+Frozen source0eaf058 passes the26-command scripted STUDY workflow and7receipts.
+Its first focused CI static job fails at avoid.sh after689s: class names Node
+and Outcome collide with Q chapter examples, and the provided policy's propose
+method shares the frozen fvh protocol name with Q12 exercise declarations.
+All preceding static bars, the404-test course-map suite and reference lint pass.
+Retain the original CI and run its remaining jobs unchanged.
+
+The source repair renames the two provided data classes R12Node/R12Outcome and
+composes the existing frozen MockPolicy adapter: R12Policy inherits its propose
+dispatch and supplies step_r12 as the callback. No new frozen-core code, checker
+change, convention or name/genre waiver. The callback keeps original binding,
+budget and transport behavior. Provided AST frame and source-input hash are
+re-pinned for these explicit interface edits; plan text/hashes stay unchanged.
+The complete central reference still passes144cases, and all320native-source
+replays plus reference-drift rejection pass. Fresh avoid.sh has0hits/0waived.
+Native source/reference bytes are unchanged. Final source static replay, STUDY
+workflow and archive must identify the repaired commit rather than0eaf058.
+Actual final chapter count is5701words; historical5642counts are superseded.

@@ -105,7 +105,7 @@ class Hint:
         if sum(len(x) for x in self.annotations)>65536:raise ValueError('hint too large')
 
 @dataclass(frozen=True)
-class Outcome:
+class R12Outcome:
     accepted:bool
     score:int|None
     feedback:object
@@ -125,26 +125,26 @@ class Attempt:
     index:int
     parent:int
     hint:Hint|None
-    outcome:Outcome|None
+    outcome:R12Outcome|None
     status:str
 
 @dataclass
-class Node:
+class R12Node:
     id:int
     depth:int
     hint:Hint
-    outcome:Outcome
+    outcome:R12Outcome
     expanded:int=0
 
 class FrontierExhausted(LookupError):pass
 
 class SearchR12:
     """Configuration is fixed before calls; ask/judge are injected capabilities."""
-    def __init__(self,initial:Outcome,*,width:int,depth:int,priority:str):
+    def __init__(self,initial:R12Outcome,*,width:int,depth:int,priority:str):
         if type(width) is not int or width<1 or type(depth) is not int or depth<1:raise ValueError('positive fixed width/depth')
         if priority not in ['fifo','lifo','best']:raise ValueError('priority')
         self.width,self.depth,self.priority=width,depth,priority
-        self.nodes=[Node(0,0,Hint(()),initial)]
+        self.nodes=[R12Node(0,0,Hint(()),initial)]
         self.attempts=[]
         self.solved=initial.accepted
         self.pending=None
@@ -152,7 +152,7 @@ class SearchR12:
     def stage(self,ask)->Attempt:
         return self._transition('stage',ask)
 
-    def observe(self,outcome:Outcome)->Attempt:
+    def observe(self,outcome:R12Outcome)->Attempt:
         return self._transition('observe',outcome)
 
     def expand(self,ask,judge)->Attempt:
@@ -167,7 +167,7 @@ class SearchR12:
         slot and records the request. FIFO/LIFO use stable ids; best uses the smallest
         trusted obligation count with id tie-break, unavailable scores last. Malformed
         data consumes a request without a tool call; other provider errors remain
-        recorded and propagate. Observe binds one pending request to trusted Outcome,
+        recorded and propagate. Observe binds one pending request to trusted R12Outcome,
         adds its child, replaces the pending row and stops only on accepted evidence.
         Reject double staging or observation without a request. Parameters never depend
         on the current budget point; expand is the supplied synchronous composition."""
@@ -343,7 +343,7 @@ def native_outcome(doc,ctx,raw_spans,*,raw_feedback=False):
     # Frozen executor synthesizes reduced documents for kills/unavailable stages.
     # Preserve them as unknown feedback; never invent the missing native phase.
     if doc.get('verdict') in ['killed(memory)','inconclusive','refused','error'] and not all(k in doc for k in ['lang','target','stage','per_symbol','findings']):
-        return Outcome(False,None,{'kind':'native-stage-unavailable','native':doc})
+        return R12Outcome(False,None,{'kind':'native-stage-unavailable','native':doc})
     parsed=result_stream([json.dumps(doc)])[0].document
     if parsed['lang']!=ctx.lang:raise ValueError('native language changed')
     clean=(parsed['verdict']=='verified' and parsed['stage']=='verify' and parsed['exit_code']==0 and type(parsed['verified_count']) is int and parsed['verified_count']>0 and not parsed['holes'] and not parsed['findings'] and not any(x['severity']=='error' for x in parsed['diagnostics']) and all(x in ['verified','passed'] for x in parsed['per_symbol'].values()))
@@ -353,18 +353,21 @@ def native_outcome(doc,ctx,raw_spans,*,raw_feedback=False):
     errors=[x for x in parsed['diagnostics'] if x['severity']=='error']
     score=0 if clean else (len(obligations) if parsed['stage']=='verify' and errors else None)
     feedback=parsed if raw_feedback else [dict(kind=o.kind,symbol=o.symbol,file=o.file,line=o.line,col=o.col,message=o.message,stage=o.stage,verdict=o.verdict) for o in obligations]
-    return Outcome(clean,score,feedback)
+    return R12Outcome(clean,score,feedback)
 
 
-class R12Policy:
+from fvh.policies import MockPolicy
+
+class R12Policy(MockPolicy):
     config=(3,10,'best')
     raw_feedback=False
     def __init__(self,ask,seeds):
+        super().__init__(self.step_r12)
         self.ask=ask;self.seeds=tuple(seeds)
         if not self.seeds or any(type(x) is not int for x in self.seeds):raise ValueError('pre-registered generation seeds')
         self.engine=None;self.task=None;self.spans=[];self.expected=None;self.context=None
 
-    def propose(self,state,ctx,budget):
+    def step_r12(self,state,ctx,budget):
         try:
             if self.task is None:
                 if ctx.lang not in ['dafny','verus'] or ctx.editable!=(ctx.target,):raise ValueError('one native task file required')
