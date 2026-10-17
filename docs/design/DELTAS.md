@@ -4027,3 +4027,11 @@ the registered concept tags; `loop-invariants` stays as the established ledger
 alias. The initial comma-separated fix did not satisfy the parser; its targeted
 failure and interrupted rerun are retained. The checker and existing ledger
 regression now pass. No vocabulary alias, test or checker exception is added.
+
+**Δ256 final local checkpoint.** Corrected clean d256177 passes the full static
+job in506s. Preserve the initial5pass/1fail focused run and the interrupted
+first static correction separately; the five unchanged native/paper/rubric/
+harness passes plus this corrected static run resolve the six focused bars.
+Final frozen STUDY source leak scan:23modules/1876publicfiles/OK. Exact source hashes,
+private logs and provenance are archived. R06 remains authoring; no full
+release CI, live model acceptance or Basic completion is inferred.

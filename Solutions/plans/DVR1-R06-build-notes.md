@@ -170,3 +170,21 @@ calc-chains, proof-splitting, contract-allowlist and related registered tags).
 Keep the established loop-invariants alias for ledger compatibility. No concept
 alias, checker exception or regression change is introduced. Actual checker
 and targeted existing ledger test now pass before the next full static rerun.
+
+## Final local validation checkpoint
+
+Clean d256177 final static CI20261017T091426Z-3106771:1passed/0failed in506s.
+The original focused run20261017T085912Z-3032232 keeps its actual5pass/1fail;
+its five native/paper/rubric/harness passes plus the corrected full static run
+resolve all six focused job bars without repeating unchanged proof tests.
+Interrupted static run20261017T091234Z-3101748 is not a pass.
+
+Final frozen STUDY source leak verifier:23modules,1876publicfiles,OK. Evidence archive
+~/.cache/dafny-verus-learn-0/author-probes/dvr1/r06-final-20261017 holds scratch,
+all three public/private CI trees, tracked source hashes and provenance. Source
+formal candidate9e7c6db and bank fixd256177 are separate explicit identities.
+No formal proof, contract, capture or written-material byte changed in the
+bank correction. Canonical admission14/14, workflow30/30, six targets×3seeds,
+45pins, sixteen fidelity/nine card controls, all five TeX documents and four
+PPgate/audit pairs remain complete local evidence. R06 remains authoring.
+Full release author/study CI and live D45 sessions are not claimed complete.
