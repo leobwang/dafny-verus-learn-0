@@ -98,7 +98,7 @@ passes skeleton lint. Paper's5TeXdocuments compile, and source-bound card12.3
 lines5238–5266hash52689b120cdf4e607ef042fd1c81823f91d8664680b3c302b97cd82d68da332c
 is exact. Frozen slots6, statement freeze23in12files, reference lint0findings
 (10twins), units61and map49/217pass before inheriting R12's facade removal.
-Inventory4tests pass. Fresh avoid0hits/0waived, single route35/35. Canonical
+Inventory4tests pass. Fresh avoid0hits/0waived, single route34/34. Canonical
 in-memory leak scan30modules/2384publicfilespasses. No pattern-reader helper.
 
 R12firstCIhas4/6bars; its name/dispatch repair is inherited, and its separate
@@ -106,3 +106,11 @@ facade-packaging repair is pending inheritance. Do not call either R12orR13
 locally complete until final CI/STUDY evidence. R13remains authoring. D45live
 model/grade/contractor sessions, R03Unicode and R11PointsTo remain recorded skips.
 Fine Verus linker substage is recorded as unavailable rather than fabricated.
+
+R12facade-removal b574cfa inherited with its full159-case central suite. The
+append-only PLAN conflict kept both R13§15and the R12packaging correction.
+Map imports are214after removal, and R12chapter5671words supersedes its earlier
+5701word count. R13pinsCI32/32passes, including six salted verdict answers and
+14source-bound chapter captures; no output sidecar discloses prediction answers.
+All four references passed their proper-context sweeps/audits. Native source
+bytes and R13statements are unchanged by this inheritance. Final CI/STUDY next.

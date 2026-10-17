@@ -1777,3 +1777,11 @@ and import their types directly from engine.py. Listing hole-free facades as
 learner harness exercises made author CI correctly reject an empty TRIV list.
 Keep the adapter and CI strict; every listed learner harness file now has real
 H items. Frozen single-file overlay and original five learner bodies stand.
+
+
+R13§15construction: canonical8/8admission now precedes all eight minute rows.
+Four reference sweeps/audits,26compiled cases each language,52R-corpus rows and
+32pins pass. P6dvadds the second paired prediction;6boxes/3diagrams/14captures
+and4503words are built. Source-only inventory4controls and fresh bank8native
+controls pass. Coarse native linker attribution is explicitly recorded/skipped;
+R13supplies no solo trust-report or live actor result. Final CI/STUDY remain.
