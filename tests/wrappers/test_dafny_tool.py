@@ -10,6 +10,7 @@ Run: python3 -m unittest discover -s tests/wrappers -p 'test_dafny*.py'
 """
 
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -478,7 +479,12 @@ class ArmedUnits(unittest.TestCase):
         import test_course_map as tcm  # the checker suite's armed registry text
         cls.root = common.scratch_dir("dafny-armed") / "root"
         (cls.root / "dafny").mkdir(parents=True)
-        (cls.root / "MODULES.toml").write_text(tcm.ARMED, encoding="utf-8")
+        # This root carries only the synthetic Q04 tree. Real module releases
+        # must not make gen_units expect their absent exercise/given files.
+        registry = re.sub(r'(?m)^status = "(?:authoring|shipped)"$',
+                          'status = "planned"', tcm.ARMED)
+        registry = tcm.setf("Q04", "status", '"authoring"', registry)
+        (cls.root / "MODULES.toml").write_text(registry, encoding="utf-8")
         shutil.copytree(ROOT / "dafny/options", cls.root / "dafny/options")
         for rel, text in tcm.TREE.items():
             p = cls.root / rel

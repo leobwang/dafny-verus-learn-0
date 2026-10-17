@@ -1,7 +1,7 @@
 """scripts/ci.sh: options, the author gate, statuses, logs and the study-mode
-check; the corpus job and its runner, scripts/test_corpus.py. No test here
-starts a solver (the static job runs the checker and its suite, about 25 s
-each time). The corpus tests run copies of scripts/ in throwaway checkouts,
+check; the corpus job and its runner, scripts/test_corpus.py. The static job runs the checker and its suite. Provided-layer regression
+fixtures can invoke the pinned verifier on tiny invented programs; no model
+or actor session is started. The corpus tests run copies of scripts/ in throwaway checkouts,
 with a stub runner or with a tiny invented corpus that the real runner lists
 and checks statically but never runs. Every expected outcome was captured
 from a real run of ci.sh or the runner on these roots.
@@ -206,6 +206,9 @@ class Runs(unittest.TestCase):
         self.assert_console_is_locations_only(out)
 
     def test_nothing_armed_passes_loudly(self):
+        # No armed modules and no R given layer: exercise the true empty case,
+        # independently of which provided layers this checkout has acquired.
+        shutil.rmtree(self.root / "dafny/given/R", ignore_errors=True)
         rc, out, err = C.run_ci("--job", "verify-r-dafny,pins,coexist,paper", root=self.root,
                                 logs=self.logs)
         self.assertEqual(rc, 0, (out, err))
@@ -214,6 +217,22 @@ class Runs(unittest.TestCase):
         self.assertIn("nothing to resolve together", C.job_line(out, "coexist"))
         self.assertIn("nothing to build", C.job_line(out, "paper"))
         self.assertIn("no armed module: nothing to check", (self.logs / "pins.log").read_text())
+
+    def test_an_unproved_given_fails_without_armed_modules(self):
+        given = self.root / "dafny/given/R"
+        shutil.rmtree(given, ignore_errors=True)
+        given.mkdir(parents=True)
+        (given / "RG_A1_Re.dfy").write_text(
+            "module RG_A1_Re {\n"
+            " lemma ProvidedMustHold() ensures false {}\n}\n",
+            encoding="utf-8")
+        rc, out, err = C.run_ci("--job", "verify-r-dafny", root=self.root,
+                                logs=self.logs)
+        self.assertEqual(rc, 1, (out, err))
+        self.assertEqual(C.status_of(out, "verify-r-dafny"), "FAIL")
+        log = (self.logs / "verify-r-dafny.log").read_text()
+        self.assertIn("gate dafny/given/R/RG_A1_Re.dfy", log)
+        self.assertIn("no armed R module with Dafny units", log)
 
     def test_author_only_jobs_are_skipped_and_reported_in_a_study_run(self):
         rc, out, err = C.run_ci("--job", "empty-body,rubric", root=self.root, logs=self.logs)
