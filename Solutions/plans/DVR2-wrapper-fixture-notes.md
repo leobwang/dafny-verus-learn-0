@@ -22,3 +22,15 @@ ArmedUnits class, the true no-module/no-given path and rejection of the
 unproved given with all modules planned. Private log:
 /tmp/dvl0-dvr2-r10/wrapper-fixtures-targeted.log. Full immutable wrappers
 CI is the next broader check; do not infer its outcome from this target.
+
+
+Full immutable-wrapper regression: PASS1passed/0failed/0skipped/0absent in
+2388s, author run20261017T125518Z-111732 on clean8cb6f87. The wrapper suite
+has586tests,1intentional skip; the CI integration suite also passes. This is
+the focused wrappers job, not a replacement full14job author/study result.
+The targeted9fixture tests already pass. Full public CI/orchestration logs and source
+provenance are archived at ~/.cache/dafny-verus-learn-0/author-probes/dvr2/
+wrapper-fixture-fix-20261017. No theorem, quota or deferred live result changed.
+
+The focused wrappers job retains no private/reference log tree after its CI
+cleanup; the archive records that absence rather than inventing an artifact.
