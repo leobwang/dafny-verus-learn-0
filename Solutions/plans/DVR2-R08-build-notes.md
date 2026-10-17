@@ -125,3 +125,30 @@ needs its own focused static/native/paper/rubric/harness bars before claiming
 complete local construction. Neither module is newly shipped on Basic.
 
 Frozen STUDY source scan: leak verifier: 25 module(s), 1970 public files scanned, OK
+
+## Disjointness correction after focused CI
+
+Initial CI20261017T104032Z-3506357 on clean c3066ef:5pass/1fail in934s.
+R-D136s,R-V130s,paper39s,rubric0s,harness75s pass. Static554s fails only
+avoid.sh:31name hits (Run/run,Double/double,Client/client,copy_prefix).
+All other static checks pass. Retain the failed run, never waive the naming bar.
+
+Fix compact specimen/bank declarations in public files and twins and rename
+only the complete Verus agent's prefix-copy helper. Hand goals/models/contracts,
+prediction answers, budgets and automation remain unchanged. Bank prose and
+the agent's after-every-edit run instruction remain English. The unchanged
+avoid gate reports0hits/0waivers. Validate on the R09 descendant while the
+original R08 CI source stays untouched.
+
+All5Ps,10non-Psource controls,2bankprobes,4PPgate/audit pairs and2agent
+full gate/audit pairs pass again. Four positive cards verify and the renamed
+agent passes3seeds. An initial direct Solutions/specimens gate lacked its
+provided interface (resolve failure, not semantic evidence); complete private
+cards with the original given chain pass without new trust. Normal updates
+refresh15chapter captures/10sidecars;36pins pass with0problems. Restoring the
+original contract prose requires normal recaptures for agent-v and shipped-v
+(the crate input hash includes its agent file), plus the rubric SHA update.
+Freeze/reference/chapter lint pass. Frozen scan and final source identity
+follow; corrected static/R-V CI and final study workflow remain required.
+
+Naming-fixed STUDY scan: leak verifier: 25 module(s), 1970 public files scanned, OK

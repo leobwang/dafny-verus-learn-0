@@ -17,7 +17,7 @@ use rg_re_a2::*;
 use rg_re_a2::word_matcher::WordMatcher;
 verus! {
 // GIVEN adapter: its complete proof is not a learner repair target.
-fn copy_prefix(word:&Vec<char>) -> (prefix:Vec<char>)
+fn shortened_word_copy_r08(word:&Vec<char>) -> (prefix:Vec<char>)
  ensures prefix@ == if word.len() == 0 { word@ } else { word@.take(word.len()-1) },
 {
  let target = if word.len() == 0 { 0 } else { word.len()-1 };
@@ -38,7 +38,7 @@ impl WordMatcher for InfraEngine {
  fn match_word(&self,word:&Vec<char>) -> (b:bool)
   ensures b == self.word_language(word@),
  {
-  let prefix = copy_prefix(word);
+  let prefix = shortened_word_copy_r08(word);
   deriv_match(&self.pattern,&prefix)
  }
 }

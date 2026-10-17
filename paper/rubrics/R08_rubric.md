@@ -9,7 +9,7 @@ paper/R08_problems.tex  sha256 4fa1af4f361ce9030adda17eba88adbfcbcc3a03f7af2ce00
 Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 9a7f37c9f9e30c8dd3833b2669c7f6880105553884a4b52e9390b7b40245a2d4
 Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 495c984eb6832301f2e909210eeed8e149613d190a7a5c529ca12d5151fd0d8d
 Solutions/dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy  sha256 781659838dd9d9ae164eeae7637383349d2323f6ce74fae704998bc5324bf845
-Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 14de1fd7125b89f038c8ba40e00fe04874cfc4ba7f9098e2a9b960b87f6e718b
+Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 da5f50863eb1e667c1373cae81385dfeb821817ab1c6be669f167d693f63aef4
 
 ## Verifier anchors
 

@@ -66,10 +66,10 @@ lang = "v"
 open_bodies = ["LiteralContract::language"]
 [file.statements]
 "<Literal as LiteralContract>::language" = "d375314d37c047ee80d184c2273b8e3be0f2c6241ce39523c63193504e050463"
-"<Literal as LiteralContract>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"<Literal as LiteralContract>::literal_decision_r08" = "5b5919f8073b6a83afe1558d1e46495c594e572d52ec15bafa26e40a3250efde"
 "Literal" = "76b856f91120e60666058d58a000455ee8e79e3973f2353e2e7e154a44091be7"
 "LiteralContract::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
-"LiteralContract::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"LiteralContract::literal_decision_r08" = "2e7c090650fb9b9fd5446ecfea13e998711031fc6acb31eef39b1d424c3393cc"
 "scalar_model_value" = "4e9f13b170ee19f47c15cb3d25236224f3c7d24cb4b3d9d810dfbe572024df9a"
 
 [[file]]
@@ -78,10 +78,10 @@ lang = "v"
 open_bodies = ["LiteralContract::language"]
 [file.statements]
 "<Literal as LiteralContract>::language" = "d375314d37c047ee80d184c2273b8e3be0f2c6241ce39523c63193504e050463"
-"<Literal as LiteralContract>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"<Literal as LiteralContract>::literal_decision_r08" = "5b5919f8073b6a83afe1558d1e46495c594e572d52ec15bafa26e40a3250efde"
 "Literal" = "76b856f91120e60666058d58a000455ee8e79e3973f2353e2e7e154a44091be7"
 "LiteralContract::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
-"LiteralContract::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"LiteralContract::literal_decision_r08" = "2e7c090650fb9b9fd5446ecfea13e998711031fc6acb31eef39b1d424c3393cc"
 "receiver_obligations" = "f2200e2208166a23d0dafef5fb678b8d18bbc1f1b127c5ec7e99bd56d726b547"
 
 [[file]]
@@ -98,11 +98,11 @@ path = "specimens/R08/card-c1v.rs.specimen"
 lang = "v"
 open_bodies = ["DoubleContract::language"]
 [file.statements]
-"<Double as DoubleContract>::language" = "efe087f566180f45d4e3f9b55ed05383c5bb4ff86e7b1826494817973a2fc0e0"
-"<Double as DoubleContract>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
-"Double" = "8ec1c1ad82d18280ab5436dff75987cbdc4b75f02f54fe9025e43a3cd170ec30"
+"<PairedWordR08 as DoubleContract>::language" = "efe087f566180f45d4e3f9b55ed05383c5bb4ff86e7b1826494817973a2fc0e0"
+"<PairedWordR08 as DoubleContract>::literal_decision_r08" = "5b5919f8073b6a83afe1558d1e46495c594e572d52ec15bafa26e40a3250efde"
 "DoubleContract::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
-"DoubleContract::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"DoubleContract::literal_decision_r08" = "2e7c090650fb9b9fd5446ecfea13e998711031fc6acb31eef39b1d424c3393cc"
+"PairedWordR08" = "3473a35c632538c4189c82cfca8ce04bb3fbffe777b4c460afcb2a0606419f81"
 
 [[file]]
 path = "specimens/R08/card-c2d.dfy.specimen"
@@ -110,16 +110,16 @@ lang = "d"
 open_bodies = []
 frozen_levers = ["R08_RevealCard.OpenDouble {:induction false}"]
 [file.statements]
-"R08_RevealCard.Double" = "fe2f6aef1485ef04290fa6d603cc7f973029dbe752dda490ad22809542d8d035"
-"R08_RevealCard.OpenDouble" = "f298745e032d760c73dd6613b0e16806fa3f5203b1cdbc5689d94f95c699212c"
+"R08_RevealCard.OpenDouble" = "43ea90a20ae63b7acb77b6b16f3da882928942914b88d6348670ee57edcf1957"
+"R08_RevealCard.PairedWordR08" = "b29d8f3cacdeb10e901798e65f29c48235d07aceac643973d11097685b03dd5e"
 
 [[file]]
 path = "specimens/R08/card-c2v.rs.specimen"
 lang = "v"
 open_bodies = []
 [file.statements]
-"double" = "5cde06207f26bfd06d1855e8b494b3d4e87830d453ac2df9eb4e5cc96fa98c75"
-"open_double" = "7513bde38d4a425bc9a8961a2429da049b673589f71d8c1cd5543678f3ed090b"
+"open_double" = "b273f76163bca571bcfaaec839040e63f99dfbd7c043b61a180237af2d99ba09"
+"paired_word_r08" = "96e4c07d8ebfa76c2a89903e428a660f4a976e771cfee5d12d0e05de902de199"
 
 [[file]]
 path = "specimens/R08/model-x-d.dfy.specimen"
@@ -127,7 +127,7 @@ lang = "d"
 open_bodies = []
 [file.statements]
 "R08_Modelx.Language" = "43ade558f98f6bcee1a64ebf410077df35db56f0306ea8ff4bba0382abc51ac4"
-"R08_Modelx.Run" = "856658154c9be1223a180b4cd4f88a0f7188a727dd0aece4e9c4562a14d7a8f4"
+"R08_Modelx.LiteralDecisionR08" = "16d7a52b09051091ffb16d8181f6e5797024c87c7176d8aa6578ca9335e87482"
 
 [[file]]
 path = "specimens/R08/model-x-v.rs.specimen"
@@ -135,10 +135,10 @@ lang = "v"
 open_bodies = ["Matcher::language"]
 [file.statements]
 "<Engine as Matcher>::language" = "d375314d37c047ee80d184c2273b8e3be0f2c6241ce39523c63193504e050463"
-"<Engine as Matcher>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"<Engine as Matcher>::literal_decision_r08" = "5b5919f8073b6a83afe1558d1e46495c594e572d52ec15bafa26e40a3250efde"
 "Engine" = "a8818da46adf031cb047b94429318794e0524b640d65789b630e7d3169f399f7"
 "Matcher::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
-"Matcher::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"Matcher::literal_decision_r08" = "2e7c090650fb9b9fd5446ecfea13e998711031fc6acb31eef39b1d424c3393cc"
 
 [[file]]
 path = "specimens/R08/model-y-d.dfy.specimen"
@@ -146,7 +146,7 @@ lang = "d"
 open_bodies = []
 [file.statements]
 "R08_Modely.Language" = "f71cac14df2c3bd51f95f2185bca3b7d58a0e8e2ca6b997ce56c1cd28c215560"
-"R08_Modely.Run" = "856658154c9be1223a180b4cd4f88a0f7188a727dd0aece4e9c4562a14d7a8f4"
+"R08_Modely.LiteralDecisionR08" = "16d7a52b09051091ffb16d8181f6e5797024c87c7176d8aa6578ca9335e87482"
 
 [[file]]
 path = "specimens/R08/model-y-v.rs.specimen"
@@ -154,10 +154,10 @@ lang = "v"
 open_bodies = ["Matcher::language"]
 [file.statements]
 "<Engine as Matcher>::language" = "e297f89ce21dcf763d3f1decfad289feb5487cbd67eeb2338ba688b5dffc4f51"
-"<Engine as Matcher>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"<Engine as Matcher>::literal_decision_r08" = "5b5919f8073b6a83afe1558d1e46495c594e572d52ec15bafa26e40a3250efde"
 "Engine" = "a8818da46adf031cb047b94429318794e0524b640d65789b630e7d3169f399f7"
 "Matcher::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
-"Matcher::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"Matcher::literal_decision_r08" = "2e7c090650fb9b9fd5446ecfea13e998711031fc6acb31eef39b1d424c3393cc"
 
 [[file]]
 path = "specimens/R08/same-model-d.dfy.specimen"
@@ -194,4 +194,4 @@ open_bodies = []
 "<InfraEngine as WordMatcher>::match_word" = "8d12e4df969881e702452cf64bfd47c2cbd0eee93e11113f3b91b2a7b7d4f307"
 "<InfraEngine as WordMatcher>::word_language" = "44726b5420c79ae5a84307ffaa0e6782782f2e9dbe1cc7aa6dd2d6bb874f5a43"
 "InfraEngine" = "3baf69fd4e24e4a1f259ce15fb5e8160ee13b9444bb5826d4679874ba2d3f077"
-"copy_prefix" = "a961094ad7df5da93530c6670e97d365c41bd4bb59cd9e3f223591af818a3c9c"
+"shortened_word_copy_r08" = "a0592a4a0ddc6d3cad42fb2c8e91a9610f514c0d894926a588c66be4135b241d"

@@ -4,12 +4,12 @@ verus! {
 // Printed local interface for this complete prediction; no earlier learner file.
 pub trait LiteralContract {
  spec fn language(&self,word:Seq<char>)->bool;
- fn run(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
+ fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
 }
 pub struct Literal { pub c:char }
 impl LiteralContract for Literal {
  open spec fn language(&self,word:Seq<char>)->bool { word == seq![self.c] }
- fn run(&self,word:&Vec<char>)->(b:bool)
+ fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool)
   ensures b == self.language(word@),
  {
   let b = word.len()==1 && word[0]==self.c;
@@ -25,7 +25,7 @@ fn receiver_obligations(word:&Vec<char>)
 {
  let left=Literal { c:'k' };
  let right=Literal { c:'m' };
- let b=left.run(word);
+ let b=left.literal_decision_r08(word);
  assert(b == left.language(word@)); // [a]
  assert(b == right.language(word@)); // [b]
  assert(b); // [c]

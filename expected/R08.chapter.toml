@@ -25,7 +25,7 @@ drop = ["^raw output: "]
 body = "8e80b67575e960839d119e34ae9c127d0b3ec6db645679f1b68cc49e43eda909"
 [entry.pinned.inputs]
 "verus/r/r08_abstraction/Cargo.toml" = "45401b0369d3bff1957a0d62486365d401bdead474908b7ca5fb99b253e25f01"
-"verus/r/r08_abstraction/src/agent.rs" = "8244385c3b63c245987bc4903d42540256d679f0754370babe7eab531f4f766e"
+"verus/r/r08_abstraction/src/agent.rs" = "50fe1f0b9e191b08537596df11f425e419f773249a509f4e134eeb9dc10293ba"
 "verus/r/r08_abstraction/src/lib.rs" = "7fbc647b6dc7f0069f2ad8e86cddd2c420a095a216b05146e08117c0bbccbe39"
 
 [[entry]]
@@ -56,7 +56,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "b290f7ac7c5245d4e817424ff07d88bfb1e5174f95f8e9c6633fcbc596060d46"
 [entry.pinned.inputs]
-"verus/r/r08_abstraction/src/agent.rs" = "8244385c3b63c245987bc4903d42540256d679f0754370babe7eab531f4f766e"
+"verus/r/r08_abstraction/src/agent.rs" = "50fe1f0b9e191b08537596df11f425e419f773249a509f4e134eeb9dc10293ba"
 
 [[entry]]
 id = "refinement-d"
@@ -74,9 +74,9 @@ cmd = ["scripts/vcheck", "specimens/R08/card-c1v.rs.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "a9386cbdebfb499ae56745d040ee7a0a163bc507d21d3b97b9380dd8ed6f95e5"
+body = "541537eb239a827cabce4a10433389765917847e790ae3d1037dbd8f0a6cff74"
 [entry.pinned.inputs]
-"specimens/R08/card-c1v.rs.specimen" = "fbdeb94006f4d6c6025390ac0a2f0833f5dfbd8084589c93fcc49254052b3270"
+"specimens/R08/card-c1v.rs.specimen" = "e4825c3b3c423f042972425dc7cd181cee216831ff040b2973baad490daa47bd"
 
 [[entry]]
 id = "reveal-d"
@@ -84,9 +84,9 @@ cmd = ["scripts/vcheck", "specimens/R08/card-c2d.dfy.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "4a8a27eeaf786ffd1b675c6a217e9a118ad82e7fc173eaaa107a00598733fbf3"
+body = "9710b3e7397fd40406d87c087489acbc934574256f19ce745ce65b1d7aeda22a"
 [entry.pinned.inputs]
-"specimens/R08/card-c2d.dfy.specimen" = "8f0d61f52e6ddfcd475e7b572300d9133401d5c988c16abe0ea9631c414a5daa"
+"specimens/R08/card-c2d.dfy.specimen" = "19b637cd2e6bc12c26937f050cc9ee648f5ab089e9b0de0c20dd7bda7f8479b3"
 
 [[entry]]
 id = "reveal-v"
@@ -96,7 +96,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "56de6d468e8d2be9860875ce5a98a113e2a90ba83cd9d07c31ed2ec2e56b148a"
 [entry.pinned.inputs]
-"specimens/R08/card-c2v.rs.specimen" = "53cd2200cb9d58462e8e8cd3af1f7bb1ebe3c114a6dbbdadb4b3c6d5f4dc60ae"
+"specimens/R08/card-c2v.rs.specimen" = "8e9888b32eb609a6d4adbb84c779c50512dea9a72f87a6b6ca952f1b8ef97696"
 
 [[entry]]
 id = "model-x-d"
@@ -107,7 +107,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "5dbff65d53e84ec9be870e75926f049244abb7582049dbde3d285e835ad34fd1"
 [entry.pinned.inputs]
-"specimens/R08/model-x-d.dfy.specimen" = "5ed55e3facf8f5c5afe8690ee6b4324c8acf13a6ed2fd50d735fe6338177bb14"
+"specimens/R08/model-x-d.dfy.specimen" = "6fea38586f9cd75b1f5846da3c5a9e15aaf69383df4c47b432a26d7ebfc24c4a"
 
 [[entry]]
 id = "model-y-d"
@@ -118,7 +118,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "4c85f061e678184a4d7a5af0cdc29131805782fc1c6dd39e4cc7e9b96eab4031"
 [entry.pinned.inputs]
-"specimens/R08/model-y-d.dfy.specimen" = "11763f068cb383c532843e85eac9aaba61bcb6dca6124270db73b2a3e81c7ffa"
+"specimens/R08/model-y-d.dfy.specimen" = "60d314cfacb2d0e57bcf0f7282d79c7edab2d05a1e7f24a133c436c9d4fb85a9"
 
 [[entry]]
 id = "same-d"
@@ -138,9 +138,9 @@ answers = ["R08.P3dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "55a623d04ea49e2b1ff0d1c5fdf90e203ec1c25522b03182bcd4d05958e07252"
+body = "d890efef0ed44bae4eca7b990e420ea51d72d118902640470affb433e7dd4649"
 [entry.pinned.inputs]
-"specimens/R08/model-x-v.rs.specimen" = "7458af1d6264b29d63d87f92ccae7f31c7284fda6715c6d5547bf6acd3e93f00"
+"specimens/R08/model-x-v.rs.specimen" = "1f89501e031a56e96fc64ba32422a030acb165ff2dd1e147940cc41449b9f63c"
 
 [[entry]]
 id = "model-y-v"
@@ -151,7 +151,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "71bb1aba6a15352e115d94a8cf6b3d681499343914eb1767f1cfe1f52f900f68"
 [entry.pinned.inputs]
-"specimens/R08/model-y-v.rs.specimen" = "aaf293eaf73a3031dc76d70c6b5c5531e2f8c9c65d544dcac60e3776264eb503"
+"specimens/R08/model-y-v.rs.specimen" = "fb9892713c3d10f9e956790a907d4be8408f2a358cdb0b15b8b63e7e88528af0"
 
 [[entry]]
 id = "same-v"

@@ -3,12 +3,12 @@ use vstd::prelude::*;
 verus! {
 pub trait Matcher {
  spec fn language(&self,word:Seq<char>)->bool;
- fn run(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
+ fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
 }
 pub struct Engine { pub c:char }
 impl Matcher for Engine {
  open spec fn language(&self,word:Seq<char>)->bool { word.len() == 2 && word[0] == self.c }
- fn run(&self,word:&Vec<char>)->(b:bool)
+ fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool)
   ensures b == self.language(word@),
  { word.len() == 2 && word[0] == self.c }
 }

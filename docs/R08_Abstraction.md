@@ -124,7 +124,7 @@ specimens/R08/card-c1d.dfy.specimen:1:35: error: module RG_A2_MatcherSpec named 
 ```
 $ scripts/vcheck specimens/R08/card-c1v.rs.specimen
 vcheck: specimens/R08/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error, stage resolve
-specimens/R08/card-c1v.rs.specimen:12:36: error: mismatched types
+specimens/R08/card-c1v.rs.specimen:12:53: error: mismatched types
 ```
 
 These cards teach the implementation boundary. They are not permission to change the interface or replace its semantics with a different predicate. In the hand file, H1 and H2 each use that same boundary for a separate model and backend. Explain the fixed obligations before filling either body.
@@ -172,7 +172,7 @@ C2d and C2v isolate revealing a different opaque double-character model. Fill th
 $ scripts/vcheck specimens/R08/card-c2d.dfy.specimen
 vcheck: specimens/R08/card-c2d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
 specimens/R08/card-c2d.dfy.specimen:7:2: error: a postcondition could not be proved on this return path
-specimens/R08/card-c2d.dfy.specimen:6:23: related: this is the postcondition that could not be proved
+specimens/R08/card-c2d.dfy.specimen:6:30: related: this is the postcondition that could not be proved
 ```
 
 <!-- pin: reveal-v -->
@@ -210,7 +210,7 @@ vcheck: specimens/R08/model-y-d.dfy.specimen [dafny, learner loop]: verified —
 ```
 $ scripts/vcheck specimens/R08/model-x-v.rs.specimen
 vcheck: specimens/R08/model-x-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 2 errors
-specimens/R08/model-x-v.rs.specimen:6:50: error: postcondition not satisfied
+specimens/R08/model-x-v.rs.specimen:6:67: error: postcondition not satisfied
 specimens/R08/model-x-v.rs.specimen:12:11: error: postcondition not satisfied
 ```
 

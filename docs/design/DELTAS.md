@@ -4143,3 +4143,16 @@ controls,5TeXbuilds,15chaptercaptures/10sidecars and36pins with0problems.
 Course map, chapter lint and all245reference twins pass. Study-clone workflow
 and focused CI are pending on this source checkpoint; it is not a release.
 D45 live-model debt and R03's packaging blocker remain deferred, never passes.
+
+## Δ260 — R08 compact-example disjointness names (2026-10-17)
+
+R08's first focused CI passed native R-D/R-V, paper, rubric and harness but
+failed static's naming gate on31collisions with Q/curated declarations. Rename
+compact literal/paired-word specimen and bank declarations, and the complete
+agent's prefix-copy helper, in public files and twins. Preserve hand goals,
+semantic bindings/contracts, predictions and guards. No waiver or checker
+relaxation; avoid.sh now reports0hits. Changed native material, four positive
+cards, agent gates/audits and the renamed agent's three seeds pass. Normal
+freeze/rubric/chapter/sidecar refreshes pass with36module pins,0problems.
+Final study workflow and corrected static/R-V CI remain pending. Retain the
+original5pass/1fail CI without relabelling it as a pass.

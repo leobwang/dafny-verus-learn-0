@@ -1,9 +1,9 @@
 // Reference Solution.
 module R08_RevealCard {
- opaque ghost predicate Double(c:char,w:seq<char>) { w == [c,c] }
+ opaque ghost predicate PairedWordR08(c:char,w:seq<char>) { w == [c,c] }
  // item: R08.C2d write:reveal
  // WRITE: one local reveal; keep the definition opaque to other clients.
  lemma {:induction false} OpenDouble(c:char,w:seq<char>)
-  ensures Double(c,w) <==> w == [c,c]
- { reveal Double(); }
+  ensures PairedWordR08(c,w) <==> w == [c,c]
+ { reveal PairedWordR08(); }
 }
