@@ -152,3 +152,22 @@ Freeze/reference/chapter lint pass. Frozen scan and final source identity
 follow; corrected static/R-V CI and final study workflow remain required.
 
 Naming-fixed STUDY scan: leak verifier: 25 module(s), 1970 public files scanned, OK
+
+## Final local checkpoint
+
+Naming-fixed source93264e0 is clean/STUDY. CI20261017T110125Z-3647945 passes
+2/2: static555s and R-V131s,686s total. This completes the six local bars
+alongside the unchanged R-D/paper/rubric/harness passes from c3066ef. Neither
+run is described as a single6/6pass. A final rubric-pin check also passes.
+The naming-fixed source's study-clone workflow passes15/15commands,5genuine
+first-try predictions,2positive original-model agent snapshots, full gates,
+audits and strict report. Final frozen scan25modules/1970public/OK.
+
+Source and initial/fixed scratch, both public/private CI trees, tracked hashes
+and provenance are archived under
+~/.cache/dafny-verus-learn-0/author-probes/dvr2/r08-final-20261017/.
+This metadata-only checkpoint changes no verified program or captured output.
+R08 local construction is complete; Basic still ships onlyR01/R02 of R.
+R03 is parked; R09–R16 remain to build. Full release CI and all D45 live debt
+retain their stated scope. R09 continues in its own worktree; do not mutate
+this candidate while any new release validation uses it.

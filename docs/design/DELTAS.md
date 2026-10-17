@@ -4156,3 +4156,11 @@ cards, agent gates/audits and the renamed agent's three seeds pass. Normal
 freeze/rubric/chapter/sidecar refreshes pass with36module pins,0problems.
 Final study workflow and corrected static/R-V CI remain pending. Retain the
 original5pass/1fail CI without relabelling it as a pass.
+
+R08 final local follow-up: naming-fixed source93264e0 passes the corrected
+static/R-V CI20261017T110125Z-3647945 (2/2,686s). With the unchanged original
+R-D/paper/rubric/harness passes, all six local checks are complete across two
+runs. The final study workflow passes15/15with5first predictions and2original-
+model agent snapshots. Frozen source scan25modules/1970public/OK. Archive,
+source hashes and CI provenance are in the protected DVR2 notes. R08 is an
+authoring candidate, not a new Basic shipment; full release/model debt remains.
