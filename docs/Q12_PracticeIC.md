@@ -165,7 +165,8 @@ flowchart LR
   parse --> resolve["resolve: names, types, modes, borrows"]
   resolve --> verify["verify: the solver's obligations"]
   verify --> compile["compile: code generation"]
-  compile --> test["test: compiled checks"]
+  compile --> link["link: the native linker (Verus)"]
+  link --> test["test: compiled checks"]
   test --> run["run"]
 ```
 

@@ -30,7 +30,10 @@ item parser's block lookup; the ids name no registry item.
   its assumption audit included), and `external_task.rs`, a task form that ships a
   `#[verifier::external_body]` proof fn its lemma calls, delivered unchanged (the
   user's decision D24).
-- `tests.rs`: `test()` (libtest through `verus --compile --test`).
+- `tests.rs`: `test()` (libtest through `verus --compile --test`); `link_test.rs` and
+  `lint_test.rs`: a proved lemma whose test build fails after verification, at the native
+  linker (a library no host has) and at rustc's later passes (an out-of-range literal):
+  stages `link` and `compile`, never `verify`.
 - `cli/`: `run_bin()` and `vcheck --bin` (the user's decision D16): the crate `tcli`, a
   verified library over `chain/tla` and one `[[bin]]` target `tally` (a command line
   outside `verus!`: `tally sum <a> <b>`, `tally twice <a>`, else a usage line and exit 2).

@@ -414,6 +414,18 @@ class Tests(unittest.TestCase):
         r = V.test(FX / "holes.rs")
         self.assertEqual((r.verdict, r.stage), ("failed", "verify"))
 
+    def test_a_build_failure_after_verification_names_its_stage(self):
+        """A proved crate whose test build fails reports the stage that failed: the native
+        linker (link) or rustc's later passes (compile), never verify; verification itself
+        stays green (the R13 P5v shape)."""
+        for name, stage in (("link_test.rs", "link"), ("lint_test.rs", "compile")):
+            with self.subTest(fixture=name):
+                self.assertEqual(V.verify(FX / name).verdict, "verified")
+                r = V.test(FX / name)
+                self.assertEqual((r.verdict, r.stage, r.verified_count), ("failed", stage, 1),
+                                 r.diagnostics)
+                self.assertEqual(r.per_symbol["sum_thirteen"], "no-error")
+
 
 class EmptyBody(unittest.TestCase):
     """The empty-body gate (Δ45, Δ47); verdict failed = the hole is real."""

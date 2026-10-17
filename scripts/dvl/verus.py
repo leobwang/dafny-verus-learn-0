@@ -80,7 +80,9 @@ a location, a front-end error, a failed gate condition); inconclusive (every
 error is an rlimit hit, or the wall-clock kill); refused (no tool ran);
 killed(memory); error (no verdict: CLI error 255, panic 134, unreadable
 output, a dependency that did not build). Stages: cli, parse, resolve (rustc
-and VIR front end), verify, compile, test.
+and VIR front end), verify, compile (code generation after a verification
+that found nothing: a --compile run whose errors come from rustc's later
+passes), link (the same, when the native linker failed), test, run.
 
 The hole counter (Δ7, Δ8): holes = the --no-cheating diagnostics W-V07
 (assume/admit), W-V08 (external_body, assume_specification, axiom fn,
@@ -1001,9 +1003,14 @@ def _classify(run, job, crate_name, gate, min_verified, findings, partial, srcs=
     extra = []
     if real:
         vir = vr.get("encountered-vir-error")
-        if any(d.code in FRONT_END_IDS or re.fullmatch(r"E\d{4}", d.code or "") for d in real) \
-                or (vir and not all_holes and verified is None):
+        front = any(d.code in FRONT_END_IDS or re.fullmatch(r"E\d{4}", d.code or "")
+                    for d in real)
+        if front or (vir and not all_holes and verified is None):
             stage = "resolve"
+        elif _after_verification(job, vr, verified, vir):
+            # a --compile run whose verification found nothing: rustc's code generation
+            # or the native linker stopped it (the R13 P5v shape), never the solver
+            stage = "link" if any(_is_link_error(d) for d in real) else "compile"
         elif not vir and verified == 0 and vr.get("errors") == 0:
             stage = "parse"
         else:
@@ -1022,6 +1029,23 @@ def _classify(run, job, crate_name, gate, min_verified, findings, partial, srcs=
             if verdict == "verified":
                 verdict = "failed"
     return res(verdict, stage, extra)
+
+
+LINK_ERROR = re.compile(r"^(linking with `[^`]*` failed|could not find native static library|"
+                        r"error: linking)")
+
+
+def _is_link_error(d):
+    """A rustc diagnostic of the native link step (no error code, rustc's own wording)."""
+    return not d.code and bool(LINK_ERROR.match(d.message or ""))
+
+
+def _after_verification(job, vr, verified, vir):
+    """True when a failed run compiled after a verification that found nothing: the job
+    asked for code generation (`--compile`), verification ran over the crate (`verified`
+    positive) with no error and no VIR error, so its errors come from a later stage."""
+    return ("--compile" in [str(a) for a in (job.argv or [])] and not vir
+            and isinstance(verified, int) and verified > 0 and vr.get("errors") == 0)
 
 
 def _gate_failures(vr, verified, min_verified, holes, findings, exit_code):

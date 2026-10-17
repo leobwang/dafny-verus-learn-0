@@ -109,7 +109,7 @@ PINS_FILE = Path(__file__).resolve().with_name("pins.toml")
 GET_TOOLCHAIN = SCRIPTS / "get_toolchain.sh"
 
 VERDICTS = ("verified", "failed", "inconclusive", "refused", "killed(memory)", "error")
-STAGES = ("cli", "parse", "resolve", "verify", "compile", "test", "run")
+STAGES = ("cli", "parse", "resolve", "verify", "compile", "link", "test", "run")
 SEVERITIES = ("error", "warning", "info", "hint", "related")
 KILLED_EXITS = (137, 143)     # SIGKILL / SIGTERM: a memory kill, never a verdict
 WALL_CLOCK_EXIT = 124         # dvl's own wall-clock safety kill (Δ58), as timeout(1) reports
