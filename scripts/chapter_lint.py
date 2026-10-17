@@ -586,7 +586,7 @@ def files_table(root, rec, ch, rel):
         if e["role"] == "agent" and e.get("errors") and \
                 not any(count_said(r, table, path, e["errors"], "error") for r in mine):
             bad(f"{path}: its row states the agent file's shipped errors, {e['errors']}")
-    if not any("/given/" in r for r in rows):
+    if rec.get("layer") and not any("/given/" in r for r in rows):
         bad("the files table names the given layer(s) (a `…/given/…` path)")
     if not any("Solutions" in r and re.search(r"(?i)\blast\b", r) for r in rows):
         bad("the files table names the reference, \"yours to open LAST\"")

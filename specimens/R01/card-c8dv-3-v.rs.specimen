@@ -1,0 +1,2 @@
+use vstd::prelude::*;
+verus! { proof fn all_chars() { assert forall|c: char| c == 'x' by { } } }

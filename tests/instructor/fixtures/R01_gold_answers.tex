@@ -1,0 +1,29 @@
+% R01 grader calibration fixture; author-only. No live calibration has run.
+% EXPECTED[B1][card-fidelity][4]: all eight fields agree by substance; no finding. Expected B1 grade 4 (3 only with a declared-gap note).
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R01 --- Hello, two verifiers \\ \large Written answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} A position paper proposing a compiler that checks annotated software through mathematical reasoning, with legacy and open-source software as its test bed; it reports no programme-synthesis experiment.
+
+\textbf{Oracle:} Specifications, assertions and other annotations state correctness obligations; proof tools check the reasoning, including checks by rival tools. There is no experimental success gate or measured solve rate in this card.
+
+\textbf{Trust:} The proposal explicitly permits an unverified verifier. Its language semantics, annotations and proof-checking chain remain part of the trusted account; the card identifies that account as under-specified.
+
+\textbf{Cheat surface:} Counting verified lines can reward weak annotations, so a larger figure need not mean more faithful specifications or more useful guarantees.
+
+\textbf{Metric:} Progress is described on annotation strength and verification level. The seventeen criteria evaluate the challenge proposal. The 80 percent reliability figure is an aspiration, not an observed compiler success rate.
+
+\textbf{Budget:} The ambition is a programme on the scale of about one thousand person-years and more than ten years. No per-task model calls, token allowance or solver cap is specified in the pinned range.
+
+\textbf{Variance:} No experiments, repeated trials or confidence intervals are reported in this position-paper card; such measurements would be needed to turn the aspirations into empirical performance claims.
+
+\textbf{Artifact:} The range identifies a programme and a proposed legacy-code test bed, not a released compiler implementation or dataset with a reusable location and licence.
+\end{answer}
+
+\end{document}

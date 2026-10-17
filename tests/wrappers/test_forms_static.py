@@ -1584,6 +1584,77 @@ class EmptyBodyHoleKinds(unittest.TestCase):
         self.assertEqual([m for m, _ in got], ["NL"])
 
 
+class GivenBodyAnnotation(unittest.TestCase):
+    item = EmptyBodyHoleKinds.item
+    LEARNER = '''use vstd::prelude::*;
+verus! {
+// item: Q99.H3v S1
+pub fn step(x: u8) -> (y: u8)
+    // @hole-begin Q99.H3v
+    // Add a precondition.
+    // @hole-end Q99.H3v
+    ensures y > x,
+{
+    #[verifier::proof_note("Q99.H3v")] assume(false);
+    x + 2
+}
+} // verus!
+'''
+    TWIN = LEARNER.replace("    // Add a precondition.", "    requires x < 254,").replace(
+        '    #[verifier::proof_note("Q99.H3v")] assume(false);\n', '')
+
+    def test_only_header_work_and_identical_given_implementation(self):
+        it = self.item(self.LEARNER, "Q99.H3v")
+        self.assertTrue(firsttry.given_body_annotation(self.LEARNER, self.TWIN, it))
+        for twin in (
+                self.TWIN.replace("x + 2", "x + 3"),
+                self.TWIN.replace("    x + 2", "    assert(x < 254);\n    x + 2"),
+                self.TWIN.replace("    // @hole-begin Q99.H3v\n", "").replace(
+                    "    // @hole-end Q99.H3v\n", ""),
+                self.TWIN.replace("    x + 2", "    // @hole-begin Q99.H3v\n    x + 2"),
+                self.TWIN.replace("    x + 2", "    // @hole-begin Q99.H3v\n"
+                                  "    x + 2\n    // @hole-end Q99.H3v"),
+                self.TWIN.replace("pub fn step", "pub proof fn step")):
+            with self.subTest(twin=twin):
+                self.assertFalse(firsttry.given_body_annotation(self.LEARNER, twin, it))
+
+    def route(self, twin, modes=None, region_verdict="failed"):
+        from types import SimpleNamespace
+        rel = "verus/q/toy/src/lib.rs"
+        it = self.item(self.LEARNER, "Q99.H3v")
+        failed = SimpleNamespace(verdict="failed", per_symbol={}, findings=[])
+        region = SimpleNamespace(verdict=region_verdict, per_symbol={}, findings=[])
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / "Solutions" / rel
+            path.parent.mkdir(parents=True)
+            path.write_text(twin)
+            ctx = SimpleNamespace(root=root, mid="Q99", rec={},
+                                  text=lambda _: self.LEARNER,
+                                  lines=lambda _: self.LEARNER.splitlines())
+            with unittest.mock.patch.object(firsttry, "open_spec_symbols_of",
+                                            return_value=["step"]), \
+                    unittest.mock.patch.object(firsttry, "statement_gate",
+                                               return_value=failed) as body, \
+                    unittest.mock.patch.object(firsttry, "region_gate",
+                                               return_value=region) as rgn, \
+                    contextlib.redirect_stdout(io.StringIO()):
+                bad = firsttry._empty_body_items(ctx, [(it, rel)], modes,
+                                                 modes, False, None, (1, 2, 3))
+                return bad, body.call_args.args[4], rgn.call_count
+
+    def test_default_routes_to_triv_and_mandatory_region(self):
+        self.assertEqual(self.route(self.TWIN), (0, ["TRIV"], 1))
+        # A missing annotation that is unnecessary still rejects admission.
+        self.assertEqual(self.route(self.TWIN, region_verdict="verified")[0], 1)
+        # Missing implementation/proof work retains every ordinary body mode.
+        changed = self.TWIN.replace("x + 2", "x + 3")
+        self.assertEqual(self.route(changed), (0, None, 1))
+
+    def test_explicit_mode_selection_is_preserved(self):
+        self.assertEqual(self.route(self.TWIN, ["E0"]), (0, ["E0"], 0))
+
+
 # DV5a integration: a statement hole after an open statement (both languages),
 # a bodyless Dafny function hole, and the not-admitted rule
 EB_DAFNY = """module M {

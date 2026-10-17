@@ -1,0 +1,34 @@
+# R01 leak patterns — author-only. Cut from H/T reference answer regions only.
+# Rule 1: every pattern matches its named twin. Rule 2: no public course file matches.
+# from Solutions/dafny/R/R01_Hello/core/R01_Hello.dfy
+# source: m := lo + (hi - lo) / 2; (R01.H1d)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+method\s+Midpoint\(lo:\s*U32,\s*hi:\s*U32\)[^{]*\{\s*m\s*:=\s*lo\s*\+\s*\(hi\s*-\s*lo\)\s*/\s*2\s*;
+# from Solutions/verus/r/r01_hello/src/lib.rs
+# source: lo + (hi - lo) / 2 (R01.H1v)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+pub\s+fn\s+midpoint\(lo:\s*u32,\s*hi:\s*u32\)[^{]*\{\s*lo\s*\+\s*\(hi\s*-\s*lo\)\s*/\s*2\s*\}
+# from Solutions/dafny/R/R01_Hello/core/R01_Hello.dfy
+# source: assert (s + t)[1..] == s[1..] + t; (R01.H2d)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+assert\s*\(s\s*\+\s*t\)\[1\.\.\]\s*==\s*s\[1\.\.\]\s*\+\s*t\s*;\s*CountCharAppend\(s\[1\.\.\],\s*t,\s*c\);
+# from Solutions/verus/r/r01_hello/src/lib.rs
+# source: assert((s + t).drop_first() =~= s.drop_first() + t); (R01.H2v)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+assert\(\(s\s*\+\s*t\)\.drop_first\(\)\s*=~=\s*s\.drop_first\(\)\s*\+\s*t\);\s*lemma_count_char_append\(s\.drop_first\(\),\s*t,\s*c\);
+# from Solutions/dafny/R/R01_Hello/core/R01_Hello.dfy
+# source: requires a as int + b as int < 0x1_0000_0000 (R01.H3d)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+method\s+MeanOfTwo\(a:\s*U32,\s*b:\s*U32\)[^{]*requires\s+a\s+as\s+int\s*\+\s*b\s+as\s+int\s*<\s*0x1_0000_0000
+# from Solutions/verus/r/r01_hello/src/lib.rs
+# source: requires a as int + b as int <= u32::MAX, (R01.H3v)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+pub\s+fn\s+mean_of_two\(a:\s*u32,\s*b:\s*u32\)[^{]*requires\s+a\s+as\s+int\s*\+\s*b\s+as\s+int\s*<=\s*u32::MAX
+# from Solutions/dafny/R/R01_Hello/core/R01_Hello.dfy
+# source: assert [d, e][1..] == [e]; (R01.T1d)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+assert\s+\[d,\s*e\]\[1\.\.\]\s*==\s*\[e\];\s*assert\s+\[e\]\[1\.\.\]\s*==\s*\[\];
+# from Solutions/verus/r/r01_hello/src/lib.rs
+# source: assert(seq![d, e].drop_first() =~= seq![e]); (R01.T1v)
+# verified: solutions=1 public=0 (2026-10-17, local verifier)
+assert\(seq!\[d,\s*e\]\.drop_first\(\)\s*=~=\s*seq!\[e\]\);\s*assert\(seq!\[e\]\.drop_first\(\)\s*=~=\s*Seq::<char>::empty\(\)\);

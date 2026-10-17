@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R01 --- Hello, two verifiers \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Answer in \texttt{R01\_answers.tex}; retain \verb+\label{ans:B1}+.
+Read the chapter first, then fill this card before starting the holes (15 minutes).
+Use your own words. A position paper is not an empirical benchmark: an absent
+measurement is a fact to record, not a blank to fill with an invented number.
+\texttt{/grade-paper R01} runs in a fresh examiner session. Compare the reference last.
+
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Paper card 12.11: The Verifying Compiler: A Grand Challenge for Computing
+Research.} Fill the eight fields below against your own pinned card, lines 5480--5506 of \texttt{cheatsheets.md}. First run:
+\begin{verbatim}
+sed -n '5480,5506p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+17159f86b9f03720e05f62037bb3b12b85b206b79d7d7caeea638be052e46ce2  -
+\end{verbatim}
+The hash is a source pin, not evidence that the paper's proposal is true.
+A changed range is re-pinned by the author before grading.
+\begin{description}
+\item[Task shape:] the proposed engineering task and its intended input and output;
+  distinguish the proposal from a measured benchmark.
+\item[Oracle:] what is intended to establish correctness, and what checks the proof.
+\item[Trust:] what the proposed judgement takes on faith, including the verifier itself.
+\item[Cheat surface:] how apparent progress could increase without stronger software guarantees.
+\item[Metric:] the proposed progress axes and any reported results; separate aspirations from observations.
+\item[Budget:] the scale of the proposed programme; say whether a per-task model or solver budget is given.
+\item[Variance:] whether experiments, repetitions or intervals support the claims in this range.
+\item[Artifact:] what reusable implementation or dataset the range identifies, or what it does not identify.
+\end{description}
+One or two sentences per field. Where the range is silent, state the absence and
+what evidence would be needed. The grade is the minimum of the field grades.
+\end{problem}
+
+\end{document}

@@ -1,0 +1,7 @@
+// A diagnostic resource probe, not a learner proof exercise.
+module R01_TriageResource {
+  lemma CubicSearch(x: int, y: int, z: int)
+    requires x > 0 && y > 0 && z > 0
+    ensures x * x * x + y * y * y != z * z * z
+  { }
+}

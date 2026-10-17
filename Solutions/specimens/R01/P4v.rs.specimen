@@ -1,0 +1,19 @@
+// item: R01.P4v obligation
+// NextUp exports only y > x. Which labelled caller assertions fail?
+// Answer form: FAILS followed by labels in order, or FAILS none.
+// FAILS b d
+use vstd::prelude::*;
+verus! {
+fn next_up(x: u32) -> (y: u32)
+    requires x < 100,
+    ensures y > x,
+{ x + 1 }
+fn case_a() { let y = next_up(5); assert(y > 5); // [a]
+}
+fn case_b() { let y = next_up(5); assert(y == 6); // [b]
+}
+fn case_c() { let y = next_up(5); assert(y >= 6); // [c]
+}
+fn case_d() { let y = next_up(5); assert(y < 1000); // [d]
+}
+}

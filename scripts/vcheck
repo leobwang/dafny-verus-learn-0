@@ -1052,7 +1052,8 @@ def frame_symbols(text, path="<twin>"):
     """The Dafny method-like symbols of a reference twin whose HEADER holds a
     learner region (a `@hole-begin` marker between the declaration's first
     line and its body or header end): the open_frames of a freeze pin
-    (QPLAN §6 Q22). ValueError on broken markers."""
+    (QPLAN §6 Q22). Requires-only regions belong to open specs instead
+    (PLAN §8 R11). ValueError on broken markers."""
     regions = common.hole_regions(text)
     if not regions:
         return []
@@ -1062,8 +1063,21 @@ def frame_symbols(text, path="<twin>"):
         if d.kind not in D.METHODLIKE:
             continue
         last = src.toks[d.body[0]].line if d.body else src.toks[max(d.header_end - 1, 0)].line
-        if any(d.line < b < last for _, b, _ in regions) and d.qual not in out:
-            out.append(d.qual)
+        header_regions = [(b, e) for _, b, e in regions if d.line < b < last]
+        if not header_regions or d.qual in out:
+            continue
+        # A requires-only annotation hole is an open spec (PLAN §8 R11),
+        # not an open frame. Inspect real clause tokens so a marker just
+        # before ensures is not mistaken for the preceding requires clause.
+        marked = set()
+        for n, (kw, start) in enumerate(d.clauses):
+            stop = d.clauses[n + 1][1] if n + 1 < len(d.clauses) else d.header_end
+            if any(b < src.toks[k].line < e for b, e in header_regions
+                   for k in range(start, stop)):
+                marked.add(kw)
+        if "requires" in marked and "modifies" not in marked:
+            continue
+        out.append(d.qual)
     return out
 
 

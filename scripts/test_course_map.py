@@ -468,7 +468,9 @@ _s, _e = table("R01")
 _q01 = table("Q01")
 case("R before Q", BASE[:_q01[0]] + BASE[_s:_e] + BASE[_q01[0]:_s] + BASE[_e:], 1,
      "modules must be listed in order")
-case("field order", edit("R01", 'track = "R"\nstatus = "planned"', 'status = "planned"\ntrack = "R"'),
+_r01_status = next(m["status"] for m in tomllib.loads(BASE)["module"] if m["id"] == "R01")
+case("field order", edit("R01", f'track = "R"\nstatus = "{_r01_status}"',
+                         f'status = "{_r01_status}"\ntrack = "R"'),
      1, "fields out of order")
 case("missing field", edit("R01", 'card = ["12.11"]\n', ""), 1, "missing field 'card'")
 case("unknown field", edit("R01", 'solo = false\n', 'solo = false\nnotes = "x"\n'), 1,
@@ -1013,7 +1015,8 @@ case("resolve nothing", BASE, 3, "unknown module id", args=("--resolve", ""))
 case("resolve a malformed record", setf("R04", "paper", '"yes"'), 1, "'paper' must be true or false",
      args=("--resolve", "R04"))
 case("--list-nonplanned", ARMED, 0, "Q04", armed=True, args=("--list-nonplanned", "Q01-Q18"))
-case("--list-nonplanned: none armed", BASE, 0, "", args=("--list-nonplanned", "R01-R16"))
+case("--list-nonplanned: none armed", BASE, 0, "",
+     args=("--list-nonplanned", f"{PLANNED}-{PLANNED}"))
 case("--list-nonplanned: a malformed range", BASE, 2, "wants a range",
      args=("--list-nonplanned", "Q01-R18"))
 case("--list-nonplanned: a reversed range", BASE, 2, "wants a range",

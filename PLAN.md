@@ -530,7 +530,7 @@ Each cost names the insight pre-empted for a learner who does the Q home first; 
 
 ### 6.1 R01 — Hello, two verifiers
 
-*No layer, 276 min (viva included). Bank of 8. Agent rung 1: repairer + three doors; rung 3: contract R-v0 by hand. No checkpoint.*
+*No layer, 276 min (viva included). Bank of 12 (minimum 8; two disjoint six-question draws). Agent rung 1: repairer + three doors; rung 3: contract R-v0 by hand. No checkpoint.*
 
 #### Files
 
@@ -552,14 +552,14 @@ Header counts (exercise files and chapter): **10 holes** (5 per language), **6 p
 
 | id | K | format | pair | uses | statement or prompt (as the learner sees it) | form · lever |
 |---|---|---|---|---|---|---|
-| R01.T1d | T | — | R01.T1v | ensures, assert, lemma-call | **The hole census**, closed book, before reading: this block holds two declarations whose bodies are holes of two different kinds: `lemma CountCharSingle(d: char, c: char) ensures CountChar([d], c) == (if d == c then 1 else 0)` and `method CountFirstTwo(s: seq<char>, c: char) returns (n: nat) requires \|s\| >= 2 ensures n == CountChar(s[..2], c)`. Close both, so that `scripts/vcheck --gate` reports no hole in the block; record the first try with `scripts/firsttry.sh R01 --check` | 2 holes (bodyless lemma; exec `{ assume false; }`) · none |
-| R01.T1v | T | — | R01.T1d | ensures, assert, lemma-call | the same: `proof fn lemma_count_char_single(d: char, c: char) ensures count_char(seq![d], c) == (if d == c { 1nat } else { 0nat })` and `fn count_first_two(s: &Vec<char>, c: char) -> (n: u32) requires s.len() >= 2 ensures n == count_char(s@.subrange(0, 2), c)` | 2 holes (`proof_note` assume; `external_body` + `unimplemented!()`) · none |
+| R01.T1d | T | — | R01.T1v | ensures, assert, lemma-call | **The hole census**, closed book, before reading: this block holds two declarations whose bodies are holes of two different kinds: `lemma CountCharPair(d: char, e: char, c: char) ensures CountChar([d, e], c) == (if d == c then 1 else 0) + (if e == c then 1 else 0)` and `method CountFirstTwo(s: seq<char>, c: char) returns (n: nat) requires \|s\| >= 2 ensures n == CountChar(s[..2], c)`. Close both, so that `scripts/vcheck --gate` reports no hole in the block; record the first try with `scripts/firsttry.sh R01 --check` | 2 holes (bodyless lemma; exec `{ assume false; }`) · none |
+| R01.T1v | T | — | R01.T1d | ensures, assert, lemma-call | the same: `proof fn lemma_count_char_pair(d: char, e: char, c: char) ensures count_char(seq![d, e], c) == (if d == c { 1nat } else { 0nat }) + (if e == c { 1nat } else { 0nat })` and `fn count_first_two(s: &Vec<char>, c: char) -> (n: u32) requires s.len() >= 2 ensures n == count_char(s@.subrange(0, 2), c)` | 2 holes (`proof_note` assume; `external_body` + `unimplemented!()`) · none |
 | R01.P1dv | P | verdict | — | — | A midpoint `m := (lo + hi) / 2` under `requires lo <= hi`, `ensures lo <= m <= hi`: Dafny over `int`; Dafny over the course's `U32`; Verus over `u32`. Answer form `D-int:<v> D-u32:<v> V:<v>`, v one of `ok`, `fail`, `timeout`, `err:<stage>` (stage as `scripts/vcheck` prints it) | slot · block |
 | R01.P2dv | P | verdict | — | — | A function `HalveEven(n)` with `requires n % 2 == 0` and `ensures` that twice the result is `n`, verified on its own, and a test that calls it on 7 and checks the result: a Dafny `@Test` method; a Verus `#[test]` fn outside `verus!`. What do `scripts/vcheck` and then `scripts/vcheck --test` report? Answer form `D:<v>,<t> V:<v>,<t>`, v as in P1dv, t one of `passed`, `failed`, `not-run` | slot · block |
 | R01.P3d | P | obligation | — | — | `specimens/R01/P3d.dfy.specimen`: `method NextUp(x: U32) returns (y: U32) requires x < 100 ensures y > x` with the body `y := x + 1;`, and a caller of `y := NextUp(5);` with four labelled asserts: [a] `y > 5`, [b] `y == 6`, [c] `y >= 6`, [d] `y < 1000`. Which fail? | specimen slot |
 | R01.P4v | P | obligation | — | — | `specimens/R01/P4v.rs.specimen`: the same for `fn next_up(x: u32) -> (y: u32) requires x < 100 ensures y > x` | specimen slot |
 | R01.P5d | P | value | — | — | `dafny/checks/R01_checks.dfy`: `expect (-7) / 2 == ???;` (compiled and run). Answer form: an integer numeral | check-unit slot |
-| R01.P6v | P | value | — | — | `specimens/R01/P6v.rs.specimen`: in an exec fn, `let q: i32 = -7i32 / 2; assert(q == ???);`. Answer form: an integer numeral | specimen slot |
+| R01.P6v | P | value | — | — | `specimens/R01/P6v.rs.specimen`: in a native compiled test, `let q: i32 = -7i32 / 2; assert_eq!(q, ???);`. Answer form: numeral (including a signed integer) | specimen slot |
 | R01.W1d | W | — | — | — | `method LastChar(s: seq<char>) returns (c: char) requires \|s\| > 0 ensures c == s[\|s\| - 1]`: a first verified method | given, live |
 | R01.W1v | W | — | — | — | `fn last_char(s: &Vec<char>) -> (c: char) requires s.len() > 0 ensures c == s@[s.len() - 1]` | given, live |
 | R01.W2d | W | — | — | — | `lemma CountCharBound(s: seq<char>, c: char) ensures CountChar(s, c) <= \|s\|` (`decreases \|s\|`), with an `assert` after each step stating what the verifier knows there: a first lemma | given, live |
@@ -643,6 +643,8 @@ recognise_v = ["requires", "decreases", "function", "forall"]
 ```
 
 ---
+
+*DVR1 as-built follow-up (2026-10-17): the planned census fallback uses the two-character lemma, because the original singleton verifies empty. Both code test-outs still contain two holes. Twelve bank questions support two disjoint six-question vivas. All eight hole items pass their shipped/region gates; reference units and agents pass three seeded runs. Live Claude validation is deferred under D45; local CI is tracked separately.*
 
 ### 6.2 R02 — Datatypes and recursion
 

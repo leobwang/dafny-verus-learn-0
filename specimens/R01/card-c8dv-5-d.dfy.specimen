@@ -1,0 +1,1 @@
+module R01_FalseFriend5 { function CountDown(n: nat): nat decreases n { if n == 0 then 0 else 1 + CountDown(n) } }

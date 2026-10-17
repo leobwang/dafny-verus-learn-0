@@ -2847,6 +2847,38 @@ def open_spec_statement(ltext, ttext, it, open_specs):
     return ltext[:la] + ttext[ta:tb] + ltext[lb:]
 
 
+def given_body_annotation(ltext, ttext, it):
+    """An exec annotation item with its entire implementation already given.
+
+    Every reference region must be in this function's contract, and its raw
+    body must equal the shipped body's E0 projection (tokens, ignoring comments).
+    Extra reference proof or implementation work therefore keeps the ordinary
+    body gates. For a pure annotation, TRIV tests the completed contract's
+    usefulness and RGN tests the missing annotation's necessity; stripping
+    proof from the already-given implementation is not a learner-work test.
+    Call only after open_spec_statement has recognized the frozen open spec.
+    """
+    try:
+        lsrc, lfn = _first_fn(ltext, it)
+        tsrc = V.vs.parse(ttext)
+        regions = core.common.hole_regions(ttext, it["id"])
+        if lfn is None or not lfn.body or lfn.mode in ("proof", "spec") or not regions:
+            return False
+        tfn = next((x for x in tsrc.walk() if x.kind == "fn" and x.in_verus
+                    and V.vs.item_symbol(x) == V.vs.item_symbol(lfn) and x.body), None)
+        if tfn is None or tfn.mode != lfn.mode:
+            return False
+        if not all(tsrc.line_of(tfn.params[1]) < b < e < tsrc.line_of(tfn.body[0])
+                   for _, b, e in regions):
+            return False
+        projected = V.eb_variant(ltext, lsrc, lfn, "E0")
+        psrc, pfn = _first_fn(projected, it)
+        return ([t.text for t in psrc.toks[pfn.body[0]:pfn.body[1] + 1]] ==
+                [t.text for t in tsrc.toks[tfn.body[0]:tfn.body[1] + 1]])
+    except (V.vs.ParseError, ValueError):
+        return False
+
+
 def statement_gate(ctx, it, rel, stext, shipped_modes, seeds, triv_body):
     """The shipped gate of an open-statement hole, run on a shadow of its
     learner crate whose file carries the twin's clauses (open_spec_statement).
@@ -3480,7 +3512,14 @@ def _empty_body_items(ctx, todo, modes, shipped_modes, run_forms, shadows, seeds
                                         open_spec_symbols_of(ctx, rel)) \
                 if twin.is_file() else None
             if stext is not None:
-                res = statement_gate(ctx, it, rel, stext, shipped_modes, seeds, tb)
+                body_modes = shipped_modes
+                if modes is None and given_body_annotation(
+                        ctx.text(rel), twin.read_text(encoding="utf-8"), it):
+                    body_modes = ["TRIV"]
+                    lines.append(f"    {it['id']}: a contract annotation with its exec body "
+                                 "already given: TRIV tests the completed contract; RGN "
+                                 "tests the missing annotation")
+                res = statement_gate(ctx, it, rel, stext, body_modes, seeds, tb)
                 lines.append(f"    {it['id']}: an open statement (QPLAN §6 Q44): the gate runs "
                              "with its twin's clauses laid over the shipped declaration")
             else:

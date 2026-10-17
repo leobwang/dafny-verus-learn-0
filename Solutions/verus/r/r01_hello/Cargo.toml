@@ -1,0 +1,14 @@
+[package]
+name = "r01_hello"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+[lib]
+path = "src/lib.rs"
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+[package.metadata.verus]
+verify = true
+
+[workspace]

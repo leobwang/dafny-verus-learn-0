@@ -802,5 +802,67 @@ class A1bLayerNames(unittest.TestCase):
         self.assertIsNone(V.GIVEN_CRATE.fullmatch("rg_re_a2b"))
 
 
+
+class RequiresOnlyHeaderRegions(unittest.TestCase):
+    """Precondition annotations keep their shipped ensures under specfreeze."""
+
+    def test_pin_fill_and_weaken_with_a_marked_requires_clause(self):
+        root = C.build_root()
+        try:
+            shutil.copytree(REFERENCE, root / "Solutions")
+            learner = ("\nmodule RequiresProbe {\n"
+                       "  method Half(n: int) returns (r: int)\n"
+                       "    ensures 2 * r == n\n"
+                       "  { assume false; r := n / 2; }\n}\n")
+            twin = learner.replace("    ensures", "    // @hole-begin Q04.H9d\n"
+                                   "    requires n % 2 == 0\n"
+                                   "    // @hole-end Q04.H9d\n    ensures")
+            twin = twin.replace("assume false; ", "")
+            for rel, addition in ((CORE, learner), ("Solutions/" + CORE, twin)):
+                path = root / rel
+                path.write_text(path.read_text() + addition)
+            rc, out, err = C.tool("specfreeze", "--pin", "Q04", root=root,
+                                  env={"CI": "true"})
+            self.assertEqual(rc, 0, out + err)
+            freeze = tomllib.loads((root / "expected/Q04.freeze").read_text())
+            file = next(x for x in freeze["file"] if x["path"] == CORE)
+            self.assertIn("RequiresProbe.Half", file["open_specs"])
+            self.assertNotIn("RequiresProbe.Half", file.get("open_frames", []))
+            path = root / CORE
+            path.write_text(path.read_text().replace(learner, twin))
+            rc, out, err = C.tool("specfreeze", "--check", "Q04", root=root)
+            self.assertEqual(rc, 0, out + err)
+            path.write_text(path.read_text().replace("ensures 2 * r == n", "ensures true"))
+            rc, out, err = C.tool("specfreeze", "--check", "Q04", root=root)
+            self.assertNotEqual(rc, 0, out + err)
+        finally:
+            C.remove_root(root)
+
+    def test_requires_expression_region_and_existing_frames(self):
+        requires = """module Sample {
+  method F(n: int)
+    requires
+      // @hole-begin sample
+      n > 0
+      // @hole-end sample
+    ensures n > 0
+  { }
+}
+"""
+        self.assertEqual(core.frame_symbols(requires), [])
+        frame = """module Sample {
+  method F(a: array<int>)
+    requires a.Length > 0
+    // @hole-begin sample
+    modifies a
+    ensures a[0] == 1
+    // @hole-end sample
+  { a[0] := 1; }
+}
+"""
+        self.assertEqual(core.frame_symbols(frame), ["Sample.F"])
+        mixed = frame.replace("    modifies a", "    requires a[0] == 0\n    modifies a")
+        self.assertEqual(core.frame_symbols(mixed), ["Sample.F"])
+
 if __name__ == "__main__":
     unittest.main()

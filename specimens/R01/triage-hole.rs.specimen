@@ -1,0 +1,6 @@
+use vstd::prelude::*;
+verus! {
+proof fn pending_evidence()
+    ensures false,
+{ #[verifier::proof_note("R01 triage")] assume(false); }
+}

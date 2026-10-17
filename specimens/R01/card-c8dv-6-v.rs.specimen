@@ -1,0 +1,2 @@
+use vstd::prelude::*;
+verus! { proof fn char_implication_demo() { assert(true ==> false); } }

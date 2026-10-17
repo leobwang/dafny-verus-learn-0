@@ -1,0 +1,2 @@
+use vstd::prelude::*;
+verus! { fn char_cell_advance_demo(x: &mut u32) requires *old(x) < 100, ensures *x == *old(x) + 1, { *x = *x + 2; } }

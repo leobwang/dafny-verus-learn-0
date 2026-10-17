@@ -40,6 +40,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 | Q16 | `Q16.txt`: 8 (H1d twice, H3d, H2v three times, H3v twice) | 2026-10-14 (DV6 fix round: the verifier over all 18 modules, 1,634 public files, after the round's chapter, rubric, fixture and plant edits) | 8 OK |
 | Q17 | `Q17.txt`: 8 (H1d three times, H2v twice, H3d, A1d twice) | 2026-10-14 (DV6 fix round: the verifier over all 18 modules, 1,634 public files, after the round's chapter, rubric, fixture and plant edits) | 8 OK |
 | Q18 | `Q18.txt`: 8 (H1d, H1v, H2d with A2dv, H2v with A2dv, H3py, H4py, H6py, H7py) | 2026-10-14 (DV6 fix round: the verifier over all 18 modules, 1,634 public files, after the round's chapter, rubric, fixture and plant edits) | 8 OK |
+| R01 | `R01.txt`: 8 (H1d–H3d, H1v–H3v, T1d, T1v) | 2026-10-17 (19 modules, 1,704 public files; local source scan) | 8 OK; live sessions deferred |
 
 ## The verifier
 
@@ -70,8 +71,8 @@ SKIP_EXT = {".pdf", ".aux", ".log", ".fls", ".fdb_latexmk", ".gz", ".pyc", ".zip
 
 # Rule 2's exemption: a given layer file (Dafny dafny/given/<T>/<QG|RG>_<L|A><k>_*.dfy,
 # Verus verus/given/<qg_bignat_l<k> | rg_re_a<k>>/...) and its layer number.
-GIVEN = re.compile(r"dafny/given/[QR]/(?:QG|RG)_([LA])([1-7])_[^/]*\.dfy$"
-                   r"|verus/given/(?:qg_bignat_(l)|rg_re_(a))([1-7])/")
+GIVEN = re.compile(r"dafny/given/[QR]/(?:QG|RG)_([LA])([1-7]b?)_[^/]*\.dfy$"
+                   r"|verus/given/(?:qg_bignat_(l)|rg_re_(a))([1-7]b?)/")
 
 if not (ROOT / "MODULES.toml").is_file() or not HERE.is_dir():
     sys.exit("leak verifier: run it from the repository root")
@@ -85,11 +86,14 @@ def above_layer(rel, m):
     if not g:
         return False
     letter = (g.group(1) or g.group(3) or g.group(4)).upper()
-    k = int(g.group(2) or g.group(5))
-    own = m.get("layer") or ""
+    layer = letter + (g.group(2) or g.group(5)).upper()
+    own = (m.get("layer") or "").upper()
     if letter != ("L" if m["id"].startswith("Q") else "A"):
         return False
-    return k > (int(own[1:]) if own[1:].isdigit() else 0)
+    order = [f"L{k}" for k in range(1, 8)] if letter == "L" else ["A1", "A1B", "A2", "A3", "A4", "A5"]
+    if layer not in order or (own and own not in order):
+        return False
+    return order.index(layer) > (order.index(own) if own else -1)
 
 cache = {}
 def text(path):

@@ -1,0 +1,9 @@
+// after: R01.P2dv
+module R01_P2D {
+  method HalveEven(n: int) returns (m: int)
+    requires n % 2 == 0
+    ensures 2 * m == n
+  { m := n / 2; }
+  @Test
+  method OddTest() { var m := HalveEven(7); expect 2 * m == 7; }
+}

@@ -1,0 +1,1 @@
+module R01_FalseFriend3 { lemma AllChars() { forall c: char ensures c == 'x' { } } }

@@ -14,6 +14,8 @@ Design: [`docs/design/DESIGN-PROPOSAL.md`](docs/design/DESIGN-PROPOSAL.md), with
 
 Q01–Q18 form the initial Basic release: exercises, specimens, exits, agent files, chapters, written pairs, rubrics, banks, Labs 1–3 and the capstone are built, and the release registry marks those eighteen modules `shipped`. Full author/study CI and final source/history checks passed. The user has deferred live Claude guard, coaching, grading and contractor validation under D45 because of the provider quota; these checks remain validation debt, never passing results. The [release checklist](docs/design/BASIC-RELEASE.md) records current evidence. The standalone R core is added to `basic` next; challenges follow on `challenge`, branched from Basic. Every later fix lands on Basic first and is merged forward. Actual learner labs still require completed learner oracles/policies, task draws and a graded pre-registration.
 
+R01, “Hello, two verifiers,” is built in the R authoring worktree: the exercise pair, predictions, two agent repairs, chapter, paper pair, rubric and bank are present. Its local admission and CI checks are being completed before integration onto the released Basic baseline. R02–R16 remain planned; challenges follow after the R core. Each module starts with predictions, so keep its specimens, expected outputs and later files closed until its chapter asks for them.
+
 ## Two tracks
 
 The repo holds two complete, standalone courses over the same goals. They share one registry (`MODULES.toml`), one instructor layer, one error ledger and one gradebook, and both are comparative from the first module: most exercises pair the same obligation in a `.dfy` file and a `.rs` file, and where the two languages differ, the difference is the lesson.

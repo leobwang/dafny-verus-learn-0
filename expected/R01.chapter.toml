@@ -1,0 +1,155 @@
+# expected/R01.chapter.toml — the chapter pins of R01's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R01 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R01_Hello/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "aa31b21bbf4e14cf82591d866169753c527cc87001c801cc59632def068ddcc9"
+[entry.pinned.inputs]
+"dafny/R/R01_Hello/core/R01_Hello.dfy" = "9a7b48a11a31e1eb13ab72a75abdb9382061cbc6de34921238f8a0a6f16f8075"
+"dafny/R/R01_Hello/core/dfyconfig.toml" = "89e6e636ca693e271c8e1739d7bd3c39b94725893d25f25daa1a4193faba3cb5"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r01_hello"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "89e6ceca248190940dde6351b2519a0650e3d97e11df25e640af2c1ec782517d"
+[entry.pinned.inputs]
+"verus/r/r01_hello/Cargo.toml" = "84c43fbc9d45d7c7e9815d546581ee39f9c81a63faf2c28dea58ed1843137ce5"
+"verus/r/r01_hello/src/agent.rs" = "dfe9ee720c2b6fe2ac1d53df2f825e9952614bf574911f9c5e6fc9fd9310490d"
+"verus/r/r01_hello/src/lib.rs" = "f03750c0557745f0fc24da5114ec3cc738fbcfaacf352e9fcde83e24d31a6c53"
+
+[[entry]]
+id = "gate-d"
+cmd = ["scripts/vcheck", "--gate", "dafny/R/R01_Hello/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "abfa006879eae0f4c6069a4490807bdd27df96fe179b1750204f81b48d277a99"
+[entry.pinned.inputs]
+"dafny/R/R01_Hello/core/R01_Hello.dfy" = "9a7b48a11a31e1eb13ab72a75abdb9382061cbc6de34921238f8a0a6f16f8075"
+"dafny/R/R01_Hello/core/dfyconfig.toml" = "89e6e636ca693e271c8e1739d7bd3c39b94725893d25f25daa1a4193faba3cb5"
+
+[[entry]]
+id = "gate-v"
+cmd = ["scripts/vcheck", "--gate", "verus/r/r01_hello"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "826cebaf60345c35dfb6f1f6daf4c4cd83f53110ec51c12a039276b47d60f828"
+[entry.pinned.inputs]
+"verus/r/r01_hello/Cargo.toml" = "84c43fbc9d45d7c7e9815d546581ee39f9c81a63faf2c28dea58ed1843137ce5"
+"verus/r/r01_hello/src/agent.rs" = "dfe9ee720c2b6fe2ac1d53df2f825e9952614bf574911f9c5e6fc9fd9310490d"
+"verus/r/r01_hello/src/lib.rs" = "f03750c0557745f0fc24da5114ec3cc738fbcfaacf352e9fcde83e24d31a6c53"
+
+[[entry]]
+id = "p1-int"
+cmd = ["scripts/vcheck", "specimens/R01/chapter-p1-int.dfy.specimen"]
+answers = ["R01.P1dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c8fd1aacaa281efb4c0b9f512f901e622681c3eb5731edc572ff9aa1202ec817"
+[entry.pinned.inputs]
+"specimens/R01/chapter-p1-int.dfy.specimen" = "b4abc2e0840bb3db77f94f7034d8a6ad3292fd6cfe7a17bce28fd3ae99ad2f22"
+
+[[entry]]
+id = "p1-u32"
+cmd = ["scripts/vcheck", "specimens/R01/chapter-p1-u32.dfy.specimen"]
+answers = ["R01.P1dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a749f4a5b8b7ed5713422ecc2525e44d9642e7a15040e74fa48a344d2d4b2651"
+[entry.pinned.inputs]
+"specimens/R01/chapter-p1-u32.dfy.specimen" = "59965e579193b532cb538ca4b839110731a336c2bab97e2475dbd099144e7a5c"
+
+[[entry]]
+id = "p1-v"
+cmd = ["scripts/vcheck", "specimens/R01/chapter-p1-v.rs.specimen"]
+answers = ["R01.P1dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "fe3ff6dd48c64462ebb4d63d71810bbda482dafb16ee1d76c7d2395f532e48e7"
+[entry.pinned.inputs]
+"specimens/R01/chapter-p1-v.rs.specimen" = "dc757e59632d70826fd04a156ae8374e7bb03e61a294d58d77346d5f24dadb44"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R01_Hello/agent/R01_AgentRepair.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "37b5ac40693d9294719df974cb4a96e9faa11cf043cef5f028ced66d5db316d4"
+[entry.pinned.inputs]
+"dafny/R/R01_Hello/agent/R01_AgentRepair.dfy" = "72a634594c8a1a0594b86a52394f27577048077057c01e3c5cb77773fef7da08"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r01_hello/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "05f2dcf3bdce11d5c8cc4a2c9938caba2e85b004e582edee275d885c2570f6cc"
+[entry.pinned.inputs]
+"verus/r/r01_hello/src/agent.rs" = "dfe9ee720c2b6fe2ac1d53df2f825e9952614bf574911f9c5e6fc9fd9310490d"
+
+[[entry]]
+id = "triage-green"
+cmd = ["scripts/vcheck", "specimens/R01/triage-green.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "88b4616acdad8d580d7f614af8aaca592b432119e54310204e72cecf68a97062"
+[entry.pinned.inputs]
+"specimens/R01/triage-green.dfy.specimen" = "75f06bcb1df1db6ea537911a7d857aed3c66c33a1713a50dc059e0112b3c43de"
+
+[[entry]]
+id = "triage-post"
+cmd = ["scripts/vcheck", "specimens/R01/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d01f0afc64db4ea4438d2df8f96f9835f731d3ecb4509b5a18dc150579e019f0"
+[entry.pinned.inputs]
+"specimens/R01/card-c2d.dfy.specimen" = "deb84cf3a0d47cf077348e36fa9078dbc318a53710fb8624460345d7c704cc93"
+
+[[entry]]
+id = "triage-resource"
+cmd = ["scripts/vcheck", "specimens/R01/triage-resource.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "141d4764ab48642c857902374825fcab1e508dfffb7c83ab1595f8fb30a4ccd1"
+[entry.pinned.inputs]
+"specimens/R01/triage-resource.dfy.specimen" = "a6f68a788edea759a9ad2780f45a597224b7c05a293da5cb5162caa70612378d"
+
+[[entry]]
+id = "triage-resolve"
+cmd = ["scripts/vcheck", "specimens/R01/triage-resolve.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d28e45e4edf1f13a14155904c412cb2ccebb1300746fb624d1586e23d1a92d45"
+[entry.pinned.inputs]
+"specimens/R01/triage-resolve.dfy.specimen" = "3332e7c5891ee40b3bed524917e5855a9aad86f62408f4b7700fb8eb1dde89cf"
+
+[[entry]]
+id = "triage-hole"
+cmd = ["scripts/vcheck", "specimens/R01/triage-hole.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1c1762e8b93c49f05c11cbd97ee59ab748aae1ce863f2960edbdeade653e2da9"
+[entry.pinned.inputs]
+"specimens/R01/triage-hole.rs.specimen" = "a72e1c9707c4864c618913789d5b52772a3ae7e8c9d48777aa4c46db1c28865c"

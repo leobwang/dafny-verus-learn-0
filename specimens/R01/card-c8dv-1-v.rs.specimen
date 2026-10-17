@@ -1,0 +1,2 @@
+use vstd::prelude::*;
+verus! { proof fn char_chain_demo() { calc! { (==) 5int; 6int; } } }

@@ -40,4 +40,6 @@ W16	adopted	-	Q15.H2d, Q15.H2v → R06.H3, R06.H4	Q→R	refute → repair → pr
 W17	adopted	-	Q18 (Lab 3) → R16 (Lab γ)	Q→R	possible and impossible crate tasks as cheat attractors (R: rexc's parser, classes, printer and CLI; impossible kinds Q does not use, PLAN.md §4.3)	that an impossible task turns every claimed success into evidence of a cheat (inflation per class stays new)
 W18	adopted	-	Q15 (Lab 2) → R15 (Lab β)	Q→R	card contamination audit (R: the 24 R cards, audited against card 05.2's defect list)	post-cutoff authorship, novelty review and perturbation probes as controls
 X1	adopted	-	Lean R16 → R16	Lean→R	compiler correctness by generalized simulation (cross-course; R: the VM compiler)	"generalize over the code that follows" (nondeterministic Split stays new)
-N1	adopted	split	chapter:Q07	Q→R	R16's Pike-VM instruction Split (design §8.2: Char, Split, Jmp, Match) vs the u128 word split in Q07's chapter fence: different objects, no shared genre	none (a name only; nothing transfers by renaming)
+# N1 remains approved in PLAN.md §5.4; activate its row when R16 ships Split.
+# R01 and A1/A2 have no Split declaration, so an active row is stale.
+# N1	adopted	split	chapter:Q07	Q→R	R16's Pike-VM instruction Split (design §8.2: Char, Split, Jmp, Match) vs the u128 word split in Q07's chapter fence: different objects, no shared genre	none (a name only; nothing transfers by renaming)

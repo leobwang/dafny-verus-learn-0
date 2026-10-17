@@ -1,0 +1,36 @@
+% R01 grader calibration fixture; author-only. No live calibration has run.
+% EXPECTED[B1][card-fidelity][2]: Oracle — the card explicitly says the verifier need not be verified; quote the field and its pinned-source contradiction or absence.
+% EXPECTED[B1][card-fidelity][2]: Metric — the percentage is an aspiration; there are no experiments; quote the field and its pinned-source contradiction or absence.
+% EXPECTED[B1][card-fidelity][2]: Variance — the card reports no experiments or intervals; quote the field and its pinned-source contradiction or absence.
+% EXPECTED[B1][card-fidelity][4]: Task shape — correct control, no finding.
+% EXPECTED[B1][card-fidelity][4]: Trust — correct control, no finding.
+% EXPECTED[B1][card-fidelity][4]: Cheat surface — correct control, no finding.
+% EXPECTED[B1][card-fidelity][4]: Budget — correct control, no finding.
+% EXPECTED[B1][card-fidelity][4]: Artifact — correct control, no finding.
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R01 --- Hello, two verifiers \\ \large Written answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} A position paper proposing a compiler that checks annotated software through mathematical reasoning, with legacy and open-source software as its test bed; it reports no programme-synthesis experiment.
+
+\textbf{Oracle:} The proposal requires the compiler itself to be formally verified before any proof can count as correct.
+
+\textbf{Trust:} The proposal explicitly permits an unverified verifier. Its language semantics, annotations and proof-checking chain remain part of the trusted account; the card identifies that account as under-specified.
+
+\textbf{Cheat surface:} Counting verified lines can reward weak annotations, so a larger figure need not mean more faithful specifications or more useful guarantees.
+
+\textbf{Metric:} The paper measures an 80 percent success rate on the programmes compiled in its experiments.
+
+\textbf{Budget:} The ambition is a programme on the scale of about one thousand person-years and more than ten years. No per-task model calls, token allowance or solver cap is specified in the pinned range.
+
+\textbf{Variance:} Three repeated compiler trials establish a 95 percent confidence interval for that measured success rate.
+
+\textbf{Artifact:} The range identifies a programme and a proposed legacy-code test bed, not a released compiler implementation or dataset with a reusable location and licence.
+\end{answer}
+
+\end{document}

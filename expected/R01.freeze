@@ -1,0 +1,320 @@
+# expected/R01.freeze — statement-freeze pins for R01 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R01` from the files as shipped; checked by
+# `scripts/specfreeze --check R01`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R01"
+unfrozen = ["specimens/R01/triage-resolve.dfy.specimen"]
+
+[[file]]
+path = "dafny/R/R01_Hello/core/R01_Hello.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R01_Hello.CountCharAppend {:induction false}"]
+open_specs = ["R01_Hello.MeanOfTwo"]
+[file.statements]
+"R01_Hello.CountChar" = "3611f26c871d0f63cce718bc0d83ac30b10e5c049626167ccd864cce9c4010c9"
+"R01_Hello.CountCharAppend" = "86aef8c253f07bdfcf7b1bb9e49e5be6d519aff496003f5ba42fb410bbb0aa20"
+"R01_Hello.CountCharBound" = "0173c7d9f81323166c0b5922d3bf3a273f04d29bf76083e1934bfc6830eaff55"
+"R01_Hello.CountCharPair" = "c85adb73ac43b654934391a034aaaeb35b4f1dcd727c7a64104585f6fe37ce85"
+"R01_Hello.CountFirstTwo" = "81f0bf78b9e6519ae6e737bf801be2ccb60f44f6e80861f0f85b756b5bbb5655"
+"R01_Hello.CountWithinLength" = "f29239fd84a9e4e93e8c6c3840ab5c6f5631cdcc64fc3ebf44ce5feac9e96bd2"
+"R01_Hello.EmptyPrefix" = "40e84dc420ffe9c93958056791530ebef35d4a6701a3a29d5326c67bd6bfa1b4"
+"R01_Hello.KeepChar" = "18d407c6e9b840d24111803d20c6b7dcf7e3cfe6cd0d5147f28a0ee51c41c5af"
+"R01_Hello.LastChar" = "e6a363ba1f2982f0e02c6b8d815fefe63f2d353fd715386dc8e5e50197f69fc3"
+"R01_Hello.MeanEdge" = "6317738811878a08040be521356aeb02126feb2ef5e93bb6857cdc87de0a9364"
+"R01_Hello.MeanOfTwo" = "d3e3abad7880fdcf255224037e6ddb77d15a4d2a2fe4393674c2f941f01e6716"
+"R01_Hello.MeanSmall" = "f6f0bf572452daf465a4c8d32db1ef05b31ebd9b2d93af13519f65396fe054fb"
+"R01_Hello.MeanZero" = "660d8a5084b71dc0798787a8b6fb0b6ea1877962deab5f2b4473461b400e130f"
+"R01_Hello.Midpoint" = "1f4db67be3f055cf755c2a2a525ba8634c6089bd6e0d55de30d99ed78b33e973"
+"R01_Hello.U32" = "ea322a9e391c31f606153346e50fd7fe16821ab5147ab826d96996a18ecb9809"
+[file.spec_clauses]
+"R01_Hello.MeanOfTwo" = { requires = [], ensures = ["b82e87e56733b5e0706b0a0c81c5560aa9abd88c8b82e60b135c3c3e11207043"] }
+
+[[file]]
+path = "dafny/checks/R01_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_Checks.P5d" = "a3de80bc9e6a17e2758002792d4745c732ba3d22f0da5212bde9ed4fbf4a9322"
+
+[[file]]
+path = "verus/r/r01_hello/src/lib.rs"
+lang = "v"
+open_bodies = []
+open_specs = ["mean_of_two"]
+[file.statements]
+"count_char" = "b3af815d19ea0c086ef0efb4eafbcb6842d39c8fdf4f7f1b51cd7d093f2f87a9"
+"count_first_two" = "07e3539fe1a9827d90dfd8b376258242156a756ba906b68c4e290538d4f0ad56"
+"keep_char" = "e85b792fb3928a77316442c34931fa3907d0c107ebe293d4d66b18403856b3d1"
+"last_char" = "6cc8c1e172f83501a633bc2fa00b12c0f66438f2bf9a0b66f64567fbd3e276b5"
+"lemma_count_char_append" = "c2cf4f55cb628517db7eb16f13e622324d86d073ba81d09f744d41a457f51f77"
+"lemma_count_char_bound" = "7ee565cd82ad868cb0a5c14227564f0388c3fa5fcc0b332249c689d87112309d"
+"lemma_count_char_pair" = "8523b56c5c6ceea40bb74b31c8114144bb98c5f8ae12354de82a6308b90d4227"
+"lemma_count_within_length" = "3fc69e3f857869a4d5411d7a3cd35b8e97b06f39c49945fb136bf9085ee9d655"
+"lemma_empty_prefix" = "3874b5d735cdeeec2331d81f68b2712d3394cfd6d27096097a6d1ba7237c6b96"
+"mean_edge" = "c32df22740b43c09ddc9bdd702a24fd2e4edc41f0bf7adc0c3d7bc4e9d5d8ea3"
+"mean_of_two" = "002569395111ba73418691f6d61fd53e6e2cd0f34d24c71d7a5e346b2194106a"
+"mean_small" = "dd23fc7d11da59debe08e83498eae837eec8f0618e692cd052c73fa4427e33d1"
+"mean_zero" = "913bb77240ed9f4fead47c67a954b3716266cba1af02381a51c11dd861c6ddd5"
+"midpoint" = "f4e9cbc80829a85c489c5701c83523e6ac54fb3b0fa5550053a9f82e2247c023"
+[file.spec_clauses]
+"mean_of_two" = { requires = [], ensures = ["21c3e9dfc3fb42b1fdaa4989e77725ed7e39d7d05800568de0c57aafea0f539a"] }
+
+[[file]]
+path = "specimens/R01/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_P3d.CaseA" = "7a735df7aa7ced9c389cffadbaec53502040167eb7d75b0913b16c22c8db10da"
+"R01_P3d.CaseB" = "2de4abad95c145ea7e2be054f11be6d9517c2769d178e4b7939765d70b38f9c3"
+"R01_P3d.CaseC" = "83ab175643ee43b02ae60a9060924227ef06def78a5b56e3a0f5812f89f9b41c"
+"R01_P3d.CaseD" = "374f4cf69c8b6db77b2478b50906c600a691cf6a611ce2339dc518e0114b27d8"
+"R01_P3d.NextUp" = "3ee57ffcdb53c4d6f71220caa8cb8ba784368792cdc98c4a9298263030a31f7b"
+"R01_P3d.U32" = "ea322a9e391c31f606153346e50fd7fe16821ab5147ab826d96996a18ecb9809"
+
+[[file]]
+path = "specimens/R01/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"case_a" = "f2fafa3dae347884c60fa0b9012e5b006ade8be296b03051bd74322938d9fd55"
+"case_b" = "beb5cde887d786704e337ba9ef015a9c6a845e7dedcd51e2d4fb3d41a94ed633"
+"case_c" = "39765aaa106594ae8c8d077b344ec10a3941f9bb4e90fc9325579ca4ba5b62a4"
+"case_d" = "4d43a48b2b080605779529da5c6a303c775aa7f49a6cd77cc2e1f775a4e19eb3"
+"next_up" = "b8ac8cf958bd69460dffb20ef9d31b44b186bf729601cc9dbd4a011060c7288e"
+
+[[file]]
+path = "specimens/R01/P6v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"quotient_value" = "b607e7ec548edfce6e6789f5681d869313695db185841bd108bdd7bde1eb0604"
+
+[[file]]
+path = "specimens/R01/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_C1D.Keep" = "414b469b9ebebfb44bc268749be0b97ab51755ccb93624ad5dcb471c8c2368b8"
+
+[[file]]
+path = "specimens/R01/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"keep" = "6be4c2ed00786a310fcca6c6e2e24964f38f948472062e97eabe15c1e70fd467"
+
+[[file]]
+path = "specimens/R01/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_C2D.EveryChar" = "1401689ccc5e52c3c56d0f6e6a7694f01425f73dd77499b80fc20f2022f30d9e"
+
+[[file]]
+path = "specimens/R01/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"every_char" = "69bf1990cbdf9f86f5d48da07865a543c566355499e0ca5bc77b467585c7a52f"
+
+[[file]]
+path = "specimens/R01/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_C3D.Client" = "a84ac7bac3a421bdc3201c520720ffd94cd00ada41ad3d8bd4acc2f9fbcf49c0"
+"R01_C3D.Establish" = "6f0802dba71e5e54dd4959dbf9f2110424a91de9e9091a185957c9fa04792e68"
+"R01_C3D.Short" = "188f3a0cd090d614b6eca874e31a1cc4e4cbb4f2c093748f746937ac31b9bfcf"
+
+[[file]]
+path = "specimens/R01/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"client" = "28125a3d17e1f53c6db80a49a980093286f69294d3b8aa47f0797d7c02b46cba"
+"establish" = "23afa7aa7844ef659fffefcc41cd0ee1ced81f820d02a9f016fde769f3dae754"
+"short" = "c91a4bc14bbda4fa9e963b903baa74da63b85d2ff180682aa78bb902a221b0a2"
+
+[[file]]
+path = "specimens/R01/card-c8dv-1-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_FalseFriend1.CharChainDemo" = "c02c4e07b99cdb779d71e813fad489cfd0b9f2265b0dc531116d0c20d39567e4"
+
+[[file]]
+path = "specimens/R01/card-c8dv-1-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"char_chain_demo" = "1b56587e365cc68daf73fc5a3a290f5080f2df61c060c0945c3f520c18adb5c7"
+
+[[file]]
+path = "specimens/R01/card-c8dv-2-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_FalseFriend2.Claim" = "4e3108c2ea758ba758cfbdcbe26e9e9bfc0e08264ef1070411c0cfa6b2d02c1d"
+
+[[file]]
+path = "specimens/R01/card-c8dv-2-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"claim" = "be4034fd24be83a75077f127ca36ad79556645a614e2d86c06109d78ae441d0c"
+
+[[file]]
+path = "specimens/R01/card-c8dv-3-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_FalseFriend3.AllChars" = "25db3d367313cedc0ee096cd042d30847cabb5e62ea7a14cf6e3ec8b216122ea"
+
+[[file]]
+path = "specimens/R01/card-c8dv-3-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"all_chars" = "6080f9cbf17f4e52d2fb601b9cd31a549953bd5432d8a207639ce2799af2840a"
+
+[[file]]
+path = "specimens/R01/card-c8dv-4-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_FalseFriend4.CharCellAdvanceDemo" = "09a56a38dfb1e2a4fdf46b21cf10d0ad2d741235f65f86ddd19c17ed9974c487"
+
+[[file]]
+path = "specimens/R01/card-c8dv-4-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"char_cell_advance_demo" = "02987b5edcf8b2eec6ed90d5411685eb760ff621f7a74bad81c454ff306863f6"
+
+[[file]]
+path = "specimens/R01/card-c8dv-5-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_FalseFriend5.CountDown" = "74b83e67f71f904f0e058b1727ea301e356514a88dececb0e5608f1d7fab46a9"
+
+[[file]]
+path = "specimens/R01/card-c8dv-5-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"count_down" = "253e4f894658ee5574d3ef9a97bc0d0de323994a9d25512a0a3742ad7637273f"
+
+[[file]]
+path = "specimens/R01/card-c8dv-6-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_FalseFriend6.CharImplicationDemo" = "4b8506672ed1895bb11f5fa7f9803db4702b24f5ef2edc8190fd0b9f63bc09a9"
+
+[[file]]
+path = "specimens/R01/card-c8dv-6-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"char_implication_demo" = "46c9126f1dba01c940dea2ef2c4d25791bf26d3919632a90bad4187a9a0504e5"
+
+[[file]]
+path = "specimens/R01/card-c9dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_DivisionD.Division" = "da51509f35a023031dfbc6b511309d8223d1aca87e44bda9a2d03e0210458901"
+
+[[file]]
+path = "specimens/R01/card-c9dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"division" = "5eb74a3001c5e336b580f550f010c61acc36bb8dc6c94fb3116f68a6e142807e"
+
+[[file]]
+path = "specimens/R01/chapter-p1-int.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_P1Int.Middle" = "54323c62a158976622a9bd8f77dc18c2a3ed94b425ca14c0345bc673f7143e95"
+
+[[file]]
+path = "specimens/R01/chapter-p1-u32.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_P1U32.Middle" = "192d89246e9b768b72fbe63d6dcccc08555f5675b93f7eb7f3d93f24cc44febc"
+"R01_P1U32.U32" = "ea322a9e391c31f606153346e50fd7fe16821ab5147ab826d96996a18ecb9809"
+
+[[file]]
+path = "specimens/R01/chapter-p1-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"middle" = "c9c40ffefe6756c6a80f7432b68248720c0b65961d92e59997dfeeb5e6cd7175"
+
+[[file]]
+path = "specimens/R01/chapter-p2-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_P2D.HalveEven" = "ca8843e3e6c21caf66f11bd8114cd4d6859d8833baa02ff701da16cc85c6d769"
+"R01_P2D.OddTest" = "e819b6075a8f715c1c033c0ba3d2d50ada787b01b17ab383fdb4682036224765"
+
+[[file]]
+path = "specimens/R01/chapter-p2-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"halve_even" = "9a4735f82934bcc698867d7ece3e989812ad32c4c4bc9d10f38d994d74dd5df0"
+
+[[file]]
+path = "specimens/R01/triage-green.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_TriageGreen.Echo" = "1913fffcbafb0259ffd03d5d206805b2098feb70aa27cae74676e302a8b89dba"
+
+[[file]]
+path = "specimens/R01/triage-hole.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"pending_evidence" = "9bdad7ed21f611d7987034748cff04d7eea75891ad45acbf22e9dddf6c8a3d9d"
+
+[[file]]
+path = "specimens/R01/triage-resource.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_TriageResource.CubicSearch" = "d9c68aa3b3a74f2cc93856ac39936d4c72d343d97bfa998da6f9348a2c71fbd5"
+
+[[file]]
+path = "dafny/R/R01_Hello/agent/R01_AgentRepair.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R01_AgentRepair.WalkLengthSound {:induction false}"]
+[file.statements]
+"R01_AgentRepair.NoLater" = "5a907b92bcc4e0ed309cbbe619103a42a7bdb5cce85b567ec5adee1962de888e"
+"R01_AgentRepair.PickChar" = "0b28fafb51d3e998627e7d7669ee08f7ddac210e97dd49cdc20a9e7818e1eda5"
+"R01_AgentRepair.RoomForTerminator" = "44bebc0711268701e824fee4886d38b06f07cf4981176152f55c48ffe9ca33e8"
+"R01_AgentRepair.WalkLength" = "90070d2dc8f80db6616b88b60d7f4c3ae33dc924a238e422c9f691d7ddaa7a29"
+"R01_AgentRepair.WalkLengthSound" = "2be50a47b5e197221144f321c7ee6b693d263b5fc66b863513cd44e5d6ce7eff"
+
+[[file]]
+path = "verus/r/r01_hello/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_walk_length_sound" = "111d7eeb1e71472722814a6d99d6e67de0613cf7fdbe47afd95c320ecf2494b3"
+"pick_char" = "a212433f730a67987d7be3ec901a5206dd6eeefcfccaf595897f4d252650a614"
+"reserve_successor" = "ab50c4923f9e95ccfdfa053ddb7118f0c1bb083256063f7b8de3f0f0a447130e"
+"room_for_terminator" = "95d51130544e27aa59771f00afffe3a028c8d0f6968b1beb93ed6dd15c071bdd"
+"walk_length" = "721c6b4446a85a1411bba855f74ca10fc5f34f8f3c1f4bec2cc2178213c02827"

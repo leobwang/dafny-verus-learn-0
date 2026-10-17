@@ -1,0 +1,61 @@
+# expected/R01.counts — Δ11 count pins for R01: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts R01` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "R01"
+
+[[unit]]
+path = "dafny/R/R01_Hello/core"
+lang = "dafny"
+reference_verified = 22
+min_verified = 11
+symbols = ["R01_Hello.CountChar", "R01_Hello.CountCharAppend", "R01_Hello.CountCharBound", "R01_Hello.CountCharPair", "R01_Hello.CountFirstTwo", "R01_Hello.CountWithinLength", "R01_Hello.EmptyPrefix", "R01_Hello.KeepChar", "R01_Hello.LastChar", "R01_Hello.MeanOfTwo", "R01_Hello.Midpoint"]
+
+[[unit]]
+path = "verus/r/r01_hello"
+lang = "verus"
+reference_verified = 17
+min_verified = 11
+symbols = ["count_char", "count_first_two", "keep_char", "last_char", "lemma_count_char_append", "lemma_count_char_bound", "lemma_count_char_pair", "lemma_count_within_length", "lemma_empty_prefix", "mean_of_two", "midpoint"]
+
+[[file]]
+path = "dafny/R/R01_Hello/core/R01_Hello.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "verus/r/r01_hello/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "dafny/checks/R01_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/R/R01_Hello/agent/R01_AgentRepair.dfy"
+role = "agent"
+verdict = "failed"
+holes = 0
+errors = 4
+
+[[file]]
+path = "verus/r/r01_hello/src/agent.rs"
+role = "agent"
+verdict = "failed"
+holes = 0
+errors = 4

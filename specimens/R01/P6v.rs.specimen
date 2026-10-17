@@ -1,0 +1,12 @@
+// item: R01.P6v value
+// What is the executable i32 quotient? The compiled test observes the actual value.
+// Answer form: numeral
+use vstd::prelude::*;
+verus! {
+fn quotient_value() -> i32 { -7i32 / 2 }
+}
+#[test]
+fn quotient_check() {
+    let q = quotient_value();
+    // SLOT: assert_eq!(q, ???);
+}

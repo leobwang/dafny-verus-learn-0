@@ -1089,7 +1089,10 @@ class SpecFreeze(RootCase):
         self.rep(self.CORE, "  function Sum", self.BOX)
         twin = self.root / "Solutions" / self.CORE
         twin.parent.mkdir(parents=True)
-        bad = self.TWIN_BOX.replace("      modifies a\n", "      requires a[0] < 9\n")
+        # A requires-only region is now an open spec (PLAN R11). Keep
+        # this refusal case a frame that also tries to add a precondition.
+        bad = self.TWIN_BOX.replace("      modifies a\n",
+                                    "      modifies a\n      requires a[0] < 9\n")
         twin.write_text((self.root / self.CORE).read_text().replace(self.BOX, bad))
         rc, out, err = C.tool("specfreeze", "--pin", "Q04", root=self.root, env={"CI": "true"})
         self.assertEqual(rc, 3, out + err)
@@ -2936,6 +2939,15 @@ class ChapterLint(ChapterRoot):
         self.edit(reference,
                   f"| `{py}` | the Python exercise | failed, **3 holes** |\n" + reference)
         self.assertEqual(self.lint()[0], [])
+
+    def test_a_module_without_a_spine_layer_needs_no_given_file(self):
+        text = self.chapter().replace("`dafny/given/Q/QG_L3_BigNat.dfy`", "no given layer")
+        chapter = self.cl.Chapter(text.splitlines())
+        rec = core.record(self.root, "Q04")
+        problems = self.cl.files_table(self.root, rec, chapter, CHAPTER)
+        self.assertTrue(any("given layer" in p for p in problems), problems)
+        rec = dict(rec, layer="")
+        self.assertEqual(self.cl.files_table(self.root, rec, chapter, CHAPTER), [])
 
     def test_stated_counts(self):
         sc = self.cl.stated_counts

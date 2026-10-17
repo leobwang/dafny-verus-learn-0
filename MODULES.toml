@@ -1875,14 +1875,14 @@ concept_items = {}
 id = "R01"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "Hello, two verifiers"
 tier = ""
 topic = ""
 strands = []
 langs = ["d", "v"]
 chapter = "docs/R01_Hello.md"
-exercises = ["dafny/R/R01_Hello/core/R01_Hello.dfy", "verus/r/r01_hello/src/lib.rs", "specimens/R01/"]
+exercises = ["dafny/R/R01_Hello/core/R01_Hello.dfy", "dafny/checks/R01_checks.dfy", "verus/r/r01_hello/src/lib.rs", "specimens/R01/"]
 exits = []
 agentic = ["dafny/R/R01_Hello/agent/R01_AgentRepair.dfy", "verus/r/r01_hello/src/agent.rs"]
 harness = []
@@ -1902,13 +1902,13 @@ viva_mode = "module"
 tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
-write_d = []
-write_v = []
-recognise_d = []
-recognise_v = []
+write_d = ["ensures", "assert", "lemma-call"]
+write_v = ["ensures", "assert", "lemma-call"]
+recognise_d = ["requires", "decreases", "function", "forall"]
+recognise_v = ["requires", "decreases", "function", "forall"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "dafny/R/R01_Hello/core/R01_Hello.dfy" = "core", "dafny/checks/R01_checks.dfy" = "core", "dafny/R/R01_Hello/agent/R01_AgentRepair.dfy" = "core", "verus/r/r01_hello/src/lib.rs" = "prelude", "verus/r/r01_hello/src/agent.rs" = "prelude" }
 concept_items = {}
 
 [[module]]
@@ -1948,7 +1948,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "dafny/given/R/RG_A1_Re.dfy" = "core", "verus/given/rg_re_a1/src/lib.rs" = "prelude" }
 concept_items = {}
 
 [[module]]
@@ -2108,7 +2108,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "dafny/given/R/RG_A1b_Facts.dfy" = "core", "verus/given/rg_re_a1b/src/lib.rs" = "prelude" }
 concept_items = {}
 
 [[module]]
@@ -2148,7 +2148,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "dafny/given/R/RG_A2_Deriv.dfy" = "core", "verus/given/rg_re_a2/src/lib.rs" = "prelude", "verus/given/rg_re_a2/src/char_class.rs" = "prelude" }
 concept_items = {}
 
 [[module]]
