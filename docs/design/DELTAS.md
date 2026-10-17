@@ -4091,3 +4091,11 @@ first attempt caught the unrelated project drift; the scoped case now passes.
 Full static rerun follows. Study workflow15/15 passes with7genuine first tries
 and both agent snapshots; all46pins pass. The ISet finite-premise control also
 verifies. No release CI or live actor validation is inferred.
+
+**Δ257 final local checkpoint.** Clean620324e passes the corrected full static
+job in518s. Preserve the initial focused5pass/1fail run; its five unchanged
+native/paper/rubric/harness passes plus this static run resolve the six local
+bars. Workflow15/15,7genuine first tries, two agent snapshots and46pins pass.
+Frozen STUDY leak scan24modules/1927publicfiles/OK. Exact source hashes,
+private logs and provenance are archived. R07 is still authoring; no full
+release CI, live race/model validation or Basic completion is inferred.

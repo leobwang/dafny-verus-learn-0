@@ -171,3 +171,19 @@ strict/freeze, five full target gates/audits and both agent snapshots. All46pin
 checks pass. The finite-premise ISet positive control verifies with zero holes,
 paired with the missing-premise negative. Successful clone removed, records
 retained privately. Release CI/live D45 sessions are not inferred passed.
+
+## Final local validation checkpoint
+
+Clean620324e static-only CI20261017T100114Z-3327853 passes1/0 in518s.
+Original7826548 focused run retains5/1 in847s; its five unchanged native/
+paper/rubric/harness passes plus the corrected full static run resolve all
+six focused bars. No false6/6 single-run claim. Exact7826548 workflow15/15,
+7genuine first tries, two agent snapshots and46pins/0problems all pass.
+
+Final frozen STUDY leak scan:24modules/1927publicfiles/OK. Private archive
+~/.cache/dafny-verus-learn-0/author-probes/dvr2/r07-final-20261017 holds scratch,
+both public/private CI trees, tracked source hashes and provenance. All native
+content, predictions, admission, four-target three-seed stability,20chapter
+captures,15sidecars, five TeX builds, card/bank/PP/agent and tool/statistics
+controls retain their exact scopes. R07 remains authoring. R04's long global
+release CI and D45 live sessions remain pending, never inferred passed.
