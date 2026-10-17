@@ -44,7 +44,14 @@ Everything under `/tmp/dvl0-dvr1-build/`, to archive under guarded `~/.cache/daf
 
 ## Next
 
-1. Final R01 admission repeat passes 8/8. Focused static rerun (session 15929) and remaining native CI plus targeted R01 pins (session 46206) are active; wait and inspect failures. Re-pin freeze after final source/check changes, refresh rubric hashes and source/chapter pins only where stale, compile R01 reference and two fixtures.
+1. Final R01 admission repeat passes 8/8. Final static CI passes: `build/ci/20261017T035010Z-167293/`, 446 s, 396/396 course-map regressions. It includes seven R given files in fixture counts and clears both tracks when testing a truly empty module glob. Native CI `20261017T034242Z-135612` passed verify-r-dafny (15 s), verify-r-verus (31 s), paper (10 s) and harness (73 s), but found two stale reference hashes in R01's rubric. Refreshing those is validated by `20261017T034624Z-155495/`: rubric passes, all 118 pins current. Targeted R01 pins CI passes 25 checks with zero problems. No native code changed after these passes. Re-pin freeze after final source/check changes, refresh rubric hashes and source/chapter pins only where stale, compile R01 reference and two fixtures.
 2. Run model-free focused R CI in study mode: static, verify-r-dafny, verify-r-verus, paper, rubric, harness; targeted R01 pins check. Needed before checkpointing R01. Keep the Q verification tree isolated. No additional solver lane while R's 16 GiB lane is active.
 3. Final 19-module leak scan after staging, diff check, restore study settings, commit R work. Add numbered DELTAS entries only when integrating with the Q release, to avoid Δ248 collision (candidate already reserves it).
 4. Advance R02 from PLAN §6.2 and existing reconciled references while full Q CI completes. Before promoting Q, finish candidate static/leak checks and record the full author/study summaries. Promote as D42, preserve old branches and transplant R commits onto the new Basic baseline. Never push externally or update the primary checkout during author orchestration.
+
+## Final R01 checkpoint
+
+- Initial content/tool checkpoint: `ddd1f7a`. The following evidence/fix commit preserves all native payloads and closes the static fixtures and rubric metadata. Study mode is the committed state.
+- Final admission: `r01-empty-body-release-fixed.log`, 8/8. All given layers and reference units/agents have the seeded evidence listed above. Completed-reference study workflow is 11/11; no model.
+- Final full source-leak audit is repeated after staging. Evidence copied under the guarded `author-probes/dvr1/r01-final-20261017/` directory, including failed setup attempts explicitly superseded by the final runs.
+- R02 development is isolated in `../dafny-verus-learn-0-r02-authoring`, branch `authoring-r02`, initially at `ddd1f7a`. Carry this final R01 evidence/fix commit forward there before arming R02. Its registry stays planned while prototypes and remaining kit are prepared. Do not copy the R01 active CI state into the Q release tree.

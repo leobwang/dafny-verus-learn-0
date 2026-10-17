@@ -243,6 +243,13 @@ BASE_ON_DISK = _baseline(BASE)[3]
 # course files without an owner (DV4 ships harness/q/fvh_q/ and harness/r/fvh_r/).
 PKG_ON_DISK = sum(1 for d in ("harness/q/fvh_q", "harness/r/fvh_r") if (ROOT / d).is_dir()
                   for _ in (ROOT / d).rglob("__init__.py"))
+# The fixture supplies Q's three layer pairs; R's independently declared
+# foundations remain in its copied tree even before their owning module arms.
+REAL_R_GIVEN_FILES = len({p for m in tomllib.loads(ARMED)["module"]
+                         for p in (m.get("imports") or {})
+                         if p.startswith(("dafny/given/R/", "verus/given/rg_"))
+                         and (ROOT / p).is_file()})
+ARMED_IMPORT_FILES = 13 + REAL_MODULE_FILES + REAL_R_GIVEN_FILES + PKG_ON_DISK
 ARMED_IDS = ", ".join(sorted(REAL_ARMED + ["Q04"]))
 
 
@@ -1025,7 +1032,7 @@ case("--list-nonplanned: a reversed range", BASE, 2, "wants a range",
 # --- the armed module: every group passes ------------------------------------------------------------------
 case("armed: every group passes", ARMED, 0, f"{1 + REAL_AUTHORING} authoring", armed=True)
 for group, line in (("units", f"units: {3 + REAL_UNITS} unit(s)"),
-                    ("import-tiers", f"import-tiers: {13 + REAL_MODULE_FILES + PKG_ON_DISK} files"),
+                    ("import-tiers", f"import-tiers: {ARMED_IMPORT_FILES} files"),
                     ("isolation", "isolation:"),
                     ("coverage", f"coverage: {1 + len(REAL_ARMED)} module(s) past planned ({ARMED_IDS})")):
     case(f"armed: --only {group}", ARMED, 0, line, armed=True, args=("--only", group))
@@ -1131,7 +1138,7 @@ case("tiers: a braced vstd import", ARMED, 1, "uses vstd::arithmetic but its tie
      armed=True, files=fx(EXIT_RS, "use vstd::prelude::*;\n",
                           "use vstd::{prelude::*, arithmetic::power::*};\n"))
 case("tiers: a prelude file may use the calc! macro (QPLAN §6 Q16)", ARMED, 0,
-     f"import-tiers: {13 + REAL_MODULE_FILES + PKG_ON_DISK} files", armed=True,
+     f"import-tiers: {ARMED_IMPORT_FILES} files", armed=True,
      files=fx(EXIT_RS, "use vstd::prelude::*;\n",
               "use vstd::prelude::*;\nuse vstd::calc;\nuse vstd::calc_macro::*;\n"),
      args=("--only", "import-tiers"))
@@ -1154,7 +1161,8 @@ case("tiers: a file declared by two records (a duplicated table)",
      args=("--only", "import-tiers"))
 case("tiers: the glob is empty while a module is armed", ARMED, 1, "a broken glob, not a pass",
      armed=True, after={**{p: None for p in TREE if p.startswith(("dafny/Q/", "verus/q/"))},
-                        "dafny/Q": None, "dafny/checks": None, "verus/q": None,
+                        "dafny/Q": None, "dafny/R": None, "dafny/checks": None,
+                        "verus/q": None, "verus/r": None,
                         "harness/q/fvh_q": None, "harness/r/fvh_r": None},
      args=("--only", "import-tiers"))
 STATS = "harness/q/fvh_q/q06_stats.py"

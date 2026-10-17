@@ -6,8 +6,8 @@ The review bar is `it-reads`. Live Claude calibration is deferred under D45, not
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R01_solutions.tex  sha256 6d245ce85fdae9a220aae4a1d29356e78966be5265a19b63e6d9392dbc147493
 paper/R01_problems.tex  sha256 fd97bd6b26ec5a21f0ae1b6526733d28f11fa56e54b903373b6533385d025a88
-Solutions/dafny/R/R01_Hello/core/R01_Hello.dfy  sha256 0990375acd8f9bb2fcf8b3c0377201541495d719707d354372d301c5f935defc
-Solutions/verus/r/r01_hello/src/lib.rs  sha256 cb638ddb83a572f8e069958da1b91683e38e11865c16cd684d14a04fe23fec13
+Solutions/dafny/R/R01_Hello/core/R01_Hello.dfy  sha256 150be316fb4259384bb9a6dce96851006594ef4438328d2f91edd4cf99de0e03
+Solutions/verus/r/r01_hello/src/lib.rs  sha256 caaac9b3f7029fce8f5da9852ed71d824068587b21277a4cc27377fdc23c14c7
 Solutions/dafny/R/R01_Hello/agent/R01_AgentRepair.dfy  sha256 b5445c8b5e54952d56e477d2defa17f8b14a2a75bd03e8934381bd6b0f9095b0
 Solutions/verus/r/r01_hello/src/agent.rs  sha256 76c8cd6e176038d876fc6e86b78c00f80e1245f971eca7aec9f804e0e4b780d0
 
