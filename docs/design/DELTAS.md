@@ -3864,3 +3864,17 @@ refreshed. No hand-edited digest, output change or relaxed stale-input rule.
 All20 chapters now lint clean. Rerun static CI and R01/R02 pin checks before
 advancing Basic; keep the failed run as evidence. Private before/after hashes,
 commands and results are archived under author-probes/dv7-freeze/q-option-recapture.
+
+### Δ253 · Ship validated R01/R02 on the local Basic baseline — adopted (2026-10-17 UTC)
+
+Transplant R01/R02 plus the independent export-freeze/manual-induction and
+private R03 checkpoint onto the recreated authoring branch based on39ba47b.
+Combined integration: native Dafny23s, Verus42s, paper4s, rubric0s and harness70s
+pass in20261017T061521Z-1670472; its stale-input static failure is preserved.
+After Δ252's37 real recaptures with byte-identical published Q chapters,
+static author CI20261017T062822Z-1716277 passes in469s. Each R module passes25
+pin checks. Final source leak and study settings pass. Fast-forward local
+basic to this validated descendant, without merging old authoring ancestry
+or changing main. No external push. R03 remains planned/parked with its
+recorded OD8 blocker, R04 building; the complete R core remains unfinished.
+D45 live-validation debt is still unpassed and deferred.

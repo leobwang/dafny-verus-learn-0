@@ -82,3 +82,14 @@ Integration follow-up Δ252: combined CI20261017T061521Z-1670472 has5pass and
 is byte-identical. Native R/paper/rubric/harness pass on the transplanted tree.
 Only expected chapter input metadata and status notes change for the rerun.
 Rerun static, then targeted R01/R02 pins; final leak/study checks precede Basic.
+
+
+## R01/R02 integration accepted — 2026-10-17 UTC
+
+Static-only author CI20261017T062822Z-1716277 passes469s on405a9cf; targeted
+R01 and R02 pins25each/0problems. Prior native R,paper,rubric,harness passes
+are unchanged; first static failure remains recorded. Final source leak and
+study settings are checked after this metadata. Advance basic by fast-forward,
+retain basic-candidate39ba47b as the initial one-squash history anchor, and
+keep main6f453d0 untouched. Full Basic still requires R03–R16; R03 parked,
+R04 active in its separate draft worktree. No model or external push.

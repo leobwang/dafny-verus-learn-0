@@ -220,3 +220,20 @@ static fails on37 stale Q chapter input hashes after the R-only shared-option
 edit. All37 entries have been executed and recaptured with every published
 chapter byte unchanged. All20 chapter lints pass. The static rerun and targeted
 R01/R02 pins still precede Basic advancement; no failed run is relabelled passed.
+
+## 15. R01/R02 added to local Basic (2026-10-17 UTC; Δ253)
+
+The combined integration bar passes with its exact two-run scope: the first
+six-job run20261017T061521Z-1670472 has native Dafny, native Verus, paper,
+rubric and harness passing; its failed static step is retained. After normal
+recapture of37 unchanged Q outputs, static-only author CI
+20261017T062822Z-1716277 passes in469s. R01 and R02 each pass25 targeted pin
+checks with zero problems. The final study settings and source-leak checks
+pass before Basic advances. No native proof body changed for the pin repair.
+
+R01/R02 are shipped on local Basic. Initial Q-only squash39ba47b remains
+available as basic-candidate and is the commit to use for the initial D42
+history check. Later R commits are ordinary descendants of that release;
+legacy author histories remain on separate branches. Main stays design-only.
+R03 is parked and R04 is being built. This does not claim the entire Basic
+course is finished. Live Claude debt remains explicitly deferred under D45.
