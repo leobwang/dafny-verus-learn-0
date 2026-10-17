@@ -36,8 +36,10 @@ here once the policy file is final. A Claude arm runs arm E only, on 12 of the
 
 \textbf{Tasks and strata.} 40 tasks, 20 per language: 10 local tasks per language
 from the course's local cards (authored after the models' release) and 10
-public tasks per language from the pinned sets, drawn with seed 9127 from each
-set's validated pool. No pilot: the public tasks are drawn once.
+public tasks per language from the pinned sets, drawn with seed 9127 from the
+members \texttt{scripts/get\_bench.sh --members <set> --lab Q12} lists for each set
+(its validated pool less Lab 2's tasks, Lab 2's HumanEval problems excluded in both
+languages). No pilot: the public tasks are drawn once.
 
 \textbf{Budget arithmetic.} Qwen: 40 tasks $\times$ 6 calls $\times$ 2 arms
 $= 480$ calls, run as 3 repeats. Claude: 12 tasks $\times$ 6 calls $= 72$

@@ -36,8 +36,12 @@ Pre-register Lab 1 in the PREREG section of your answers file, on every field
 of the template there, with your own numbers: the claim (the three hypotheses,
 each one- or two-sided); the metric and estimator; the arms and policies with
 their prompt hashes and the Claude subset's seed and stratification; the tasks
-and strata (the sets' commits, the validation files' sha256, the draw seed,
-the pilot rule, and the local stratum's composition in each of the two cases
+and strata (the sets' commits, the validation files' sha256, the draw seed and
+the members it draws from: each pool less the tasks another lab's
+\texttt{[[draw]]} record took, excluding Lab 2's HumanEval problems across both
+languages (D39), so the HumanEval-Verus stratum draws from the 74 members
+\texttt{scripts/get\_bench.sh --members humaneval-verus --lab Q12} lists; the
+pilot rule; and the local stratum's composition in each of the two cases
 \texttt{STRATUM.toml} names); the budget arithmetic per arm, with the sentinel
 calls and the throughput assumption and its source, against the registry's
 \texttt{budget}; the generation settings; the cost per arm with its
