@@ -1,0 +1,7 @@
+audit d [{'file': '/tmp/dvl0-dvr3-r13/repairs.dfy', 'line': 1, 'kind': 'include', 'message': 'an included file is not verified by default and audit skips it (Δ3, G9)'}]
+reference seeds v 0
+Traceback (most recent call last):
+  File "/tmp/dvl0-dvr3-r13/check_reference_finish.py", line 9, in <module>
+    findings=lib.audit(str(target),lint_mode='reference');(out/('audit-'+lang+'.json')).write_text(json.dumps([asdict(x) for x in findings],indent=2)+'\n');print('audit',lang,[asdict(x) for x in findings],flush=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: audit() got an unexpected keyword argument 'lint_mode'

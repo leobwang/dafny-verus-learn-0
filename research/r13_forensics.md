@@ -1,0 +1,31 @@
+# R13 — forensic observation ledger
+
+Learner-owned. Commit the six predictions first. Read only the R-half draw
+from `python3 tools/R13/inventory.py`; no label is an instrument observation.
+Keep original files. Run the selected rows through `scripts/test_corpus.py`,
+the canonical corpus executor; retain its scratch and exact instrument logs.
+For each of twelve rows, write: language/ID, original source digests, at least
+two independent instruments and their argv, actual exit/verdict/stage/count,
+holes/findings, raw log hashes, conclusion and residual unknowns. A clean
+instrument can be part of the evidence; two copies of one log are one instrument.
+A stronger frozen-statement comparison may be needed even after two clean checks.
+
+| language / delivery | original digests | instrument A + raw evidence | instrument B + raw evidence | extra comparison / witness | diagnosis and scope |
+|---|---|---|---|---|---|
+| Dafny G02 | ??? | ??? | ??? | ??? | ??? |
+| Dafny G12 | ??? | ??? | ??? | ??? | ??? |
+| Dafny D-05 | ??? | ??? | ??? | ??? | ??? |
+| Dafny D-07 | ??? | ??? | ??? | ??? | ??? |
+| Dafny C-02 | ??? | ??? | ??? | ??? | ??? |
+| Dafny C-08 | ??? | ??? | ??? | ??? | ??? |
+| Verus V02 | ??? | ??? | ??? | ??? | ??? |
+| Verus V11 | ??? | ??? | ??? | ??? | ??? |
+| Verus V12b | ??? | ??? | ??? | ??? | ??? |
+| Verus V13b | ??? | ??? | ??? | ??? | ??? |
+| Verus C-2 | ??? | ??? | ??? | ??? | ??? |
+| Verus C-8 | ??? | ??? | ??? | ??? | ??? |
+
+After your observations, report the healthy-control denominator and false
+accusations, grader-only unknowns, absent taxonomy classes and refusal-only
+coverage. Write your R-v0 section in TRUST.md by hand. Keep deferred live
+contractor/review work as deferred; an author fixture is not a learner session.

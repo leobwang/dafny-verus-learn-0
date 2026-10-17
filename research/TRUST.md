@@ -28,4 +28,13 @@ Learner-owned: you write every section, when the module named in its heading ask
 
 ## R-v0 — R13 (not written yet)
 
+<!-- Write this section yourself after the R-half observations. Bind original
+     files, claims and input domains to exact source/command/report hashes.
+     Separate proved, tested, assumed and unknown. Name front end, translation,
+     VC generation, SMT solver, given layers, libraries, compiler, linker,
+     build tooling, wrappers and agent. Record escape-hatch locations and the
+     reason each component is trusted. Refusal-only vectors stay refusal-only.
+     A coarse native stage does not license invented finer attribution.
+     State false accusations with the healthy-control denominator. -->
+
 ## R-v1 — R16, final (not written yet)

@@ -1,0 +1,109 @@
+# expected/R13.freeze — statement-freeze pins for R13 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R13` from the files as shipped; checked by
+# `scripts/specfreeze --check R13`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R13"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R13_Pipelines/std/R13_Pipelines.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R13_Repairs.ClampIndexR13" = "5c806b60591ba58c477c8c012bf904bc5f1936bfa98693c987f0ded0b6855b8b"
+"R13_Repairs.PairWitnessR13" = "992cf2b2d8945e6d0adf1b3a5d4f38e77c7518c04967ac3115cbabc0782743f9"
+"R13_Repairs.RangeFitsR13" = "21bfe76f470274988a55853079df09556f9d61c6ff454a4b43ae94d998a276e4"
+"R13_Repairs.SaturatingSumR13" = "89343266a94c1504d4787a521ca2273c511363736c7278c2e811cda0731f4ca9"
+[file.frozen_imports]
+"R13_Repairs" = ["c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+
+[[file]]
+path = "verus/r/r13_pipelines/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"clamp_index_r13" = "4d086a01b5e8c3c57bd999c7fdc943e08a733be8e232e5f9810a06a912261631"
+"pair_witness_r13" = "b417eb1d0cc136babd017eb80084ddc47c25638e7b0b244269cc6907ae3065bb"
+"range_fits_r13" = "ea8e6b2cbb51e0e3dc3a6759792a95f81a9afccab39222f9dc2eb31d6af6d069"
+"saturating_sum_r13" = "465ace5447866e60bf376006835f851f6ce09d956eb792fbf130f2e00c477497"
+
+[[file]]
+path = "specimens/R13/P1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R13_EarlyD.ReadForeignR13" = "8326a89488ac4957d1c1902bf6f3e4acb1634cbfd8a0ac3dbccc8278da030faa"
+
+[[file]]
+path = "specimens/R13/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"read_syntax_r13" = "82138e463e83cf26ff557bc9e6e7e2185cb840786b4ce778cb842d4a08713146"
+
+[[file]]
+path = "specimens/R13/P4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R13_RuntimeD.CheckRuntimeR13" = "7425f8b9b1c7bee374819b92a5bd7718cbbd7428526857ade5826cccefa0922f"
+"R13_RuntimeD.ProvedBoundR13" = "a02451b4f18cc8ff17d1011a992793149e76338e9c033ec7a1d227de57a73b89"
+
+[[file]]
+path = "specimens/R13/P5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"checked_identity_r13" = "7e0f4e3822e02166c0185e78483be0ee8776cb3aae2e5f948dc7d61cf63e2bdf"
+
+[[file]]
+path = "specimens/R13/proof-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R13_ProofD.RequireEvidenceR13" = "f855121a548218385aa8868dfcae069ae355362b756d21300df7572dd3c233de"
+
+[[file]]
+path = "specimens/R13/proof-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"require_evidence_r13" = "0fb85f6f8ef47c3245c1c64144441fb32fbfa858533625120c7fbf372ac67d58"
+
+[[file]]
+path = "specimens/R13/selection-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R13_SelectedD.CleanDeclarationR13" = "2e2d7846961499f3177b863aa3c94a32a19d3714689b3d8f82bad816e055326b"
+"R13_SelectedD.UnfinishedDeclarationR13" = "e1200adbe3c2e2163a7b6e879963a06742e1081890ed08b108a903f4e48000df"
+
+[[file]]
+path = "specimens/R13/selection-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"clean_declaration_r13" = "60330b2ed94a89e33408732d0635d8875b6cc4afd6a6eb4822392b5cbb5878bc"
+"unfinished_declaration_r13" = "bc1eccfeb8ebb0f9bc86b6af6122f740008131efe6c0f6f0d0cb4880dca022d2"
+
+[[file]]
+path = "dafny/R/R13_Pipelines/agent/R13_AgentForensic.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R13_ForensicDelivery.DeliveredScoreR13" = "c5bbd8786ba94df4ae071af896d0ae6a9160c33c185d34abd4db8e024124d0b9"
+"R13_ForensicDelivery.SupportScoreR13" = "78716e54a0e06a1b426efae62a6e8e9fcaee4bd7228357b702fd619dfd33727e"
+[file.frozen_imports]
+"R13_ForensicDelivery" = []
+
+[[file]]
+path = "verus/r/r13_pipelines/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"delivered_score_r13" = "9ad42a726bd6a912978eaf1aed057fd1621f09299522ec2727eb5b1d8f248ee6"
+"support_score_r13" = "b4c4501d87ed0dd2a0fe802d2a128d2ba2316eaaaa24cbf7ecf9981e2aea4119"

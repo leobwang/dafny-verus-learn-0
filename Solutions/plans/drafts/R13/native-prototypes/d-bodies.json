@@ -1,0 +1,6 @@
+{
+  "T1": "// did: retain an in-range index and clamp only the out-of-range case.\n  at:=if i<bound then i else bound-1;",
+  "H1": "// did: compare against the remaining headroom before adding.\n  if a<=18446744073709551615-b {out:=a+b;} else {out:=18446744073709551615;}",
+  "H2": "// did: guard the subtraction, preserving the mathematical sum predicate.\n  fits:=pos<=limit && need<=limit-pos;",
+  "H3": "// did: supply executable data and a concrete semantic split witness.\n  s:=[c,d];\n  assert s[..1]==[c] && s[1..]==[d];\n  assert Matches(Chr(c),s[..1]) && Matches(Chr(d),s[1..]);\n  assert exists i | 0<=i<=|s| :: Matches(Chr(c),s[..i]) && Matches(Chr(d),s[i..]);"
+}

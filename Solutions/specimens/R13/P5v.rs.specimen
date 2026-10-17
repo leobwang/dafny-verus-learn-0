@@ -1,0 +1,12 @@
+// Reference Solution.
+// item: R13.P5v verdict
+// Predict verification, then --test on the complete file.
+// CHECK P5v
+// after: R13.P5v
+use vstd::prelude::*;
+verus! {pub proof fn checked_identity_r13() {assert(6+7==13);}}
+#[cfg(test)] mod build_probe {
+#[link(name="r13_unavailable_library")]
+extern "C" {fn unavailable_r13();}
+#[test] fn exercise_identity_r13() {assert_eq!(6+7,13);}
+}

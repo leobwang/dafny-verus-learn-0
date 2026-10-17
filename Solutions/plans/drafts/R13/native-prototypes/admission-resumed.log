@@ -1,0 +1,14 @@
+retained R13.T1d
+retained R13.H1d
+retained R13.H2d
+retained R13.H3d
+retained R13.T1v
+R13.H1v failed verify {'E0 seed=1': 'fails(error)', 'E0 seed=2': 'fails(error)', 'E0 seed=3': 'fails(error)', 'E0H seed=1': 'fails(error)', 'E0H seed=2': 'fails(error)', 'E0H seed=3': 'fails(error)', 'E1 seed=1': 'fails(error)', 'E1 seed=2': 'fails(error)', 'E1 seed=3': 'fails(error)', 'E2 seed=1': 'fails(error)', 'E2 seed=2': 'fails(error)', 'E2 seed=3': 'fails(error)', 'EM seed=1': 'fails(error)', 'TRIV seed=1': 'fails(error)', 'TRIV seed=2': 'fails(error)', 'TRIV seed=3': 'fails(error)'}
+R13.H2v failed verify {'E0 seed=1': 'fails(error)', 'E0 seed=2': 'fails(error)', 'E0 seed=3': 'fails(error)', 'E0H seed=1': 'fails(error)', 'E0H seed=2': 'fails(error)', 'E0H seed=3': 'fails(error)', 'E1 seed=1': 'fails(error)', 'E1 seed=2': 'fails(error)', 'E1 seed=3': 'fails(error)', 'E2 seed=1': 'fails(error)', 'E2 seed=2': 'fails(error)', 'E2 seed=3': 'fails(error)', 'EM seed=1': 'fails(error)', 'TRIV seed=1': 'fails(error)', 'TRIV seed=2': 'fails(error)', 'TRIV seed=3': 'fails(error)'}
+R13.H3v failed verify {'E0 seed=1': 'fails(error)', 'E0 seed=2': 'fails(error)', 'E0 seed=3': 'fails(error)', 'E0H seed=1': 'fails(error)', 'E0H seed=2': 'fails(error)', 'E0H seed=3': 'fails(error)', 'E1 seed=1': 'fails(error)', 'E1 seed=2': 'fails(error)', 'E1 seed=3': 'fails(error)', 'E2 seed=1': 'fails(error)', 'E2 seed=2': 'fails(error)', 'E2 seed=3': 'fails(error)', 'EM seed=1': 'fails(error)', 'TRIV seed=1': 'fails(error)', 'TRIV seed=2': 'fails(error)', 'TRIV seed=3': 'fails(error)'}
+reference seeds d 0
+Traceback (most recent call last):
+  File "/tmp/dvl0-dvr3-r13/check_gates.py", line 17, in <module>
+    findings=lib.audit(str(target),lint_mode='reference');(out/('audit-'+lang+'.json')).write_text(json.dumps([x.to_dict() for x in findings],indent=2)+'\n');print('audit',lang,len(findings),flush=True);assert not findings
+                                                                                                               ^^^^^^^^^
+AttributeError: 'Finding' object has no attribute 'to_dict'

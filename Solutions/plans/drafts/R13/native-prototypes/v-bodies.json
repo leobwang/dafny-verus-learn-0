@@ -1,0 +1,6 @@
+{
+  "T1": "// did: preserve the index in range and clamp only the other branch.\n  if i<bound {i} else {bound-1}",
+  "H1": "// did: compare headroom before executing bounded addition.\n  if a<=u64::MAX-b {a+b} else {u64::MAX}",
+  "H2": "// did: guard subtraction while keeping the full mathematical domain.\n  pos<=limit && need<=limit-pos",
+  "H3": "// did: construct a nonempty vector and connect its two slices to the existential.\n  let s=vec![c,d];\n  proof {\n   assert(s@.subrange(0,1)=~=seq![c]);\n   assert(s@.subrange(1,2)=~=seq![d]);\n   assert(matches(Re::Chr(c),s@.subrange(0,1)));\n   assert(matches(Re::Chr(d),s@.subrange(1,2)));\n   assert(exists|i:int| 0<=i<=s.len() && matches(Re::Chr(c),#[trigger] s@.subrange(0,i)) && matches(Re::Chr(d),s@.subrange(i,s.len() as int)));\n  }\n  s"
+}

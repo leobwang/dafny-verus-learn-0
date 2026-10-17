@@ -1,0 +1,9 @@
+// Reference Solution.
+// item: R13.P2v verdict
+// Predict the native verdict and stage on this exact source.
+// CHECK P2v
+// after: R13.P2v
+use vstd::prelude::*;
+verus! {
+ pub proof fn read_syntax_r13() {assert(5===5);}
+}

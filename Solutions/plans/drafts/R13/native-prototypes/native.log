@@ -1,0 +1,9 @@
+d verified verify 4 0
+v failed resolve 0 0
+9 `if` and `else` have incompatible types
+0 gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, Δ11); exit 1
+Traceback (most recent call last):
+  File "/tmp/dvl0-dvr3-r13/check_native.py", line 11, in <module>
+    assert all(x['verdict']=='verified' for x in rows)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

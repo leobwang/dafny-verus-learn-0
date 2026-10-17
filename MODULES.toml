@@ -2355,7 +2355,7 @@ concept_items = {}
 id = "R13"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "Pipelines and trust"
 tier = ""
 topic = ""
@@ -2387,8 +2387,8 @@ write_v = []
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
-imports = {}
+admissible = { "R13.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R13.H1d" = { admitted = true, minutes = 10, fallback = "" }, "R13.H2d" = { admitted = true, minutes = 10, fallback = "" }, "R13.H3d" = { admitted = true, minutes = 10, fallback = "" }, "R13.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R13.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R13.H2v" = { admitted = true, minutes = 10, fallback = "" }, "R13.H3v" = { admitted = true, minutes = 10, fallback = "" } }
+imports = { "dafny/R/R13_Pipelines/std/R13_Pipelines.dfy" = "std", "dafny/R/R13_Pipelines/agent/R13_AgentForensic.dfy" = "std", "verus/r/r13_pipelines/src/lib.rs" = "all", "verus/r/r13_pipelines/src/agent.rs" = "all" }
 concept_items = {}
 
 [[module]]

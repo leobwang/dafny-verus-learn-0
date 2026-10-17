@@ -1,0 +1,36 @@
+{
+  "lang": "dafny",
+  "target": "/tmp/dvl0-dvr3-r13/repairs.dfy",
+  "exit_code": 0,
+  "verdict": "verified",
+  "stage": "verify",
+  "verified_count": 4,
+  "holes": [],
+  "diagnostics": [],
+  "findings": [],
+  "per_symbol": {
+    "R13_Repairs.SaturatingSumR13": "verified",
+    "R13_Repairs.ClampIndexR13": "verified",
+    "R13_Repairs.PairWitnessR13": "verified",
+    "R13_Repairs.RangeFitsR13": "verified"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-131502-gxpi5jap",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r13-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+    "verify",
+    "/tmp/dvl0-dvr3-r13/repairs.dfy",
+    "--json-output",
+    "--resource-limit",
+    "5000000",
+    "--cores",
+    "2",
+    "--solver-path",
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r13-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+    "--allow-axioms",
+    "false",
+    "--allow-warnings",
+    "false",
+    "--log-format",
+    "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-131502-gxpi5jap/tasks.csv"
+  ]
+}

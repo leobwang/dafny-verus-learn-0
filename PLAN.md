@@ -1739,7 +1739,7 @@ remain refusal-only coverage with the original wrapper tests as evidence.
 
 The390-minute plan stays: native T1d/v5each and H1–H3d/v10each account for
 test-out10 and holes60. T1 constructs an in-range clamped index; H1 repairs
-an unchecked arithmetic delivery with an exact overflow-safe midpoint; H2
+an unchecked arithmetic delivery with an exact saturating sum; H2
 implements a full-domain buffer-range predicate without adding a smaller
 precondition; H3 repairs a vacuous test with a concrete nonempty two-character
 regex witness for its original A1 language. Each repair includes attribution,

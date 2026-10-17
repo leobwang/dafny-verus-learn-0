@@ -1,0 +1,8 @@
+// Reference Solution.
+// item: R13.P1d verdict
+// Predict the native verdict and stage; do not guess from message wording.
+// CHECK P1d
+// after: R13.P1d
+module R13_EarlyD {
+ lemma ReadForeignR13() {assert AbsentStageTokenR13;}
+}

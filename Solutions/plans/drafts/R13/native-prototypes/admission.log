@@ -1,0 +1,6 @@
+R13.T1d failed verify {'maxauto': 'failed', 'shipped:seed=1': 'failed', 'shipped:seed=2': 'failed', 'shipped:seed=3': 'failed'}
+Traceback (most recent call last):
+  File "/tmp/dvl0-dvr3-r13/check_gates.py", line 10, in <module>
+    assert result.verdict=='verified',row
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'item': 'R13.T1d', 'verdict': 'failed', 'stage': 'verify', 'per_symbol': {'maxauto': 'failed', 'shipped:seed=1': 'failed', 'shipped:seed=2': 'failed', 'shipped:seed=3': 'failed'}, 'findings': []}

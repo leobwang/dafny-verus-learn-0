@@ -1,0 +1,25 @@
+# R13 withheld answer tripwires, author-only.
+# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
+# source: at:=if i<bound then i else bound-1; (R13.T1d)
+at:=if\s+i<bound\s+then\s+i\s+else\s+bound\-1;
+# from Solutions/verus/r/r13_pipelines/src/lib.rs
+# source: if i<bound {i} else {bound-1} (R13.T1v)
+if\s+i<bound\s+\{i\}\s+else\s+\{bound\-1\}
+# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
+# source: if a<=18446744073709551615-b {out:=a+b;} else {out:=18446744073709551615;} (R13.H1d)
+if\s+a<=18446744073709551615\-b\s+\{out:=a\+b;\}\s+else\s+\{out:=18446744073709551615;\}
+# from Solutions/verus/r/r13_pipelines/src/lib.rs
+# source: if a<=u64::MAX-b {a+b} else {u64::MAX} (R13.H1v)
+if\s+a<=u64::MAX\-b\s+\{a\+b\}\s+else\s+\{u64::MAX\}
+# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
+# source: fits:=pos<=limit && need<=limit-pos; (R13.H2d)
+fits:=pos<=limit\s+\&\&\s+need<=limit\-pos;
+# from Solutions/verus/r/r13_pipelines/src/lib.rs
+# source: pos<=limit && need<=limit-pos (R13.H2v)
+pos<=limit\s+\&\&\s+need<=limit\-pos
+# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
+# source: s:=[c,d]; (R13.H3d)
+s:=\[c,d\];
+# from Solutions/verus/r/r13_pipelines/src/lib.rs
+# source: let s=vec![c,d]; (R13.H3v)
+let\s+s=vec!\[c,d\];

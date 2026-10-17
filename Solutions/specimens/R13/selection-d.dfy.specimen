@@ -1,0 +1,6 @@
+// after: R13.P6dv
+// Reference Solution.
+module R13_SelectedD {
+ lemma CleanDeclarationR13() ensures 11<12 {}
+ lemma UnfinishedDeclarationR13(n:int) ensures n==11 {}
+}
