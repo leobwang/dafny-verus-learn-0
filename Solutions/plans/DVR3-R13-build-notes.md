@@ -133,8 +133,8 @@ Native8/8admissions, four reference3seed sweeps/four clean audits, full52-row
 R-corpus115s replay,8fresh bank controls, inventory4tests, paper5TeXbuilds and
 32guarded pins pass. Chapter4503words/6boxes/3diagrams/14captures,23frozen
 statements in12files. Frozen-source leak scan30modules/2378publicfilespasses.
-Source archive has3370tracked SHA256entries and32referenced native raw roots,
-0missing: ~/.cache/dafny-verus-learn-0/author-probes/dvr3/r13-final-20261017/.
+Source archive has3370tracked SHA256entries and32referenced construction-native
+raw roots,0missing construction roots: ~/.cache/dafny-verus-learn-0/author-probes/dvr3/r13-final-20261017/.
 Finalize the full public/private CI trees and metadata commit separately from
 the checked source. R12closure metadata9a7e113is inherited after CI; its PLAN
 append/CLAUDE merge preserves both module statuses. Native R13bytes unchanged.
@@ -142,3 +142,13 @@ append/CLAUDE merge preserves both module statuses. Native R13bytes unchanged.
 Coarse Verus link attribution stays recorded/skipped with actual native evidence.
 D45live grade/contractor/model work and R03Unicode/R11PointsTo remain deferred.
 R14–R16and final Basic assembly are still unfinished.
+
+Archive scope clarification: successful CI automatically deletes its transient
+tool scratch (ci.sh lines1300–1302). All59native raw_dir paths named in the
+public CI JSON have consequently been pruned. Record those unavailable paths
+separately in ci-pruned-native-roots.json; do not claim they were copied or
+that every referenced CIraw tree is present. The32construction-native trees
+and full retained public/private CIlogs/structured results are preserved. This
+is a retention limit, not a failed proof or a reason to invent evidence. Under
+the user directive, record and skip the unavailable transient trees and keep
+building. There is no need to rerun passed CI solely to simulate old artifacts.

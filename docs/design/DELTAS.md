@@ -4513,7 +4513,13 @@ compile/test command and linker diagnostic, skip unsupported finer attribution,
 and never claim a successful executable. This records a limit, not a waiver.
 
 Canonical leak scan30modules/2378publicfilespasses. Private archive3370tracked
-hashes and32referenced native roots/0missing preserves construction, original
+hashes and32construction-native roots/0missing construction roots preserves construction, original
 failures, final workflow and full public/private CI evidence. D45live actors/
 grades/models, R03Unicode and R11PointsTo remain deferred. R14–R16and final
 Basic release assembly remain; no provider, budget, grade or actor event occurs.
+
+Δ273archive clarification: passing CIprunes its native scratch;59raw_dir paths
+in its retained JSON are no longer available. They are explicitly indexed as
+CI-pruned, not included in the32preserved construction-root count. Complete
+retained CIlogs/structured results remain archived. This is not a proof failure
+or a claim that every raw tree survived. Record the retention limit and continue.
