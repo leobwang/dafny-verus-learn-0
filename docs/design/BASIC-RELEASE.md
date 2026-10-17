@@ -189,3 +189,26 @@ Sections1–12 retain dated checkpoint history. Their earlier running/queued
 or not-promoted text describes that checkpoint; this release entry and the
 current freeze table give the final local state. Re-run the read-only history
 checker against the initial release commit, not later R development commits.
+
+## 14. R integration candidate and recorded R03 blocker (2026-10-17 UTC)
+
+Initial Q release is39ba47b, still the sole-parent squash atop main. Its old
+source author history is preserved at authoring-q-archive-20261017 (40a9b5a).
+Authoring was recreated from Basic, then validated R01/R02 and the independent
+export-freeze/manual-induction checkpoint were transplanted with cherry-picks.
+No legacy authoring ancestry is merged into the released line.
+
+R01/R02 candidate records are shipped while combined-tree static/native/paper/
+rubric/harness checks run. Basic advances only after that integration bar,
+module-specific pins, source leak and study settings pass. Earlier R evidence
+is indexed by Δ251 and protected DVR1 notes. This is not a claim that every R
+module or the full Basic objective is complete.
+
+R03's standalone native cores and agent references pass, but its canonical
+module packaging is blocked by OD8: the pinned Verus char conversion lacks a
+usable std contract, and the verified UTF-8 alternative reaches libraries
+before R07. Both direct and A1-transitive attempts were rejected by the tier
+checker. The draft and evidence are preserved privately; no tier exception,
+new trust assumption or relaxed gate is adopted. R03 stays planned. Record
+and skip that blocker while R04 is built independently. Resolve primitive
+placement or a prelude-only implementation before accepting R03.

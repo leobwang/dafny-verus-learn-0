@@ -55,3 +55,22 @@ Everything under `/tmp/dvl0-dvr1-build/`, to archive under guarded `~/.cache/daf
 - Final admission: `r01-empty-body-release-fixed.log`, 8/8. All given layers and reference units/agents have the seeded evidence listed above. Completed-reference study workflow is 11/11; no model.
 - Final full source-leak audit is repeated after staging. Evidence copied under the guarded `author-probes/dvr1/r01-final-20261017/` directory, including failed setup attempts explicitly superseded by the final runs.
 - R02 development is isolated in `../dafny-verus-learn-0-r02-authoring`, branch `authoring-r02`, initially at `ddd1f7a`. Carry this final R01 evidence/fix commit forward there before arming R02. Its registry stays planned while prototypes and remaining kit are prepared. Do not copy the R01 active CI state into the Q release tree.
+
+
+## Basic transplant checkpoint — 2026-10-17 UTC
+
+Initial Q release39ba47b is local basic/basic-candidate, sole parent main6f453d0.
+Full author14/14 and final study12pass+2expectedskip; final leak18modules/1642
+public files, course map and history pass. Archived authoring40a9b5a is now
+authoring-q-archive-20261017. No push. Canonical authoring starts at Basic.
+
+Transplants: R01 ddd1f7a->151bfa0, final6bd5fab->9366fd9; R02
+34b33b5->0d275c7, finalb354945->687e538; R03 tooling/private parked draft
+659b565->cad7034. README retained released Q status; Δ248–250 remain before
+Δ251. No legacy ancestry merged. R01/R02 candidate status is shipped for
+combined-tree verification; Basic waits for focused integration CI/pins/leak.
+R03's OD8 primitive-packaging blocker remains recorded and skipped, planned.
+Active R04 draft still lives in ../dafny-verus-learn-0-r04-authoring, with
+standalone native paired source/ref cores; source6holes/errors0 each, refs
+17/17 native tasks, zero holes/errors. Admission/predictions/kit are in progress.
+Live Claude debt remains deferred under D45.
