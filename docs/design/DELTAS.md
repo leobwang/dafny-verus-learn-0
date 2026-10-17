@@ -4310,3 +4310,14 @@ model or proof code changes. Targeted chapter/reference lint passes; the
 initial focused CI's static failure and corrected replay remain separate
 results. The20-command scripted STUDY workflow and37guarded pins pass;
 neither supplies a measured human/actor session. D45/R03 remain recorded skips.
+
+
+R10 Δ266 local follow-up: corrected static1/1passes in640s on8e78fa5. The
+original five other CI jobs and this corrected-static replay meet six local
+construction bars across two runs. Canonical admission8/8, four references
+under three seeds,37guarded pins and the20-command scripted STUDY workflow
+pass. Five native prediction receipts and all three default actual-source
+tools are retained. V proof tokens and reference slot answers are unchanged
+by the format correction. Exact archive/frozen-source evidence is in protected
+notes. This completes local R10 construction, not a Basic shipment or live
+D45 validation. R11–R16 and the parked R03 remain separately recorded.

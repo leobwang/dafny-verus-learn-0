@@ -172,3 +172,31 @@ slot parsing before any prediction attempt because the generic reference
 comment used // rather than #; the corrected fixture removes that header,
 which is the same reference-only format correction above. Native answers
 and source code remain unchanged. Final guarded-source pins37/37 pass.
+
+
+## Local completion (not a Basic release)
+
+Corrected static PASS1/1,640s, clean8e78fa5, run20261017T140900Z-534751.
+Original98b7dad run20261017T134828Z-430710 has5pass/1fail,1191s:
+static641failedonlychapter/referenceformat; R-D235,R-V204,paper39,rubric0,
+harness72pass. These are six construction bars across2runs, not a one-run6/6.
+The corrected V reference token stream exactly equals the native-tested old
+stream; .slots answers exactly equal the fixture's header-stripped old file.
+The only reference differences are receipt/comment formatting. Both corrected
+linters pass, and the corrected static run checks the complete reference tree.
+
+Canonical admission8/8,4complete references×3pinned seeds,5reference predictions,
+37guarded pins,4reference audits, all20STUDY workflow commands/5prediction
+receipts, all3default actual-source tools,19native captures/7Vsidecars (4sealed),
+5private TeX builds and the complete local semantic negative controls pass.
+R08/R09 changed-context capture replays pass; their native source/statements
+are unchanged. Full global wrapper regression is separately PASS1/1,2388s.
+The final frozen scan and source/archive binding follow this metadata update.
+
+Archive author-probes/dvr2/r10-final-20261017 retains the scratch corpus,
+source/code-equivalence provenance, both CI runs and tracked source hashes.
+D45 live acceptance/actor/calibration debt stays deferred, never passed. R03
+remains parked. R10registry is authoring, so instructor skills still refuse
+it until release. R11–R16 and final full release/history validation remain work.
+
+Final frozen STUDY scan: leak verifier: 27 module(s), 2072 public files scanned, OK.
