@@ -1841,3 +1841,11 @@ harness/rubric replay. Original failures remain recorded. Final chapter5671
 words/5boxes/3diagrams/14captures,30pins and29module/2252public-file leak scan
 pass. The507referenced native raw roots are archived with0missing. D45live
 work stays deferred, the unused public slice unrun, and R03/R11skips unchanged.
+
+
+R13§15closure (Δ273): checked6fba3a5passes a single six-job CI6/6in1513s and
+16scripted STUDY commands/8receipts, with original agent snapshots. All8native
+admissions, four3seed sweeps/audits,52R-corpus rows,26compiled cases/language
+and32pins pass. Chapter4503words/6boxes/3diagrams/14captures,30module/2378file
+leak scan and archived32referenced native roots/0missing. Authoring candidate,
+not shipment/live actor outcome; D45/R03/R11and coarse-link-stage skips stand.

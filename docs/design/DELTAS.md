@@ -4487,3 +4487,33 @@ planning MDE and unchanged budgets stand. D45live model/grade/contractor work
 and the unused public slice remain deferred/unrun; no event is fabricated.
 R03Unicode and R11PointsTo remain their recorded skips. Basic assembly awaits
 the remaining R core and final release checks.
+
+
+## Δ273 — R13 pipelines and R-half forensic local closure (2026-10-17)
+
+R13is a complete local authoring candidate on6fba3a5, not shipped. Canonical
+8/8admissions and four complete references under3seeds/four audits pass. The
+practice repairs preserve full original domains; the forensic delivery exposes
+a helper hole behind a public caller. Actual-source compiled clients pass26
+cases per language, while shipped4-hole defaults stop at the gate.
+
+Single clean-STUDY CI20261017T183822Z-1421979passes6/6in1513s. Final scripted
+STUDY workflow16/16commands/8receipts preserves original agent snapshots and
+checks gates/audits, clients, unlabelled source inventory and the12-row R-half
+mixed draw. Full R-half canonical replay52/52rows passes in115s:34constructs,
+8healthy controls and10refusal-only coverage rows. A selected replay does not
+re-run whole-corpus partition/catalog checks. Inventory exposes no evaluator
+labels;4isolation/provenance controls pass. No poisoning build is executed.
+
+Chapter4503words/6predictions(including2paired)/3diagrams/14native captures,
+32pins, frozen statements23in12files, fiveTeXbuilds and12-question/disjoint6
+bank with8native controls pass. Card12.3 is exact local5238–5266/SHA256bound.
+Pinned Verus records a linking failure at coarse stageverify; retain its raw
+compile/test command and linker diagnostic, skip unsupported finer attribution,
+and never claim a successful executable. This records a limit, not a waiver.
+
+Canonical leak scan30modules/2378publicfilespasses. Private archive3370tracked
+hashes and32referenced native roots/0missing preserves construction, original
+failures, final workflow and full public/private CI evidence. D45live actors/
+grades/models, R03Unicode and R11PointsTo remain deferred. R14–R16and final
+Basic release assembly remain; no provider, budget, grade or actor event occurs.

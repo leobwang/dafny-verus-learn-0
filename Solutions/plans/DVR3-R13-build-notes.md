@@ -114,3 +114,31 @@ Map imports are214after removal, and R12chapter5671words supersedes its earlier
 14source-bound chapter captures; no output sidecar discloses prediction answers.
 All four references passed their proper-context sweeps/audits. Native source
 bytes and R13statements are unchanged by this inheritance. Final CI/STUDY next.
+
+
+## Local completion — checked source6fba3a5
+
+R13is locally complete, still authoring/not shipped. Single focused clean-STUDY
+CI20261017T183822Z-1421979on6fba3a5passes6/6in1513s: static711,D379,V295,
+paper45,rubric0,harness83. All prior explicit source controls stand; no checker
+waiver, model/provider call, invented grade or actor transcript.
+
+Final scripted STUDY workflow passes16/16commands on6fba3a5with8receipts
+(6predictions+2test-outs). It preserves original agent files before author
+stand-in deliveries, then full gates/audits,26compiled observations each language,
+source inventory and actual12-row mixed R-half corpus replay. Snapshots/receipts
+are author mechanics, not a learner or live contractor performance claim.
+
+Native8/8admissions, four reference3seed sweeps/four clean audits, full52-row
+R-corpus115s replay,8fresh bank controls, inventory4tests, paper5TeXbuilds and
+32guarded pins pass. Chapter4503words/6boxes/3diagrams/14captures,23frozen
+statements in12files. Frozen-source leak scan30modules/2378publicfilespasses.
+Source archive has3370tracked SHA256entries and32referenced native raw roots,
+0missing: ~/.cache/dafny-verus-learn-0/author-probes/dvr3/r13-final-20261017/.
+Finalize the full public/private CI trees and metadata commit separately from
+the checked source. R12closure metadata9a7e113is inherited after CI; its PLAN
+append/CLAUDE merge preserves both module statuses. Native R13bytes unchanged.
+
+Coarse Verus link attribution stays recorded/skipped with actual native evidence.
+D45live grade/contractor/model work and R03Unicode/R11PointsTo remain deferred.
+R14–R16and final Basic assembly are still unfinished.
