@@ -313,3 +313,35 @@ waiver. Update registry/counts/freeze and only the changed shipped-Python chapte
 capture. Remaining native/paper bytes are unchanged. The20-command final STUDY
 workflow must omit the six nonexistent facade gate/audit commands and retain
 seven receipts; its original26-command result remains historical evidence.
+
+
+## Local completion — repaired source b574cfa
+
+R12is locally complete as an authoring candidate, not shipped. Original CI
+20261017T180841Z-1220772on0eaf058passes native D/V,paper,rubric and retains
+its static/name and harness/empty-TRIV failures:4/6in1461s. Repaired-source CI
+20261017T183735Z-1417354on clean STUDY b574cfa passes static/rubric/harness3/3
+in779s. Native source/reference/check bytes are identical from0eaf058to b574cfa;
+all six focused bars therefore pass across the explicitly identified runs.
+No first failure was erased or called a pass. The complete central reference
+passes159cases, preserving all15provided-model boundary controls. Frozen core,
+CI/checkers and name/genre waivers are unchanged.
+
+Final scripted STUDY workflow on b574cfa passes20/20commands and7receipts
+(5predictions+2test-outs). It stages author stand-ins, keeps original profiler
+source/tests before delivery, and checks source gates/audits,66compiled cases
+each language, actual trace, locked plans and refusal of missing registration.
+It is not a learner, contractor, grader or model outcome. The earlier26-command
+workflow remains historical evidence for the pre-packaging source. Final chapter
+5671words supersedes5701and5642historical counts;5boxes/3diagrams/14captures
+remain, with30pins. Source leak verifier29modules/2252publicfilespasses.
+
+Immutable source/evidence archive:
+~/.cache/dafny-verus-learn-0/author-probes/dvr2/r12-final-20261017/
+Source tar+3299tracked SHA256entries, construction and both public/private CI
+trees, final workflow,507referenced external native raw roots,0missing. The
+closure manifest names both CI source revisions and their exact scopes. The
+metadata follow-up commit will be recorded separately from the checked source.
+Live Labα/model arms, genuine grades/registrations and contractor sessions
+remain deferred under D45. The unused public slice remains reserved/unrun;
+R03Unicode and R11PointsTo stay parked. No quota, grade, provider or actor event.

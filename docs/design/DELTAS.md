@@ -4459,3 +4459,31 @@ Vcomparison sidecars. All30pins, exact local card pins, updated TeX builds,
 source/statement/frame checks and route check pass. Final scripted STUDY workflow
 and focused clean-source CI remain before local completion; D45 live work stays
 deferred. This corpus source build is not a Basic shipment or empirical result.
+
+
+## Δ272 — R12 local closure with strict harness packaging (2026-10-17)
+
+The local R12candidate is complete on b574cfa, still authoring/not shipped.
+First CI0eaf058passed native D/V,paper,rubric and exposed five disjointness name
+hits plus empty TRIV lists on redundant API facades. Rename the provided data
+classes, compose the existing frozen MockPolicy dispatcher, remove the three
+facades, and retain all15model controls in the single learner engine suite.
+The complete reference now passes159cases. No frozen-core/checker/CI change,
+empty-list waiver, new convention or name waiver was introduced.
+
+Original CI20261017T180841Z-1220772retains4/6in1461s. Clean repaired-source
+CI20261017T183735Z-1417354passes static/rubric/harness3/3in779s. Native and
+paper bytes are unchanged, so all six bars pass across the identified runs.
+Final STUDY workflow20/20commands,7receipts, actual source gates/audits,
+66compiled observations each language, own LSP trace, locked plans and missing-
+registration refusal pass. These are scripted author controls, not live actors.
+
+Final chapter5671words/5boxes/3diagrams/14captures and30pins pass, superseding
+historical5642/5701counts. Canonical leak scan29modules/2252publicfilespasses.
+The private final archive has3299tracked hashes and507referenced native raw
+roots,0missing, with both full CI trees and final workflow. The40native-task/
+20cluster corpus,320policy replays plus drift rejection, exploratory infinite
+planning MDE and unchanged budgets stand. D45live model/grade/contractor work
+and the unused public slice remain deferred/unrun; no event is fabricated.
+R03Unicode and R11PointsTo remain their recorded skips. Basic assembly awaits
+the remaining R core and final release checks.
