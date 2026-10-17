@@ -391,7 +391,7 @@ SOLVER_BUDGET_GB = 48
 @functools.lru_cache(maxsize=1)
 def _slice_ready():
     """Set the shared solver slice's bound (MemoryMax=SOLVER_BUDGET_GB, MemorySwapMax=0,
-    runtime only: no sudo, no unit file) and check that it took. Once per process;
+    runtime only: no root privileges, no unit file) and check that it took. Once per process;
     otherwise CapError (a solver never runs outside the shared bound)."""
     want = SOLVER_BUDGET_GB * 1024 ** 3
     try:
