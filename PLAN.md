@@ -1726,3 +1726,47 @@ Provided policy rejects an already-green original form, and proof-call admission
 requires unique same-namespace ghost bindings without shadowing. Final source
 CI/STUDY closure remains before declaring local completion. D45 live work stays
 deferred; no registration, grade, run, reserve or provider event is fabricated.
+
+
+## 15. Band 3 item plan — R13 pipelines (2026-10-17)
+
+Plan before activation, source parent0eaf058. R12 remains an immutable STUDY
+source while its six-job CI finishes; its26-command scripted workflow passes.
+R13 is planned/admission0. Record D45 live forensic contractor/review sessions
+as deferred and keep building native sources, own captures and scripted checks.
+Do not execute build poisoning: cargo/build.rs/config and toolchain vectors
+remain refusal-only coverage with the original wrapper tests as evidence.
+
+The390-minute plan stays: native T1d/v5each and H1–H3d/v10each account for
+test-out10 and holes60. T1 constructs an in-range clamped index; H1 repairs
+an unchecked arithmetic delivery with an exact overflow-safe midpoint; H2
+implements a full-domain buffer-range predicate without adding a smaller
+precondition; H3 repairs a vacuous test with a concrete nonempty two-character
+regex witness for its original A1 language. Each repair includes attribution,
+original-claim/frame review, native gate and audit. No native hole implements
+the later solo trust-report. Only actual empty/default/max-auto/seed gates can
+admit these rows; a failed item keeps0minutes until fixed or explicitly parked.
+
+Stage attribution uses five own native prediction subjects with real Result
+fields and raw --log evidence: parse/resolve/verify/compile distinctions,
+selected versus full-target scope, and a successful proof with a failed runtime
+expectation. R13 does not teach another JSON parser or LSP client. Actual source
+bytes and pin/tool options accompany evidence; a simulated receipt is never
+called a native run. Three diagrams explain stage barriers, the TCB and evidence
+composition. Banks have12questions/disjoint6draws and two paired PP subjects.
+
+R13 forensics uses only fvh.corpus.load_half(lang,"R"). The existing manifests
+already partition the halves. Keep label data out of delivery-facing tools.
+Select at least4constructs per language plus healthy controls; collect at least
+two instruments on every selected delivery, even when an instrument is clean.
+AllR-half constructs/covered rows remain indexed for R16, with the per-language
+14-family scope and X09/X14/X18 gaps stated. UNKNOWN is required on grader-only
+classes; never infer an accusation from a missing observation or corpus label.
+The frozen corpus runner remains the only corpus executor. Published fixtures
+and the author replay retain their distinction from learner diagnoses.
+
+Paper12.3 uses its exact local card excerpt and provenance. Add stage-evidence
+and no-kernel trust analyses, blank learner forensic/trust ledgers, production
+review rubric and gold/flawed calibration fixtures. No live grade or transcript
+is invented. Given A1–A4 imports remain tier-correct and original statements
+are frozen; public examples must not disclose any hole/slot answer.
