@@ -1481,3 +1481,79 @@ given construction, with explicit AST ranges; the frozen A2 API remains opaque
 and unchanged. Direct class-range output, source spans and error locations
 are compared before any claim about later expansion-size fidelity. A zero
 upper repetition bound must not reject an unused oversized operand.
+
+
+## 12. Band 2 item plan — R10 invariants in types (2026-10-17)
+
+This plan precedes R10 activation. R09 source907f0af is the local construction
+candidate; its workflow's17commands pass, with5prediction and2test-out
+receipts. Focused CI found only the quoted unknown verdict slots in static;
+keep that run untouched, correct their serialization on the R09 branch when
+it ends, then inherit the fix here. D45 actor debt and parked R03 remain skipped.
+
+A4 contains Normal/NormRe, smart-constructor definitions and executable raw
+smart operations, the normalizer/normal derivative models, pure shape-only
+closure, and CatCongRight/CatCong/StarOfEps. It does not publish semantic
+smart-constructor proofs, normalizer language preservation or R11 certificate
+soundness/completeness/search. The executable normalizer is not a given:
+D's normalization model is ghost; a by-method implementation must supply the
+compiled computation. V needs a normalizer model absent from its old spike.
+NormRe's library boundary promises representation shape, not preservation of
+a caller's original language. No extra R08 matcher interface is re-supplied.
+
+A4's certificate definitions use the same relative split offsets in both
+languages. The old D spike's word-relative certificate and V spike's absolute
+slice certificate are different representations; reconcile before freezing.
+The checker model is ghost. A slice alias may relate it to a subrange, but
+R11 supplies the actual checker/proofs. Keep the V usize representability
+domain explicit in later completeness claims. No earlier learner imports.
+
+| item | form / pair | task | planned minutes D / V |
+|---|---|---|---|
+| W1d/W1v | worked | Normal/NormRe boundary, erased fields and native subset/by-method or type-invariant/Ghost/Tracked syntax | 8 / 8 |
+| W2d/W2v | worked | runtime predicate, Option result and precondition versions of one fixed shape invariant | 5 / 5 |
+| W3d/W3v | worked | the given shape/congruence facts and a client that distinguishes shape from language | 2 / 2 |
+| H1d/H1v | execution | accept exactly normal raw inputs into a packet with an erased node-count witness (Option completeness included) | 8 / 10 |
+| H2d/H2v | execution/proof | concatenate packets under the shape model and rebuild erased cached evidence from the branches and original caches | 12 / 12 |
+| H3d/H3v | proof | every already-normal regex is a fixed point of the normalizer; derive idempotence separately | 15 / 15 |
+| H4d/H4v | execution | structural compiled normalization agrees with the ghost model and returns a valid packet; preserve termination | 20 / 18 |
+| P1d | value | one concrete normal-form branch and its executable node count | 3 |
+| P2v | value | a different fixed shape/erased-model expression | 3 |
+| P3dv | verdict | distinguish runtime/Option enforcement from a call that fails the original precondition | 3 |
+| P4v | obligation | labelled claims under the actual invariant and cached proof data | 3 |
+| P5dv | verdict | a normal output under a shape-only promise versus the same output under the original language relation | 3 |
+| A1d/A1v | spec-to-proof flagship | human writes three constructor statements, witnesses and snapshot; contractor supplies bodies/proofs under those original statements | statements40 + audit20 |
+
+H totals55D/55V=110minutes; admission/minutes remain0 until actual native
+controls and three-seed references pass. MkAltCorrect is not a hole: the
+spike's empty proof already verifies. Smart-constructor language statements
+are the flagship's human work; no prewritten formal answer silently replaces
+it. Its initial actor files have fixed signatures and shape-typed results,
+with open statement clauses and counted body holes. Human-written clauses
+are snapshotted before any actor edit and remain frozen thereafter.
+
+The statement readiness check uses the proposed contract as an abstract
+provider, tests calls on the original domain, and requires its returned value
+to preserve the original constructor language. A shape-only result must not
+pass merely because the actual given constructor definitions preserve the
+language: the abstract result is arbitrary. Native proof failure establishes
+that readiness was not proved, not a universal semantic counterexample.
+Implementability, nonvacuous compiled examples, full native gates and original
+snapshots are separate checks. No concrete implementation is assumed and no
+new trust is introduced. Live actor outcome remains D45 debt.
+
+Declare WRITE only after native probes: D subset types, by-method and ghost
+fields; V type-invariant, Ghost and Tracked. H1/H2 provide two actual hand
+uses of each declared construct. Runtime erasure observations must compile
+actual programs and inspect the retained generated bodies/types, not infer
+execution from a proof. In particular a normal form invariant is not itself
+a language-preservation statement.
+
+Keep408minutes: setup5, reading60, worked30, cards8, predicts15, H holes110,
+spectrum lab30, flagship statements40/audit20, paper30, bench20, viva30,
+calibration10. Paper03.5 is SpecGen: report verifiability separately from
+strength and retain actual denominator/budget/source evidence. The written
+erasure argument identifies erased data and justifies the compiled result.
+Add12bank questions/disjoint six-question draws, two paired parallel problems,
+5predictions and ninth course-derived bench instructions. No quota retry,
+Claude call or earlier-tier waiver follows from local author controls.
