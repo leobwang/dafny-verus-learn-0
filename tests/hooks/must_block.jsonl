@@ -918,7 +918,8 @@
 {"why": "rule 1e: listing a policy run's state (fvh, Qwen)", "tool_name": "Bash", "tool_input": {"command": "ls -la /run/user/@UID@/fvh-qwen-state/"}, "cwd": "@ROOT@"}
 {"why": "rule 1: Read of an author lane's scratch", "tool_name": "Read", "tool_input": {"file_path": "/tmp/dvl0-dv5b-q15/lab2/tasks.py"}, "cwd": "@ROOT@"}
 {"why": "rule 1: cat of an author lane's scratch", "tool_name": "Bash", "tool_input": {"command": "cat @LANE@/crate/src/lib.rs"}, "cwd": "@ROOT@"}
-{"why": "rule 1d: grep over an author lane's scratch", "tool_name": "Bash", "tool_input": {"command": "grep -r requires /tmp/dvl0-dvr2-r09/"}, "cwd": "@ROOT@"}
+{"why": "rule 1: grep over an author lane's scratch", "tool_name": "Bash", "tool_input": {"command": "grep -r requires @LANE@/"}, "cwd": "@ROOT@"}
+{"why": "rule 1d: grep over a lane scratch path that does not exist (no operand exists, so it searches the working directory)", "tool_name": "Bash", "tool_input": {"command": "grep -r requires @LANE@-absent/"}, "cwd": "@ROOT@"}
 {"why": "rule 2f: Write the benchmark manifest", "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/bench/manifest.toml", "content": "schema = 1\n"}, "cwd": "@ROOT@"}
 {"why": "rule 2f: Edit a public benchmark task", "tool_name": "Edit", "tool_input": {"file_path": "@ROOT@/bench/public/dafnybench/tasks/task001.dfy", "old_string": "decoy", "new_string": "edited"}, "cwd": "@ROOT@"}
 {"why": "rule 2f: rm -rf of an installed public set", "tool_name": "Bash", "tool_input": {"command": "rm -rf bench/public/dafnybench"}, "cwd": "@ROOT@"}
