@@ -1559,3 +1559,71 @@ erasure argument identifies erased data and justifies the compiled result.
 Add12bank questions/disjoint six-question draws, two paired parallel problems,
 5predictions and ninth course-derived bench instructions. No quota retry,
 Claude call or earlier-tier waiver follows from local author controls.
+
+## 13. Band 2 item plan — R11 theory (2026-10-17)
+
+This plan precedes activation; R11 remains planned/admission0. Parent98b7dad
+is the R10 source checkpoint. R10 focused CI and scripted STUDY workflow run
+on an untouched worktree; inherit final formatting/results after they end.
+Keep D45 live work and R03's primitive boundary parked under the user request.
+The S2 PointsTo arena has three exec functions without admissible gates; record
+and skip that lane, using the already specified Vec-backed fallback only after
+its own complete four-result admission. Do not call index invariants PointsTo
+permissions or claim the still-gated permission coverage has been achieved.
+
+A4 remains frozen. Its relative-word certificate definitions are imported,
+never replaced by the absolute-offset old Verus spike. V slice checking uses
+the same relative certificate through a slice alias. Soundness is general;
+V completeness states its word-length<=usize::MAX representability domain.
+A runtime checker checks split bounds before computing an absolute slice end.
+No semantic R10 answer, executable full normalizer or R11 checkpoint solution
+is added to a provided layer. The matcher loop can use provided raw A2
+derivatives, so R10 semantic proofs do not become public R11 dependencies.
+
+| item | form / pair | obligation | planned minutes D / V |
+|---|---|---|---|
+| T1d/T1v | execution | discharge the loop-step wp under the original bounds | 5 / 5 |
+| W1d/W1v | worked | relative certificates, explicit slice domain and a concrete derivation tree | part of worked30 |
+| W2d/W2v | worked | evidence fields, native ghost/Tracked modes and the exact checker boundary | part of worked30 |
+| W3d/W3v | worked | one matcher-loop VC and model unfolding, without the complete invariant | part of worked30 |
+| H1d/H1v | execution | full compiled checker equals the frozen validity model, including rejection and all constructors | 18 / 15 |
+| H2d/H2v | proof | general certificate soundness; V consumes a tracked evidence record under its stated validity premise | 17 / 15 |
+| H3d/H3v | proof/construction | direct completeness by induction; construct a witness, V in a tracked evidence record with explicit representability | 20 / 15 |
+| H4d/H4v | execution/proof | raw derivative matcher loop: write/use invariant and termination, retain exact whole-word language | 15 / 10 |
+| H5d/H5v | execution | complete certificate search by regex constructor, not an always-absent producer | 15 / 10 |
+| H6d/H6v | execution/proof | search Cat splits with a missed-prefix invariant and bounded progress | 10 / 5 |
+| H7d/H7v | execution/proof | search positive Star chunks; reject zero progress and prove termination | 5 / 5 |
+| H8v | execution/proof | admitted Vec-arena append fallback, preserve index and old-node invariants | — / 20 |
+| H9v | execution/proof | admitted Vec-arena edge-update fallback, preserve ownership/frame and valid targets | — / 25 |
+| X1d/X1v | proof | fresh certificate consumed-character measure theorem, independent of hand soundness code | 6 / 6 |
+| X2d/X2v | execution/proof | fresh loop building repeated-character certificates under fixed relative rules | 5 / 5 |
+| A1d/A1v | metatheory audit | preserve original rules while auditing a plausible wrong rule/model and delivered proof | agent25 |
+
+Core H1–H4 budget70D/55V=125; H5–H7 are the separately budgeted50-minute
+certifying-matcher project (30D/20V); H8/H9 are the gated45-minute V arena
+line. T10 and checkpoint22 are separate. Empty/default/max-auto/three-seed
+controls precede every admitted minute. Checkpoint needs>=3/4 and>=1 per
+language, with statement/body disjointness from the hand/agent files recorded.
+No complete search body is supplied next to a completeness hole: all producer
+parts are learner tasks. Rejection completeness must remain explicit; a
+certificate producer that returns no witness for a match is not a complete
+certifying matcher. The small checker's positive acceptance guarantee remains
+separate from producer completeness and from trust in the formal rules.
+
+Predict5: P1d reads a relative split value (given-only check); P2v evaluates a
+fixed ghost certificate model; P3dv compares original-rule and changed-rule
+native consumers; P4v selects failing labelled VCs; P5dv compares fixed-domain
+checker/producer rejection promises. Two dv predictions, no Q-owned surprise.
+Use guarded scenarios, sealed native sidecars, and real-extension contextual
+D probes for supplied-layer imports. Never pin unresolved imports as a
+semantic outcome. Declare WRITE constructs only after native feasibility;
+V H2/H3 provide two actual tracked-evidence uses if those forms admit.
+
+Keep540minutes: setup8, testout10, reading70, worked30, cards8, predicts15,
+coreholes125, wp-lab35, certifier50, checkpoint22, agent25, paper40, bench20,
+viva30, calibration7, arena45. Until the Vec fallback admits, its45 is0 and
+a delta records the shortfall. Paper12.10 Lean4Lean uses its exact local
+excerpt, separating an executable kernel, claimed independence and partial
+metatheory. Add12bank questions/disjoint6draws, two paired PP,5predictions,
+three diagrams, source-bound native captures and the tenth course-derived
+bench prompt. No fabricated learner artifact or live model result is supplied.
