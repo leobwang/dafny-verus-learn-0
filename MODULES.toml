@@ -2268,7 +2268,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "dafny/given/R/RG_A4_Norm.dfy" = "std", "verus/given/rg_re_a4/src/lib.rs" = "prelude" }
 concept_items = {}
 
 [[module]]

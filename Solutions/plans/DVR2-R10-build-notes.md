@@ -24,3 +24,40 @@ Vslots3 alongside the two untouched CI lanes. R10 still planned/admission0.
 
 No actor session, live grade or measured contractor outcome is inferred.
 D45 and R03's primitive boundary remain recorded skips under the user request.
+
+
+## A4 provided boundary checkpoint
+
+Final provided definitions have no semantic constructor/normalizer or R11
+checker answers. D's model is ghost; V now has the missing normalization
+model and shape closure, including normal derivative shape. Both certificate
+models use word-relative splits; V's slice alias is checked on a shifted word.
+R10 remains planned/admission0 while only its given imports are installed.
+
+Actual native A4 probes: D11verified; V21verified. Public dependency-closed
+gates: D46verified/V21verified,0holes. Audits0findings and three pinned seeds
+stable both; final V gate/audit/seeds repeated after adding NDeriv shape.
+Private packet prototypes for H1–H4 pass D9/V7, with actual erased cache and
+tracked evidence syntax. They are protected drafts, not provided answers.
+
+Actual compiled fidelity: 120 fixed/random raw trees per language, exact
+expected normal forms/node counts/normality, and1320 word-semantic comparisons
+each against the actual A2 derivative matcher. Ground ghost-model equations
+also verify. D121tests and V121tests pass, including relative certificate
+controls in D and erased packet layout in V. Relative V certificate ground
+proof initially failed to derive slice equalities; explicit extensional slice
+facts repair that proof with no model or resource change. The original failed
+result/source are retained. No universal semantic preservation follows from
+these finite runtime observations. V's concrete packet size equals NormRe;
+this is not a general performance theorem or a Dafny layout observation.
+
+R09 original snapshot check remains0findings. Native artifacts/source hashes
+are archived under ~/.cache/dafny-verus-learn-0/author-probes/dvr2/
+r10-a4-20261017; scratch /tmp/dvl0-dvr2-r10 is retained. Generator scripts
+predate manual proof fixes and must not overwrite the verified sources.
+The independent full wrapper fixture regression continues on immutable
+8cb6f87; targeted9tests pass, but no full result is inferred while running.
+D45 live validation and parked R03 stay explicitly skipped, never passed.
+
+Final frozen STUDY leak scan:26modules/2027publicfiles/OK. Course map and
+avoid both-track checks pass. This is a provided-boundary checkpoint only.

@@ -4254,3 +4254,17 @@ final learner paths. Frozen scan26modules/2024public/OK. Exact source hashes
 and private CI/runtime provenance are archived in the protected R09 notes.
 This completes local R09 construction, not a new Basic release; live D45
 validation, parked R03 and full release validation remain separately recorded.
+
+
+## Δ264 — R10 provided A4 definitions checkpoint (2026-10-17)
+
+Freeze the shape-only normal-form boundary before activating R10. The provided
+layer supplies the normalization/derivative models, normal-form wrapper,
+smart operations and congruence facts, with no semantic constructor proofs,
+compiled full normalizer or R11 certificate solution. Certificate splits are
+word-relative in both languages. Native gates/audits/three seeds pass; paired
+compiled checks cover120 raw trees and1320 semantic word comparisons each.
+Protected notes retain exact source, failures and finite evidence limits.
+R10 remains planned with no admitted minutes or shipped exercises. R09's
+original snapshot remains intact; no tier waiver or trust addition is used.
+D45 live validation and the parked R03 primitive blocker remain recorded skips.
