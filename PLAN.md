@@ -1589,7 +1589,7 @@ derivatives, so R10 semantic proofs do not become public R11 dependencies.
 | H1d/H1v | execution | full compiled checker equals the frozen validity model, including rejection and all constructors | 18 / 15 |
 | H2d/H2v | proof | general certificate soundness; V consumes a tracked evidence record under its stated validity premise | 17 / 15 |
 | H3d/H3v | proof/construction | direct completeness by induction; construct a witness, V in a tracked evidence record with explicit representability | 20 / 15 |
-| H4d/H4v | execution/proof | raw derivative matcher loop: write/use invariant and termination, retain exact whole-word language | 15 / 10 |
+| H4d/H4v | execution/proof | streaming prefix ledger plus final acceptance: derive every consumed-prefix result with a uniform residual invariant and termination | 15 / 10 |
 | H5d/H5v | execution | complete certificate search by regex constructor, not an always-absent producer | 15 / 10 |
 | H6d/H6v | execution/proof | search Cat splits with a missed-prefix invariant and bounded progress | 10 / 5 |
 | H7d/H7v | execution/proof | search positive Star chunks; reject zero progress and prove termination | 5 / 5 |
@@ -1604,6 +1604,10 @@ certifying-matcher project (30D/20V); H8/H9 are the gated45-minute V arena
 line. T10 and checkpoint22 are separate. Empty/default/max-auto/three-seed
 controls precede every admitted minute. Checkpoint needs>=3/4 and>=1 per
 language, with statement/body disjointness from the hand/agent files recorded.
+The A2 whole-word matcher loop is already provided; it is a WP worked source,
+not a new hole. H4 instead returns all nonempty-prefix outcomes and final
+whole-word acceptance. Its original model and output ledger are new; opaque
+residual-step helpers isolate quantifiers without changing that relation.
 No complete search body is supplied next to a completeness hole: all producer
 parts are learner tasks. Rejection completeness must remain explicit; a
 certificate producer that returns no witness for a match is not a complete
