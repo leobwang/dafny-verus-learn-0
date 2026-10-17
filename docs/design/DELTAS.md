@@ -4225,3 +4225,21 @@ R09 is a local candidate pending final STUDY workflow and focused CI. D45
 live Claude/calibration/transcript debt and R03's pre-OD8 primitive packaging
 blocker remain recorded and skipped under the user's instruction. Neither is
 a pass, and this candidate is not a new Basic shipment.
+
+
+## Δ263 — R09 unfilled verdict-slot serialization (2026-10-17)
+
+Use bare `???` in the two learner verdict slots; quoting it makes a filled
+but disabled string, rather than an unfilled answer. Reference answers remain
+quoted. The initial focused CI on907f0af passes all five native/paper/rubric/
+harness jobs; its static failure is limited to those two placeholder states.
+The correction changes no code, statement, model, answer or captured output.
+Corrected static is required before local completion; these are separate runs.
+
+The clean STUDY workflow runs17commands successfully, including five first
+predictions, two test-out receipts, original snapshots, full gates/audits and
+the default actual-source compiled frontend/port harnesses. All four complete
+reference targets pass three pinned seeds. The private workflow driver had a
+five-only receipt expectation; validating the retained seven successful rows
+corrects the harness expectation, not a course result. Live validation stays
+deferred D45 debt, and R03 remains parked. No new Basic release is implied.

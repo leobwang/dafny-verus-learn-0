@@ -212,3 +212,23 @@ Current chapter structure/captures, fresh full pins and candidate CI are
 checked below; no release or live actor outcome is claimed by this commit.
 
 Frozen STUDY source checkpoint: leak verifier: 26 module(s), 2024 public files scanned, OK.
+
+## Initial focused CI and packaging correction
+
+Focused CI20261017T122354Z-4137543 on clean907f0af finishes5pass/1fail in
+1075s: static619s failed only because source verdict slots quoted "???";
+R-D179s,R-V167s,paper37s,rubric0s,harness73s passed (use summary for exact
+R-D duration). Unknown verdict answers must be bare ???; reference answers
+remain strings. Corrected only the two learner slot values. No statement,
+implementation, prediction answer, source capture or native proof changed.
+Run corrected static before local completion; do not report one-run6/6.
+
+STUDY workflow on907f0af:17/17commands pass, including both default supplied
+compiled tools (297frontend and12port cases per language), full gates/audits
+and both original-model snapshots. The private driver's final receipt count
+assertion expected5, but the actual course correctly records7:5predictions
+and2test-outs, all pass. Retained command results, source identity and seven
+rows validated in workflow-validation.json; no successful native commands
+were needlessly replayed. Final4reference targets each pass3pinned seeds,
+with advisory resource variation reported separately. Corrected static still
+required; no live actor result or new Basic shipment.
