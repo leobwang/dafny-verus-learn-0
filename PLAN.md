@@ -1409,3 +1409,60 @@ exposes model meaning, while P5 checks equivalence of two genuinely equivalent
 full-word bindings. This replaces the preliminary generic proper-prefix claim;
 no refinement-legality prediction is added. C3v recognises open-spec visibility,
 since trait-spec is already WRITE and cannot also be RECOGNISE.
+
+## 11. Band 2 item plan — R09 effects (2026-10-17)
+
+This plan precedes activation; R09 remains planned. A3 supplies definitions,
+syntax, well-formedness and parser specification predicates, not a parser,
+execution lowering or lowering-correctness proofs. The canonical paired parser
+uses the Dafny spike's finite single-character-bound grammar: literals,
+escapes, groups, alternation, concatenation, classes and postfix *,+,?,{d},{d,d}.
+Positions count Unicode scalars. The Verus spike's extra {d,} form and missing
+classes are fidelity discrepancies to repair, not an accepted port. Preserve
+nested source spans where the syntax declares them. Unsupported syntax must
+receive the same specified error position in the paired port.
+
+| item | form / pair | task | planned minutes |
+|---|---|---|---|
+| T1d/T1v | closed-book execution | propagate a single-bound error without losing its original position | 5 each |
+| W1d/W1v | worked | one-character bound recogniser and complete native result interface | 3 each |
+| W2d/W2v | worked | read failure propagation and the actual result obligations | 3 each |
+| W3d/W3v | worked | concrete syntax, source spans, lowering and error positions | 3 each |
+| H1d/H1v | execution | parse a finite counted suffix under completeness and error-position contracts | 12 / 15 |
+| H2d/H2v | execution/annotations | class-body progression, preserved accumulator and completion at the first closing delimiter | 9 / 12 |
+| H3d/H3v | execution | enforce the lowering's expansion cap without overflowing the bounded multiplication | 8 / 9 |
+| H4d/H4v | proof | finite repetition denotes some number of copies within the original bounds; explicit recursive helpers remain learner work | 14 / 16 |
+| H5d/H5v | execution/annotations | advance the parser cursor while preserving old input and position guarantees | 7 / 8 |
+| P1d | value | complete single-bound propagation on a concrete invalid suffix | 3 |
+| P2v | value | complete single-bound propagation on a different scalar input | 3 |
+| P3dv | verdict | direct product versus guarded division at the full machine boundary | 3 |
+| P4v | obligation | labelled mutable-cursor calls under the original position bounds | 3 |
+| P5dv | verdict | error-position preservation versus replacing the propagated location | 3 |
+| A1d/A1v | refactorer | preserve the selected parser's original statement and differential harness while porting/refactoring its body | 25 follow-up |
+
+Hand totals50D/60V=110minutes; minutes remain0 until each actual item passes
+canonical native admission and its complete reference passes three seeds.
+A trivial Err return must fail the Counted/ClassItems completeness clauses.
+WRITE constructs include failure propagation and old-state mutation, with at
+least two actual hand uses for each construct declared WRITE. Native probes
+must establish the pinned :-/? and old/final syntax before those cards arm.
+No decimal digit-run parsing, previous learner imports or trusted adapter.
+
+The60-minute port audit compiles the actual Dafny parser to Python and the
+actual Verus implementation to Rust. Independently transcribed mirror contracts
+get explicit implication proofs labelled relative to the mirror; differential
+execution and shared mutant-kill parity remain separate, necessary evidence.
+The corpus includes malformed suffixes, non-ASCII scalar positions, classes,
+escapes, single-digit extremes, reversed bounds, truncated input and cap edges.
+Both acceptance and exact error positions are compared; language/set-only
+agreement cannot hide a span or failure discrepancy. Preserve native tool and
+execution stages; no parser grammar theorem is inferred from safety or tests.
+
+The written pair contains card06.11 PUMPKIN Pi and the fidelity method. The
+bank has12questions, disjoint six-question draws with actual native live probes,
+and two paired parallel problems. The eighth bench card strips an own effects
+goal and discloses course-derived provenance and prior exposure. The overflow
+and encoding divergence lab takes25minutes. The existing444-minute record is
+unchanged: setup8,test-out10,read60,worked30,cards8,predict15,holes110,port60,
+divergence25,agent25,paper35,bench20,viva30,calibration8. Live actor validation
+remains D45 debt; no native author run substitutes for it.
