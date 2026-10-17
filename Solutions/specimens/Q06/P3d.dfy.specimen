@@ -1,0 +1,61 @@
+// item: Q06.P3d S11 obligation
+// **P3.** Triggers (Reference Solution: the hypothesis fires only for a term
+// that matches its trigger. [b]'s goal mentions no `Pow` term, so the
+// hypothesis is never instantiated; [a] mentions `Pow(k)` and [d] `Pow(2)`;
+// in [c] the goal's `s[..2]` matches the prefix trigger, and `Pow(2)` then
+// unfolds to `BASE * BASE` because its argument is a literal). Each lemma
+// below has the same hypothesis, that every prefix of `s` is below a power of
+// BASE, with an explicit trigger, and an empty body; the definitions are
+// copies of layer L1's. Which labelled postconditions does the verifier fail
+// to prove? Answer form: `FAILS` followed by the failing labels in label
+// order, separated by single spaces, or `FAILS none`.
+// FAILS b
+module Q06_P3 {
+  // Copied from the given spine, layer L1 (QG_L1_BigNat), verbatim.
+
+  // The limb base, 2^64, written as a literal.
+  const BASE: nat := 18446744073709551616
+
+  // The value of a limb sequence, least significant limb first:
+  // s[0] + BASE * (the value of the remaining limbs).
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  // BASE^n, by repeated multiplication by BASE.
+  function Pow(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 1 else BASE * Pow(n - 1)
+  }
+
+  lemma BoundAtK(s: seq<nat>, k: nat)
+    requires forall i {:trigger Pow(i)} | 0 <= i <= |s| :: ToNat(s[..i]) < Pow(i)
+    requires k <= |s|
+    ensures ToNat(s[..k]) < Pow(k)  // [a]
+  {
+  }
+
+  lemma TwoLimbsProduct(s: seq<nat>)
+    requires forall i {:trigger Pow(i)} | 0 <= i <= |s| :: ToNat(s[..i]) < Pow(i)
+    requires |s| >= 2
+    ensures ToNat(s[..2]) < BASE * BASE  // [b]
+  {
+  }
+
+  lemma TwoLimbsProductPrefixTrigger(s: seq<nat>)
+    requires forall i {:trigger s[..i]} | 0 <= i <= |s| :: ToNat(s[..i]) < Pow(i)
+    requires |s| >= 2
+    ensures ToNat(s[..2]) < BASE * BASE  // [c]
+  {
+  }
+
+  lemma TwoLimbsPow(s: seq<nat>)
+    requires forall i {:trigger Pow(i)} | 0 <= i <= |s| :: ToNat(s[..i]) < Pow(i)
+    requires |s| >= 2
+    ensures ToNat(s[..2]) < Pow(2)  // [d]
+  {
+  }
+}

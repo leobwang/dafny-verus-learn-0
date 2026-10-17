@@ -1,0 +1,23 @@
+// item: Q12.P1d S9 verdict
+// **P1.** Stage attribution, the machine channel. A short Dafny file (below; a specimen
+// stands alone: it imports nothing), run as
+//     scripts/vcheck --json specimens/Q12/P1d.dfy.specimen
+// The command prints one JSON document. BEFORE you run it, predict the value of the
+// document's `stage` field.
+// Answer form: one of `cli`, `parse`, `resolve`, `verify`, `compile`, `test`, `run`, in
+// slots/Q12.slots.
+// Reference Solution: `parse`: the `if` block's brace is never closed, so the
+// module's closing brace closes it and the file ends inside the module; Dafny's parser
+// stops (`rbrace expected` at the end of the file), the document says `stage` "parse",
+// `verdict` "failed" and `verified_count` null, and nothing was verified.
+// after: Q12.P1d
+// CHECK P1d
+module Q12_P1 {
+  // Adding zero changes nothing, by cases on x.
+  lemma AddZero(x: nat)
+    ensures x + 0 == x
+  {
+    if x > 0 {
+      assert x - 1 + 1 == x;
+  }
+}

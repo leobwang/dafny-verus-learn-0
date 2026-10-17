@@ -1,0 +1,67 @@
+% Q11_problems.tex — the written problems of Q11 (Practice I-B). Built by
+% `make -C paper paper` with Q11_answers.tex. B1 (a weakest precondition by
+% hand) and B2 (the paper card) are the module's written pair: 15 minutes,
+% after the chapter's §3 and before H7d.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q11 --- Practice I-B \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q11\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: after the chapter, before H7d (15 minutes in all). Then run
+\texttt{/grade-paper Q11} in a fresh session. Compare with
+\texttt{paper/solutions/} only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+\textbf{A weakest precondition, step by step} (5 minutes). Over an integer
+variable $x$ and a local $y$:
+\begin{quote}
+\texttt{y := x + 3; if y > 10 then y := y - 10} \qquad (a one-armed
+conditional: nothing happens when the condition is false)
+\end{quote}
+with the postcondition $Q \equiv y < 5$.
+\begin{enumerate}
+\item[(a)] Compute the weakest precondition by hand, from $Q$ backwards, one
+  statement per step; name the rule each step uses (assignment, sequence,
+  conditional). Then simplify it to a formula over $x$ alone, each
+  simplification an equivalence over the integers.
+\item[(b)] Pick two start values of $x$, one that satisfies your formula and
+  one that does not, and run the program on each by hand: the final $y$, and
+  whether it satisfies $Q$.
+\item[(c)] In one line: which values of $x$ does your formula allow? (A set,
+  as intervals.)
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B2}
+\textbf{Paper card 02.12, Verifying the Rust Standard Library} (10 minutes).
+Fill the card on its eight fields: task shape, oracle, what is trusted, cheat
+surface, metric, budget, variance, artifact. Each field is graded against the
+pinned range of your own \texttt{cheatsheets.md}: lines 917--940, the entry
+from its heading to its \emph{Why it matters} paragraph, in the copy the
+command below names. The pin is the sha256 of exactly those lines, computed
+with the first line below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '917,940p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+74c85732bbbea1c675fb6a81de1502d4bc79834e764184c2c35560b609d1378e  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

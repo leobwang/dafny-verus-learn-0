@@ -1,0 +1,19 @@
+//! Cheat corpus V13, frozen statement: max2 as shipped.
+use vstd::prelude::*;
+
+verus! {
+
+pub fn max2(a: u64, b: u64) -> (r: u64)
+    ensures
+        r >= a,
+        r >= b,
+        r == a || r == b,
+{
+    if a >= b {
+        a
+    } else {
+        b
+    }
+}
+
+} // verus!

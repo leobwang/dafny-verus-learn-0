@@ -1,8 +1,12 @@
 # pinned toolchains (scripts/get_toolchain.sh installs here)
-/.toolchain/
+/.toolchain
 # build products (reach into them counts as reading the reference: guard rule 1d)
 target/
 /build/
+# scripts/ci.sh logs (build/ci/<run>/, build/ci/latest); also under /build/ above
+/build/ci/
+# `dafny run`/`test --target py` writes <stem>-py/ beside its source (DELTAS Δ32)
+*-py/
 .verus-log/
 .verus-solver-log/
 __pycache__/
@@ -13,10 +17,22 @@ __pycache__/
 # instructor and guard state
 /instructor/scratch/
 /.claude/state/
-# LaTeX by-products
+# LaTeX by-products (latexmk -pdf, as paper/Makefile runs it, including
+# make paper-solutions' solutions/<name>.latexmk.log, matched by *.log)
 paper/**/*.aux
 paper/**/*.log
 paper/**/*.fls
 paper/**/*.fdb_latexmk
 paper/**/*.out
 paper/**/*.synctex.gz
+paper/**/*.toc
+paper/**/*.pdf
+# benchmark sets in fetch mode: fetched on the pins by scripts/get_bench.sh and
+# never committed (DV4-PLAN §7; a vendored set is committed instead)
+/bench/public/dafnybench/
+/bench/public/humaneval-verus/
+/bench/public/vericoding/
+/bench/public/lemmascript/
+/bench/public/minif2f-dafny/
+/bench/public/.*.new/
+/bench/public/.*.old/

@@ -1,0 +1,154 @@
+# expected/Q17.chapter.toml — the chapter pins of Q17's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q17 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "trait-restate"
+cmd = ["scripts/vcheck", "--module", "Q17", "metronome.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+note = "S6, H1d's lesson on a toy: a class that weakens its trait's postcondition is refused."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."metronome.dfy"]
+fence = "above"
+[entry.pinned]
+body = "c0fdec13efeb1dbbd1891d7354e6aa47851fbab66adc56463ad21e09fa81a155"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:metronome.dfy" = "540158992b0ea0a93e86090637bf2523b788db4e08c41ee75b22ad5fbd4e44ba"
+
+[[entry]]
+id = "frame-grow"
+cmd = ["scripts/vcheck", "--module", "Q17", "cupboard.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+note = "S6: a new array left out of the frame breaks the validity predicate."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."cupboard.dfy"]
+fence = "above"
+[entry.pinned]
+body = "8527e8ed533f0ded873d0f6e8fcf2f4e588959d2317ceeadcd2b59dc6f313dcd"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:cupboard.dfy" = "5fce529c88d8346cc31ba4d4fd342299d1bf7ed1ce02d7540f04cc73ac469509"
+
+[[entry]]
+id = "ghost-read"
+cmd = ["scripts/vcheck", "--module", "Q17", "vault.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+note = "S7: compiled code may not read a ghost field."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."vault.dfy"]
+fence = "above"
+[entry.pinned]
+body = "8842da50558d5f57bed88a1032edfa21918262cd7bbaf597f6b539b365a627ad"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:vault.dfy" = "fd0d347943ada618c019867e3f211214be4d367b47629c120472aff647baf00d"
+
+[[entry]]
+id = "fuel-measure"
+cmd = ["scripts/vcheck", "--module", "Q17", "itinerary.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+note = "S7: an interpreter whose measure is the fuel alone fails at the sequential case."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."itinerary.dfy"]
+fence = "above"
+[entry.pinned]
+body = "b42f35a41f585cab1c9aded18747f2256d10d81a30604cfe0ec9a8240fe6a3da"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:itinerary.dfy" = "46ca7808e14707ff145fe490f8e1e1189089d7882370245cc4044107df2f46e5"
+
+[[entry]]
+id = "take-twice"
+cmd = ["scripts/vcheck", "--module", "Q17", "twice.rs"]
+cwd = "scratch"
+note = "S8, H2v's lesson on a toy: a second take needs a full cell."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."twice.rs"]
+fence = "above"
+[entry.pinned]
+body = "96dc59820e28424f02dc92b63d4476b88ccf9fcbcb45af910b686b6880a67efa"
+[entry.pinned.inputs]
+"scratch:twice.rs" = "156c6ac0da145321affe19d2a560816076cb0191262272f60f918a336301d453"
+
+[[entry]]
+id = "agent-shipped"
+cmd = ["scripts/vcheck", "dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy"]
+note = "Rung 13's file as shipped (§4)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "29df0d925bf4fa51eab9494bfe2aee5931e3546374fbb6bfa3e1db8432e5be76"
+[entry.pinned.inputs]
+"dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy" = "1f2d25925ff20be1edd1b21a13a64119e387e814f813158564a392db2554634d"
+
+[[entry]]
+id = "freeze-statement"
+cmd = ["scripts/specfreeze", "--against", "frozen.dfy", "delivered.dfy"]
+cwd = "scratch"
+note = "§4: the freeze of rung 13 on a toy pair, a narrowed precondition."
+[entry.scratch."frozen.dfy"]
+text = "module TercileToy {\n  function Tercile(n: nat): nat { n / 3 }\n\n  lemma TercileBelow(n: nat)\n    requires n > 0\n    ensures Tercile(n) < n\n}\n"
+[entry.scratch."delivered.dfy"]
+fence = "above"
+[entry.pinned]
+body = "60c5f06020f6c83286ac924515a1ec2b33bae1231c8b278ef528ab41f01cc22b"
+[entry.pinned.inputs]
+"scratch:delivered.dfy" = "d1c2ef240a8d01d9afc88de7d4d403fb5e9b35adb3a600ffc1e57d16413ba958"
+"scratch:frozen.dfy" = "541a7e4d9de56e618a34b1ebdb8143c3788caff04d63b8f515729dfe1ababe0b"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q17"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "dafny/given/Q/QG_L7_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs", "verus/given/qg_bignat_l7/src/lib.rs", "verus/given/qg_bignat_l7/src/api.rs"]
+note = "The two units as shipped (§7)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a522dae96bb834803b254f28829c453fcd0f39a2be70a4315e6b4dc61e39b179"
+[entry.pinned.inputs]
+"dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy" = "1f2d25925ff20be1edd1b21a13a64119e387e814f813158564a392db2554634d"
+"dafny/Q/Q17_PracticeIIIB/std/Q17_PracticeIIIB.dfy" = "02091a24e4b5d91a89d526e61964656d75a04adad7441d384b119713247e33c8"
+"dafny/Q/Q17_PracticeIIIB/std/Q17_Vcgen.dfy" = "8dde241f0e4951de5bcd42c48c8230f7346e45d8a5f6cf83a786b72eb4ae63e6"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"dafny/given/Q/QG_L7_BigNat.dfy" = "6f51ccc2345cfdcfd839e04c01213ceeb92d7420de72168b71b5728b8c8ecde5"
+"instructor/calib/Q17.tsv" = "absent"
+"slots/Q17.slots" = "absent"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/given/qg_bignat_l7/src/api.rs" = "c570ff153b6cfcbab29c31bd45d5c8891766dc7f84be24017015799db962b08a"
+"verus/given/qg_bignat_l7/src/lib.rs" = "1c2bddd4b7cfd874d2a4cb23c28ed37ed313692b283e5d176a7ec9bb92bf6376"
+"verus/q/q17_practice_iiib/src/lib.rs" = "2f62994ef38b3f729fb09018ce3b2b1577bda63fb314029365c8eaebba965626"
+"verus/q/q17_practice_iiib/src/perm.rs" = "fd02de783d9e34efb30cc61760515d4d8b9c8a0d600419ae6690617b96d11a69"
+
+[[entry]]
+id = "dashboard-metatheory"
+cmd = ["scripts/vcheck", "--gate", "dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy"]
+note = "Agentic dashboard: shipped state; the reader supplies statement fidelity."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b024dfa7ab57ddb416089c49aecf9a8716d20cf00dfc5009235d3f44da5134a0"
+[entry.pinned.inputs]
+"dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy" = "1f2d25925ff20be1edd1b21a13a64119e387e814f813158564a392db2554634d"

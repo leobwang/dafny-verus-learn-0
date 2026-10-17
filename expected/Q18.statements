@@ -1,0 +1,8 @@
+# expected/Q18.statements — fvh's statements pin (QPLAN §28.6, §30 Q64; fvh.statements).
+# One line per statement file Lab 3's sealed tasks wait on: the sha256 of the file's
+# shipped form, two spaces, its course path. `python -m fvh unseal Q18` and a lab plan's
+# `statements` key pass only when each file is committed with content that differs from
+# this shipped form. Frozen (guard rule 2f); the author re-pins it when a shipped form
+# changes (harness/tests/core/test_statements.py checks the pin against the shipped files).
+91e71a98b7334f93b2f9886b99c6e60afdc7f1fd62865e822a2a03441db64916  research/q18_statements.dfy
+901f2e89ccf33735502e259f1fd2ef6d14ea97861dd7e6f075a50972db6d0e71  research/q18_statements.rs

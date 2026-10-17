@@ -1,0 +1,17 @@
+// Demo for card Q09.C1d (write:proof-split), the failure half. The success half is
+// `ThreeLimbProduct` in dafny/Q/Q09_InternalsIII/std/Q09_InternalsIII.dfy; here the body is
+// empty, so the solver must find the whole product's bound in one step. Run it with
+// `scripts/vcheck specimens/Q09/card-c1d.dfy.specimen` (and `--json` for its resource count);
+// the EXPECT line pins the message the verifier gives (line and fragment).
+// after: Q09.P1d
+// EXPECT @15 "could not be proved"
+module Q09_CardC1d {
+  // The limb base, 2^64, as layer L1 writes it.
+  const BASE: nat := 18446744073709551616
+
+  lemma ThreeLimbProduct(x: nat, y: nat, z: nat)
+    requires x < BASE && y < BASE && z < BASE
+    ensures x * y * z < BASE * BASE * BASE
+  {
+  }
+}

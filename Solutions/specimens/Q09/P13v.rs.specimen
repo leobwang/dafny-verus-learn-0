@@ -1,0 +1,50 @@
+// item: Q09.P13v S12 verdict
+// **P13.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots.
+// Reference Solution: `vacuous`: `seq_wf(s)` with `s.len() > 0` says the top limb is
+// not zero, contradicting `s.last() == 0`; no caller can meet the `requires` (the
+// witness, specimens/Q09/P13v-witness.rs.specimen, fails with a precondition error).
+// Gate and audit pass.
+// Claim:
+//   `lemma_top_limb(s)`: the value of a canonical non-empty limb sequence is
+//   at least the weight of its top limb,
+//   `seq_to_nat(s) >= weight((s.len() - 1) as nat)`.
+// CHECK P13v
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+// Delivered: a canonical non-empty sequence weighs at least its top limb's weight.
+pub proof fn lemma_top_limb(s: Seq<u64>)
+    requires
+        seq_wf(s),
+        s.len() > 0,
+        s.last() == 0,  // planted: Q09.P13v
+    ensures
+        seq_to_nat(s) >= weight((s.len() - 1) as nat),
+{
+}
+
+} // verus!

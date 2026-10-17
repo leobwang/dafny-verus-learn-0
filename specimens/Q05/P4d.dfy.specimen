@@ -1,0 +1,84 @@
+// item: Q05.P4d S6 obligation
+// **P4d.** Frames at a call. `LimbStack` below is a copy of the given stack of
+// dafny/Q/Q05_Frames/std/Q05_Frames.dfy whose `Push` is declared by its contract only
+// (no body, so `scripts/vcheck` lists it as a hole; at a call the verifier uses the
+// contract only). Each client method calls `s.Push(x)` and then asserts one fact, on the
+// line labelled `// [x]`: [a] the other stack is still valid, the two representations
+// being disjoint; [b] the same, without the disjointness requirement; [c] the two
+// representations are still disjoint; [d] after two pushes, the contents.
+// Which labelled assertions does the verifier fail to prove? Answer form: `FAILS`
+// followed by the failing labels in label order, separated by single spaces, or
+// `FAILS none`. Fill the slot line below, record the first try
+// (`scripts/firsttry.sh Q05 --check`), and only then enable it (`// SLOT: FAILS …`
+// becomes `// FAILS …`).
+// SLOT: FAILS ???
+module Q05_P4 {
+  class LimbStack {
+    var a: array<nat>
+    var n: nat
+    ghost var Contents: seq<nat>
+    ghost var Repr: set<object>
+
+    ghost predicate Valid()
+      reads this, Repr
+    {
+      this in Repr && a in Repr && n <= a.Length && Contents == a[..n]
+    }
+
+    constructor (cap: nat)
+      requires cap > 0
+      ensures Valid() && fresh(Repr) && Contents == []
+    {
+      a := new nat[cap];
+      n := 0;
+      Contents := [];
+      Repr := {this, a};
+    }
+
+    function Size(): nat
+      reads this, Repr
+      requires Valid()
+      ensures Size() == |Contents|
+    {
+      n
+    }
+
+    method Push(x: nat)
+      requires Valid()
+      modifies Repr
+      ensures Valid() && Contents == old(Contents) + [x] && fresh(Repr - old(Repr))
+  }
+
+  method WithDisjoint(s: LimbStack, t: LimbStack, x: nat)
+    requires s.Valid() && t.Valid() && s.Repr !! t.Repr
+    modifies s.Repr
+  {
+    s.Push(x);
+    assert t.Valid();  // [a]
+  }
+
+  method WithoutDisjoint(s: LimbStack, t: LimbStack, x: nat)
+    requires s.Valid() && t.Valid()
+    modifies s.Repr
+  {
+    s.Push(x);
+    assert t.Valid();  // [b]
+  }
+
+  method StillDisjoint(s: LimbStack, t: LimbStack, x: nat)
+    requires s.Valid() && t.Valid() && s.Repr !! t.Repr
+    modifies s.Repr
+  {
+    s.Push(x);
+    assert s.Repr !! t.Repr;  // [c]
+  }
+
+  method SameStackTwice(s: LimbStack, x: nat, y: nat)
+    requires s.Valid()
+    modifies s.Repr
+  {
+    s.Push(x);
+    s.Push(y);
+    assert s.Contents == old(s.Contents) + [x, y];  // [d]
+  }
+}

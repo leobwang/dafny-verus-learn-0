@@ -1,0 +1,50 @@
+// item: Q09.P10d S12 verdict
+// **P10.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots.
+// Reference Solution: `healthy`: proved honestly; the `planted:` marker sits on an
+// ordinary step. Every instrument passes; a DIAGNOSIS row that accuses it fails the
+// rubric (design §5 E4).
+// Claim:
+//   `AppendEmpty(a)`: appending no limbs keeps the value,
+//   `ToNat(a + []) == ToNat(a)`.
+// CHECK P10d
+module Q09_P10 {
+  // The definitions this delivery is about, as layer L1 gives them (copies: a
+  // specimen stands alone).
+  const BASE: nat := 18446744073709551616
+
+  // The value of a limb sequence, least significant limb first.
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  // Delivered: appending the empty sequence changes nothing, value included.
+  lemma AppendEmpty(a: seq<nat>)
+    ensures ToNat(a + []) == ToNat(a)
+  {
+    assert a + [] == a;  // planted: Q09.P10d
+  }
+}

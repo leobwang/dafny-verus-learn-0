@@ -1,0 +1,695 @@
+#!/usr/bin/env python3
+"""specfreeze — statement-freeze pins (phase DV1b).
+
+Spec §8.3, §11.1 row 29; DELTAS Δ44. The learner (or a contractor) fills
+bodies; the statements stay as shipped. A statement is a declaration's
+signature and its requires/ensures/decreases/… clauses, token-normalized
+(comments, layout and attributes dropped; a Dafny clause's `{:trigger …}` is
+kept, as a Verus `#[trigger]` is, DV5c), plus the body of a Dafny function
+or predicate and of a Verus spec fn (a definition's body is part of what it
+states): dvl.dafny.spec_hash, dvl.verus.spec_hash. A function shipped without
+a body (a Dafny function hole, a Verus `uninterp spec fn`) is pinned without
+its body, and the pin records it under `open_bodies`, so filling the hole
+does not count as a change; for Verus such a symbol is also compared without
+the qualifiers that only say how visible its body is (`uninterp`, `open`,
+`closed`), since the delivery of `uninterp spec fn f…;` is `open spec fn
+f… { … }` (QPLAN §6 Q7). A Dafny frame annotation hole (QPLAN §6 Q22: the
+learner adds a method's `modifies` clause and a frame postcondition, as in
+Q05.H2d) is pinned under `open_frames`: its signature and every clause but
+`modifies` and `ensures` are compared exactly, every shipped `ensures` clause
+must still be there verbatim and in order (`frame_ensures` pins their
+hashes), and added `modifies` and `ensures` clauses are accepted. `--pin`
+takes the open frames from the reference twins: a method whose twin header
+holds a `@hole-begin` region (vcheck frame_symbols); the twin's header must
+differ from the shipped one by added `modifies` and `ensures` clauses only.
+A statement hole completed by adding requires and ensures clauses (QPLAN §6
+Q44: Q07.H7v's port ships with no `ensures`, Q08.T1v's and H3v's trait
+methods with no specification; Dafny and Verus, exec fns and trait methods
+included) is pinned under `open_specs`: its spec core (the signature and
+every clause but `requires` and `ensures`, a definition's body) is compared
+exactly, every shipped `requires` and `ensures` clause (Verus: each
+comma-separated expression) must still be there verbatim and in order
+(`spec_clauses` pins their hashes), and added `requires` and `ensures`
+clauses are accepted. `--pin` takes the open specs from the reference twins:
+a declaration whose twin statement differs from the shipped one by added
+`requires` and `ensures` clauses only (vcheck open_spec_symbols).
+
+An added measure is no change (DV3b kits; Δ160's first Open item, a Q08
+Dafny exit whose direct answer adds a `decreases` to its lemma): a statement
+that differs from its pin is compared again with the file's header
+`decreases` clauses blanked (vcheck measure_free_text), so a `decreases`
+added to a declaration (Dafny method-like, Verus fn; open spec or not) that
+shipped without one passes, and a shipped one stays frozen: blanked, the
+file no longer matches a pin that holds it. Never blanked: Dafny's
+`decreases *` (a method that may diverge states less) and a Verus clause
+with `when` or `via` (`when` narrows a spec fn's definition). `--against`
+(dvl freeze_check) and reference_lint.py judge the same way, and `--pin`
+takes no open spec for a twin that only adds a measure.
+
+Opacity is part of a Dafny statement (DV3a follow-up; Q06's opaque
+definitions): the shared statement table drops `opaque` with the attributes, so
+specfreeze folds it back in. An opaque declaration (the `opaque` modifier or
+a `{:opaque}` attribute; the two spellings are one statement) is pinned as
+sha256("opaque\\0" + its plain statement hash); every other hash is the plain
+one, so a pin of a file without opaque declarations is unchanged. Making a
+shipped opaque function transparent, or a transparent one opaque, is
+freeze-changed. Verus's `#[verifier::opaque]` is a kept attribute of the
+statement already.
+
+Placeholder bodies (QPLAN §30 Q52; Q11.H5d, H7d, H8d, R04.H4d). A Dafny
+function or predicate shipped WITH a body that its learner replaces (a
+placeholder such as `true`) is an open body too: `--pin` takes it from the
+twin (vcheck open_body_symbols: the twin states the same declaration once the
+body is dropped, another one with it) and lists it under `open_bodies` beside
+the bodyless ones, so its signature and its requires, reads and decreases
+clauses are compared exactly and the body is the learner's. The
+reference lint compares it by its header the same way.
+
+Frozen import lists (QPLAN §30 Q62; Q11's `Q11_VcAnswer`). A Dafny module
+whose import list is part of what it states carries the comment line
+`// specfreeze: frozen-imports` inside it (dvl.dafny.FROZEN_IMPORTS_MARKER);
+`--pin` records, under the file's `[file.frozen_imports]` table, one sha256
+per import statement of that module and of every module nested in it, and
+`--check` reports `freeze-imports-changed — module <M>` when an import is
+added, removed or changed there (their order is free), `freeze-missing` when
+the module is gone. Unmarked modules may import freely. `--against` and
+`--lab` apply the frozen file's markers the same way.
+
+Frozen levers. A learner may add verification levers, but the ones
+that switch automation off are part of the task a file ships: deleting a
+module's `{:disableNonlinearArithmetic}` (or a lemma's `{:induction false}`)
+turns a library-step exercise into a solver one, and no statement changes.
+`--pin` records a Dafny or Verus file's automation-off levers
+(dvl.levers.off_levers) under `frozen_levers`, `--check` reports each one that
+is gone as `freeze-lever-removed — <scope> <lever>`, and `--against` compares
+the candidate's with the frozen file's the same way. Adding a lever, or
+removing any other (a trust escape, an option the lint refuses), is no
+finding here; `--lab` keeps its stricter two-way lever check.
+
+Python statements (the registry's `harness` files, DV4): dvl.python.spec_hash,
+each function's and class's signature (name, parameters with annotations and
+defaults, return annotation, decorators, bases), never a body or docstring,
+so filling a `raise NotImplementedError` hole changes no statement.
+
+Usage:
+  specfreeze --pin <ID>       author-only (CI=true or the author's linked
+                              worktree off a learner branch, spec §7.4): write
+                              expected/<ID>.freeze: one sha256 per statement
+                              of every Dafny, Verus and Python file the
+                              registry lists for the module (exercises,
+                              specimens, exits, agentic and harness files),
+                              as they stand (run it on the
+                              files as shipped). Static. A study or contractor
+                              session that re-pinned after weakening a
+                              statement would defeat --check, so it refuses
+                              there (exit 3).
+  specfreeze --check <ID>     compare the files with expected/<ID>.freeze.
+                              Static. Findings: freeze-changed,
+                              freeze-missing (a frozen symbol is gone),
+                              freeze-file-missing, freeze-unpinned-file (the
+                              registry lists a file the pin does not know: a
+                              stale pin), freeze-stale (a pin entry for a file
+                              the registry no longer lists),
+                              freeze-lever-removed (a pinned automation-off
+                              lever is gone).
+  specfreeze --hash <file> [--json]
+                              print each statement's symbol and sha256.
+  specfreeze --against <frozen> <candidate>
+                              dvl's freeze_check: Dafny refinement mode when
+                              the frozen file holds abstract modules (that
+                              check runs the verifier, Δ44), else hash mode;
+                              Dafny or Verus only. For Dafny it adds
+                              freeze-changed for a declaration of a concrete
+                              frozen module whose statement is unchanged but
+                              whose opacity is not; for both,
+                              freeze-lever-removed for an automation-off
+                              lever of the frozen file that is gone.
+  specfreeze --lab <task> <delivery> [--json]
+                              the lab gate's static half (QPLAN §30 Q63;
+                              PLAN §4.3, Lab α's validity rule): --against's
+                              statement freeze of the delivery against its
+                              task form, and the lever check (dvl.levers): a
+                              verification lever the task form does not ship
+                              (lab-lever-added), a shipped one that is gone
+                              (lab-lever-removed; a removed trust escape such
+                              as the exec hole's external_body is no finding),
+                              a lever in a file the task form lacks
+                              (lab-file-added), a changed project file
+                              (lab-project-changed). Two files of one language
+                              or two directories (a crate, a Dafny project).
+                              Static unless the frozen file holds abstract
+                              modules. Learner files are never judged this
+                              way: the learner gate allows the levers.
+
+Output: `path:line: kind — symbol` (symbols, never statement text).
+Exit: 0 match · 1 findings · 2 usage · 3 refused (unknown or planned module,
+missing file or pin).
+"""
+
+import argparse
+import ast
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import sys
+import tomllib
+from collections import Counter
+from pathlib import Path
+
+sys.dont_write_bytecode = True
+SCRIPTS = Path(__file__).resolve().parent
+
+
+def load_core():
+    if "vcheck" in sys.modules:
+        return sys.modules["vcheck"]
+    loader = importlib.machinery.SourceFileLoader("vcheck", str(SCRIPTS / "vcheck"))
+    spec = importlib.util.spec_from_loader("vcheck", loader)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["vcheck"] = mod
+    loader.exec_module(mod)
+    return mod
+
+
+core = load_core()
+D, V, vs, PY = core.D, core.V, core.V.vs, core.PY
+from dvl import levers as LEV  # noqa: E402  (the shared core put scripts/ on sys.path)
+FREEZE_EXTS = (".dfy", ".rs", ".py", ".dfy.specimen", ".rs.specimen")
+# The record lists whose files are frozen (Python: the learner files of `harness`).
+FREEZE_KEYS = ("exercises", "exits", "agentic", "harness")
+
+
+# --- per-language statement tables --------------------------------------------------------
+
+def lang_of(path):
+    """'d', 'v' or 'py' (a Python file); None for anything else."""
+    return "py" if str(path).endswith(".py") else core.lang_of(path)
+
+
+def _sha(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def opaque_symbols(src):
+    """The qualified symbols of a parsed Dafny source's opaque declarations:
+    the `opaque` modifier or a `{:opaque}` attribute (one statement either way)."""
+    return {d.qual for d in src.decls if d.kind in D.HASHED_KINDS and
+            ("opaque" in d.modifiers or any((a.style, a.name) == ("{:", "opaque")
+                                            for a in d.attrs))}
+
+
+def with_opacity(hashes, opaque):
+    """Statement hashes with opacity folded in: an opaque declaration's hash is
+    sha256("opaque\\0" + its plain hash); every other hash stays plain."""
+    return {sym: (_sha("opaque\0" + h) if sym in opaque else h) for sym, h in hashes.items()}
+
+
+def python_statements(path):
+    """({symbol: sha256}, {symbol: line}, []) of a Python file: dvl.python's
+    spec_hash (signatures only), and each symbol's def/class line under the
+    same names (classes `C`, methods `C.m`, nested functions `f.<locals>.g`).
+    SyntaxError when the file does not parse."""
+    hashes = PY.spec_hash(path)
+    tree = ast.parse(Path(path).read_text(encoding="utf-8"))
+    lines = {}
+
+    def walk(node, prefix):
+        for child in ast.iter_child_nodes(node):
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                name = f"{prefix}{child.name}"
+                lines.setdefault(name, child.lineno)
+                walk(child, f"{name}." if isinstance(child, ast.ClassDef)
+                     else f"{name}.<locals>.")
+            else:
+                walk(child, prefix)
+    walk(tree, "")
+    return hashes, lines, []
+
+
+def statements(path, lang, open_bodies=(), open_frames=(), open_specs=(), text=None):
+    """The shared core's statement table (vcheck statement_table), with a Dafny
+    declaration's opacity folded into its hash (with_opacity); a Python file's
+    signatures (python_statements). `text`: the Dafny or Verus source to read
+    in place of the file's (the measure-free comparison of check_module)."""
+    if lang == "py":
+        return python_statements(path)
+    hashes, lines, bodyless = core.statement_table(path, lang, open_bodies, text=text,
+                                                   open_frames=open_frames,
+                                                   open_specs=open_specs)
+    if lang == "d":
+        text = Path(path).read_text(encoding="utf-8") if text is None else text
+        hashes = with_opacity(hashes, opaque_symbols(D.parse_source(text, str(path))))
+    return hashes, lines, bodyless
+
+
+def opacity_findings(frozen, candidate):
+    """--against, Dafny: a declaration of a concrete frozen module whose plain
+    statement is unchanged in the candidate but whose opacity is not."""
+    fsrc, csrc = D.parse_file(Path(frozen).resolve()), D.parse_file(Path(candidate).resolve())
+    abstract = {m.qual for m in fsrc.modules if m.abstract}
+    fh = D.spec_hash_source(fsrc.text, fsrc.path)
+    ch = D.spec_hash_source(csrc.text, csrc.path)
+    fop, cop = opaque_symbols(fsrc), opaque_symbols(csrc)
+    cline = {}
+    for d in csrc.decls:
+        cline.setdefault(d.qual, d.line)
+    out = []
+    for sym in sorted(fh):
+        if any(sym.startswith(q + ".") for q in abstract):
+            continue
+        if ch.get(sym) == fh[sym] and (sym in fop) != (sym in cop):
+            out.append(core.common.Finding(str(candidate), cline.get(sym, 0), "freeze-changed",
+                                           f"{sym}: the statement differs from the frozen one "
+                                           "(its opacity)"))
+    return out
+
+
+def open_frames_of(root, rel, lang, learner_hashes):
+    """(open frames [symbol], {symbol: [shipped ensures hashes]}) of a learner
+    file, from its reference twin's header regions (vcheck frame_symbols).
+    Raises Refusal when the twin's markers are broken or its header differs
+    from the shipped one by more than added modifies and ensures clauses."""
+    twin = Path(root) / core.REF_DIR / rel
+    if lang != "d" or not twin.is_file():
+        return [], {}
+    ttext = twin.read_text(encoding="utf-8")
+    try:
+        syms = [x for x in core.frame_symbols(ttext, twin) if x in learner_hashes]
+    except ValueError as e:
+        raise core.Refusal(f"{core.REF_DIR}/{rel}: {e}") from None
+    if not syms:
+        return [], {}
+    lpath = Path(root) / rel
+    lcore, _, _ = statements(lpath, lang, (), syms)
+    tcore, _, _ = statements(twin, lang, (), syms)
+    lens = core.frame_ensures(lpath, symbols=set(syms))
+    tens = core.frame_ensures(twin, text=ttext, symbols=set(syms))
+    for sym in syms:
+        if lcore.get(sym) != tcore.get(sym) or not core.is_subsequence(lens.get(sym, []),
+                                                                         tens.get(sym, [])):
+            raise core.Refusal(f"{core.REF_DIR}/{rel}: {sym}: the twin's header differs from the "
+                               "shipped one by more than added modifies and ensures clauses "
+                               "(an open frame accepts only those)")
+    return sorted(syms), {sym: lens.get(sym, []) for sym in sorted(syms)}
+
+
+def open_specs_of(root, rel, lang, learner_hashes, exclude=()):
+    """(open specs [symbol], {symbol: {"requires": [...], "ensures": [...]}}) of
+    a learner file: the declarations whose reference twin's statement differs
+    from the shipped one by added requires and ensures clauses only (vcheck
+    open_spec_symbols), with the shipped clause hashes. Empty without a twin."""
+    twin = Path(root) / core.REF_DIR / rel
+    if lang not in ("d", "v") or not twin.is_file():
+        return [], {}
+    lpath = Path(root) / rel
+    try:
+        syms = [s for s in core.open_spec_symbols(lpath, lang, tpath=twin, exclude=exclude)
+                if s in learner_hashes]
+    except (vs.ParseError, UnicodeDecodeError) as e:
+        raise core.Refusal(f"{core.REF_DIR}/{rel}: the twin does not parse ({e})") from None
+    if not syms:
+        return [], {}
+    _, _, bodyless = statements(lpath, lang)
+    parts = core.spec_parts(lpath, lang, symbols=set(syms), open_bodies=set(bodyless))
+    return sorted(syms), {s: parts[s][1] for s in sorted(syms)}
+
+
+# --- the pin file -------------------------------------------------------------------------
+
+def freeze_path(root, mid):
+    return Path(root) / "expected" / f"{mid}.freeze"
+
+
+def module_freeze_files(root, rec):
+    """Repo-relative Dafny, Verus and Python files of the module (FREEZE_KEYS)."""
+    rels = core.expand_files(root, [p for k in FREEZE_KEYS for p in rec.get(k) or []],
+                             FREEZE_EXTS)
+    return [r for r in rels if (Path(root) / r).is_file()]
+
+
+def toml_str(s):
+    return json.dumps(s, ensure_ascii=False)
+
+
+def render_freeze(mid, entries, unfrozen):
+    """The pin file text. entries: (rel, lang, hashes, bodyless, open frames,
+    {symbol: [ensures hashes]}[, open specs, {symbol: {"requires": [...],
+    "ensures": [...]}}]); the open_frames line and the frame_ensures table
+    appear only for a file that has open frames, the open_specs line and the
+    spec_clauses table only for a file that has open specs."""
+    out = [f"# expected/{mid}.freeze — statement-freeze pins for {mid} (spec §11.1 row 29, Δ44).",
+           f"# Written by `scripts/specfreeze --pin {mid}` from the files as shipped; checked by",
+           f"# `scripts/specfreeze --check {mid}`. One sha256 per statement (signature and",
+           "# clauses, token-normalized; a definition's body included). A symbol under",
+           "# open_bodies was pinned without a body (a function hole); one under open_frames",
+           "# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6",
+           "# Q22, Q44). Never edit by hand.",
+           "schema = 1", f"module = {toml_str(mid)}",
+           "unfrozen = [" + ", ".join(toml_str(u) for u in unfrozen) + "]", ""]
+    for entry in entries:
+        rel, lang, hashes, bodyless, frames, fens = entry[:6]
+        specs, sclauses = (entry[6], entry[7]) if len(entry) > 6 else ([], {})
+        fimports = entry[8] if len(entry) > 8 else {}
+        flevers = entry[9] if len(entry) > 9 else []
+        out += ["[[file]]", f"path = {toml_str(rel)}", f"lang = {toml_str(lang)}",
+                "open_bodies = [" + ", ".join(toml_str(b) for b in bodyless) + "]"]
+        if flevers:
+            out.append("frozen_levers = [" + ", ".join(toml_str(x) for x in flevers) + "]")
+        if frames:
+            out.append("open_frames = [" + ", ".join(toml_str(f) for f in frames) + "]")
+        if specs:
+            out.append("open_specs = [" + ", ".join(toml_str(s) for s in specs) + "]")
+        out.append("[file.statements]")
+        out += [f"{toml_str(sym)} = {toml_str(h)}" for sym, h in sorted(hashes.items())]
+        if frames:
+            out.append("[file.frame_ensures]")
+            out += [f"{toml_str(sym)} = [" + ", ".join(toml_str(h) for h in fens[sym]) + "]"
+                    for sym in frames]
+        if specs:
+            out.append("[file.spec_clauses]")
+            for sym in specs:
+                cl = sclauses[sym]
+                out.append(f"{toml_str(sym)} = {{ " + ", ".join(
+                    f"{kw} = [" + ", ".join(toml_str(h) for h in cl.get(kw, [])) + "]"
+                    for kw in core.SPEC_CLAUSES) + " }")
+        if fimports:
+            out.append("[file.frozen_imports]")
+            out += [f"{toml_str(mod)} = [" + ", ".join(toml_str(h) for h in hs) + "]"
+                    for mod, hs in sorted(fimports.items())]
+        out.append("")
+    return "\n".join(out)
+
+
+def load_freeze(path):
+    data = tomllib.loads(Path(path).read_text(encoding="utf-8"))
+    if data.get("schema") != 1 or not isinstance(data.get("file", []), list):
+        raise ValueError(f"{path}: not a schema-1 freeze file")
+    return data
+
+
+# --- modes ---------------------------------------------------------------------------------
+
+def open_bodies_of(root, rel, lang, bodyless):
+    """The open bodies of a learner file: its bodyless definitions, and (Dafny,
+    QPLAN §30 Q52) the functions and predicates shipped with a placeholder body
+    whose twin states them with another body (vcheck open_body_symbols)."""
+    twin = Path(root) / core.REF_DIR / rel
+    placeholders = core.open_body_symbols(Path(root) / rel, lang, tpath=twin) \
+        if lang == "d" and twin.is_file() else []
+    return sorted(set(bodyless) | set(placeholders))
+
+
+def frozen_imports_of(path, lang, text=None):
+    """{module: [sha256 of each import statement of its subtree, sorted]} of the
+    Dafny modules a file marks as having a frozen import list (QPLAN §30 Q62;
+    dvl.dafny.FROZEN_IMPORTS_MARKER); {} for any other file."""
+    if lang != "d":
+        return {}
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    src = D.parse_source(text, str(path))
+    return {mod: sorted(_sha(x) for x in D.subtree_imports(src, mod))
+            for mod in sorted(D.frozen_import_modules(src))}
+
+
+def import_findings(path, frozen, text=None):
+    """[(line, kind, module)] of a Dafny file against a pin's frozen import
+    lists ({module: [sha256 …]}): freeze-missing for a frozen module the file
+    no longer declares, freeze-imports-changed for one whose subtree's import
+    statements differ (added, removed or changed; their order is free)."""
+    if not frozen:
+        return []
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    src = D.parse_source(text, str(path))
+    lines = {m.qual: m.line for m in src.modules}
+    out = []
+    for mod, pinned in sorted(frozen.items()):
+        now = D.subtree_imports(src, mod)
+        if now is None:
+            out.append((0, "freeze-missing", f"module {mod}"))
+        elif sorted(_sha(x) for x in now) != sorted(pinned):
+            out.append((lines.get(mod, 0), "freeze-imports-changed", f"module {mod}"))
+    return out
+
+
+def mode_pin(root, mid):
+    core.require_author(root, "specfreeze --pin")
+    rec = core.record(root, mid)
+    entries, unfrozen = [], []
+    for rel in module_freeze_files(root, rec):
+        lang = lang_of(rel)
+        hashes, _, bodyless = statements(Path(root) / rel, lang)
+        if not hashes:
+            unfrozen.append(rel)
+            continue
+        opened = open_bodies_of(root, rel, lang, bodyless)
+        frames, fens = open_frames_of(root, rel, lang, hashes)
+        specs, sclauses = open_specs_of(root, rel, lang, hashes,
+                                        exclude=set(opened) | set(frames))
+        hashes, _, _ = statements(Path(root) / rel, lang, set(opened), frames, specs)
+        entries.append((rel, lang, hashes, opened, frames, fens, specs, sclauses,
+                        frozen_imports_of(Path(root) / rel, lang),
+                        LEV.off_levers(Path(root) / rel) if lang in ("d", "v") else []))
+    if not entries:
+        print(f"specfreeze: {rec['id']}: no statement in any Dafny, Verus or Python file of the "
+              "module (an empty pin fails)", file=sys.stderr)
+        return core.EXIT_FAIL
+    p = freeze_path(root, rec["id"])
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(render_freeze(rec["id"], entries, unfrozen), encoding="utf-8")
+    n = sum(len(e[2]) for e in entries)
+    specs = [f"{e[0]}: {s}" for e in entries for s in e[6]]
+    frozen = [f"{e[0]}: {m}" for e in entries for m in e[8]]
+    print(f"specfreeze: wrote {core.show(p, root)}: {n} statement(s) in {len(entries)} file(s)"
+          + (f"; {len(unfrozen)} file(s) without statements" if unfrozen else "")
+          + (f"; open specs (QPLAN §6 Q44): {', '.join(specs)}" if specs else "")
+          + (f"; frozen import lists (QPLAN §30 Q62): {', '.join(frozen)}" if frozen else ""))
+    return core.EXIT_OK
+
+
+def check_module(root, rec):
+    """[(path, line, kind, symbol)] for a module against its pin."""
+    p = freeze_path(root, rec["id"])
+    if not p.is_file():
+        raise core.Refusal(f"{core.show(p, root)}: no freeze pin (run specfreeze --pin "
+                           f"{rec['id']} on the files as shipped)")
+    data = load_freeze(p)
+    pinned = {e["path"]: e for e in data.get("file", [])}
+    unfrozen = set(data.get("unfrozen", []))
+    if not pinned:
+        raise core.Refusal(f"{core.show(p, root)}: pins no statement (an empty pin fails)")
+    listed = set(module_freeze_files(root, rec))
+    out = []
+    for rel in sorted(listed - set(pinned) - unfrozen):
+        out.append((rel, 0, "freeze-unpinned-file", "(file)"))
+    for rel in sorted((set(pinned) | unfrozen) - listed):
+        if not (Path(root) / rel).is_file():
+            out.append((rel, 0, "freeze-file-missing", "(file)"))
+        else:
+            out.append((rel, 0, "freeze-stale", "(file)"))
+    for rel, e in sorted(pinned.items()):
+        f = Path(root) / rel
+        if not f.is_file() or rel not in listed:
+            continue
+        frozen = dict(e.get("statements", {}))
+        if not frozen:
+            out.append((rel, 0, "freeze-empty", "(file)"))
+            continue
+        lang = e.get("lang") or lang_of(rel)
+        frames = set(e.get("open_frames", [])) if lang == "d" else set()
+        specs = set(e.get("open_specs", [])) if lang in ("d", "v") else set()
+        try:
+            have, lines, _ = statements(f, lang, set(e.get("open_bodies", [])), frames, specs)
+            ens = core.frame_ensures(f, symbols=frames) if frames else {}
+            sparts = core.spec_parts(f, lang, symbols=specs,
+                                     open_bodies=set(e.get("open_bodies", []))) if specs else {}
+        except (vs.ParseError, UnicodeDecodeError, SyntaxError, PY.Refused) as err:
+            line = getattr(err, "lineno", None) if isinstance(err, SyntaxError) else None
+            out.append((rel, line or getattr(err, "line", 0) or 0, "freeze-parse-error",
+                        "(file)"))
+            continue
+        pinned_ens = e.get("frame_ensures", {})
+        pinned_cl = e.get("spec_clauses", {})
+        if lang in ("d", "v") and any(have.get(s, h) != h for s, h in frozen.items()):
+            # an added measure is no change (vcheck measure_free_text): a statement
+            # that differs is compared again with the file's measures blanked
+            text = f.read_text(encoding="utf-8")
+            alt, _, _ = statements(f, lang, set(e.get("open_bodies", [])), frames, specs,
+                                   text=core.measure_free_text(text, lang, f))
+            have = {s: (frozen[s] if s in frozen and alt.get(s) == frozen[s] else h)
+                    for s, h in have.items()}
+        for sym, h in sorted(frozen.items()):
+            if sym not in have:
+                out.append((rel, 0, "freeze-missing", sym))
+            elif have[sym] != h or (sym in frames and not core.is_subsequence(
+                    pinned_ens.get(sym, []), ens.get(sym, []))) or (
+                    sym in specs and (sym not in pinned_cl or not core.spec_clauses_kept(
+                        pinned_cl[sym], sparts.get(sym, (None, {}))[1]))):
+                out.append((rel, lines.get(sym, 0), "freeze-changed", sym))
+        if lang == "d" and e.get("frozen_imports"):
+            out += [(rel, line, kind, what)
+                    for line, kind, what in import_findings(f, e["frozen_imports"])]
+        if lang in ("d", "v") and e.get("frozen_levers"):
+            try:
+                gone = Counter(e["frozen_levers"]) - Counter(LEV.off_levers(f))
+                out += [(rel, 0, "freeze-lever-removed", key) for key in sorted(gone)]
+            except LEV.LeverError:
+                out.append((rel, 0, "freeze-parse-error", "(file)"))
+    return out
+
+
+def mode_check(root, mid):
+    rec = core.record(root, mid)
+    found = check_module(root, rec)
+    for rel, line, kind, sym in found:
+        print(f"{rel}:{line}: {kind} — {sym}")
+    print(f"specfreeze: {rec['id']}: {len(found)} finding(s)")
+    return core.EXIT_OK if not found else core.EXIT_FAIL
+
+
+def mode_hash(root, path, as_json):
+    lang = lang_of(path)
+    if lang is None or Path(path).is_dir():
+        raise core.Usage(f"{path}: one .dfy, .rs, .py or specimen file")
+    if not Path(path).is_file():
+        raise core.Refusal(f"{path}: no such file")
+    if core.is_reference_path(path, root):
+        raise core.Refusal(f"{path} is reference material")
+    hashes, lines, bodyless = statements(path, lang)
+    if as_json:
+        print(json.dumps(hashes, sort_keys=True))
+    else:
+        for sym in sorted(hashes, key=lambda s: lines.get(s, 0)):
+            print(f"{core.show(path, root)}:{lines.get(sym, 0)}: {sym} sha256 {hashes[sym]}"
+                  + (" (bodyless)" if sym in bodyless else ""))
+    return core.EXIT_OK
+
+
+def against_findings(frozen, candidate):
+    """dvl freeze_check of a candidate against a frozen file (Dafny or Verus),
+    with Dafny's opacity findings and the frozen import lists the frozen file
+    marks (QPLAN §30 Q62)."""
+    lang = core.lang_of(candidate)
+    found = core.lib(lang).freeze_check(str(frozen), str(candidate))
+    if lang == "d" and Path(frozen).is_file() and Path(candidate).is_file():
+        found = set(found) | set(opacity_findings(frozen, candidate))
+        found |= {core.common.Finding(str(candidate), line, kind, what) for line, kind, what in
+                  import_findings(candidate, frozen_imports_of(frozen, "d"))}
+    return sorted(found, key=lambda x: (x.file, x.line, x.kind, x.message))
+
+
+def _check_pair(root, *paths):
+    for p in paths:
+        if not Path(p).exists():
+            raise core.Refusal(f"{p}: no such file")
+        if core.is_reference_path(p, root):
+            raise core.Refusal(f"{p} is reference material")
+
+
+def mode_against(root, frozen, candidate):
+    lang = core.lang_of(candidate)
+    if lang is None:
+        raise core.Usage(f"{candidate}: a .dfy or .rs candidate")
+    _check_pair(root, frozen, candidate)
+    found = against_findings(frozen, candidate)
+    if Path(frozen).is_file() and Path(candidate).is_file() and \
+            core.lang_of(frozen) == lang:
+        try:
+            found += LEV.off_lever_findings(frozen, candidate)
+        except LEV.LeverError as e:
+            raise core.Usage(str(e)) from None
+    for f in found:
+        print(f"{core.show(f.file, root)}:{f.line}: {f.kind} — {f.message}")
+    print(f"specfreeze: {core.show(candidate, root)}: {len(found)} finding(s)")
+    return core.EXIT_OK if not found else core.EXIT_FAIL
+
+
+def lab_findings(task, delivery):
+    """The lab gate's static half (QPLAN §30 Q63): the statement freeze of
+    every source file of the delivery against its task form (against_findings;
+    a file pair, or two directories compared under the same relative paths)
+    and the lever check (dvl.levers.lever_findings: no lever added, none
+    removed, project files unchanged). Raises core.Usage for a pair it cannot
+    compare."""
+    task, delivery = Path(task), Path(delivery)
+    try:
+        found = list(LEV.lever_findings(task, delivery))
+    except LEV.LeverError as e:
+        raise core.Usage(str(e)) from None
+    if task.is_file():
+        pairs = [(task, delivery)]
+    else:
+        pairs = []
+        for t in sorted(task.rglob("*")):
+            rel = t.relative_to(task)
+            if t.is_file() and core.lang_of(t) in ("d", "v") and \
+                    not any(x in ("target", ".git") for x in rel.parts) and \
+                    (delivery / rel).is_file():
+                pairs.append((t, delivery / rel))
+    for t, d in pairs:
+        found += against_findings(t, d)
+    return sorted(set(found), key=lambda x: (x.file, x.line, x.kind, x.message))
+
+
+def mode_lab(root, task, delivery, as_json):
+    _check_pair(root, task, delivery)
+    found = lab_findings(task, delivery)
+    if as_json:
+        print(json.dumps({"task": core.show(task, root), "delivery": core.show(delivery, root),
+                          "exit_code": core.EXIT_OK if not found else core.EXIT_FAIL,
+                          "findings": [{"file": core.show(f.file, root), "line": f.line,
+                                        "kind": f.kind, "message": f.message} for f in found]},
+                         sort_keys=True))
+    else:
+        for f in found:
+            print(f"{core.show(f.file, root)}:{f.line}: {f.kind} — {f.message}")
+        print(f"specfreeze: {core.show(delivery, root)}: {len(found)} finding(s) (lab: statements "
+              "and levers against the task form)")
+    return core.EXIT_OK if not found else core.EXIT_FAIL
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="specfreeze", description="Statement-freeze pins.")
+    g = ap.add_mutually_exclusive_group(required=True)
+    g.add_argument("--pin", metavar="ID")
+    g.add_argument("--check", metavar="ID")
+    g.add_argument("--hash", metavar="FILE", type=Path)
+    g.add_argument("--against", nargs=2, metavar=("FROZEN", "CANDIDATE"), type=Path)
+    g.add_argument("--lab", nargs=2, metavar=("TASK", "DELIVERY"), type=Path)
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--root", type=Path, default=core.REPO, help=argparse.SUPPRESS)
+    try:
+        a = ap.parse_args(sys.argv[1:] if argv is None else argv)
+    except SystemExit as e:
+        return core.EXIT_USAGE if e.code else 0
+    root = a.root.resolve()
+    try:
+        if a.pin:
+            return mode_pin(root, a.pin)
+        if a.check:
+            return mode_check(root, a.check)
+        if a.hash:
+            return mode_hash(root, a.hash, a.json)
+        if a.lab:
+            return mode_lab(root, *a.lab, a.json)
+        return mode_against(root, *a.against)
+    except core.Usage as e:
+        print(f"specfreeze: {e}", file=sys.stderr)
+        return core.EXIT_USAGE
+    except core.Refusal as e:
+        print(f"specfreeze: refused: {e}", file=sys.stderr)
+        return core.EXIT_REFUSED
+    except (ValueError, tomllib.TOMLDecodeError) as e:
+        print(f"specfreeze: {e}", file=sys.stderr)
+        return core.EXIT_FAIL
+    except SyntaxError as e:            # a Python file that does not parse (no content shown)
+        print(f"specfreeze: {e.filename}:{e.lineno or 0}: the Python file does not parse",
+              file=sys.stderr)
+        return core.EXIT_FAIL
+    except PY.Refused as e:
+        print(f"specfreeze: {e}", file=sys.stderr)
+        return core.EXIT_FAIL
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,24 @@
+// Card demo Q01.C3v (calling a proof fn), the failure half. The success half is
+// `wf_push_call` in verus/q/q01_hello/src/lib.rs; here the call's argument breaks the
+// proof fn's `requires`. Run it with `scripts/vcheck specimens/Q01/card-c3v.rs.specimen`;
+// the EXPECT line at the end pins the message the verifier gives (line and fragment).
+// after: Q01.P8dv
+use vstd::prelude::*;
+use qg_bignat_l1::*;
+
+verus! {
+
+pub proof fn lemma_wf_push(s: Seq<u64>, d: u64)
+    requires
+        d != 0,
+    ensures
+        seq_wf(s.push(d)),
+{
+}
+
+pub proof fn wf_push_call(s: Seq<u64>) {
+    lemma_wf_push(s, 0);
+}
+
+} // verus!
+// EXPECT @20 "precondition not satisfied"

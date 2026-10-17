@@ -1,0 +1,125 @@
+% Q10_problems.tex — the written problems of Q10 (Practice I-A). Built by
+% `make -C paper paper` with Q10_answers.tex. B1 (loop measures, a concept
+% question) and B2 (the paper card) are the module's written pair: 15 minutes,
+% after the chapter's §5 and before the holes.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q10 --- Practice I-A \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q10\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: after the chapter, before you start the holes (15 minutes in all).
+Answer B1 without running the four loops: the grader runs them. Then run
+\texttt{/grade-paper Q10} in a fresh session. Compare with
+\texttt{paper/solutions/} only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B1}
+\textbf{Loop measures} (5 minutes). Each loop below is a whole file, run with
+\texttt{scripts/vcheck --module Q10}. None has a \texttt{decreases} clause.
+\begin{dafnycode}
+module A {
+  method Up(s: seq<nat>) returns (i: nat)
+    ensures i == |s|
+  {
+    i := 0;
+    while i < |s|
+    {
+      i := i + 1;
+    }
+  }
+}
+\end{dafnycode}
+\begin{dafnycode}
+module B {
+  method Down(n: nat) returns (j: nat)
+    ensures j == 0
+  {
+    j := n;
+    while j > 0
+    {
+      j := j - 1;
+    }
+  }
+}
+\end{dafnycode}
+\begin{dafnycode}
+module C {
+  method Evens(n: nat) returns (i: nat)
+    ensures i == n
+  {
+    i := 0;
+    while i != n
+      invariant i <= n
+    {
+      i := i + 2;
+    }
+  }
+}
+\end{dafnycode}
+\begin{veruscode}
+use vstd::prelude::*;
+
+verus! {
+
+fn up(v: &Vec<u64>) -> (i: usize)
+    ensures
+        i == v.len(),
+{
+    let mut i: usize = 0;
+    while i < v.len()
+        invariant
+            i <= v.len(),
+    {
+        i = i + 1;
+    }
+    i
+}
+
+} // verus!
+\end{veruscode}
+For each of A, B, C and D (the Verus file): \textbf{(a)} does it verify?
+If not, at which stage does it stop (\texttt{parse}, \texttt{resolve} or
+verification), and which obligation fails? \textbf{(b)} In one line, why. For
+the Dafny loops, say what measure Dafny uses when none is written, and whether
+that measure is the loop's problem.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B2}
+\textbf{Paper card 02.11, Laurel: Unblocking Automated Verification with
+Large Language Models} (10 minutes). Fill the card on its eight fields: task
+shape, oracle, what is trusted, cheat surface, metric, budget, variance,
+artifact. Each field is graded against the pinned range of your own
+\texttt{cheatsheets.md}: lines 888--913, the entry from its heading to its
+\emph{Why it matters} paragraph, in the copy the command below names. The pin
+is the sha256 of exactly those lines, computed with the first line below; it
+must print the second.
+{\small
+\begin{verbatim}
+sed -n '888,913p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+d9fda575ed350eed76ac951aaca5717f1063acb0f78f146ac4ef1201d74c056a  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+
+Then one more line, \textbf{(ninth)}: Laurel's placeholder tells the model
+\emph{where} the missing assertion goes and its retrieval suggests
+\emph{what} it says. In H3 of Q10 (the assertion repairs), which of the two
+did the verifier's error message already give you, and which did you have to
+supply yourself?
+\end{problem}
+
+\end{document}

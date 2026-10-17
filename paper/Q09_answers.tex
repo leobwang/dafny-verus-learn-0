@@ -1,0 +1,95 @@
+% Q09_answers.tex — YOUR answers to paper/Q09_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q09_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q09 --- Internals III: brittleness, forensics, gate core \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+% One line per step; name the formula each step uses.
+\textbf{(a)} \\
+$p_0 q_0 = \dots$ \quad $2 p_0 q_0 / n = \dots$ \quad its root $= \dots$ \\
+$z_a + z_b = \dots$ \quad $\delta_1 = \dots$
+
+\textbf{(b)} \\
+$p_1 = \dots$ \quad $\bar p = \dots$ \\
+$\sqrt{2 \bar p \bar q} = \dots$ \quad $\sqrt{p_0 q_0 + p_1 q_1} = \dots$ \\
+$n(\delta_1) = \dots$ \quad detectable at $n = 40$: \dots \\
+\texttt{fvh.stats.mde\_two\_proportions(40, 0.3)} $= \dots$ \quad $n$ at that value: \dots
+
+\textbf{(c)} $n(0.10) = \dots$ \\
+What the pre-registration must say or change: \dots
+
+\textbf{(d)} The paired value: \dots \\
+Why it is conservative: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} mean $= \dots$ \\
+sum of squared deviations $= \dots$ \quad variance (divisor 3) $= \dots$ \\
+standard deviation $= \dots$ \quad CV $= \dots$ \quad flagged: \dots
+
+\textbf{(b)} Stable: \dots \quad the row that decides: \dots \\
+What the CV adds: \dots \\
+Why the two solvers' counts are not pooled: \dots
+
+\textbf{(c)} \texttt{fvh.stats.wilson\_interval(17, 22)} $= \dots$ \\
+The claim sentence: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+\textbf{(a)} The ten rows, as in \texttt{research/q09\_forensics.md}:
+% Paste the rows between the two lstlisting lines; long rows wrap on the page only.
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible]
+item  | true? | valid? | useful? | instrument (command)                    | root cause
+\end{lstlisting}
+The lines each copy changed (one line per copy, if any): \dots
+
+\textbf{(b)} The delivery: \dots \quad the second instrument: \dots \\
+What each sees: \dots
+
+\textbf{(c)} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 07.2, lines 2852--2873 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

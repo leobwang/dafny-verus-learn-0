@@ -1,0 +1,5 @@
+# expected/Q11.pins — one salted sha256 per verdict answer: sha256 of "Q11:<item id>:<answer>",
+# the answer normalized (trimmed, whitespace collapsed). Written by
+# `scripts/pins.py --update --ref --module Q11` from the reference answers. Never the answer itself.
+P1dv  salted-sha256 08e6734b9de30ba855fe12eaa2dd382ccb3baf673313cb52635c529db6d2131a
+P2dv  salted-sha256 fcbb8c0209378f2ea2bd8a32231341ce6524f5d25922196837e3a833cc38b920

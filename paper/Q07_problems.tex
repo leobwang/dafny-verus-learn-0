@@ -1,0 +1,199 @@
+% Q07_problems.tex — the written problems of Q07 (Internals I: proof
+% engineering, translation). Built by `make -C paper paper` with
+% Q07_answers.tex. B1 (a blueprint), B2 (a concept question) and B3 (the paper
+% card) are the module's written pair: 15 minutes, after the chapter and before
+% the holes.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q07 --- Internals I: proof engineering, translation \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q07\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: after the chapter, before you start the holes (15 minutes in all). Write
+B1 \emph{before} you open the hints under H3 in the Dafny exercise file and
+under H5 in \texttt{lib.rs}. Then run \texttt{/grade-paper Q07} in a fresh
+session. Once H3d and H5v verify, \verb+/grade-paper Q07 --post+ re-scores B1's
+blueprint against your own proofs. Compare with \texttt{paper/solutions/} only
+as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B1}
+\textbf{Two quotients, every step named} (6 minutes). Nonlinear arithmetic is
+off in Q07's Dafny module, and the Verus crate proves products and quotients
+without \vrs{nonlinear_arith}. A proof there is a chain of facts, and the
+blueprint's job is to name each one. \dfy{BASE} is layer L1's constant
+$2^{64}$.
+\begin{enumerate}
+\item[(a)] Dafny, H3 of the exercise file: one step of division by a limb.
+\begin{dafnycode}
+lemma DivLimbStep(r: nat, x: nat, d: nat)
+  requires 0 < d < BASE && r < d && x < BASE
+  ensures (r * BASE + x) / d < BASE
+\end{dafnycode}
+  Prove it informally as a chain of facts that ends at the postcondition.
+  Name every fact by its statement (an equation or inequality between named
+  quantities, with its hypotheses), and say where it comes from: the standard
+  library (\texttt{Std.Arithmetic.Mul} or \texttt{Std.Arithmetic.DivMod},
+  opened in the file; its name if you know it, its statement in any case), a
+  new lemma you would have to prove, or a gap you declare. Give the arguments
+  at which each fact is used, and show that its hypotheses hold there. Then
+  say which steps of your chain the solver takes without a named fact, with
+  nonlinear arithmetic off, and why.
+\item[(b)] Verus, H5 of \texttt{lib.rs}: dropping one more limb is one more
+  division by \vrs{BASE}. Layer L3's \vrs{weight(n)} is \vrs{BASE} to the
+  power $n$, and it is opaque; L3 states its facts as lemmas:
+\begin{veruscode}
+pub proof fn lemma_weight_zero()
+    ensures
+        weight(0) == 1,
+
+pub proof fn lemma_weight_succ(n: nat)
+    ensures
+        weight(n + 1) == BASE * weight(n),
+
+pub broadcast proof fn lemma_weight_mono(m: nat, n: nat)
+    requires
+        m <= n,
+    ensures
+        #[trigger] weight(m) <= #[trigger] weight(n),
+
+pub proof fn lemma_div_weight_succ(v: nat, n: nat)
+    ensures
+        v / weight(n + 1) == (v / weight(n)) / BASE,
+\end{veruscode}
+  Prove \vrs{lemma_div_weight_succ} informally, with no
+  \vrs{nonlinear_arith}, in the same form as (a): each fact by its statement,
+  attributed to L3 (by name), to \texttt{vstd::arithmetic} (its statement; its
+  name if you know it), to a new lemma, or to a gap; the arguments of each use;
+  and how each hypothesis of each fact is met.
+\end{enumerate}
+\emph{What will be formalized:} Q07.H3d in the Dafny exercise file and Q07.H5v
+in the Verus crate root:
+\begin{quote}
+\texttt{dafny/Q/Q07\_InternalsI/std/Q07\_InternalsI.dfy} \\
+\texttt{verus/q/q07\_internals\_i/src/lib.rs}
+\end{quote}
+\noindent Your chain is the blueprint: someone else should be able to
+formalize it without inventing any statement.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B2}
+\textbf{What a refactor's dashboard sees} (3 minutes). A file in the shape of
+Q07's agent files, each language in a file of its own: a \texttt{FROZEN}
+section, an \texttt{API} section and an empty \texttt{HELPERS} section. The
+snapshot, committed before any edit, holds the module header and the
+\texttt{FROZEN} section, as \texttt{research/q07\_frozen.dfy} does for the
+agent file.
+\begin{dafnycode}
+module {:disableNonlinearArithmetic} Shelf {
+  function Doubled(c: nat): nat { c + c }
+
+  // ### FROZEN
+  lemma PairBelow(a: nat, b: nat, c: nat)
+    requires a < c && b < c
+    ensures a + b < Doubled(c)
+  {
+    assert a + b < c + c;
+  }
+
+  // ### API
+  lemma PairBelowTight(a: nat, b: nat, c: nat)
+    requires a < c && b < c
+    ensures a + b < Doubled(c) && a + b <= Doubled(c) - 2
+  {
+    assert a + b < c + c;
+    assert a + b <= c + c - 2;
+  }
+
+  // ### HELPERS
+}
+\end{dafnycode}
+\begin{veruscode}
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn doubled(c: nat) -> nat {
+    c + c
+}
+
+// ### FROZEN
+pub proof fn pair_below(a: nat, b: nat, c: nat)
+    requires
+        a < c,
+        b < c,
+    ensures
+        a + b < doubled(c),
+{
+    assert(a + b < c + c);
+}
+
+// ### API
+pub proof fn pair_below_tight(a: nat, b: nat, c: nat)
+    requires
+        a < c,
+        b < c,
+    ensures
+        a + b < doubled(c),
+        a + b <= doubled(c) - 2,
+{
+    assert(a + b < c + c);
+    assert(a + b <= c + c - 2);
+}
+
+// ### HELPERS
+
+} // verus!
+\end{veruscode}
+Three edits, each made alone to the shipped file, the same three in each
+language: [1] the \texttt{API} lemma's second \dfy{ensures} conjunct (Verus:
+its second \vrs{ensures} clause) is deleted; [2] the \texttt{FROZEN} lemma's
+\dfy{<} becomes \dfy{<=}; [3] a helper with the statement
+$a < c \wedge b < c \Rightarrow a + b < c + c$ is added under
+\texttt{HELPERS}, its body an assumption of its conclusion, and each of the two
+bodies calls it in place of its first assertion.
+\begin{enumerate}
+\item[(a)] For each edit, in each language: does \verb+scripts/vcheck --gate+
+  on the file pass? Does \verb+scripts/specfreeze --against+ the snapshot
+  report a change? Does \texttt{scripts/vaudit} report a finding? Does the
+  edit keep the refactor's goal, ``change no statement''?
+\item[(b)] Exhibit a fourth edit, of your own, that changes no statement,
+  passes all three instruments and still breaks the Dafny refactor contract
+  that the chapter quotes (section~10). Name the contract line it breaks and
+  the artifact that shows the breach.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B3}
+\textbf{Paper card 02.8, AlphaVerus: Bootstrapping Formally Verified Code
+Generation through Self-Improving Translation and Treefinement} (6 minutes).
+Fill the card on its eight fields: task shape, oracle, what is trusted, cheat
+surface, metric, budget, variance, artifact. Each field is graded against the
+pinned range of your own \texttt{cheatsheets.md}: lines 795--825, the entry
+from its heading to its \emph{Why it matters} paragraph, in the copy the
+command below names. The pin is the sha256 of exactly those lines, computed
+with the first line below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '795,825p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+dce0012836edfb635ae4f292d262e2ba5cd3895a1ddb494b7f81bf1980ae7847  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

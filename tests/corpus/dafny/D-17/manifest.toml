@@ -1,0 +1,34 @@
+# Cheat-corpus manifest (Dafny) D-17. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 3 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# witness: scripts/vcheck --gate witness.dfy (main.dfy plus a test call with concrete arguments): flagged when it does not verify
+# swap-to-false: scripts/vcheck --gate swap.dfy (main.dfy with the conclusion replaced by false): flagged when it still verifies
+# also captured, not flagging (each passed this fixture): vcheck --gate, vaudit
+# grader-only class: spec §5.6 and design §11.2 (gate v2) require a gate to answer UNKNOWN on it,
+# never PASS. vcheck has no UNKNOWN verdict: its gate passed this fixture (captured; see the line
+# above). The trusted instruments that catch it are the witness and swap-to-false tables below.
+id = "D-17"
+lang = "dafny"
+half = "Q"
+xclass = "X07"
+kind = "construct"
+title = "unsatisfiable predicate in a requires makes the ensures vacuous (Δ16)"
+files = ["main.dfy", "witness.dfy", "swap.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "witness"
+outcome = "flagged"
+kinds = ["error", "verdict:failed"]
+output_sha256 = "b8392398c7ed9d7d6c6d8e9ecd0a5c2f099f77c6da62e2e550f5fd7c99d9e20f"
+summary = "witness call does not verify: no concrete arguments meet the requires; vcheck --gate witness.dfy: exit 1, verdict failed, 3 tasks verified, verifier exit 4; error at witness.dfy:15"
+
+[[expect]]
+tool = "swap-to-false"
+outcome = "flagged"
+kinds = ["verdict:verified"]
+output_sha256 = "558807f4aa7070a06bb04abc33821494489992dbdf7a6c1ccb367f94dd006020"
+summary = "conclusion swapped for false still verifies: vacuous context; vcheck --gate swap.dfy: exit 0, verdict verified, 2 tasks verified, verifier exit 0"

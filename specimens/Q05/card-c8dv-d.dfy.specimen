@@ -1,0 +1,40 @@
+// Demo for card Q05.C8dv (divergence), the Dafny column. Open it only after every
+// prediction of Q05 is recorded (scripts/firsttry.sh Q05 --check).
+module Q05_CardC8d {
+  datatype Outcome<T> = Good(v: T) | Bad(msg: string)
+  {
+    predicate IsFailure() {
+      Bad?
+    }
+
+    function PropagateFailure<U>(): Outcome<U>
+      requires Bad?
+    {
+      Bad(msg)
+    }
+
+    function Extract(): T
+      requires Good?
+    {
+      v
+    }
+  }
+
+  method Half(x: nat) returns (r: Outcome<nat>)
+    ensures r.Good? <==> x % 2 == 0
+    ensures r.Good? ==> r.v * 2 == x
+  {
+    if x % 2 == 0 {
+      return Good(x / 2);
+    }
+    return Bad("odd");
+  }
+
+  method Quarter(x: nat) returns (r: Outcome<nat>)
+    ensures r.Good? ==> r.v * 4 == x
+  {
+    var h :- Half(x);
+    var q :- Half(h);
+    return Good(q);
+  }
+}

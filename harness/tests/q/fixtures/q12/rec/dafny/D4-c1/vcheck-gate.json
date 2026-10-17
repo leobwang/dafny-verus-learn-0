@@ -1,0 +1,67 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D10",
+    "col": 3,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy",
+    "line": 13,
+    "message": "a postcondition could not be proved on this return path",
+    "severity": "error"
+   },
+   {
+    "code": "W-D10",
+    "col": 27,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy",
+    "line": 11,
+    "message": "this is the postcondition that could not be proved",
+    "severity": "related"
+   }
+  ],
+  "exit_code": 4,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "Battery_D4.CountZeros": "verified",
+   "Battery_D4.CountZerosBound": "failed"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "92633cf2a5f431cf94495df40149927fa66a2d741a7ed365a1d79afe0301bdac",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy"
+}

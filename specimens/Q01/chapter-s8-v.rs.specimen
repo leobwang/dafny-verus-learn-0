@@ -1,0 +1,28 @@
+use vstd::prelude::*;
+
+verus! {
+
+fn step(x: u64) -> (y: u64)
+    requires
+        x < 4,
+    ensures
+        y < 9,
+{
+    2 * x + 1
+}
+
+fn step_loose(x: u64) -> (y: u64)
+    requires
+        x < 5,
+    ensures
+        y < 9,
+{
+    2 * x + 1
+}
+
+} // verus!
+
+// Chapter specimen for docs/Q01_Hello.md, section 8: one assignment under two
+// preconditions. The chapter quotes its output; scripts/vcheck runs it once this
+// prediction is recorded.
+// after: Q01.P8dv

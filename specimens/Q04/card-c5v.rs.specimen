@@ -1,0 +1,22 @@
+// Card demo Q04.C5v (`broadcast use`), the failure half. The success half is
+// `lemma_weight_order_by_group` in verus/q/q04_proof_craft/src/library.rs; this copy
+// leaves out its `broadcast use` line. Run it with
+// `scripts/vcheck specimens/Q04/card-c5v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+// after: Q04.P9v
+use vstd::prelude::*;
+use qg_bignat_l3::*;
+
+verus! {
+
+pub proof fn lemma_weight_order_by_group(k: nat, m: nat, n: nat)
+    requires
+        k <= m,
+        m <= n,
+    ensures
+        weight(k) <= weight(n),
+{
+}
+
+} // verus!
+// EXPECT @17 "postcondition not satisfied"

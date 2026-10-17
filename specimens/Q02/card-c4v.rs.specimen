@@ -1,0 +1,29 @@
+// Card Q02.C4v (a `forall` postcondition), the failure demo: card_indices of the exercise
+// crate with a body that builds the wrong limbs. Open it only after your Q02 predictions are
+// committed.
+// EXPECT @12 "postcondition not satisfied"
+use vstd::prelude::*;
+
+verus! {
+
+pub fn card_indices(n: u64) -> (v: Vec<u64>)
+    ensures
+        v@.len() == n,
+        forall|i: int| 0 <= i < n ==> v@[i] as int == i,
+{
+    let mut v: Vec<u64> = Vec::new();
+    let mut k: u64 = 0;
+    while k < n
+        invariant
+            k <= n,
+            v@.len() == k,
+            forall|i: int| 0 <= i < k ==> v@[i] as int == i + 1,
+        decreases n - k,
+    {
+        v.push(k + 1);
+        k = k + 1;
+    }
+    v
+}
+
+} // verus!

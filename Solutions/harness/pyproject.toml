@@ -1,0 +1,23 @@
+# Solutions/harness/pyproject.toml — the reference harness (author-only, never
+# learner-visible). Its own uv project, never a member of harness/ (design §10.3,
+# §14.2 rule 2): harness/pyproject.toml declares no workspace, and this project's name
+# starts with `solutions`, so no learner run, import or lock ever reaches it.
+#
+# It holds the twins of the learner Python files at their learner paths
+# (q/fvh_q/q06_stats.py mirrors harness/q/fvh_q/q06_stats.py). The course tools
+# never run this project: scripts/dvl/python.py (vcheck --ref, the Python TRIV mode of
+# firsttry --empty-body, ci.sh --author's harness job) lays a twin over a scratch copy
+# of harness/ and runs the learner project's acceptance tests there, with its lock.
+# Each H item of a twin declares its trivial body on `# triv: <statement>` lines.
+
+[project]
+name = "solutions-harness"
+version = "0.1.0"
+description = "Reference twins of the learner Python files (author-only)"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.uv]
+package = false
+required-version = "==0.12.4"
+python-preference = "only-system"

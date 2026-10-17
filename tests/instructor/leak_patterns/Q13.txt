@@ -1,0 +1,36 @@
+# Q13 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q13 (never a P
+# answer: the chapter reveals those after their boxes) and is verified against its own
+# reference file (rule 1) and against every learner-visible file (rule 2). Q13 is
+# intermediate practice tier, so these patterns bind instructor sessions of Q13 onward
+# (the README's tier rule).
+
+# from Solutions/dafny/Q/Q13_PracticeIIA/std/Q13_PracticeIIA.dfy
+# source:     NormalizeIdem(a + b);   (Q13.H2d)
+# verified: solutions=1 public=0
+NormalizeIdem\(a\s*\+\s*b\)
+# source:       LemmaMulIsDistributiveSub(BASE, d * P, d);   (Q13.H4d)
+# verified: solutions=1 public=0
+LemmaMulIsDistributiveSub\(BASE,\s*d\s*\*\s*P,\s*d\)
+# source:       invariant v + w * ToNat(s[i..]) == ToNat(s)   (Q13.H5d)
+# verified: solutions=1 public=0
+v\s*\+\s*w\s*\*\s*ToNat\(s\[i\.\.\]\)\s*==\s*ToNat\(s\)
+
+# from Solutions/verus/q/q13_practice_iia/src/lib.rs
+# source:         proof { c = c.push(borrow as nat); }   (Q13.H1v)
+# verified: solutions=1 public=0
+c\s*=\s*c\.push\(borrow\s+as\s+nat\)
+# source:             0 <= j < r.len() ==> limb_at(a, j) + BASE * c[j + 1] == #[trigger] r[j] + limb_at(b, j)   (Q13.H1v, the helper)
+# verified: solutions=1 public=0
+limb_at\(a@?,\s*j\)\s*\+\s*BASE\s*\*\s*c\[j\s*\+\s*1\]
+# source:         limb_at(a, i) < limb_at(b, i),   (Q13.H3v, the prose item's statement)
+# verified: solutions=1 public=0
+limb_at\(a,\s*i\)\s*<\s*limb_at\(b,\s*i\)
+# source:         lemma_mul_is_distributive_sub(d as int, BASE * w, 1);   (Q13.H4v)
+# verified: solutions=1 public=0
+lemma_mul_is_distributive_sub\(d\s+as\s+int,\s*BASE\s*\*\s*w,\s*1\)
+
+# from Solutions/verus/q/q13_practice_iia/src/exit.rs
+# source:     lemma_mul_is_distributive_add_other_way(w, s.last() as int, 1);   (Q13.X1v)
+# verified: solutions=1 public=0
+lemma_mul_is_distributive_add_other_way\(w,\s*s\.last\(\)\s+as\s+int,\s*1\)

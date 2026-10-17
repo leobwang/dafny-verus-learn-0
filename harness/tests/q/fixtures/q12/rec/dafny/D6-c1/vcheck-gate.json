@@ -1,0 +1,56 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/dafny/D6/c1.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/harness/tests/q/fixtures/q12/battery/dafny/D6/c1.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "p_assert_needs_by_or_semicolon",
+    "col": 39,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D6/c1.dfy",
+    "line": 15,
+    "message": "expected either 'by' or a semicolon following the assert expression",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 2,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {},
+  "raw_dir": "<scratch>",
+  "stage": "parse",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D6/c1.dfy",
+  "verdict": "failed",
+  "verified_count": null
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "10f95ca327e168c7a36e093c63a517892de6281c277ac7f2933eefaf865cef1d",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/dafny/D6/c1.dfy"
+}

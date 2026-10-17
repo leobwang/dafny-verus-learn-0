@@ -1,0 +1,157 @@
+% Q07_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q07_answers.tex (spec §4.7, §6.12). Two of the
+% three problems carry one planted flaw each; B2 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q07_rubric.md), never by eye.
+%
+% EXPECTED[B1][induction-soundness][2]: (a)'s chain weakens x < BASE to x <= BASE, so it reaches only r * BASE + x <= d * BASE, and then names the quotient fact with a non-strict hypothesis ("0 < b and a <= b * c give a / b < c"), which is false. The finding must name that fact and exhibit values where its hypotheses hold and its conclusion fails, e.g. a = 5 * BASE, b = 5, c = BASE (or a = 6, b = 2, c = 3): Probe A'' with expect (a <= b * c) ==> a / b < c at those values: FAILED (captured). Gap-accounting may record the same undeclared false step at <= 2 with the same instance. Statement-fidelity and case-exhaustiveness are correct (4). Probe A filled from (a)'s chain verifies (verified, 25 verified, 3 holes, captured), so a finding that rests on Probe A alone is wrong: a splice shows the chain closes given its facts, never that a fact is true. (b) is correct (Probe A' with its calls: verified, captured).
+% EXPECTED[B2][correctness][4]: correct, no finding (Probe B on each of the three edits and on the answer's fuel-attribute edit, in both languages, matches every claim; all captured). A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B3][card-fidelity][2]: Metric — the field calls 32.9 and 65.7 pass@1 rates (the first sample verifies); pinned line 799 defines the metric as pass@K (any of K samples verifies) and line 807 reports the table as pass@256. The finding must quote line 799 or line 807.
+% EXPECTED[B3][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Budget, Variance and Artifact — correct, no finding (lines 797, 799, 802-805, 815-816, 819, 822-823, 825). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2.
+% A calibration run FAILS if B1 or B3 scores >= 3, if a planted finding does not locate
+% its fact or field (with the instance or the quoted line named above), or if ANY flaw
+% is reported on B2 or on a B3 field other than Metric.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q07 --- Internals I: proof engineering, translation \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} For naturals $r$, $x$, $d$ with
+$0 < d < \mathit{BASE}$, $r < d$ and $x < \mathit{BASE}$, the quotient
+$(r \cdot \mathit{BASE} + x) / d$ is below $\mathit{BASE}$.
+
+\textbf{The chain} (one line per step: the fact used, by its statement with
+its hypotheses; where it comes from; the arguments of the use; why its
+hypotheses hold there):
+\begin{enumerate}
+\item From $r < d$: $r + 1 \leq d$ (integers).
+\item Monotonicity, from \texttt{Std.Arithmetic.Mul}: if $a \leq b$ and
+  $c \geq 0$ then $a \cdot c \leq b \cdot c$. Used at $(r + 1, d,
+  \mathit{BASE})$: $a \leq b$ is step~1, and $\mathit{BASE} \geq 0$. So
+  $(r + 1) \cdot \mathit{BASE} \leq d \cdot \mathit{BASE}$.
+\item Distributivity, from \texttt{Std.Arithmetic.Mul}: $(a + 1) \cdot c =
+  a \cdot c + c$, at $(r, \mathit{BASE})$. So $r \cdot \mathit{BASE} +
+  \mathit{BASE} \leq d \cdot \mathit{BASE}$.
+\item Since $x \leq \mathit{BASE}$: $r \cdot \mathit{BASE} + x \leq
+  r \cdot \mathit{BASE} + \mathit{BASE} \leq d \cdot \mathit{BASE}$.
+\item The quotient fact, from \texttt{Std.Arithmetic.DivMod}: if $0 < b$ and
+  $a \leq b \cdot c$ then $a / b < c$. Used at $(r \cdot \mathit{BASE} + x,
+  d, \mathit{BASE})$: $0 < d$ is given and $a \leq b \cdot c$ is step~4.
+  That is the postcondition.
+\end{enumerate}
+
+\textbf{Facts needed (this is the blueprint;} each by its statement, and
+where it comes from\textbf{):} the monotonicity, distributivity and quotient
+facts above, all three from the standard library.
+
+\textbf{Steps the solver takes without a named fact} (nonlinear arithmetic
+off), and why: steps 1 and 4, which are linear once the products are treated
+as single terms; also the order of factors in a product, since commutativity
+survives with nonlinear arithmetic off.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones):
+none.
+
+\textbf{(b) Statement.} For all naturals $v$ and $n$:
+$v / \mathit{weight}(n + 1) = (v / \mathit{weight}(n)) / \mathit{BASE}$.
+
+\textbf{The chain} (each fact by its statement; L3's lemmas by name; the
+arguments of each use; how each hypothesis is met):
+\begin{enumerate}
+\item \vrs{lemma_weight_succ(n)}: $\mathit{weight}(n + 1) = \mathit{BASE}
+  \cdot \mathit{weight}(n)$.
+\item \vrs{lemma_weight_zero()} and \vrs{lemma_weight_mono(0, n)} (its
+  hypothesis $0 \leq n$ holds for any natural): $1 = \mathit{weight}(0) \leq
+  \mathit{weight}(n)$, so $\mathit{weight}(n)$ is positive. \vrs{weight} is
+  opaque, so the solver cannot see this by itself.
+\item \vrs{lemma_mul_is_commutative(BASE, weight(n))}:
+  $\mathit{BASE} \cdot \mathit{weight}(n) = \mathit{weight}(n) \cdot
+  \mathit{BASE}$.
+\item \vrs{lemma_div_denominator(v, weight(n), BASE)} from
+  \texttt{vstd::arithmetic::div\_mod}: for $0 \leq x$, $0 < c$, $0 < d$,
+  $(x / c) / d = x / (c \cdot d)$. Hypotheses: $v \geq 0$ (a natural), step~2,
+  and $\mathit{BASE} > 0$. With steps~1 and~3 the divisor $\mathit{weight}(n)
+  \cdot \mathit{BASE}$ is $\mathit{weight}(n + 1)$.
+\end{enumerate}
+
+\textbf{Facts needed (this is the blueprint):} L3's three weight lemmas,
+\texttt{vstd}'s commutativity and division-by-a-product lemmas.
+
+\textbf{Gaps I know about:} none.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+% Short answers. Expect the grader to try to counterexample them.
+\textbf{(a)} For each edit, in each language: the gate passes? \texttt{specfreeze
+--against} reports a change? \texttt{vaudit} reports a finding? The edit keeps
+``change no statement''? \\
+{[1]} Dafny: the gate passes, the freeze reports nothing (the snapshot does not
+hold \texttt{API}), the audit reports nothing; the edit changes a statement, so
+it breaks the goal. \quad Verus: the same. \\
+{[2]} Dafny: the gate passes, the freeze reports that \dfy{PairBelow} changed,
+the audit reports nothing; it breaks the goal. \quad Verus: the same, for
+\vrs{pair_below}. \\
+{[3]} Dafny: the gate fails, because the assumption is a hole; the freeze
+reports nothing; the audit reports the assumption. No shipped statement
+changed, but the contract's hole and audit lines fail. \quad Verus: the same.
+
+\textbf{(b)} The fourth edit: add \dfy{\{:fuel Doubled, 3\}} to
+\dfy{PairBelowTight}. \\
+Why it passes all three instruments: an attribute is not part of a statement
+for the freeze, the proof still verifies, and the audit does not list fuel. \\
+The contract line it breaks: ``no \dfy{\{:fuel\}} attribute is added to any
+lemma''. \\
+The artifact that shows the breach: \texttt{git diff} from the snapshot's
+commit.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.8, lines 795--825 (the pinned range).
+
+\textbf{Task shape:} from a specification, produce Verus code and proof
+annotations that verify; to get there, Llama-3.1-70B (not fine-tuned)
+translates DafnyBench programs into Verus, repairs failures by tree search on
+verifier errors, filters out hacks, and keeps the survivors as few-shot
+examples. Tested on HumanEval-Verus (85) and MBPP-verified (78).
+
+\textbf{Oracle:} the Verus verdict; a score from the verifier's counts guides
+the search; a critique stage (rule filters, an LLM judge, an exploit LLM)
+decides which candidates survive.
+
+\textbf{What is trusted:} Verus, the specifications (never checked against
+intent), and the heuristic critique for whether a translation stays faithful
+to its Dafny source.
+
+\textbf{Cheat surface:} \vrs{assume(false)}, \vrs{#[verifier::external]},
+trivial preconditions and vacuous specifications are filtered; without the
+critique the loop drifts into them. A mistranslated postcondition or an added
+precondition can still slip through.
+
+\textbf{Metric:} pass@1, the share of tasks whose first sample verifies:
+32.9 on HumanEval and 65.7 on MBPP, against GPT-4o few-shot at 27.1 and 35.9.
+
+\textbf{Budget:} 256 samples per exploration, a search tree of breadth 32 and
+depth 8, 7 iterations; the tree-search comparison is at equal budget. No time,
+token or money figure.
+
+\textbf{Variance:} none reported: one number per cell, no seeds or intervals.
+
+\textbf{Artifact:} the translated set (247 programs, 102 error trajectories,
+579 exploit pairs) and the two benchmarks; the range does not say what is
+released.
+\end{answer}
+
+\end{document}

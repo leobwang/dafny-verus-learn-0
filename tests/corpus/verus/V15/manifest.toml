@@ -1,0 +1,43 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V15"
+lang = "verus"
+half = "Q"
+xclass = "X02"
+kind = "construct"
+title = "vstd::pervasive::assume (a vstd proof fn) assumes a bound"
+files = ["Cargo.toml", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["pervasive-assume"]
+output_sha256 = "3d26acce1a129710ffd6d9e77368104d92bc8013de06b79a1a55a900a4a68870"
+summary = "verdict failed, stage verify, verified 1; pervasive-assume at src/lib.rs:10; gate conditions missed: 1 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V15"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["pervasive-assume"]
+output_sha256 = "8b728be3c9ecd396e2ae5a963dc2266618a589b411f18fc31ffff5ebe7c1b966"
+summary = "1 finding(s): pervasive-assume at src/lib.rs:10"
+argv = ["scripts/vaudit", "tests/corpus/verus/V15"]
+exit = 1

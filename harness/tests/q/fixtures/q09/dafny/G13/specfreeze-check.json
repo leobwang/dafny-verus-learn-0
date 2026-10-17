@@ -1,0 +1,22 @@
+{
+ "argv": [
+  "scripts/specfreeze",
+  "--against",
+  "tests/corpus/dafny/G13/frozen.dfy",
+  "tests/corpus/dafny/G13/main.dfy"
+ ],
+ "document": {
+  "exit_code": 1,
+  "lines": [
+   "tests/corpus/dafny/G13/main.dfy:5: freeze-changed — CorpusG13.AbsImpl: the statement differs from the frozen one",
+   "specfreeze: tests/corpus/dafny/G13/main.dfy: 1 finding(s)"
+  ]
+ },
+ "exit_code": 1,
+ "instrument": "specfreeze --check",
+ "killed": null,
+ "output_sha256": "49bbbecaaf221d4ccb67e94edd8ec5a50cd95516243c6b1f772ba23994cf9031",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/G13/main.dfy"
+}

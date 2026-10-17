@@ -1,0 +1,17 @@
+# Cheat corpus fixture (tests/corpus/verus): an invented crate.
+[package]
+name = "r02_probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+rg_re_a4 = { path = "../../given/rg_re_a4" }
+
+[package.metadata.verus]
+verify = true

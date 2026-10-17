@@ -1,0 +1,29 @@
+// Demo for card Q07.C7dv (divergence), the Verus column. Open it only after every
+// prediction of Q07 is recorded (scripts/firsttry.sh Q07 --check). Its pinned run is
+// `scripts/vcheck` (the sidecar's command); run it the same way.
+// after: Q07.P2dv
+use vstd::prelude::*;
+
+verus! {
+
+proof fn divide_minus_seven()
+    ensures
+        (-7int) / 2 == -4,
+        (-7int) % 2 == 1,
+{
+}
+
+fn half_of_minus_seven(x: i64) -> (r: i64)
+    requires
+        x == -7,
+    ensures
+        r == -3,
+{
+    x / 2
+}
+
+pub open spec fn ratio(x: int, d: int) -> int {
+    x / d
+}
+
+} // verus!

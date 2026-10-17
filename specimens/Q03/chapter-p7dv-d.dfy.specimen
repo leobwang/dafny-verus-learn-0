@@ -1,0 +1,22 @@
+// Chapter specimen for docs/Q03_FirstSyntaxII.md §5: the Dafny lemmas of Q03.P7dv,
+// verbatim. Open it only after your Q03 predictions are committed; scripts/vcheck
+// refuses it until P7dv's first try is recorded. The chapter runs a copy of it with the
+// Q03 unit's options: `scripts/vcheck --module Q03 p7.dfy`.
+// after: Q03.P7dv
+module Q03_ChapterP7 {
+  function Count(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 0 else 1 + Count(n - 1)
+  }
+
+  lemma CountIsN(n: nat)
+    ensures Count(n) == n
+  {
+  }
+
+  lemma CountIsNPlusOne(n: nat)
+    ensures Count(n) == n + 1
+  {
+  }
+}

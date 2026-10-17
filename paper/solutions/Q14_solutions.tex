@@ -1,0 +1,104 @@
+% Q14_solutions.tex — REFERENCE SOLUTIONS to paper/Q14_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1's claims were checked on the course pins (Dafny 4.11.0) on 2026-10-11
+% with the rubric's own templates (paper/rubrics/Q14_rubric.md, Probes A and
+% A'): Probe A verifies both lemmas for C1, C3 and C5, and fails exactly PreOk
+% for C2 and exactly PostOk for C4; Probe A' passes at x = 0 for C2's (i) and at
+% (5, 5) for C4's (ii) (scripts/vcheck --test). Dafny's own override check
+% agrees on C1, C2, C4 and C5 (a class overriding a trait method with the
+% candidate's contract: C1 and C5 verify; C2 reports "the method must provide an
+% equal or more permissive precondition than in its parent trait", C4 "... an
+% equal or more detailed postcondition ..."). The probe files are archived
+% under ~/.cache/dafny-verus-learn-0/author-probes/dv5b/q14-kit/. B2's fields
+% are graded against the learner's own cheatsheets.md; this file records which
+% lines of the pinned range each field draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q14 --- Practice II-B \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is a concept answer (\texttt{correctness}: the grader checks each claimed
+implication with an empty-bodied lemma and each witness with a compiled test).
+B2 is a paper card (\texttt{card-fidelity}, per field).
+
+% ---------------------------------------------------------------------------
+\section*{B1 (concept)}
+
+\begin{description}
+\item[$C_1$] (i) holds: $0 \le x \le 10$ gives $x \ge 0$; the precondition is
+  weaker. (ii) holds: $Q_I$ is $Q_T$. It may stand in.
+\item[$C_2$] (i) fails at $x = 0$: the trait admits it, the candidate does
+  not. (ii) holds ($Q_I$ is $Q_T$). It may not stand in: a client may call it
+  at $0$.
+\item[$C_3$] Both hold: the same precondition, and $y = x + 1$ gives $y > x$.
+  A stronger postcondition may stand in.
+\item[$C_4$] (i) holds (\textsf{true} admits everything). (ii) fails at
+  $(5, 5)$: $P_T(5)$, $5 \ge 5$, and not $5 > 5$. It may not stand in.
+\item[$C_5$] Both hold. (i): $0 \le x \le 10$ gives $x \le 10$. (ii): under
+  $P_T$, $x \ge 0$, so $Q_I$ gives $y > x$. Its postcondition says nothing for
+  negative $x$, but (ii) asks only about arguments the trait admits, so it may
+  stand in.
+\item[(c)] (i) protects the call: the client establishes only $P_T$, so the
+  implementation's precondition must follow from it. (ii) protects the
+  conclusion: the client concludes $Q_T$, so every result the implementation
+  allows, on an argument the trait admits, must meet $Q_T$.
+\end{description}
+Any witness that shows the same failure is correct: for $C_2$ the only one
+is $x = 0$; for $C_4$ it is any $(x, x)$ with $0 \le x \le 10$. The common error
+is to check (ii) without $P_T$, which wrongly rejects $C_5$ with a pair whose
+$x$ is negative.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (paper card 06.9): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 2588--2631 (computed 2026-10-11),
+\[ \texttt{sha256 993a2dfbe563247916b85f81105abf302e12b6a340be78e25dc3c9fa8c152b5b}. \]
+
+\begin{description}
+\item[Task shape.] An LLM repairs failing Isabelle proofs: 12 frozen repair
+  tasks, half historical failures and half controlled corruptions, in four
+  developments (Isabelle2025-2), under five workflows from one-shot to
+  iterative with diagnostics, one of them proof-body-only. \emph{Lines 2590,
+  2593--2594, 2596--2601.}
+\item[Oracle.] A candidate is accepted when the build succeeds \emph{and} it
+  conforms to the contract: the protected text outside the editable region is
+  byte-identical, the target declaration is still there, and no forbidden
+  command (\texttt{sorry}, \texttt{oops}, \texttt{axiomatization},
+  \texttt{oracle}) appears. \emph{Lines 2604--2608.}
+\item[What is trusted.] Isabelle's build, and the contract checker, which is
+  syntactic and unverified; the contract itself (what is editable, which
+  commands are forbidden) is the authors' choice. \emph{Lines 2604--2608,
+  2628.}
+\item[Cheat surface.] A false success: the build passes but the candidate
+  changed protected text, that is, the question; 6 of the 144
+  Isabelle-accepted candidates (4.2\%) did, all from iterative full-theory
+  workflows. Proof-body-only authority closes this and also rules out helper
+  lemmas and statement changes. \emph{Lines 2609, 2621, 2629, 2631.}
+\item[Metric.] Valid repairs out of 36 per workflow (22, 31, 29, 24, 32 for
+  C0--C4), false successes (3 each for C1 and C4, none elsewhere) and tasks
+  solved (10 or 11); C4 against C0, 10 blocks improved and none worse,
+  $p = 0.001953$. \emph{Lines 2613--2619, 2622.}
+\item[Budget.] 180 runs (12 tasks $\times$ 5 workflows $\times$ 3
+  replicates), four attempts in the iterative workflows C1 and C2 (none stated
+  for C4), one model at high reasoning effort; no token, time or cost figure. \emph{Lines 2595--2599.}
+\item[Variance.] Three replicates per task and workflow, a paired comparison
+  with its $p$-value, and the remark that iteration mainly improved
+  consistency; no interval or per-run spread is given, and the post hoc
+  comparison ($p = 0.0625$) is confounded by a provider change.
+  \emph{Lines 2596, 2622--2624.}
+\item[Artifact.] CAPRI, the independent byte-exact contract check with a full
+  audit trail, and the 12 frozen tasks, a tiny benchmark the authors maintain;
+  no release is stated. \emph{Lines 2590, 2593, 2627.}
+\end{description}
+
+\end{document}

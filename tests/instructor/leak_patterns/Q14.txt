@@ -1,0 +1,41 @@
+# Q14 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q14 (never the P
+# answer: the chapter reveals P1dv's after its box) and is verified against its own reference
+# file (rule 1) and against every learner-visible file (rule 2). H3v's pattern is cut from
+# its invented lemma's statement, which the learner writes; the twin's `cfree:` loop is not
+# used (it is a shortcut, not the item's answer). Q14 is intermediate practice tier, so these
+# patterns bind instructor sessions of Q13 onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q14_PracticeIIB/std/Q14_PracticeIIB.dfy
+# source:     Power.LemmaPowIncreases(L1.BASE, |x|, |y| - 1);   (Q14.H1d)
+# verified: solutions=1 public=0
+LemmaPowIncreases\(L1\.BASE,\s*\|x\|,\s*\|y\|\s*-\s*1\)
+# source:       InterleaveSpec(b, t, x, y);   (Q14.H3d)
+# verified: solutions=1 public=0
+InterleaveSpec\(b,\s*t,\s*x,\s*y\)
+
+# from Solutions/dafny/Q/Q14_PracticeIIB/std/Q14_Loop.dfy
+# source:         WpSoundWhile(b, inv, c, q, r.s, fuel - 1);   (Q14.H4d)
+# verified: solutions=1 public=0
+WpSoundWhile\(b,\s*inv,\s*c,\s*q,\s*r\.s,\s*fuel\s*-\s*1\)
+
+# from Solutions/verus/q/q14_practice_iib/src/lib.rs
+# source:                 lemma_weight_mono(2, (n - 1) as nat);   (Q14.H2v)
+# verified: solutions=1 public=0
+lemma_weight_mono\(2,\s*\(n\s*-\s*1\)\s*as\s+nat\)
+# source:         limb_sum(t) == t[0] as nat + limb_sum(t.drop_first()),   (Q14.H3v)
+# verified: solutions=1 public=0
+limb_sum\(t\)\s*==\s*t\[0\]\s*as\s+nat\s*\+\s*limb_sum\(t\.drop_first\(\)\)
+
+# from Solutions/verus/q/q14_practice_iib/src/perm.rs
+# source:             tracked_swap(self.perm.borrow_mut(), &mut old_perm);   (Q14.H5v)
+# verified: solutions=1 public=0
+tracked_swap\(self\.perm\.borrow_mut\(\),\s*&mut\s+old_perm\)
+# source:                 perm = node.perm.borrow();   (Q14.H5v)
+# verified: solutions=1 public=0
+perm\s*=\s*node\.perm\.borrow\(\)
+
+# from Solutions/dafny/Q/Q14_PracticeIIB/exit/Q14_Exit.dfy
+# source:       PushAllConcat(a + [b[0]], b[1..]);   (Q14.X1d)
+# verified: solutions=1 public=0
+PushAllConcat\(a\s*\+\s*\[b\[0\]\],\s*b\[1\.\.\]\)

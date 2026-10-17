@@ -1,0 +1,96 @@
+# expected/Q04.counts — Δ11 count pins for Q04: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q04` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q04"
+
+[[unit]]
+path = "dafny/Q/Q04_ProofCraft/core"
+lang = "dafny"
+reference_verified = 38
+min_verified = 7
+symbols = ["Q04_ProofCraft.AppendZeroEach", "Q04_ProofCraft.FromNatShort", "Q04_ProofCraft.PowAdd", "Q04_ProofCraft.PowSucc", "Q04_ProofCraft.PrefixBounds", "Q04_ProofCraft.ToNatTwoSteps", "Q04_ProofCraft.ZeroValueZeroLimbs"]
+
+[[unit]]
+path = "dafny/Q/Q04_ProofCraft/std"
+lang = "dafny"
+reference_verified = 36
+min_verified = 3
+symbols = ["Q04_Library.CmpCorrect", "Q04_Library.ScaleLe", "Q04_Library.ShiftBound"]
+
+[[unit]]
+path = "verus/q/q04_proof_craft"
+lang = "verus"
+reference_verified = 24
+min_verified = 15
+symbols = ["lemma_first_difference", "lemma_push_zero_each", "lemma_seq_to_nat_two_steps", "lemma_weight_above", "lemma_weight_succ_comm", "lemma_zero_value_zero_limbs", "library::cmp", "library::lemma_product_le_by_hand", "library::lemma_product_le_by_nl", "library::lemma_scale_le", "library::lemma_shift_bound", "library::lemma_value_times_limb", "library::lemma_weight_add", "library::lemma_weight_order_by_group", "library::lemma_weight_order_by_name"]
+
+[[file]]
+path = "dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q04_ProofCraft/std/Q04_Library.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q04_proof_craft/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q04_proof_craft/src/library.rs"
+role = "exercise"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "dafny/checks/Q04_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q04_ProofCraft/exit/Q04_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q04_proof_craft/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q04_ProofCraft/agent/Q04_AgentRetriever.dfy"
+role = "agent"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "verus/q/q04_proof_craft/src/agent.rs"
+role = "agent"
+verdict = "verified"
+holes = 3
+errors = 0

@@ -1,0 +1,113 @@
+# The battery of the Q12 retry client (frozen, guard rule 2f; QPLAN §22.3).
+# Twelve goals, six per language, three candidate files each, tried in the order listed.
+# Each candidate is a whole file that stands alone. The results of `vcheck --gate` on
+# every candidate are recorded under rec/ (results only), and the frozen tests replay
+# them; expected/Q12.battery pins the solve count at k = 3.
+
+[[goal]]
+id = "D1"
+lang = "dafny"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/dafny/D1/c1.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D1/c2.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D1/c3.dfy",
+]
+
+[[goal]]
+id = "D2"
+lang = "dafny"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/dafny/D2/c1.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D2/c2.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D2/c3.dfy",
+]
+
+[[goal]]
+id = "D3"
+lang = "dafny"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/dafny/D3/c1.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D3/c2.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D3/c3.dfy",
+]
+
+[[goal]]
+id = "D4"
+lang = "dafny"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/dafny/D4/c1.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy",
+]
+
+[[goal]]
+id = "D5"
+lang = "dafny"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/dafny/D5/c1.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D5/c3.dfy",
+]
+
+[[goal]]
+id = "D6"
+lang = "dafny"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/dafny/D6/c1.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D6/c2.dfy",
+  "harness/tests/q/fixtures/q12/battery/dafny/D6/c3.dfy",
+]
+
+[[goal]]
+id = "V1"
+lang = "verus"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/verus/V1/c1.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V1/c2.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V1/c3.rs",
+]
+
+[[goal]]
+id = "V2"
+lang = "verus"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/verus/V2/c1.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V2/c2.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V2/c3.rs",
+]
+
+[[goal]]
+id = "V3"
+lang = "verus"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/verus/V3/c1.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V3/c2.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V3/c3.rs",
+]
+
+[[goal]]
+id = "V4"
+lang = "verus"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/verus/V4/c1.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V4/c2.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V4/c3.rs",
+]
+
+[[goal]]
+id = "V5"
+lang = "verus"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/verus/V5/c1.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V5/c2.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V5/c3.rs",
+]
+
+[[goal]]
+id = "V6"
+lang = "verus"
+candidates = [
+  "harness/tests/q/fixtures/q12/battery/verus/V6/c1.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V6/c2.rs",
+  "harness/tests/q/fixtures/q12/battery/verus/V6/c3.rs",
+]

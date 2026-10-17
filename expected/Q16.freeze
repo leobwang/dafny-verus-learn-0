@@ -1,0 +1,31 @@
+# expected/Q16.freeze — statement-freeze pins for Q16 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q16` from the files as shipped; checked by
+# `scripts/specfreeze --check Q16`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q16"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q16_PracticeIIIA/std/Q16_PracticeIIIA.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q16_PracticeIIIA {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q16_PracticeIIIA.MulCorrect" = "c41072a7e1aba301a1e30cb6f0b13ea8f446348a26e5f9f7ad5722ffc9ee1ba7"
+"Q16_PracticeIIIA.MulCorrectCheck" = "112a2de93d9a1d9d3b74bd8acd9ef67c17224e513f461eb4f4130a69590d0b50"
+"Q16_PracticeIIIA.MulLoop" = "0e426cb27cd91f660856cddabfd3beadadaa791af4889b352915601e101f44c8"
+"Q16_PracticeIIIA.MulLoopCheck" = "2d61b6e28dc5d9eb506f523e1f86a7a6eb3e1979c0fee4e71e6b28823014df7c"
+
+[[file]]
+path = "verus/q/q16_practice_iiia/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"div_limb" = "f77bf962510586d4f79e9fccdab249c501c38d5118fb60cb5b3ed73039e90e63"
+"div_limb_check" = "678a57fd01a91259a44eb6e8245fb6e81db006316383150e0b3e3772ec60680c"
+"mul" = "6c52a65dc023a03430de98e28b2ab8872ca85e3db35eacf366cde2c485afa452"
+"mul_check" = "001a13417285c5832522463b3b1546ba7c1ca082dad1cb5606c174b4cd8d3d0c"

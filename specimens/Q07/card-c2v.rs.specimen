@@ -1,0 +1,18 @@
+// Demo for card Q07.C2v (write:arithmetic-library), the failure half. The success half is
+// `lemma_limb_product_at_most` in verus/q/q07_internals_i/src/lib.rs; here the same proof
+// fn makes no library call. Run it with `scripts/vcheck specimens/Q07/card-c2v.rs.specimen`;
+// the EXPECT line pins the message the verifier gives (line and fragment).
+// after: Q07.P5dv
+// EXPECT @14 "postcondition not satisfied"
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+pub proof fn lemma_limb_product_at_most(x: u64, y: u64)
+    ensures
+        (x as nat) * (y as nat) <= (BASE - 1) * (BASE - 1),
+{
+}
+
+} // verus!

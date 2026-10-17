@@ -1,0 +1,64 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/verus/V5/c1.rs"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/harness/tests/q/fixtures/q12/battery/verus/V5/c1.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "c1",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "W-V03",
+    "col": 9,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/verus/V5/c1.rs",
+    "line": 22,
+    "message": "postcondition not satisfied",
+    "severity": "error"
+   },
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 'success' is false, not true; exit 1",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 1,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "count_zeros": "verified",
+   "lemma_one_zero": "failed"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/verus/V5/c1.rs",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "99a0abed27547a2554e17cda15ca2ce89d871798937e6209477c6ff4093f934d",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/verus/V5/c1.rs"
+}

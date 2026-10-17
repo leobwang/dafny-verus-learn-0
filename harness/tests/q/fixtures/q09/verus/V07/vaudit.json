@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V07"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V07/src/lib.rs",
+    "kind": "hole-assume-termination",
+    "line": 7,
+    "message": "an assume_termination hole (in next_value) not on the trust allowlist"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V07"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "2403015e12347579f4a35b8c9f961ca0cdb4fad6ee3942be5c57431e458e5f0e",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V07"
+}

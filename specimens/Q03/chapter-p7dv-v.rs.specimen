@@ -1,0 +1,27 @@
+// Chapter specimen for docs/Q03_FirstSyntaxII.md §5: the Verus proof fns of Q03.P7dv,
+// verbatim. Open it only after your Q03 predictions are committed; scripts/vcheck
+// refuses it until P7dv's first try is recorded.
+// after: Q03.P7dv
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn count(n: nat) -> nat
+    decreases n,
+{
+    if n == 0 { 0 } else { 1 + count((n - 1) as nat) }
+}
+
+pub proof fn lemma_count_is_n(n: nat)
+    ensures
+        count(n) == n,
+{
+}
+
+pub proof fn lemma_count_is_n_plus_one(n: nat)
+    ensures
+        count(n) == n + 1,
+{
+}
+
+} // verus!

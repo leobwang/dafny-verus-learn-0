@@ -1,0 +1,58 @@
+[[module]]
+id = "Q04"
+legacy_id = ""
+track = "Q"
+status = "authoring"
+title = "Proof craft, loops and libraries"
+tier = "moderate"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5"]
+langs = ["d", "v"]
+chapter = "docs/Q04_ProofCraft.md"
+exercises = ["dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy", "dafny/Q/Q04_ProofCraft/std/Q04_Library.dfy", "verus/q/q04_proof_craft/src/lib.rs", "specimens/Q04/"]
+exits = ["dafny/Q/Q04_ProofCraft/exit/Q04_Exit.dfy", "verus/q/q04_proof_craft/src/exit.rs"]
+agentic = ["dafny/Q/Q04_ProofCraft/agent/Q04_AgentRetriever.dfy", "verus/q/q04_proof_craft/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q04.md"
+paper = true
+rubric = "paper/rubrics/Q04_rubric.md"
+card = ["02.2"]
+build_target = "Q"
+units = ["dafny/Q/Q04_ProofCraft/core", "dafny/Q/Q04_ProofCraft/std", "verus/q/q04_proof_craft"]
+layer = "L3"
+engines = ["contract"]
+statements = []
+deep_dive = ["R07"]
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["calc", "lemma-call"]
+write_v = ["calc", "lemma-call"]
+recognise_d = ["forall"]
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/given/Q/QG_L3_BigNat.dfy" = "std"
+"verus/given/qg_bignat_l3/src/lib.rs" = "seq_lib"
+"dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy" = "core"
+"dafny/Q/Q04_ProofCraft/std/Q04_Library.dfy" = "std"
+"dafny/Q/Q04_ProofCraft/exit/Q04_Exit.dfy" = "core"
+"dafny/Q/Q04_ProofCraft/agent/Q04_AgentRetriever.dfy" = "core"
+"verus/q/q04_proof_craft/src/lib.rs" = "seq_lib"
+"verus/q/q04_proof_craft/src/exit.rs" = "prelude"
+"verus/q/q04_proof_craft/src/agent.rs" = "prelude"
+
+[module.concept_items]
+"S1.limbs" = ["Q04.P1dv"]
+"S2.specs" = ["Q04.P2dv"]
+"S3.calc" = ["Q04.H1d", "Q04.H1v"]
+"S3.obligations@d" = ["Q04.P3d"]
+"S4.loops" = ["Q04.H2d", "Q04.H2v", "Q04.X1d", "Q04.X1v"]
+"S5.library" = ["Q04.X2d", "Q04.X2v", "Q04.T1dv"]
+"S5.retriever@d" = ["Q04.A1d"]
+

@@ -1,0 +1,51 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/C-09/main.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/C-09/main.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusC09.Mirror": "verified",
+   "CorpusC09.MirrorSize": "verified",
+   "CorpusC09.Size": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/C-09/main.dfy",
+  "verdict": "verified",
+  "verified_count": 3
+ },
+ "exit_code": 0,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "0f7bf20db9b6a4c43ac6fff85f78eb3523615b037a9f3ab96e78c526420c2ff9",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/C-09/main.dfy"
+}

@@ -1,0 +1,13 @@
+// Card demo Q01.C4dv (false friends), row 1 (`calc`), Dafny side. Open it only after Q01's
+// predictions are recorded. Run `scripts/vcheck specimens/Q01/card-c4dv-1-d.dfy.specimen` and compare with
+// the Verus side, `specimens/Q01/card-c4dv-1-v.rs.specimen`.
+module Q01_C4dv1d {
+  lemma CalcDemo(x: int)
+    ensures x + 0 == x
+  {
+    calc {
+      x + 0;
+      x;
+    }
+  }
+}

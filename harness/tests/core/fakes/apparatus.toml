@@ -1,0 +1,41 @@
+# The fake apparatus file of the harness job's sterile environment (DV4-PLAN §9;
+# scripts/ci.sh points FVH_APPARATUS here). Its binaries are written relative to
+# HOME, which CI sets to an empty directory, so none of them exists there and
+# every backend built with these pins fails closed; FVH_NO_MODEL=1 refuses
+# earlier still. No address in it reaches anything: the model gate's address
+# is a run parameter, and CI registers no server for it. The sha256 pins are
+# of no real file.
+
+schema = 1
+
+[defaults]
+calls = 40
+turns = 40
+wall_s = 2700
+gpu_s = 3600
+
+[window]
+allowed_overage = ["rejected"]
+five_hour_max = 0.8
+seven_day_max = 0.6
+
+[backend.claude]
+version = "0.0.0-fake"
+binary = "~/.local/share/claude/versions/0.0.0-fake"
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+model = "fake-model"
+effort = "low"
+max_turns = 2
+
+[backend.qwen]
+version = "0.0.0-fake"
+binary = "~/.opencode/bin/opencode"
+sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
+model = "fake:latest"
+num_ctx = 32768
+num_predict = 4096
+external_ok = []
+
+[model_server]
+version = "0.0.0-fake"
+models = { "fake:latest" = "0000000000000000000000000000000000000000000000000000000000000000" }

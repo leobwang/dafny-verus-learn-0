@@ -1,0 +1,189 @@
+% Q15_answers.tex — your answers to paper/Q15_problems.tex (learner-owned). One section
+% per problem, keyed by its \label{ans:B<n>} anchor; the GRADER comment convention and the
+% PREREG markers are paper/template_answers.tex's. /grade-paper hashes exactly the lines
+% from PREREG-BEGIN to PREREG-END, inclusive: editing anything between them after grading
+% changes the hash, and the runs stay locked.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q15 --- Practice II-C + Lab 2 \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% PREREG-BEGIN
+\section*{Problem B1 (pre-registration)}\label{ans:B1}
+\begin{answer}
+\textbf{Claim} (oracle separation; the feedback effect S1 $-$ S0 at matched
+calls, one- or two-sided; the vericoding re-judged failure rate, Dafny against
+Verus, reported on its own and never compared with S0 or S1; for each, the
+outcome that would refute it): \dots
+
+\textbf{Feedback signals} (each signal S1 receives after a sample, named, and
+shown to need no hidden input): \dots
+
+\textbf{Metric and estimator} (the oracle verdict against the hidden reference;
+agreement with the hidden verdicts as a confusion matrix with Cohen's
+$\kappa$; the verified-but-unfaithful rate with Wilson intervals; the unit and
+the paired estimator of S1 $-$ S0): \dots
+
+\textbf{Arms and policies} (S0, S1, V and the Claude arm, each with its policy
+file, render mode and prompt hash; the Claude subset's seed and its
+stratification): \dots
+
+\textbf{Tasks and strata} (the local stratum's file and its sha256, the public
+strata's sources and commits, the validation files' sha256, the draw seeds):
+\dots
+
+\textbf{Budget arithmetic} (calls = tasks $\times$ attempts $\times$ rounds
+$\times$ arms $\times$ repeats, per arm, plus the sentinel calls; the runs; the
+throughput assumption and its source; against the registry's budget): \dots
+
+\textbf{Generation settings} (the values the Ollama gate pins for every Qwen
+call; the seed list per arm, pairwise disjoint; for Claude the pinned argv):
+\dots
+
+\textbf{Cost per arm} (tokens in and out, GPU-seconds and wall clock per arm,
+against the ceiling; the truncation rate per arm as a sensitivity line; the
+fallback if the per-arm totals exceed the ceiling): \dots
+
+\textbf{MDE} (computed with \texttt{fvh.stats.mde\_two\_proportions}: $n$,
+baseline, pairing, $\alpha$, the call and its value): \dots
+
+\textbf{Seeds and repeats} (Qwen: the per-request seeds; Claude: repeated
+runs): \dots
+
+\textbf{Oracles' version} (the sha256 of \texttt{harness/q/fvh\_q/oracles.py}
+at the run, and the command that computes it): \dots
+
+\textbf{Cheat surface and gate} (the instruments every claimed success passes,
+where \texttt{implication} and \texttt{classify} run, \texttt{UNKNOWN} and
+\texttt{UNDECIDED} handling): \dots
+
+\textbf{Exclusions} (\texttt{infra-failed} re-issue; \texttt{truncated:<cause>}
+as failures, with the sensitivity line; a killed oracle run): \dots
+
+\textbf{Stopping rule}: \dots
+
+\textbf{Prediction intervals} (80\%, for each claim's estimate, scored after
+the run): \dots
+
+\textbf{Contamination} (the local stratum's authorship dates; the card
+contamination audit: novelty review and perturbation probes; the public sets
+flagged as possibly seen): \dots
+
+\textbf{Disclosure} (a small-scale replication with model substitution; Claude as
+grader and subject; one machine, one solver pin): \dots
+
+\textbf{Batch plan} (the plan file \texttt{python -m fvh run Q15 -{}-plan}
+reads: its path, and its sha256 on a line of its own as \texttt{plan-sha256:}
+followed by the 64 hex digits \texttt{sha256sum} prints for the file;
+\texttt{fvh run} opens a lab batch only on the plan this line names;
+separately executed pilot or subset plans need their own binding and a new
+gradebook row after re-grading the changed pre-registration, with the
+registered method held fixed): \dots
+\end{answer}
+% PREREG-END
+
+\section*{Problem B2 (lab report)}\label{ans:B2}
+\begin{answer}
+\textbf{Reproduce:} \verb+<one command over research/runs/Q15/ that regenerates every table below>+
+
+\textbf{Oracle separation} (the confusion matrix and $\kappa$, with its
+interval): \dots
+
+\textbf{The feedback effect} (S1 $-$ S0, with its interval): \dots
+
+\textbf{Vericoding} (the re-judged failure rate per language, with its Wilson
+interval, on its own): \dots
+
+\textbf{Deviations from the pre-registration} (each one, and why): \dots
+
+\textbf{Gate and grader-container checks} (the gate's verdict on every claimed
+success; every claimed faithful verdict reproduced from a clean checkout):
+\dots
+
+\textbf{Reward audit and bench audit}: \dots
+
+\textbf{Prediction intervals, scored}: \dots
+
+\textbf{Contamination}: \dots
+
+\textbf{Disclosure}: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 04.6, lines 1618--1649 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Closest oracle, and whether S1 could receive it:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 04.7, lines 1653--1677 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Closest oracle, and whether S1 could receive it:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 03.8, lines 1257--1282 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Closest oracle, and whether S1 could receive it:} \dots
+\end{answer}
+
+\end{document}

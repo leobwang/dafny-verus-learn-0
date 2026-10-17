@@ -1,0 +1,41 @@
+# Q15 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q15 (never a P
+# answer: the chapter reveals the server, forensic and battery answers after their boxes)
+# and is verified against its own reference file (rule 1) and against every learner-visible
+# file (rule 2). The refutations of H2d and H2v are included: the counterexample is part of
+# the item's answer. Lab 2's hidden references are not in Solutions/ and have no pattern
+# here; the six prose items' reference specifications in the twins are (H5d below). Q15 is
+# intermediate practice tier, so these patterns bind instructor sessions of Q13 onward (the
+# README's tier rule).
+
+# from Solutions/dafny/Q/Q15_PracticeIIC/std/Q15_PracticeIIC.dfy
+# source:     var m1, m2 := n + 1, n + 2;   (Q15.H1d)
+# verified: solutions=1 public=0
+var\s+m1,\s*m2\s*:=\s*n\s*\+\s*1,\s*n\s*\+\s*2
+# source:       CmpTop(a[1..], b[1..]);   (Q15.H2d)
+# verified: solutions=1 public=0
+CmpTop\(a\[1\.\.\],\s*b\[1\.\.\]\)
+# source:     ensures var a, b := [2 * BASE, 0], [0, 1];   (Q15.H2d, the refutation)
+# verified: solutions=1 public=0
+\[2\s*\*\s*BASE,\s*0\],\s*\[0,\s*1\]
+
+# from Solutions/dafny/Q/Q15_PracticeIIC/std/Q15_Lab2Specs.dfy
+# source:     ensures r == if ToNat(b) <= ToNat(a) then Sub(a, b) else []   (Q15.H5d)
+# verified: solutions=1 public=0
+then\s+Sub\(a,\s*b\)\s+else\s+\[\]
+
+# from Solutions/verus/q/q15_practice_iic/src/lib.rs
+# source:     assert(weight(((n + 1) + 1) + 1) == BASE * weight((n + 1) + 1));   (Q15.H1v)
+# verified: solutions=1 public=0
+weight\(\(\(n\s*\+\s*1\)\s*\+\s*1\)\s*\+\s*1\)
+# source:     lemma_mul_inequality(weight(a.len()) as int, weight(b.len()) as int, x as int);   (Q15.H2v)
+# verified: solutions=1 public=0
+lemma_mul_inequality\(weight\(a\.len\(\)\)\s+as\s+int
+# source:         seq_to_nat(seq![5u64, 0u64]) < seq_to_nat(seq![6u64]),   (Q15.H2v, the refutation)
+# verified: solutions=1 public=0
+seq!\[5u64,\s*0u64\]\)\s*<\s*seq_to_nat\(seq!\[6u64\]\)
+
+# from Solutions/dafny/Q/Q15_PracticeIIC/exit/Q15_Exit.dfy
+# source:     forall i {:trigger a[i]} {:trigger b[i]} | 0 <= i < |a|   (Q15.X1d)
+# verified: solutions=1 public=0
+\{:trigger\s+a\[i\]\}\s*\{:trigger\s+b\[i\]\}

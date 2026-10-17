@@ -1,0 +1,25 @@
+// Demo for card Q06.C6dv (divergence), the Verus column. Open it only after every
+// prediction of Q06 is recorded (scripts/firsttry.sh Q06 --check). Its pinned run is
+// `scripts/vcheck` (the sidecar's command); run `scripts/vaudit` on it too.
+// after: Q06.P6dv
+// after: Q06.P8dv
+use vstd::prelude::*;
+use vstd::arithmetic::mul::*;
+
+verus! {
+
+#[verifier::rlimit(1)]
+pub proof fn lemma_small(x: nat)
+    ensures
+        x + 0 == x,
+{
+}
+
+pub proof fn lemma_commute(x: int, y: int)
+    ensures
+        x * y == y * x,
+{
+    lemma_mul_is_commutative(x, y);
+}
+
+} // verus!

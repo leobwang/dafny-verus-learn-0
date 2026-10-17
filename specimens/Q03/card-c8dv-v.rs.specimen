@@ -1,0 +1,14 @@
+// Demo for card Q03.C8dv (divergence), the Verus column. Open it only after
+// every prediction of Q03 is recorded (scripts/firsttry.sh Q03 --check).
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn lemma_double_is_sum(x: nat)
+    ensures
+        x + x == 2 * x,
+{
+    assume(false);
+}
+
+} // verus!

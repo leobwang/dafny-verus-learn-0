@@ -1,0 +1,70 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "C-8"
+lang = "verus"
+half = "R"
+xclass = ""
+kind = "control"
+title = "a frozen statement kept as shipped, its body filled"
+files = ["Cargo.toml", "frozen.rs", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "clean"
+kinds = []
+output_sha256 = "d1b27dc044da74e1e6c91186bc62275243813a935eca1c6bdc33c2d122605937"
+summary = "verdict verified, stage verify, verified 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/C-8"]
+exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "clean"
+kinds = []
+output_sha256 = "9a0e28cde6dce01ba74a88628b4162d8588b60037c5e49cb2bfd190632035f59"
+summary = "0 finding(s)"
+argv = ["scripts/vaudit", "tests/corpus/verus/C-8"]
+exit = 0
+
+[[expect]]
+tool = "specfreeze --check"
+outcome = "clean"
+kinds = []
+output_sha256 = "f5cf1b209705f17a4609e3217e651e88e2373d829f637f3e6cce539ef28b6b0f"
+summary = "specfreeze --against frozen.rs (hash mode; the course form is --check <ID> against expected/<ID>.freeze): 0 finding(s)"
+argv = ["scripts/specfreeze", "--against", "tests/corpus/verus/C-8/frozen.rs", "tests/corpus/verus/C-8/src/lib.rs"]
+exit = 0
+
+[[expect]]
+tool = "json-completeness"
+outcome = "clean"
+kinds = []
+output_sha256 = "e22ecd71b0c91d577ba64adc762978f88f83918f22736c267604da8a97005c56"
+summary = "the plain run's --output-json verification-results: success true, is-verifying-entire-crate true, verified 1, errors 0; func-details 3 entries; the check: success true, entire crate, verified >= 1 (output_sha256: of that verification-results object as sorted-key JSON plus a newline)"
+argv = ["verus", "tests/corpus/verus/C-8/src/lib.rs", "--crate-type=lib", "--crate-name", "corpus_vc8", "--rlimit", "2", "--num-threads", "1", "--output-json", "--error-format=json", "--time"]
+exit = 0
+
+[[expect]]
+tool = "seed-rerun"
+outcome = "clean"
+kinds = []
+output_sha256 = "97cab2b0dad3790a86981ac2729d3d555033ebdedc13f06309bfcdecae28a31e"
+summary = "vcheck --brittleness under seeds 1, 2, 3: seed 1 verified, seed 2 verified, seed 3 verified; stable; the resource-count spread line is advisory (its numbers are in the hash)"
+argv = ["scripts/vcheck", "--brittleness", "tests/corpus/verus/C-8"]
+exit = 0

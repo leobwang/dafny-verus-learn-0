@@ -1,0 +1,95 @@
+{
+  "func-details": {
+    "kinds::u_marked": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "kinds::trusted": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::function::axiom_fn_mut_call_requires": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "kinds::u_bodyless": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "kinds::ax": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "kinds::plain": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::function::axiom_fn_mut_call_ensures": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "kinds::loops": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "kinds::assumes": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    }
+  },
+  "verification-results": {
+    "encountered-error": true,
+    "encountered-vir-error": true,
+    "success": false
+  },
+  "times-ms": {
+    "verus-build": {
+      "profile": "release",
+      "version": "0.2026.09.27.3cf1832"
+    },
+    "num-threads": 1,
+    "total": 186,
+    "estimated-cpu-time": 186,
+    "rust": {
+      "total": 20,
+      "init-and-types": 5,
+      "trait-conflicts": 15,
+      "compile": 0
+    },
+    "verification": {
+      "total": 161,
+      "vir": {
+        "total": 144,
+        "hir": 1,
+        "import": 102,
+        "rust-to-vir": 19
+      }
+    },
+    "total-verify": 15,
+    "total-verify-module-times": [
+      {
+        "module": "",
+        "time": 15
+      }
+    ],
+    "air": {
+      "total": 10,
+      "module-times": [
+        {
+          "module": "",
+          "time": 10
+        }
+      ]
+    }
+  },
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.09.27.3cf1832",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.98.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "3cf18325f0fd0c3040fbdec8c0f2255c0504c91a"
+  }
+}

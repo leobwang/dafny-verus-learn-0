@@ -1,0 +1,10 @@
+// item: Q04.P5d S3 error
+// **P5.** Where does the verifier object? Answer form: `EXPECT @<line> "<fragment>"`.
+// SLOT: EXPECT @??? "???"
+module Q04_P5 {
+  method Demo(x: nat) returns (y: nat)
+    ensures y > x
+  {
+    y := x;
+  }
+}

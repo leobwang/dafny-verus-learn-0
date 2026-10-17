@@ -1,0 +1,174 @@
+% Q04_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q04_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the measure, the case split, the helpers, the wording and the
+% examples are deliberately far from the reference, so the grader must recognise
+% correctness by substance (the rubric's probes), not by matching text.
+% B1 inducts on the longer length instead of the sum of the lengths (both drop at the
+% one recursive use), splits on the tails' values instead of on Cmp's result, and
+% declares the head-and-tail arithmetic as a new lemma; its Verus clause quantifies
+% over the indices below a@.len() with the sides swapped. B2's fourth body is a calc
+% chain, not a helper lemma. B3 words every field its own way.
+%
+% EXPECTED[B1][statement-fidelity][4] [induction-soundness][4] [case-exhaustiveness][4] [blueprint-quality][4] [gap-accounting][4]: correct. Probe A filled from this blueprint (the declared Dominance pasted bodyless, the call on the tails, Dominance in the two unequal-tails cases) verifies with exactly that hole (verified, 31 verified, 1 hole, captured), and Dominance itself verifies with an empty body (captured); the larger length drops at the recursive use whether or not a is empty. Probe A' with (b)'s clause and its three named calls verifies (captured). No finding.
+% EXPECTED[B2][correctness][4]: correct; Probe B on each body and on the calc-chain body, in both languages, matches every claim (all captured). No finding.
+% EXPECTED[B3][card-fidelity][4]: every field agrees with the pinned range (lines 614-638); Budget and Artifact correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a wrong step,
+% an uncovered instance, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q04 --- Proof craft, loops and libraries \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} Whenever every limb of $a$ and of $b$ is below
+\dfy{BASE}, the comparison is one of $-1$, $0$, $1$, it is negative exactly
+when $a$'s value is the smaller, and it is zero exactly when the two values
+coincide.
+
+\textbf{Induction on / decreases measure:} on $L = \max(|a|, |b|)$, the
+length of the longer sequence.
+
+\textbf{Base:} $L = 0$, so both sequences are empty: \dfy{Cmp} gives $0$ and
+both values are $0$, which makes the three claims true.
+
+\textbf{IH (stated as a formula):} for all valid $a'$ and $b'$ with
+$\max(|a'|, |b'|) < L$:
+\[
+\begin{array}{l}
+\mathit{Cmp}(a', b') \in \{-1, 0, 1\} \\
+\wedge\ (\mathit{Cmp}(a', b') < 0 \iff \mathit{ToNat}(a') < \mathit{ToNat}(b')) \\
+\wedge\ (\mathit{Cmp}(a', b') = 0 \iff \mathit{ToNat}(a') = \mathit{ToNat}(b')).
+\end{array}
+\]
+
+\textbf{Step} ($L > 0$). \dfy{Tail} shortens the longer sequence by one limb
+and leaves an empty one empty, so $\max(|\mathit{Tail}(a)|,
+|\mathit{Tail}(b)|) = L - 1$, and the IH is available at
+$(\mathit{Tail}(a), \mathit{Tail}(b))$ once the tails are valid. First,
+L2's \dfy{ValidTail} on each sequence (valid tails, heads below \dfy{BASE}) and
+L2's \dfy{ToNatHeadTail} on each (a value is its head plus \dfy{BASE} times its
+tail's value). Let $u$ and $v$ be the tails' values and $p$, $q$ the heads.
+\begin{itemize}
+\item $u = v$: the IH makes the tails' comparison $0$, so \dfy{Cmp} falls
+  through to the heads, and the values differ by $p - q$: the head test gives
+  the right sign and $0$ exactly when $p = q$.
+\item $u < v$: the IH makes the tails' comparison negative, so \dfy{Cmp}
+  returns it, and it is $-1$. My lemma \textsc{Dominance} below, at $(p, q, u,
+  v)$, shows $p + \mathit{BASE} \cdot u < q + \mathit{BASE} \cdot v$, so $a$'s
+  value is the smaller and the values differ: all three claims hold.
+\item $v < u$: symmetric, with \textsc{Dominance} at $(q, p, v, u)$; \dfy{Cmp}
+  returns $1$.
+\end{itemize}
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement,
+and where it comes from\textbf{):} L2's \dfy{ValidTail} and
+\dfy{ToNatHeadTail}, each twice; and one new lemma, \textsc{Dominance}:
+\dfy{lemma Dominance(ha: nat, hb: nat, ta: nat, tb: nat) requires ha < BASE && ta < tb ensures ha + BASE * ta < hb + BASE * tb},
+true because $ha + \mathit{BASE} \cdot ta < \mathit{BASE} \cdot (ta + 1) \leq
+\mathit{BASE} \cdot tb \leq hb + \mathit{BASE} \cdot tb$: a difference of one
+in the tails is worth \dfy{BASE}, which no head reaches.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): none;
+\textsc{Dominance} is linear in its variables, so I expect it to go through with
+no hint.
+
+\textbf{(b) The missing clause (a formula over \texttt{i}, \texttt{n},
+\texttt{a@} and \texttt{b@}):} for every index $k$ with
+$i \leq k < |a@|$, $b@[k] = a@[k]$, that is
+\vrs{forall|k: int| i <= k < a@.len() ==> b@[k] == a@[k]}.
+
+\textbf{Why one pass keeps it:} the loop only runs when the limbs just below
+$i$ agree; after \vrs{i = i - 1} that index joins the range, and it agrees.
+Before the first pass the range is empty.
+
+\textbf{What it gives at each outcome after the loop} (\texttt{i == 0}; the
+two limb comparisons, and which \texttt{requires} of \texttt{lemma\_lt\_at}
+it supplies): if $i = 0$ the clause covers all of $a@$, which has $b@$'s
+length, so the views are equal (the given extensional assertion) and so are
+the values. If $i > 0$ the loop stopped because limb $i - 1$ differs. The
+call \vrs{lemma_lt_at(a@, b@, i - 1)} (or with the views exchanged) then needs
+equal lengths (from $n$), an index in range (from $i \leq n$), the strict
+comparison at $i - 1$ (the branch), and agreement strictly above $i - 1$:
+that last one is my clause.
+
+\textbf{The two length cases} (each fact by its statement, and the lemma of
+L3 that states it): say $|a| < |b|$. Since $b$ is canonical and not empty,
+\vrs{lemma_seq_to_nat_lower} puts its value at least at
+\vrs{weight(|b| - 1)}; \vrs{lemma_seq_to_nat_upper} puts $a$'s value strictly
+under \vrs{weight(|a|)}; and \vrs{lemma_weight_mono} with
+$|a| \leq |b| - 1$ orders the two weights. Chained, $a$'s value is below
+$b$'s. The other length case swaps the roles.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+% Short answers. Expect the grader to try to counterexample them.
+\textbf{(a)} For each body, in each language: the gate passes? \texttt{vaudit}
+reports a finding? The body keeps ``only standard-library lemma calls''? \\
+{[1]} Dafny: green gate, clean audit, within the rule. \quad Verus: likewise. \\
+{[2]} Dafny: still a green gate and a clean audit, since the assertion is
+proved, not assumed; but an assertion is a statement of my own, so the rule
+is broken. \quad Verus: likewise. \\
+{[3]} Dafny: red gate (it counts the assumption as a hole) and one audit
+finding; also outside the rule. \quad Verus: likewise.
+
+\textbf{(b)} The fourth body: a one-step \dfy{calc} chain from \dfy{a * w} to
+\dfy{b * w} with the relation \dfy{<=} and the library call as the step's hint
+(Verus: \vrs{calc!} with \vrs{(<=)} and the same call in the step's braces,
+plus \vrs{use vstd::calc;}). \\
+Why it passes both instruments: the chain is a real proof, the hint is the
+same library fact, and nothing is assumed. \\
+The artifact that shows the breach: the diff of the agent file, whose body
+then holds a chain instead of bare calls; the gate's summary line and the
+audit look exactly as for body [1].
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.2, lines 614--638 (the pinned range).
+
+\textbf{Task shape:} proof synthesis for verified Rust: given one function with
+its Verus pre- and postconditions, write the proof parts (invariants, asserts,
+lemmas) so that Verus accepts it; GPT-4o agents do it in three phases.
+
+\textbf{Oracle:} the verifier's result, scored by how many functions verify
+(loops counted separately) and how many errors remain, which also ranks the
+candidates; Lynette rejects a candidate that changed code or spec or added an
+\vrs{assume}.
+
+\textbf{What is trusted:} the verifier and solver, the authors' Lynette check,
+and the given specifications (the limitations call them trusted).
+
+\textbf{Cheat surface:} closed: code edits, spec edits, \vrs{assume}. Open: a
+spec that is too weak is taken as true; nothing is said about other ways to
+skip a proof.
+
+\textbf{Metric:} Verus-Bench tasks proved: 137 of 150 (best run; the first run
+alone 122) against 67 for the baseline; ablations in tasks (17 of 37 against 37
+of 37; 26/26/23/18 on 30 tasks across four models).
+
+\textbf{Budget:} only partly stated: the baseline's 10 minutes per task, and
+the cost of reaching 67 tasks (22 s and 2 calls for AutoVerus, 458 s and 59
+for the baseline); 5 samples in phase 1, at most 10 repair rounds in phase 3.
+No token or money figure.
+
+\textbf{Variance:} three runs, reported as their best; the first run's 122 next
+to the best 137 is the only spread shown; no interval and no seeds; sampling
+at temperature 1.0.
+
+\textbf{Artifact:} the 150-task Verus-Bench (78 MBPP, 38 Diffy, 23 Misc, 11
+CloverBench), later reused (a 139-task variant in SAFE; AlphaVerus compares
+with AutoVerus). Release of the code is not stated in the range.
+\end{answer}
+
+\end{document}

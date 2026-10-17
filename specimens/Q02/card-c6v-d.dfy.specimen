@@ -1,0 +1,10 @@
+// Card Q02.C6v, demo d (Dafny). Open it only after your Q02 predictions are committed, then
+// run `scripts/vcheck specimens/Q02/card-c6v-d.dfy.specimen` and compare with demo v.
+// after: Q02.P7dv
+module Q02_CardC6vD {
+  method SetFirst(a: array<nat>)
+    requires a.Length > 0
+  {
+    a[0] := 1;
+  }
+}

@@ -1,0 +1,177 @@
+% Q17_solutions.tex — REFERENCE SOLUTIONS to paper/Q17_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1's blueprint is the reference twins' (Solutions/dafny/Q/Q17_PracticeIIIB/
+% std/Q17_PracticeIIIB.dfy and Q17_Vcgen.dfy, and the agent twin), each
+% statement checked on the course pins on 2026-10-11 (Dafny 4.11.0): the twins
+% gate with 0 holes and are stable on seeds 1-3 under both bundled solvers;
+% the plain invariant (the prefix's multiset only) fails ExtractMin's minimum
+% postcondition; Solutions/plans/Q17-code-notes.md records the runs and the
+% probe files (archive ~/.cache/dafny-verus-learn-0/author-probes/dv5c/q17/).
+% B1(e)'s counterexample was executed with the rubric's Probe B (a {:test}
+% method appended to a copy of the agent file; `scripts/vcheck --test`:
+% 1 passed); a verifier proof of it over the W2 language ran out of resources
+% at the pinned limit (code notes §5). B2's fields
+% are graded against the learner's own cheatsheets.md; this file records
+% which lines of the pinned range each field draws on and never copies the
+% card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q17 --- Practice III-B \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is an informal proof first (the five dimensions: statement-fidelity,
+induction-soundness, case-exhaustiveness, blueprint-quality, gap-accounting;
+the grade is their minimum, and at least 3 on every one unlocks formal work).
+Any blueprint whose invariant and statements are true and whose steps compose
+is correct: the reference below is one, not the only one. B2 is a paper card
+(\texttt{card-fidelity}, per field).
+
+% ---------------------------------------------------------------------------
+\section*{B1 (the blueprint)}
+
+\subsection*{H1, \dfy{ArrayPQ}}
+\begin{description}
+\item[(a) The invariant.] Six conjuncts:
+  \dfy{this in Repr} (every method writes \dfy{n} or \dfy{Model}, and the
+  frame is \dfy{modifies Repr});
+  \dfy{a in Repr} (\dfy{Insert} writes the array's elements);
+  \dfy{n <= a.Length} (every read \dfy{a[n - 1]} and the shift's write
+  \dfy{a[n]} after growth);
+  \dfy{0 < a.Length} (growth doubles the length, which must exceed \dfy{n}
+  afterwards: from length 0 it would stay 0);
+  descending order of \dfy{a[..n]}, written
+  $\forall i, j.\ 0 \le i < j < |s| \Rightarrow s[i] \ge s[j]$ for
+  $s = $ \dfy{a[..n]} (\dfy{ExtractMin}'s and \dfy{Peek}'s minimum);
+  \dfy{Model == multiset(a[..n])} (every postcondition about \dfy{Model}).
+  The plain invariant without the order verifies everything but
+  \dfy{ExtractMin}'s minimum.
+\item[(b) The frames.] The constructor allocates \dfy{a} and sets
+  \dfy{Repr := \{this, a\}}: all fresh. \dfy{Insert} without growth writes
+  \dfy{a}'s elements, \dfy{n} and \dfy{Model}; \dfy{Repr} is unchanged. With
+  growth it allocates a new array \dfy{b}, copies the prefix into it, and sets
+  \dfy{a := b; Repr := Repr + \{b\}}: the only new member of \dfy{Repr} is
+  fresh, so \dfy{fresh(Repr - old(Repr))} holds; the old array stays in
+  \dfy{Repr} (harmless). \dfy{ExtractMin} writes \dfy{n} and \dfy{Model} only.
+  The copy loop must say it writes only \dfy{b} (a loop \dfy{modifies}
+  clause), or it may lose \dfy{n} and the old prefix.
+\item[(c) The lemmas.] Three, beside the ordering predicate:
+  \begin{itemize}
+  \item \dfy{DescLastMin(s)}: requires order and $|s| > 0$; ensures every
+    $y$ in \dfy{multiset(s)} is at least $s[|s| - 1]$. Proof: a membership
+    in the multiset is a membership in the sequence, at some index.
+  \item \dfy{DescInsert(s, i, x)}: requires order, $i \le |s|$,
+    $i > 0 \Rightarrow x \le s[i - 1]$ and $s[j] < x$ for $j \ge i$;
+    ensures order of $s[..i] + [x] + s[i..]$ and its multiset is
+    \dfy{multiset(s) + multiset\{x\}}. Proof: the identity
+    $s = s[..i] + s[i..]$.
+  \item \dfy{Spliced(t, s, i, x)}: the array after the shift, read as a
+    sequence $t$ of length $|s| + 1$ that agrees with $s$ below $i$, holds
+    $x$ at $i$ and $s[j - 1]$ above, is $s[..i] + [x] + s[i..]$
+    (extensionality; stated apart to keep \dfy{Insert}'s cost low).
+  \end{itemize}
+  The shifting loop (from $i = n$ down, while $a[i - 1] < x$), with
+  $s$ the ghost prefix at entry: $0 \le i \le n < $ \dfy{a.Length};
+  $a[j] = s[j]$ for $j < i$; $a[j] = s[j - 1]$ for $i < j \le n$;
+  $s[j] < x$ for $i \le j < n$; \dfy{modifies a}. At exit, $i = 0$ or
+  $s[i - 1] = a[i - 1] \ge x$, which is \dfy{DescInsert}'s second
+  precondition. The growth is a helper method (\dfy{Grow}) whose contract
+  keeps \dfy{Valid()}, \dfy{n}, the prefix and \dfy{Model}, and makes
+  $n < $ \dfy{a.Length}.
+\end{description}
+
+\subsection*{H3, the statements}
+\begin{description}
+\item[(d) In words.] If every side condition in \dfy{Vcs(c, q)} holds in
+  \emph{every} state, and \dfy{Pre(c, q)} holds in the start state $s$, then
+  for every fuel, a run of $c$ from $s$ that ends (\dfy{Done}) ends in a state
+  where $q$ holds. As a formula (one \dfy{ensures}):
+  \dfy{lemma VcSound(c: Cmd, q: BExp, s: State, fuel: nat)}
+  \dfy{requires forall p | p in Vcs(c, q) :: Valid(p)}
+  \dfy{requires Holds(Pre(c, q), s)}
+  \dfy{ensures Exec(c, s, fuel).Done? ==> Holds(q, Exec(c, s, fuel).s)}.
+  Partial correctness: nothing is claimed of a \dfy{Stuck} run. Further
+  statements are optional; the metatheory run needs a substitution lemma for
+  assignment (\dfy{Holds(SubstB(p, x, e), s)} equals
+  \dfy{Holds(p, Update(s, x, Eval(e, s)))}, with its expression twin) and
+  may add it itself under \dfy{HELPERS}.
+  \emph{The witness:} \dfy{c := Assign(0, Const(1))},
+  \dfy{q := Lt(Const(0), Var(0))}, any state, fuel 0: \dfy{Vcs(c, q)} is
+  empty, \dfy{Pre(c, q)} is \dfy{Lt(Const(0), Const(1))}, true everywhere,
+  and an assignment spends no fuel, so the run is \dfy{Done}. A witness with
+  a loop is also correct if its run provably ends.
+\item[(e) The audit.] \emph{Plausible but wrong:} the side conditions
+  required only in the start state, \dfy{forall p | p in Vcs(c, q) ::
+  Holds(p, s)}. It fails at
+  $c = $ \dfy{While(Lt(Var(0), Const(1)), Lt(Const(0), Const(1)),
+  Assign(0, Const(1)))}, $q = $ \dfy{Lt(Var(0), Const(1))}, a state with
+  $x_0 = 0$, fuel 2: in $s$ the guard holds, so the exit condition's side
+  condition holds vacuously there, the other one is valid, and the
+  invariant holds; the loop runs once, ends \dfy{Done} with $x_0 = 1$, and
+  $q$ is false. The loop case uses its first side condition at the start of
+  every iteration and its second at the exit, never only in $s$.
+  \emph{True but too weak:} any statement the corollary cannot apply to
+  \dfy{Count} at every fuel, for example one that also requires
+  \dfy{fuel == 0} (true: a loop with no fuel is \dfy{Stuck}), or one that
+  concludes only \dfy{Holds(Pre(c, q), s)}; the corollary's call then fails a
+  precondition, or its postcondition is not reached.
+\item[(f) Gaps.] None in the reference. A blueprint that leaves the
+  substitution case as a declared gap is fine: the contractor states it.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (paper card 12.12): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 5507--5533 (computed 2026-10-11),
+\[ \texttt{sha256 533d07ab0f8f5ab0124ca406b4ee1f805f83d56d626979c023ac7947a30dabba}. \]
+
+\begin{description}
+\item[Task shape.] An audit, not a benchmark: everything CompCert's
+  machine-checked correctness proof still trusts, in CompCert and two forks
+  (KVX, SSA), read off Coq counterexamples and bug-fix commits.
+  \emph{Lines 5509, 5511.}
+\item[Oracle.] The guarantee being audited: if compilation succeeds and the
+  source has no undefined behaviour, the assembly behaves observably the same,
+  over the CompCert C and Asm models; a defect is a counterexample or a fix
+  outside what that theorem covers. \emph{Line 5511.}
+\item[What is trusted.] The Coq kernel (it re-checks tactic output, so
+  tactics and checked oracles add nothing), three consistent axioms,
+  extraction, the C and Asm semantic models, and the unverified glue
+  (elaboration, printers, pseudo-instruction expansion, clobber
+  specifications). \emph{Lines 5511, 5514, 5516, 5520--5527.}
+\item[Cheat surface.] Unrealized axioms (a sigma-typed axiom gives
+  \texttt{False}), impure OCaml bound as pure, unsound physical equality,
+  cyclic values under pointer equality, and a specification in one file
+  drifting from code in another (clobbers): proofs pass while code is wrong.
+  The fixes: prove an axiom's type inhabited, a may-return monad, checked
+  hash-consing. \emph{Lines 5515--5516, 5529, 5533.}
+\item[Metric.] Defects cited per TCB layer (the authors' tally): 0 in the
+  kernel, extraction and axioms; 3 each in elaboration and C semantics,
+  printing, expansion and clobbers (the last latent); 1 latent in value
+  modeling. \emph{Lines 5520--5527.}
+\item[Budget.] None stated: a qualitative analysis; a learner should say so
+  and name what would be needed (person-time, commits examined).
+  \emph{Line 5531.}
+\item[Variance.] Not applicable to a one-project qualitative study; the
+  limitation is generality (one project, authors who develop a fork).
+  \emph{Line 5531.}
+\item[Artifact.] The analysis itself, with its counterexamples and the
+  upstream fixes; no tool or dataset is stated. \emph{Lines 5509, 5511.}
+\item[This module.] Your H3 statements: the contractor's proofs are checked by
+  the verifier, but what they prove is only what you stated, as CompCert's
+  theorem is only as good as its C and Asm models; and the language that the
+  agent file copies from \texttt{Q17\_Vcgen.dfy} is a specification in two
+  files (the freeze compares them). Either answer, argued, is full credit.
+  \emph{Line 5533.}
+\end{description}
+
+\end{document}

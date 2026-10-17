@@ -1,0 +1,49 @@
+// Demo for card Q08.C2v (write:trait-spec), the failure half. The success half is `Dial`,
+// `Knob` and `leave_zero` in verus/q/q08_internals_ii/src/lib.rs; here the implementation
+// promises more than the trait, and a generic client relies on that. Run it with
+// `scripts/vcheck specimens/Q08/card-c2v.rs.specimen`; the EXPECT line at the end pins the
+// message the verifier gives (line and fragment).
+// after: Q08.P6v
+use vstd::prelude::*;
+
+verus! {
+
+pub trait Dial: Sized {
+    spec fn pos(&self) -> nat;
+
+    fn turn(&mut self)
+        requires
+            old(self).pos() < 9,
+        ensures
+            final(self).pos() > old(self).pos(),
+    ;
+}
+
+pub struct Knob {
+    pub p: u8,
+}
+
+impl Dial for Knob {
+    open spec fn pos(&self) -> nat {
+        self.p as nat
+    }
+
+    fn turn(&mut self)
+        ensures
+            final(self).p == old(self).p + 1,
+    {
+        self.p = self.p + 1;
+    }
+}
+
+pub fn turn_to_one<D: Dial>(d: &mut D)
+    requires
+        old(d).pos() == 0,
+    ensures
+        final(d).pos() == 1,
+{
+    d.turn();
+}
+
+} // verus!
+// EXPECT @43 "postcondition not satisfied"

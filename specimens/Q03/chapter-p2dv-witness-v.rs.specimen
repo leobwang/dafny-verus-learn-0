@@ -1,0 +1,22 @@
+// Chapter specimen for docs/Q03_FirstSyntaxII.md §7: Q03.P2dv's Verus proof fn, called
+// on a concrete argument. Open it only after your Q03 predictions are committed;
+// scripts/vcheck refuses it until P2dv's first try is recorded.
+// after: Q03.P2dv
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn lemma_contra(x: nat)
+    requires
+        x > 5,
+        x < 3,
+    ensures
+        false,
+{
+}
+
+proof fn witness() {
+    lemma_contra(4);
+}
+
+} // verus!

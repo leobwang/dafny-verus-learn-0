@@ -1,0 +1,212 @@
+% Q03_problems.tex — the written problems of Q03 (First syntax II: modes,
+% logic, tooling, trust). Built by `make -C paper paper` with Q03_answers.tex.
+% B1 and B2 are the S8 lab (weakest preconditions and verification conditions
+% by hand, 20 minutes); B3 (a blueprint) and B4 (the paper card) are the
+% module's written pair (15 minutes).
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q03 --- First syntax II: modes, logic, tooling, trust \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q03\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B1 and B2 after chapter section~2 (the S8 lab, 20 minutes); B3 and B4
+before you start the holes (15 minutes). Write B3 \emph{before} you open the
+hints under H1 in the exercise file. Then run \texttt{/grade-paper Q03} in a
+fresh session. Once H1d verifies, \verb+/grade-paper Q03 --post+ re-scores
+B3's blueprint against your own proof.
+
+Hand calculations are graded step by step: write every step, and name the rule
+it uses. Derive first; check with the verifier afterwards, as chapter section~2
+does. Compare with \texttt{paper/solutions/} only as the module's last step.
+
+Notation: $\WP{c}{Q}$ is the weakest precondition of program $c$ for
+postcondition $Q$; $\subst{Q}{x}{e}$ is $Q$ with $e$ substituted for $x$.
+All variables range over the mathematical integers unless a type says
+otherwise.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+\textbf{The weakest precondition of loop-free code} (10 minutes). Over integer
+variables $x$ and $y$, the program $c$ is
+\[
+  y \assign x + 3 \seqc
+  \mathbf{if}\ y > 10\ \mathbf{then}\ y \assign y - 10\ \mathbf{else}\ y \assign 2 \cdot y \seqc
+  x \assign y - 1
+\]
+and the postcondition is $Q \equiv x \geq 4$. In the two languages, with the
+precondition $P \equiv 0 \leq x \leq 8$ of part (b) attached:
+\begin{dafnycode}
+method B1(x0: int) returns (x: int, y: int)
+  requires 0 <= x0 <= 8
+  ensures x >= 4
+{
+  x := x0;
+  y := x + 3;
+  if y > 10 { y := y - 10; } else { y := 2 * y; }
+  x := y - 1;
+}
+\end{dafnycode}
+\begin{veruscode}
+proof fn b1(x0: int) -> (x: int)
+    requires 0 <= x0 <= 8,
+    ensures x >= 4,
+{
+    let y = x0 + 3;
+    let y = if y > 10 { y - 10 } else { 2 * y };
+    y - 1
+}
+\end{veruscode}
+\begin{enumerate}
+\item[(a)] Compute $\WP{c}{Q}$ backwards, one statement at a time, naming the
+  rule at each step (assignment, sequence, conditional). Then simplify the
+  result to a formula over the start value of $x$ alone, justifying each
+  simplification over the integers.
+\item[(b)] State the verification condition $P \impl \WP{c}{Q}$ and decide
+  it. If it fails, exhibit a start state that satisfies $P$ and ends outside
+  $Q$, and trace the program on it.
+\item[(c)] In one sentence: is the set of start values of $x$ that satisfy
+  $\WP{c}{Q}$ an interval?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B2}
+\textbf{Verification conditions of a loop} (10 minutes). The loop below
+counts $x$ up to $n$ while it counts $y$ down from $n$:
+\begin{dafnycode}
+method Countdown(n: int) returns (x: int, y: int)
+  requires n >= 0
+  ensures y == 0
+{
+  x, y := 0, n;
+  while x < n
+    invariant x <= n && x + y == n
+    decreases n - x
+  {
+    x := x + 1;
+    y := y - 1;
+  }
+}
+\end{dafnycode}
+\begin{veruscode}
+fn countdown(n: u64) -> (y: u64)
+    ensures y == 0,
+{
+    let mut x: u64 = 0;
+    let mut y: u64 = n;
+    while x < n
+        invariant
+            x <= n,
+            x + y == n,
+        decreases n - x,
+    {
+        x = x + 1;
+        y = y - 1;
+    }
+    y
+}
+\end{veruscode}
+Work with the Dafny version (integers) in (a) and (b). Write $I$ for the
+invariant $x \leq n \wedge x + y = n$, $b$ for the guard $x < n$ and $S$ for
+the body.
+\begin{enumerate}
+\item[(a)] Write the four verification conditions of the loop as formulas:
+  \emph{entry} (the precondition and the initialisation establish $I$),
+  \emph{maintenance} ($I \wedge b \impl \WP{S}{I}$, with $\WP{S}{I}$ computed by
+  the assignment and sequence rules), \emph{use at exit} ($I \wedge \neg b$
+  gives the postcondition) and \emph{termination} (the measure
+  $n - x$ is bounded below while the loop runs, and $S$ decreases it).
+  Decide each with a one-line argument.
+\item[(b)] Weaken the invariant to $I' \equiv x + y = n$ and redo the four
+  conditions. Which one fails? Exhibit a state that satisfies its hypotheses
+  and violates its conclusion. Can any run of the program reach that state?
+  What does the failure say about the program, and what about $I'$?
+\item[(c)] Keep $I'$, but give $y$ a type that cannot go below zero: \dfy{y: nat}
+  in Dafny, or the \vrs{u64} of the Verus version. Does the loop verify now?
+  Name the fact that changes the outcome of the condition that failed in (b),
+  and say where the verifier gets it.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B3}
+\textbf{A blueprint for H1d} (7 minutes). Write the informal proof of the
+lemma below \emph{before} you formalize it, and before you read the hints
+under it in the exercise file. The definitions are those of the given layers
+L1 and L2:
+\begin{dafnycode}
+const BASE: nat := 18446744073709551616
+
+predicate Valid(s: seq<nat>)
+{
+  forall i | 0 <= i < |s| :: s[i] < BASE
+}
+
+function ToNat(s: seq<nat>): nat
+  decreases |s|
+{
+  if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+}
+
+function AddLimb(s: seq<nat>, d: nat): seq<nat>
+  decreases |s|
+{
+  if |s| == 0 then (if d == 0 then [] else [d])
+  else if s[0] + d < BASE then [s[0] + d] + s[1..]
+  else [s[0] + d - BASE] + AddLimb(s[1..], 1)
+}
+
+lemma AddLimbToNat(s: seq<nat>, d: nat)
+  requires Valid(s) && d < BASE
+  ensures ToNat(AddLimb(s, d)) == ToNat(s) + d
+  decreases |s|
+\end{dafnycode}
+State the induction you use and the induction hypothesis as a formula, cover
+every case, and name every helper fact by its statement: a lemma of L2 (read
+its file) or a new lemma you would have to prove.
+
+\emph{What will be formalized:} Q03.H1d, \dfy{AddLimbToNat} in the Dafny
+exercise file
+\begin{quote}
+\texttt{dafny/Q/Q03\_FirstSyntaxII/core/Q03\_FirstSyntaxII.dfy}.
+\end{quote}
+\noindent That unit does
+no induction for you: each use of the induction hypothesis is a recursive call
+you write, and each helper fact is a lemma call or an \dfy{assert}. Your proof
+is the blueprint: someone else should be able to formalize it without
+inventing any statement. (The Verus pair H1v rests on the given
+\vrs{lemma_add_limb_lift}, whose per-limb relation is the arithmetic of the
+carry case.)
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B4}
+\textbf{Paper card 02.13, Clover: Closed-Loop Verifiable Code Generation}
+(8 minutes). Fill the card on its eight fields: task shape, oracle, what is
+trusted, cheat surface, metric, budget, variance, artifact. Each field is
+graded against the pinned range of your own \texttt{cheatsheets.md}: lines
+944--967, the entry from its heading to its \emph{Why it matters} paragraph,
+in the copy the command below names. The pin is the sha256 of exactly those
+lines, computed with the first line below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '944,967p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+d323712a0a7d430510ca9b9f14daa83c0c6ca9ad876eaffa542ed9c6bc56a38e  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

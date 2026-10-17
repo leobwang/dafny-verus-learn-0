@@ -1,0 +1,52 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/C-5/upper"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/C-5/upper/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_vc5_upper",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--import",
+   "corpus_vc5_lower=<scratch>",
+   "--extern",
+   "corpus_vc5_lower=<scratch>",
+   "-L",
+   "<scratch>",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "lemma_twice_even": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/C-5/upper",
+  "verdict": "verified",
+  "verified_count": 1
+ },
+ "exit_code": 0,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "1bd9b6c21bcc4af56b99730d64f9faeb02560e0150bca80b06dfda3420b32359",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/C-5/upper"
+}

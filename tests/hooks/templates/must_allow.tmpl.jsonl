@@ -1,0 +1,387 @@
+// must-allow templates: ordinary study-mode work the guard must never break; every expanded line must exit 0.
+// ---- reading course material ----
+{"why": "read an exercise file", "axes": ["track", "lang"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%EX%"}, "cwd": "@ROOT@"}
+{"why": "read a given layer (reading is not editing)", "axes": ["track", "lang"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%GIVEN%"}, "cwd": "@ROOT@"}
+{"why": "read a module's project or crate file", "axes": ["lang"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%PROJ%"}, "cwd": "@ROOT@"}
+{"why": "read a chapter", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%DOC%"}, "cwd": "@ROOT@"}
+{"why": "read the written-track problems", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%PROBLEMS%", "offset": 1, "limit": 40}, "cwd": "@ROOT@"}
+{"why": "read the learner's own written answers", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%ANSWERS%"}, "cwd": "@ROOT@"}
+{"why": "read a rubric (predicates and pins, learner-visible by design)", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%RUBRIC%"}, "cwd": "@ROOT@"}
+{"why": "read a slot file", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%SLOTS%"}, "cwd": "@ROOT@"}
+{"why": "read a pinned expected output", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/expected/Q04.pins"}, "cwd": "@ROOT@"}
+{"why": "read instructor state", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/instructor/ledger.md"}, "cwd": "@ROOT@"}
+{"why": "read instructor state while a contract runs (only writes are blocked)", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/instructor/ledger.md"}, "cwd": "@ROOT@", "contract": true}
+{"why": "read the research report", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/research/EVAL.md"}, "cwd": "@ROOT@"}
+{"why": "read a public benchmark answer outside a contract", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%PUBANS%"}, "cwd": "@ROOT@"}
+{"why": "read a public benchmark task while a contract runs", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%PUBTASK%"}, "cwd": "@ROOT@", "contract": true}
+{"why": "read a learner tool file", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%TOOLOK%"}, "cwd": "@ROOT@"}
+{"why": "read a scratch probe", "axes": ["lang"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%PROBE%"}, "cwd": "@ROOT@"}
+{"why": "read settings.json (only writes are guarded)", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/.claude/settings.json"}, "cwd": "@ROOT@"}
+{"why": "read user-level settings (only writes are guarded)", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/settings.json"}, "cwd": "@ROOT@"}
+{"why": "read the CI script with the Read tool", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/scripts/ci.sh"}, "cwd": "@ROOT@"}
+{"why": "read a specimen", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/specimens/Q04/K1.dfy.specimen"}, "cwd": "@ROOT@"}
+{"why": "read a check unit", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/dafny/checks/Q04_checks.dfy"}, "cwd": "@ROOT@"}
+// ---- searches and listings ----
+{"why": "Grep scoped to an exercise directory", "axes": ["track", "lang"], "tool_name": "Grep", "tool_input": {"pattern": "%HOLE%", "path": "@ROOT@/%EXDIR%", "output_mode": "content"}, "cwd": "@ROOT@"}
+{"why": "Grep whose pattern mentions the English word (content form allows it)", "tool_name": "Grep", "tool_input": {"pattern": "Solutions-first", "path": "@ROOT@/docs"}, "cwd": "@ROOT@"}
+{"why": "Grep scoped to docs, relative path", "tool_name": "Grep", "tool_input": {"pattern": "lemma", "path": "docs"}, "cwd": "@ROOT@"}
+{"why": "Grep scoped to one exercise file", "axes": ["lang"], "tool_name": "Grep", "tool_input": {"pattern": "%HOLE%", "path": "@ROOT@/%EX%"}, "cwd": "@ROOT@"}
+{"why": "Grep of the given layers", "tool_name": "Grep", "tool_input": {"pattern": "Limb", "path": "@ROOT@/dafny/given"}, "cwd": "@ROOT@"}
+{"why": "Grep of the Verus tree (it holds target/, but the search is not rooted in it)", "tool_name": "Grep", "tool_input": {"pattern": "ensures", "path": "@ROOT@/verus/q"}, "cwd": "@ROOT@"}
+{"why": "Glob over exercise files", "axes": ["lang"], "tool_name": "Glob", "tool_input": {"pattern": "%EXDIR%/**/*.%EXT%", "path": "@ROOT@"}, "cwd": "@ROOT@"}
+{"why": "Glob over chapters", "tool_name": "Glob", "tool_input": {"pattern": "docs/*.md"}, "cwd": "@ROOT@"}
+{"why": "scoped recursive grep", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "grep -rn '%HOLE%' %EXDIR% docs"}, "cwd": "@ROOT@"}
+{"why": "recursive grep from inside an exercise directory", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "grep -rn ensures ."}, "cwd": "@ROOT@/%EXDIR%"}
+{"why": "non-recursive grep of one file", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "grep -n '%HOLE%' %EX%"}, "cwd": "@ROOT@"}
+{"why": "scoped ripgrep", "tool_name": "Bash", "tool_input": {"command": "rg -n lemma dafny verus/q docs"}, "cwd": "@ROOT@"}
+{"why": "ripgrep file listing (names only, nothing opened)", "tool_name": "Bash", "tool_input": {"command": "rg --files dafny | head"}, "cwd": "@ROOT@"}
+{"why": "scoped find feeding grep", "tool_name": "Bash", "tool_input": {"command": "find dafny -name '*.dfy' -exec grep -l 'assume false' {} +"}, "cwd": "@ROOT@"}
+{"why": "a scoped find substituted into a reader", "tool_name": "Bash", "tool_input": {"command": "wc -l $(find dafny -name '*.dfy')"}, "cwd": "@ROOT@"}
+{"why": "verus on a scratch crate whose mod is a plain sibling file", "tool_name": "Bash", "tool_input": {"command": "%VERUS% --crate-type=lib --rlimit 2 instructor/scratch/crate_ok/lib.rs"}, "cwd": "@ROOT@"}
+{"why": "find from the root that only lists names", "tool_name": "Bash", "tool_input": {"command": "find . -maxdepth 1 -name '*.md'"}, "cwd": "@ROOT@"}
+{"why": "find of exported .vir names (names only)", "tool_name": "Bash", "tool_input": {"command": "find verus/target -name '*.vir'"}, "cwd": "@ROOT@"}
+{"why": "glob over exercise files", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "cat %EXDIR%/*.%EXT% | wc -l"}, "cwd": "@ROOT@"}
+{"why": "root-level glob that does not expand into a reference tree", "tool_name": "Bash", "tool_input": {"command": "wc -l *.toml"}, "cwd": "@ROOT@"}
+{"why": "list the root", "tool_name": "Bash", "tool_input": {"command": "ls -la"}, "cwd": "@ROOT@"}
+{"why": "list chapters", "tool_name": "Bash", "tool_input": {"command": "ls docs"}, "cwd": "@ROOT@"}
+{"why": "list the target directory (names only)", "tool_name": "Bash", "tool_input": {"command": "ls verus/target/debug/deps"}, "cwd": "@ROOT@"}
+{"why": "read a chapter from the shell", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "sed -n '1,80p' %DOC%"}, "cwd": "@ROOT@"}
+{"why": "quoted-phrase ripgrep scoped to learner directories", "tool_name": "Bash", "tool_input": {"command": "rg \"carry out of\" dafny/ docs/"}, "cwd": "@ROOT@"}
+{"why": "quoted-phrase recursive grep scoped to learner directories", "tool_name": "Bash", "tool_input": {"command": "grep -rn 'two words' dafny docs"}, "cwd": "@ROOT@"}
+{"why": "recursive grep -e of a quoted phrase, scoped", "tool_name": "Bash", "tool_input": {"command": "grep -rn -e \"a b\" verus/q"}, "cwd": "@ROOT@"}
+{"why": "git grep of a quoted phrase with a learner pathspec", "tool_name": "Bash", "tool_input": {"command": "git grep -n \"carry out of\" -- dafny docs"}, "cwd": "@ROOT@"}
+{"why": "ag and ack of a quoted phrase, scoped", "tool_name": "Bash", "tool_input": {"command": "ag \"a b\" dafny && ack \"a b\" docs"}, "cwd": "@ROOT@"}
+{"why": "ripgrep with a quoted glob and a quoted phrase, scoped", "tool_name": "Bash", "tool_input": {"command": "rg -g '*.rs' -n \"carry out of\" verus/q"}, "cwd": "@ROOT@"}
+{"why": "grep --include with a quoted phrase, scoped", "tool_name": "Bash", "tool_input": {"command": "grep -rn --include '*.dfy' 'two words' dafny"}, "cwd": "@ROOT@"}
+{"why": "quoted-phrase ripgrep from inside the exercise tree", "tool_name": "Bash", "tool_input": {"command": "rg -n \"carry out of\""}, "cwd": "@ROOT@/dafny"}
+{"why": "cd into the exercises, then a quoted-phrase search", "tool_name": "Bash", "tool_input": {"command": "cd verus/q && rg \"carry out of\""}, "cwd": "@ROOT@"}
+{"why": "quoted-phrase grep inside bash -c, scoped", "tool_name": "Bash", "tool_input": {"command": "bash -c 'grep -rn \"two words\" dafny docs'"}, "cwd": "@ROOT@"}
+{"why": "a loop whose search path is a variable", "tool_name": "Bash", "tool_input": {"command": "for d in dafny docs; do grep -rn \"two words\" \"$d\"; done"}, "cwd": "@ROOT@"}
+{"why": "nice -n ahead of a scoped quoted-phrase search", "tool_name": "Bash", "tool_input": {"command": "nice -n 5 rg \"carry out of\" dafny docs"}, "cwd": "@ROOT@"}
+{"why": "a quoted alternation with \\| in a scoped recursive grep (the cut inside the quotes is undone)", "tool_name": "Bash", "tool_input": {"command": "grep -rn \"Limb\\|lemma Add\\|ensures\" dafny/given/Q/*.dfy | head"}, "cwd": "@ROOT@"}
+{"why": "rg with a quoted | alternation, scoped", "tool_name": "Bash", "tool_input": {"command": "rg -n \"lemma|invariant\" verus/q"}, "cwd": "@ROOT@"}
+{"why": "grep -rn with parentheses inside the quoted pattern, scoped", "tool_name": "Bash", "tool_input": {"command": "grep -rn 'assume(false)' verus/q"}, "cwd": "@ROOT@"}
+{"why": "a scoped search that names no held-out tree", "tool_name": "Bash", "tool_input": {"command": "grep -rn \"decreases\" dafny docs"}, "cwd": "@ROOT@"}
+{"why": "a spine layer read in a command of its own", "tool_name": "Bash", "tool_input": {"command": "grep -n Limb dafny/given/Q/QG_L1_BigNat.dfy"}, "cwd": "@ROOT@"}
+// ---- git ----
+{"why": "git status", "tool_name": "Bash", "tool_input": {"command": "git status --short"}, "cwd": "@ROOT@"}
+{"why": "git log, patch-free", "tool_name": "Bash", "tool_input": {"command": "git log --oneline -10"}, "cwd": "@ROOT@"}
+{"why": "git log --stat (names only)", "tool_name": "Bash", "tool_input": {"command": "git log --stat -3"}, "cwd": "@ROOT@"}
+{"why": "git log -p narrowed to learner paths", "tool_name": "Bash", "tool_input": {"command": "git log -p -3 -- dafny docs instructor"}, "cwd": "@ROOT@"}
+{"why": "git diff of the working tree", "tool_name": "Bash", "tool_input": {"command": "git diff"}, "cwd": "@ROOT@"}
+{"why": "git diff HEAD (uncommitted learner work)", "tool_name": "Bash", "tool_input": {"command": "git diff HEAD"}, "cwd": "@ROOT@"}
+{"why": "git diff against main, narrowed", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "git diff main...HEAD -- %EX%"}, "cwd": "@ROOT@"}
+{"why": "git diff --stat against main (names only)", "tool_name": "Bash", "tool_input": {"command": "git diff --stat main"}, "cwd": "@ROOT@"}
+{"why": "names changed vs main", "tool_name": "Bash", "tool_input": {"command": "git diff --name-only main...HEAD"}, "cwd": "@ROOT@"}
+{"why": "git show --stat", "tool_name": "Bash", "tool_input": {"command": "git show --stat HEAD"}, "cwd": "@ROOT@"}
+{"why": "git show of one learner file at a revision", "tool_name": "Bash", "tool_input": {"command": "git show HEAD~1:dafny/Q/Q04_Proofs/core/Q04_Proofs.dfy"}, "cwd": "@ROOT@"}
+{"why": "git show narrowed by pathspec", "tool_name": "Bash", "tool_input": {"command": "git show HEAD -- dafny instructor/ledger.md"}, "cwd": "@ROOT@"}
+{"why": "git commit of instructor state", "tool_name": "Bash", "tool_input": {"command": "git add instructor/ledger.md && git commit -m \"Record Q04 tutor notes\""}, "cwd": "@ROOT@"}
+{"why": "commit with an arrow in the message", "tool_name": "Bash", "tool_input": {"command": "git commit -m \"Ledger: Q04 carry -> due 2026-10-09\""}, "cwd": "@ROOT@"}
+{"why": "scoped git ls-files piped into grep", "tool_name": "Bash", "tool_input": {"command": "git ls-files dafny docs | xargs grep -l 'assume false'"}, "cwd": "@ROOT@"}
+{"why": "unscoped git ls-files only lists names", "tool_name": "Bash", "tool_input": {"command": "git ls-files | wc -l"}, "cwd": "@ROOT@"}
+{"why": "fast-forward from main", "tool_name": "Bash", "tool_input": {"command": "git fetch origin && git merge --ff-only origin/main"}, "cwd": "@ROOT@"}
+{"why": "working-tree diff of a given layer", "tool_name": "Bash", "tool_input": {"command": "git diff -- dafny/given/Q/QG_L1_BigNat.dfy"}, "cwd": "@ROOT@"}
+// ---- builds and verifier runs ----
+{"why": "vcheck a registry unit", "axes": ["track", "lang"], "langs": ["dafny", "verus"], "tool_name": "Bash", "tool_input": {"command": "%BUILD%"}, "cwd": "@ROOT@"}
+{"why": "the pinned verifier on a learner unit", "axes": ["track", "lang"], "tool_name": "Bash", "tool_input": {"command": "%DIRECT% 2>&1 | tail -20"}, "cwd": "@ROOT@"}
+{"why": "run the harness tests from harness/", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "cd harness && uv run pytest -q tests/%TL%"}, "cwd": "@ROOT@"}
+{"why": "pytest from inside harness/", "tool_name": "Bash", "tool_input": {"command": "pytest -q"}, "cwd": "@ROOT@/harness"}
+{"why": "pytest on named learner test files", "tool_name": "Bash", "tool_input": {"command": "python3 -m pytest -q harness/tests/q/test_policies.py"}, "cwd": "@ROOT@"}
+{"why": "verify a clean scratch probe", "axes": ["track", "lang"], "tool_name": "Bash", "tool_input": {"command": "%RUNPROBE% %PROBE%"}, "cwd": "@ROOT@"}
+{"why": "a heredoc probe that includes the given layers only", "tool_name": "Bash", "tool_input": {"command": "cat > instructor/scratch/h.dfy <<'EOF'\ninclude \"../../dafny/given/Q/QG_L1_BigNat.dfy\"\nlemma L() ensures true {}\nEOF\n%DAFNY% verify --cores 2 --resource-limit 5000000 instructor/scratch/h.dfy"}, "cwd": "@ROOT@"}
+{"why": "dafny with the pinned bundled Z3 4.14.1", "tool_name": "Bash", "tool_input": {"command": "%DAFNY% verify --cores 2 --solver-path %Z3PIN% dafny/Q/Q04_Proofs/core/dfyconfig.toml"}, "cwd": "@ROOT@"}
+{"why": "a bare cargo verus verify in the learner workspace (default members only)", "tool_name": "Bash", "tool_input": {"command": "cargo verus verify -- --rlimit 2"}, "cwd": "@ROOT@/verus"}
+{"why": "verify a given crate by name", "tool_name": "Bash", "tool_input": {"command": "cargo verus verify -p qg_bignat_l1 -- --rlimit 2"}, "cwd": "@ROOT@/verus"}
+{"why": "cargo test of a learner crate", "tool_name": "Bash", "tool_input": {"command": "cargo test -p r07_library"}, "cwd": "@ROOT@/verus"}
+{"why": "cargo clean", "tool_name": "Bash", "tool_input": {"command": "cargo clean"}, "cwd": "@ROOT@/verus"}
+{"why": "remove the default Verus log directory", "tool_name": "Bash", "tool_input": {"command": "rm -rf .verus-log"}, "cwd": "@ROOT@"}
+{"why": "vcheck with its raw output under a scratch root of its own", "tool_name": "Bash", "tool_input": {"command": "DVL_SCRATCH=/tmp/dvl0-q04 scripts/vcheck Q04 v --json"}, "cwd": "@ROOT@"}
+{"why": "the CI's scratch and a sandbox job's directory are no author lane's", "tool_name": "Bash", "tool_input": {"command": "ls /tmp/dvl0-ci-@UID@ /tmp/dvl0-sandbox-job-x1"}, "cwd": "@ROOT@"}
+{"why": "vcheck a scratch file", "axes": ["lang"], "langs": ["dafny", "verus"], "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck %PROBE%"}, "cwd": "@ROOT@"}
+{"why": "the first-try gate", "tool_name": "Bash", "tool_input": {"command": "scripts/firsttry.sh Q04 --report"}, "cwd": "@ROOT@"}
+{"why": "the learner's own specimen pins (no author flags)", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/pins.py Q04"}, "cwd": "@ROOT@"}
+{"why": "the written track build", "tool_name": "Bash", "tool_input": {"command": "make -C paper paper"}, "cwd": "@ROOT@"}
+{"why": "registry resolve", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/check_course_map.py --resolve q04"}, "cwd": "@ROOT@"}
+{"why": "mode status", "tool_name": "Bash", "tool_input": {"command": "scripts/course_mode.sh status"}, "cwd": "@ROOT@"}
+{"why": "toolchain check", "tool_name": "Bash", "tool_input": {"command": "scripts/get_toolchain.sh verus --check"}, "cwd": "@ROOT@"}
+{"why": "run a clean python probe", "tool_name": "Bash", "tool_input": {"command": "python3 instructor/scratch/probe_q04.py"}, "cwd": "@ROOT@"}
+{"why": "a shell probe that lists learner files", "tool_name": "Bash", "tool_input": {"command": "sh instructor/scratch/probe.sh"}, "cwd": "@ROOT@"}
+{"why": "read-only python with str.replace, dict.copy and list.remove", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "python3 -c \"s=open('%EX%').read(); d={}; e=d.copy(); l=[1]; l.remove(1); print(s.replace('x','').count('a'))\""}, "cwd": "@ROOT@"}
+{"why": "here-string", "tool_name": "Bash", "tool_input": {"command": "jq -r .a <<< '{\"a\": 1}'"}, "cwd": "@ROOT@"}
+// ---- verifier MCP and LSP ----
+{"why": "verifier MCP on a registry id", "axes": ["track", "lang"], "langs": ["dafny", "verus"], "tool_name": "mcp__vcheck__check", "tool_input": {"target": "%ID%", "lang": "%LANG%"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP on a learner crate", "axes": ["track", "lang"], "langs": ["verus"], "tool_name": "mcp__vcheck__check", "tool_input": {"package": "%PKG%"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP on a learner exercise file", "axes": ["track", "lang"], "tool_name": "mcp__vcheck__check", "tool_input": {"file_path": "@ROOT@/%EX%"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP on a clean scratch probe, project-relative", "axes": ["lang"], "tool_name": "mcp__vcheck__check", "tool_input": {"file_path": "%PROBE%"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP code that includes or imports given or learner code only", "axes": ["lang"], "tool_name": "mcp__vcheck__check", "tool_input": {"lang": "%LANG%", "code": "%IMPORT_OK%"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP of this checkout as project", "tool_name": "mcp__vcheck__check", "tool_input": {"project": "@ROOT@", "target": "Q04"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP of a given crate", "tool_name": "mcp__verus__verify", "tool_input": {"crate": "rg_re_a1"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP of a unit by its path", "tool_name": "mcp__dafny__verify", "tool_input": {"unit": "dafny/R/R07_Library/core/dfyconfig.toml"}, "cwd": "@ROOT@"}
+{"why": "no registry: verifier MCP of an id-shaped target", "tool_name": "mcp__vcheck__check", "tool_input": {"target": "Q99"}, "cwd": "@ROOT@", "no_registry": true}
+{"why": "no registry: verifier MCP of a lowercase id", "tool_name": "mcp__vcheck__check", "tool_input": {"target": "r07"}, "cwd": "@ROOT@", "no_registry": true}
+{"why": "a plugin-scoped verifier MCP on an exercise", "tool_name": "mcp__plugin_dafny-tools_dafny__verify", "tool_input": {"file_path": "@ROOT@/dafny/Q/Q04_Proofs/core/Q04_Proofs.dfy"}, "cwd": "@ROOT@"}
+{"why": "LSP documentSymbol on a given layer", "axes": ["lang"], "tool_name": "LSP", "tool_input": {"operation": "documentSymbol", "filePath": "@ROOT@/%GIVEN%", "line": 1, "character": 1}, "cwd": "@ROOT@"}
+{"why": "LSP hover on a clean scratch probe", "axes": ["lang"], "tool_name": "LSP", "tool_input": {"operation": "hover", "filePath": "@ROOT@/%PROBE%", "line": 1, "character": 1}, "cwd": "@ROOT@"}
+{"why": "other MCP servers pass", "tool_name": "mcp__claude_ai_Claude_Docs__read", "tool_input": {"id": "Solutions/x"}, "cwd": "@ROOT@"}
+{"why": "tools outside the guard's scope pass", "tool_name": "Agent", "tool_input": {"prompt": "read Solutions/dafny"}, "cwd": "@ROOT@"}
+// ---- writes: instructor state, scratch, contract ----
+{"why": "Edit an allowlisted contract file", "axes": ["track", "lang"], "tool_name": "Edit", "tool_input": {"file_path": "@ROOT@/%AGENT%", "old_string": "%HOLE%", "new_string": "%FILL%"}, "cwd": "@ROOT@", "contract": true}
+{"why": "sed -i on an allowlisted contract file", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "sed -i 's/%HOLE%/%FILL%/' %AGENT%"}, "cwd": "@ROOT@", "contract": true}
+{"why": "Write an allowlisted written answer", "axes": ["track"], "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/%ANSWERS_OK%", "content": "\\section*{Answers}\n"}, "cwd": "@ROOT@", "contract": true}
+{"why": "Edit an allowlisted learner tool file (a toolwright contract)", "axes": ["track"], "tool_name": "Edit", "tool_input": {"file_path": "@ROOT@/%TOOLOK%", "old_string": "decoy", "new_string": "real"}, "cwd": "@ROOT@", "contract": true}
+{"why": "/contract writes its allowlist", "axes": ["track", "lang"], "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/.claude/state/contract-allowlist", "content": "%AGENT%\n"}, "cwd": "@ROOT@"}
+{"why": "/contract writes its allowlist in a command of its own", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "printf '%AGENT%\\n' > .claude/state/contract-allowlist"}, "cwd": "@ROOT@"}
+{"why": "/contract closes out by emptying the allowlist", "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/.claude/state/contract-allowlist", "content": ""}, "cwd": "@ROOT@", "contract": true}
+{"why": "close out the allowlist from the shell", "tool_name": "Bash", "tool_input": {"command": ": > .claude/state/contract-allowlist"}, "cwd": "@ROOT@", "contract": true}
+{"why": "instructor feedback that uses the words in prose", "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/instructor/feedback/Q04.md", "content": "# Q04 feedback\n\nGraded against the rubric (Solutions-first rule: the learner opens the reference solutions only after the loop). The include of the given layer was correct.\n"}, "cwd": "@ROOT@"}
+{"why": "record prose may mention the held-out tree (content is not a path-like field)", "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/instructor/records/Q15_discuss.md", "content": "Searched dafny and docs only; nothing under a Hidden/ tree was named.\n"}, "cwd": "@ROOT@"}
+{"why": "ledger entry", "tool_name": "Edit", "tool_input": {"file_path": "@ROOT@/instructor/ledger.md", "old_string": "due: 2000-01-01", "new_string": "due: 2026-10-09"}, "cwd": "@ROOT@"}
+{"why": "scratch probe that includes or imports given or learner code", "axes": ["track", "lang"], "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/instructor/scratch/new_%IDL%.%EXT%", "content": "%IMPORT_OK%"}, "cwd": "@ROOT@"}
+{"why": "append to the ledger", "tool_name": "Bash", "tool_input": {"command": "echo '- Q04 carry-invariant due: 2026-10-09' >> instructor/ledger.md"}, "cwd": "@ROOT@"}
+{"why": "sed -i on instructor state", "tool_name": "Bash", "tool_input": {"command": "sed -i 's/due: 2000-01-01/due: 2026-10-09/' instructor/ledger.md"}, "cwd": "@ROOT@"}
+{"why": "sed -i through a glob over instructor state", "tool_name": "Bash", "tool_input": {"command": "sed -i 's/box 1/box 2/' instructor/*.md"}, "cwd": "@ROOT@"}
+{"why": "tee instructor feedback", "tool_name": "Bash", "tool_input": {"command": "printf '%s\\n' \"$NOTE\" | tee -a instructor/feedback/Q04.md"}, "cwd": "@ROOT@"}
+{"why": "copy an exercise into scratch for probing", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "cp %EX% instructor/scratch/copy_probe.%EXT%"}, "cwd": "@ROOT@"}
+{"why": "heredoc write to scratch whose body mentions a shell-like line", "tool_name": "Bash", "tool_input": {"command": "cat > instructor/scratch/notes.md <<'EOF'\nTried: grep -rn foo . (blocked, as designed)\nEOF"}, "cwd": "@ROOT@"}
+{"why": "redirect into scratch", "tool_name": "Bash", "tool_input": {"command": "%DAFNY% verify --cores 2 instructor/scratch/probe_q04.dfy > instructor/scratch/out.txt 2>&1"}, "cwd": "@ROOT@"}
+{"why": "chmod of a scratch script", "tool_name": "Bash", "tool_input": {"command": "chmod +x instructor/scratch/probe.sh"}, "cwd": "@ROOT@"}
+{"why": "write outside the checkout (another worktree's given layer is not this checkout's)", "tool_name": "Write", "tool_input": {"file_path": "/tmp/other-worktree/dafny/given/Q/QG_L1_BigNat.dfy", "content": "module X {}\n"}, "cwd": "@ROOT@"}
+{"why": "work in another worktree with relative paths", "tool_name": "Bash", "tool_input": {"command": "cd /tmp/other-worktree && sed -i 's/a/b/' dafny/given/Q/QG_L1_BigNat.dfy"}, "cwd": "@ROOT@"}
+{"why": "read-only python over a git diff that prints 'removed:' (not a write)", "tool_name": "Bash", "tool_input": {"command": "git diff -U0 main -- dafny/Q/Q04_Proofs/core/Q04_Proofs.dfy | python3 -c '\nimport sys\nlines=sys.stdin.read().splitlines()\nrem=[l for l in lines if l.startswith(\"-\")]\nprint(\"removed:\",len(rem))\n'"}, "cwd": "@ROOT@"}
+{"why": "a python heredoc that writes only to scratch", "tool_name": "Bash", "tool_input": {"command": "python3 - <<'PY'\nfrom pathlib import Path\nPath('instructor/scratch/out.json').write_text('{}')\nPY"}, "cwd": "@ROOT@"}
+// ---- copies and archives of learner material ----
+{"why": "cp -r of an exercise directory", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "cp -r %EXDIR% /tmp/x"}, "cwd": "@ROOT@"}
+{"why": "tar of named learner directories", "tool_name": "Bash", "tool_input": {"command": "tar czf /tmp/l.tgz dafny docs"}, "cwd": "@ROOT@"}
+{"why": "rsync -av of an exercise directory", "tool_name": "Bash", "tool_input": {"command": "rsync -av verus/q/ /tmp/y/"}, "cwd": "@ROOT@"}
+{"why": "zip -r of the chapters", "tool_name": "Bash", "tool_input": {"command": "zip -r /tmp/a.zip docs"}, "cwd": "@ROOT@"}
+{"why": "tar extraction into a temp directory", "tool_name": "Bash", "tool_input": {"command": "tar xzf /tmp/a.tgz -C /tmp/out"}, "cwd": "@ROOT@"}
+{"why": "cp of one exercise file", "tool_name": "Bash", "tool_input": {"command": "cp verus/q/q04_proofs/src/lib.rs /tmp/x.rs"}, "cwd": "@ROOT@"}
+{"why": "cp -a of an exercise directory into scratch", "tool_name": "Bash", "tool_input": {"command": "cp -a harness/q instructor/scratch/"}, "cwd": "@ROOT@"}
+{"why": "find of an exercise directory feeding cpio", "tool_name": "Bash", "tool_input": {"command": "find dafny -name '*.dfy' | cpio -o > /tmp/a.cpio"}, "cwd": "@ROOT@"}
+// ---- this session's own Claude Code state ----
+{"why": "read this project's memory index", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/projects/@SLUG@/memory/MEMORY.md"}, "cwd": "@ROOT@"}
+{"why": "read this project's memory when the session is unknown (slug from the project dir)", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/projects/@SLUG@/memory/MEMORY.md"}, "cwd": "@ROOT@", "nosession": true}
+{"why": "write a memory file (auto-memory)", "tool_name": "Write", "tool_input": {"file_path": "@HOME@/.claude/projects/@SLUG@/memory/feedback-hints.md", "content": "---\nname: hints\n---\nOne rung per turn.\n"}, "cwd": "@ROOT@"}
+{"why": "edit the memory index", "tool_name": "Edit", "tool_input": {"file_path": "@HOME@/.claude/projects/@SLUG@/memory/MEMORY.md", "old_string": "decoy", "new_string": "- [hints](feedback-hints.md)"}, "cwd": "@ROOT@"}
+{"why": "Grep in this project's memory", "tool_name": "Grep", "tool_input": {"pattern": "hint", "path": "@HOME@/.claude/projects/@SLUG@/memory"}, "cwd": "@ROOT@"}
+{"why": "read this session's own tool result", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/projects/@SLUG@/@SID@/tool-results/r1.txt"}, "cwd": "@ROOT@"}
+{"why": "jq over this session's own tool result", "tool_name": "Bash", "tool_input": {"command": "jq -r .markdown @HOME@/.claude/projects/@SLUG@/@SID@/tool-results/r1.txt | head"}, "cwd": "@ROOT@"}
+{"why": "this session's own file history", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/file-history/@SID@/f1@v1"}, "cwd": "@ROOT@"}
+{"why": "write into this session's scratchpad", "tool_name": "Write", "tool_input": {"file_path": "%OWNTMP%/scratchpad/notes.md", "content": "x\n"}, "cwd": "@ROOT@"}
+{"why": "read this session's background task output", "tool_name": "Read", "tool_input": {"file_path": "%OWNTMP%/tasks/b1.output"}, "cwd": "@ROOT@"}
+{"why": "list this session's scratchpad and read a file in it", "tool_name": "Bash", "tool_input": {"command": "ls %OWNTMP%/scratchpad && cat %OWNTMP%/scratchpad/notes.md"}, "cwd": "@ROOT@"}
+{"why": "Grep in this session's scratchpad", "tool_name": "Grep", "tool_input": {"pattern": "x", "path": "%OWNTMP%/scratchpad"}, "cwd": "@ROOT@"}
+{"why": "a scratchpad dir supplied by the hook input", "tool_name": "Read", "tool_input": {"file_path": "/var/tmp/cc/claude-@UID@/@SLUG@/@SID@/scratchpad/n.md"}, "cwd": "@ROOT@", "scratchpad_dir": "/var/tmp/cc/claude-@UID@/@SLUG@/@SID@/scratchpad"}
+{"why": "list this project's memory directory", "tool_name": "Bash", "tool_input": {"command": "ls ~/.claude/projects/@SLUG@/memory"}, "cwd": "@ROOT@"}
+{"why": "list the projects directory (names only)", "tool_name": "Bash", "tool_input": {"command": "ls ~/.claude/projects"}, "cwd": "@ROOT@"}
+{"why": "read user-level skills (not session state)", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/skills/tutor/SKILL.md"}, "cwd": "@ROOT@"}
+// ---- agents and containers through the sanctioned routes ----
+{"why": "a sandboxed agent run through mksandbox-run", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run sandbox/manifests/q12-lab1.toml"}, "cwd": "@ROOT@"}
+{"why": "a local contract replay through contract_local.sh", "tool_name": "Bash", "tool_input": {"command": "scripts/contract_local.sh Q07"}, "cwd": "@ROOT@"}
+{"why": "an fvh run whose backend is opencode (inside the harness)", "tool_name": "Bash", "tool_input": {"command": "uv run --directory harness fvh run --backend opencode --manifest ../sandbox/manifests/q12-lab1.toml"}, "cwd": "@ROOT@"}
+{"why": "the fvh report from logs", "tool_name": "Bash", "tool_input": {"command": "uv run --directory harness fvh report ../research/runs/q12"}, "cwd": "@ROOT@"}
+{"why": "the course's tool-less claude policy form", "tool_name": "Bash", "tool_input": {"command": "claude -p \"$(cat prompt.txt)\" --safe-mode --tools \"\" --strict-mcp-config --no-session-persistence --output-format stream-json --verbose --max-turns 2"}, "cwd": "/tmp/empty-policy-cwd"}
+{"why": "the policy form with --tools= spelled as one word", "tool_name": "Bash", "tool_input": {"command": "claude --print 'x' --tools= --strict-mcp-config"}, "cwd": "/tmp/empty-policy-cwd"}
+{"why": "claude --version", "tool_name": "Bash", "tool_input": {"command": "claude --version"}, "cwd": "@ROOT@"}
+{"why": "claude auth status", "tool_name": "Bash", "tool_input": {"command": "claude auth status --json"}, "cwd": "@ROOT@"}
+{"why": "which docker (no daemon reached)", "tool_name": "Bash", "tool_input": {"command": "which docker opencode"}, "cwd": "@ROOT@"}
+{"why": "ollama model list", "tool_name": "Bash", "tool_input": {"command": "ollama list"}, "cwd": "@ROOT@"}
+{"why": "a commit message about the sandbox", "tool_name": "Bash", "tool_input": {"command": "git commit -m \"Lab 1: Qwen arm through the sandbox\""}, "cwd": "@ROOT@"}
+{"why": "other skills pass", "tool_name": "Skill", "tool_input": {"skill": "tutor", "args": "Q04"}, "cwd": "@ROOT@"}
+// ---- web tools outside a contract ----
+{"why": "WebFetch of documentation outside a contract", "tool_name": "WebFetch", "tool_input": {"url": "https://dafny.org/latest/DafnyRef/DafnyRef", "prompt": "Solutions/ is not in this URL"}, "cwd": "@ROOT@"}
+{"why": "WebSearch outside a contract", "tool_name": "WebSearch", "tool_input": {"query": "verus broadcast use groups"}, "cwd": "@ROOT@"}
+// ---- parser robustness ----
+{"why": "malformed input never blocks", "raw": "{not json at all"}
+{"why": "empty input never blocks", "raw": ""}
+{"why": "a non-object tool_input never blocks", "tool_name": "Bash", "tool_input": "ls", "cwd": "@ROOT@"}
+// ---- specimens, check units and steering files: reads and runs stay open (DV1a fix round) ----
+{"why": "read a track's specimen", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%SPECIMEN%"}, "cwd": "@ROOT@"}
+{"why": "read a track's check unit", "axes": ["track"], "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%CHECKS%"}, "cwd": "@ROOT@"}
+{"why": "vcheck a specimen", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck %SPECIMEN%"}, "cwd": "@ROOT@"}
+{"why": "vcheck a check unit", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck %CHECKS%"}, "cwd": "@ROOT@"}
+{"why": "cat a specimen", "tool_name": "Bash", "tool_input": {"command": "cat specimens/Q04/P5.dfy.specimen"}, "cwd": "@ROOT@"}
+{"why": "grep the slots of a module's specimens and check unit", "tool_name": "Bash", "tool_input": {"command": "grep -n 'SLOT:' specimens/Q04/*.specimen dafny/checks/Q04_checks.dfy"}, "cwd": "@ROOT@"}
+{"why": "Grep tool over the specimens", "tool_name": "Grep", "tool_input": {"pattern": "SLOT: FAILS", "path": "@ROOT@/specimens"}, "cwd": "@ROOT@"}
+{"why": "git diff of the specimens and check units", "tool_name": "Bash", "tool_input": {"command": "git diff -- specimens dafny/checks"}, "cwd": "@ROOT@"}
+{"why": "the learner's specimen pins on one module's specimens", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/pins.py specimens/Q04/"}, "cwd": "@ROOT@"}
+{"why": "read CLAUDE.md", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/CLAUDE.md"}, "cwd": "@ROOT@"}
+{"why": "print CLAUDE.md's contract block", "tool_name": "Bash", "tool_input": {"command": "sed -n '/learner-owned below/,$p' CLAUDE.md"}, "cwd": "@ROOT@"}
+{"why": "read the instructor contract", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/.claude/skills/instructor/CORE.md"}, "cwd": "@ROOT@"}
+{"why": "cat a project skill", "tool_name": "Bash", "tool_input": {"command": "cat .claude/skills/tutor/SKILL.md"}, "cwd": "@ROOT@"}
+{"why": "read an acceptance test", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/harness/tests/q/test_policies.py"}, "cwd": "@ROOT@"}
+{"why": "read the hook fixtures", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/tests/hooks/seeded-allowlist"}, "cwd": "@ROOT@"}
+{"why": "read the rubric-pin script with the Read tool", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/scripts/update_rubric_pins.sh"}, "cwd": "@ROOT@"}
+{"why": "the hook suite itself", "tool_name": "Bash", "tool_input": {"command": "bash scripts/test_hooks.sh"}, "cwd": "@ROOT@"}
+// ---- the registry's solutions_policy field by shell (DV1a fix round) ----
+{"why": "registry field read by jq", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "python3 scripts/check_course_map.py --resolve %ID% | jq -r .solutions_policy"}, "cwd": "@ROOT@"}
+{"why": "registry field read by a python one-liner", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/check_course_map.py --resolve Q04 | python3 -c 'import json,sys; print(json.load(sys.stdin)[\"solutions_policy\"])'"}, "cwd": "@ROOT@"}
+{"why": "registry value compared in jq", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/check_course_map.py --resolve R07 | jq -e '.solutions_policy == \"solutions-first\"'"}, "cwd": "@ROOT@"}
+{"why": "grep the registry for the policy field", "tool_name": "Bash", "tool_input": {"command": "grep -n 'solutions_policy = \"solutions-first\"' MODULES.toml"}, "cwd": "@ROOT@"}
+{"why": "Grep tool for the policy field in the registry", "tool_name": "Grep", "tool_input": {"pattern": "solutions_policy", "path": "@ROOT@/MODULES.toml"}, "cwd": "@ROOT@"}
+// ---- scratch outside the Claude Code tmp root (DV1a fix round) ----
+{"why": "a scratch directory under /tmp outside /tmp/claude-<uid>/", "tool_name": "Bash", "tool_input": {"command": "mkdir -p /tmp/dvl0-dv1b-infra && ls /tmp/dvl0-dv1b-infra"}, "cwd": "@ROOT@"}
+// ---- $PWD spellings that stay inside learner or scratch paths (DV1a recheck) ----
+{"why": "grep -r under \"$PWD/dafny/Q\"", "tool_name": "Bash", "tool_input": {"command": "grep -rn lemma \"$PWD/dafny/Q\""}, "cwd": "@ROOT@"}
+{"why": "grep -r under \"$(pwd)/dafny/Q\"", "tool_name": "Bash", "tool_input": {"command": "grep -rn lemma \"$(pwd)/dafny/Q\""}, "cwd": "@ROOT@"}
+{"why": "rg under \"$PWD/docs\"", "tool_name": "Bash", "tool_input": {"command": "rg lemma \"$PWD/docs\""}, "cwd": "@ROOT@"}
+{"why": "cat \"$PWD/CLAUDE.md\"", "tool_name": "Bash", "tool_input": {"command": "cat \"$PWD/CLAUDE.md\""}, "cwd": "@ROOT@"}
+{"why": "cp \"$PWD/CLAUDE.md\" out of the checkout (a read)", "tool_name": "Bash", "tool_input": {"command": "cp \"$PWD/CLAUDE.md\" /tmp/x.md"}, "cwd": "@ROOT@"}
+{"why": "ls -R under \"$PWD/docs\"", "tool_name": "Bash", "tool_input": {"command": "ls -R \"$PWD/docs\""}, "cwd": "@ROOT@"}
+{"why": "find under \"$PWD/dafny/Q\" listing names", "tool_name": "Bash", "tool_input": {"command": "find \"$PWD/dafny/Q\" -name '*.dfy'"}, "cwd": "@ROOT@"}
+{"why": "redirect into scratch through \"$PWD\"", "tool_name": "Bash", "tool_input": {"command": "echo x > \"$PWD/instructor/scratch/notes.md\""}, "cwd": "@ROOT@"}
+{"why": "redirect into scratch through ~+", "tool_name": "Bash", "tool_input": {"command": "echo x > ~+/instructor/scratch/n.md"}, "cwd": "@ROOT@"}
+{"why": "cd \"$PWD/instructor\" then list", "tool_name": "Bash", "tool_input": {"command": "cd \"$PWD/instructor\" && ls"}, "cwd": "@ROOT@"}
+{"why": "git status through -C \"$PWD\"", "tool_name": "Bash", "tool_input": {"command": "git -C \"$PWD\" status"}, "cwd": "@ROOT@"}
+{"why": "grep -r of \"$PWD\" from inside the scratch directory", "tool_name": "Bash", "tool_input": {"command": "grep -rn lemma \"$PWD\""}, "cwd": "@ROOT@/instructor/scratch"}
+// ---- archives, patches and editors on scratch or outside the checkout (DV1a recheck) ----
+{"why": "tar x -C into scratch", "tool_name": "Bash", "tool_input": {"command": "tar xf /tmp/a.tar -C instructor/scratch"}, "cwd": "@ROOT@"}
+{"why": "tar t lists an archive at the root", "tool_name": "Bash", "tool_input": {"command": "tar tf /tmp/a.tar"}, "cwd": "@ROOT@"}
+{"why": "tar xO prints a member to stdout at the root", "tool_name": "Bash", "tool_input": {"command": "tar xOf /tmp/a.tar notes.md"}, "cwd": "@ROOT@"}
+{"why": "unzip -d into scratch", "tool_name": "Bash", "tool_input": {"command": "unzip -o /tmp/a.zip -d instructor/scratch/u"}, "cwd": "@ROOT@"}
+{"why": "unzip -l lists an archive at the root", "tool_name": "Bash", "tool_input": {"command": "unzip -l /tmp/a.zip"}, "cwd": "@ROOT@"}
+{"why": "7z x -o into /tmp", "tool_name": "Bash", "tool_input": {"command": "7z x /tmp/a.7z -o/tmp/out"}, "cwd": "@ROOT@"}
+{"why": "patch -p1 of a diff that only touches scratch", "tool_name": "Bash", "tool_input": {"command": "patch -p1 < instructor/scratch/fix_scratch.diff"}, "cwd": "@ROOT@"}
+{"why": "patch --dry-run of a diff that names a specimen", "tool_name": "Bash", "tool_input": {"command": "patch --dry-run -p1 < instructor/scratch/fix_specimen.diff"}, "cwd": "@ROOT@"}
+{"why": "git apply --check of a diff that names a specimen", "tool_name": "Bash", "tool_input": {"command": "git apply --check instructor/scratch/fix_specimen.diff"}, "cwd": "@ROOT@"}
+{"why": "git apply --stat of a diff that names a specimen", "tool_name": "Bash", "tool_input": {"command": "git apply --stat instructor/scratch/fix_specimen.diff"}, "cwd": "@ROOT@"}
+{"why": "git apply of a diff that only touches allowlisted files while a contract runs", "tool_name": "Bash", "tool_input": {"command": "git apply instructor/scratch/fix_agent.diff"}, "cwd": "@ROOT@", "contract": true}
+{"why": "patch -i of a diff that only touches allowlisted files while a contract runs", "tool_name": "Bash", "tool_input": {"command": "patch -p1 -i instructor/scratch/fix_agent.diff"}, "cwd": "@ROOT@", "contract": true}
+{"why": "ex -sc on a scratch file", "tool_name": "Bash", "tool_input": {"command": "ex -sc '%s/a/b/|x' instructor/scratch/notes.md"}, "cwd": "@ROOT@"}
+{"why": "find -delete inside scratch", "tool_name": "Bash", "tool_input": {"command": "find instructor/scratch -name '*.tmp' -delete"}, "cwd": "@ROOT@"}
+{"why": "cp a scratch file into the root under a new name", "tool_name": "Bash", "tool_input": {"command": "cp instructor/scratch/notes.md ./notes-copy.md"}, "cwd": "@ROOT@"}
+{"why": "cp a file into the root (judged by its own name)", "tool_name": "Bash", "tool_input": {"command": "cp /tmp/notes.md ."}, "cwd": "@ROOT@"}
+{"why": "mv a scratch file into the root (judged by its own name)", "tool_name": "Bash", "tool_input": {"command": "mv instructor/scratch/notes.md ."}, "cwd": "@ROOT@"}
+{"why": "rm -rf of a scratch directory", "tool_name": "Bash", "tool_input": {"command": "rm -rf instructor/scratch/tmpdir"}, "cwd": "@ROOT@"}
+{"why": "git clean -n lists what would go", "tool_name": "Bash", "tool_input": {"command": "git clean -n"}, "cwd": "@ROOT@"}
+{"why": "git clean of the scratch directory only", "tool_name": "Bash", "tool_input": {"command": "git clean -fd instructor/scratch"}, "cwd": "@ROOT@"}
+// ---- whole-tree git without a contract: an accepted cost (hook header); allowed forms under a contract ----
+{"why": "git checkout of a branch with no contract (accepted cost)", "tool_name": "Bash", "tool_input": {"command": "git checkout main"}, "cwd": "@ROOT@"}
+{"why": "git stash with no contract (accepted cost)", "tool_name": "Bash", "tool_input": {"command": "git stash"}, "cwd": "@ROOT@"}
+{"why": "git reset --hard with no contract (accepted cost)", "tool_name": "Bash", "tool_input": {"command": "git reset --hard"}, "cwd": "@ROOT@"}
+{"why": "git pull with no contract (accepted cost)", "tool_name": "Bash", "tool_input": {"command": "git pull"}, "cwd": "@ROOT@"}
+{"why": "git stash list while a contract runs", "tool_name": "Bash", "tool_input": {"command": "git stash list"}, "cwd": "@ROOT@", "contract": true}
+{"why": "git switch -c names a new branch at HEAD while a contract runs", "tool_name": "Bash", "tool_input": {"command": "git switch -c contract-q04"}, "cwd": "@ROOT@", "contract": true}
+{"why": "git checkout -b names a new branch at HEAD while a contract runs", "tool_name": "Bash", "tool_input": {"command": "git checkout -b contract-q04"}, "cwd": "@ROOT@", "contract": true}
+{"why": "git checkout -- an allowlisted file while a contract runs", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "git checkout -- %AGENT%"}, "cwd": "@ROOT@", "contract": true}
+{"why": "git reset (index only) while a contract runs", "tool_name": "Bash", "tool_input": {"command": "git reset -q HEAD %AGENT%"}, "cwd": "@ROOT@", "contract": true}
+// ---- the contract allowlist written next to a mkdir of its directory (DV1a recheck) ----
+{"why": "/contract makes the state directory and writes its allowlist", "tool_name": "Bash", "tool_input": {"command": "mkdir -p .claude/state && printf '%AGENT%\\n' > .claude/state/contract-allowlist"}, "cwd": "@ROOT@"}
+// ---- reading the registry field by shell still passes (DV1a recheck) ----
+{"why": "registry field read by a python one-liner that imports json", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/check_course_map.py --resolve Q04 | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get(\"solutions_policy\"))'"}, "cwd": "@ROOT@"}
+// ---- recursive diff, ugrep, fd -x, ctags -R; cd -, popd and subshells (DV1a round 3) ----
+{"why": "diff of two named non-reference files", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "diff -u %EX% %PROBE%"}, "cwd": "@ROOT@"}
+{"why": "diff -r of a learner directory against a copy elsewhere", "tool_name": "Bash", "tool_input": {"command": "diff -r dafny/Q /tmp/x/dafny/Q"}, "cwd": "@ROOT@"}
+{"why": "diff of two directories without -r compares top-level files only", "tool_name": "Bash", "tool_input": {"command": "diff . ../other"}, "cwd": "@ROOT@"}
+{"why": "diff -I with an argument holding r is not recursive", "tool_name": "Bash", "tool_input": {"command": "diff -I rr . ../other"}, "cwd": "@ROOT@"}
+{"why": "ugrep -r scoped to named directories", "tool_name": "Bash", "tool_input": {"command": "ugrep -rn lemma dafny/Q verus/q"}, "cwd": "@ROOT@"}
+{"why": "fd -x scoped to a learner directory", "tool_name": "Bash", "tool_input": {"command": "fd -e dfy . dafny/Q -x cat"}, "cwd": "@ROOT@"}
+{"why": "fd listing names only", "tool_name": "Bash", "tool_input": {"command": "fd -e dfy"}, "cwd": "@ROOT@"}
+{"why": "fd -x rm inside scratch", "tool_name": "Bash", "tool_input": {"command": "fd -e tmp . instructor/scratch -x rm"}, "cwd": "@ROOT@"}
+{"why": "fd --base-directory into dafny feeding cat", "tool_name": "Bash", "tool_input": {"command": "fd -e dfy --base-directory dafny -x cat"}, "cwd": "@ROOT@"}
+{"why": "ctags -R of named learner directories", "tool_name": "Bash", "tool_input": {"command": "ctags -R dafny/Q verus/q"}, "cwd": "@ROOT@"}
+{"why": "ctags of one named file", "axes": ["lang"], "tool_name": "Bash", "tool_input": {"command": "ctags %EX%"}, "cwd": "@ROOT@"}
+{"why": "find of a learner tree feeding ctags -L", "tool_name": "Bash", "tool_input": {"command": "find dafny -name '*.dfy' | ctags -L -"}, "cwd": "@ROOT@"}
+{"why": "pushd into a learner tree, search, popd", "tool_name": "Bash", "tool_input": {"command": "pushd dafny/Q && grep -rn x . && popd"}, "cwd": "@ROOT@"}
+{"why": "a subshell's cd leaves the outer directory as it was", "tool_name": "Bash", "tool_input": {"command": "cd dafny && (cd Q && ls) && grep -rn x ."}, "cwd": "@ROOT@"}
+{"why": "a cd inside $(…) stays inside it", "tool_name": "Bash", "tool_input": {"command": "cd dafny && echo \"$(cd Q; pwd)\" && grep -rn x ."}, "cwd": "@ROOT@"}
+{"why": "pushd -n changes only the stack", "tool_name": "Bash", "tool_input": {"command": "cd dafny/Q && pushd -n /tmp && grep -rn x ."}, "cwd": "@ROOT@"}
+{"why": "cd -- DIR is tracked", "tool_name": "Bash", "tool_input": {"command": "cd -- dafny/Q && grep -rn x ."}, "cwd": "@ROOT@"}
+// ---- the CI script, the learner forms of the author tools, CI read but never set, continuation lines, and the cheat corpus (DV1c guard follow-ups) ----
+{"why": "run the local CI script (the learner's pre-merge check)", "tool_name": "Bash", "tool_input": {"command": "scripts/ci.sh"}, "cwd": "@ROOT@"}
+{"why": "one CI job by name, through bash", "tool_name": "Bash", "tool_input": {"command": "bash scripts/ci.sh static 2>&1 | tail -n 20"}, "cwd": "@ROOT@"}
+{"why": "the CI script with its log in instructor scratch", "tool_name": "Bash", "tool_input": {"command": "./scripts/ci.sh hook-test > instructor/scratch/ci.log 2>&1; echo $?"}, "cwd": "@ROOT@"}
+{"why": "read the CI script by shell", "tool_name": "Bash", "tool_input": {"command": "cat scripts/ci.sh"}, "cwd": "@ROOT@"}
+{"why": "page the CI script by shell", "tool_name": "Bash", "tool_input": {"command": "sed -n 1,80p scripts/ci.sh"}, "cwd": "@ROOT@"}
+{"why": "the done gate on a registry unit", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck --gate %ID%"}, "cwd": "@ROOT@"}
+{"why": "the assumption audit on a module", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "scripts/vaudit %ID%"}, "cwd": "@ROOT@"}
+{"why": "the assumption audit, JSON, one language", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/vaudit --json Q04 v"}, "cwd": "@ROOT@"}
+{"why": "the audit compared with its pinned report (expected/ is only read)", "tool_name": "Bash", "tool_input": {"command": "scripts/vaudit --compare expected/Q04.audit Q04"}, "cwd": "@ROOT@"}
+{"why": "an audit report written to instructor scratch", "tool_name": "Bash", "tool_input": {"command": "scripts/vaudit --write instructor/scratch/q04.audit Q04"}, "cwd": "@ROOT@"}
+{"why": "an audit report written outside the checkout", "tool_name": "Bash", "tool_input": {"command": "scripts/vaudit --write=/tmp/dvl0-q04.audit Q04"}, "cwd": "@ROOT@"}
+{"why": "the trust allowlist check of the given layers", "tool_name": "Bash", "tool_input": {"command": "scripts/vaudit --check-trust"}, "cwd": "@ROOT@"}
+{"why": "the statement-freeze check", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "scripts/specfreeze --check %ID%"}, "cwd": "@ROOT@"}
+{"why": "statement hashes of a learner file", "axes": ["track", "lang"], "langs": ["dafny", "verus"], "tool_name": "Bash", "tool_input": {"command": "scripts/specfreeze --hash %EX% --json"}, "cwd": "@ROOT@"}
+{"why": "the first-try gate records first tries", "axes": ["track"], "tool_name": "Bash", "tool_input": {"command": "scripts/firsttry.sh %ID% --check"}, "cwd": "@ROOT@"}
+{"why": "the first-try report, strict (the done gate)", "tool_name": "Bash", "tool_input": {"command": "scripts/firsttry.sh Q04 --report --strict"}, "cwd": "@ROOT@"}
+{"why": "the exit scorer", "tool_name": "Bash", "tool_input": {"command": "scripts/firsttry.sh R07 --exit"}, "cwd": "@ROOT@"}
+{"why": "the hollow lint over every module, through firsttry.py", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/firsttry.py --lint-hollow --all"}, "cwd": "@ROOT@"}
+{"why": "the calibration record", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/firsttry.py Q04 --record"}, "cwd": "@ROOT@"}
+{"why": "golden pins in CI mode (pins.py gates its reference half itself)", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/pins.py --ci"}, "cwd": "@ROOT@"}
+{"why": "golden pins in CI mode for one module", "tool_name": "Bash", "tool_input": {"command": "scripts/pins.py --ci --module Q04"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus in CI mode", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/test_corpus.py --ci"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus listing", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/test_corpus.py --list"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus listing, counted", "tool_name": "Bash", "tool_input": {"command": "scripts/test_corpus.py --list | wc -l"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus listing of one language's fixture", "tool_name": "Bash", "tool_input": {"command": "scripts/test_corpus.py --list --only verus/V12"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus on one fixture id (--only)", "tool_name": "Bash", "tool_input": {"command": "scripts/test_corpus.py --only G01"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus in CI mode on two fixtures by LANG/ID, scratch kept", "tool_name": "Bash", "tool_input": {"command": "python3 -B scripts/test_corpus.py --ci --only dafny/C-01 --only verus/V12 --keep"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus with two fixtures in flight", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/test_corpus.py --ci --jobs 2"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus on bare ids, one on a continuation line", "tool_name": "Bash", "tool_input": {"command": "scripts/test_corpus.py V12 \\\n  V12b"}, "cwd": "@ROOT@"}
+{"why": "the CI corpus job by name", "tool_name": "Bash", "tool_input": {"command": "scripts/ci.sh --job corpus"}, "cwd": "@ROOT@"}
+{"why": "the cheat corpus on one fixture directory", "tool_name": "Bash", "tool_input": {"command": "scripts/test_corpus.py tests/corpus/dafny/G01"}, "cwd": "@ROOT@"}
+{"why": "read a cheat-corpus fixture", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/tests/corpus/dafny/G01/main.dfy"}, "cwd": "@ROOT@"}
+{"why": "cat a cheat-corpus fixture", "tool_name": "Bash", "tool_input": {"command": "cat tests/corpus/verus/V03/src/lib.rs"}, "cwd": "@ROOT@"}
+{"why": "vcheck a clean cheat-corpus fixture (content-scanned; nothing reaches the reference)", "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck tests/corpus/dafny/G01/main.dfy"}, "cwd": "@ROOT@"}
+{"why": "verifier MCP on a clean cheat-corpus fixture", "tool_name": "mcp__vcheck__check", "tool_input": {"file_path": "tests/corpus/dafny/G01/main.dfy"}, "cwd": "@ROOT@"}
+{"why": "search the cheat corpus", "tool_name": "Bash", "tool_input": {"command": "grep -rn axiom tests/corpus"}, "cwd": "@ROOT@"}
+{"why": "Grep tool over the cheat corpus", "tool_name": "Grep", "tool_input": {"pattern": "external_body", "path": "@ROOT@/tests/corpus"}, "cwd": "@ROOT@"}
+{"why": "list the cheat corpus", "tool_name": "Bash", "tool_input": {"command": "ls -R tests/corpus"}, "cwd": "@ROOT@"}
+{"why": "CI read, never set: grep for CI=true in a script", "tool_name": "Bash", "tool_input": {"command": "grep -n 'CI=true' scripts/vcheck"}, "cwd": "@ROOT@"}
+{"why": "CI read, never set: echo its value", "tool_name": "Bash", "tool_input": {"command": "echo \"CI is ${CI:-unset}\""}, "cwd": "@ROOT@"}
+{"why": "CI read, never set: a commit message that names it", "tool_name": "Bash", "tool_input": {"command": "git commit -m 'Document the CI=true self-gate' -- docs/README.md"}, "cwd": "@ROOT@"}
+{"why": "a variable whose name ends in CI is not CI", "tool_name": "Bash", "tool_input": {"command": "GITHUB_CI=1 DVL_SCRATCH=/tmp/dvl0-q04 scripts/vcheck Q04 v"}, "cwd": "@ROOT@"}
+{"why": "env -u CI in front of a learner check", "tool_name": "Bash", "tool_input": {"command": "env -u CI scripts/firsttry.sh Q04 --report"}, "cwd": "@ROOT@"}
+{"why": "a continuation line in a learner check", "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck --gate \\\n  Q04 v"}, "cwd": "@ROOT@"}
+{"why": "a continuation line that copies a specimen into scratch", "tool_name": "Bash", "tool_input": {"command": "cp specimens/Q04/K1.dfy.specimen \\\n  instructor/scratch/K1.dfy.specimen"}, "cwd": "@ROOT@"}
+{"why": "a quoted heredoc whose body line ends in a backslash", "tool_name": "Bash", "tool_input": {"command": "cat > instructor/scratch/note.md <<'EOF'\nline one \\\nEOF\nls dafny/Q"}, "cwd": "@ROOT@"}
+{"why": "a scratch Python script that only reads CI", "tool_name": "Bash", "tool_input": {"command": "python3 instructor/scratch/readci.py"}, "cwd": "@ROOT@"}
+{"why": "a python one-liner that only reads CI", "tool_name": "Bash", "tool_input": {"command": "python3 -c 'import os; print(os.environ.get(\"CI\", \"unset\"))'"}, "cwd": "@ROOT@"}
+{"why": "a node one-liner that only compares CI", "tool_name": "Bash", "tool_input": {"command": "node -e 'console.log(process.env.CI === \"true\")'"}, "cwd": "@ROOT@"}
+// ---- neighbours of the grader calibration fixtures stay open: tests/instructor/'s other files, tests/hooks/, a pytest fixtures/ directory, the bare word (DV2b-2) ----
+{"why": "read a README beside the calibration fixtures", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/tests/instructor/README.md"}, "cwd": "@ROOT@"}
+{"why": "cat a README beside the calibration fixtures", "tool_name": "Bash", "tool_input": {"command": "cat tests/instructor/README.md"}, "cwd": "@ROOT@"}
+{"why": "list tests/instructor (names only, as the Glob tool does)", "tool_name": "Bash", "tool_input": {"command": "ls tests/instructor"}, "cwd": "@ROOT@"}
+{"why": "Glob over tests/ for READMEs (names only)", "tool_name": "Glob", "tool_input": {"pattern": "tests/**/README.md"}, "cwd": "@ROOT@"}
+{"why": "recursive grep of the hook fixtures", "tool_name": "Bash", "tool_input": {"command": "grep -rn allowlist tests/hooks"}, "cwd": "@ROOT@"}
+{"why": "ripgrep of the hook fixtures", "tool_name": "Bash", "tool_input": {"command": "rg -n contract tests/hooks"}, "cwd": "@ROOT@"}
+{"why": "Grep tool over the hook fixtures", "tool_name": "Grep", "tool_input": {"pattern": "contract", "path": "@ROOT@/tests/hooks"}, "cwd": "@ROOT@"}
+{"why": "the bare word fixtures stays open on a shell line", "tool_name": "Bash", "tool_input": {"command": "grep -n fixtures docs/README.md"}, "cwd": "@ROOT@"}
+{"why": "Grep for calibration fixtures in prose (no path)", "tool_name": "Grep", "tool_input": {"pattern": "calibration fixture", "path": "@ROOT@/docs"}, "cwd": "@ROOT@"}
+{"why": "read a pytest fixture file (the name fixtures alone is no reference)", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/harness/tests/q/fixtures/case1.json"}, "cwd": "@ROOT@"}
+{"why": "recursive grep of a test package that holds a pytest fixtures/ directory", "tool_name": "Bash", "tool_input": {"command": "grep -rn case harness/tests/q"}, "cwd": "@ROOT@"}
+{"why": "Grep tool rooted at a pytest fixtures/ directory", "tool_name": "Grep", "tool_input": {"pattern": "case", "path": "@ROOT@/harness/tests/q/fixtures"}, "cwd": "@ROOT@"}
+{"why": "list the instructor scratch (a partial copy there is listed, not read)", "tool_name": "Bash", "tool_input": {"command": "ls instructor/scratch"}, "cwd": "@ROOT@"}
+{"why": "an instructor feedback note that names the calibration fixtures without their path", "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/instructor/feedback/Q04.md", "content": "Graded against the rubric; the calibration fixtures were not consulted.\n"}, "cwd": "@ROOT@"}
+{"why": "recursive grep of the wrapper tests (their fixtures/ directory is no reference)", "tool_name": "Bash", "tool_input": {"command": "grep -rn PASS tests/wrappers"}, "cwd": "@ROOT@"}
+{"why": "read a wrapper-test fixture", "tool_name": "Bash", "tool_input": {"command": "cat tests/wrappers/fixtures/dafny/README.md"}, "cwd": "@ROOT@"}
+{"why": "Grep tool rooted at the wrapper tests' fixtures/", "tool_name": "Grep", "tool_input": {"pattern": "captured", "path": "@ROOT@/tests/wrappers/fixtures"}, "cwd": "@ROOT@"}
+// ---- DV4 guard rows (steps 1b-1e): the learner forms beside the new author-only and contract-time refusals ----
+{"why": "mksandbox-run --dry-run shows a run without starting it", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run --dry-run sandbox/manifests/q12-lab1.toml"}, "cwd": "@ROOT@"}
+{"why": "mksandbox-run --check-access reports Docker access", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run --check-access"}, "cwd": "@ROOT@"}
+{"why": "get_bench.sh --list and --check, the learner forms", "tool_name": "Bash", "tool_input": {"command": "scripts/get_bench.sh --list && scripts/get_bench.sh --check"}, "cwd": "@ROOT@"}
+{"why": "read the fvh fixture recorder's source", "tool_name": "Bash", "tool_input": {"command": "cat harness/fvh/tools/record.py"}, "cwd": "@ROOT@"}
+{"why": "fvh report from the run logs", "tool_name": "Bash", "tool_input": {"command": "uv run --directory harness python -m fvh report ../research/runs/Q07"}, "cwd": "@ROOT@"}
+{"why": "python3 -m fvh run with no contract", "tool_name": "Bash", "tool_input": {"command": "python3 -m fvh run --lab Q12"}, "cwd": "@ROOT@"}
+{"why": "get_bench.sh fetches a set with no contract", "tool_name": "Bash", "tool_input": {"command": "scripts/get_bench.sh dafnybench"}, "cwd": "@ROOT@"}
+{"why": "mksandbox-run --selftest-only with no contract", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run --selftest-only sandbox/manifests/q12-lab1.toml"}, "cwd": "@ROOT@"}
+{"why": "fvh report while a contract runs", "tool_name": "Bash", "tool_input": {"command": "uv run --directory harness python -m fvh report ../research/runs/Q12"}, "cwd": "@ROOT@", "contract": true}
+{"why": "fvh ledger while a contract runs", "tool_name": "Bash", "tool_input": {"command": "python3 -m fvh ledger Q12"}, "cwd": "@ROOT@", "contract": true}
+{"why": "fvh apparatus --check while a contract runs", "tool_name": "Bash", "tool_input": {"command": "cd harness && python3 -m fvh apparatus --check"}, "cwd": "@ROOT@", "contract": true}
+{"why": "mksandbox-run --check-access while a contract runs", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run --check-access"}, "cwd": "@ROOT@", "contract": true}
+{"why": "mksandbox-run --dry-run while a contract runs", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run --dry-run sandbox/manifests/q12-lab1.toml"}, "cwd": "@ROOT@", "contract": true}
+{"why": "read Claude Code's own user settings", "tool_name": "Read", "tool_input": {"file_path": "@HOME@/.claude/settings.json"}, "cwd": "@ROOT@"}
+{"why": "list the runtime directory itself", "tool_name": "Bash", "tool_input": {"command": "ls /run/user/@UID@"}, "cwd": "@ROOT@"}
+{"why": "read the benchmark manifest", "tool_name": "Bash", "tool_input": {"command": "cat bench/manifest.toml"}, "cwd": "@ROOT@"}
+{"why": "read a public task file while a contract runs", "tool_name": "Bash", "tool_input": {"command": "head -5 %PUBTASK%"}, "cwd": "@ROOT@", "contract": true}
+{"why": "an allowlist naming another research/ path", "tool_name": "Write", "tool_input": {"file_path": "@ROOT@/.claude/state/contract-allowlist", "content": "research/EVAL.md\n"}, "cwd": "@ROOT@"}
+{"why": "mksandbox-run --build-verify (prints a manifest, starts no container) while a contract runs", "tool_name": "Bash", "tool_input": {"command": "scripts/mksandbox-run --build-verify --target dafny/Q/Q04_ProofCraft/core --argv '[\"scripts/vcheck\", \"--gate\", \"dafny/Q/Q04_ProofCraft/core\"]' --module Q04"}, "cwd": "@ROOT@", "contract": true}
+{"why": "mksandbox-run --build-verify through python3 with no contract", "tool_name": "Bash", "tool_input": {"command": "python3 scripts/mksandbox-run --build-verify --target dafny/Q/Q04_ProofCraft/core --argv '[\"scripts/vcheck\"]'"}, "cwd": "@ROOT@"}
+// ---- the Monitor tool (DV6 fix round) ----
+{"why": "Monitor tails the learner's own scratch log", "tool_name": "Monitor", "tool_input": {"command": "tail -f instructor/scratch/run.log | grep --line-buffered -E 'verified|error'", "description": "watch", "timeout_ms": 60000}, "cwd": "@ROOT@"}
+{"why": "Monitor opens a WebSocket with no contract", "tool_name": "Monitor", "tool_input": {"ws": {"url": "wss://events.example.com/stream"}, "description": "events", "timeout_ms": 60000}, "cwd": "@ROOT@"}
+// ---- DV6 follow-up: ordinary local documents remain readable through Firecrawl ----
+{"why": "Firecrawl parses an ordinary chapter", "axes": ["track"], "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/%DOC%"}, "cwd": "@ROOT@"}
+{"why": "Firecrawl parses the learner's own scratch notes", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "notes.md"}, "cwd": "@ROOT@/instructor/scratch"}
+{"why": "Firecrawl parses a learner exercise", "axes": ["track", "lang"], "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/%EX%"}, "cwd": "@ROOT@"}
+{"why": "Firecrawl parses a public task during a contract", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/%PUBTASK%"}, "cwd": "@ROOT@", "contract": true}

@@ -1,0 +1,40 @@
+# pins.py golden for specimens/Q04/card-c9dv-v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q04/card-c9dv-v.rs.specimen`; never edit.
+command: verify
+exit: 0
+verdict: verified
+stage: verify
+verified: 1
+holes: 0
+{
+ "diagnostics": [],
+ "json": {
+  "func-details": {
+   "card_c9dv_v::lemma_scale_le": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::arithmetic::mul::lemma_mul_inequality": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": false,
+   "encountered-vir-error": false,
+   "errors": 0,
+   "is-verifying-entire-crate": true,
+   "success": true,
+   "verified": 1
+  }
+ },
+ "other": []
+}

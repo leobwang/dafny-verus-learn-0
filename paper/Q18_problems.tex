@@ -1,0 +1,177 @@
+% Q18_problems.tex — the written problems of Q18 (Practice III-C + Lab 3 + capstone;
+% QPLAN §28.3, §28.6, §28.7). Built by `make -C paper paper` with Q18_answers.tex. B1
+% (the capstone blueprint, an informal proof first) before any statement; B2 (Lab 3's
+% pre-registration) before any run; B6 (Lab 3's report) after the runs; B3 (the one-page
+% research proposal) last; B4 and B5 (the two paper cards, 15 minutes each) in the cards line.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q18 --- Practice III-C + Lab 3 + capstone \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{Instructions}
+Answer in \texttt{Q18\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay
+green: a non-compiling answer set is the written track's red build.
+
+Order: B1 after the chapter and before you write any statement in either
+agent file; run \texttt{/grade-paper Q18} in a fresh session and get at
+least 3 on every dimension before you state anything. B4 and B5 (the cards)
+with B1 or after it. B2 before any Lab 3 run: the runs unlock only on its
+unlocked gradebook row. B6 after the runs, graded only by \texttt{/grade-paper
+Q18 --report}. B3 last, after the lab. Once the capstone is shipped,
+run \texttt{/grade-paper Q18 --post}, which compares B1 with the delivery.
+Compare with \texttt{paper/solutions/} only as the module's last step.
+
+The capstone crate \texttt{bignat} is layer L7's base API (the trait
+\vrs{BigNatCore}: zero, one word, addition, multiplication by one word,
+comparison, \vrs{minus}, \vrs{to_word}) plus four operations whose statements
+are yours: multiplication; division by one word; \vrs{to_decimal}, the value
+as decimal chunks below $10^{19}$, least significant first, by repeated
+division by $10^{19}$; and \vrs{from_decimal}, back from such chunks by Horner
+steps of \vrs{mul_limb} and \vrs{add_limb}; each with its round-trip
+statement. Its Dafny mirror states and proves the same operations as compiled
+methods; their statements may name L7's ghost \dfy{Times} and L6's ghost
+\dfy{Sub}.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B1}
+\textbf{The capstone blueprint} (25 minutes). For the four new operations
+and the round trip, in both languages, write:
+\begin{enumerate}
+\item[(a)] each operation's statement in words and as a formula over its own
+  names: its inputs and their \texttt{requires}, and what its result's value
+  and form must be (the decimal chunk value you will define, and what makes
+  chunks canonical, included);
+\item[(b)] the round trip, stated in both directions: what a value goes back
+  to after the decimal conversions, and what canonical chunks go back to;
+  and which statement of (a) each direction follows from, or what more it
+  needs;
+\item[(c)] each loop's invariant, as a formula (every conjunct, bounds
+  included), and each loop's measure;
+\item[(d)] every lemma you expect a proof to invent: its name, its exact
+  \texttt{requires} and \texttt{ensures}, and its proof's shape; and where
+  each layer or library fact enters, by name;
+\item[(e)] the plant you will try in the adversarial round, in one line, and
+  which statement of (a) must catch it;
+\item[(f)] every step you cannot yet justify, declared as a gap.
+\end{enumerate}
+The test of a blueprint: could a contractor formalize it without inventing a
+statement? Write formulas in \LaTeX{} or in \dfy{...}/\vrs{...} code; the
+grader reads either.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[pre-registration]\label{prob:B2}
+Pre-register Lab 3 in the PREREG section of your answers file, on every field
+of the template there, with your own numbers: the claim (arm G, whose
+acceptance tool is your gate v2, against arm P, the same rules stated in the
+prompt only, on re-judged success and on cheat rate, one- or two-sided, with
+the outcome that would refute each); the metric and estimator (re-judged
+success per task, arm and repeat; cheats by X class among the claimed
+successes; cost in calls, tokens, GPU-seconds and wall clock; the paired
+estimator of G $-$ P); the arms and policies with their prompt hashes; the
+tasks (the stratum's file and its sha256, the Qwen draw of four possible and
+two impossible tasks and its seed); the budget arithmetic per arm (Claude
+harness-executed, Qwen in agent mode), with the sentinel calls, the
+throughput assumption and its source, against the registry's
+\texttt{budget}; the generation settings; the cost per arm with its
+truncation rate, and the fallback if the per-arm totals exceed the ceiling;
+the MDE, computed with \texttt{fvh.stats.mde\_two\_proportions} at your $n$,
+baseline, pairing and $\alpha$; the seeds and repeats; the gate's version
+(the sha256 of \texttt{harness/q/fvh\_q/gate/gate\_v2.py} at the run) and its
+measured false-positive rate with its interval (H7py), as a pre-registered
+caveat on every cheat rate; the impossible tasks' expected outcome (no
+claimed success is correct); the cheat surface and how every claimed success
+is re-judged; the exclusions; the stopping rule; your 80\% prediction
+intervals; the contamination controls (the tasks' authorship after the
+models' release, and the seal); the batch plan path and its final \texttt{plan-sha256:} binding;
+and the disclosure. The runs unlock only when
+\texttt{/grade-paper Q18} scores every method dimension at least 3, and the
+harness refuses a run whose pre-registration hash is not on that unlocked
+gradebook row.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[proposal]\label{prob:B3}
+\textbf{The one-page research proposal} (60 minutes, last). Propose one study
+you could run next in agentic formal verification, scoped to what one machine
+and a small replication can show. On one page: the question; the claim and
+the outcome that would refute it; the measurement (the unit, the metric, the
+arms or conditions, the budget in calls and GPU-hours); the cheat surface and
+the gate that guards the metric, with the gate's false-positive rate as a
+caveat; what is trusted and what would break the result if it were wrong; the
+prior work it builds on (two or three of your cards, by id); and what a null
+result would mean. Ground every number you give in a run or a card you
+cite. Graded on the rubric's declared dimensions, never on the question's
+ambition.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B4}
+\textbf{Paper card 02.6, Vero: Can AI Agents Build Formally Verified Software Repositories?} (15 minutes). Fill the card on its eight
+fields: task shape, oracle, what is trusted, cheat surface, metric, budget,
+variance, artifact. Each field is graded against the pinned range of your own
+\texttt{cheatsheets.md}: lines 737--762, the entry from its heading to its
+\emph{Why it matters} paragraph, in the copy the command below names. The pin
+is the sha256 of exactly those lines, computed with the first line below; it
+must print the second.
+{\small
+\begin{verbatim}
+sed -n '737,762p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+2c4e04db3d4ebc9da8d788494821ddbaf1630ef1762a28a12be1ff5636388e26  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed. Then one more line: which part of Lab 3's
+design (the sealed tasks, the impossible tasks, the gate on a clean checkout,
+the statements frozen before the proofs) is nearest the paper's grader, and
+what the paper's grader does that your gate v2 does not.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B5}
+\textbf{Paper card 05.9, VeriSoftBench: Repository-Scale Formal Verification Benchmarks for Lean} (15 minutes). Fill the card on its eight
+fields: task shape, oracle, what is trusted, cheat surface, metric, budget,
+variance, artifact. Each field is graded against the pinned range of your own
+\texttt{cheatsheets.md}: lines 2117--2144, the entry from its heading to its
+\emph{Why it matters} paragraph, in the copy the command below names. The pin
+is the sha256 of exactly those lines, computed with the first line below; it
+must print the second.
+{\small
+\begin{verbatim}
+sed -n '2117,2144p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+a310019354e8d6eec907278258c1d9a48abb31e2ae497100b8710c8992af58e8  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed. Then one more line: which of the paper's two
+context modes your Lab 3 tasks resemble, and why that matters for comparing
+a success rate across the two.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[lab-report]\label{prob:B6}
+After the runs, report Lab 3 against its pre-registration (B2): every table
+regenerated by your \emph{Reproduce} command from the logs in
+\texttt{research/runs/Q18/}; every deviation; re-judged success per arm and
+family, and G $-$ P with its interval; the cheats by X class among the claimed
+successes, the impossible tasks' claims among them; gate v2's verdict on every
+claimed success, re-run from a clean checkout in the verification container;
+the gate's version and its false-positive rate with its Wilson interval, and
+how that interval bounds each cheat rate; the cost per arm; your prediction
+intervals scored; contamination; and the disclosure block. It is graded with
+\texttt{/grade-paper Q18 --report}, on method and reproducibility, never on
+the numbers.
+\end{problem}
+
+\end{document}

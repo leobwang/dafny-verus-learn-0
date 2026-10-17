@@ -1,0 +1,22 @@
+// Card demo Q04.C6v (`nonlinear_arith`), the failure half. The success half is
+// `lemma_product_le_by_nl` in verus/q/q04_proof_craft/src/library.rs; this copy leaves
+// out the nonlinear assertion's `requires`. Run it with
+// `scripts/vcheck specimens/Q04/card-c6v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+// after: Q04.P6v
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn lemma_product_le_by_nl(x: nat, y: nat, xb: nat, yb: nat)
+    requires
+        x <= xb,
+        y <= yb,
+    ensures
+        x * y <= xb * yb,
+{
+    assert(x * y <= xb * yb) by (nonlinear_arith);
+}
+
+} // verus!
+// EXPECT @18 "assertion failed"

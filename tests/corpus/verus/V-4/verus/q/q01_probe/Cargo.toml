@@ -1,0 +1,17 @@
+# Cheat corpus fixture (tests/corpus/verus): an invented crate.
+[package]
+name = "q01_probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+qg_bignat_l3 = { path = "../../given/qg_bignat_l3" }
+
+[package.metadata.verus]
+verify = true

@@ -1,0 +1,13 @@
+// Card demo Q01.C2d (`assert`), the failure half. The success half is `AssertStep` in
+// dafny/Q/Q01_Hello/core/Q01_Hello.dfy; this assertion is false. Run it with
+// `scripts/vcheck specimens/Q01/card-c2d.dfy.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+// after: Q01.P8dv
+module Q01_CardC2d {
+  method AssertStep(x: nat)
+  {
+    var y := x + 2;
+    assert y < x;
+  }
+}
+// EXPECT @10 "assertion might not hold"

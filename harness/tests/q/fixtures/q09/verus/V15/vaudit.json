@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V15"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V15/src/lib.rs",
+    "kind": "pervasive-assume",
+    "line": 10,
+    "message": "vstd::pervasive::assume is green under --no-cheating (V15, Δ9)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V15"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "c829e465d963f2e54390a4999d24b968aa77a2a662aa31f8e1ca2c891f413b46",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V15"
+}

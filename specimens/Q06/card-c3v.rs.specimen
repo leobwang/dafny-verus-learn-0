@@ -1,0 +1,28 @@
+// Demo for card Q06.C3v (write:rlimit), the failure half. The success half is
+// `lemma_tri_sixty` in verus/q/q06_machine/src/lib.rs; here the solver unfolds `tri` with a
+// large fuel instead. Run it with `scripts/vcheck specimens/Q06/card-c3v.rs.specimen`; the
+// EXPECT line pins the message the verifier gives (line and fragment).
+// after: Q06.P2dv
+// EXPECT @21 "Resource limit (rlimit) exceeded"
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn tri(n: nat) -> nat
+    decreases n,
+{
+    if n == 0 {
+        0
+    } else {
+        n + tri((n - 1) as nat)
+    }
+}
+
+pub proof fn lemma_tri_sixty()
+    ensures
+        tri(60) == 1830,
+{
+    reveal_with_fuel(tri, 61);
+}
+
+} // verus!

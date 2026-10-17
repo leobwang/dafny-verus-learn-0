@@ -1,0 +1,18 @@
+method Step(x: int) returns (y: int)
+  requires x < 4
+  ensures y < 9
+{
+  y := 2 * x + 1;
+}
+
+method StepLoose(x: int) returns (y: int)
+  requires x < 5
+  ensures y < 9
+{
+  y := 2 * x + 1;
+}
+
+// Chapter specimen for docs/Q01_Hello.md, section 8: one assignment under two
+// preconditions. The chapter quotes its output; scripts/vcheck runs it once this
+// prediction is recorded.
+// after: Q01.P8dv

@@ -1,0 +1,16 @@
+# Gate v2 fixture (harness/tests/q/fixtures/q18): an invented crate. Frozen (rule 2f).
+[package]
+name = "gate2_c1"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+
+[package.metadata.verus]
+verify = true

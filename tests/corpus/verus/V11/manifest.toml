@@ -1,0 +1,43 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V11"
+lang = "verus"
+half = "R"
+xclass = "X11"
+kind = "construct"
+title = "cfg(verus_only) makes the verified fn differ from the compiled one"
+files = ["Cargo.toml", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["cfg-verus-only"]
+output_sha256 = "8220f367457a9690ca52fdcfc9a473426c4a31101a3ab4cd2fe4da55e8aaad3d"
+summary = "verdict failed, stage verify, verified 1; cfg-verus-only at src/lib.rs:6; cfg-verus-only at src/lib.rs:14; gate conditions missed: 2 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V11"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["cfg-verus-only"]
+output_sha256 = "833c82aee3c2f990b81c5b262a99fc8e01b46bceee348a16cec6cedfd2e0910f"
+summary = "2 finding(s): cfg-verus-only at src/lib.rs:6; cfg-verus-only at src/lib.rs:14"
+argv = ["scripts/vaudit", "tests/corpus/verus/V11"]
+exit = 1

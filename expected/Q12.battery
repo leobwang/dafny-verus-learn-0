@@ -1,0 +1,11 @@
+# expected/Q12.battery — the pinned outcome of the Q12 retry battery (frozen, rule 2f;
+# QPLAN §22.3). harness/tests/q/test_retry.py requires the same solve count from the
+# learner's run_battery over the recorded results, and checks the recordings' digest
+# below (sha256 over each recording's path under harness/tests/q/fixtures/q12/rec/,
+# a NUL byte and its bytes, in path order). Re-recording the battery
+# (Solutions/plans/Q12-record-battery.py, author-only) must leave both unchanged, or
+# be re-pinned here and in the tests together.
+k = 3
+solved = 8
+total = 12
+recordings_sha256 = "caf3fd4e4b6e1ac1c5471a4f00303465cededc9e18fa039fd3c4104c95c67b45"

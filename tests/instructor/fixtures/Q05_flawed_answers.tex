@@ -1,0 +1,239 @@
+% Q05_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q05_answers.tex (spec §4.7, §6.12). Three of the
+% four problems carry one planted flaw each; B2 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q05_rubric.md), never by eye. Reference-class
+% (hook rule 1, DELTAS Δ125): it holds a blueprint of Q05.H4d and H4v, so open it only
+% after Q05 is done.
+%
+% EXPECTED[B1][recomputation][2]: (b) claims that the verification condition still holds without Drain's frame postcondition, by reading Drain's body. The finding must locate (b) and exhibit an outcome that the weakened contract allows on which R fails, such as s = [3, 4], the first call returning x = 3 and leaving c = [0, 9], the second returning y = 9 and leaving c' = [7, 0]: t = 12 is not s[0] + s[1] = 7, and c'[0] = 7 is not 0 (Probe A''' passes on it, for each of the two conjuncts). Parts (a) and (c) are correct and must draw no finding <= 2.
+% EXPECTED[B2][recomputation][4]: correct, no finding. A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B3][induction-soundness][2]: the measure is stated as (x, |s| - i), compared left to right, and the load branch is argued by its second component alone. The finding must name that branch and exhibit s = [5], i = 0, x = 0, c = 0 (it satisfies the stated invariant and the guard): one pass loads the limb and takes (x, |s| - i) from (0, 1) to (5, 0), larger in the first component (Probe C' passes with that decrease negated; Probe C with this measure fails at "decreases expression might not decrease", which alone is not the instance). Statement-fidelity and case-exhaustiveness are correct (4); blueprint-quality may draw 3 for the same measure but must not score <= 2; gap-accounting must not score <= 2.
+% EXPECTED[B4][card-fidelity][2]: Metric — the field gives Lemur one hour per Code2Inv program; pinned line 1381 gives the Code2Inv benchmark 10 minutes, and the 1 h belongs to the quoted Code2Inv baseline (92). The finding must quote line 1381.
+% EXPECTED[B4][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Budget, Variance and Artifact — correct, no finding (lines 1368, 1370, 1373–1376, 1379–1384, 1386). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2, B4 = 2.
+% A calibration run FAILS if B1, B3 or B4 scores >= 3, if a planted finding does not locate
+% its part, branch or field (with the instance or the quoted line named above), or if ANY
+% flaw is reported on B2 or on a B4 field other than Metric.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q05 --- Frames, ownership, modes, wp$\to$VC \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} Write $c$ for the contents after the first call and $c'$ for the
+contents after the second, so that $R \equiv t = s[0] + s[1] \wedge c'[0] = 0
+\wedge c'[1] = 0$. \\
+Step 1: $\WP{t \assign x + y}{R} = (x + y = s[0] + s[1] \wedge c'[0] = 0
+\wedge c'[1] = 0)$ \quad by the assignment rule. \\
+Step 2: $\WP{y \assign \mathit{Drain}(a, 1)}{\cdot} = 1 < L \wedge \forall c',
+y' .\; (y' = c[1] \wedge c'[1] = 0 \wedge \forall j .\; 0 \leq j < L \wedge j
+\neq 1 \impl c'[j] = c[j]) \impl (x + y' = s[0] + s[1] \wedge c'[0] = 0 \wedge
+c'[1] = 0)$ \quad by the call rule. \\
+\hspace*{2em} simplified: $1 < L \wedge x + c[1] = s[0] + s[1] \wedge c[0] = 0$
+\quad ($y'$ is fixed to $c[1]$ by the first hypothesis, $c'[1]$ to $0$ by the
+second, and $c'[0]$ to $c[0]$ by the frame hypothesis at $j = 0$; an outcome
+meeting all three exists, so the $\forall$ is its conclusion at that
+outcome). \\
+Step 3: $\WP{x \assign \mathit{Drain}(a, 0)}{\cdot} = 0 < L \wedge \forall c,
+x' .\; (x' = s[0] \wedge c[0] = 0 \wedge \forall j .\; 0 \leq j < L \wedge j
+\neq 0 \impl c[j] = s[j]) \impl (1 < L \wedge x' + c[1] = s[0] + s[1] \wedge
+c[0] = 0)$ \quad by the call rule, and the sequence rule composes the
+steps. \\
+\hspace*{2em} simplified: $0 < L \wedge 1 < L$ \quad ($1 < L$ does not mention
+the outcome; under it the frame hypothesis at $j = 1$ fixes $c[1] = s[1]$, and
+$x' = s[0]$, so the sum holds; $c[0] = 0$ is a hypothesis). \\
+Result, over $L$ and $s$: $L \geq 2$, with no condition on $s$.
+
+\textbf{(b)} Verification condition: $L = 2 \impl L \geq 2$. \quad Decision:
+valid. \\
+Without the frame postcondition, the step that changes: steps 2 and 3 lose
+their frame hypotheses, but the result does not change. \dfy{Drain} assigns
+only \dfy{a[i]} (its body is \dfy{x := a[i]; a[i] := 0;}), so after
+\dfy{Drain(a, 0)} limb 1 still holds $s[1]$, and after \dfy{Drain(a, 1)} limb
+0 still holds $0$. The wp is still $L \geq 2$, and the verification condition
+still holds. \\
+Conjuncts of $R$ that can no longer be proved: none. \\
+For each: start contents $s$, then after each call its result and the
+contents: not applicable. \\
+Can a run end that way? No: every run from $[3, 4]$ returns $7$ and leaves
+$[0, 0]$. \\
+What the failure says, and about what: there is no failure; the deleted
+clause only restated what the body already does.
+
+\textbf{(c)} The role of \dfy{modifies a}: the parameter \vrs{v: &mut Vec<u64>},
+which lends all of \vrs{*v}, its length included, and nothing else; the
+\vrs{forall} clause, with the length clause, says which part of it stayed. \\
+The extra obligation, and what discharges it: the \vrs{u64} addition
+\vrs{x + y} must not overflow. It follows from \vrs{collect}'s bounds
+\vrs{old(v)@[0] < 1000} and \vrs{old(v)@[1] < 1000}, from \vrs{drain}'s
+\vrs{x == old(v)@[i as int]} at each call, and from the first call's
+\vrs{forall} clause, which carries limb 1 unchanged to the second call. \\
+With the \vrs{forall} clause deleted, the obligations that fail: the overflow
+check at \vrs{x + y}, and the postcondition clauses
+\vrs{t == old(v)@[0] + old(v)@[1]} and \vrs{final(v)@[0] == 0};
+\vrs{final(v)@[1] == 0} still holds, since it is the second call's own
+postcondition.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} With $I \equiv 0 \leq i \leq L \wedge \forall j .\; 0 \leq j < i \impl c[j] = 0$: \\
+Entry: $\WP{i \assign 0}{I} = 0 \leq 0 \leq L \wedge \forall j .\; 0 \leq j <
+0 \impl c[j] = 0$. \quad Decision: valid; an array's length is at least $0$
+and the range of $j$ is empty. \\
+Maintenance ($\WP{S}{I}$, step by step, the call last): the assignment rule
+on \dfy{i := i + 1} gives $0 \leq i + 1 \leq L \wedge \forall j .\; 0 \leq j <
+i + 1 \impl c'[j] = 0$ over the contents $c'$ after the call; the call rule on
+\dfy{x := Drain(a, i)} gives
+$i < L \wedge \forall c', x' .\; (x' = c[i] \wedge c'[i] = 0 \wedge \forall j
+.\; 0 \leq j < L \wedge j \neq i \impl c'[j] = c[j]) \impl (0 \leq i + 1 \leq L
+\wedge \forall j .\; 0 \leq j < i + 1 \impl c'[j] = 0)$. The condition is
+$I \wedge i < L \impl \WP{S}{I}$. \quad Decision: valid. The guard is the
+callee's precondition and gives $i + 1 \leq L$; for $j < i$ the frame gives
+$c'[j] = c[j]$, which is $0$ by $I$; for $j = i$ the postcondition gives
+$c'[i] = 0$. \\
+Use at exit: $I \wedge \neg(i < L) \impl \forall j .\; 0 \leq j < L \impl
+c[j] = 0$. \quad Decision: valid; $i \leq L$ and $i \geq L$ give $i = L$. \\
+Termination: under $I \wedge i < L$ the measure $L - i$ is positive, and
+$\WP{S}{L - i < V_0}$ with $V_0 = L - i$ reduces to $L - (i + 1) < L - i$:
+the call cannot change \dfy{a.Length}. \quad Decision: valid.
+
+\textbf{(b)} Without the frame postcondition: \\
+Entry: valid, unchanged. \quad Maintenance: fails. \quad Use at exit: valid,
+unchanged. \quad Termination: valid, unchanged (none of the three uses the
+frame). \\
+The condition that fails: maintenance; the outcome of the call is now
+constrained only by $x' = c[i] \wedge c'[i] = 0$, so $c'[j] = 0$ for $j < i$ no
+longer follows. \\
+A state and a call outcome that satisfy its hypotheses and violate its
+conclusion: $L = 2$, $i = 1$, $c = [0, 5]$, and the outcome $x' = 5$,
+$c' = [9, 0]$; the conclusion needs $c'[0] = 0$. \\
+Reachable by a run? No: \dfy{Drain}'s body writes only \dfy{a[i]}, so no run
+changes a limb it already cleared. \\
+Could a stronger invariant repair it? No. The postcondition needs every limb
+$0$ after the last call, and the weakened contract lets that call, at
+$i = L - 1$, leave any value in every other limb (for $L \geq 2$), so nothing
+an invariant says before it survives it. \\
+What the failure is about, against Q03's B2: here the program and the
+invariant are right and the callee's contract is too weak for its caller, so
+the repair belongs in \dfy{Drain}'s \dfy{ensures}. In Q03's B2 the program
+was right and the invariant was too weak, satisfied by an unreachable state.
+
+\textbf{(c)} The conditions that fail: maintenance of \vrs{i <= v.len()},
+because after the call the length is unknown, and termination, because the
+measure \vrs{v.len() - i} reads that length. \\
+Why the Dafny \dfy{Drain} needs no such line: an array's length is fixed at
+allocation, and \dfy{modifies a} lets the callee change the elements, never
+\dfy{a.Length}; a \vrs{Vec}'s length is part of the value that \vrs{&mut}
+lends.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (informal-proof-first)}\label{ans:B3}
+\begin{answer}
+\textbf{Statement.} For every sequence $s$ of naturals, \dfy{CountOnes(s)}
+returns $\mathrm{Ones}(s)$; for H4v, under $\mathrm{ones}(v) \leq 2^{64} - 1$,
+no addition overflows.
+
+\textbf{Induction on / loop invariant / decreases measure:} the loop
+invariant below, and the measure $(x, |s| - i)$, compared left to right.
+
+\textbf{Base} (entry: the invariant holds before the first iteration)\textbf{:}
+$i = 0$, $x = 0$, $c = 0$; $\mathrm{BitCount}(0) = 0$ and $s[0..] = s$, so
+$0 + 0 + \mathrm{Ones}(s) = \mathrm{Ones}(s)$, and $0 \leq 0 \leq |s|$.
+
+\textbf{IH or invariant (stated as a formula):}
+$0 \leq i \leq |s| \wedge c + \mathrm{BitCount}(x) + \mathrm{Ones}(s[i..]) =
+\mathrm{Ones}(s)$.
+
+\textbf{Step} (one paragraph per branch of the body: the invariant is kept,
+and the measure goes down while staying bounded below)\textbf{:} \\
+\emph{Branch $x > 0$.} $c$ gains $x \bmod 2$ and $x$ becomes $x / 2$; one
+unfolding of BitCount at $x \neq 0$ gives $\mathrm{BitCount}(x) = x \bmod 2 +
+\mathrm{BitCount}(x / 2)$, so the sum is unchanged; $i$ does not move. The
+first component of the measure, $x$, drops, since $x / 2 < x$ for $x > 0$. \\
+\emph{Branch $x = 0$} (so $i < |s|$ by the guard). $x$ becomes $s[i]$ and $i$
+grows by one. One unfolding of Ones on the non-empty $s[i..]$ and the given
+assertion $s[i..][1..] = s[i + 1..]$ give $\mathrm{Ones}(s[i..]) =
+\mathrm{BitCount}(s[i]) + \mathrm{Ones}(s[i + 1..])$, and $\mathrm{BitCount}(0)
+= 0$, so the sum is unchanged, and $i + 1 \leq |s|$. The measure goes down
+because its second component, $|s| - i$, drops by one: one component goes
+down in each branch, which is what a lexicographic measure needs. \\
+Both components are naturals, so the measure is bounded below.
+
+\textbf{Use at exit:} the negated guard gives $x = 0$ and $i \geq |s|$, so
+$i = |s|$ by the invariant; $\mathrm{Ones}(s[|s|..]) = 0$ and
+$\mathrm{BitCount}(0) = 0$, hence $c = \mathrm{Ones}(s)$.
+
+\textbf{Overflow in H4v} (why \texttt{c + x \% 2} fits in a \vrs{u64})\textbf{:}
+the addition happens only when $x > 0$, and then $\mathrm{bit\_count}(x) = x
+\bmod 2 + \mathrm{bit\_count}(x / 2) \geq x \bmod 2$. So $c + x \bmod 2 \leq c +
+\mathrm{bit\_count}(x) \leq \mathrm{ones}(v) \leq 2^{64} - 1$, by the
+invariant and the precondition, which the loop must carry as a further
+invariant.
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement:
+an unfolding, the given assertion, or a new lemma\textbf{):} one unfolding of
+BitCount at $x > 0$, and its value $0$ at $0$; one unfolding of Ones on a
+non-empty sequence, and its value $0$ on the empty one; the given assertion
+$s[i..][1..] = s[i + 1..]$; $s[0..] = s$ at entry. No new lemma.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): none.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 03.12, lines 1366--1386 (the pinned range).
+
+\textbf{Task shape:} a small C program and a property (a predicate at a
+program line) go in; the output is a proof that the property holds on every
+execution, or that it fails. The proof is built in a calculus of eight rules
+over configurations (program, an optional assumption, a trail of goals),
+in which GPT proposes loop invariants and sub-goals as assertions at marked
+lines.
+
+\textbf{Oracle:} a conventional C verifier, esbmc or UAutomizer, sound but
+incomplete (True, False, Unknown). It must prove every implication before a
+proposal is used, and the calculus's theorems make success imply the property
+and fail imply its negation, whatever the oracle proposes.
+
+\textbf{What is trusted:} the soundness of the verifier and of the calculus,
+including the case split of Lemma 2.1, which needs a stable assumption; how
+stability is checked is not described. The language model is not trusted: it
+affects only speed and completeness.
+
+\textbf{Cheat surface:} a wrong or vacuous proposal cannot produce a verdict,
+since the checker decides every implication. Still open: the undescribed
+stability check, a hard set whose properties are all true and which was
+chosen because the baselines fail on it, and possible contamination of the
+tiny programs.
+
+\textbf{Metric:} benchmarks solved. On Code2Inv (133 programs), Lemur proved
+103 with GPT-3.5 and 107 with GPT-4, within one hour per program, against
+esbmc's 68 and Code2Inv's 92; on the 47 hard SV-COMP programs (15 minutes
+each), 14--15 with GPT-3.5 and 24--25 with GPT-4 (19--20 without repair),
+against 1 for UAutomizer and for esbmc (2 and 4 after 12 hours).
+
+\textbf{Budget:} at most $k$ proposals per goal, which the termination
+theorem needs (each proposal at an earlier line), 30 seconds per verifier
+call, and a wall-clock limit per benchmark (15 minutes on the hard set); the
+range gives no token, call-count or dollar figure.
+
+\textbf{Variance:} each configuration ran 3 times, and the hard-set results
+are ranges over those runs; no intervals or seeds are reported.
+
+\textbf{Artifact:} the calculus (eight rules, Algorithm 1) instantiated with
+GPT-3.5 or GPT-4 and esbmc or UAutomizer, evaluated on Code2Inv and a hard
+SV-COMP subset; the range does not say whether code or prompts are released.
+\end{answer}
+
+\end{document}

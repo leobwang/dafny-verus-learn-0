@@ -1,0 +1,3027 @@
+#!/usr/bin/env python3
+"""vcheck — the course's pinned verifier wrapper (phase DV1b).
+
+Design §7.1 ("the verifier part"), §14.2; spec §8.3, §11.1 rows 1, 2, 17, 22;
+DELTAS Δ10–Δ14, Δ17, Δ41, Δ56–Δ59. The only way the course runs Dafny and
+Verus: it always uses the pinned binaries, the pinned project or crate and
+the pinned flags (all read by the dvl libraries from scripts/dvl/pins.toml),
+and every job runs under the CLAUDE.md §Resources memory cap.
+
+Usage:
+  vcheck [--gate] [--json] [--symbol S | --module M --function F] [--seed N]
+         [--isolate] <target> [-- <verifier args>]
+      target: a unit directory (Dafny dfyconfig.toml dir, Verus crate dir), a
+      project file, one .dfy/.rs file, or a *.dfy.specimen / *.rs.specimen
+      (copied to scratch with its real extension).
+  vcheck <ID> [d|v] / vcheck --module <ID> [--lang d|v]
+      every verification unit of a module (the registry's `units`), learner
+      loop settings unless --gate. Planned modules are refused.
+  vcheck [--gate] [--json] <file.py> / vcheck <ID> py
+      a learner Python file (harness/q/fvh_q/…, harness/r/fvh_r/…; with
+      `<ID> py`, every file of the module's `harness` list): its holes,
+      counted from the syntax tree by the frozen core (fvh.holes), then its
+      acceptance tests (harness/tests/<t>/test_<stem>.py) through pytest,
+      offline on the pinned uv lock, under the memory cap (dvl.python). The
+      learner loop's verdict is the tests'; the gate passes only with zero
+      holes and every test passing. Summary: `vcheck: <file> [python, <mode>]:
+      <verdict> — <p> passed, <f> failed, <n> holes`. --ref on a twin
+      (Solutions/harness/…) lays it over a scratch copy of harness/ and runs
+      the same tests there; --test runs the tests alone; --shipped and
+      --pin-counts include the file (role harness).
+  vcheck --module <ID> <probe file>
+      one probe (instructor/scratch/probe.dfy|rs) with the module's given
+      layer chain and unit options.
+  vcheck --brittleness [--solvers | --solver S] <target>
+      re-verify under every pinned seed (Δ59); a verdict that differs between
+      seeds fails; the resource-count spread is reported, never gating, and a
+      symbol whose spread exceeds the pinned coefficient of variation (20%,
+      pins.toml spread_flag_cv) is flagged, never gated (QPLAN §6 Q29).
+      Dafny only (QPLAN §6 Q29, §17.5): --solvers re-verifies under every
+      seed with each Z3 bundled with the pinned Dafny (pins.toml
+      [dafny.solvers], the pinned 4.12.1 first), and --solver S under one of
+      them; every row must verify for `stable`. Verus checks its Z3's version
+      and has one solver (VERSIONS.md §1.2): both options are refused there.
+  vcheck --solver <S> [--seed N] [--json] <Dafny target>
+      the learner loop under another bundled Z3 (a measurement; QPLAN §6
+      Q29). The done gate and the reference gate keep the pinned solver
+      (Δ10): --solver with --gate or --ref (except --ref --brittleness) is
+      refused. Solver pass-through after `--` stays refused.
+  vcheck --ref --brittleness [--solvers | --solver S] <twin target>
+      author-only: the same sweep on a reference twin, laid over its learner
+      unit as --ref runs it (DV0-REPORT §8 item 37); locations only, never a
+      symbol name or a message.
+  vcheck --gate --lab-task <task form> [--json] <delivery>
+      the lab gate (QPLAN §30 Q63; PLAN §4.3): the done gate on the
+      delivery, plus the lever check against the task form it was made from
+      (dvl.levers): a verification lever the task form does not ship (Dafny
+      {:induction …}, {:fuel …}, {:vcs_split_on_every_assert}, assertion
+      isolation, the nonlinear switch, resource, time and option attributes;
+      Verus every verifier attribute but proof_note and triggers), a shipped
+      one the delivery dropped, or a changed project file is a lab-lever-added,
+      lab-lever-removed, lab-file-added or lab-project-changed finding, and
+      the verdict is failed. Then, on a delivery still verified, vaudit's
+      assumption rules (scripts/vaudit's audit, learner mode, the default
+      trust allowlist; the user's decision D24): each finding is a lab-audit
+      finding and the verdict is failed, so a delivery equal to a task form
+      that ships `assume {:axiom}`, or a lever the lever check allows but the
+      audit reports (a shipped `{:axiom}` lemma), does not pass. Two files of
+      one language or two directories. The learner gate never applies it
+      (learner files may carry the allowed levers). `specfreeze --lab` runs
+      the lever check beside the freeze (its static half: no audit).
+      On a Lab 2 card (a task form under bench/local/q/lab2/ or lab2pub/;
+      the user's decision D27), after the lever check, the code check
+      (dvl.labcode): the delivery keeps the task form's executable code token
+      for token; it may add the target's specification, one witness call,
+      definitions and lemmas, and on a public card (lab2pub/) proof
+      annotations (invariants, assertions, proof blocks, lemma calls); any
+      other difference is a lab-code-changed finding and the verdict is
+      failed.
+  vcheck --gate --lab-task <task form> --lab-code own [--json] <delivery>
+      the lab gate without the code check, for an arm that writes its own
+      code on a Lab 2 card (the vericoding arm V, QPLAN §25.5).
+  vcheck --selftest
+      the pinned toolchains pass their checks and verify tiny invented
+      programs (one gate pass and one counted hole per language).
+  vcheck --ref <target>
+      author-only (CI=true or the author's linked worktree): the reference
+      gate; prints the verdict and locations only, never a message. A twin
+      runs in its learner unit; a directory of loose .dfy files that mirrors
+      no learner path (the DV0 spikes) runs as one program with the pinned
+      resource limit (and the standard library when a file imports Std). A
+      unit twin is compared with its count pin: a stale pin fails.
+  vcheck --ref --pin-counts <ID>
+      author-only: run the reference gate on the twin of every unit of the
+      module and write expected/<ID>.counts (Δ11): per unit, the twin's count
+      and the learner-declared declarations with a contract that ran a task
+      there; per file (schema 2, the Q8 decision), the shipped state of every
+      exercise, check, exit and agent file in the learner loop: verdict,
+      tool-counted holes and errors (run it on the files as shipped). Nothing
+      is written unless every twin passes and every file gives a verdict.
+  vcheck --shipped [--json] <ID> [d|v]
+      every file of the module against its shipped-state pin in
+      expected/<ID>.counts: the same verdict, holes and errors in the learner
+      loop (a unit's files through one run of the unit, every other file on
+      its own). Learner files only; scripts/ci.sh's verify jobs run it. It
+      fails once a file is worked on: it checks the course as shipped.
+  vcheck --bin <crate> [-- <arguments>]
+      a Verus crate's command-line tool (the user's decision D16; QPLAN §30
+      Q59; the capstone crate's `[[bin]]`, which scripts/gen_units.py
+      generates): the crate's layer chain verified and exported, its library
+      verified (the learner loop's normal mode: holes do not block it, as for
+      --test; the done gate is --gate) and compiled, its one `[[bin]]` root
+      compiled against it by the pinned `verus --crate-type=bin --compile`,
+      then the binary run once with the arguments after `--`, in a scratch
+      copy under the memory cap (dvl.verus.run_bin). Cargo is never used.
+      Prints `vcheck: <crate> [verus, bin <name>]: built — N verified; ran
+      `<name> <arguments>`: exit <n>`, then the program's standard output
+      and (on stderr) its standard error. Exit 0 when it was built and
+      exited 0; 1 otherwise (a build that failed prints why); 3 refused (no
+      crate directory, not exactly one [[bin]] target, its root missing,
+      reference material). The binary is deleted afterwards: run it again
+      with new arguments.
+  vcheck --test [--json] [--name N ...] <unit | crate | file | ID [d|v]>
+      the compiled checks: Dafny {:test}/@Test methods (dafny test --target
+      py) and Verus #[test] fns (verus --compile --test, then the binary),
+      in a scratch copy under the memory cap (dvl.dafny.test,
+      dvl.verus.test). One PASSED/FAILED line per test; exit 0 when every
+      requested test (every test, without --name) ran and passed. Refused
+      for reference targets, and for a target holding an enabled slot or an
+      `after:` item whose first try is not recorded (H5).
+
+Modes:
+  learner loop (default)  Dafny --allow-warnings, Verus one --no-cheating run
+                          (holes are counted, never fatal); exit 0 = verified.
+  --gate                  the done gate: Dafny --allow-warnings false and a
+                          positive verified count (Δ10, Δ11; the Δ3 lint is
+                          vaudit's, Δ4: done = this gate AND vaudit); Verus
+                          Δ12's one-run gate (success, whole crate, no VIR
+                          error, verified >= the floor, no hole, lint at
+                          zero). On a registry unit (the unit dir, a file of
+                          its project or crate) the Δ11 count pin applies:
+                          every symbol expected/<ID>.counts pins must have
+                          run a task and the count must reach min_verified,
+                          so a deleted lemma or hole fails; a unit with no
+                          pin fails (count-pin-missing). Filters are refused.
+  fast channel            --symbol S (Dafny Mod.Name, Verus f | m::f |
+                          m::*::method) or --module M --function F (Verus,
+                          Δ41); never a pass in the gate.
+
+Verifier arguments after `--` pass through only when the library's refusal
+list allows them (dvl.dafny.check_args: the learner loop may add the filters,
+--isolate-assertions, --analyze-proofs, --extract-counterexample; the gate
+none. dvl.verus.check_args: --expand-errors, --multiple-errors N, --triggers,
+--triggers-mode M; the gate only the pinned rlimit and the seed option). The
+legacy CLI, --allow-*, --no-verify, solver and Boogie pass-through, unpinned
+limits and every other flag are refused (exit 3; Δ10, Δ13, Δ17, Δ18).
+
+Output: one summary line, then one line per hole, diagnostic and finding as
+`path:line:col: …` (paths relative to the repo root). A clean gate prints only
+the summary line. The summary names the count in its own unit (Δ39):
+`N verified` (Dafny tasks; Verus `verified`), `N assertions verified` under
+Dafny --filter-position (W-D08), `N tasks passed` for a seeded Dafny run.
+--json prints {lang, target, exit_code, verdict, stage, verified_count,
+count_unit, holes, findings, diagnostics, per_symbol, raw_dir, cmd} (a list
+for several units; count_unit: tasks | assertions | passed-tasks | verified).
+With --measures (learner loop and fast channel only; DV5a integration, so
+the default document the chapters quote is unchanged), --json adds two
+measurements (R05.P3dv, R05.H1py): `resource_count`, the run's total solver resource count (Dafny:
+the tasks' ResourceCount sum from the CSV log; Verus: the per-function
+rlimit sum of the --time breakdown; null when the run left none, as a Verus
+run that met a hole, and for Python), and `wall_s`, the wall-clock seconds
+vcheck spent on the target. The gate's record carries neither (an instrument
+document fvh hashes, Δ161).
+A specimen whose prediction slots have no recorded first try is refused:
+running it would print the answer (spec §3.8.4 H5). So is a specimen that
+waits for a prediction: a card demo carrying `// after: <item id>` runs only
+once that item's first try is recorded (vaudit and --test refuse it too).
+
+Exit: 0 verified · 1 not verified (failed, inconclusive, killed(memory),
+error) · 2 usage · 3 refused (unknown or planned module, missing file, a
+refused option or target, a missing pinned toolchain).
+
+Environment: DVL_SCRATCH, DVL_DAFNY_JOBS, DVL_VERUS_JOBS (dvl.common).
+
+This file is also the tools' shared core: scripts/vaudit, scripts/specfreeze,
+scripts/firsttry.py, scripts/pins.py and scripts/reference_lint.py load it
+(load_core below) for the registry, target resolution, the author self-gate,
+scratch shadow trees, calibration records and output formatting.
+"""
+
+from __future__ import annotations
+
+import argparse
+import contextlib
+import dataclasses
+import hashlib
+import io
+import json
+import os
+import re
+import shutil
+import statistics
+import subprocess
+import sys
+import time
+import tomllib
+from dataclasses import dataclass
+from datetime import date
+from pathlib import Path
+
+sys.dont_write_bytecode = True   # importing the shared modules leaves no scripts/__pycache__
+SCRIPTS = Path(__file__).resolve().parent
+REPO = SCRIPTS.parent
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+import course_items as ci  # noqa: E402  (the ONE item parser, Δ71)
+import check_course_map as ccm  # noqa: E402  (registry, --resolve, module items)
+import gen_units as gu  # noqa: E402  (layers, unit options)
+from dvl import common  # noqa: E402
+from dvl import dafny as D  # noqa: E402
+from dvl import verus as V  # noqa: E402
+from dvl import python as PY  # noqa: E402  (DV4: the learner Python files)
+from dvl import levers as LEV  # noqa: E402  (the lab gate's lever check, QPLAN §30 Q63)
+from dvl import labcode as LC  # noqa: E402  (the lab gate's code check on a Lab 2 card, D27)
+
+EXIT_OK, EXIT_FAIL, EXIT_USAGE, EXIT_REFUSED = 0, 1, 2, 3
+LANGS = ("d", "v")
+LANG_NAMES = {"d": "Dafny", "v": "Verus", "py": "Python"}
+POOL = {"d": "dafny", "v": "verus", "py": "python"}
+# Python (DV4, QPLAN §11.8): a learner .py file is a target of its own, never a
+# unit; `<ID> py` names a module's harness files. LANGS stays the verifiers'.
+MODULE_LANGS = LANGS + ("py",)
+REF_DIR = "Solutions"          # the reference tree (author tooling only)
+ID_RE = re.compile(r"[QRqr]\d\d")
+UNVERIFIED = ("failed", "inconclusive", "killed(memory)", "error")
+
+
+# =====================================================================================
+# Errors and small helpers
+# =====================================================================================
+
+class Refusal(Exception):
+    """Exit 3: unknown or planned module, missing file, refused target or option."""
+
+
+class Usage(Exception):
+    """Exit 2: a malformed command line."""
+
+
+def lib(lang):
+    """The dvl library of a language: dvl.dafny for 'd', dvl.verus for 'v',
+    dvl.python for 'py'."""
+    return D if lang == "d" else PY if lang == "py" else V
+
+
+def lang_of(path):
+    """'d' or 'v' for a Dafny or Verus target (file, project, unit or crate dir)."""
+    p = Path(path)
+    if p.is_dir():
+        if (p / "dfyconfig.toml").is_file():
+            return "d"
+        if (p / "Cargo.toml").is_file():
+            return "v"
+        return None
+    name = p.name
+    if name.endswith((".dfy", ".dfy.specimen")) or name == "dfyconfig.toml":
+        return "d"
+    if name.endswith((".rs", ".rs.specimen")) or name == "Cargo.toml":
+        return "v"
+    return None
+
+
+def show(path, root=None):
+    """A path for printing: relative to the root (else the cwd) when inside it."""
+    if not path:
+        return "(no file)"
+    p = Path(path)
+    for base in (root or REPO, Path.cwd()):
+        try:
+            return p.resolve().relative_to(Path(base).resolve()).as_posix()
+        except (ValueError, OSError):
+            continue
+    return str(path)
+
+
+def rel_to(path, root):
+    """Repo-relative POSIX path, or None when outside the root."""
+    try:
+        return Path(path).resolve().relative_to(Path(root).resolve()).as_posix()
+    except (ValueError, OSError):
+        return None
+
+
+def is_reference_path(path, root):
+    """True for a path into the reference tree, the written-track solutions,
+    leak patterns or held-out material (the checker's is_reference test, on the
+    repo-relative path, and on the absolute path for a path outside the root)."""
+    rel = rel_to(path, root)
+    if rel is not None:
+        return ccm.is_reference(rel)
+    return ccm.is_reference(Path(path).resolve().as_posix().lstrip("/"))
+
+
+def today():
+    return date.today().isoformat()
+
+
+def tool_pins(lang):
+    return common.load_pins()[POOL[lang]]
+
+
+# =====================================================================================
+# The author self-gate (spec §7.4: CI=true, or the three-condition test)
+# =====================================================================================
+
+def learner_prefix(root):
+    """The learner branch prefix, read from scripts/course_mode.sh (one source)."""
+    try:
+        text = (Path(root) / "scripts" / "course_mode.sh").read_text(encoding="utf-8")
+    except OSError:
+        text = (SCRIPTS / "course_mode.sh").read_text(encoding="utf-8")
+    m = re.search(r"^LEARNER_PREFIX=['\"]?([A-Za-z0-9_.-]+)", text, re.M)
+    return m.group(1) if m else "leobwang-"
+
+
+def author_gate(root):
+    """None when an author-only script may run here, else the reason it may
+    not: CI=true, or (a) inside a git checkout, (b) a linked worktree, (c)
+    HEAD not on a learner branch. A self-check, not a guard: the hook also
+    refuses any command that names these scripts in study mode."""
+    if os.environ.get("CI") == "true":
+        return None
+
+    def git(*args):
+        try:
+            p = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True,
+                               timeout=30)
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+        return p.stdout.strip() if p.returncode == 0 else None
+
+    gd = git("rev-parse", "--path-format=absolute", "--git-dir")
+    cd = git("rev-parse", "--path-format=absolute", "--git-common-dir")
+    if gd is None or cd is None:
+        return "not inside a git checkout"
+    if gd == cd:
+        return "this is the primary worktree"
+    branch = git("symbolic-ref", "--short", "-q", "HEAD")
+    if branch and branch.startswith(learner_prefix(root)):
+        return "HEAD is on a learner branch"
+    return None
+
+
+def require_author(root, tool):
+    why = author_gate(root)
+    if why:
+        raise Refusal(f"{tool} is author-only and refuses to run here ({why}); it runs under "
+                      "scripts/ci.sh (CI=true) or in the course author's worktree (spec §7.4)")
+
+
+# =====================================================================================
+# The registry
+# =====================================================================================
+
+REGISTRY_HINT = "run python3 scripts/check_course_map.py to see why"
+
+
+def record(root, mid, allow_planned=False):
+    """The module record (check_course_map --resolve). Refusal (exit 3, the
+    Δ14 map) for an unknown id, a missing or unusable MODULES.toml (with the
+    checker's own message) or, unless allowed, a planned module."""
+    said = io.StringIO()
+    with contextlib.redirect_stderr(said):
+        rec, code = ccm.find_record(Path(root), mid)
+    if rec is None:
+        if code == 3:
+            raise Refusal(f"unknown module id {mid!r}")
+        why = "; ".join(x.strip() for x in said.getvalue().splitlines() if x.strip())
+        raise Refusal(f"the module registry is unusable: {why or f'check_course_map exit {code}'}"
+                      f" ({REGISTRY_HINT})")
+    if rec["status"] == "planned" and not allow_planned:
+        raise Refusal(f"{rec['id']} is planned (not authored yet): it has no units, items or "
+                      "slots to check")
+    return rec
+
+
+def module_items(root, rec):
+    """(items, errors) of a module through check_course_map (the one parser)."""
+    return ccm.module_items(Path(root), rec)
+
+
+def registry(root):
+    """The parsed MODULES.toml; Refusal (exit 3) when it is missing or unusable."""
+    data, err = ccm.load_registry(Path(root))
+    if err:
+        raise Refusal(f"the module registry is unusable: {err} ({REGISTRY_HINT})")
+    return data
+
+
+def nonplanned(root, track=None):
+    """Ids of every non-planned module (Q then R), optionally one track."""
+    data = registry(root)
+    out = []
+    for m in data.get("module", []):
+        if isinstance(m, dict) and isinstance(m.get("id"), str) and \
+                m.get("status") != "planned" and (track is None or m["id"][0] == track):
+            out.append(m["id"])
+    return out
+
+
+def armed_or_none(root):
+    """(non-planned ids, None), or ([], the loud pass line) when the registry
+    lists modules and every one is planned: an author tool over "every armed
+    module" then has nothing to check and says so (it passes). A registry
+    that lists no module at all is a Refusal: an empty set fails."""
+    data = registry(root)
+    mods = [m for m in data.get("module", []) if isinstance(m, dict)]
+    if not mods:
+        raise Refusal("the module registry lists no module (an empty set fails)")
+    mids = nonplanned(root)
+    if mids:
+        return mids, None
+    return [], (f"no armed module: nothing to check (all {len(mods)} module(s) in "
+                "MODULES.toml are planned)")
+
+
+def module_files(rec, keys=("exercises", "exits", "agentic")):
+    """The record's file paths (directory entries kept as given, with '/')."""
+    return [p for k in keys for p in rec[k]]
+
+
+def expand_files(root, rels, exts=(".dfy", ".rs", ".py", ".dfy.specimen", ".rs.specimen")):
+    """Repo-relative files: each listed file, and the files under a listed dir."""
+    out = []
+    for p in rels:
+        if p.endswith("/"):
+            d = Path(root) / p
+            if d.is_dir():
+                out += sorted(x.relative_to(root).as_posix() for x in d.rglob("*")
+                              if x.is_file() and x.name.endswith(exts))
+        elif p.endswith(exts):
+            out.append(p)
+    return list(dict.fromkeys(out))
+
+
+def slot_file(root, mid):
+    """('slots/<ID>.slots', table) or None; parse errors raise RuntimeError."""
+    rel = f"slots/{mid}.slots"
+    p = Path(root) / rel
+    if not p.is_file():
+        return None
+    table, errs = ci.parse_slot_file(rel, p.read_text(encoding="utf-8"))
+    if errs:
+        raise RuntimeError("; ".join(errs))
+    return rel, table
+
+
+# =====================================================================================
+# The files as shipped: their version at the shipped reference (the user's D26):
+# the newest merge base of HEAD with the shipped branches basic / challenge
+# (local or origin/), or, while neither exists, with main / origin/main
+# =====================================================================================
+
+LEARNER_EXTS = (".dfy", ".rs", ".py", ".dfy.specimen", ".rs.specimen")
+_BASE = {}
+# The shipped branches (D26): the learner forks leobwang-<name> from basic,
+# and the challenges ship on challenge (branched from basic, fixes merged
+# forward at once). Full ref names, so a tag or a path of the same name is
+# never taken for one.
+SHIPPED_REFS = ("refs/heads/basic", "refs/heads/challenge",
+                "refs/remotes/origin/basic", "refs/remotes/origin/challenge")
+# The fallback while none of SHIPPED_REFS exists (the behaviour before D26).
+FALLBACK_REFS = ("main", "origin/main")
+
+
+def git_out(root, *args):
+    """stdout of `git -C root …`, or None when git fails."""
+    try:
+        r = subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True,
+                           timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    return r.stdout if r.returncode == 0 else None
+
+
+def _is_ancestor(root, a, b):
+    return git_out(root, "merge-base", "--is-ancestor", a, b) is not None
+
+
+def newest_merge_base(root, refs):
+    """The newest merge base of HEAD with the refs of `refs` that exist and
+    share history with HEAD, or None. Newest: the base every other base is
+    an ancestor of. Bases none of which contains another (HEAD merged a fix
+    on basic that challenge has not taken yet, and challenge too) have no
+    order in history: the one with the latest committer time wins, a tie
+    going to the ref listed last (so challenge over basic, origin/ over
+    local)."""
+    bases = []
+    for ref in refs:
+        if git_out(root, "rev-parse", "--verify", "-q", f"{ref}^{{commit}}") is None:
+            continue
+        mb = git_out(root, "merge-base", "HEAD", ref)
+        if mb and mb.strip() and mb.strip() not in bases:
+            bases.append(mb.strip())
+    tops = [b for b in bases if not any(c != b and _is_ancestor(root, b, c) for c in bases)]
+    if len(tops) <= 1:
+        return tops[0] if tops else None
+
+    def when(b):
+        t = git_out(root, "show", "-s", "--format=%ct", b)
+        return int(t.strip()) if t and t.strip().isdigit() else 0
+    return max(enumerate(tops), key=lambda ib: (when(ib[1]), ib[0]))[1]
+
+
+def fallback_base(root):
+    """The merge base of HEAD with main (or origin/main, the newer one), or
+    None: the shipped reference before D26, unchanged."""
+    bases = []
+    for ref in FALLBACK_REFS:
+        mb = git_out(root, "merge-base", "HEAD", ref)
+        if mb and mb.strip():
+            bases.append(mb.strip())
+    best = bases[0] if bases else None
+    for b in bases[1:]:
+        if b != best and _is_ancestor(root, best, b):
+            best = b
+    return best
+
+
+def shipped_base(root):
+    """The shipped reference (D26): the newest merge base of HEAD with
+    basic, challenge, origin/basic and origin/challenge, those that exist.
+    While none of them exists (or none shares history with HEAD), the merge
+    base with main / origin/main, exactly as before D26. None without either."""
+    key = str(Path(root).resolve())
+    if key in _BASE:
+        return _BASE[key]
+    best = newest_merge_base(root, SHIPPED_REFS)
+    if best is None:
+        best = fallback_base(root)
+    _BASE[key] = best
+    return best
+
+
+def shipped_text(root, rel):
+    """`rel` at the shipped baseline, or None (no base, or not on it yet)."""
+    base = shipped_base(root)
+    if base is None:
+        return None
+    return git_out(root, "show", f"{base}:./{rel}")
+
+
+def shipped_files(root, rels, exts=LEARNER_EXTS):
+    """The repo-relative files the registry entries `rels` cover at the
+    shipped baseline (git ls-tree of the merge base), filtered as
+    expand_files filters the working tree: a listed file, and the files under
+    a listed directory. [] when there is no baseline."""
+    base = shipped_base(root)
+    if base is None or not rels:
+        return []
+    out = git_out(root, "ls-tree", "-r", "--name-only", "-z", base, "--",
+                  *[p.rstrip("/") or "." for p in rels])
+    if out is None:
+        return []
+    names = [x for x in out.split("\0") if x]
+    got = []
+    for p in rels:
+        if p.endswith("/"):
+            got += sorted(n for n in names if n.startswith(p) and n.endswith(exts))
+        elif p.endswith(exts) and p in names:
+            got.append(p)
+    return list(dict.fromkeys(got))
+
+
+def gone_files(root, rels, exts=LEARNER_EXTS):
+    """Files the registry entries covered as shipped that the working tree no
+    longer holds (a deleted exercise, specimen or exit file)."""
+    return [r for r in shipped_files(root, rels, exts) if not (Path(root) / r).is_file()]
+
+
+def shipped_slot_items(root, mid, rels):
+    """{item id: (item, file text)} of the items the files `rels` held as
+    shipped (parsed with the slot file as shipped, so verdict items carry
+    their slot). {} without a baseline."""
+    slot_rel = f"slots/{mid}.slots"
+    stext = shipped_text(root, slot_rel)
+    slot_file = None
+    if stext is not None:
+        table, _ = ci.parse_slot_file(slot_rel, stext)
+        slot_file = (slot_rel, table)
+    out = {}
+    for rel in rels:
+        text = shipped_text(root, rel)
+        if text is None:
+            continue
+        items, _ = ci.parse_items(rel, text, slot_file)
+        out.update({it["id"]: (it, text) for it in items})
+    return out
+
+
+# =====================================================================================
+# Calibration records (instructor/calib/<ID>.tsv; CORE.md §State files)
+# =====================================================================================
+
+def calib_path(root, mid):
+    return Path(root) / "instructor" / "calib" / f"{mid}.tsv"
+
+
+def read_calib(root, mid):
+    """item id -> its FIRST record {item, kind, verdict, date, hash}."""
+    first, p = {}, calib_path(root, mid)
+    if p.is_file():
+        for line in p.read_text(encoding="utf-8").splitlines():
+            if not line.strip() or line.startswith("#"):
+                continue
+            f = line.split("\t")
+            if len(f) >= 5:
+                first.setdefault(f[0], {"item": f[0], "kind": f[1], "verdict": f[2],
+                                        "date": f[3], "hash": f[4]})
+    return first
+
+
+def append_calib(root, mid, rows):
+    """Append rows [item, kind, verdict, date, hash]; never rewrites a line."""
+    if not rows:
+        return
+    p = calib_path(root, mid)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with p.open("a", encoding="utf-8") as fh:
+        for r in rows:
+            fh.write("\t".join(r) + "\n")
+
+
+# =====================================================================================
+# Scratch shadow trees
+# =====================================================================================
+
+# What a shadow tree links to the real checkout (read-only context): the
+# registry and options (dvl.dafny's course_root and unit options), the given
+# layers (a module file's chain), the slot and expected files.
+SHADOW_LINKS = ("MODULES.toml", "dafny/options", "dafny/given", "verus/given", "slots",
+                "expected")
+
+
+def shadow_tree(root, copies, tag, base=None):
+    """A scratch directory that mirrors the course layout: SHADOW_LINKS are
+    symlinks into `root`, and each repo-relative path in `copies` is a real
+    copy (a directory is copied whole, build outputs excluded). `base` maps a
+    copied path's source root (default `root`), so a reference twin can be
+    copied to its learner path. Edits go to the copies only; the caller
+    deletes the tree (remove_tree) when done, so no answer text stays in
+    scratch."""
+    root = Path(root)
+    s = common.scratch_dir(f"shadow-{tag}")
+    for rel in SHADOW_LINKS:
+        src = root / rel
+        if src.exists():
+            dst = s / rel
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.symlink_to(src.resolve(), target_is_directory=src.is_dir())
+    for item in copies:
+        rel, src = (item, root / item) if isinstance(item, str) else (item[0], Path(item[1]))
+        if any(rel == lk or rel.startswith(lk + "/") for lk in SHADOW_LINKS):
+            raise ValueError(f"shadow_tree: {rel} lies under a linked directory")
+        dst = s / rel
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        if Path(src).is_dir():
+            shutil.copytree(src, dst, symlinks=False,
+                            ignore=shutil.ignore_patterns("target", "*-py", "__pycache__",
+                                                          ".verus-log"))
+        else:
+            shutil.copyfile(src, dst)
+    return s
+
+
+def remove_tree(path):
+    if path is not None:
+        shutil.rmtree(path, ignore_errors=True)
+
+
+# =====================================================================================
+# Statement tables (the freeze and the twin comparison share them)
+# =====================================================================================
+
+# Open frames (QPLAN §6 Q22). A Dafny frame annotation hole (Q05.H2d) ships a
+# method whose `modifies` clause and frame postcondition the learner adds, so
+# the plain statement hash would report a correct answer as freeze-changed. For
+# a symbol the pin lists under `open_frames`, the statement splits into a CORE
+# (the signature and every clause but modifies and ensures, in order; a
+# definition's body too) compared exactly, and the ordered `ensures` clauses,
+# of which every shipped one must still be there, verbatim and in order; added
+# `modifies` and `ensures` clauses are accepted.
+FRAME_CLAUSES = ("modifies", "ensures")
+
+
+def dafny_frame_parts(src, d):
+    """(core token list, [ensures clause token strings]) of a Dafny declaration
+    (attributes but a clause's triggers and a leading `opaque` dropped, as in
+    the statement hash)."""
+    skip = D.statement_attr_skip(d)
+    starts = sorted(k for _, k in d.clauses if d.start <= k < d.header_end)
+    core, ensures = [], []
+    cur_kw, cur = None, []
+
+    def flush():
+        if cur_kw == "ensures":
+            ensures.append(" ".join(cur))
+        elif cur_kw not in FRAME_CLAUSES:
+            core.extend(cur)
+    for k in range(d.start, d.header_end):
+        if k in starts:
+            flush()
+            cur_kw, cur = src.toks[k].text, []
+        if k in skip or (src.toks[k].text == "opaque" and k < d.kw):
+            continue
+        cur.append(src.toks[k].text)
+    flush()
+    if d.kind in D.DEFINITION_KINDS and d.body:
+        core += [src.toks[k].text for k in range(d.body[0], d.body[1] + 1)]
+    return core, ensures
+
+
+def _sha(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def frame_ensures(path, text=None, symbols=None):
+    """{symbol: [sha256 of each ensures clause, in order]} of a Dafny file's
+    method-like declarations (only `symbols` when given). Static."""
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    src = D.parse_source(text, str(path))
+    out = {}
+    for d in src.decls:
+        if d.kind in D.METHODLIKE and (symbols is None or d.qual in symbols):
+            out.setdefault(d.qual, [_sha(c) for c in dafny_frame_parts(src, d)[1]])
+    return out
+
+
+def _dafny_statements(path, text, open_bodies, open_frames=(), open_specs=()):
+    src = D.parse_source(text, str(path))
+    hashes = D.spec_hash_source(text, str(path))
+    lines, bodyless = {}, []
+    for d in src.decls:
+        if d.qual not in hashes:
+            continue
+        lines.setdefault(d.qual, d.line)
+        if d.kind in D.DEFINITION_KINDS and d.body is None:
+            bodyless.append(d.qual)
+        if d.qual in open_bodies and d.kind in D.DEFINITION_KINDS:
+            toks = D._spec_tokens(src, dataclasses.replace(d, body=None))
+            hashes[d.qual] = hashlib.sha256(
+                (d.kind + "\0" + " ".join(toks)).encode("utf-8")).hexdigest()
+        if d.qual in open_frames and d.kind in D.METHODLIKE:
+            dd = dataclasses.replace(d, body=None) if d.qual in open_bodies else d
+            core, _ = dafny_frame_parts(src, dd)
+            hashes[d.qual] = _sha(d.kind + "\0frames\0" + " ".join(core))
+        elif d.qual in open_specs and d.kind in D.METHODLIKE:
+            dd = dataclasses.replace(d, body=None) if d.qual in open_bodies else d
+            core, _ = dafny_spec_parts(src, dd)
+            hashes[d.qual] = _sha(d.kind + "\0specs\0" + " ".join(core))
+    return hashes, lines, bodyless
+
+
+# The qualifiers of a Verus spec fn that only say whether (and how far) its
+# body is visible: an open-body symbol is compared without them, since a
+# shipped `uninterp spec fn …;` is filled as `open spec fn … { … }` (or
+# `closed`), which states nothing new (QPLAN §6 Q7).
+BODY_VISIBILITY = ("uninterp", "open", "closed")
+
+
+def _body_free_statement(vs, src, it):
+    """The statement of a spec fn without its body and without the
+    body-visibility qualifiers before `fn` (BODY_VISIBILITY)."""
+    text = vs.statement_text(src, dataclasses.replace(it, body=None))
+    parts = text.split("\n")
+    for k, part in enumerate(parts):
+        if part.startswith("#["):
+            continue
+        toks = part.split(" ")
+        cut = toks.index("fn") if "fn" in toks else len(toks)
+        parts[k] = " ".join([x for x in toks[:cut] if x not in BODY_VISIBILITY] + toks[cut:])
+        break
+    return "\n".join(parts)
+
+
+def _verus_statements(text, open_bodies, open_specs=()):
+    vs = V.vs
+    src = vs.parse(text)
+    hashes, lines, bodyless = {}, {}, []
+    by_head = {}
+    for it in src.walk():
+        if it.kind == "fn" and it.in_verus:
+            by_head.setdefault(src.line_of(it.head), it)
+    for sym, digest, line, kind in vs.statements(src):
+        hashes[sym], lines[sym] = digest, line
+        it = by_head.get(line)
+        if it is not None and it.mode == "spec" and (not it.body or "uninterp" in it.quals):
+            bodyless.append(sym)
+        if sym in open_bodies and it is not None and it.mode == "spec":
+            hashes[sym] = hashlib.sha256(
+                _body_free_statement(vs, src, it).encode("utf-8")).hexdigest()
+        if sym in open_specs and it is not None and kind == "fn":
+            core, _ = verus_spec_parts(src, it, open_body=sym in open_bodies)
+            hashes[sym] = _sha("fn\0specs\0" + core)
+    return hashes, lines, bodyless
+
+
+def statement_table(path, lang, open_bodies=(), text=None, open_frames=(), open_specs=()):
+    """({symbol: sha256}, {symbol: line}, [bodyless definitions]) of a Dafny
+    or Verus file (dvl.dafny/dvl.verus statement hashes: signature and clauses,
+    token-normalized, a definition's body included). A symbol in open_bodies
+    is hashed without its body and, in Verus, without `uninterp`: a function
+    hole shipped bodyless is compared by its header only. A Dafny symbol in
+    open_frames is hashed by its frame core only (dafny_frame_parts; its
+    ensures clauses come from frame_ensures). A symbol in open_specs (Dafny
+    or Verus; QPLAN §6 Q44) is hashed by its spec core only (spec_parts: the
+    signature and every clause but requires and ensures; its requires and
+    ensures clauses come from spec_clauses). Static."""
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    if lang == "d":
+        return _dafny_statements(path, text, set(open_bodies), set(open_frames),
+                                 set(open_specs))
+    return _verus_statements(text, set(open_bodies), set(open_specs))
+
+
+# Open specs (QPLAN §6 Q44). A statement hole is completed by ADDING clauses:
+# Q07.H7v's port ships with no `ensures`, Q08.T1v's and H3v's trait methods
+# ship with no specification. For a symbol the freeze pin lists under
+# `open_specs`, the statement splits into a CORE (attributes kept by the
+# statement hash, the signature, every clause but requires and ensures in
+# order, a definition's body) compared exactly, and the ordered requires and
+# ensures clauses (Verus: each comma-separated expression of the clause), of
+# which every shipped one must still be there, verbatim and in order; added
+# requires and ensures clauses are accepted. The pin takes the open specs from
+# the twins: a declaration whose twin statement differs from the shipped one by
+# added requires and ensures clauses only (open_spec_symbols).
+SPEC_CLAUSES = ("requires", "ensures")
+
+
+def dafny_spec_parts(src, d):
+    """(core token list, {"requires": [clause strings], "ensures": [...]}) of a
+    Dafny declaration (attributes but a clause's triggers and a leading `opaque`
+    dropped, as in the statement hash; a definition's body is part of the
+    core)."""
+    skip = D.statement_attr_skip(d)
+    starts = sorted(k for _, k in d.clauses if d.start <= k < d.header_end)
+    core, clauses = [], {kw: [] for kw in SPEC_CLAUSES}
+    cur_kw, cur = None, []
+
+    def flush():
+        if cur_kw in SPEC_CLAUSES:
+            clauses[cur_kw].append(" ".join(cur))
+        else:
+            core.extend(cur)
+    for k in range(d.start, d.header_end):
+        if k in starts:
+            flush()
+            cur_kw, cur = src.toks[k].text, []
+        if k in skip or (src.toks[k].text == "opaque" and k < d.kw):
+            continue
+        cur.append(src.toks[k].text)
+    flush()
+    if d.kind in D.DEFINITION_KINDS and d.body:
+        core += [src.toks[k].text for k in range(d.body[0], d.body[1] + 1)]
+    if d.kind == "const" and core and core[-1] == ";":
+        core.pop()
+    return core, clauses
+
+
+QUANT_PIPES = {"forall", "exists", "choose", "map", "set", "move", "(", ",", "=", "&&", "||",
+               "==>", "&&&", "|||", "<==>", "{", "["}
+
+
+def _verus_clause_exprs(src, a, b):
+    """The normalized comma-separated expressions of a clause's tokens [a, b):
+    commas inside brackets or between the pipes of a quantifier's or a
+    closure's parameter list (`forall|i: int, j: int| …`) do not split."""
+    t = src.toks
+    out, cur, i = [], [], a
+    while i < b:
+        x = t[i]
+        if x.kind == "punct" and x.text in V.vs.OPEN:
+            j = src.pairs.get(i, i)
+            cur.extend(t[i:j + 1])
+            i = j + 1
+            continue
+        if x.kind == "punct" and x.text == "|" and (not cur or cur[-1].text in QUANT_PIPES):
+            j = i + 1
+            while j < b and not (t[j].kind == "punct" and t[j].text == "|"):
+                j = src.pairs.get(j, j) + 1 if t[j].kind == "punct" and \
+                    t[j].text in V.vs.OPEN else j + 1
+            cur.extend(t[i:min(j + 1, b)])
+            i = j + 1
+            continue
+        if x.kind == "punct" and x.text == ",":
+            if cur:
+                out.append(V.vs._norm(cur))
+            cur = []
+            i += 1
+            continue
+        cur.append(x)
+        i += 1
+    if cur:
+        out.append(V.vs._norm(cur))
+    return out
+
+
+def verus_spec_parts(src, it, open_body=False):
+    """(core text, {"requires": [expression strings], "ensures": [...]}) of a
+    Verus fn (the statement hash's kept attributes, its signature, every other
+    clause and a spec fn's body; open_body drops the body and the
+    body-visibility qualifiers, as for an open-body symbol)."""
+    vs, t = V.vs, src.toks
+    parts = []
+    for a in it.attrs:
+        if not vs.HASH_DROPPED_ATTRS.search(vs.attr_text(src, a)):
+            parts.append("#[" + vs.attr_text(src, a) + "]")
+    sig_end = it.clauses[0][1] - 1 if it.clauses else (it.body[0] if it.body else it.end)
+    sig = list(t[it.head:sig_end])
+    while sig and sig[-1].kind == "punct" and sig[-1].text == ";":
+        sig.pop()
+    sig_text = vs._norm(sig)
+    if open_body:
+        words = sig_text.split(" ")
+        cut = words.index("fn") if "fn" in words else len(words)
+        sig_text = " ".join([w for w in words[:cut] if w not in BODY_VISIBILITY] + words[cut:])
+    parts.append(sig_text)
+    clauses = {kw: [] for kw in SPEC_CLAUSES}
+    for kw, a, b in it.clauses:
+        if kw in SPEC_CLAUSES:
+            clauses[kw] += _verus_clause_exprs(src, a, b)
+        else:
+            parts.append(kw + " " + vs._norm(t[a:b]))
+    if it.mode == "spec" and it.body and not open_body:
+        parts.append(vs._norm(t[it.body[0]:it.body[1] + 1]))
+    return "\n".join(parts), clauses
+
+
+def spec_parts(path, lang, text=None, symbols=None, open_bodies=()):
+    """{symbol: (core sha256, {"requires": [sha256 …], "ensures": [sha256 …]})}
+    of a Dafny or Verus file's method-like declarations (Verus: fns), only
+    `symbols` when given; the core hash is the one statement_table gives an
+    open-spec symbol. Static."""
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    out = {}
+    if lang == "d":
+        src = D.parse_source(text, str(path))
+        for d in src.decls:
+            if d.kind not in D.METHODLIKE or (symbols is not None and d.qual not in symbols):
+                continue
+            dd = dataclasses.replace(d, body=None) if d.qual in open_bodies else d
+            core, cl = dafny_spec_parts(src, dd)
+            out.setdefault(d.qual, (_sha(d.kind + "\0specs\0" + " ".join(core)),
+                                    {k: [_sha(c) for c in v] for k, v in cl.items()}))
+        return out
+    vs = V.vs
+    src = vs.parse(text)
+    by_head = {}
+    for it in src.walk():
+        if it.kind == "fn" and it.in_verus:
+            by_head.setdefault(src.line_of(it.head), it)
+    for sym, _, line, kind in vs.statements(src):
+        it = by_head.get(line)
+        if kind != "fn" or it is None or (symbols is not None and sym not in symbols):
+            continue
+        core, cl = verus_spec_parts(src, it, open_body=sym in open_bodies)
+        out[sym] = (_sha("fn\0specs\0" + core), {k: [_sha(c) for c in v] for k, v in cl.items()})
+    return out
+
+
+def spec_clauses_kept(shipped, now):
+    """True when every shipped requires and ensures clause hash is still in
+    `now`, in order ({"requires": [...], "ensures": [...]} each)."""
+    return all(is_subsequence(shipped.get(k, []), now.get(k, [])) for k in SPEC_CLAUSES)
+
+
+def measure_free_text(text, lang, path="<text>"):
+    """A Dafny or Verus source with its added measures blanked (the header
+    `decreases` clauses, but Dafny's `decreases *` and a Verus clause with
+    `when` or `via`; dvl.dafny/dvl.verus_spec measure_free_text). A statement
+    that differs from its pin or twin is compared a second time on this text:
+    a `decreases` added to a declaration that shipped without one is part of
+    the proof, not of the statement, and a shipped one stays frozen. Other
+    languages unchanged. Static."""
+    if lang == "d":
+        return D.measure_free_text(text, str(path))
+    if lang == "v":
+        return V.vs.measure_free_text(text)
+    return text
+
+
+def open_spec_symbols(lpath, lang, ltext=None, ttext=None, tpath=None, exclude=()):
+    """The symbols of a learner file whose reference twin's statement differs
+    from the shipped one by added requires and ensures clauses only (the same
+    spec core, each shipped clause list a subsequence of the twin's; an added
+    measure, measure_free_text, is no difference): the open_specs of a freeze
+    pin (QPLAN §6 Q44). `exclude`: symbols compared another way (open bodies,
+    open frames). Static."""
+    ltext = Path(lpath).read_text(encoding="utf-8") if ltext is None else ltext
+    ttext = Path(tpath).read_text(encoding="utf-8") if ttext is None else ttext
+    mtext = measure_free_text(ttext, lang, tpath or lpath)
+    lh, _, lbodyless = statement_table(lpath, lang, text=ltext)
+    lh, _, _ = statement_table(lpath, lang, set(lbodyless), text=ltext)
+    th, _, _ = statement_table(tpath or lpath, lang, set(lbodyless), text=ttext)
+    tm, _, _ = statement_table(tpath or lpath, lang, set(lbodyless), text=mtext)
+    cands = {s for s in set(lh) & set(th) if lh[s] != th[s] and lh[s] != tm.get(s)
+             and s not in set(exclude)}
+    if not cands:
+        return []
+    lp = spec_parts(lpath, lang, text=ltext, symbols=cands, open_bodies=set(lbodyless))
+    # the twin's core as written (a shipped `decreases` kept: the learner's core holds it
+    # too) and with its measures blanked (a measure the twin adds); either may match
+    tps = [spec_parts(tpath or lpath, lang, text=t, symbols=cands, open_bodies=set(lbodyless))
+           for t in (ttext, mtext)]
+    out = []
+    for s in sorted(cands):
+        if s in lp and any(s in tp and lp[s][0] == tp[s][0] and
+                           spec_clauses_kept(lp[s][1], tp[s][1]) for tp in tps):
+            out.append(s)
+    return out
+
+
+def open_body_symbols(lpath, lang, ltext=None, ttext=None, tpath=None):
+    """Dafny (QPLAN §30 Q52): the functions and predicates a learner file ships
+    WITH a body (a placeholder, such as Q11.H7d's `true`) whose reference twin
+    states the same declaration with another body: the same statement once the
+    body is dropped (an added measure, measure_free_text, is no difference),
+    a different one with it. They join the bodyless definitions under a freeze
+    pin's `open_bodies`: the signature and the requires, reads and decreases
+    clauses are compared exactly, the body is the learner's. Verus needs no
+    such rule (its definition holes ship as `uninterp spec fn`, already open,
+    QPLAN §6 Q7). Static; [] for another language or without a twin."""
+    if lang != "d" or tpath is None or not Path(tpath).is_file():
+        return []
+    ltext = Path(lpath).read_text(encoding="utf-8") if ltext is None else ltext
+    ttext = Path(tpath).read_text(encoding="utf-8") if ttext is None else ttext
+    src = D.parse_source(ltext, str(lpath))
+    defs = {d.qual for d in src.decls if d.kind in D.DEFINITION_KINDS and d.body is not None}
+    if not defs:
+        return []
+    lfull, _, _ = statement_table(lpath, lang, text=ltext)
+    tfull, _, _ = statement_table(tpath, lang, text=ttext)
+    lfree, _, _ = statement_table(lpath, lang, defs, text=ltext)
+    tfree, _, _ = statement_table(tpath, lang, defs, text=ttext)
+    tmfree, _, _ = statement_table(tpath, lang, defs,
+                                   text=measure_free_text(ttext, lang, tpath))
+    return sorted(s for s in defs if s in tfull and s in lfull and lfull[s] != tfull[s]
+                  and lfree.get(s) in (tfree.get(s), tmfree.get(s)))
+
+
+def frame_symbols(text, path="<twin>"):
+    """The Dafny method-like symbols of a reference twin whose HEADER holds a
+    learner region (a `@hole-begin` marker between the declaration's first
+    line and its body or header end): the open_frames of a freeze pin
+    (QPLAN §6 Q22). ValueError on broken markers."""
+    regions = common.hole_regions(text)
+    if not regions:
+        return []
+    src = D.parse_source(text, str(path))
+    out = []
+    for d in src.decls:
+        if d.kind not in D.METHODLIKE:
+            continue
+        last = src.toks[d.body[0]].line if d.body else src.toks[max(d.header_end - 1, 0)].line
+        if any(d.line < b < last for _, b, _ in regions) and d.qual not in out:
+            out.append(d.qual)
+    return out
+
+
+def is_subsequence(small, big):
+    """True when every element of `small` occurs in `big`, in order."""
+    it = iter(big)
+    return all(any(x == y for y in it) for x in small)
+
+
+# =====================================================================================
+# Count pins (Δ11): expected/<ID>.counts
+# =====================================================================================
+#
+# One [[unit]] table per verification unit of the module (the registry's
+# `units`), written by `vcheck --ref --pin-counts <ID>` from the reference
+# twins' gate runs:
+#   reference_verified  the twin's own count (Dafny tasks, Verus `verified`);
+#                       `vcheck --ref` fails when the twin no longer gives it
+#   symbols             the learner-declared declarations with a contract
+#                       (contract_symbols) that carry obligations in the twin
+#                       run: each must run in the learner's gate
+#   min_verified        the gate's floor, one per pinned symbol (a learner may
+#                       add helpers, and a twin's reference-only helpers or
+#                       isolated assertions count tasks a learner need not
+#                       have, so the floor is not the twin's count)
+# The learner's gate fails when a pinned symbol ran no task or the count is
+# below the floor: a deleted lemma or a deleted hole fails it, whatever else
+# verifies.
+#
+# Schema 2 (DV2a fix round; the orchestrator's Q8 decision) adds one [[file]]
+# table per Dafny and Verus file of the module that is not a specimen (its
+# exercise files in units, its given-only check files, its exit and agentic
+# files): the file's SHIPPED STATE in the learner loop, tool-counted, written
+# by the same `vcheck --ref --pin-counts <ID>` from the learner files as they
+# stand (run it on the files as shipped):
+#   role     exercise (a file of a registry unit) | check (another exercise
+#            file: a given-only check unit) | exit | agent
+#   verdict  the learner-loop verdict (verified for a green file with holes;
+#            failed for a RED agent file)
+#   holes    the tool-counted holes in the file (the number its header and
+#            the chapter state)
+#   errors   the error diagnostics located in the file (an agent file's RED
+#            state; 0 elsewhere)
+# `vcheck --shipped <ID> [d|v]` (scripts/ci.sh's verify jobs) compares the
+# files with these pins; pins.py --ci checks their structure. Schema 1 (units
+# only) is still read for the units, and pins.py --ci flags it as unpinned.
+
+COUNTS_SCHEMA = 2
+COUNTS_SCHEMAS = (1, 2)
+FILE_ROLES = ("exercise", "check", "exit", "agent", "harness")
+TEST_ATTRS = re.compile(r"^(?:test|Test|tokio::test|rstest)\b")
+
+
+def counts_path(root, mid):
+    return Path(root) / "expected" / f"{mid}.counts"
+
+
+def _load_counts(root, mid):
+    """(data or None, [problems]) of expected/<ID>.counts."""
+    p = counts_path(root, mid)
+    if not p.is_file():
+        return None, []
+    rel = f"expected/{mid}.counts"
+    try:
+        data = tomllib.loads(p.read_text(encoding="utf-8"))
+    except (tomllib.TOMLDecodeError, UnicodeDecodeError) as e:
+        return {}, [f"{rel}:0: not valid TOML ({e})"]
+    if data.get("schema") not in COUNTS_SCHEMAS or data.get("module") != mid:
+        return data, [f"{rel}:0: not a schema-{COUNTS_SCHEMA} count pin for {mid}"]
+    return data, []
+
+
+def read_file_pins(root, mid):
+    """({file path: entry}, [problems]) of the [[file]] tables of
+    expected/<ID>.counts (schema 2), or (None, problems) when there are none
+    (no file, or a schema-1 pin)."""
+    data, errs = _load_counts(root, mid)
+    if data is None or errs:
+        return None, errs
+    rel = f"expected/{mid}.counts"
+    if data.get("schema") == 1:
+        return None, []
+    files = data.get("file")
+    if not isinstance(files, list) or not files:
+        return None, [f"{rel}:0: no [[file]] table (schema 2 pins every file's shipped state)"]
+    table = {}
+    for k, f in enumerate(files, 1):
+        at = f"{rel}:0: file #{k}"
+        ok = isinstance(f, dict) and isinstance(f.get("path"), str) and f["path"] and \
+            f.get("role") in FILE_ROLES and isinstance(f.get("verdict"), str) and \
+            all(isinstance(f.get(x), int) and not isinstance(f.get(x), bool) and f[x] >= 0
+                for x in ("holes", "errors")) and \
+            set(f) <= {"path", "role", "verdict", "holes", "errors"}
+        if not ok:
+            errs.append(f"{at}: needs path, role ({' | '.join(FILE_ROLES)}), verdict, holes >= 0 "
+                        "and errors >= 0, and nothing else")
+            continue
+        if f["path"] in table:
+            errs.append(f"{at}: {f['path']} is pinned twice")
+            continue
+        table[f["path"]] = f
+    return table, errs
+
+
+def read_counts(root, mid):
+    """({unit path: entry}, [problems]) of the [[unit]] tables of
+    expected/<ID>.counts, or (None, []) when there is no such file."""
+    data, errs = _load_counts(root, mid)
+    if data is None:
+        return None, []
+    if not data:
+        return {}, errs
+    rel = f"expected/{mid}.counts"
+    table = {}
+    units = data.get("unit")
+    if not isinstance(units, list) or not units:
+        errs.append(f"{rel}:0: no [[unit]] table (an empty pin fails)")
+        units = []
+    for k, u in enumerate(units, 1):
+        at = f"{rel}:0: unit #{k}"
+        ok = isinstance(u, dict) and isinstance(u.get("path"), str) and \
+            u.get("lang") in ("dafny", "verus") and \
+            all(isinstance(u.get(x), int) and not isinstance(u.get(x), bool) and u[x] >= 1
+                for x in ("reference_verified", "min_verified")) and \
+            isinstance(u.get("symbols"), list) and u["symbols"] and \
+            all(isinstance(s, str) and s for s in u["symbols"])
+        if not ok:
+            errs.append(f"{at}: needs path, lang (dafny|verus), reference_verified >= 1, "
+                        "min_verified >= 1 and a non-empty symbols list")
+            continue
+        if u["min_verified"] > u["reference_verified"]:
+            errs.append(f"{at} ({u['path']}): min_verified exceeds reference_verified")
+        if u["path"] in table:
+            errs.append(f"{at}: {u['path']} is pinned twice")
+            continue
+        table[u["path"]] = u
+    return table, errs
+
+
+def module_pin_files(root, rec, langs=None):
+    """[(repo-relative path, role, lang)] of the files whose shipped state
+    schema 2 pins: every existing Dafny and Verus file the record lists in
+    exercises, exits and agentic, specimens excepted (role: FILE_ROLES)."""
+    out = []
+    units = [u.rstrip("/") for u in rec["units"]]
+    for key in ("exercises", "exits", "agentic"):
+        for rel in expand_files(root, rec[key], (".dfy", ".rs")):
+            lang = lang_of(rel)
+            if lang is None or not (Path(root) / rel).is_file() or (langs and lang not in langs):
+                continue
+            if key == "exits":
+                role = "exit"
+            elif key == "agentic":
+                role = "agent"
+            else:
+                role = "exercise" if any(rel.startswith(u + "/") for u in units) else "check"
+            out.append((rel, role, lang))
+    if not langs or "py" in langs:
+        for rel in rec["harness"]:
+            if (Path(root) / rel).is_file():
+                out.append((rel, "harness", "py"))
+    return list({r[0]: r for r in out}.values())
+
+
+def file_state(res, path):
+    """{verdict, holes, errors} of one file in a learner-loop Result."""
+    p = str(Path(path).resolve())
+    return {"verdict": res.verdict,
+            "holes": sum(1 for h in res.holes if h.file and str(Path(h.file).resolve()) == p),
+            "errors": sum(1 for d in res.diagnostics if d.severity == "error" and d.file and
+                          str(Path(d.file).resolve()) == p)}
+
+
+def shipped_runs(root, rec, langs=None):
+    """[(Target, Result, [(rel, role)])]: every pinned file of the module run
+    once in the learner loop: the files of a registry unit through one run of
+    the unit, every other file on its own (its module's context)."""
+    files = module_pin_files(root, rec, langs)
+    units = [u.rstrip("/") for u in rec["units"]]
+    groups = {}
+    for rel, role, lang in files:
+        # an exit or agent file inside a crate directory is never part of the
+        # crate (it is not mod-declared): it runs on its own
+        unit = next((u for u in units if rel.startswith(u + "/")), None) \
+            if role == "exercise" else None
+        key = unit or rel
+        groups.setdefault(key, (lang, []))[1].append((rel, role))
+    out = []
+    for key, (lang, members) in groups.items():
+        t = Target(lang, (Path(root) / key).resolve(), Path(root))
+        out.append((t, verify(t), members))
+    return out
+
+
+def _dafny_is_test(d):
+    return any((a.style, a.name) in (("{:", "test"), ("@", "Test")) for a in d.attrs)
+
+
+def contract_symbols(root, unit, lang):
+    """{symbol: (repo-relative file, line)} of the learner-declared
+    declarations of a unit whose statement carries a contract, so a finished
+    unit always runs a task for them: Dafny lemmas, methods, functions and
+    predicates with an ensures clause, and function or predicate definitions
+    shipped with their (frozen) body; Verus fns with an ensures clause, and
+    spec fns with a body and a decreases clause. Tests and test-only Verus
+    modules are left out. Static."""
+    d = Path(root) / unit
+    out = {}
+    if lang == "d":
+        for f in sorted(d.glob("*.dfy")):
+            src = D.parse_source(f.read_text(encoding="utf-8"), str(f))
+            for x in src.decls:
+                if x.kind not in D.METHODLIKE or _dafny_is_test(x):
+                    continue
+                definition = x.kind in ("function", "predicate") and x.body is not None
+                if x.ensures or definition:
+                    out.setdefault(x.qual, (rel_to(f, root), x.line))
+        return out
+    for f, modpath, test_only in V.crate_files(V.load_crate(d).root):
+        if test_only:
+            continue
+        try:
+            src = V.vs.parse(Path(f).read_text(encoding="utf-8"))
+        except (V.vs.ParseError, OSError, UnicodeDecodeError):
+            continue
+        for it in src.walk():
+            if it.kind != "fn" or not it.in_verus:
+                continue
+            if any(TEST_ATTRS.match(V.vs.attr_text(src, a)) for a in it.attrs):
+                continue
+            kws = {k for k, _, _ in it.clauses}
+            if "ensures" in kws or (it.mode == "spec" and it.body and "decreases" in kws):
+                sym = "::".join(filter(None, [modpath, V.vs.item_symbol(it)]))
+                out.setdefault(sym, (rel_to(f, root), src.line_of(it.head)))
+    return out
+
+
+def hole_held_symbols(root, unit, lang, holes):
+    """The declarations of a unit (symbols as contract_symbols names them)
+    whose lines hold one of the run's counted holes: a pinned symbol whose
+    declaration is still there as a hole (Q14_Term.InterleaveSpec, a bodyless
+    lemma, runs no task) is held by that hole, which already fails the gate;
+    it is not a deleted declaration (DV5c: the `pinned-symbol-missing` false
+    alarm on shipped files). Static."""
+    want = {}
+    for h in holes or ():
+        p = Path(h.file)
+        p = p if p.is_absolute() else Path(root) / p
+        try:
+            want.setdefault(p.resolve(), set()).add(h.line)
+        except OSError:
+            continue
+    if not want:
+        return set()
+    d = Path(root) / unit
+    out = set()
+
+    def hit(f, a, b):
+        try:
+            lines = want.get(Path(f).resolve(), ())
+        except OSError:
+            return False
+        return any(a <= ln <= b for ln in lines)
+    if lang in ("d", "dafny"):
+        for f in sorted(d.glob("*.dfy")):
+            try:
+                src = D.parse_source(f.read_text(encoding="utf-8"), str(f))
+            except (OSError, UnicodeDecodeError):
+                continue
+            for x in src.decls:
+                if x.kind in D.METHODLIKE and hit(f, src.toks[x.start].line, x.end_line):
+                    out.add(x.qual)
+        return out
+    for f, modpath, test_only in V.crate_files(V.load_crate(d).root):
+        if test_only:
+            continue
+        try:
+            src = V.vs.parse(Path(f).read_text(encoding="utf-8"))
+        except (V.vs.ParseError, OSError, UnicodeDecodeError):
+            continue
+        for it in src.walk():
+            if it.kind == "fn" and it.in_verus and \
+                    hit(f, src.line_of(it.start), src.line_of(max(it.start, it.end - 1))):
+                out.add("::".join(filter(None, [modpath, V.vs.item_symbol(it)])))
+    return out
+
+
+def unit_of(path, root):
+    """(module id, unit path) when `path` verifies as one registry unit (the
+    unit directory, a Dafny file of its project, a Verus file of its crate),
+    else None. A reference twin maps to its learner unit."""
+    p = Path(path).resolve()
+    if is_reference_path(p, root):
+        lp = learner_counterpart(p, root)
+        if lp is None:
+            return None
+        p = lp
+    if p.name.endswith(".specimen"):
+        return None
+    d = None
+    if p.is_dir() and ((p / "dfyconfig.toml").is_file() or (p / "Cargo.toml").is_file()):
+        d = p
+    elif p.suffix == ".dfy" and (p.parent / "dfyconfig.toml").is_file():
+        d = p.parent
+    elif p.suffix == ".rs":
+        c = _crate_dir_of(p, root)
+        if c is not None:
+            try:
+                files = [f for f, _, _ in V.crate_files(V.load_crate(c).root)]
+            except (ValueError, OSError):
+                files = []
+            if p in files:
+                d = c
+    rel = rel_to(d, root) if d is not None else None
+    if rel is None:
+        return None
+    data, err = ccm.load_registry(Path(root))
+    if err or not isinstance(data.get("module"), list):
+        return None
+    for m in data["module"]:
+        if isinstance(m, dict) and m.get("status") != "planned" and \
+                isinstance(m.get("units"), list) and rel in m["units"]:
+            return m.get("id"), rel
+    return None
+
+
+def apply_count_pin(res, path, root, reference=False):
+    """Δ11 on a gate Result for a target that verifies as a registry unit:
+    the learner gate needs every pinned symbol to have run and the count at
+    or above the pinned floor; the reference gate needs the twin to give the
+    pinned count and every pinned symbol (else the pin is stale). A missing
+    or malformed pin fails both. Adds findings (kind count-*) and turns a
+    `verified` verdict into `failed`. Runs that stopped before verification
+    are left alone."""
+    u = unit_of(path, root)
+    if u is None or res.verdict not in ("verified", "failed") or res.stage != "verify":
+        return res
+    mid, unit = u
+    table, errs = read_counts(root, mid)
+    found = []
+    pin_rel = f"expected/{mid}.counts"
+    if errs:
+        found.append(("count-pin-malformed", f"{pin_rel} is malformed: run pins.py --ci"))
+    elif table is None or unit not in table:
+        found.append(("count-pin-missing", f"{unit} has no count pin in {pin_rel} (Δ11: the "
+                      f"author writes it with vcheck --ref --pin-counts {mid})"))
+    else:
+        e = table[unit]
+        n = res.verified_count
+        ran = {k for k, v in res.per_symbol.items() if v == "verified"} if reference else \
+            set(res.per_symbol)
+        gone = [s for s in e["symbols"] if s not in ran] if res.per_symbol else []
+        if gone and not reference:
+            # a declaration still there as a counted hole is not missing (its hole
+            # fails the gate already); one deleted, renamed or emptied still is
+            held = hole_held_symbols(root, unit, res.lang, res.holes)
+            gone = [s for s in gone if s not in held]
+        if reference:
+            if n != e["reference_verified"] or gone:
+                found.append(("count-pin-stale", f"the reference gives {n} verified and "
+                              f"{len(e['symbols']) - len(gone)} of {len(e['symbols'])} pinned "
+                              f"symbol(s); {pin_rel} pins {e['reference_verified']}: re-pin "
+                              f"with vcheck --ref --pin-counts {mid}"))
+        else:
+            if res.lang == "dafny" and n is not None and n < e["min_verified"]:
+                found.append(("count-below-pin", f"{n} verified, below the unit's pinned "
+                              f"minimum {e['min_verified']} (Δ11): a declaration that must be "
+                              "proved is gone"))
+            for s in gone:
+                found.append(("pinned-symbol-missing", f"{s}: no verification task ran for this "
+                              "pinned declaration (Δ11): it was deleted, renamed or emptied"))
+    for kind, msg in found:
+        res.findings.append(common.Finding(str(res.target), 0, kind, msg))
+    if found and res.verdict == "verified":
+        res.verdict = "failed"
+    return res
+
+
+def pinned_min_verified(path, root):
+    """The Verus floor to pass to dvl.verus.verify for a unit target, or None."""
+    u = unit_of(path, root)
+    if u is None:
+        return None
+    table, errs = read_counts(root, u[0])
+    if errs or not table or u[1] not in table:
+        return None
+    return table[u[1]]["min_verified"]
+
+
+# =====================================================================================
+# Targets
+# =====================================================================================
+
+@dataclass
+class Target:
+    lang: str                  # d | v
+    path: Path                 # absolute: a unit dir, crate dir, project, file or specimen
+    root: Path                 # the course root it is shown against
+    module: dict | None = None  # the record for a module-context probe (--module ID probe)
+
+    @property
+    def label(self):
+        return show(self.path, self.root)
+
+
+def module_targets(root, rec, langs=None):
+    """The module's verification units (registry `units`), optionally one
+    language; with `py` among langs, its learner Python files (`harness`)."""
+    out = []
+    if langs and "py" in langs:
+        for rel in rec["harness"]:
+            p = Path(root) / rel
+            if not p.is_file():
+                raise Refusal(f"{rel}: a harness file of {rec['id']} does not exist")
+            out.append(Target("py", p.resolve(), Path(root)))
+    for unit in rec["units"]:
+        lang, _ = gu.unit_kind(unit)
+        if langs and lang not in langs:
+            continue
+        p = Path(root) / unit
+        if not p.is_dir():
+            raise Refusal(f"{unit}: a unit of {rec['id']} does not exist (run "
+                          "python3 scripts/gen_units.py, or write the module's files)")
+        out.append(Target(lang, p.resolve(), Path(root)))
+    if not out:
+        want = " or ".join(LANG_NAMES[x] for x in (langs or LANGS))
+        raise Refusal(f"{rec['id']} has no {want} verification unit or file (an empty list "
+                      "fails)")
+    return out
+
+
+def twin_has_sources(path):
+    """True when a reference unit or crate directory holds a source file of
+    its own (a .dfy beside its project file, a .rs under src/): a twin
+    directory that holds only a hand-written project mirror is no twin, and
+    running it would run the learner files in reference mode (Δ110)."""
+    p = Path(path)
+    if not p.is_dir():
+        return p.is_file()
+    return any(p.glob("*.dfy")) or any((p / "src").rglob("*.rs"))
+
+
+def learner_counterpart(path, root):
+    """The learner path a reference twin mirrors (<ref>/<path> → <path>), or None."""
+    rel = rel_to(path, root)
+    if rel is None or not rel.startswith(REF_DIR + "/"):
+        return None
+    return Path(root) / rel[len(REF_DIR) + 1:]
+
+
+def is_loose_dafny_dir(p):
+    """A directory of .dfy files with no project (the author's DV0 spikes)."""
+    p = Path(p)
+    return p.is_dir() and not (p / "dfyconfig.toml").is_file() and \
+        not (p / "Cargo.toml").is_file() and any(p.glob("*.dfy"))
+
+
+def path_target(root, raw, lang=None, loose_dir=False):
+    """The Target for a path. loose_dir (the reference modes only): a
+    directory of .dfy files with no dfyconfig.toml is one Dafny program."""
+    p = Path(raw)
+    if not p.is_absolute():
+        p = Path.cwd() / p
+    if not p.exists():
+        raise Refusal(f"{raw}: no such file or directory")
+    if p.is_file() and p.suffix == ".py":
+        if lang and lang != "py":
+            raise Usage(f"{raw} is a Python target, not {LANG_NAMES[lang]}")
+        return Target("py", p.resolve(), Path(root))
+    got = lang_of(p)
+    twin_of = learner_counterpart(p, root) if p.is_dir() else None
+    if got is None and p.is_dir():
+        got = lang_of(twin_of) if twin_of is not None and twin_of.is_dir() else None
+    if got is None and loose_dir and is_loose_dafny_dir(p) and \
+            (twin_of is None or not twin_of.exists()):
+        got = "d"        # a self-contained directory that mirrors no learner path
+    if got is None:
+        raise Refusal(f"{raw}: not a Dafny or Verus target (a .dfy/.rs file, a specimen, a "
+                      "unit or crate directory, or a module id)")
+    if lang and got != lang:
+        raise Usage(f"{raw} is a {LANG_NAMES[got]} target, not {LANG_NAMES[lang]}")
+    if p.name in ("dfyconfig.toml", "Cargo.toml"):
+        p = p.parent
+    return Target(got, p.resolve(), Path(root))
+
+
+def _crate_dir_of(path, root):
+    d = Path(path) if Path(path).is_dir() else Path(path).parent
+    while d != Path(root) and d != d.parent:
+        if (d / "Cargo.toml").is_file():
+            return d
+        d = d.parent
+    return None
+
+
+def twin_context(t, root):
+    """A reference twin runs where its learner file runs: (shadow dir, Target)
+    with the learner unit (Dafny: the unit's project and given layers; Verus:
+    the module crate and its layer chain) copied to scratch and the twin's
+    files laid over it. None when the twin mirrors no learner unit (then it
+    runs as it stands, like a self-contained spike). The caller deletes the
+    shadow (remove_tree) and maps locations back (twin_remap)."""
+    lp = learner_counterpart(t.path, root)
+    if lp is None:
+        return None
+    root = Path(root)
+    twin_base = root / REF_DIR
+    if t.lang == "d":
+        unit = lp if lp.is_dir() else lp.parent
+        if (unit / "dfyconfig.toml").is_file():
+            unit_rel = rel_to(unit, root)
+            s = shadow_tree(root, [unit_rel], "ref")
+            for f in sorted((twin_base / unit_rel).glob("*.dfy")):
+                shutil.copyfile(f, s / unit_rel / f.name)
+        elif unit.is_dir() and not lp.is_dir():
+            lrel = rel_to(lp, root)
+            s = shadow_tree(root, [(lrel, t.path)], "ref")
+        else:
+            return None
+    else:
+        crate = _crate_dir_of(lp if lp.exists() else lp.parent, root)
+        if crate is None:
+            return None
+        crate_rel = rel_to(crate, root)
+        s = shadow_tree(root, [crate_rel], "ref")
+        twin_crate = twin_base / crate_rel
+        for f in sorted(twin_crate.rglob("*.rs")) if twin_crate.is_dir() else []:
+            dst = s / crate_rel / f.relative_to(twin_crate)
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(f, dst)
+    return s, Target(t.lang, s / rel_to(lp, root), Path(root))
+
+
+def remap(res, src, dst):
+    """A Result's locations under directory `src`, moved to `dst`."""
+    base = str(Path(src).resolve())
+    to = str(Path(dst).resolve())
+
+    def m(p):
+        return to + p[len(base):] if p and p.startswith(base) else p
+    res.target = m(res.target)
+    res.holes = [dataclasses.replace(h, file=m(h.file)) for h in res.holes]
+    res.diagnostics = [dataclasses.replace(d, file=m(d.file)) for d in res.diagnostics]
+    res.findings = [dataclasses.replace(f, file=m(f.file)) for f in res.findings]
+    return res
+
+
+def remap_findings(found, src, dst):
+    base, to = str(Path(src).resolve()), str(Path(dst).resolve())
+    return [dataclasses.replace(f, file=to + f.file[len(base):]) if f.file.startswith(base)
+            else f for f in found]
+
+
+def twin_remap(res, shadow, root):
+    """Locations under a twin's shadow, mapped back into the reference tree."""
+    return remap(res, shadow, Path(root) / REF_DIR)
+
+
+def loose_dafny_unit(path):
+    """(scratch dir, unit dir, original dir): a directory of loose .dfy files
+    (the author's DV0 spikes, cross-file imports and all) as one scratch unit:
+    copies of the files and a dfyconfig.toml that includes them all with the
+    pinned resource limit, plus the standard library when a file imports Std.
+    The caller deletes the scratch dir (remove_tree) and maps locations back
+    (remap) from the unit dir to the original directory."""
+    src = Path(path).resolve()
+    files = sorted(src.glob("*.dfy"))
+    s = common.scratch_dir("ref-dir")
+    unit = s / src.name
+    unit.mkdir(parents=True)
+    for f in files:
+        shutil.copyfile(f, unit / f.name)
+    opts = [f"resource-limit = {int(D.pins()['resource_limit'])}"]
+    if D._uses_std(files):
+        opts.append("standard-libraries = true")
+    (unit / "dfyconfig.toml").write_text('includes = ["*.dfy"]\n\n[options]\n'
+                                         + "\n".join(opts) + "\n", encoding="utf-8")
+    return s, unit, src
+
+
+def run_context(t, root, reference):
+    """(scratch dir or None, Target to run, dir to map locations back from,
+    dir to map them to) for a target: a reference twin runs in its learner
+    unit (twin_context); a loose Dafny directory as a scratch unit. A Python
+    twin makes its own overlay (dvl.python.ref_check)."""
+    if t.lang == "py":
+        return None, t, None, None
+    if reference:
+        ctx = twin_context(t, root)
+        if ctx:
+            return ctx[0], ctx[1], ctx[0], Path(root) / REF_DIR
+        lp = learner_counterpart(t.path, root)
+        if t.lang == "d" and is_loose_dafny_dir(t.path) and (lp is None or not lp.exists()):
+            s, unit, src = loose_dafny_unit(t.path)
+            return s, Target("d", unit, Path(root)), unit, src
+    return None, t, None, None
+
+
+SWITCH_LINE = re.compile(r"\s*(?://|#)\s*(?:SLOT:\s*)?CHECK\s+[WCPHXTA][1-9]\d*(?:dv|py|d|v)\s*$")
+
+
+def slot_bearing(rel, text):
+    """The items of a file that carry a learner prediction: a P item, an item
+    with a slot, an item of a slot format (value, obligation, error,
+    verdict); plus "(slot line)" for a stray `SLOT:` or CHECK-switch line.
+    A whole-output golden of such a file holds its answers (H5), so pins.py
+    never writes one and pins.py --ci and reference_lint flag one."""
+    items, _ = ci.parse_items(rel, text)
+    out = [it["id"] for it in items
+           if it["kind"] == "P" or it["slots"] or it["format"] in ci.P_FORMATS]
+    if not out and any("SLOT:" in x or SWITCH_LINE.match(x) for x in text.split("\n")):
+        out.append("(slot line)")
+    return out
+
+
+# `// after: <item id>` in a specimen (a card demo, DV2a fix round, QPLAN §6
+# Q10): the demo settles that prediction, so it runs only after the item's
+# first try is recorded, exactly like a specimen's own slots (H5). vcheck,
+# vaudit and vcheck --test honour it; a demo's pins.py sidecar is sealed
+# (pins.py). One or more lines, anywhere in the file.
+AFTER_LINE = re.compile(r"^\s*//\s*after:\s*(\S+)\s*$")
+
+
+def after_items(text):
+    """[(line, item id)] of a file's `// after:` lines, in order."""
+    return [(ln, m.group(1)) for ln, line in enumerate(text.split("\n"), 1)
+            if (m := AFTER_LINE.match(line))]
+
+
+def h5_guard(root, target):
+    """Refuse a specimen whose prediction slots have no recorded first try,
+    or that waits (`// after: <item id>`) for an item whose first try is not
+    recorded: running it prints the answer (spec §3.8.4 H5, §3.8.5)."""
+    p = target.path
+    if not p.name.endswith(".specimen"):
+        return
+    rel = rel_to(p, root)
+    m = re.match(r"specimens/([QR]\d\d)/", rel or "")
+    if not m:
+        return
+    text = p.read_text(encoding="utf-8")
+    items, _ = ci.parse_items(rel, text)
+    calib = read_calib(root, m.group(1))
+    open_ = [it["id"] for it in items if it["slots"] and it["id"] not in calib]
+    if open_:
+        raise Refusal(f"{rel} holds {', '.join(open_)}, whose first try is not recorded: running "
+                      "it would print the answer (H5). Fill the slot, run scripts/firsttry.sh "
+                      f"{m.group(1)} --check, then run it")
+    waits = []
+    for _, iid in after_items(text):
+        mm = ci.ITEM_ID.fullmatch(iid)
+        if not mm:
+            raise Refusal(f"{rel}: its `after:` line names {iid!r}, which is no item id; this "
+                          "demo stays closed until the line is fixed")
+        if iid not in read_calib(root, mm.group(1)):
+            waits.append(iid)
+    if waits:
+        mids = sorted({w.split(".", 1)[0] for w in waits})
+        raise Refusal(f"{rel} waits for {', '.join(waits)}, whose first try is not recorded: "
+                      "running it would settle that prediction (H5). Record it with "
+                      + " and ".join(f"scripts/firsttry.sh {x} --check" for x in mids)
+                      + ", then run it")
+
+
+def slot_guard(root, target):
+    """Refuse a run (vcheck --test) over files that hold an ENABLED slot whose
+    first try is not recorded: its pass or fail would answer the prediction
+    (H5; pins.py's learner mode refuses the same)."""
+    files = []
+    p = target.path
+    if p.is_dir() and target.lang == "d":
+        files = sorted(p.glob("*.dfy"))
+    elif p.is_dir():
+        try:
+            files = [Path(f) for f, _, _ in V.crate_files(V.load_crate(p).root)]
+        except (ValueError, OSError):
+            files = []
+    else:
+        files = [p]
+    open_ = []
+    for f in files:
+        rel = rel_to(f, root) or str(f)
+        try:
+            items, _ = ci.parse_items(rel, Path(f).read_text(encoding="utf-8"))
+        except OSError:
+            continue
+        for it in items:
+            if any(s["state"] == "enabled" and s["file"] == it["file"] for s in it["slots"]) \
+                    and it["id"] not in read_calib(root, it["id"].split(".", 1)[0]):
+                open_.append(it["id"])
+    if open_:
+        mids = sorted({x.split(".", 1)[0] for x in open_})
+        raise Refusal(f"{target.label} holds the enabled slot(s) of {', '.join(open_)}, whose "
+                      "first try is not recorded: running the checks would answer them (H5). "
+                      "Record them with " + " and ".join(f"scripts/firsttry.sh {x} --check"
+                                                         for x in mids) + " first")
+
+
+# =====================================================================================
+# Running
+# =====================================================================================
+
+def own_files(target):
+    """The target's own source files (the files a gate lint covers)."""
+    p = target.path
+    if p.is_dir():
+        if target.lang == "d":
+            return sorted(p.glob("*.dfy"))
+        return [p]           # dvl.verus.lint expands a crate dir to its files
+    return [p]
+
+
+def dafny_probe_program(path, rec, root):
+    """A Dafny probe with a module's context: the probe plus the given layers
+    of the module's chain (the core ones only, unless the probe imports Std
+    or a std-tier layer such as QG_L3_BigNat: a probe has no registry entry,
+    so its tier is inferred as dvl.dafny infers an undeclared file's,
+    dafny.py file_tier) and the unit options of the module and tier, as
+    dvl.dafny builds a module file outside a unit (dafny.py _files_program)."""
+    mid, layer = rec["id"], rec["layer"]
+    options, errs = gu.load_options(root)
+    if errs:
+        raise Refusal("; ".join(errs))
+    std = D._uses_std([path]) or D._reaches_std_layer([path])
+    tier = "std" if std else "core"
+    files = [path]
+    for l in gu.layer_chain(layer):
+        if tier != "std" and gu.LAYER_DAFNY_TIER[l] != "core":
+            continue
+        d = Path(root) / gu.dafny_given_dir(mid[0])
+        got = sorted(d.glob(gu.dafny_layer_glob(l))) if d.is_dir() else []
+        files += [g.resolve() for g in got if g.resolve() not in files]
+    opts = gu.unit_options(options, tier, mid)
+    return D.Program(path, "files", None, files, [path], opts, Path(root), mid,
+                     opts.get("standard-libraries") is True)
+
+
+def _toolchain_result(lang, target, e):
+    return common.Result(POOL[lang], str(target), None, "error", "cli",
+                         findings=[common.Finding(str(target), 0, "toolchain", str(e))])
+
+
+def verify(t, gate=False, symbol=None, seed=None, isolate=False, lint_mode="learner",
+           extra=(), min_verified=None, solver=None):
+    """One verify call through the dvl library for a Target. The Dafny gate is
+    Δ10/Δ11's (verification, no warnings, a positive count); its Δ3 lint is
+    vaudit's (Δ4). The Verus gate lints by itself (Δ12) in lint_mode, with
+    min_verified the unit's pinned floor (Δ11; pinned_min_verified). `extra`
+    are verifier arguments the caller passes through; each library's
+    refusal list judges them (dafny.check_args, verus.check_args). The count
+    pins (apply_count_pin) are the caller's. A Python file runs through
+    dvl.python: check (the learner loop or the gate), or ref_check in the
+    reference mode. `solver` names another Z3 bundled with the pinned Dafny
+    (QPLAN §6 Q29): Dafny's learner loop only; the gate, Verus and Python
+    refuse it."""
+    extra = list(extra)
+    if solver is not None and t.lang != "d":
+        return lib(t.lang)._refused(t.path, f"{LANG_NAMES[t.lang]} has one solver: --solver "
+                                            "names a Z3 bundled with the pinned Dafny (QPLAN "
+                                            "§6 Q29; Verus checks its Z3's version, VERSIONS.md "
+                                            "§1.2)")
+    if t.lang == "py":
+        if symbol or seed is not None or isolate or extra:
+            return PY._refused(t.path, "a Python file takes no symbol, seed, isolation or "
+                                       "verifier argument")
+        if lint_mode == "reference":
+            return PY.ref_check(t.path, root=t.root)
+        return PY.check(t.path, gate=gate, root=t.root)
+    if t.lang == "d":
+        if t.module is None:
+            return D.verify(str(t.path), gate=gate, symbol=symbol, seed=seed, isolate=isolate,
+                            extra_args=extra, solver=solver)
+        # a probe with a module's context: the probe plus the module's given chain
+        reasons = D.check_args(extra, gate)
+        if reasons:
+            return D._refused(t.path, "; ".join(reasons))
+        if gate and (symbol or isolate):
+            return D._refused(t.path, "the gate verifies the whole program: filters and "
+                                      "per-assertion isolation are refused (Δ10, Δ11, G8)")
+        if gate and solver is not None:
+            return D._refused(t.path, "the gate keeps the pinned solver (Δ10): another bundled "
+                                      "solver is a measurement, never a gate (QPLAN §6 Q29)")
+        try:
+            common.toolchain("dafny", fresh=gate)
+            if solver is not None:
+                D.solver_path(solver)
+            prog = dafny_probe_program(t.path, t.module, t.root)
+        except common.ToolchainError as e:
+            return _toolchain_result("d", t.path, e)
+        except D.Refused as e:
+            return D._refused(t.path, str(e))
+        try:
+            return D._verify_program(prog, gate=gate, symbol=symbol, seed=seed,
+                                     isolate=isolate, extra_flags=extra, target=str(t.path),
+                                     solver=solver)
+        finally:
+            D.discard(prog)
+    layer = t.module["layer"] if t.module else None
+    # a module probe's chain is the --root course's (the probe may lie outside
+    # it); any other target's comes from its own course root (dvl.verus.root_for)
+    return V.verify(str(t.path), gate=gate, symbol=symbol, seed=seed, isolate=isolate,
+                    lint_mode=lint_mode, layer=layer, extra_args=extra,
+                    min_verified=min_verified if gate else None,
+                    root=t.root if t.module is not None else None)
+
+
+def lab_gate(res, task, delivery, audit=None, code=True):
+    """The lab gate's refusals (QPLAN §30 Q63; the user's decisions D24 and
+    D27) on a gate result. First the lever check: every lever the delivery
+    adds to, or drops from, its task form (dvl.levers.lever_findings) is a
+    finding, and a verified result becomes failed; a pair the check cannot
+    compare is a `lab-levers-unchecked` finding, never a pass. On a Lab 2
+    card, with `code` (the default; `--lab-code own` turns it off), the code
+    check (dvl.labcode.code_findings): a delivery that changes the task
+    form's executable code is a `lab-code-changed` finding (a public card's
+    proof annotations are no change), and the result failed. Then, when the result is
+    still verified and `audit` is given (a callable returning the delivery's
+    assumption-audit findings: lab_audit, which `vcheck --gate --lab-task`
+    always passes), vaudit's assumption rules: each audit finding becomes a
+    `lab-audit` finding and the result failed, so a delivery equal to a task
+    form that ships an assumption (`assume {:axiom}`) or a lever the lever
+    check allows but the audit reports does not pass. An audit that cannot
+    run is a `lab-audit` finding too, never a pass; one whose run was killed
+    by memory (137/143) or stopped by the wall-clock net (124) makes the
+    result killed(memory) or inconclusive with that exit code, never a
+    verdict (CLAUDE.md §Resources). `audit=None` is the lever check alone (a
+    caller without a toolchain: the static tests)."""
+    try:
+        found = LEV.lever_findings(task, delivery)
+    except LEV.LeverError as e:
+        found = [common.Finding(str(delivery), 0, "lab-levers-unchecked",
+                                f"the lever check could not compare the delivery with its "
+                                f"task form: {e}")]
+    if code:
+        found = list(found) + list(LC.code_findings(task, delivery))
+    if found:
+        res.findings = list(res.findings) + list(found)
+        if res.verdict == "verified":
+            res.verdict = "failed"     # exit_code stays the verifier's own
+    if audit is not None and res.verdict == "verified":
+        try:
+            got = list(audit())
+        except (common.ToolchainError, common.CapError, OSError, ValueError) as e:
+            got = [common.Finding(str(delivery), 0, "audit-incomplete",
+                                  f"the assumption audit did not run: {e}")]
+        found = [common.Finding(f.file, f.line, "lab-audit",
+                                f"the assumption audit (vaudit) reports {f.kind}: {f.message}")
+                 for f in got]
+        if found:
+            res.findings = list(res.findings) + found
+            res.verdict = "failed"         # exit_code stays the verifier's own
+            incomplete = [f.message for f in got if f.kind in AUDIT_INCOMPLETE]
+            if any("killed(memory)" in m for m in incomplete):
+                res.verdict, res.exit_code = "killed(memory)", common.KILLED_EXITS[0]
+            elif any("(inconclusive" in m or "wall-clock" in m for m in incomplete):
+                res.verdict, res.exit_code = "inconclusive", common.WALL_CLOCK_EXIT
+    return res
+
+
+# The audit's own "did not complete" kinds (dvl.dafny.audit's audit-error, dvl.verus.audit's
+# audit-incomplete): a killed or timed-out audit run is never a lab verdict.
+AUDIT_INCOMPLETE = ("audit-error", "audit-incomplete")
+
+
+def _vaudit():
+    """scripts/vaudit as a module (its audit is the one set of assumption rules;
+    it takes this file as its core)."""
+    if "vaudit" in sys.modules:
+        return sys.modules["vaudit"]
+    import importlib.machinery
+    import importlib.util
+    sys.modules.setdefault("vcheck", sys.modules[__name__])
+    loader = importlib.machinery.SourceFileLoader("vaudit", str(SCRIPTS / "vaudit"))
+    spec = importlib.util.spec_from_loader("vaudit", loader)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["vaudit"] = mod
+    try:
+        loader.exec_module(mod)
+    except BaseException:
+        sys.modules.pop("vaudit", None)
+        raise
+    return mod
+
+
+def lab_audit(t):
+    """[Finding] of vaudit's assumption audit on one delivery Target, as
+    `scripts/vaudit <delivery>` runs it (learner mode, the default trust
+    allowlist): Dafny's `dafny audit` plus the lint, Verus's --no-cheating
+    audit of the crate and its path dependencies plus the lint, Python's
+    lint (the lab gate, D24)."""
+    return _vaudit().audit(t, "learner", None)
+
+
+def exit_of(results):
+    if any(r.verdict == "refused" for r in results):
+        return EXIT_REFUSED
+    if any(r.verdict == "error" and any(f.kind == "toolchain" for f in r.findings)
+           for r in results):
+        return EXIT_REFUSED
+    return EXIT_OK if all(r.verdict == "verified" for r in results) else EXIT_FAIL
+
+
+# =====================================================================================
+# Output
+# =====================================================================================
+
+def loc(path, line, col, root):
+    if not line:
+        return show(path, root)
+    return f"{show(path, root)}:{line}" + (f":{col}" if col else "")
+
+
+def count_unit(res):
+    """What a run's verified_count counts: Dafny "tasks" (W-D07), "assertions"
+    under --filter-position (W-D08) or "passed-tasks" for a seeded run (Δ39,
+    dvl.dafny.count_unit); Verus "verified" (its own count, Δ40). Counts of
+    different units are never compared."""
+    if res.lang == PY.LANG:
+        return "tests"           # Python: the acceptance tests that passed
+    return D.count_unit(res) if res.lang == "dafny" else "verified"
+
+
+# How the summary line names a count of each unit (tasks and Verus: plain).
+COUNT_WORDS = {"assertions": "assertions verified", "passed-tasks": "tasks passed"}
+
+
+def summary_line(res, root, mode):
+    if res.lang == PY.LANG:
+        return PY.summary_line(res, show(res.target, root), mode)
+    if res.verdict == "refused":
+        return f"vcheck: {show(res.target, root)} [{res.lang}, {mode}]: refused (no tool ran)"
+    holes = len(res.holes)
+    errs = sum(1 for d in res.diagnostics if d.severity == "error")
+    vc = "-" if res.verified_count is None else str(res.verified_count)
+    parts = [f"{vc} {COUNT_WORDS.get(count_unit(res), 'verified')}",
+             f"{holes} hole{'s' if holes != 1 else ''}",
+             f"{errs} error{'s' if errs != 1 else ''}"]
+    if res.findings:
+        parts.append(f"{len(res.findings)} finding{'s' if len(res.findings) != 1 else ''}")
+    if res.stage != "verify" and res.verdict != "verified":
+        parts.append(f"stage {res.stage}")
+    name = show(res.target, root)
+    return f"vcheck: {name} [{res.lang}, {mode}]: {res.verdict} — " + ", ".join(parts)
+
+
+def detail_lines(res, root, locations_only=False):
+    """One line per hole, error/warning diagnostic and finding. With
+    locations_only (the reference), no message text at all."""
+    out = []
+    hole_codes = set(D.HOLE_CODES) | set(V.HOLE_IDS)
+    for h in res.holes:
+        out.append(f"{loc(h.file, h.line, h.col, root)}: hole {h.kind}"
+                   + (f" {h.label}" if h.label and not locations_only else ""))
+    for d in res.diagnostics:
+        if d.code in hole_codes or d.severity in ("info", "hint"):
+            continue
+        if locations_only:
+            out.append(f"{loc(d.file, d.line, d.col, root)}: {d.severity}")
+        else:
+            out.append(f"{loc(d.file, d.line, d.col, root)}: {d.severity}: {d.message}")
+    for f in res.findings:
+        if locations_only:
+            out.append(f"{loc(f.file, f.line, 0, root)}: {f.kind}")
+        else:
+            out.append(f"{loc(f.file, f.line, 0, root)}: {f.kind}: {f.message}")
+    return out
+
+
+def resource_total(res):
+    """The run's total solver resource count, or None when the run left none:
+    Dafny, the sum of every task's resource count in its CSV task log (the
+    `ResourceCount` column, the unit `--resource-limit` caps); Verus, the sum
+    of the per-function Z3 rlimit counts of its target job's --time
+    breakdown (a --no-cheating run that met a hole prints none); Python,
+    None. A measurement (R05.P3dv, R05.H1py), never a verdict; counts of the
+    two languages are different units and are never compared."""
+    if res.lang == "dafny":
+        if not res.raw_dir:
+            return None
+        rows = D.parse_csv_log(Path(res.raw_dir) / "tasks.csv")
+        return sum(rc for _, _, rc in rows) if rows else None
+    if res.lang == "verus":
+        counts = [v for v in V.rlimit_counts(target_stdout(res)).values()
+                  if isinstance(v, (int, float)) and not isinstance(v, bool)]
+        return sum(counts) if counts else None
+    return None
+
+
+def result_json(res, locations_only=False, measures=None):
+    """The --json record. locations_only (the reference gate): every message
+    and hole label blanked, as the text output prints none. `measures`
+    (the learner loop and the fast channel only; R05.P3dv): {"resource_count":
+    resource_total, "wall_s": the wall-clock seconds vcheck spent on the
+    target}, added as two keys. The gate's record carries neither: it is an
+    instrument document whose hash fvh compares across runs (Δ161), and a
+    timing would make it differ every run."""
+    d = res.to_dict()
+    keys = ("lang", "target", "exit_code", "verdict", "stage", "verified_count", "holes",
+            "findings", "diagnostics", "per_symbol", "raw_dir", "cmd")
+    out = {k: d[k] for k in keys}
+    out["count_unit"] = count_unit(res)
+    if measures is not None:
+        out.update(measures)
+    if locations_only:
+        for key, field in (("holes", "label"), ("findings", "message"),
+                           ("diagnostics", "message")):
+            out[key] = [{**x, field: ""} for x in out[key]]
+    return out
+
+
+def toolchain_hint(res):
+    for f in res.findings:
+        if f.kind == "toolchain":
+            return (f"vcheck: the pinned {res.lang} toolchain is missing or altered: run "
+                    f"scripts/get_toolchain.sh {res.lang}")
+    return None
+
+
+def print_result(res, root, mode, locations_only=False):
+    print(summary_line(res, root, mode))
+    hint = toolchain_hint(res)
+    if hint:
+        print(hint)
+    clean = res.verdict == "verified" and not res.holes and not res.findings and \
+        not any(d.severity in ("error", "warning") for d in res.diagnostics)
+    if clean:
+        return
+    for line in detail_lines(res, root, locations_only):
+        print(line)
+    if res.raw_dir and res.verdict != "verified":
+        print(f"raw output: {res.raw_dir}")
+
+
+# =====================================================================================
+# Brittleness (Δ59) and the self-test
+# =====================================================================================
+
+def target_stdout(res):
+    """The stdout text of a run's (last) target job, from its raw dir."""
+    if not res.raw_dir:
+        return ""
+    raw = Path(res.raw_dir)
+    jobs = sorted(p for p in raw.glob("*-target") if p.is_dir())
+    f = (jobs[-1] if jobs else raw) / "stdout.txt"
+    return f.read_text(encoding="utf-8", errors="replace") if f.is_file() else ""
+
+
+def resource_counts(res, lang):
+    if lang == "d":
+        return D.resource_counts(res)
+    return {k: v for k, v in V.rlimit_counts(target_stdout(res)).items() if v is not None}
+
+
+# A sweep is one learner-loop run per row: per pinned seed, and for Dafny with
+# --solvers (or --solver S) per bundled solver too (QPLAN §6 Q29, §17.5: a
+# proof is stable when it verifies under seeds 1-3 and, in Dafny, under both
+# bundled solvers). firsttry's `stable` form (QPLAN §6 Q43) runs the same rows.
+
+@dataclass
+class Row:
+    solver: str | None        # a bundled Dafny solver by name; None: the pinned one, unnamed
+    seed: int
+    result: object            # dvl.common.Result
+    counts: dict              # {symbol: resource count} (Dafny tasks, Verus rlimit)
+
+    @property
+    def label(self):
+        return f"{self.solver} seed {self.seed}" if self.solver else f"seed {self.seed}"
+
+
+def spread_flag_cv(lang):
+    """The coefficient of variation above which a symbol's resource spread is
+    flagged (pins.toml spread_flag_cv; QPLAN §6 Q29)."""
+    return float(tool_pins(lang).get("spread_flag_cv", 0.20))
+
+
+def sweep_solvers(lang, all_solvers=False, solver=None):
+    """The solvers of a sweep: [None] (the pinned one) unless Dafny names some.
+    Raises Refusal for a solver option on another language or an unknown name."""
+    if not all_solvers and solver is None:
+        return [None]
+    if lang != "d":
+        raise Refusal(f"{LANG_NAMES.get(lang, lang)} has one solver: --solver and --solvers name "
+                      "the Z3 binaries bundled with the pinned Dafny (QPLAN §6 Q29; Verus "
+                      "checks its Z3's version, VERSIONS.md §1.2)")
+    names = D.solver_names()
+    if all_solvers:
+        return names
+    if solver not in names:
+        raise Refusal(f"--solver {solver}: not a solver bundled with the pinned Dafny; one of "
+                      + ", ".join(names))
+    return [solver]
+
+
+def brittleness_rows(t, solvers=(None,), seeds=None):
+    """[Row]: the learner loop of a Target under each seed (default: the pinned
+    seeds), for each solver in order (None: the pinned one). Runs one job at a
+    time through the dvl libraries (memory cap and all)."""
+    seeds = list(seeds) if seeds else list(tool_pins(t.lang)["seeds"])
+    if not seeds:
+        raise Refusal("no pinned seeds (empty lists fail)")
+    rows = []
+    for sv in solvers:
+        for s in seeds:
+            res = verify(t, seed=s, solver=sv)
+            rows.append(Row(sv, s, res, resource_counts(res, t.lang)))
+    return rows
+
+
+def sweep_summary(rows, lang):
+    """The sweep's findings: verdicts {label: verdict}; differs [(symbol,
+    {label: status})] (a symbol whose status is not the same in every row);
+    spread [(cv, symbol, lo, hi, solver)], widest first, each over one
+    solver's seeds (counts of two solvers measure two programs, not noise);
+    flagged (the spread entries above the pinned CV, advisory); stable (every
+    row verified and no symbol differs)."""
+    verdicts = {r.label: r.result.verdict for r in rows}
+    symbols = sorted({k for r in rows for k in r.result.per_symbol})
+    differs = []
+    for sym in symbols:
+        sts = {r.label: r.result.per_symbol.get(sym, "absent") for r in rows}
+        if len(set(sts.values())) > 1:
+            differs.append((sym, sts))
+    spread = []
+    for sv in dict.fromkeys(r.solver for r in rows):
+        mine = [r for r in rows if r.solver == sv]
+        for sym in sorted({k for r in mine for k in r.counts}):
+            vals = [r.counts[sym] for r in mine if sym in r.counts]
+            if len(vals) >= 2 and max(vals) > 0:
+                mean = statistics.mean(vals)
+                cv = statistics.pstdev(vals) / mean if mean else 0.0
+                spread.append((cv, sym, min(vals), max(vals), sv))
+    spread.sort(key=lambda x: (-x[0], x[1], x[4] or ""))
+    flag = spread_flag_cv(lang)
+    flagged = [x for x in spread if x[0] > flag]
+    stable = bool(rows) and not differs and all(v == "verified" for v in verdicts.values())
+    return {"verdicts": verdicts, "differs": differs, "spread": spread, "flagged": flagged,
+            "stable": stable, "flag_cv": flag}
+
+
+def symbol_sites(t):
+    """{symbol: (absolute file, line)} of a target's own declarations, keyed as
+    the libraries' per_symbol keys them (Dafny `Mod.Name`; Verus `m::f`, the
+    module path inside the crate): Dafny, the target file or every .dfy file
+    of its unit; Verus, every file of the target's crate (a standalone file:
+    itself). Static; unreadable files are skipped."""
+    p = Path(t.path)
+    out = {}
+    if t.lang == "d":
+        if p.is_dir():
+            files = sorted(p.glob("*.dfy"))
+        elif p.name == "dfyconfig.toml" or (p.parent / "dfyconfig.toml").is_file():
+            files = sorted(p.parent.glob("*.dfy"))
+        else:
+            files = [p]
+        for f in files:
+            try:
+                src = D.parse_source(f.read_text(encoding="utf-8"), str(f))
+            except (OSError, UnicodeDecodeError):
+                continue
+            for d in src.decls:
+                if d.kind in D.METHODLIKE:
+                    out.setdefault(d.qual, (str(f.resolve()), d.line))
+        return out
+    for f, modpath in verus_file_modpaths(p):
+        try:
+            src = V.vs.parse(Path(f).read_text(encoding="utf-8"))
+        except (V.vs.ParseError, OSError, UnicodeDecodeError):
+            continue
+        for it in src.walk():
+            if it.kind == "fn" and it.in_verus:
+                sym = "::".join(filter(None, [modpath, V.vs.item_symbol(it)]))
+                out.setdefault(sym, (str(Path(f).resolve()), src.line_of(it.head)))
+    return out
+
+
+def _split_top(s, sep="::"):
+    """s split on `sep` outside angle brackets."""
+    out, depth, cur, k = [], 0, "", 0
+    while k < len(s):
+        if s.startswith(sep, k) and depth == 0:
+            out.append(cur)
+            cur, k = "", k + len(sep)
+            continue
+        ch = s[k]
+        depth += (ch == "<") - (ch == ">")
+        cur += ch
+        k += 1
+    return out + [cur]
+
+
+def _no_generics(seg):
+    """A path segment without its generic arguments (`G<A>` -> `G`)."""
+    i = seg.find("<")
+    return seg if i <= 0 else seg[:i]
+
+
+def verus_run_name(sym):
+    """The name a Verus run's --time JSON and per-symbol status give the fn a
+    symbol_sites key names (crate prefix aside): an impl's owner without its
+    generic arguments (`G<A>::g` -> `G::g`) and a trait impl's method under
+    its type (`<S as T>::t` -> `S::t`; DV5d: the brittleness sweep's symbol
+    attribution)."""
+    segs = []
+    for seg in _split_top(sym):
+        if seg.startswith("<") and seg.endswith(">") and " as " in seg:
+            ty = seg[1:-1]
+            depth, cut = 0, None
+            for k, ch in enumerate(ty):
+                depth += (ch == "<") - (ch == ">")
+                if depth == 0 and ty.startswith(" as ", k):
+                    cut = k
+                    break
+            ty = ty[:cut] if cut is not None else ty
+            segs += [_no_generics(x) for x in _split_top(ty)]
+        else:
+            segs.append(_no_generics(seg))
+    return "::".join(segs)
+
+
+def site_of(sites, sym, lang, crate=None):
+    """(file, line) of a sweep symbol among symbol_sites, else None. A Verus
+    resource count is keyed by the run's own name, crate prefix included
+    (`<crate>::m::f`, Δ59's --time JSON) and an impl's method by its type, so
+    both forms are tried against the sites' keys (DV5d). A run name that two
+    sites share (`<S as T>::t` and `<S as U>::t`, `G<A>::g` and `G<B>::g`) is
+    ambiguous and gives None, never the first site; the leading segment is
+    taken off as the crate prefix only when it is `crate` (when known) and
+    names no module or type of the target's own sites (DV5e review fix)."""
+    if sym in sites:
+        return sites[sym]
+    if lang != "v":
+        return None
+    alias = {}
+    for k, v in sites.items():
+        alias.setdefault(verus_run_name(k), set()).add(v)
+    heads = {_split_top(k)[0] for k in list(sites) + list(alias)}
+    segs = _split_top(sym)
+    cands = [sym]
+    if len(segs) > 1 and segs[0] not in heads and (crate is None or segs[0] == crate):
+        cands.append("::".join(segs[1:]))                                   # the crate prefix off
+    for c in cands:
+        if c in sites:
+            return sites[c]
+        if c in alias:
+            return next(iter(alias[c])) if len(alias[c]) == 1 else None
+    return None
+
+
+def verus_crate_name(path):
+    """The crate name a Verus run of `path` gives its symbols, when it is
+    certain (a crate whose module tree holds the file, or a standalone file
+    with no Cargo.toml above it); else None."""
+    p = Path(path).resolve()
+    try:
+        got = verus_crate_of(p)
+        if got is not None:
+            return V.load_crate(got[0]).name
+        d = p if p.is_dir() else p.parent
+        while d != d.parent:
+            if (d / "Cargo.toml").is_file():
+                return None
+            d = d.parent
+        stem = p.name[:-len(".rs.specimen")] if p.name.endswith(".rs.specimen") else p.stem
+        return V._crate_name(stem)
+    except (V.Refused, ValueError, OSError):
+        return None
+
+
+def verus_crate_of(path):
+    """(crate dir, [(file, module path)]) of the crate a Verus target belongs
+    to: the nearest directory upwards holding a Cargo.toml, when its module
+    tree reaches the file (a crate dir: itself); else None."""
+    p = Path(path).resolve()
+    if p.name.endswith(".specimen"):
+        return None
+    d = p if p.is_dir() else p.parent
+    while d != d.parent:
+        if (d / "Cargo.toml").is_file():
+            try:
+                files = [(Path(f), m) for f, m, _ in V.crate_files(V.load_crate(d).root)]
+            except (V.Refused, ValueError, OSError):
+                files = []
+            if p.is_dir() or any(f == p for f, _ in files):
+                return d, files
+            return None
+        d = d.parent
+    return None
+
+
+def verus_file_modpaths(path):
+    """[(file, module path)] of the crate a Verus target belongs to
+    (verus_crate_of), else [(the file, "")] for a standalone file."""
+    got = verus_crate_of(path)
+    if got is not None:
+        return got[1]
+    p = Path(path).resolve()
+    return [] if p.is_dir() else [(p, "")]
+
+
+def brittleness(t, root, as_json=False, solvers=(None,), reference=False):
+    """vcheck --brittleness on one Target (see sweep_summary). reference=True
+    (vcheck --ref --brittleness, author-only): the twin runs in its learner
+    unit (run_context) and the output names locations, never a symbol."""
+    shadow, run_t, src_dir, dst_dir = run_context(t, root, True) if reference else \
+        (None, t, None, None)
+    try:
+        rows = brittleness_rows(run_t, solvers)
+        sites = symbol_sites(run_t) if reference else {}
+    finally:
+        remove_tree(shadow)
+    if shadow is not None:
+        for r in rows:
+            remap(r.result, src_dir, dst_dir)
+        base, to = str(Path(src_dir).resolve()), str(Path(dst_dir).resolve())
+        sites = {k: ((to + f[len(base):]) if f.startswith(base) else f, ln)
+                 for k, (f, ln) in sites.items()}
+    s = sweep_summary(rows, t.lang)
+    crate = verus_crate_name(t.path) if reference and t.lang == "v" else None
+
+    def name(sym):
+        if not reference:
+            return sym
+        f, ln = site_of(sites, sym, t.lang, crate) or (None, 0)
+        return loc(f, ln, 0, root) if f else "(a declaration outside the target's files)"
+    named = [x for x in solvers if x is not None]
+    if as_json:
+        seeds = list(dict.fromkeys(r.seed for r in rows))
+        plain = not named
+        print(json.dumps({
+            "target": str(t.path), "lang": POOL[t.lang], "seeds": seeds,
+            "solvers": named or None,
+            "verdicts": ({r.seed: r.result.verdict for r in rows} if plain else s["verdicts"]),
+            "differs": [{"symbol": name(sym), "by_row": st,
+                         **({"by_seed": {r.seed: st[r.label] for r in rows}} if plain else {})}
+                        for sym, st in s["differs"]],
+            "spread": [{"symbol": name(sym), "cv": round(cv, 4), "min": lo, "max": hi,
+                        "solver": sv} for cv, sym, lo, hi, sv in s["spread"]],
+            "flagged": [{"symbol": name(sym), "cv": round(cv, 4), "solver": sv}
+                        for cv, sym, lo, hi, sv in s["flagged"]],
+            "flag_cv": s["flag_cv"], "stable": s["stable"]}, sort_keys=True))
+    else:
+        label = t.label
+        print(f"vcheck --brittleness: {label} [{POOL[t.lang]}"
+              + (", reference" if reference else "") + "]: "
+              + " · ".join(f"{r.label}: {r.result.verdict}" for r in rows)
+              + (" — stable" if s["stable"] else " — NOT stable"))
+        for sym, st in s["differs"]:
+            print(f"  differs: {name(sym)}: " + ", ".join(f"{k} {v}" for k, v in st.items()))
+        if s["spread"]:
+            cv, sym, lo, hi, sv = s["spread"][0]
+            print(f"  resource counts: {len(s['spread'])} symbol(s); widest spread {name(sym)} "
+                  f"{lo}..{hi} (CV {cv:.1%}" + (f", solver {sv}" if sv else "")
+                  + "); advisory, never gating")
+        if s["flagged"]:
+            print(f"  spread above {s['flag_cv']:.0%}: {len(s['flagged'])} symbol(s), flagged, "
+                  "never gating: " + ", ".join(
+                      f"{name(sym)} (CV {cv:.1%}" + (f", solver {sv}" if sv else "") + ")"
+                      for cv, sym, lo, hi, sv in s["flagged"]))
+        for r in rows:
+            if r.result.verdict != "verified" and r.result.raw_dir:
+                print(f"  {r.label} raw output: {r.result.raw_dir}")
+    return EXIT_OK if s["stable"] else EXIT_FAIL
+
+
+SELFTEST = {
+    "d": ("selftest_ok.dfy",
+          "module SelfTest {\n  function Double(n: nat): nat { n + n }\n\n"
+          "  lemma DoubleIsTwice(n: nat)\n    ensures Double(n) == 2 * n\n  {\n  }\n}\n",
+          "selftest_hole.dfy",
+          "module SelfTestHole {\n  function Double(n: nat): nat { n + n }\n\n"
+          "  lemma DoubleIsTwice(n: nat)\n    ensures Double(n) == 2 * n\n}\n"),
+    "v": ("selftest_ok.rs",
+          "use vstd::prelude::*;\n\nverus! {\n\npub open spec fn double(n: nat) -> nat {\n"
+          "    n + n\n}\n\npub proof fn double_is_twice(n: nat)\n    ensures\n"
+          "        double(n) == 2 * n,\n{\n}\n\n} // verus!\n",
+          "selftest_hole.rs",
+          "use vstd::prelude::*;\n\nverus! {\n\npub open spec fn double(n: nat) -> nat {\n"
+          "    n + n\n}\n\npub proof fn double_is_twice(n: nat)\n    ensures\n"
+          "        double(n) == 2 * n,\n{\n    assume(false);\n}\n\n} // verus!\n"),
+}
+
+
+def selftest(root):
+    """Toolchain checks plus two invented programs per language: the gate
+    passes on a finished one, and the learner loop counts one hole."""
+    work = common.scratch_dir("selftest")
+    ok = True
+    try:
+        for lang in LANGS:
+            name = LANG_NAMES[lang]
+            try:
+                common.toolchain(POOL[lang], fresh=True)
+            except common.ToolchainError as e:
+                print(f"selftest: {name}: FAIL — {e}; run scripts/get_toolchain.sh {POOL[lang]}")
+                ok = False
+                continue
+            okf, oktext, holef, holetext = SELFTEST[lang]
+            (work / okf).write_text(oktext, encoding="utf-8")
+            (work / holef).write_text(holetext, encoding="utf-8")
+            g = verify(Target(lang, work / okf, Path(root)), gate=True)
+            gate_ok = g.verdict == "verified" and (g.verified_count or 0) > 0 and not g.holes
+            h = verify(Target(lang, work / holef, Path(root)))
+            hole_ok = h.verdict == "verified" and len(h.holes) == 1
+            print(f"selftest: {name}: gate {'OK' if gate_ok else 'FAIL'} ({g.verdict}, "
+                  f"{g.verified_count} verified) · hole count {'OK' if hole_ok else 'FAIL'} "
+                  f"({len(h.holes)} counted, verdict {h.verdict})")
+            for r in (g, h):
+                if r.verdict != "verified" and r.raw_dir:
+                    print(f"  raw output: {r.raw_dir}")
+            ok = ok and gate_ok and hole_ok
+    finally:
+        remove_tree(work)
+    print(f"selftest: {'PASS' if ok else 'FAIL'}")
+    return EXIT_OK if ok else EXIT_FAIL
+
+
+# =====================================================================================
+# --ref --pin-counts (Δ11; author-only)
+# =====================================================================================
+
+def render_counts(mid, entries, files=()):
+    out = [f"# expected/{mid}.counts — Δ11 count pins for {mid}: per verification unit, the",
+           "# reference twin's gate count and the learner-declared declarations with a contract",
+           "# that must run in the learner's gate (min_verified is one per pinned symbol); per",
+           "# file (schema 2), its shipped state in the learner loop: verdict, tool-counted",
+           "# holes and errors (the counts its header and the chapter state).",
+           f"# Written by `scripts/vcheck --ref --pin-counts {mid}` (author-only) from the twins",
+           "# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that",
+           "# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a",
+           "# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and",
+           "# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.",
+           f"schema = {COUNTS_SCHEMA}", f"module = {json.dumps(mid)}", ""]
+    for unit, lang, ref_n, syms in entries:
+        out += ["[[unit]]", f"path = {json.dumps(unit)}", f"lang = {json.dumps(lang)}",
+                f"reference_verified = {ref_n}", f"min_verified = {len(syms)}",
+                "symbols = [" + ", ".join(json.dumps(s) for s in syms) + "]", ""]
+    for rel, role, st in files:
+        out += ["[[file]]", f"path = {json.dumps(rel)}", f"role = {json.dumps(role)}",
+                f"verdict = {json.dumps(st['verdict'])}", f"holes = {st['holes']}",
+                f"errors = {st['errors']}", ""]
+    return "\n".join(out)
+
+
+def shipped_states(root, rec, langs=None):
+    """([(rel, role, state)], [problems], runs): every pinned-kind file of
+    the module run in the learner loop (shipped_runs, whose list is the
+    third value). A run with no verdict (refused, killed(memory), the wall
+    clock, a toolchain or CLI error) is a problem."""
+    rows, problems = [], []
+    runs = shipped_runs(root, rec, langs)
+    for t, res, members in runs:
+        if res.verdict not in ("verified", "failed"):
+            problems.append(f"{t.label}: no learner-loop verdict ({res.verdict}, stage "
+                            f"{res.stage}); raw output: {res.raw_dir}")
+            continue
+        for rel, role in members:
+            rows.append((rel, role, file_state(res, Path(root) / rel)))
+    rows.sort(key=lambda r: (FILE_ROLES.index(r[1]), r[0]))
+    return rows, problems, runs
+
+
+def shipped_check(root, mid, langs=None):
+    """(problems, checked, runs): the module's files against the [[file]] pins of
+    expected/<ID>.counts (schema 2): same verdict, holes and errors in the
+    learner loop; a pinned file that is gone, a file the pin does not know,
+    and a missing or schema-1 pin are problems too. Prints nothing."""
+    rec = record(root, mid)
+    pins_, errs = read_file_pins(root, rec["id"])
+    rel_pin = f"expected/{rec['id']}.counts"
+    if errs:
+        return errs, 0, []
+    if pins_ is None:
+        return [f"{rel_pin}:0: {rec['id']} has no shipped-state pin ([[file]] tables, schema "
+                f"{COUNTS_SCHEMA}): the author writes it with vcheck --ref --pin-counts "
+                f"{rec['id']} on the files as shipped"], 0, []
+    want = {r: e for r, e in pins_.items()
+            if not langs or ("py" if r.endswith(".py") else lang_of(r)) in langs}
+    listed = {rel: role for rel, role, _ in module_pin_files(root, rec, langs)}
+    problems = []
+    for rel in sorted(set(want) - set(listed)):
+        problems.append(f"{rel_pin}:0: {rel} is pinned but is no {rec['id']} file any more (a "
+                        "pin that matches nothing is an error)")
+    for rel in sorted(set(listed) - set(want)):
+        problems.append(f"{rel}: {rec['id']} lists it, but {rel_pin} pins no shipped state for "
+                        "it (re-pin with vcheck --ref --pin-counts)")
+    rows, run_problems, runs = shipped_states(root, rec, langs)
+    problems += run_problems
+    checked = 0
+    for rel, role, st in rows:
+        e = want.get(rel)
+        if e is None:
+            continue
+        checked += 1
+        got = (role, st["verdict"], st["holes"], st["errors"])
+        pinned = (e["role"], e["verdict"], e["holes"], e["errors"])
+        if got != pinned:
+            problems.append(f"{rel}: not in its shipped state: pinned {e['role']} {e['verdict']}, "
+                            f"{e['holes']} hole(s), {e['errors']} error(s); the learner loop gives "
+                            f"{role} {st['verdict']}, {st['holes']} hole(s), {st['errors']} "
+                            "error(s)")
+    return problems, checked, runs
+
+
+def pin_counts(root, mid):
+    """Run the reference gate on the twin of every unit of the module and
+    write expected/<ID>.counts, with the shipped state of every file of the
+    module (the learner loop on the learner files as they stand: run it on
+    the files as shipped). Nothing is written unless every twin passes,
+    every unit pins at least one symbol (an empty pin fails) and every file
+    gives a learner-loop verdict. Prints counts only."""
+    rec = record(root, mid)
+    if not rec["units"]:
+        raise Refusal(f"{rec['id']} has no verification unit (an empty list fails)")
+    entries, bad = [], 0
+    for unit in rec["units"]:
+        lang, _ = gu.unit_kind(unit)
+        twin = Path(root) / REF_DIR / unit
+        if not (Path(root) / unit).is_dir():
+            raise Refusal(f"{unit}: a unit of {rec['id']} does not exist (run "
+                          "python3 scripts/gen_units.py)")
+        if not twin.is_dir() or not twin_has_sources(twin):
+            raise Refusal(f"{REF_DIR}/{unit}: the unit has no reference twin (no source file of "
+                          "its own)")
+        t = Target(lang, twin.resolve(), Path(root))
+        shadow, run_t, src, dst = run_context(t, root, True)
+        try:
+            res = verify(run_t, gate=True, lint_mode="reference")
+            if shadow is not None:
+                remap(res, src, dst)
+        finally:
+            remove_tree(shadow)
+        head = f"vcheck --pin-counts: {show(twin, root)} [{POOL[lang]}]"
+        if res.verdict != "verified" or not res.verified_count:
+            print(f"{head}: {res.verdict} — the reference gate does not pass; nothing pinned")
+            bad += 1
+            continue
+        contract = contract_symbols(root, unit, lang)
+        ran = {k for k, v in res.per_symbol.items() if v == "verified"}
+        syms = sorted(s for s in contract if s in ran)
+        if not syms:
+            print(f"{head}: no learner-declared declaration with a contract ran a task in the "
+                  "reference gate (an empty pin fails)")
+            bad += 1
+            continue
+        entries.append((unit, POOL[lang], res.verified_count, syms))
+        print(f"{head}: reference {res.verified_count} verified; {len(syms)} of {len(contract)} "
+              f"contract declaration(s) pinned (gate floor {len(syms)})")
+    if bad:
+        print(f"vcheck --pin-counts: {rec['id']}: {bad} unit(s) not pinned; nothing written")
+        return EXIT_FAIL
+    files, problems, _ = shipped_states(root, rec)
+    for x in problems:
+        print(f"vcheck --pin-counts: {x}")
+    if problems:
+        print(f"vcheck --pin-counts: {rec['id']}: {len(problems)} file run(s) gave no verdict; "
+              "nothing written")
+        return EXIT_FAIL
+    for rel, role, st in files:
+        print(f"vcheck --pin-counts: {rel} [{role}]: shipped {st['verdict']}, {st['holes']} "
+              f"hole(s), {st['errors']} error(s)")
+    p = counts_path(root, rec["id"])
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(render_counts(rec["id"], entries, files), encoding="utf-8")
+    print(f"vcheck --pin-counts: wrote {show(p, root)} ({len(entries)} unit(s), {len(files)} "
+          "file(s))")
+    return EXIT_OK
+
+
+# =====================================================================================
+# --shipped (Q8: the files' shipped state) and --test (compiled checks)
+# =====================================================================================
+
+def shipped_mode(root, mid, langs, as_json):
+    """Compare every file of the module with its shipped-state pin
+    (shipped_check). Learner-safe: it runs learner files only and prints
+    locations and counts. --json: {module, langs, checked, problems,
+    results} with every learner-loop result (scripts/ci.sh reads the unit
+    results for its per-item hole comparison)."""
+    rec = record(root, mid)
+    problems, checked, collected = shipped_check(root, rec["id"], langs)
+    if as_json:
+        results = []
+        for t, res, members in collected:
+            d = result_json(res)
+            d["unit"] = rel_to(t.path, root) if any(r == "exercise" for _, r in members) else None
+            d["files"] = [{"path": rel, "role": role} for rel, role in members]
+            results.append(d)
+        print(json.dumps({"module": rec["id"], "langs": sorted(langs or LANGS),
+                          "checked": checked, "problems": problems, "results": results},
+                         ensure_ascii=False, sort_keys=True))
+    else:
+        for x in problems:
+            print(x)
+        want = " and ".join(LANG_NAMES[x] for x in (langs or LANGS))
+        print(f"vcheck --shipped: {rec['id']} ({want}): {checked} file(s) checked against "
+              f"expected/{rec['id']}.counts; {len(problems)} problem(s)")
+    return EXIT_OK if not problems else EXIT_FAIL
+
+
+def test_mode(targets, root, names, as_json):
+    """Run the compiled checks (Dafny {:test}/@Test methods, Verus #[test]
+    fns) of each target through dvl.dafny.test / dvl.verus.test, in a
+    scratch copy under the memory cap. Learner-safe: reference targets are
+    refused, and so is a target whose enabled slots or `after:` items have no
+    recorded first try (H5). Prints one PASSED/FAILED line per test, then the
+    failures' messages. Exit 0 when every requested test (all of them, with
+    no --name) ran and passed."""
+    results = []
+    for t in targets:
+        if t.module is not None:
+            raise Usage("--test runs a unit, a crate or a file, not a module probe")
+        res = lib(t.lang).test(str(t.path), names=list(names) or None)
+        results.append(res)
+        if as_json:
+            continue
+        passed = sum(1 for v in res.per_symbol.values() if v == "passed")
+        failed = sum(1 for v in res.per_symbol.values() if v == "failed")
+        extra = "" if res.stage == "test" or res.verdict == "verified" else f", stage {res.stage}"
+        print(f"vcheck: {t.label} [{res.lang}, test]: {res.verdict} — {passed} passed, "
+              f"{failed} failed{extra}")
+        hint = toolchain_hint(res)
+        if hint:
+            print(hint)
+        for k, v in sorted(res.per_symbol.items()):
+            print(f"{'PASSED' if v == 'passed' else 'FAILED' if v == 'failed' else v.upper()} {k}")
+        if res.verdict != "verified":
+            for line in detail_lines(res, root):
+                print(line)
+            if res.raw_dir:
+                print(f"raw output: {res.raw_dir}")
+    if as_json:
+        payload = [result_json(r) for r in results]
+        print(json.dumps(payload[0] if len(payload) == 1 else payload, ensure_ascii=False,
+                         sort_keys=True))
+    return exit_of(results)
+
+
+def bin_mode(t, root, args):
+    """--bin (D16): build a crate's one [[bin]] target through dvl.verus.run_bin
+    and run it with `args`. Learner-safe: reference targets are refused by
+    the caller; prints the build's summary, then the program's own output."""
+    if t.lang != "v" or not t.path.is_dir():
+        raise Usage("usage: vcheck --bin <crate directory> [-- <arguments>] (a Verus crate "
+                    "with one [[bin]] target)")
+    res, out = V.run_bin(str(t.path), args, root=root)
+    if out is None:
+        print(f"vcheck: {t.label} [verus, bin]: {res.verdict} — not built (stage {res.stage})")
+        hint = toolchain_hint(res)
+        if hint:
+            print(hint)
+        for line in detail_lines(res, root):
+            print(line)
+        if res.raw_dir and res.verdict != "refused":
+            print(f"raw output: {res.raw_dir}")
+        return exit_of([res])
+    shown = " ".join([out.name, *out.args])
+    count = "-" if res.verified_count is None else res.verified_count
+    print(f"vcheck: {t.label} [verus, bin {out.name}]: built — {count} verified; ran "
+          f"`{shown}`: exit {out.exit}")
+    sys.stdout.write(out.stdout)
+    sys.stdout.flush()
+    sys.stderr.write(out.stderr)
+    if res.verdict not in ("verified", "failed"):
+        for line in detail_lines(res, root):
+            print(line)
+        if res.raw_dir:
+            print(f"raw output: {res.raw_dir}")
+    return EXIT_OK if res.verdict == "verified" else EXIT_FAIL
+
+
+# =====================================================================================
+# The CLI
+# =====================================================================================
+
+def parse_args(argv):
+    ap = argparse.ArgumentParser(prog="vcheck", description="The pinned verifier wrapper.",
+                                 add_help=True)
+    ap.add_argument("targets", nargs="*", metavar="TARGET",
+                    help="a file, specimen, unit or crate dir; or a module id [d|v]")
+    ap.add_argument("--gate", action="store_true", help="the done gate")
+    ap.add_argument("--json", action="store_true", help="JSON output")
+    ap.add_argument("--measures", action="store_true",
+                    help="with --json, learner loop or fast channel: add resource_count and "
+                         "wall_s (R05.P3dv)")
+    ap.add_argument("--symbol", help="fast channel: one symbol (Dafny Mod.Name, Verus m::f)")
+    ap.add_argument("--module", help="a module id (its units, or a probe's context); with "
+                                     "--function: a Verus module path")
+    ap.add_argument("--function", help="Verus fast channel: the function (with --module)")
+    ap.add_argument("--lang", choices=MODULE_LANGS, help="with a module id: one language")
+    ap.add_argument("--seed", type=int, help="a pinned-style solver seed (Δ59)")
+    ap.add_argument("--isolate", action="store_true",
+                    help="per-assertion (Dafny) or per-function (Verus) isolation")
+    ap.add_argument("--lint-mode", choices=("learner", "agent", "reference"), default="learner",
+                    help="the Verus gate's lint mode (default learner)")
+    ap.add_argument("--brittleness", action="store_true", help="re-verify under every seed")
+    ap.add_argument("--solver", metavar="S",
+                    help="Dafny: another Z3 bundled with the pinned Dafny (a measurement; "
+                         "never the gate)")
+    ap.add_argument("--solvers", action="store_true",
+                    help="Dafny, with --brittleness: every bundled solver times every seed")
+    ap.add_argument("--selftest", action="store_true", help="check the pinned toolchains")
+    ap.add_argument("--ref", action="store_true", help="author-only: the reference gate")
+    ap.add_argument("--pin-counts", action="store_true",
+                    help="author-only, with --ref and a module id: write expected/<ID>.counts")
+    ap.add_argument("--test", action="store_true",
+                    help="run the compiled checks ({:test}/@Test, #[test]) of a unit or file")
+    ap.add_argument("--bin", action="store_true",
+                    help="build a Verus crate's [[bin]] target with the pinned compiler and run "
+                         "it with the arguments after -- (D16)")
+    ap.add_argument("--name", action="append", default=[], metavar="N",
+                    help="with --test: one test to run (repeatable; default every test)")
+    ap.add_argument("--shipped", action="store_true",
+                    help="with a module id: every file against its shipped-state pin")
+    ap.add_argument("--lab-task", type=Path, metavar="TASK",
+                    help="with --gate: the lab gate; also refuse a delivery whose verification "
+                         "levers differ from its task form's (QPLAN §30 Q63)")
+    ap.add_argument("--lab-code", choices=("own",), default=None,
+                    help="with --lab-task: `own` waives the code check on a Lab 2 card, for an "
+                         "arm that writes its own code (the vericoding arm V; D27)")
+    ap.add_argument("--root", type=Path, default=REPO, help=argparse.SUPPRESS)
+    try:
+        return ap.parse_args(argv)
+    except SystemExit as e:
+        raise SystemExit(EXIT_USAGE if e.code else 0)
+
+
+def build_targets(a, root):
+    """(targets, symbol) from the parsed arguments."""
+    symbol = a.symbol
+    if a.function is not None:
+        if not a.module:
+            raise Usage("--function needs --module (the Verus module path; '' for the root: "
+                        "use --symbol F instead)")
+        if a.symbol:
+            raise Usage("--symbol and --module/--function are alternatives")
+        symbol = f"{a.module}::{a.function}"
+        modid = None
+    else:
+        modid = a.module
+    if modid is not None and not ID_RE.fullmatch(modid):
+        raise Usage(f"--module {modid!r}: a module id like Q04 (with --function it is a Verus "
+                    "module path)")
+    args = list(a.targets)
+    langs = [a.lang] if a.lang else None
+    if modid is None and args and ID_RE.fullmatch(args[0]) and not Path(args[0]).exists():
+        modid = args.pop(0)
+        if args and args[0] in MODULE_LANGS:
+            if langs and args[0] not in langs:
+                raise Usage("two different languages given")
+            langs = [args.pop(0)]
+        if args:
+            raise Usage(f"unexpected argument {args[0]!r} after the module id")
+        args = []
+    if modid is not None:
+        rec = record(root, modid)
+        if not args:
+            if a.function is not None:
+                raise Usage("--module/--function selects a function inside a target: name it")
+            return module_targets(root, rec, langs), symbol
+        if len(args) != 1:
+            raise Usage("--module <ID> takes at most one probe file")
+        t = path_target(root, args[0], a.lang)
+        if t.path.is_dir() or t.path.name.endswith(".specimen"):
+            raise Usage("--module <ID> <probe>: the probe is one .dfy or .rs file")
+        t.module = rec
+        return [t], symbol
+    if not args:
+        raise Usage("nothing to check: name a file, a unit, or a module id")
+    out = []
+    for raw in args:
+        if raw in MODULE_LANGS:
+            raise Usage(f"{raw!r}: a language letter follows a module id")
+        out.append(path_target(root, raw, a.lang, loose_dir=a.ref))
+    return out, symbol
+
+
+def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    extra = []
+    if "--" in argv:
+        k = argv.index("--")
+        argv, extra = argv[:k], argv[k + 1:]
+    try:
+        a = parse_args(argv)
+    except SystemExit as e:
+        return e.code
+    root = a.root.resolve()
+    try:
+        if extra and (a.selftest or a.ref or a.brittleness):
+            raise Usage("verifier arguments after -- go with the learner loop or the gate only")
+        solver_opt = a.solver is not None or a.solvers
+        if a.selftest:
+            if a.targets or a.gate or a.ref or a.brittleness or solver_opt:
+                raise Usage("--selftest takes no other argument")
+            return selftest(root)
+        if a.solvers and not a.brittleness:
+            raise Usage("--solvers goes with --brittleness (every bundled solver times every "
+                        "seed); one other solver is --solver S")
+        if a.solvers and a.solver is not None:
+            raise Usage("--solvers and --solver are alternatives")
+        if a.function is not None and a.symbol:
+            raise Usage("--symbol and --module/--function are alternatives")
+        if a.name and not a.test:
+            raise Usage("--name goes with --test")
+        if a.bin:
+            if a.gate or a.ref or a.test or a.shipped or a.symbol or a.function is not None or \
+                    a.module or a.lang or a.seed is not None or a.isolate or a.brittleness or \
+                    a.pin_counts or a.json or a.measures or solver_opt or \
+                    a.lab_task is not None or len(a.targets) != 1:
+                raise Usage("usage: vcheck --bin <crate directory> [-- <arguments>] (one "
+                            "crate; no other mode or flag)")
+            t = path_target(root, a.targets[0], None)
+            if is_reference_path(t.path, root):
+                raise Refusal(f"{t.label} is reference material: vcheck never builds it for a "
+                              "study session")
+            h5_guard(root, t)
+            slot_guard(root, t)
+            return bin_mode(t, root, extra)
+        if a.shipped:
+            mids = [x for x in ([a.module] if a.module else []) + list(a.targets)]
+            langs = [a.lang] if a.lang else None
+            if len(mids) == 2 and mids[1] in MODULE_LANGS and not a.lang:
+                langs = [mids.pop()]
+            if len(mids) != 1 or not ID_RE.fullmatch(mids[0]) or a.gate or a.ref or a.test \
+                    or a.symbol or a.function is not None or a.seed is not None or a.isolate \
+                    or a.brittleness or a.pin_counts or extra or solver_opt:
+                raise Usage("usage: vcheck --shipped [--json] <ID> [d|v]")
+            return shipped_mode(root, mids[0], langs, a.json)
+        if a.test and (a.gate or a.ref or a.symbol or a.function is not None or
+                       a.seed is not None or a.isolate or a.brittleness or a.pin_counts or extra
+                       or solver_opt):
+            raise Usage("usage: vcheck --test [--json] [--name N ...] <unit | crate | file | ID "
+                        "[d|v]> (the compiled checks only; no other mode or flag)")
+        if a.pin_counts:
+            mids = [x for x in ([a.module] if a.module else []) + list(a.targets)]
+            if not a.ref or len(mids) != 1 or not ID_RE.fullmatch(mids[0]) or a.gate or \
+                    a.lang or a.symbol or a.function is not None or a.seed is not None or \
+                    a.isolate or a.brittleness or a.json or solver_opt:
+                raise Usage("usage: vcheck --ref --pin-counts <ID>")
+            require_author(root, "vcheck --ref --pin-counts")
+            return pin_counts(root, mids[0])
+        if solver_opt and (a.gate or (a.ref and not a.brittleness)):
+            raise Refusal("the done gate and the reference gate keep the pinned solver (Δ10): "
+                          "another bundled solver is a measurement (--solver S in the learner "
+                          "loop, or --brittleness with --solvers or --solver S; QPLAN §6 Q29)")
+        targets, symbol = build_targets(a, root)
+        if solver_opt:
+            for t in targets:
+                sweep_solvers(t.lang, a.solvers, a.solver)
+        if a.ref:
+            require_author(root, "vcheck --ref")
+            for t in targets:
+                if not is_reference_path(t.path, root):
+                    raise Usage(f"--ref is for reference targets; {t.label} is not one")
+                lp = learner_counterpart(t.path, root)
+                if t.path.is_dir() and lp is not None and lp.is_dir() and \
+                        not twin_has_sources(t.path):
+                    raise Refusal(f"{t.label}: no reference twin (the directory holds no source "
+                                  "file of its own)")
+            if symbol or a.seed is not None or a.isolate:
+                raise Usage("--ref runs the reference gate (or, with --brittleness, the sweep) "
+                            "only")
+        else:
+            for t in targets:
+                if is_reference_path(t.path, root):
+                    raise Refusal(f"{t.label} is reference material: vcheck never prints it "
+                                  "(the author's CI runs it by name)")
+                h5_guard(root, t)
+                if a.test:
+                    slot_guard(root, t)
+        if a.test:
+            return test_mode(targets, root, a.name, a.json)
+        if a.brittleness:
+            if any(t.lang == "py" for t in targets):
+                raise Usage("--brittleness re-verifies under the solver seeds; a Python file "
+                            "has none")
+            if a.gate or symbol or a.seed is not None or a.isolate:
+                raise Usage("--brittleness runs the learner loop under every pinned seed; it "
+                            "takes no other mode")
+            code = EXIT_OK
+            for t in targets:
+                code = max(code, brittleness(t, root, a.json,
+                                             sweep_solvers(t.lang, a.solvers, a.solver),
+                                             reference=a.ref))
+            return code
+        gate = a.gate or a.ref
+        if gate and symbol:
+            raise Refusal("the gate verifies the whole unit: a symbol or function filter is "
+                          "refused (Δ10, Δ11, Δ12, Δ41)")
+        mode = "reference gate" if a.ref else "gate" if gate else (
+            f"fast channel {symbol}" if symbol else "learner loop")
+        if a.solver is not None:
+            mode += f", solver {a.solver}"
+        if a.lab_task is not None:
+            if not a.gate or a.ref or len(targets) != 1:
+                raise Usage("usage: vcheck --gate --lab-task <task form> <delivery> (one "
+                            "delivery: a file, a crate or a unit directory)")
+            if not a.lab_task.exists():
+                raise Refusal(f"{a.lab_task}: no such task form")
+            if is_reference_path(a.lab_task, root):
+                raise Refusal(f"{a.lab_task} is reference material")
+        if a.lab_code is not None and a.lab_task is None:
+            raise Usage("usage: --lab-code goes with --gate --lab-task <task form>")
+        if a.measures and (not a.json or gate):
+            raise Usage("usage: --measures goes with --json, in the learner loop or the fast "
+                        "channel (never with --gate)")
+        results, measures = [], []
+        for t in targets:
+            shadow, run_t, src, dst = run_context(t, root, a.ref)
+            minv = pinned_min_verified(t.path, root) if gate and t.lang == "v" else None
+            started = time.monotonic()
+            try:
+                res = verify(run_t, gate=gate, symbol=symbol, seed=a.seed, isolate=a.isolate,
+                             lint_mode="reference" if a.ref else a.lint_mode, extra=extra,
+                             min_verified=None if a.ref else minv, solver=a.solver)
+                if shadow is not None:
+                    remap(res, src, dst)
+            finally:
+                remove_tree(shadow)
+            wall = round(time.monotonic() - started, 3)
+            if gate and t.module is None:
+                apply_count_pin(res, t.path, root, reference=a.ref)
+            if a.lab_task is not None:
+                lab_gate(res, a.lab_task, t.path, audit=lambda t=t: lab_audit(t),
+                         code=a.lab_code != "own")
+            results.append(res)
+            measures.append({"resource_count": resource_total(res), "wall_s": wall}
+                            if a.measures and not gate else None)
+            if not a.json:
+                print_result(res, root, mode, locations_only=a.ref)
+                if symbol:
+                    want = symbol.rstrip(".")
+                    for k, v in sorted(res.per_symbol.items()):
+                        if k == want or k.endswith("." + want) or k.endswith("::" + want):
+                            print(f"symbol {k}: {v}")
+        if a.json:
+            payload = [result_json(r, locations_only=a.ref, measures=m)
+                       for r, m in zip(results, measures)]
+            print(json.dumps(payload[0] if len(payload) == 1 else payload, ensure_ascii=False,
+                             sort_keys=True))
+        elif len(results) > 1:
+            n_ok = sum(r.verdict == "verified" for r in results)
+            holes = sum(len(r.holes) for r in results)
+            print(f"vcheck: {len(results)} unit(s): {n_ok} verified, "
+                  f"{len(results) - n_ok} not; {holes} hole(s) in all")
+        return exit_of(results)
+    except Usage as e:
+        print(f"vcheck: {e}", file=sys.stderr)
+        return EXIT_USAGE
+    except Refusal as e:
+        print(f"vcheck: refused: {e}", file=sys.stderr)
+        return EXIT_REFUSED
+    except common.CapError as e:
+        print(f"vcheck: {e}", file=sys.stderr)
+        return EXIT_FAIL
+
+
+if __name__ == "__main__":
+    sys.modules.setdefault("vcheck", sys.modules["__main__"])
+    sys.exit(main())

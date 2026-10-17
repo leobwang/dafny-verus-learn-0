@@ -1,0 +1,23 @@
+// Card Q04.C8dv (false friends), row 4 (bringing in a library), demo d (Dafny). Open it
+// only after your Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-4-d.dfy.specimen` and compare with
+// specimens/Q04/card-c8dv-4-v.rs.specimen.
+// after: Q04.P8dv
+module Limbs {
+  // A stand-in for a layer that defines its own power function.
+  function Pow(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 1 else 2 * Pow(n - 1)
+  }
+}
+
+module Q04_CardC8dv4D {
+  import opened Limbs
+  import opened Std.Arithmetic.Power
+
+  lemma PowTwo()
+    ensures Pow(2) == 4
+  {
+  }
+}

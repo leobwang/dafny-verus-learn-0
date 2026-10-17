@@ -1,0 +1,24 @@
+// Demo for card Q07.C5d (recognise:bv-types). Open it only after every
+// prediction of Q07 is recorded (scripts/firsttry.sh Q07 --check). Its pinned
+// run is `scripts/vcheck` (the sidecar's command); run it the same way.
+// after: Q07.P4d
+module {:disableNonlinearArithmetic} Q07_CardC5d {
+  // Copied from the given spine, layer L1 (QG_L1_BigNat), verbatim.
+
+  // The limb base, 2^64, written as a literal.
+  const BASE: nat := 18446744073709551616
+
+  // All on one side: a mask and a remainder of one bv64.
+  lemma MaskIsMod(x: bv64)
+    ensures x & 0xFF == x % 256
+  {
+  }
+
+  // Across the two sides: bit-vector code, a postcondition about nat values.
+  method SplitWide(x: bv128) returns (hi: bv64, lo: bv64)
+    ensures (hi as nat) * BASE + (lo as nat) == x as nat
+  {
+    hi := (x >> 64) as bv64;
+    lo := (x & 0xFFFF_FFFF_FFFF_FFFF) as bv64;
+  }
+}

@@ -1,0 +1,82 @@
+# expected/Q09.counts — Δ11 count pins for Q09: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q09` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q09"
+
+[[unit]]
+path = "dafny/Q/Q09_InternalsIII/std"
+lang = "dafny"
+reference_verified = 130
+min_verified = 6
+symbols = ["Q09_InternalsIII.ProductBelowSquare", "Q09_InternalsIII.ThreeLimbProduct", "Q09_InternalsIII.Zeros", "Q09_InternalsIII.ZerosNonEmpty", "Q09_InternalsIII.ZerosSucc", "Q09_Triggers.PowGrowsByBase"]
+
+[[unit]]
+path = "verus/q/q09_internals_iii"
+lang = "verus"
+reference_verified = 10
+min_verified = 6
+symbols = ["lemma_product_below_square", "lemma_three_limb_product", "lemma_weight_strict_mono", "lemma_zeros_nonempty", "lemma_zeros_succ", "zeros"]
+
+[[file]]
+path = "dafny/Q/Q09_InternalsIII/std/Q09_InternalsIII.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q09_InternalsIII/std/Q09_Triggers.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "verus/q/q09_internals_iii/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q09_InternalsIII/exit/Q09_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q09_internals_iii/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q09_InternalsIII/agent/Q09_AgentRedTeam.dfy"
+role = "agent"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "verus/q/q09_internals_iii/src/agent.rs"
+role = "agent"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "harness/q/fvh_q/gate/core.py"
+role = "harness"
+verdict = "failed"
+holes = 4
+errors = 0

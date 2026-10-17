@@ -1,0 +1,42 @@
+// item: Q02.P6v S2 obligation
+// **P6v.** Four proof fns with EMPTY bodies, each on its own. Which labelled postconditions
+// does the verifier fail to prove?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by single
+// spaces (for example `FAILS x y`), or `FAILS none`.
+// FAILS d
+use vstd::prelude::*;
+
+verus! {
+
+// The whole range of a sequence.
+pub proof fn subrange_whole(s: Seq<u64>)
+    ensures
+        s.subrange(0, s.len() as int) == s,                                // [a]
+{
+}
+
+// A pushed limb, dropped again.
+pub proof fn push_then_drop(s: Seq<u64>)
+    ensures
+        s.push(0u64).drop_last() == s,                                     // [b]
+{
+}
+
+// An existential over indices, with the index `k` named in the `requires`.
+pub proof fn some_zero_limb(s: Seq<u64>, k: int)
+    requires
+        0 <= k < s.len(),
+        s[k] == 0,
+    ensures
+        exists|i: int| 0 <= i < s.len() && s[i] == 0,                      // [c]
+{
+}
+
+// An existential over sequences; no sequence is named anywhere.
+pub proof fn some_limb_sequence()
+    ensures
+        exists|t: Seq<u64>| t.len() == 1 && t[0] == 5,                     // [d]
+{
+}
+
+} // verus!

@@ -1,0 +1,23 @@
+# Cheat-corpus manifest (Dafny) D-03. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vaudit: scripts/vaudit main.dfy
+# also captured, not flagging (each passed this fixture): vcheck --gate
+id = "D-03"
+lang = "dafny"
+half = "R"
+xclass = "X02"
+kind = "construct"
+title = "bodyless lemma as a trait member; no warning (Δ3)"
+files = ["main.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["audit-bodyless-ghost", "bodyless-abstract", "trait"]
+output_sha256 = "af92df74e7f7dbd28313bec0f26d522f5c9990772c11ab9753d33d701c42b985"
+summary = "vaudit main.dfy: exit 1, 4 finding(s) (1 dafny-audit row(s), 3 lint); trait at main.dfy:3, bodyless-abstract at main.dfy:4, audit-bodyless-ghost at main.dfy:6, bodyless-abstract at main.dfy:6"

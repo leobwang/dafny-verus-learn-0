@@ -1,0 +1,48 @@
+# Q09 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H, T, X or A answer of Q09 (never a P
+# answer: the chapter reveals those after their boxes, and the forensic species are P
+# answers). Q09's written pair holds no blueprint problem, so no item is excluded for that
+# reason. Each is verified against its own reference file (rule 1) and against every
+# learner-visible file (rule 2); no given layer above Q09's layer (L4) exists yet, so rule 2's
+# exemption lists nothing.
+# T1's references differ from P2dv's quoted attempts (shipped, learner-visible) only by the
+# trigger's place, so the T1 patterns are cut across the trigger and the step it guards.
+# The X2 pattern is spelled to match both halves' answer (Dafny `{:trigger LimbSum(s + t)}`,
+# Verus `#[trigger] limb_sum(s + t)`); rule 1 checks it against the Dafny exit twin.
+
+# from Solutions/dafny/Q/Q09_InternalsIII/std/Q09_InternalsIII.dfy
+# source:     Mul.LemmaMulLeftInequality(p, y, p);   (Q09.H1d)
+# verified: solutions=1 public=0
+LemmaMulLeftInequality\(p,\s*y,\s*p\)
+
+# from Solutions/dafny/Q/Q09_InternalsIII/std/Q09_Triggers.dfy
+# source:     forall k: nat {:trigger Pow(k + 1)} ensures Pow(k) * BASE <= Pow(k + 1) {   (Q09.T1d)
+# verified: solutions=1 public=0
+\{:trigger\s+Pow\(k\s*\+\s*1\)\}\s*ensures\s+Pow\(k\)\s*\*\s*BASE
+
+# from Solutions/verus/q/q09_internals_iii/src/lib.rs
+# source:     assert forall|k: nat| weight(k) < #[trigger] weight(k + 1) by {   (Q09.T1v)
+# verified: solutions=1 public=0
+weight\(k\)\s*<\s*#\[trigger\]\s*weight\(k\s*\+\s*1\)
+# source:     assert(x * p < p * p) by (nonlinear_arith)   (Q09.H1v)
+# verified: solutions=1 public=0
+assert\(x\s*\*\s*p\s*<\s*p\s*\*\s*p\)\s*by\s*\(nonlinear_arith\)
+
+# from Solutions/dafny/Q/Q09_InternalsIII/exit/Q09_Exit.dfy
+# source:     Mul.LemmaMulIsDistributiveSub(p - 1, p, 1);   (Q09.X1d)
+# verified: solutions=1 public=0
+LemmaMulIsDistributiveSub\(p\s*-\s*1,\s*p,\s*1\)
+# source:     assert forall s: seq<nat>, t: seq<nat> {:trigger LimbSum(s + t)} ::   (Q09.X2d; the same
+#             pattern matches Q09.X2v's #[trigger] limb_sum(s + t) in src/exit.rs's twin)
+# verified: solutions=1 public=0
+(?:\{:trigger\s+LimbSum|#\[trigger\]\s*limb_sum)\(s\s*\+\s*t\)
+
+# from Solutions/harness/q/fvh_q/gate/core.py
+# source:     return GateVerdict(PASS, tuple(x for x in GRADER_ONLY if x not in decided))   (Q09.H3py)
+# verified: solutions=1 public=0
+GateVerdict\(PASS,\s*tuple\(\w+\s+for\s+\w+\s+in\s+GRADER_ONLY
+
+# from Solutions/dafny/Q/Q09_InternalsIII/agent/Q09_AgentRedTeam.dfy
+# source:     ensures Valid([1, 0]) && Valid([1]) && Cmp([1, 0], [1]) == 0 && [1, 0] != [1]   (Q09.A1d)
+# verified: solutions=1 public=0
+Cmp\(\[1,\s*0\],\s*\[1\]\)\s*==\s*0

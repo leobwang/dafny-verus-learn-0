@@ -1,0 +1,42 @@
+# Q18 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or A answer of Q18 (never a P
+# answer: the chapter reveals the specimens' answers after their box) and is verified
+# against its own reference file (rule 1) and against every learner-visible file (rule 2).
+# The capstone's reference statements and delivery live in the agent twins (H2d, H2v,
+# A2dv); Lab 3's task references are sealed with the tasks and have no pattern here. Q18 is
+# hard practice tier, so these patterns bind instructor sessions of Q16 onward (the
+# README's tier rule).
+
+# from Solutions/dafny/Q/Q18_PracticeIIIC/std/Q18_PracticeIIIC.dfy
+# source:       DivMod.LemmaModMultiplesVanish(t, d + t, m);   (Q18.H1d)
+# verified: solutions=1 public=0
+LemmaModMultiplesVanish\(t,\s*d\s*\+\s*t,\s*m\)
+
+# from Solutions/verus/q/q18_practice_iiic/src/lib.rs
+# source:             lemma_mod_multiples_vanish(t as int, x + t, m);   (Q18.H1v)
+# verified: solutions=1 public=0
+lemma_mod_multiples_vanish\(t\s+as\s+int,\s*x\s*\+\s*t,\s*m\)
+
+# from Solutions/dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy
+# source:       invariant DecToNat(d) + DecPow(|d|) * ToNat(x) == ToNat(a)   (Q18.H2d, Q18.A2dv)
+# verified: solutions=1 public=0
+DecToNat\(d\)\s*\+\s*DecPow\(\|d\|\)\s*\*\s*ToNat\(x\)
+
+# from Solutions/verus/q/q18_practice_iiic/src/agent.rs
+# source:             lemma_to_decimal_step(dec_pow(d@.len()), c as nat, q.to_nat(), x.to_nat());   (Q18.H2v, Q18.A2dv)
+# verified: solutions=1 public=0
+lemma_to_decimal_step\(dec_pow\(d@\.len\(\)\)
+
+# from Solutions/harness/q/fvh_q/gate/gate_v2.py
+# source:     recording = lambda instrument, t: results.setdefault(instrument, run(instrument, t))  # noqa: E731   (Q18.H3py)
+# verified: solutions=1 public=0
+setdefault\(instrument,\s*run\(instrument
+# source:         partial = [a for a in cmd if a in PARTIAL_FLAGS[lang]]   (Q18.H4py)
+# verified: solutions=1 public=0
+for\s+a\s+in\s+cmd\s+if\s+a\s+in\s+PARTIAL_FLAGS
+# source:     return Spread(tuple(verdicts), max(cvs) if cvs else None,   (Q18.H6py)
+# verified: solutions=1 public=0
+Spread\(tuple\(verdicts\),\s*max\(cvs\)
+# source:     interval = stats.wilson_interval(fp, controls) if controls else (0.0, 1.0)   (Q18.H7py)
+# verified: solutions=1 public=0
+wilson_interval\(fp,\s*controls\)\s+if\s+controls

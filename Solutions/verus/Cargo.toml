@@ -1,0 +1,13 @@
+# The reference workspace (author-only, never learner-visible): one crate per armed Q
+# module, mirroring verus/q/<id>_<name>/ (the twins src/lib.rs, src/exit.rs and
+# src/agent.rs; exit.rs and agent.rs are never mod-declared, as in the learner crate).
+# Its own [workspace], outside the learner workspace verus/Cargo.toml, so no learner
+# build ever reaches it (Δ23). Build it only by name:
+#     cargo verus verify --manifest-path Solutions/verus/Cargo.toml
+# Package names start with `solutions` (design §14.2 rule 2; Δ79). The course tools
+# never read these manifests: vcheck --ref and vaudit --ref lay the twin sources over
+# the learner crate in a scratch shadow tree. Members are hand-written, one per armed
+# module crate; add a crate when its module is armed.
+[workspace]
+resolver = "2"
+members = ["q/q01_hello", "q/q02_first_syntax_i", "q/q03_first_syntax_ii", "q/q04_proof_craft", "q/q05_frames", "q/q06_machine", "q/q07_internals_i", "q/q08_internals_ii", "q/q09_internals_iii", "q/q10_practice_ia", "q/q11_practice_ib", "q/q12_practice_ic", "q/q13_practice_iia", "q/q14_practice_iib", "q/q15_practice_iic", "q/q16_practice_iiia", "q/q17_practice_iiib", "q/q18_practice_iiic"]

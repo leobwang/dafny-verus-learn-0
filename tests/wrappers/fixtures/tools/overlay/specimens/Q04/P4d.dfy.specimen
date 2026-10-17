@@ -1,0 +1,20 @@
+// item: Q04.P4d S3 obligation
+// **P4.** Which labelled assertions fail? Answer form: `FAILS` and the failing labels.
+// SLOT: FAILS ???
+module Q04_P4 {
+  method A(x: nat) {
+    assert x + 0 == x;      // [a]
+  }
+
+  method B(x: nat) {
+    assert x * 2 == x + 1;  // [b]
+  }
+
+  method C(y: int) {
+    assert y + 1 > y;       // [c]
+  }
+
+  method E(y: int) {
+    assert y > 0;           // [d]
+  }
+}

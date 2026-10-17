@@ -1,0 +1,16 @@
+# The reference project of the learner unit dafny/Q/Q10_PracticeIA/std (author-only, never learner-visible).
+# It holds the twins of that unit's files (same stems, same module names) plus the
+# given layers of the module's chain, with the unit's [options]. Build it only by
+# name: dafny verify Solutions/dafny/Q/Q10_PracticeIA/std/dfyconfig.toml. Never verify it together with
+# the learner unit (Dafny has one global module namespace and the twins keep the
+# learner module names). The course tools do not read this file: vcheck --ref and
+# vaudit --ref lay the twins over the learner unit in a scratch shadow tree.
+# Hand-written mirror of the generated dafny/Q/Q10_PracticeIA/std/dfyconfig.toml (Unit: Q10):
+# keep includes (re-rooted here) and [options] equal to it when the registry, the
+# layer chain or dafny/options/std.toml change.
+includes = ["*.dfy", "../../../../../dafny/given/Q/QG_L1_*.dfy", "../../../../../dafny/given/Q/QG_L2_*.dfy", "../../../../../dafny/given/Q/QG_L3_*.dfy", "../../../../../dafny/given/Q/QG_L4_*.dfy", "../../../../../dafny/given/Q/QG_L5_*.dfy"]
+
+[options]
+resource-limit = 5000000
+standard-libraries = true
+manual-lemma-induction = true

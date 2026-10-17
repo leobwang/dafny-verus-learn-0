@@ -1,0 +1,18 @@
+// Demo for card Q03.C6dv (divergence), the Dafny column. Open it only after
+// every prediction of Q03 is recorded (scripts/firsttry.sh Q03 --check).
+// Run it compiled: its pinned run is `dafny test` (the sidecar's command).
+// after: Q03.P1dv
+module Q03_CardC6d {
+  method Seven() returns (r: int)
+    ensures r == 7
+  {
+    assume false;
+    r := 8;
+  }
+
+  @Test
+  method SevenTest() {
+    var r := Seven();
+    expect r == 7;
+  }
+}

@@ -1,0 +1,61 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "C-3"
+lang = "verus"
+half = "Q"
+xclass = ""
+kind = "control"
+title = "a recursive spec fn with a decreases clause, met by an exec fn"
+files = ["Cargo.toml", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 2, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "clean"
+kinds = []
+output_sha256 = "003cc8ab21f5dbe703f59c6e1f672ca386446b60c3522fd8206bfb3f6f2b21af"
+summary = "verdict verified, stage verify, verified 2"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/C-3"]
+exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "clean"
+kinds = []
+output_sha256 = "8d0b7baa0584442f68cdd5e94d90ac2698a41483c9f6e376124a9f6a85c97749"
+summary = "0 finding(s)"
+argv = ["scripts/vaudit", "tests/corpus/verus/C-3"]
+exit = 0
+
+[[expect]]
+tool = "json-completeness"
+outcome = "clean"
+kinds = []
+output_sha256 = "7f1492357ee26e93a3b3a341646623f6929328883e0c400a08fbb6b26ce5ea1e"
+summary = "the plain run's --output-json verification-results: success true, is-verifying-entire-crate true, verified 2, errors 0; func-details 4 entries; the check: success true, entire crate, verified >= 1 (output_sha256: of that verification-results object as sorted-key JSON plus a newline)"
+argv = ["verus", "tests/corpus/verus/C-3/src/lib.rs", "--crate-type=lib", "--crate-name", "corpus_vc3", "--rlimit", "2", "--num-threads", "1", "--output-json", "--error-format=json", "--time"]
+exit = 0
+
+[[expect]]
+tool = "seed-rerun"
+outcome = "clean"
+kinds = []
+output_sha256 = "dd068842db4f3796f573b18ea372a87ea97de1f8e79dc77065e654d1a3c51abf"
+summary = "vcheck --brittleness under seeds 1, 2, 3: seed 1 verified, seed 2 verified, seed 3 verified; stable; the resource-count spread line is advisory (its numbers are in the hash)"
+argv = ["scripts/vcheck", "--brittleness", "tests/corpus/verus/C-3"]
+exit = 0

@@ -1,0 +1,146 @@
+# bench/local/q/lab2/STRATUM.toml — Lab 2's local stratum (QPLAN §25.6). Learner-owned tree
+# (guard rule 2); the task forms are course-authored and shipped, and this file says which of
+# them the lab draws. The reference specifications are not here, nor anywhere learner-visible:
+# they are Lab 2's hidden truth, sealed for the grader container (QPLAN §30 Q49).
+#
+# Every local task is one standalone file (it imports nothing: the definitions it is about are
+# copied into it): a prose docstring, a method (Dafny) or exec fn (Verus) with its
+# implementation and no specification, and an empty witness. A delivery adds the `requires`
+# and `ensures` and one witness call, and changes no code (arms S0 and S1); the vericoding arm V
+# writes the specification and then its own implementation and proof (QPLAN §25.5).
+#
+# Validity (checked by the Q15 module lane on 2026-10-11, one solver job at a time): each task's
+# reference program (its form with the reference specification and a witness) passes `vcheck
+# --gate`; each task form, as shipped, verifies (it states nothing). `mutants` is the number of
+# mutants the reference oracles (`fvh_q.oracles.mutants`) make of the shipped code; the
+# reference specification kills every one but three (two equivalent mutants and one that does
+# not resolve; counts per task in the hidden truth).
+#
+# Composition (to be pre-registered in paper/Q15_answers.tex, B1): the ten Dafny and ten Verus
+# cards below, with the public strata of QPLAN §25.6 (5 HumanEval-Verus, 5 HumanEval-Dafny),
+# built in Lab 2's form in bench/local/q/lab2pub/ (its STRATUM.toml) from the draw that
+# bench/public/POOLS.toml's two Q15 [[draw]] records hold.
+
+schema = 1
+lab = "Q15"
+date = "2026-10-11"
+
+[[card]]
+id = "d01-third-limb"
+lang = "dafny"
+name = "ThirdLimb"
+mutants = 6
+
+[[card]]
+id = "d02-top-is-zero"
+lang = "dafny"
+name = "TopIsZero"
+mutants = 7
+
+[[card]]
+id = "d03-drop-low"
+lang = "dafny"
+name = "DropLow"
+mutants = 4
+
+[[card]]
+id = "d04-zero-low"
+lang = "dafny"
+name = "ZeroLow"
+mutants = 6
+
+[[card]]
+id = "d05-same-limbs"
+lang = "dafny"
+name = "SameLimbs"
+mutants = 5
+
+[[card]]
+id = "d06-has-zero-limb"
+lang = "dafny"
+name = "HasZeroLimb"
+mutants = 7
+
+[[card]]
+id = "d07-first-nonzero"
+lang = "dafny"
+name = "FirstNonZero"
+mutants = 11
+
+[[card]]
+id = "d08-limbwise-le"
+lang = "dafny"
+name = "LimbwiseLe"
+mutants = 10
+
+[[card]]
+id = "d09-keep-low"
+lang = "dafny"
+name = "KeepLow"
+mutants = 1
+
+[[card]]
+id = "d10-fits-in"
+lang = "dafny"
+name = "FitsIn"
+mutants = 9
+
+[[card]]
+id = "v01-third-limb"
+lang = "verus"
+name = "third_limb"
+mutants = 6
+
+[[card]]
+id = "v02-top-two-equal"
+lang = "verus"
+name = "top_two_equal"
+mutants = 10
+
+[[card]]
+id = "v03-is-canonical"
+lang = "verus"
+name = "is_canonical"
+mutants = 7
+
+[[card]]
+id = "v04-add-carry"
+lang = "verus"
+name = "add_carry"
+mutants = 11
+
+[[card]]
+id = "v05-sub-borrow"
+lang = "verus"
+name = "sub_borrow"
+mutants = 10
+
+[[card]]
+id = "v06-min-limb"
+lang = "verus"
+name = "min_limb"
+mutants = 1
+
+[[card]]
+id = "v07-pair-le"
+lang = "verus"
+name = "pair_le"
+mutants = 3
+
+[[card]]
+id = "v08-sig-two"
+lang = "verus"
+name = "sig_two"
+mutants = 9
+
+[[card]]
+id = "v09-add-carry-in"
+lang = "verus"
+name = "add_carry_in"
+mutants = 7
+
+[[card]]
+id = "v10-same-length"
+lang = "verus"
+name = "same_length"
+mutants = 1

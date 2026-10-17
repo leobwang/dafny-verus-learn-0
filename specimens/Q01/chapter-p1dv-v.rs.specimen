@@ -1,0 +1,15 @@
+use vstd::prelude::*;
+
+verus! {
+
+fn sub(x: u64, y: u64) -> (d: u64)
+{
+    x - y
+}
+
+} // verus!
+
+// Chapter specimen for docs/Q01_Hello.md, section 1: the scenario of Q01.P1dv. The
+// chapter quotes its output; scripts/vcheck runs it once these predictions are recorded.
+// after: Q01.P1dv
+// after: Q01.P8dv

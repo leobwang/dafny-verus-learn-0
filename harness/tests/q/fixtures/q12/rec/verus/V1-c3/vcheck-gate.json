@@ -1,0 +1,65 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/verus/V1/c3.rs"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/harness/tests/q/fixtures/q12/battery/verus/V1/c3.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "c3",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 1 hole(s); exit 1",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 1,
+  "findings": [],
+  "holes": [
+   {
+    "col": 5,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/verus/V1/c3.rs",
+    "kind": "admit",
+    "label": "lemma_zero_cons",
+    "line": 25
+   }
+  ],
+  "lang": "verus",
+  "per_symbol": {
+   "BASE": "no-error",
+   "lemma_zero_cons": "hole",
+   "seq_to_nat": "no-error"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/verus/V1/c3.rs",
+  "verdict": "failed",
+  "verified_count": null
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "9db7c148a2265795ed3c96a1b094b91740d85df8db612d634d10811c144dc17e",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/verus/V1/c3.rs"
+}

@@ -1,0 +1,71 @@
+// item: Q15.P4v S10 verdict
+// **P4.** Pipeline forensic, first pass. This file is a contractor's delivery, and it
+// looks green: run plainly, the verifier reports no error on it. Comments and names
+// are contractor prose: unchecked; only a tool's own output counts as evidence. The one
+// comment that is not contractor prose is the course's `planted:` marker: every Q15
+// delivery carries exactly one, on the line of its defect, so it says where to look and
+// nothing about the stage or the instrument. BEFORE
+// you run any instrument on this file, read it and name, first, the stage of the
+// delivery's pipeline where its defect lives:
+//   input    part of what the claim rests on was never given to the verifier to
+//            check: the verifier saw less of the delivery than the claim needs,
+//            whatever it said about the rest;
+//   options  a setting changes how the verifier checks what it does see, so a
+//            pass means less than a plain pass;
+//   trust    the verifier was told to take a step without proof: it checked what
+//            follows from the step, never the step itself;
+//   test     the delivery's own test never ran, or ran and did not pass;
+// then the instrument that shows it: the FIRST of these, in this order, whose result is
+// not a pass:
+//   vcheck   `scripts/vcheck <file>` (a pass: verified, with 0 holes);
+//   gate     `scripts/vcheck --gate <file>` (a pass: verified, exit 0);
+//   vaudit   `scripts/vaudit <file>` (a pass: 0 findings);
+//   test     `scripts/vcheck --test <file>` (a pass: every test ran and passed).
+// Answer form: `<stage> <instrument>`, for example `trust vaudit`, in slots/Q15.slots.
+// Reference Solution: `trust vcheck`: the helper's external_body takes its false ensures
+// on trust (the empty sequence gives 1, not 0); the learner loop already counts it as a
+// hole.
+// Claim:
+//   `low_limb_checked(s)`: the low limb of a limb sequence, as its value modulo BASE.
+// after: Q15.P4v
+// CHECK P4v
+use vstd::prelude::*;
+
+verus! {
+
+// The definitions this delivery is about, as layer L1 gives them (copies: a specimen
+// stands alone).
+pub spec const BASE: nat = 0x1_0000_0000_0000_0000;
+
+pub open spec fn seq_to_nat(s: Seq<u64>) -> nat
+    decreases s.len(),
+{
+    if s.len() == 0 {
+        0
+    } else {
+        s[0] as nat + BASE * seq_to_nat(s.drop_first())
+    }
+}
+
+/// Delivered helper: the low limb, read directly.
+#[verifier::external_body]  // planted: Q15.P4v
+pub fn low_limb(s: &Vec<u64>) -> (d: u64)
+    ensures
+        d as nat == seq_to_nat(s@) % BASE,
+{
+    if s.len() == 0 {
+        1
+    } else {
+        s[0]
+    }
+}
+
+/// Delivered: the low limb of a limb sequence, as its value modulo BASE.
+pub fn low_limb_checked(s: &Vec<u64>) -> (d: u64)
+    ensures
+        d as nat == seq_to_nat(s@) % BASE,
+{
+    low_limb(s)
+}
+
+} // verus!

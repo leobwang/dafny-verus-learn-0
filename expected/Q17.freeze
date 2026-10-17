@@ -1,0 +1,86 @@
+# expected/Q17.freeze — statement-freeze pins for Q17 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q17` from the files as shipped; checked by
+# `scripts/specfreeze --check Q17`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q17"
+unfrozen = ["verus/q/q17_practice_iiib/src/lib.rs"]
+
+[[file]]
+path = "dafny/Q/Q17_PracticeIIIB/std/Q17_PracticeIIIB.dfy"
+lang = "d"
+open_bodies = ["Q17_PracticeIIIB.ArrayPQ.Valid", "Q17_PracticeIIIB.PQueue.Valid"]
+[file.statements]
+"Q17_PracticeIIIB.ArrayPQ.ExtractMin" = "aa8da6604d74a545cf039880f8930395c4ab3266442a6fdf49c5989549fcbb91"
+"Q17_PracticeIIIB.ArrayPQ.Insert" = "1866433445c62f7770fa547980313a7de185103278fc9cd18557c3199268f556"
+"Q17_PracticeIIIB.ArrayPQ.Valid" = "147add3b942464d3207c5364fcf92033d1309c3c77f0799263f482012abb5319"
+"Q17_PracticeIIIB.ArrayPQ._ctor" = "1420891fe63443928a65d14eebbd8caacfbdf304dbb426283ad3be9a4a945029"
+"Q17_PracticeIIIB.ArrayPQCheck" = "67be6cc028048ec56d17a746173aeb38713cfcf280fdb416d1199515916caa33"
+"Q17_PracticeIIIB.PQueue.ExtractMin" = "aa8da6604d74a545cf039880f8930395c4ab3266442a6fdf49c5989549fcbb91"
+"Q17_PracticeIIIB.PQueue.Insert" = "1866433445c62f7770fa547980313a7de185103278fc9cd18557c3199268f556"
+"Q17_PracticeIIIB.PQueue.Valid" = "147add3b942464d3207c5364fcf92033d1309c3c77f0799263f482012abb5319"
+
+[[file]]
+path = "dafny/Q/Q17_PracticeIIIB/std/Q17_Vcgen.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q17_Vcgen.BExp" = "6f489129a64107b6a9c287fa1ec23c3fdd7e3930c787b1ecca005bc8b4b957b0"
+"Q17_Vcgen.Cmd" = "40edcf36b52ead117d89bc280bdb7ce6491b71d96c91cc3094ba7770d7f42182"
+"Q17_Vcgen.Count" = "169c44d4e598c5bdffa8595cb5981d0cb605b5f2375f98a1af3a27bdf71dc6f6"
+"Q17_Vcgen.CountCorrect" = "a355d4f619cc12bcc597a450b4cfd3033767302d4d34addd4883b4e8213982ed"
+"Q17_Vcgen.CountPost" = "8c128d3b72750b5d5ca3098f7c338aed657f4a8c4e2accfe63ae454afe7d4da5"
+"Q17_Vcgen.CountVcsValid" = "e874efaf9ecd867730630a63e2885302b8207d53f4d299bace2b371274ebc3d9"
+"Q17_Vcgen.Eval" = "a554e449f09c3623e043136b51c4920075b6af14559103521da81e159fcf3f7b"
+"Q17_Vcgen.Exec" = "ed06669d6081a19c998c86b711673bb2efa55a5ec6e1e9828104c227e2757b29"
+"Q17_Vcgen.Expr" = "aca5907b088033677cc64c33176b7754f5f5af5945d4fb10d9bb6e80410847d7"
+"Q17_Vcgen.Holds" = "18ed0a9689e47e24ccab481ae7c0667cbe0bc4b1dcb1bf993b519970f7a59b9b"
+"Q17_Vcgen.Outcome" = "f001c7132dc22ff0e1d3b925909a5cef15277a012e87c029e75dad32c508c610"
+"Q17_Vcgen.Pre" = "c395c8f68a926163282f84aeeca3715172ee737406e199635704d6dd433a90b0"
+"Q17_Vcgen.State" = "98995003eeda3f8b4d4d7b5e891bab7d71c2b19bb92eb8a61a2f9f12667d8e08"
+"Q17_Vcgen.SubstB" = "6c82fb3718ca92e28b23977e35c4fc970eb38cbacafa0c1ee48b83cbb9bf9f9d"
+"Q17_Vcgen.SubstE" = "037decab6b3511a5be721f732d93318cc5f36220ceaf73ace8b62bde2fa7bc32"
+"Q17_Vcgen.Update" = "4cde72c95466b16f2b91ea13c8a46756cbf31e92800679d1ab456dfb92a0fe56"
+"Q17_Vcgen.Valid" = "0bb9e898e3853304cdeb738d74720de7fd75d8706b027367a8c0644d9c3346d0"
+"Q17_Vcgen.VcSoundWitness" = "aa7f19e9679c97cb3a0ade47d791c2ebfc3b98c6952021d3ad385674427b764b"
+"Q17_Vcgen.Vcs" = "a7a9732c8223834aeff9d8e97aa7b599c153e4b45f1174996af88b685d8162e0"
+
+[[file]]
+path = "verus/q/q17_practice_iiib/src/perm.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"PRing" = "3a16288f759451778436a6e318bce389acbec891a94a830cc050a9022b395e38"
+"PRing::cap" = "27439397cd00e396640b6cbade2059322d3ddf0415c81b15a87269fdbfdc1ebf"
+"PRing::live" = "80700e76ec6f1fbd60c540344c33888c4b134563b744ad79a271c17ee5bf865e"
+"PRing::new" = "51e16c59441aa99aea19b17927bd3bb23498f655444abd261e6400b0143d164e"
+"PRing::pop_front" = "6ea7826c6061baa5a4260826b323249e3d49ccf3b8bc5eae2677e42c2ff012f0"
+"PRing::push_back" = "3105aaf01d64335dd67509c07458a684556fa442cda0a51600f938f338758d10"
+"PRing::slot" = "3baecee0b6fc9b251a5dd25c6129419a265bc9d218cad75e867719ab550b0f1f"
+"PRing::view" = "39cbf5258177ac58e700cc0ee89f10ac6b0a729d76163fde672086d09933f857"
+"PRing::wf" = "3725de0cd530a179c100f8c0bd40f4b8728c9d7dc91560e61590e529e67b7932"
+"ring_check" = "1e9bcdb099f2d98fba79fe86130495ff0eda06d24e8c9751d321c7af3889b3c7"
+"slot_of" = "94cd6746e9501413bb8a6fe71c075fd46eef4f007935612d23185b1d59205ae5"
+
+[[file]]
+path = "dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q17_AgentMetatheory.BExp" = "6f489129a64107b6a9c287fa1ec23c3fdd7e3930c787b1ecca005bc8b4b957b0"
+"Q17_AgentMetatheory.Cmd" = "40edcf36b52ead117d89bc280bdb7ce6491b71d96c91cc3094ba7770d7f42182"
+"Q17_AgentMetatheory.Eval" = "a554e449f09c3623e043136b51c4920075b6af14559103521da81e159fcf3f7b"
+"Q17_AgentMetatheory.Exec" = "ed06669d6081a19c998c86b711673bb2efa55a5ec6e1e9828104c227e2757b29"
+"Q17_AgentMetatheory.Expr" = "aca5907b088033677cc64c33176b7754f5f5af5945d4fb10d9bb6e80410847d7"
+"Q17_AgentMetatheory.Holds" = "18ed0a9689e47e24ccab481ae7c0667cbe0bc4b1dcb1bf993b519970f7a59b9b"
+"Q17_AgentMetatheory.Outcome" = "f001c7132dc22ff0e1d3b925909a5cef15277a012e87c029e75dad32c508c610"
+"Q17_AgentMetatheory.Pre" = "c395c8f68a926163282f84aeeca3715172ee737406e199635704d6dd433a90b0"
+"Q17_AgentMetatheory.State" = "98995003eeda3f8b4d4d7b5e891bab7d71c2b19bb92eb8a61a2f9f12667d8e08"
+"Q17_AgentMetatheory.SubstB" = "6c82fb3718ca92e28b23977e35c4fc970eb38cbacafa0c1ee48b83cbb9bf9f9d"
+"Q17_AgentMetatheory.SubstE" = "037decab6b3511a5be721f732d93318cc5f36220ceaf73ace8b62bde2fa7bc32"
+"Q17_AgentMetatheory.Update" = "4cde72c95466b16f2b91ea13c8a46756cbf31e92800679d1ab456dfb92a0fe56"
+"Q17_AgentMetatheory.Valid" = "0bb9e898e3853304cdeb738d74720de7fd75d8706b027367a8c0644d9c3346d0"
+"Q17_AgentMetatheory.Vcs" = "a7a9732c8223834aeff9d8e97aa7b599c153e4b45f1174996af88b685d8162e0"

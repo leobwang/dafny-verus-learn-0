@@ -1,0 +1,80 @@
+{
+ "dafny": {
+  "archive": "~/.cache/dafny-verus-learn-0/author-probes/dvr0-dafny/recon/p3-json-fields/",
+  "command": "scripts/vcheck --json <stand-in file> (learner loop, pinned seed, one run at a time)",
+  "fields_present": {
+   "resource_count": true,
+   "wall_s": true
+  },
+  "resource_count": [
+   1448290,
+   1448290,
+   1448290,
+   1448290,
+   1448290,
+   1448290,
+   1448290,
+   1448290,
+   1448290,
+   1448290
+  ],
+  "resource_count_distinct": 1,
+  "runs": 10,
+  "stand_in": "self-contained A1 Matches + the A1b CatAssoc lemma (R05's W1 is not built yet)",
+  "verdicts": [
+   "verified"
+  ],
+  "wall_s": [
+   0.91,
+   0.906,
+   0.91,
+   0.93,
+   0.899,
+   0.901,
+   0.916,
+   0.892,
+   0.9,
+   0.901
+  ],
+  "wall_s_distinct": 8
+ },
+ "verus": {
+  "archive": "~/.cache/dafny-verus-learn-0/author-probes/dvr0-verus/recon/p3-json-fields/",
+  "command": "scripts/vcheck --json <stand-in file> (learner loop, pinned seed, one run at a time)",
+  "fields_present": {
+   "resource_count": true,
+   "wall_s": true
+  },
+  "resource_count": [
+   696812,
+   696812,
+   696812,
+   696812,
+   696812,
+   696812,
+   696812,
+   696812,
+   696812,
+   696812
+  ],
+  "resource_count_distinct": 1,
+  "runs": 10,
+  "stand_in": "self-contained A1 Matches + the A1b CatAssoc lemma (R05's W1 is not built yet)",
+  "verdicts": [
+   "verified"
+  ],
+  "wall_s": [
+   1.235,
+   1.243,
+   1.23,
+   1.23,
+   1.235,
+   1.287,
+   1.227,
+   1.227,
+   1.235,
+   1.243
+  ],
+  "wall_s_distinct": 5
+ }
+}

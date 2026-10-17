@@ -1,0 +1,47 @@
+// item: Q05.P6d S8 obligation
+// **P6d.** Verification conditions of a call (the wp→VC lab is on paper; Reference
+// Solution: [d] fails. The postcondition's first conjunct is about limb 0 only; limb 1
+// after the call is known only through the second conjunct, the frame. [a], [b] and [c]
+// follow from their hypotheses: the length, the first conjunct, and the frame at
+// `j == 1`.) The callee
+// `Bump(a, i)` requires `i < |a|` and ensures that limb `i` goes up by one and that every
+// other limb is unchanged. The caller is `Bump(a, 0); assert a[0] >= 1 && a[1] ==
+// old(a[1]);`, on a sequence of length 2. Each lemma below states one candidate
+// verification condition for that caller, over the sequence `s0` before the call and
+// `s1` after it, with its conclusion on the line labelled `// [x]`: [a] the call's
+// precondition; [b] the first limb after the call; [c] the second limb, from the whole
+// postcondition; [d] the second limb, from the postcondition's first conjunct only.
+// Which labelled conclusions does the verifier fail to prove? Answer form: `FAILS`
+// followed by the failing labels in label order, separated by single spaces, or
+// `FAILS none`.
+// FAILS d
+module Q05_P6 {
+  lemma CallPre(s0: seq<nat>)
+    requires |s0| > 1
+    ensures 0 < |s0|  // [a]
+  {
+  }
+
+  lemma FirstLimb(s0: seq<nat>, s1: seq<nat>)
+    requires |s1| == |s0| > 1
+    requires s1[0] == s0[0] + 1
+    requires forall j | 0 <= j < |s0| && j != 0 :: s1[j] == s0[j]
+    ensures s1[0] >= 1  // [b]
+  {
+  }
+
+  lemma OtherLimb(s0: seq<nat>, s1: seq<nat>)
+    requires |s1| == |s0| > 1
+    requires s1[0] == s0[0] + 1
+    requires forall j | 0 <= j < |s0| && j != 0 :: s1[j] == s0[j]
+    ensures s1[1] == s0[1]  // [c]
+  {
+  }
+
+  lemma OtherLimbNoFrame(s0: seq<nat>, s1: seq<nat>)
+    requires |s1| == |s0| > 1
+    requires s1[0] == s0[0] + 1
+    ensures s1[1] == s0[1]  // [d]
+  {
+  }
+}

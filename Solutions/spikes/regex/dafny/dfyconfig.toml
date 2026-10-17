@@ -1,0 +1,10 @@
+# DVR0 regex reference (author-only): the layers A1, A1b, A2-A5 as they ship
+# (dafny/given/R/RG_*.dfy) and the module references beside them (RX_*.dfy:
+# R02, R06's decomposer, R09's parser, R04's witnesses and R08's refinement),
+# at the course resource-limit pin (Δ56). The gate tool lays variants of these
+# files out in scratch projects; this project is the reference as reconciled.
+includes = ["RG_A1_Re.dfy", "RG_A1b_Facts.dfy", "RG_A2_Deriv.dfy", "RG_A3_Syntax.dfy", "RG_A4_Norm.dfy", "RG_A5_VM.dfy", "RX_R02.dfy", "RX_R06_Decomp.dfy", "RX_R09_Syntax.dfy", "RX_Items.dfy"]
+
+[options]
+resource-limit = 5000000
+manual-lemma-induction = true

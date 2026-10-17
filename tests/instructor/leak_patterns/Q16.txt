@@ -1,0 +1,33 @@
+# Q16 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H answer of Q16 (Q16 has no P and
+# no X item) and is verified against its own reference file (rule 1) and against every
+# learner-visible file (rule 2). Q16 is hard practice tier, so these patterns bind
+# instructor sessions of Q16 onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q16_PracticeIIIA/std/Q16_PracticeIIIA.dfy
+# source:     ensures ToNat(MulAcc(a, b, acc, k)) == ToNat(acc) + Pow(k) * (ToNat(a) * ToNat(b))   (Q16.H1d, the generalization)
+# verified: solutions=1 public=0
+ToNat\(acc\)\s*\+\s*Pow\(k\)\s*\*\s*\(ToNat\(a\)\s*\*\s*ToNat\(b\)\)
+# source:       LemmaMulIsDistributive(P, A * b[0], BASE * (A * B1));   (Q16.H1d)
+# verified: solutions=1 public=0
+LemmaMulIsDistributive\(P,\s*A\s*\*\s*b\[0\],\s*BASE\s*\*\s*\(A\s*\*\s*B1\)\)
+# source:       invariant MulAcc(a, b[k..], r, k) == Times(a, b)   (Q16.H3d)
+# verified: solutions=1 public=0
+invariant\s+MulAcc\(a,\s*b\[k\.\.\],\s*r,\s*k\)
+
+# from Solutions/verus/q/q16_practice_iiia/src/lib.rs
+# source:     lemma_multiply_divide_lt(t, d as int, BASE as int);   (Q16.H2v, its helper)
+# verified: solutions=1 public=0
+lemma_multiply_divide_lt\(t,\s*d\s+as\s+int,\s*BASE\s+as\s+int\)
+# source:             seq_to_nat(a@.subrange(i as int, n as int)) == seq_to_nat(q@.subrange(i as int, n as int))   (Q16.H2v)
+# verified: solutions=1 public=0
+seq_to_nat\(a@\.subrange\(i\s+as\s+int,\s*n\s+as\s+int\)\)\s*==\s*seq_to_nat\(q@
+# source:         seq_to_nat(s.update(p, x)) + weight(p as nat) * s[p] == seq_to_nat(s) + weight(p as nat)   (Q16.H3v, its helper)
+# verified: solutions=1 public=0
+seq_to_nat\(s\.update\(p,\s*x\)\)\s*\+\s*weight\(p\s+as\s+nat\)\s*\*\s*s\[p\]
+# source:                 seq_to_nat(res@) + weight((j + i) as nat) * carry == v0 + weight(j as nat) * (   (Q16.H3v)
+# verified: solutions=1 public=0
+weight\(\(j\s*\+\s*i\)\s+as\s+nat\)\s*\*\s*carry\s*==\s*v0
+# source:         seq_to_nat(s.subrange(i, s.len() as int)) == s[i] + BASE * seq_to_nat(   (Q16.H2v, its helper; DV5c fix round: replaces an H3v call pattern)
+# verified: solutions=1 public=0
+seq_to_nat\(s\.subrange\(i,\s*s\.len\(\)\s+as\s+int\)\)\s*==\s*s\[i\]\s*\+\s*BASE

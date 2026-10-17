@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/G09/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/G09/main.dfy",
+    "kind": "include",
+    "line": 2,
+    "message": "an included file is not verified by default and audit skips it (Δ3, G9)"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/G09/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "c401e7061cf8c1c5717fa9ae52b4ea27b04d070ce7f78fbd7ef617caeed71e37",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/G09/main.dfy"
+}

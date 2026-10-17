@@ -1,0 +1,28 @@
+// Demo for card Q05.C7dv (divergence), the Verus column. Open it only after every
+// prediction of Q05 is recorded (scripts/firsttry.sh Q05 --check).
+// Run it compiled: its pinned run is `scripts/vcheck --test` (the sidecar's command).
+// after: Q05.P3dv
+use vstd::prelude::*;
+
+verus! {
+
+pub struct Tagged {
+    pub x: u64,
+    pub shadow: Ghost<Seq<u64>>,
+}
+
+pub struct Plain {
+    pub x: u64,
+}
+
+} // verus!
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn same_size() {
+        assert_eq!(core::mem::size_of::<Tagged>(), core::mem::size_of::<Plain>());
+    }
+}

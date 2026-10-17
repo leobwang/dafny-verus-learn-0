@@ -260,7 +260,7 @@ Rates follow §2.5; agent wall-clock time is excluded; lines go into `QPLAN.md` 
 | Q15 | *practice:* brief 15, S9 LSP client 30, S10 pipeline forensic 20, S11 trigger battery + stability 30, S12 refute→repair→prove 15, toolsmith 20, tutor red-team 15, exit 20; *Lab 2:* prose specs 108, pre-registration 40, `/grade-paper` 10, oracles 75, vericoding arm 20, run setup 20, analysis 60, reward audit 15, bench audit 30, `--post` 10, cards 45, task cards 20, ledger + calib 10 | 628 |
 | Q16 | brief 10, blueprint 30, H1 generalize before induction (D) 45, H2 `cmp` with invented invariant (V) 50, H3 `mul_limb` (V + D mirror, gated) 55, `/review-code` 15, paper 15, ledger 5 | 225 |
 | Q17 | brief 10, blueprint 30, H1 priority-queue refinement with frames (D) 50, H2 permission ring buffer (V, gated) 50, H3 VC-generator soundness statements (D) 35, metatheory run 15, `/review-code` 15, paper 15, ledger 5 | 225 |
-| Q18 | *practice:* brief 10, H1 brittleness repair under a solver swap 40, H2 capstone round 110, H3 gate v2 + adversarial round 85; *Lab 3:* case study 150, FP rate 20, `TRUST.md` + contract v2 30, proposal 60, `/review-code` 20, `--post` 10, cards 30, ledger + calib 10 | 575 |
+| Q18 | *practice:* brief 10, H1 brittleness repair that must hold under a solver swap and a seed sweep 40, H2 capstone round 110, H3 gate v2 + adversarial round 85; *Lab 3:* case study 150, FP rate 20, `TRUST.md` + contract v2 30, proposal 60, `/review-code` 20, `--post` 10, cards 30, ledger + calib 10 | 575 |
 
 **Totals:** concept 2,332 min; practice 2,998, of which lab blocks 1,269 (21.2 h). Q06/Q09 statistics are by hand and by composing the frozen `fvh.stats` (§10.3).
 
@@ -379,9 +379,14 @@ Each cost names the insight pre-empted for a learner who does the Q home first; 
 | W12 | framing: Q18 proposal → R16 card + memo | scoping a claim to a small-n replication |
 | W13 | R pre-empting Q32/Q33 | R12/R15 code may make solo Q32/Q33 start easier (avoided under D2's default) |
 | W14 | parse with errors: Q05 → R09 | `:-`/`?` propagation (positions and fidelity stay new) |
+| W15 | stage attribution: Q03/Q12 → R13 | that a failure's stage is read from the tool's own stage report, not guessed from the message (what each stage's fake green exploits stays new) |
+| W16 | refute → repair → prove: Q15 → R06 | that the repair is derived from the counterexample, not chosen to make the proof easy |
+| W17 | possible and impossible crate tasks as cheat attractors: Q18 Lab 3 → Lab γ | that an impossible task turns every claimed success into evidence of a cheat (inflation per class stays new) |
+| W18 | card contamination audit: Q15 Lab 2 → Lab β | post-cutoff authorship, novelty review and perturbation probes as controls |
+| ~~W19~~ (dropped, DELTAS Δ211) | a tracked map of permissions with take and put: Q14/Q17 → R11, gated | no longer shared: DV5 diversified the Q side (Q14.H5v passes one permission per node; Q17.H2v borrows each slot's permission in place from a tracked sequence), so the genre stays new in R11 |
 | X1 (cross-course) | compiler correctness by generalized simulation: Lean R16 → R16 | "generalize over the code that follows" (nondeterministic `Split` stays new) |
 
-No waiver is needed where artifacts differ: LSP-by-hand is Q-only (R12 reads a trace); the toolwright tools (`holecount` vs profiler); the library lab; the forensic halves; tutor red-team vs grader injection. The earlier draft's W14 (deep evaluator) is dropped: it was an avoided overlap.
+No waiver is needed where artifacts differ: LSP-by-hand is Q-only (R12 reads a trace); the toolwright tools (`holecount` vs profiler); the library lab; the forensic halves; tutor red-team vs grader injection. The earlier draft's W14 (deep evaluator) is dropped: it was an avoided overlap. W15–W18 come from the plan review and are adopted; W19 was provisional until DV5's probes (DELTAS Δ177) and is dropped (Δ211). `PLAN.md` §5.4 gives each waiver's R objects, and `avoid.waivers.tsv` carries the name lines the `avoid.sh` baseline needs.
 
 ## 10. Running artifacts
 

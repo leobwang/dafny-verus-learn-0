@@ -1,0 +1,256 @@
+# expected/Q08.freeze — statement-freeze pins for Q08 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q08` from the files as shipped; checked by
+# `scripts/specfreeze --check Q08`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q08"
+unfrozen = ["dafny/Q/Q08_InternalsII/agent/Q08_AgentFlagship.dfy", "verus/q/q08_internals_ii/src/agent.rs"]
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/std/Q08_InternalsII.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q08_InternalsII {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q08_InternalsII.AddWithCarry" = "9a0ce59e9d7a4361b01cb58232ae3d4343fe8582f86dee80001a6b769b1f3bc7"
+"Q08_InternalsII.AddWithCarryCheck" = "4dd61399b1696fc33ee8ff3eb3be9252156f3973f7eec644e6df974a8f1e39ef"
+"Q08_InternalsII.CardNat.Add" = "85794a340466597d101e595178b65e8d1fbffcf2f8165aaeb2f58ab1cf91bde8"
+"Q08_InternalsII.CardNat.AddCommutes" = "2f5d112d4d26dd88e968def275b64e165d5298360fa18d990da0ddede2ef4b50"
+"Q08_InternalsII.CardNat.AddCorrect" = "d12850e41e15438756ed1ffce981bfb8096a2f70aa0b9f3c52163b742414a51c"
+"Q08_InternalsII.CardNat.BigNat" = "062984d5fea5680edb8731ba1fbdcbe6aa6b18191a5cf9d09931e4c725684600"
+"Q08_InternalsII.CardNat.Cmp" = "ad927baa2d7d786afff50694968db63e3b45b4376f1e70dc823f740d6abb1bb3"
+"Q08_InternalsII.CardNat.CmpCorrect" = "9e83fd322a1075c13072cc78fde27126e8055709e48fc2cf9d8b99fc48a96248"
+"Q08_InternalsII.CardNat.FromNat" = "7df66e3cfc7965bb73f941e672fa842bb0bd85acb67854ccae4cf2e543d46906"
+"Q08_InternalsII.CardNat.FromNatCorrect" = "d8e59a2116cb212d6b9a3e9e9cbd88cb220ac3829b263b11ab05d91f2b4918d0"
+"Q08_InternalsII.CardNat.Val" = "b1298e1f9018f5ef9ee0eb1d462ee180e5cd06e3446327bef42f760060b2a986"
+"Q08_InternalsII.CardNat.Wf" = "a9a4b20a0cf1e15ab9f049aef25375dac8fe2e422df64d1403f131e43ad170db"
+"Q08_InternalsII.CardNat.Zero" = "dbfaae0e6ddbdb552383f68df01a85c16a9952991e6a4b62e0766676b19a5f02"
+"Q08_InternalsII.CardNat.ZeroCorrect" = "d1901425954565cf7f1b77d43bd69a62955e9ef95e249cc1f2d8eb0c704c9ebd"
+"Q08_InternalsII.SumAbove" = "a5b20fb83c77ebd35aaed0fceaa37e0e545bbc2903a81aa6cc4ca62be9d58c3a"
+"Q08_InternalsII.u64" = "54f4642b26257dc151b1484fb50da7f357b051a1f3a4577a9ae851a443703c3c"
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/std/Q08_Canon.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q08_Canon {:disableNonlinearArithmetic}", "module Q08_CanonRaw {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q08_Canon.Add" = "69c464d2fce6756bbe886978d57664c1d5bd9ba050727e4a73c2e9dcb46fc93f"
+"Q08_Canon.AddCorrect" = "d12850e41e15438756ed1ffce981bfb8096a2f70aa0b9f3c52163b742414a51c"
+"Q08_Canon.BigNat" = "7d71b62c1644c3272178d1120c32180fbfa6f46a490ef578db33a8929a4bc66e"
+"Q08_Canon.Cmp" = "827c4ebb330c5b3b58e62bae0343b0603b2772a729d49541a67c803688e4f99c"
+"Q08_Canon.CmpCorrect" = "9e83fd322a1075c13072cc78fde27126e8055709e48fc2cf9d8b99fc48a96248"
+"Q08_Canon.FromNat" = "9ac43bcdabbda9eb620b45115801bb1c09f848fb564c2eef211d1a74d7e11340"
+"Q08_Canon.FromNatCorrect" = "d8e59a2116cb212d6b9a3e9e9cbd88cb220ac3829b263b11ab05d91f2b4918d0"
+"Q08_Canon.Val" = "1103cb914c00c336320160e20b3932fb969969493b82ddff9b3556c8ae45aed9"
+"Q08_Canon.Wf" = "07cf9b591a2e3eb0e8a24ef0ffcbbe079e650004d452922fdcb36e6176997fd4"
+"Q08_Canon.Zero" = "3b2772e037113bd25f1c7fbdfc58339eac01e459b442383497d169496601f871"
+"Q08_Canon.ZeroCorrect" = "d1901425954565cf7f1b77d43bd69a62955e9ef95e249cc1f2d8eb0c704c9ebd"
+"Q08_CanonRaw.Add" = "442756ffd1e9d81013be31a4057cbb515359af2bb580c95641be0ffec17b34ac"
+"Q08_CanonRaw.AddCorrect" = "d12850e41e15438756ed1ffce981bfb8096a2f70aa0b9f3c52163b742414a51c"
+"Q08_CanonRaw.BigNat" = "7d71b62c1644c3272178d1120c32180fbfa6f46a490ef578db33a8929a4bc66e"
+"Q08_CanonRaw.Cmp" = "827c4ebb330c5b3b58e62bae0343b0603b2772a729d49541a67c803688e4f99c"
+"Q08_CanonRaw.CmpCorrect" = "9e83fd322a1075c13072cc78fde27126e8055709e48fc2cf9d8b99fc48a96248"
+"Q08_CanonRaw.FromNat" = "dff043d08c6209f681e5c983da0063817a869550ba142bba16649ba7ef2b934d"
+"Q08_CanonRaw.FromNatCorrect" = "d8e59a2116cb212d6b9a3e9e9cbd88cb220ac3829b263b11ab05d91f2b4918d0"
+"Q08_CanonRaw.Val" = "1103cb914c00c336320160e20b3932fb969969493b82ddff9b3556c8ae45aed9"
+"Q08_CanonRaw.Wf" = "07cf9b591a2e3eb0e8a24ef0ffcbbe079e650004d452922fdcb36e6176997fd4"
+"Q08_CanonRaw.Zero" = "3b2772e037113bd25f1c7fbdfc58339eac01e459b442383497d169496601f871"
+"Q08_CanonRaw.ZeroCorrect" = "d1901425954565cf7f1b77d43bd69a62955e9ef95e249cc1f2d8eb0c704c9ebd"
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/std/Q08_Wp.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q08_Wp {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q08_Wp.BExp" = "9ceac169bf6a3bf7f7a09b51a6ac86945db694d93645db6e59d28fdc91b2f9af"
+"Q08_Wp.Cmd" = "78078b8874072f6c9c0e648159095297cbd22e8f3c549cdf203c63413319b5ed"
+"Q08_Wp.Eval" = "5a37007186af7fb65207259b2b460ecf60c9124f0a5cf44a1f29bcb7cab0c317"
+"Q08_Wp.Exec" = "b60bd50d2b0ba03e6b3823b69e9595b3891c73f0da4802989746848ec781274b"
+"Q08_Wp.Expr" = "765d5379813dcca63e4335305dd8783cf6cf63427689567606fb41a01cb3e4b0"
+"Q08_Wp.Holds" = "e00421203867f6f1ee4254fe8782bd2e0a91a870ecfa3a7547cc1ad23e4d1c97"
+"Q08_Wp.State" = "98995003eeda3f8b4d4d7b5e891bab7d71c2b19bb92eb8a61a2f9f12667d8e08"
+"Q08_Wp.SubstB" = "0437e33e5a6eecd3222c040f5770390c1cd5ea65bcbe393b939cd0683a134d20"
+"Q08_Wp.SubstBOk" = "4889abee78ecf1f619a75bef1b8c08226b5d2e976a83e93ee06ebea7304ed8fd"
+"Q08_Wp.SubstE" = "54042b1f78c62bd6daef9466094cf2c0f771cf2e55aaa981632775c4df8fff09"
+"Q08_Wp.SubstEOk" = "792d69a9d1e7d40a05038ec5649d3c61c7ae2da71331456fb74eff6c5a079ff5"
+"Q08_Wp.Swap" = "1708a2b6ee42ac04e714a35238c4be72222ae9e8eaa33628f72a81d99b546b89"
+"Q08_Wp.SwapOrders" = "d562ec29e177c1df7ec498ed1814bb9fd61ddaff8d2e39e88e41be795ec3c5a0"
+"Q08_Wp.Update" = "c0a4a1ddc1a65525b67b49657bf8e9aa7547e6d451c54a24bfd217e1eecb9ca0"
+"Q08_Wp.UpdateApply" = "4ea97764dca22c017e00bc12ceff674a1a04f5fddf9e5f00ef0eb7e8ea3a2179"
+"Q08_Wp.Wp" = "12402ef2129ecf74c61a688c57894e45875f3c8cbddbd04198373b1ade661793"
+"Q08_Wp.WpSound" = "207f6117dbf284342604d23b74918e99c937e8d47f4b05a7bac4358b0362e8b9"
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/lib.rs"
+lang = "v"
+open_bodies = ["Dial::pos", "Odometer::ok", "Odometer::reading", "Toggle::on"]
+open_specs = ["Odometer::advance", "Odometer::current", "Toggle::flip"]
+[file.statements]
+"<Knob as Dial>::at_zero" = "f5b7c6d5c3f6ff6ac3c0cc2577f8a59fd76977f811bb5169861da036fbdca94a"
+"<Knob as Dial>::pos" = "8040274e582df7be63703f5f7cfc277b48bbc80c514740002cd32b24d9b094fe"
+"<Knob as Dial>::turn" = "878a1912e575407e30af4c21e407321aed4a713b26003cde8ced2301233618db"
+"<Lamp as Toggle>::flip" = "3efaf6d76272e18f218bbd4d5b9ddcd76766106bf6bf93a7811e55c6d5efdeff"
+"<Lamp as Toggle>::on" = "3707014ab7ce27e329e970885dbf07bc4138d8605cb7a4a12c539baf02011090"
+"<Odo as Odometer>::advance" = "983d02fce2ea8ff98b0fc1c5f3601b59326dc264d52c16862b2319fb6e4a44c0"
+"<Odo as Odometer>::current" = "0729f0ddb224342fb52e463fc5086526859ef077dc7a75980bd509107479a3c4"
+"<Odo as Odometer>::ok" = "a97f333dd49208cc76b6097443e879efa204609e24165639a161ec4c46b2a61c"
+"<Odo as Odometer>::reading" = "9011def215ae492f4b02399eabb49f95abac1965cb718bfd089c163343e75ee6"
+"Dial::at_zero" = "04762c109eeb18dbfdf40af20e611bc845188c9494ba31106742dc4e978f3072"
+"Dial::pos" = "cf3061c2a16e6159a7f73bd05bda46a01116fa98a89e2e1d8c2268f7d6a61902"
+"Dial::turn" = "593729ec949b8eb691bec8e0ef6598dc7f262839123531f8150f918715b1282c"
+"Knob" = "ab7a4b9c54e3f15751c14e083935bc347bb7d7d211cf2097d7ae96b9a0a3629e"
+"Lamp" = "c573d9798cec5b1cc25672018bd7c15892d78b13f277e73159578dc3b6a5b7d6"
+"Odo" = "c7fea283172b2d42d00aff9f2211d2c8ea2082ba9e030e25cf0149e2f2eaf1bb"
+"Odometer::advance" = "57a5fc5171de719cfe105a197c752b1a2a13dcc3d80c5f2915ffd2dc5e6cfc40"
+"Odometer::current" = "70c286c182cfdd229f9c83f84709352639522392ed846f134181c7c167acb38b"
+"Odometer::ok" = "aa8210b8e98bcfef397662781c998d778c7cd66b2804b35dd12c886705b99706"
+"Odometer::reading" = "ba28776bb687d222aaa3c89177c726bb6a60b9bc38c3d56e80b6d63bd06eec09"
+"Toggle::flip" = "22df843f177eaca579b59597240b69ee964a694a1f626839347f49a886f3c2e4"
+"Toggle::on" = "e4430d84c1769cffaa569b9678fa42c44e0a8d4eccf9caa0b5e8ad22b82090f8"
+"advance_twice" = "94e5ebee71596d31b79cfac49741904c9fb3b8a6f8a90dde3154a97776388f61"
+"current_check" = "d9788bc7eb2e302f9bc86cd0e1a1354dc0b1349bf49a7abf2aa7405899002cb3"
+"flip_check" = "8f0052b2813b95b36b5ad1a131cdc6998ba8f503c6d366c258baf82c45561c27"
+"flip_twice" = "2023399f4f65660c2ba951c88e6efaa4dbc751a4998d4d2edc3dd8d8a4c9acc2"
+"leave_zero" = "2dd548387ed1b0e42dbe12d68caedbd1614f7421559e7ab99eb4a3f809c9c3af"
+"scale" = "7dda5ab183cce282f8eaf1f912f92ffe923113f61f559cfc36c9404d5ed757ba"
+"scale_check" = "9a9c4f669b04be5a9adb2aee5d921461df9b3513e21062c0b89c3fafd2f63e45"
+"twice_plus_one" = "9a00c7adf5ae1425f48b3d88b460ed3b529293df99fa912f8a4a3b7aec490216"
+[file.spec_clauses]
+"Odometer::advance" = { requires = ["2071ca2ae247f99fc377b8d84ec5032c8f4ef39cca3b51b3fe1be7f6003e0407"], ensures = [] }
+"Odometer::current" = { requires = [], ensures = [] }
+"Toggle::flip" = { requires = [], ensures = [] }
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/perm.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"bump" = "994ccca937bb280b00bfbdb2f7e0a96f19247fe4fdcded041edbd1d621f5449f"
+"bump_check" = "39cc228f4be77f341ffcc065a5a2096bbc6e63aad48f21092f6beeea2dce82dd"
+"cell_round_trip" = "413a928c2cd5f702a4814146e3594640310973da05bfe503b46a95bc2178fb00"
+"is_small" = "e75a174649940ed20d7053e1bcd12f81245dac4e44a1feee3215cdf02625088b"
+"peek" = "be83a9fc15f485189c899c39edc4dd67599876c577d0851a02ae2afc6aa67a54"
+"transfer" = "74c650e9cca2b27ca176ed8e329f4579fbc263c419dc258e6f10e3e84fbcd872"
+"transfer_check" = "1042463819be40fd44747ebff767f60a9cb02ddf2fae92f1da5ea24f3f1af8e8"
+
+[[file]]
+path = "specimens/Q08/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = ["Q08_CardC1Base.Add"]
+[file.statements]
+"Q08_CardC1Base.Add" = "922c8a805b9e0a6e13a45b629a801c1e8957163811a770d46e04c17db7e5e3cf"
+"Q08_CardC1Base.AddCorrect" = "1414555ed9c3b388ba79e23fb3fd1597e41d6f8b096e7ba188d3f843ff04b846"
+"Q08_CardC1d.Add" = "964c8df4772ae6d9e0691924511ffe943925f1105cb94dd8374f77e39fca4997"
+"Q08_CardC1d.AddCorrect" = "56ce0ab0f01d73c1fc5933daec61ef9c0d0c2285e13338b8694f2d9b992a9491"
+
+[[file]]
+path = "specimens/Q08/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = ["Dial::pos"]
+[file.statements]
+"<Knob as Dial>::pos" = "8040274e582df7be63703f5f7cfc277b48bbc80c514740002cd32b24d9b094fe"
+"<Knob as Dial>::turn" = "e89f6968128e48d5a0f3da5a5e857dd5e8de5656f35b686b5f5dc221ac8d6f56"
+"Dial::pos" = "cf3061c2a16e6159a7f73bd05bda46a01116fa98a89e2e1d8c2268f7d6a61902"
+"Dial::turn" = "1f685a9fe557f716b3bc231faa0b8ae1e507d6aab51fef2a235e1593a0d23448"
+"Knob" = "ab7a4b9c54e3f15751c14e083935bc347bb7d7d211cf2097d7ae96b9a0a3629e"
+"turn_to_one" = "c629ac2a397ac04ef9f2782c07ca8d4dc9e61fe326023383b3e4c62f80dd31ab"
+
+[[file]]
+path = "specimens/Q08/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"peek" = "be83a9fc15f485189c899c39edc4dd67599876c577d0851a02ae2afc6aa67a54"
+"two_cells" = "de3387153f3f904e84c8f1e0d987214ff2854218ae5adc1c22be5f78b17f15f9"
+
+[[file]]
+path = "specimens/Q08/card-c4dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q08_CardC4Base.Below" = "32b18cc3e64ff623ffd632927758e0f6501c3e9c258451e00023a4236e6acbcb"
+"Q08_CardC4Base.Narrow" = "ee186f295ee871db192d978e8cfc072d3038d9c7c401294b784e94c7642c0ee9"
+"Q08_CardC4Base.Twice" = "450c4ad56e04fdd37239c2409f6c95965a88110a56e195b9e9350a68fd656566"
+"Q08_CardC4d.Below" = "cd27fc5bedf19881771cfdedd3b4442932bf422f0df87dcdb9408af7ebbd90e4"
+"Q08_CardC4d.Narrow" = "0affefe3ba46c831c23ad0b4f6899dac7901c93940ae692c6db300f3e12ac4f4"
+"Q08_CardC4d.Twice" = "a6ac419165ece7b172078b2b5b33764c515966df5480ed5d9bac85417978dc52"
+
+[[file]]
+path = "specimens/Q08/card-c4dv-v.rs.specimen"
+lang = "v"
+open_bodies = ["Gauge::level"]
+[file.statements]
+"<Tank as Gauge>::level" = "d108eac3e93a9de22a1134258d38e23365c7397095ad9cfebaa35a89503825d6"
+"<Tank as Gauge>::lower" = "42ee2561a9b5cdbecff8630bb704dd8cc57b5264bfc3afda8e180649a15c7984"
+"<Tank as Gauge>::raise" = "0bc9f609809c9eda39ef65543832a03d74403311320472bc704ce4a6d0a28192"
+"Gauge::level" = "6eac905a46ad75dce06202a1cd33ed5688a385ccf8c2c5eee2cb705f75c71726"
+"Gauge::lower" = "f7f2bb9a1ccf565d8ff2cd6470a238b33c643277d7272b87ddb6946c75ea79c3"
+"Gauge::raise" = "df4259e54b75b8ef4f75bf9e3b98a605d1c4bf4ec6447c93e442c41905d35c5f"
+"Tank" = "9e7430d3b0deaf49a077f2661cfa9ea178aed19cc12cf59eec9ade9b4f72ba73"
+
+[[file]]
+path = "specimens/Q08/card-c5dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q08_CardC5d.Depth" = "22ae4348ce5ef1a9eb8993db09a8a5ed8ef25f36cc179ab63f815c4951d53c2d"
+"Q08_CardC5d.Dots" = "cfdc8eb9914df09320954aeeacec5374f1701a138ce320ea50eaea27c66d1515"
+"Q08_CardC5d.Shape" = "83639d1f86c70d755aaa550c15987cc000472cdaf61426a914fda8137d44cc79"
+
+[[file]]
+path = "specimens/Q08/card-c5dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Shape" = "5a487e53017210b98089185f306eaaea4c081734d29253a92c4172f073c45d1b"
+"depth" = "9f3d6ca645d55ef572c8d295461d774e60e8dec060045407208a5f0c03faf1d9"
+"dots" = "b6a4f56cbf8d585c5ea38c6d9b4146b4a2e275cd0472c91545a5856f7bbac596"
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/exit/Q08_Exit.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q08_ExitFlat {:disableNonlinearArithmetic}", "module Q08_ExitRev {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q08_ExitFlat.Cmd" = "cedee445a5121192e35382d75071a02ec869d7932d5a044bd240ff087046bde6"
+"Q08_ExitFlat.Eval" = "a554e449f09c3623e043136b51c4920075b6af14559103521da81e159fcf3f7b"
+"Q08_ExitFlat.Exec" = "f4e6607531385d59931f12e3c714b19921fe2d0e21ea1013a444e2dc69568de7"
+"Q08_ExitFlat.Expr" = "aca5907b088033677cc64c33176b7754f5f5af5945d4fb10d9bb6e80410847d7"
+"Q08_ExitFlat.Flat" = "276719acbf28e8f33043da1fb7de245084e86ec0a7acac2d99e1792dff025d01"
+"Q08_ExitFlat.FlatSame" = "6762fd5157c780e88afe2385fcc4350dff2e7bedf71e1fab89f45bd012e5c179"
+"Q08_ExitFlat.LeftSize" = "7312e367ca236c3425139bb674c4a59991666bf8257ac3b0d1cbd9b658b98705"
+"Q08_ExitFlat.RotateSmaller" = "953c5b683b6c6158d1ddd4cad0a69afa9cf4c97972f573537efe245b947eab98"
+"Q08_ExitFlat.Size" = "fbee01f2fbf7e9a5f1cb5b4d03ab222b4840b0d4bd5868a7e74c6f9e04e9db0c"
+"Q08_ExitFlat.State" = "98995003eeda3f8b4d4d7b5e891bab7d71c2b19bb92eb8a61a2f9f12667d8e08"
+"Q08_ExitRev.Add" = "954a99a90d02eb2f2985b30bec34dfb60d69e7d4730f9e002afe2af816a9f00c"
+"Q08_ExitRev.AddCorrect" = "d12850e41e15438756ed1ffce981bfb8096a2f70aa0b9f3c52163b742414a51c"
+"Q08_ExitRev.BigNat" = "7d71b62c1644c3272178d1120c32180fbfa6f46a490ef578db33a8929a4bc66e"
+"Q08_ExitRev.Cmp" = "bf90c952afe77dfa35691855a48f15e5d11c22cdc4a0600877c1820cd25b9158"
+"Q08_ExitRev.CmpCorrect" = "9e83fd322a1075c13072cc78fde27126e8055709e48fc2cf9d8b99fc48a96248"
+"Q08_ExitRev.FromNat" = "123cbaceec640519fdf8133cc3e51618ea660d395b694c7fc490da7a2e7a2cd2"
+"Q08_ExitRev.FromNatCorrect" = "d8e59a2116cb212d6b9a3e9e9cbd88cb220ac3829b263b11ab05d91f2b4918d0"
+"Q08_ExitRev.FromNatMsf" = "d6485abe10ce65db8d681c2efdc68446e7449a1d2e03b18099da804f94e6342a"
+"Q08_ExitRev.FromNatMsfRev" = "a5aa8910ae0f5696595fe910689d5a68c071704cfb7058db77085c98a3a563a1"
+"Q08_ExitRev.Rev" = "347eb7a8c0558b76417c8a1c67984faec0ea5ca4eb92b37c0561c0b18b944b3c"
+"Q08_ExitRev.RevAppend" = "2e662add5eac6f6a0a67541f39022680c540557139827fc6a0defa49eaab011d"
+"Q08_ExitRev.RevRev" = "6227fb17684d2941bdcfc06d3e4a566aa768f74595c2392d7bd3187917b4892d"
+"Q08_ExitRev.Val" = "ac00a93678bb64a11c7ed98cda11eb1d9c30a047305e18d9d62d2027c78e5f11"
+"Q08_ExitRev.Wf" = "e3ad3a247521f47e3f3654d055eb2379b5d3ef429a8f717e3efacbec9e993fa9"
+"Q08_ExitRev.Zero" = "3b2772e037113bd25f1c7fbdfc58339eac01e459b442383497d169496601f871"
+"Q08_ExitRev.ZeroCorrect" = "d1901425954565cf7f1b77d43bd69a62955e9ef95e249cc1f2d8eb0c704c9ebd"
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Ledger" = "96103a01faa2c5d6dd1589bf141bed53ce4ead82a0cffef3451bbe2922a5e080"
+"Ledger::inv" = "f52de599d375d52df7a516d5856fc694cf9e0c561bbf1cd127d6e55cb817624e"
+"Ledger::record" = "d6f34696ce2885837f1485397b71d9a2a8eef1a042956bf9381ad1b49d7aea08"
+"sum_words" = "2294a8032148bf1a6a1a422bc6c2a6a11be1770b14ab5bd855f08e96efdc7065"
+"words_sum" = "c23bde1fd766d89d9ae2d3b5664530c7c6c4d73007181a7e45faec43d22aed05"

@@ -1,0 +1,64 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "",
+    "col": 7,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy",
+    "line": 15,
+    "message": "unresolved identifier: CountZerosBelow",
+    "severity": "error"
+   },
+   {
+    "code": "",
+    "col": 22,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy",
+    "line": 15,
+    "message": "expected method call, found expression",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 2,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {},
+  "raw_dir": "<scratch>",
+  "stage": "resolve",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy",
+  "verdict": "failed",
+  "verified_count": null
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "497c73746a0fc610a0a850bd6e95cd165c86b26c2f495517a473680d7fa7b3ae",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/dafny/D4/c3.dfy"
+}

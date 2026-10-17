@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V10"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V10/src/lib.rs",
+    "kind": "external",
+    "line": 13,
+    "message": "#[verifier::external] hides an item from the verifier (V10, Δ9)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V10"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "5d7b59fd8590365835182e0ce4a5c05e687c9c9cb99e61ca4f10e3cf861c5939",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V10"
+}

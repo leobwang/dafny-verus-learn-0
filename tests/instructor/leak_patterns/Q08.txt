@@ -1,0 +1,46 @@
+# Q08 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H, X or A answer of Q08 (never a P
+# answer: the chapter reveals those after their boxes). Q08's written pair holds no
+# blueprint problem; still, no pattern is cut from H8d-H10d, because the wp lab (B1, B2)
+# computes Wp by hand with the same constructors, and a grader quoting a learner's B1
+# must not trip a pattern. Each is verified against its own reference file (rule 1) and
+# against every learner-visible file (rule 2); no given layer above Q08's layer (L4)
+# exists yet, so rule 2's exemption lists nothing.
+
+# from Solutions/dafny/Q/Q08_InternalsII/std/Q08_Canon.dfy
+# source:         AddCCanonical(L1.Tail(a), L1.Tail(b), c');   (Q08.H7d, the reference helper's recursive call)
+# verified: solutions=1 public=0
+AddCCanonical\(L1\.Tail\(a\),\s*L1\.Tail\(b\)
+
+# from Solutions/verus/q/q08_internals_ii/src/lib.rs
+# source:             final(self).reading() == old(self).reading() + by,   (Q08.H3v)
+# verified: solutions=1 public=0
+final\(self\)\.reading\(\)\s*==\s*old\(self\)\.reading\(\)\s*\+\s*by
+# source:             lemma_mul_is_distributive_add(v.value() as int, i.value() as int, 1);   (Q08.H4v)
+# verified: solutions=1 public=0
+lemma_mul_is_distributive_add\(v\.value\(\)\s+as\s+int,\s*i\.value\(\)
+
+# from Solutions/verus/q/q08_internals_ii/src/perm.rs
+# source:     cell.write(Tracked(perm), v + 1);   (Q08.H5v)
+# verified: solutions=1 public=0
+cell\.write\(Tracked\(perm\),\s*v\s*\+\s*1\)
+
+# from Solutions/dafny/Q/Q08_InternalsII/exit/Q08_Exit.dfy
+# source:     RevRev(L4.Add(Rev(a), Rev(b)));   (Q08.X1d)
+# verified: solutions=1 public=0
+RevRev\(L4\.Add\(Rev\(a\),\s*Rev\(b\)\)\)
+
+# from Solutions/verus/q/q08_internals_ii/src/exit.rs
+# source:         self.log = Ghost(old_log.push(x));   (Q08.X2v)
+# verified: solutions=1 public=0
+Ghost\(old_log\.push\(x\)\)
+
+# from Solutions/dafny/Q/Q08_InternalsII/agent/Q08_AgentFlagship.dfy
+# source:     ToNatAppendL(Zeros(k), a);   (Q08.A1d, the reference delivery of the shift)
+# verified: solutions=1 public=0
+ToNatAppendL\(Zeros\(k\),\s*a\)
+
+# from Solutions/verus/q/q08_internals_ii/src/agent.rs
+# source:         lemma_div_by_low(lo, v@);   (Q08.A1v, the reference delivery of the high split)
+# verified: solutions=1 public=0
+lemma_div_by_low\(lo,\s*v@\)

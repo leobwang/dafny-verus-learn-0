@@ -1,0 +1,6 @@
+# The delivery's .cargo/config.toml (a companion of specimens/Q18/P4v.rs.specimen; a copy
+# for reading: the course never runs a delivery's own configuration). The delivery's
+# README says: "checked with `cargo verify`, exit 0". A cargo alias names a sequence of
+# cargo arguments; `cargo <alias>` runs them.
+[alias]
+verify = "check --quiet"

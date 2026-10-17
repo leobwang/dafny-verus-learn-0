@@ -1,0 +1,75 @@
+# The gate v2 fixture set (harness/tests/q/fixtures/q18; frozen, rule 2f): three planted
+# cheats (K1-K3) and four controls (C1-C4), with their labels, which only the evaluator
+# (`fp_report`) reads. `python -m fvh_q.gate.gate_v2 --set <this file>` runs the gate over
+# them; copy this file to add your own capstone plant (the chapter's adversarial round).
+# Paths are repo-relative. Every delivery is invented for the course.
+
+[[delivery]]
+id = "K1"
+lang = "verus"
+target = "harness/tests/q/fixtures/q18/K1"
+files = ["harness/tests/q/fixtures/q18/K1/Cargo.toml", "harness/tests/q/fixtures/q18/K1/src/lib.rs"]
+min_verified = 1
+symbols = ["lemma_stair_closed"]
+kind = "construct"
+xclass = "X10"
+
+[[delivery]]
+id = "K2"
+lang = "verus"
+target = "harness/tests/q/fixtures/q18/K2"
+files = ["harness/tests/q/fixtures/q18/K2/Cargo.toml", "harness/tests/q/fixtures/q18/K2/src/lib.rs", "harness/tests/q/fixtures/q18/K2/verification.json"]
+min_verified = 2
+symbols = ["add_one", "half_up"]
+kind = "construct"
+xclass = "X05"
+
+[[delivery]]
+id = "K3"
+lang = "verus"
+target = "harness/tests/q/fixtures/q18/K3"
+files = ["harness/tests/q/fixtures/q18/K3/Cargo.toml", "harness/tests/q/fixtures/q18/K3/src/lib.rs"]
+min_verified = 1
+symbols = ["mod_word"]
+kind = "construct"
+xclass = "X16"
+
+[[delivery]]
+id = "C1"
+lang = "verus"
+target = "harness/tests/q/fixtures/q18/C1"
+files = ["harness/tests/q/fixtures/q18/C1/Cargo.toml", "harness/tests/q/fixtures/q18/C1/src/lib.rs"]
+min_verified = 1
+symbols = ["larger_word"]
+kind = "control"
+xclass = ""
+
+[[delivery]]
+id = "C2"
+lang = "verus"
+target = "harness/tests/q/fixtures/q18/C2"
+files = ["harness/tests/q/fixtures/q18/C2/Cargo.toml", "harness/tests/q/fixtures/q18/C2/src/lib.rs", "harness/tests/q/fixtures/q18/C2/frozen.rs"]
+min_verified = 1
+symbols = ["bound_into"]
+kind = "control"
+xclass = ""
+
+[[delivery]]
+id = "C3"
+lang = "dafny"
+target = "harness/tests/q/fixtures/q18/C3/main.dfy"
+files = ["harness/tests/q/fixtures/q18/C3/main.dfy"]
+min_verified = 2
+symbols = ["Gate2C3.OddSumSquare"]
+kind = "control"
+xclass = ""
+
+[[delivery]]
+id = "C4"
+lang = "dafny"
+target = "harness/tests/q/fixtures/q18/C4/main.dfy"
+files = ["harness/tests/q/fixtures/q18/C4/main.dfy", "harness/tests/q/fixtures/q18/C4/frozen.dfy"]
+min_verified = 1
+symbols = ["Gate2C4.MinOf"]
+kind = "control"
+xclass = ""

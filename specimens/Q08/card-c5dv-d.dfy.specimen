@@ -1,0 +1,20 @@
+// Demo for card Q08.C5dv (divergence), the Dafny column. Open it only after every
+// prediction of Q08 is recorded (scripts/firsttry.sh Q08 --check).
+// after: Q08.P4dv
+module Q08_CardC5d {
+  datatype Shape = Dot | Pair(left: Shape, right: Shape)
+
+  function Depth(s: Shape): nat
+  {
+    match s
+    case Dot => 0
+    case Pair(l, r) => 1 + (if Depth(l) < Depth(r) then Depth(r) else Depth(l))
+  }
+
+  function Dots(s: Shape): nat
+  {
+    match s
+    case Dot => 1
+    case Pair(l, r) => Dots(l) + Dots(r)
+  }
+}

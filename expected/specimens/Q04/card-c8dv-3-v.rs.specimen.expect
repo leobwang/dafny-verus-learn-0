@@ -1,0 +1,52 @@
+# pins.py golden for specimens/Q04/card-c8dv-3-v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q04/card-c8dv-3-v.rs.specimen`; never edit.
+command: verify
+exit: 1
+verdict: failed
+stage: verify
+verified: 1
+holes: 0
+{
+ "diagnostics": [
+  {
+   "col": 9,
+   "file": "card-c8dv-3-v.rs",
+   "labels": [
+    "at the end of the function body",
+    "failed this postcondition"
+   ],
+   "level": "error",
+   "line": 21,
+   "message": "postcondition not satisfied"
+  }
+ ],
+ "json": {
+  "func-details": {
+   "card_c8dv_3_v::double": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "card_c8dv_3_v::lemma_double_twice": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": true,
+   "encountered-vir-error": false,
+   "errors": 1,
+   "is-verifying-entire-crate": true,
+   "success": false,
+   "verified": 1
+  }
+ },
+ "other": []
+}

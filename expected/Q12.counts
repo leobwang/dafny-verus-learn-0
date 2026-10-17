@@ -1,0 +1,89 @@
+# expected/Q12.counts — Δ11 count pins for Q12: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q12` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q12"
+
+[[unit]]
+path = "dafny/Q/Q12_PracticeIC/std"
+lang = "dafny"
+reference_verified = 136
+min_verified = 5
+symbols = ["Q12_Lab1Hand.CmpTrailingZero", "Q12_Lab1Hand.MulLimbZeroLimbs", "Q12_Lab1Hand.NormalizeShorter", "Q12_Lab1Hand.ToNatMono", "Q12_PracticeIC.NormalizeLiteral"]
+
+[[unit]]
+path = "verus/q/q12_practice_ic"
+lang = "verus"
+reference_verified = 5
+min_verified = 5
+symbols = ["lab1_hand::eq_big", "lab1_hand::is_zero", "lab1_hand::lemma_seq_to_nat_mono", "lab1_hand::size_bound", "lemma_chain_le"]
+
+[[file]]
+path = "dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "verus/q/q12_practice_ic/src/lab1_hand.rs"
+role = "exercise"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "verus/q/q12_practice_ic/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q12_PracticeIC/exit/Q12_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "verus/q/q12_practice_ic/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "harness/q/fvh_q/policies.py"
+role = "harness"
+verdict = "failed"
+holes = 4
+errors = 0
+
+[[file]]
+path = "harness/q/fvh_q/report.py"
+role = "harness"
+verdict = "failed"
+holes = 2
+errors = 0
+
+[[file]]
+path = "harness/q/fvh_q/retry.py"
+role = "harness"
+verdict = "failed"
+holes = 2
+errors = 0

@@ -1,0 +1,27 @@
+// Demo for card Q08.C3v (write:tracked), the failure half. The success half is `peek` and
+// `is_small` in verus/q/q08_internals_ii/src/perm.rs; here a caller passes `peek` the
+// permission of another cell. Run it with
+// `scripts/vcheck specimens/Q08/card-c3v.rs.specimen`; the EXPECT line at the end pins the
+// message the verifier gives (line and fragment).
+use vstd::prelude::*;
+use vstd::cell::pcell::*;
+
+verus! {
+
+pub fn peek(cell: &PCell<u64>, Tracked(perm): Tracked<&PointsTo<u64>>) -> (r: u64)
+    requires
+        cell.id() == perm.id(),
+    ensures
+        r == *perm.value(),
+{
+    cell.read(Tracked(perm))
+}
+
+fn two_cells() {
+    let (a, Tracked(pa)) = PCell::new(1u64);
+    let (b, Tracked(pb)) = PCell::new(2u64);
+    let x = peek(&a, Tracked(&pb));
+}
+
+} // verus!
+// EXPECT @23 "precondition not satisfied"

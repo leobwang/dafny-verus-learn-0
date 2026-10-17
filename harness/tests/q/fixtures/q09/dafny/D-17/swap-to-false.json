@@ -1,0 +1,50 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/D-17/swap.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/D-17/swap.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusD17.Middle": "verified",
+   "CorpusD17.Ordered3": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/D-17/swap.dfy",
+  "verdict": "verified",
+  "verified_count": 2
+ },
+ "exit_code": 0,
+ "instrument": "swap-to-false",
+ "killed": null,
+ "output_sha256": "2bbc72cc7557aaa9bab1bd35914e25bed19fbdc6d64b8f3f64abd0940c4dfeb1",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-17/main.dfy"
+}

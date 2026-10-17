@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V06"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V06/src/lib.rs",
+    "kind": "external-type-specification",
+    "line": 6,
+    "message": "external_type_specification is green under --no-cheating (V6, Δ9)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V06"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "a69a8f03c9b6a76233f678f118d249c6a7fbea057f2d25372550dd002eea7623",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V06"
+}

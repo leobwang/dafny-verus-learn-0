@@ -1,0 +1,68 @@
+# expected/Q10.freeze — statement-freeze pins for Q10 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q10` from the files as shipped; checked by
+# `scripts/specfreeze --check Q10`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q10"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q10_PracticeIA/std/Q10_PracticeIA.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q10_Search {:disableNonlinearArithmetic}"]
+open_specs = ["Q10_PracticeIA.Shift"]
+[file.statements]
+"Q10_PracticeIA.NormLen" = "d7778daa2fa5631006772df30fbf5cb092374ff597eadce2fb82c316cb3798bd"
+"Q10_PracticeIA.NormLenCheck" = "76014cee74c4828e36ae42d41fec5a09cf3e2b84d634bd21712e47269d6e551f"
+"Q10_PracticeIA.Shift" = "3c5e12c5f6e025ceb7907c715fd54f1e968d0fb9669dc352154a68ad134138a1"
+"Q10_PracticeIA.ShiftTwice" = "2a1ed332b1b3ca000182d67cd0f52f3a62e0b4335e9f26b5ebf61b5a4f49539b"
+"Q10_PracticeIA.ToNatTopLimb" = "37aa7b77ad2fc9a0364a07d7b47b957b785bc3d9a7bfcf3de621d4250c061387"
+"Q10_PracticeIA.ToU64" = "a7fb67dfeb148c3c0c46e5ae4c9c300411f527871c570ceda63ccaf62f9b372d"
+"Q10_PracticeIA.ToU64Check" = "1f6b6e5f4b61a4b69f5fc3bf42305261fad711c5567141c01b36c188ad8f54ed"
+"Q10_Search.ModPowSucc" = "b8c4b73c25fdee1d2cad1127d360f08ad3ab2a1eaa3353d446807dca11ed1d0b"
+[file.spec_clauses]
+"Q10_PracticeIA.Shift" = { requires = ["c06b0e6ab1d2954ac3903208aef1a7aa0126c2aea5b778050a3d6346b687b2f6"], ensures = [] }
+
+[[file]]
+path = "verus/q/q10_practice_ia/src/lib.rs"
+lang = "v"
+open_bodies = []
+open_specs = ["high_limb"]
+[file.statements]
+"Ring" = "878ab8faa254f091df503e6270750f371fac8c0d336c57fece5888fed1d3c182"
+"Ring::get" = "ee96cf0ed4b0a8c2cf3849be0096ac0447bfa6039448c67f0158c9a31995bb08"
+"Ring::inv" = "b1a8dbf0c088311ef0eea1b5fd3d5e7f35b14aeb495e543f58581f36b78ca4cb"
+"Ring::new" = "281efb319eafc01cfd3a9e8f8a050cb93331ffa0b9c4f71d0da7db0c655cf4e9"
+"Ring::push_back" = "66a9dfeb2f7e31bc62964339cd6a6d311cc807d2835f5e42842ee39f3e8c56a9"
+"Ring::slot" = "7ee618b2142750349b5c47d464bafd632c4a4f233c6fe436ab961336c2a1e6f0"
+"Ring::view" = "a6c8879a435d6f5b162931cb70b5f4d7c72768d68baed15f01e551cd8b75494f"
+"high_client" = "f7f4f543cc5f720c435e30203c14e05e27fd4ba77386247c04616e7d59d8d20a"
+"high_limb" = "631187c32b7486f85574171e487f7ec1b77681e42ef7b1a556f5b895ff2d5cee"
+"lemma_mod_weight_succ" = "27de0652a766d341cf4d078b3cfb375c7925dcfe5760a4b30b3f90c9bde4731e"
+"lemma_top_limb" = "c87c9a5b8d72ac9f0c96b74ac0a44a68b60039bca69107fa0dd268a12bccbeaa"
+"norm_len" = "4ad326dc315eff907260e04cb057a5260b7d685fb05388b8efc501f84de46b14"
+"norm_len_check" = "28845365e828eb0bc6a8145128afa21459a50b991c1fecadb48b56b70ac56903"
+"ring_check" = "1e9bcdb099f2d98fba79fe86130495ff0eda06d24e8c9751d321c7af3889b3c7"
+"round_trip" = "45a208caf75d151a5f3f5d4b4ccedee7e5a49957a9820a455220e61e67816d39"
+"to_u64" = "4971341ab6b15be6c6d162411b11f8d07ab1f6160d5420b3b49d17c22e435e82"
+[file.spec_clauses]
+"high_limb" = { requires = ["89e2d4fe3b85880c992e84a2aea63ab3aa5599c270301b557eaeff2e743a7ef6"], ensures = [] }
+
+[[file]]
+path = "dafny/Q/Q10_PracticeIA/exit/Q10_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q10_Exit.Sum" = "3190385818744760b5534c2e4750e33f5172d9fb3899339cec799bc03f325359"
+"Q10_Exit.SumLimbs" = "9aa01614c239ff277a8fb7b2f8a70a4bcc03d4cad2f1f73114a1b1b9746cff9b"
+
+[[file]]
+path = "verus/q/q10_practice_ia/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"halve_words" = "86c449889717734c4ad9e2440daa158e177067f9f50e6b6043a9b1ada6c321a2"

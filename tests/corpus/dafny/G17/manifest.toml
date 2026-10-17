@@ -1,0 +1,24 @@
+# Cheat-corpus manifest (Dafny) G17. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vaudit: scripts/vaudit main.dfy
+# also captured, not flagging (each passed this fixture): vcheck --gate
+# dafny audit is silent; the lint's attribute allowlist flags both pass-through attributes (G17).
+id = "G17"
+lang = "dafny"
+half = "R"
+xclass = "X10"
+kind = "construct"
+title = "Boogie pass-through attributes turn an earlier assertion into an assumption"
+files = ["main.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["attribute-not-allowed"]
+output_sha256 = "92e1e1f6d13f108a98016934f757817197ec7d0c358c5539cb35b9a4cf753f9b"
+summary = "vaudit main.dfy: exit 1, 2 finding(s) (0 dafny-audit row(s), 2 lint); attribute-not-allowed at main.dfy:3, attribute-not-allowed at main.dfy:6"

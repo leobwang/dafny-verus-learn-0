@@ -1,0 +1,20 @@
+// Card Q04.C8dv (false friends), row 1 (`calc`), demo d (Dafny). Open it only after your
+// Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-1-d.dfy.specimen` and compare with
+// specimens/Q04/card-c8dv-1-v.rs.specimen.
+// after: Q04.P3dv
+module Q04_CardC8dv1D {
+  lemma MixedChain(x: nat)
+    ensures x < x + 2
+  {
+    calc {
+      x;
+    <=
+      x + 1;
+    <
+      x + 1;
+    <=
+      x + 2;
+    }
+  }
+}

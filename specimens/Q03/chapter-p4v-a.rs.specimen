@@ -1,0 +1,30 @@
+// Chapter specimen for docs/Q03_FirstSyntaxII.md §1.2: crate [a] of Q03.P4v's scenario,
+// verbatim. Open it only after your Q03 predictions are committed; scripts/vcheck
+// refuses it until P4v's first try is recorded.
+// after: Q03.P4v
+use vstd::prelude::*;
+
+verus! {
+
+fn triple(x: u64) -> (r: u64)
+    requires
+        x < 1000,
+    ensures
+        r == 3 * x,
+{
+    x * 3
+}
+
+proof fn lemma_pos(x: int)
+    requires
+        x > 0,
+    ensures
+        2 * x > x,
+{
+}
+
+proof fn call_a() {
+    let y = triple(3);
+}
+
+} // verus!

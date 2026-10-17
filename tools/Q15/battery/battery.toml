@@ -1,0 +1,66 @@
+# The trigger battery of Q15 (given; QPLAN §25.1, §25.3, §25.4). Twelve goals, each in a
+# Dafny form and a Verus form, every file a whole program that stands alone. Each goal's
+# last declaration is its statement (frozen) with a quantified step in its body; the
+# step's trigger is the one choice the goal leaves open. Six goals are the predictions
+# P6dv-P11dv (G01, G02, G03, G07, G09, G10); the toolsmith's tool (tools/Q15/toolsmith.py,
+# rung 12) runs on all twelve, in both languages, and may change triggers only.
+
+[[goal]]
+id = "G01"
+dafny = "tools/Q15/battery/dafny/G01.dfy"
+verus = "tools/Q15/battery/verus/G01.rs"
+
+[[goal]]
+id = "G02"
+dafny = "tools/Q15/battery/dafny/G02.dfy"
+verus = "tools/Q15/battery/verus/G02.rs"
+
+[[goal]]
+id = "G03"
+dafny = "tools/Q15/battery/dafny/G03.dfy"
+verus = "tools/Q15/battery/verus/G03.rs"
+
+[[goal]]
+id = "G04"
+dafny = "tools/Q15/battery/dafny/G04.dfy"
+verus = "tools/Q15/battery/verus/G04.rs"
+
+[[goal]]
+id = "G05"
+dafny = "tools/Q15/battery/dafny/G05.dfy"
+verus = "tools/Q15/battery/verus/G05.rs"
+
+[[goal]]
+id = "G06"
+dafny = "tools/Q15/battery/dafny/G06.dfy"
+verus = "tools/Q15/battery/verus/G06.rs"
+
+[[goal]]
+id = "G07"
+dafny = "tools/Q15/battery/dafny/G07.dfy"
+verus = "tools/Q15/battery/verus/G07.rs"
+
+[[goal]]
+id = "G08"
+dafny = "tools/Q15/battery/dafny/G08.dfy"
+verus = "tools/Q15/battery/verus/G08.rs"
+
+[[goal]]
+id = "G09"
+dafny = "tools/Q15/battery/dafny/G09.dfy"
+verus = "tools/Q15/battery/verus/G09.rs"
+
+[[goal]]
+id = "G10"
+dafny = "tools/Q15/battery/dafny/G10.dfy"
+verus = "tools/Q15/battery/verus/G10.rs"
+
+[[goal]]
+id = "G11"
+dafny = "tools/Q15/battery/dafny/G11.dfy"
+verus = "tools/Q15/battery/verus/G11.rs"
+
+[[goal]]
+id = "G12"
+dafny = "tools/Q15/battery/dafny/G12.dfy"
+verus = "tools/Q15/battery/verus/G12.rs"

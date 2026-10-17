@@ -1,0 +1,38 @@
+# Q01 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H, X or A answer of Q01 (never a P
+# answer: the chapter reveals those after their boxes) and is verified against its own
+# reference file (rule 1) and against every learner-visible file (rule 2).
+
+# from Solutions/dafny/Q/Q01_Hello/core/Q01_Hello.dfy
+# source:     ToNatAppendZero(s + [0]);   (Q01.H2d)
+# verified: solutions=1 public=0
+ToNatAppendZero\(s\s*\+\s*\[0\]\)
+# source:       AllZeroToNat(s[1..]);   (Q01.H3d)
+# verified: solutions=1 public=0
+AllZeroToNat\(s\[1\.\.\]\)
+
+# from Solutions/verus/q/q01_hello/src/lib.rs
+# source:     lemma_seq_to_nat_push_zero(s.push(0));   (Q01.H2v)
+# verified: solutions=1 public=0
+lemma_seq_to_nat_push_zero\(s\.push\(0\)\)
+# source:         lemma_all_zero(s.drop_first());   (Q01.H3v)
+# verified: solutions=1 public=0
+lemma_all_zero\(s\.drop_first\(\)\)
+
+# from Solutions/verus/q/q01_hello/src/exit.rs
+# source:     assert(s + seq![0u64] =~= s.push(0));   (Q01.X3v)
+# verified: solutions=1 public=0
+s\s*\+\s*seq!\[0u64\]\s*=~=\s*s\.push\(0\)
+# source:         r == sq(3),   (Q01.X7v, after the `ensures` line)
+# verified: solutions=1 public=0
+ensures\s+r\s*==\s*sq\(3\)
+
+# from Solutions/dafny/Q/Q01_Hello/exit/Q01_Map.dfy
+# source:       ZerosToNat(n - 1);   (Q01.X4d)
+# verified: solutions=1 public=0
+ZerosToNat\(n\s*-\s*1\)
+
+# from Solutions/dafny/Q/Q01_Hello/agent/Q01_AgentRepair.dfy
+# source:     d := s[|s| - 1];   (Q01.A1d, Bug 2)
+# verified: solutions=1 public=0
+d\s*:=\s*s\[\|s\|\s*-\s*1\]

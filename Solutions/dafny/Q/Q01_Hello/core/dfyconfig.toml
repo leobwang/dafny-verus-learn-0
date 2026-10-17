@@ -1,0 +1,14 @@
+# The reference project of the learner unit dafny/Q/Q01_Hello/core (author-only, never learner-visible).
+# It holds the twins of that unit's files (same stems, same module names) plus the
+# given layers of the module's chain, with the unit's [options]. Build it only by
+# name: dafny verify Solutions/dafny/Q/Q01_Hello/core/dfyconfig.toml. Never verify it together with
+# the learner unit (Dafny has one global module namespace and the twins keep the
+# learner module names). The course tools do not read this file: vcheck --ref and
+# vaudit --ref lay the twins over the learner unit in a scratch shadow tree.
+# Hand-written mirror of the generated dafny/Q/Q01_Hello/core/dfyconfig.toml (Unit: Q01):
+# keep includes (re-rooted here) and [options] equal to it when the registry, the
+# layer chain or dafny/options/core.toml change.
+includes = ["*.dfy", "../../../../../dafny/given/Q/QG_L1_*.dfy"]
+
+[options]
+resource-limit = 5000000

@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V-10"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V-10/src/lib.rs",
+    "kind": "include-macro",
+    "line": 4,
+    "message": "include!-family macros pull in source the lint never sees"
+   },
+   {
+    "file": "<root>/tests/corpus/verus/V-10/src/lib.rs",
+    "kind": "outside-verus",
+    "line": 4,
+    "message": "code outside verus! is never verified (V9, Δ9)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V-10"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "3ecf4f3fb49484adac32d222051afb383135f690609fd586a2b7ea868a2a792e",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V-10"
+}

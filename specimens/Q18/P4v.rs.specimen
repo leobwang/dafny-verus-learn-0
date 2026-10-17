@@ -1,0 +1,57 @@
+// item: Q18.P4v S10 verdict
+// **P4.** Build-tool forensic, fourth pass. This file is the proof text of a contractor's
+// delivery, and the delivery came with configuration of its own (`P4v.cargo-config.toml.companion`, the delivery's `.cargo/config.toml`, beside
+// this file: read it, never run it). The contractor reports the delivery green under its
+// own build. Comments and names are contractor prose: unchecked; only a tool's own output
+// counts as evidence. The one comment that is not contractor prose is the course's
+// `planted:` marker: every Q18 delivery carries exactly one, on the line of its defect.
+// BEFORE you run any instrument on this file, read it and its companion and name, first,
+// what the companion does to the delivery's own check (the species):
+//   mute    a failure the verifier reports is made non-fatal: the run exits 0 with it;
+//   skip    part of the proof text is never given to the verifier;
+//   divert  the build ships code that the verifier never checked;
+//   bypass  the command run in the verifier's place is not a verifier at all;
+// then the instrument that catches it: the FIRST of these, in this order, whose result is
+// not a pass, run by the course on THIS file alone (the pinned command, never the
+// delivery's own configuration):
+//   vcheck  `scripts/vcheck <file>` (a pass: verified, with 0 holes);
+//   gate    `scripts/vcheck --gate <file>` (a pass: verified, exit 0);
+//   vaudit  `scripts/vaudit <file>` (a pass: 0 findings);
+//   test    `scripts/vcheck --test <file>` (a pass: every test ran and passed).
+// Answer form: `<species> <instrument>`, for example `skip vaudit`, in slots/Q18.slots.
+// Record the first try (`scripts/firsttry.sh Q18 --check`) before you run anything on
+// this file; only then enable the switch below (delete `SLOT: ` from its line), run the
+// four instruments in order, and compare.
+// Claim:
+//   `top_word(s)`: the top word of a non-empty limb sequence, as its value divided by BASE.
+// after: Q18.P4v
+// SLOT: CHECK P4v
+use vstd::prelude::*;
+
+verus! {
+
+// The definitions this delivery is about, as layer L1 gives them (copies: a specimen
+// stands alone).
+pub spec const BASE: nat = 0x1_0000_0000_0000_0000;
+
+pub open spec fn seq_to_nat(s: Seq<u64>) -> nat
+    decreases s.len(),
+{
+    if s.len() == 0 {
+        0
+    } else {
+        s[0] as nat + BASE * seq_to_nat(s.drop_first())
+    }
+}
+
+/// Delivered: the top word of a non-empty limb sequence, as its value divided by BASE.
+pub fn top_word(s: &Vec<u64>) -> (d: u64)
+    requires
+        s.len() > 0,
+    ensures
+        d as nat == seq_to_nat(s@) / BASE,
+{
+    s[s.len() - 1]  // planted: Q18.P4v
+}
+
+} // verus!

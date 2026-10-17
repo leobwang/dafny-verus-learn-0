@@ -1,0 +1,73 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D01",
+    "col": 27,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy",
+    "line": 11,
+    "message": "This ensures clause is part of a bodyless method. Add the {:axiom} attribute to it or the enclosing method to suppress this warning",
+    "severity": "warning"
+   }
+  ],
+  "exit_code": 2,
+  "findings": [
+   {
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy",
+    "kind": "warnings-fail-gate",
+    "line": 0,
+    "message": "warnings fail the gate (W-D04): holes and every other warning must be gone"
+   }
+  ],
+  "holes": [
+   {
+    "col": 27,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy",
+    "kind": "bodyless-method",
+    "label": "Battery_D4.CountZerosBound",
+    "line": 11
+   }
+  ],
+  "lang": "dafny",
+  "per_symbol": {
+   "Battery_D4.CountZeros": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "1abb51e1fe3ac9932e544e89a6e05f8b6179cb48cbffc6b7c23e703104c15874",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/dafny/D4/c2.dfy"
+}

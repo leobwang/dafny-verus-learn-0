@@ -1,0 +1,30 @@
+// Demo for card Q07.C4d (recognise:isolate). Open it only after every
+// prediction of Q07 is recorded (scripts/firsttry.sh Q07 --check). Its pinned
+// run is `scripts/vcheck` (the sidecar's command); run it the same way, and
+// then once more with `scripts/vcheck --isolate`.
+// after: Q07.P7d
+module {:disableNonlinearArithmetic} Q07_CardC4d {
+  lemma Plain(x: nat)
+    ensures true
+  {
+    assert x == 1;
+    assert x == 2;
+    assert x == 3;
+  }
+
+  lemma {:isolate_assertions} Isolated(x: nat)
+    ensures true
+  {
+    assert x == 1;
+    assert x == 2;
+    assert x == 3;
+  }
+
+  lemma Marked(x: nat)
+    ensures true
+  {
+    assert x == 1;
+    assert {:isolate} x == 2;
+    assert x == 3;
+  }
+}

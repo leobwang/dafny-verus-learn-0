@@ -1,0 +1,15 @@
+// Card demo Q04.C4d (calling a standard-library lemma), the failure half. The success
+// half is `ScaleLe` in dafny/Q/Q04_ProofCraft/std/Q04_Library.dfy; this copy drops the
+// `requires` that the library lemma's precondition needs. Run it with
+// `scripts/vcheck specimens/Q04/card-c4d.dfy.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+module Q04_CardC4d {
+  import Mul = Std.Arithmetic.Mul
+
+  lemma ScaleLe(a: nat, b: nat, w: nat)
+    ensures a * w <= b * w
+  {
+    Mul.LemmaMulInequality(a, b, w);
+  }
+}
+// EXPECT @12 "a precondition for this call could not be proved"

@@ -1,0 +1,19 @@
+// Card demo Q01.C4dv (false friends), row 5 (`decreases`), Dafny side. Open it only after Q01's
+// predictions are recorded. Run `scripts/vcheck specimens/Q01/card-c4dv-5-d.dfy.specimen` and compare with
+// the Verus side, `specimens/Q01/card-c4dv-5-v.rs.specimen`.
+module Q01_C4dv5d {
+  function ReverseLimbs(s: seq<nat>): seq<nat>
+    decreases |s|
+  {
+    if |s| == 0 then [] else ReverseLimbs(s[1..]) + [s[0]]
+  }
+
+  lemma ReverseLimbsLength(s: seq<nat>)
+    decreases |s|
+    ensures |ReverseLimbs(s)| == |s|
+  {
+    if |s| > 0 {
+      ReverseLimbsLength(s[1..]);
+    }
+  }
+}

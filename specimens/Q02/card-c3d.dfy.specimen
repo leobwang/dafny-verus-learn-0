@@ -1,0 +1,11 @@
+// Card Q02.C3d (termination measures), the failure demo: a recursion whose stated measure
+// does not get smaller at the recursive call. Open it only after your Q02 predictions are
+// committed.
+// EXPECT @9 "decreases clause might not decrease"
+module Q02_CardC3d {
+  function CountTo(n: nat, k: nat): nat
+    decreases n
+  {
+    if n >= k then n else CountTo(n + 1, k)
+  }
+}

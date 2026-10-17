@@ -1,0 +1,14 @@
+// Demo for card Q03.C1v (write:ghost), the failure half: a ghost value used by
+// exec code.
+// EXPECT @10 "cannot access spec-mode place in executable context"
+use vstd::prelude::*;
+
+verus! {
+
+fn limb_count(v: &Vec<u64>) -> (n: usize) {
+    let ghost g: usize = v.len();
+    let n: usize = g;
+    n
+}
+
+} // verus!

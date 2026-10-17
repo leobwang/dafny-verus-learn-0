@@ -1,0 +1,30 @@
+// Chapter specimen for docs/Q03_FirstSyntaxII.md §3: the Verus file of Q03.P5dv,
+// verbatim. Open it only after your Q03 predictions are committed; scripts/vcheck
+// refuses it until P5dv's first try is recorded. The chapter runs a copy of it plainly
+// (`verus probe.rs --crate-type=lib`) and this file through scripts/vcheck.
+// after: Q03.P5dv
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn lemma_a(x: int)
+    ensures
+        x + x == 2 * x,
+{
+}
+
+pub proof fn lemma_b(x: int)
+    ensures
+        x + 2 > x,
+{
+    assume(false);
+}
+
+#[verifier::external_body]
+pub proof fn lemma_c(x: int)
+    ensures
+        x + 1 > x,
+{
+}
+
+} // verus!

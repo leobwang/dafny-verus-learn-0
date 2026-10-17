@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+"""dafny-server — the course's one way to start `dafny server` (QPLAN §30 Q56).
+
+Usage:
+  scripts/dafny-server [--runtime S]
+      Replace this process with the pinned Dafny language server, talking the
+      Language Server Protocol on stdin and stdout, under the course's memory
+      cap: `systemd-run --user --scope -p MemoryMax=<the Dafny cap> -p
+      MemorySwapMax=0 -p RuntimeMaxSec=<S>`, with dvl's scrubbed environment.
+      The server runs from the scratch copy of the install (Δ33: it writes a
+      log file into its install directory on every start, so the pinned tree
+      under .toolchain/ is never the server's), with the pinned solver, the
+      course resource limit and the pinned --cores (dvl.dafny.server_argv).
+      S (default 900, at most the pinned wall clock) is the scope's lifetime:
+      systemd stops the server after S seconds whoever still waits for it,
+      because a server whose stdin reaches end of file does not exit on its
+      own (VERSIONS.md §1.1). A client ends a session with LSP `shutdown` and
+      `exit`, then kills the process group (fvh.lsp.stop_server).
+  scripts/dafny-server --argv
+      Print the command line it would run (one argument per line) and exit 0.
+
+Exit codes: the server's own once it runs; 3 a usage error or a cap that
+cannot be applied (never an uncapped server). Learner code reaches the server
+only through fvh.lsp.start_server, which runs this script.
+"""
+
+import argparse
+import os
+import sys
+import uuid
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from dvl import common, dafny  # noqa: E402
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="dafny-server", allow_abbrev=False)
+    ap.add_argument("--runtime", type=int, default=900)
+    ap.add_argument("--argv", action="store_true")
+    a = ap.parse_args(argv)
+    p = dafny.pins()
+    if not 1 <= a.runtime <= int(p["wall_clock_s"]):
+        print(f"dafny-server: --runtime must be 1 to {p['wall_clock_s']} seconds", file=sys.stderr)
+        return 3
+    try:
+        common.toolchain("dafny")
+        common._cap_works()
+        server = dafny.server_argv()
+    except (common.CapError, common.ToolchainError) as e:
+        print(f"dafny-server: refused: {e}", file=sys.stderr)
+        return 3
+    unit = f"dvl-dafny-server-{os.getpid()}-{uuid.uuid4().hex[:12]}"
+    full = common.cap_argv(p["mem_gb"], unit, common.default_env(),
+                           runtime_max_s=a.runtime) + [str(x) for x in server]
+    if a.argv:
+        print("\n".join(full))
+        return 0
+    sys.stdout.flush()
+    os.execvp(full[0], full)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V09"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V09/src/lib.rs",
+    "kind": "outside-verus",
+    "line": 5,
+    "message": "code outside verus! is never verified (V9, Δ9)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V09"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "69701acbb63fbefc30c281625f301be92820340ace7fd445f38cc823e3e9c457",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V09"
+}

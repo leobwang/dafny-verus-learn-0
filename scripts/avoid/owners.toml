@@ -1,0 +1,152 @@
+# owners.toml — the owner partitions scripts/avoid.sh checks (design §9.2; PLAN.md §5.1,
+# §5.3; spec §2.7). Author-written; under scripts/, so guard rule 2g keeps it out of every
+# learner and contractor edit.
+#
+# [conventions]  keys never compared as equal keys: names a language or its library fixes,
+#                which recur in both tracks on different objects. A convention never hides
+#                a word-run hit (artifact, curated type) or a token tripwire. Add a key only
+#                with the convention it follows; never to silence a hit on an exercise name.
+# [[artifact]]   design §9.2 item 3: what one track alone may build. A word run of the
+#                owner's `words` inside a declaration key of the other track is a hit.
+# [[tag]]        design §9.2 item 1: the surprises one track alone may pose as predictions.
+#                `homes`: the owner's prediction items for it (an armed module's home must
+#                exist; a planned one is pending). `tokens`: a name-level tripwire, a hit
+#                when one occurs among the code tokens of the other track's P-item blocks.
+#                A tag with no tokens is listed, never claimed as caught (spec §2.7: shape
+#                overlaps are not name-checkable).
+schema = 1
+
+[conventions]
+keys = [
+  # Verus / vstd / Rust conventions
+  "wf", "view", "new", "len", "get", "set", "push", "pop", "to_vec", "next", "clone",
+  "default", "from", "into", "eq", "main",
+  # Python
+  "init",
+  # Dafny dynamic frames (`Valid()`) and the failure-compatible type protocol of `:-`
+  "valid", "is_failure", "propagate_failure", "extract",
+  # option / result constructors and the empty value of a container or a language
+  "none", "some", "ok", "err", "option", "result", "empty",
+]
+
+# --- artifacts (design §9.2 item 3; PLAN.md §5.3) ---------------------------------------------
+
+[[artifact]]
+owner = "Q"
+name = "BigNat (the Q spine, little-endian limbs)"
+words = ["big nat", "limb", "limbs"]
+
+[[artifact]]
+owner = "Q"
+name = "the ring buffer"
+words = ["ring buffer"]
+
+[[artifact]]
+owner = "Q"
+name = "the priority queue"
+words = ["priority queue"]
+
+[[artifact]]
+owner = "Q"
+name = "the decimal parser (Q05; R09's bounds are single digits, PLAN.md §5.5)"
+words = ["decimal", "digit", "digits"]
+
+[[artifact]]
+owner = "R"
+name = "the regex AST, its matchers and derivatives"
+words = ["regex", "re", "deriv", "derivative", "matcher", "nullable"]
+
+[[artifact]]
+owner = "R"
+name = "character classes"
+words = ["char class"]
+
+[[artifact]]
+owner = "R"
+name = "derivations (R11's certifying matcher)"
+words = ["derivation"]
+
+[[artifact]]
+owner = "R"
+name = "the Pike VM and the NFA arena"
+words = ["pike", "nfa"]
+
+# --- owner tags (design §9.2 item 1; PLAN.md §5.1) --------------------------------------------
+
+[[tag]]
+owner = "Q"
+tag = "nat-vs-u64-minus"
+homes = ["Q01.P1dv"]
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "hole-visibility"
+homes = ["Q01.P10dv"]
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "proved-vs-computed"
+homes = []
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "auto-induction"
+homes = ["Q02.P3dv"]
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "error-count-of-a-run"
+homes = ["Q03.P6dv", "Q04.P3dv", "Q07.P7d"]
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "assert-by-scoping"
+homes = ["Q02.P8dv"]
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "resource-limit-verdicts"
+homes = ["Q06.P2dv"]
+tokens = []
+
+[[tag]]
+owner = "Q"
+tag = "seeds"
+homes = ["Q09.P2dv"]
+tokens = []
+
+[[tag]]
+owner = "R"
+tag = "midpoint-overflow"
+homes = ["R01.P1dv"]
+tokens = ["midpoint"]
+
+[[tag]]
+owner = "R"
+tag = "expect-outside-tests"
+homes = ["R04.P1d"]
+tokens = []
+
+[[tag]]
+owner = "R"
+tag = "strengthened-requires"
+homes = ["R03.P1d", "R03.P2v"]
+tokens = []
+
+[[tag]]
+owner = "R"
+tag = "empty-string-and-anchoring"
+homes = []
+tokens = []
+
+[[tag]]
+owner = "R"
+tag = "later-stage-failures"
+homes = ["R01.P2dv"]
+tokens = []

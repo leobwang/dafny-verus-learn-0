@@ -1,0 +1,22 @@
+// item: Q12.P5d S10 verdict
+// **P5.** Stage attribution, the pipeline. A short Dafny file (below) with one test
+// method, run with its compiled checks:
+//     scripts/vcheck --test specimens/Q12/P5d.dfy.specimen
+// BEFORE you run it, predict the stage `scripts/vcheck` reports: the stage its summary
+// line names (`…, stage <s>`), or `verify` when the summary line names none.
+// Answer form: one of `cli`, `parse`, `resolve`, `verify`, `compile`, `test`, `run`, in
+// slots/Q12.slots. Record the first try (`scripts/firsttry.sh Q12 --check`) before you
+// run anything on this file; only then enable the switch below (delete `SLOT: ` from its
+// line) and run the command.
+// after: Q12.P5d
+// SLOT: CHECK P5d
+module Q12_P5 {
+  // Doubling, specified only.
+  method Double(x: nat) returns (y: nat)
+    ensures y == 2 * x
+
+  method {:test} DoubleThree() {
+    var y := Double(3);
+    expect y == 6;
+  }
+}

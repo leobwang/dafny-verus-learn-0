@@ -1,0 +1,193 @@
+% Q02_solutions.tex — REFERENCE SOLUTIONS to paper/Q02_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0, Verus 0.2026.09.27.3cf1832) through scripts/vcheck, one solver job at
+% a time under a 16G cap, by the DV2b kit lane for Q02 on 2026-10-05. The probe
+% files are archived under
+% ~/.cache/dafny-verus-learn-0/author-probes/dv2b/q02-kit/ (README there).
+% B3's fields are graded against the learner's own cheatsheets.md; this file
+% records which lines of the pinned range each field draws on and never copies
+% the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q02 --- First syntax I \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How these are graded}
+B1 is informal-proof-first (the five proof dimensions; its blueprint is
+re-scored by \verb+--post+ against the learner's verified H3d and H2v). B2 is a
+concept answer (\texttt{correctness}: the grader tries to counterexample it,
+with the rubric's Probe B). B3 is a paper card (\texttt{card-fidelity}, per
+field). The solutions below give the answers; the rubric never states them.
+The structure of B1 matches the formal references of H3d and H2v (spec
+section~4.4's author rule).
+
+% ---------------------------------------------------------------------------
+\section*{B1 (informal-proof-first)}
+
+\textbf{(a) Statement.} For every $s$ of type \dfy{seq<nat>},
+$\mathit{ToNat}(\mathit{Normalize}(s)) = \mathit{ToNat}(s)$.
+
+\textbf{Induction on} the length $|s|$ (the lemma's \dfy{decreases |s|}),
+following the three cases of \dfy{Normalize}.
+
+\textbf{IH (as a formula).} For every $t$ with $|t| < |s|$:
+$\mathit{ToNat}(\mathit{Normalize}(t)) = \mathit{ToNat}(t)$. It is used once,
+at $t = p$ below, where $|p| = |s| - 1$.
+
+\textbf{Base and the two non-recursive cases.}
+\begin{itemize}
+\item $|s| = 0$: $\mathit{Normalize}(s) = [\,] = s$, so both sides are
+  $\mathit{ToNat}(s)$ (indeed 0).
+\item $|s| > 0$ and $s[|s|-1] \neq 0$: $\mathit{Normalize}(s) = s$ by
+  definition; nothing to prove.
+\end{itemize}
+
+\textbf{Step} ($|s| > 0$ and $s[|s|-1] = 0$). Let $p = s[..|s|-1]$, the
+sequence without its top limb. Then
+\begin{enumerate}
+\item $\mathit{Normalize}(s) = \mathit{Normalize}(p)$, by the definition's third
+  case;
+\item $s = p + [0]$, as sequences: the same length, and the same limb at every
+  index (limb $|s|-1$ is the zero);
+\item $\mathit{ToNat}(p + [0]) = \mathit{ToNat}(p)$, L1's worked lemma
+  \dfy{ToNatAppendZero} at $p$; with item~2, $\mathit{ToNat}(s) =
+  \mathit{ToNat}(p)$;
+\item the IH at $p$: $\mathit{ToNat}(\mathit{Normalize}(p)) = \mathit{ToNat}(p)$.
+\end{enumerate}
+Chaining 1, 4 and 3: $\mathit{ToNat}(\mathit{Normalize}(s)) =
+\mathit{ToNat}(\mathit{Normalize}(p)) = \mathit{ToNat}(p) = \mathit{ToNat}(s)$.
+
+\textbf{Helper lemmas (the blueprint).} (i) L1's \dfy{ToNatAppendZero(p)}:
+$\mathit{ToNat}(p + [0]) = \mathit{ToNat}(p)$; (ii) the sequence equation
+$s = p + [0]$ for $p = s[..|s|-1]$ when the top limb is zero, stated as an
+assertion (the solver relates $\mathit{ToNat}(p + [0])$ to $\mathit{ToNat}(s)$
+only once it is told the two sequences are equal). Items (i) and (ii) together
+are exactly H1d's statement, $\mathit{ToNat}(s[..|s|-1]) = \mathit{ToNat}(s)$,
+so naming H1d as the one helper is equally correct. No other helper.
+
+\textbf{Gaps.} None.
+
+\textbf{The formal reference it matches} (H3d's twin):
+\begin{dafnycode}
+lemma NormalizeToNat(s: seq<nat>)
+  ensures ToNat(Normalize(s)) == ToNat(s)
+  decreases |s|
+{
+  if |s| > 0 && s[|s| - 1] == 0 {
+    var p := s[..|s| - 1];
+    assert s == p + [0];
+    ToNatAppendZero(p);
+    NormalizeToNat(p);
+  }
+}
+\end{dafnycode}
+The two non-recursive cases need no line: the verifier unfolds
+\dfy{Normalize} once.
+
+\textbf{(b) Verus.} The loop is the iterative form of the same induction.
+\begin{itemize}
+\item \textbf{Invariant:} $\mathit{value}(a) = \mathit{value}(a_{\mathit{old}})$,
+  written \vrs{a.to_nat() == old(a).to_nat()}: the value at every pass is the
+  value at the call. It plays the IH; each pass is one case-3 step.
+\item \textbf{On entry:} \vrs{a} is \vrs{old(a)}.
+\item \textbf{Kept by a pass:} the guard says the vector is non-empty with a zero
+  top limb; the given call (H1v's statement) gives
+  \vrs{seq_to_nat(a@.drop_last()) == seq_to_nat(a@)}, and \vrs{pop} makes the
+  new view \vrs{a@.drop_last()}, so the value is unchanged.
+\item \textbf{At the exit:} the guard is false, so the vector is empty or its top
+  limb is non-zero, which is \vrs{wf()}; the invariant gives the value clause.
+  The measure \vrs{a.limbs.len()} drops by one per pass.
+\end{itemize}
+Verus checks the body from the invariant and the guard alone, so without the
+invariant nothing ties \vrs{a} inside the loop to \vrs{old(a)}. The twin's
+invariant is that one clause.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (concept)}
+
+\textbf{(a)} A clause is inductive when it holds on entry and every pass keeps
+it: from any state where the clause (with the other clauses kept beside it)
+and the guard hold, the body re-establishes it. So the \emph{on entry} and
+\emph{maintained} obligations decide inductiveness; the \emph{at exit}
+obligation decides only whether the invariant is strong enough for what
+follows the loop (an inductive invariant can still be too weak for the
+postcondition). Inductiveness is relative to the set of clauses kept.
+
+\textbf{(b)} One example (any loop with the same shape is correct):
+\begin{dafnycode}
+k := 0;
+t := 0;
+while k < m        // m: nat
+{
+  k := k + 1;
+  t := t + 1;
+}
+\end{dafnycode}
+Clause: $t \leq m$. Every reachable state has $t = k \leq m$, so the clause
+holds there. Alone it is not inductive: from $k = 0$, $t = 1$, $m = 1$ (the
+clause and the guard hold), one pass gives $t = 2 > m$. The rubric's Probe B
+runs exactly this pass as a compiled test (captured: \texttt{1 passed, 0
+failed}); the same loop with the clauses $k \leq m$, $t = k$ beside $t \leq m$
+verifies (Probe B$'$, captured: \texttt{verified}).
+
+\textbf{(c)} Pruning re-checks the clauses it holds: with $t \leq m$ alone the
+maintenance check fails, so pruning drops it although it is true at every
+reachable state. Beside $k \leq m$ and $t = k$ the set is inductive and pruning
+keeps all three. Dropping a true clause is sound but can lose what the
+postcondition needs; the card then restores the attempt.
+
+% ---------------------------------------------------------------------------
+\section*{B3 (paper card 02.7): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 766--791 (computed 2026-10-05),
+\[ \texttt{sha256 04b270b5bf2545aa6727055642d13097d8abedc941d775dc6dc78ec3ae7be6cc}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Input: a Dafny program whose specification
+  (\dfy{requires}/\dfy{ensures}) is given and whose annotations are missing.
+  Output: the program with loop invariants, assertions and \dfy{decreases}
+  clauses added, code unchanged, so that Dafny verifies it; an LLM in a
+  feedback loop with the verifier. \emph{Lines 770, 772.}
+\item[Oracle.] Two checks: the Dafny verifier (SMT-backed) accepts the attempt,
+  and the diff-check: stripping every annotation from the attempt, with Dafny's
+  own parser, gives back the original program. \emph{Lines 772, 775.}
+\item[What is trusted.] Dafny 4.11.0 and its solver; Dafny's parser inside the
+  strip; the benchmarks' specifications as the intent (their base programs were
+  re-derived, fixing 70 of 782 that did not compile); whether spec edits or
+  \dfy{assume} are rejected is not stated, so they are trusted silently.
+  \emph{Lines 772, 775, 789.}
+\item[Cheat surface.] Closed: changing the code (the card's example rewrites an
+  assignment to drop a \texttt{+1}), caught by the diff-check. Open or
+  unstated: editing the specification, adding \dfy{assume}; hints that may
+  encode benchmark knowledge. \emph{Lines 775, 789.}
+\item[Metric.] Percentage of programs verified, per benchmark (Clover, MBPP,
+  HumanEval, DafnyBench); the headline 86.18\% on DafnyBench with Claude 3.5;
+  ablation gains in percentage points; 69.5\% for the fine-tuned small model on
+  197 held-out programs. \emph{Lines 770, 780--787.}
+\item[Budget.] $N = 10$ attempts per program for the Claude runs; $N = 5$ for
+  the held-out small-model runs; no cost, token or time figure.
+  \emph{Lines 772, 787, 789.}
+\item[Variance.] One run per configuration, two closed models; no intervals or
+  repeats; some numbers disagree between text and figures (a plateau near
+  66.5\% against the abstract's 68\%). \emph{Lines 787, 789.}
+\item[Artifact.] No code released; a distilled set of about 31k examples is
+  used to fine-tune small models, and the range does not say it is released.
+  \emph{Lines 778, 789.}
+\end{description}
+A field that says the range is silent where it is silent (cost; variance
+intervals; a released dataset) is correct. A field that contradicts a line
+(for example an unlimited retry budget, or a test suite as the oracle) scores
+2, quoting that line.
+
+\end{document}

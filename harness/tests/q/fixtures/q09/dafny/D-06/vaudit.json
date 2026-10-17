@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/D-06/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/D-06/main.dfy",
+    "kind": "verify-only",
+    "line": 3,
+    "message": "@VerifyOnly skips every other member of the file (G5)"
+   },
+   {
+    "file": "<root>/tests/corpus/dafny/D-06/main.dfy",
+    "kind": "audit-verify-only",
+    "line": 4,
+    "message": "Fine: Member has explicit temporary `@VerifyOnly` attribute"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/D-06/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "3abc568d96a4bd980fcb6fa33e93d53a4dca9a5cc5e4a7e74a9842204977fb4c",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-06/main.dfy"
+}

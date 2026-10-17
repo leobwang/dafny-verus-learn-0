@@ -1,0 +1,23 @@
+// Card Q04.C8dv (false friends), row 2 (`forall`), demo d (Dafny). Open it only after your
+// Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-2-d.dfy.specimen` and compare with
+// specimens/Q04/card-c8dv-2-v.rs.specimen.
+module Q04_CardC8dv2D {
+  lemma Below(s: seq<nat>, i: int)
+    requires 0 <= i < |s|
+    requires forall j | 0 <= j < |s| :: s[j] < 10
+    ensures s[i] * 2 < 20
+  {
+  }
+
+  lemma AllBelow(s: seq<nat>)
+    requires forall j | 0 <= j < |s| :: s[j] < 10
+    ensures forall i | 0 <= i < |s| :: s[i] * 2 < 20
+  {
+    forall i | 0 <= i < |s|
+      ensures s[i] * 2 < 20
+    {
+      Below(s, i);
+    }
+  }
+}

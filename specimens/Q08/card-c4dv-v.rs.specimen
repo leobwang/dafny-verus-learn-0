@@ -1,0 +1,52 @@
+// Demo for card Q08.C4dv (divergence), the Verus column. Open it only after every
+// prediction of Q08 is recorded (scripts/firsttry.sh Q08 --check).
+// after: Q08.P1dv
+use vstd::prelude::*;
+
+verus! {
+
+pub trait Gauge: Sized {
+    spec fn level(&self) -> nat;
+
+    fn raise(&mut self)
+        requires
+            old(self).level() < 10,
+        ensures
+            final(self).level() > old(self).level(),
+    ;
+
+    fn lower(&mut self)
+        requires
+            old(self).level() > 0,
+        ensures
+            final(self).level() < old(self).level(),
+    ;
+}
+
+pub struct Tank {
+    pub l: u64,
+}
+
+impl Gauge for Tank {
+    open spec fn level(&self) -> nat {
+        self.l as nat
+    }
+
+    // [1] the implementation adds a postcondition
+    fn raise(&mut self)
+        ensures
+            final(self).l == old(self).l + 1,
+    {
+        self.l = self.l + 1;
+    }
+
+    // [2] the implementation adds a precondition
+    fn lower(&mut self)
+        requires
+            old(self).l > 5,
+    {
+        self.l = self.l - 1;
+    }
+}
+
+} // verus!

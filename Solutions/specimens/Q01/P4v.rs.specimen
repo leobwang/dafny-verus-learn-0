@@ -1,0 +1,31 @@
+// item: Q01.P4v S3 obligation
+// **P4v.** Four proof fns, each holding one labelled assertion about the value of a
+// literal limb sequence (least significant limb first): [a] one limb, [b] two, [c] three,
+// [d] five. Which labelled assertions does the verifier fail to prove? Each sits in its
+// own proof fn, so no failure hides another.
+// Answer form: `FAILS` followed by the failing labels in label order, separated by
+// single spaces, or `FAILS none`. Reference twin: the answer below is enabled and pinned
+// by `scripts/pins.py --ref`.
+// FAILS a b c d
+use vstd::prelude::*;
+use qg_bignat_l1::*;
+
+verus! {
+
+proof fn one_limb() {
+    assert(seq_to_nat(seq![7u64]) == 7);  // [a]
+}
+
+proof fn two_limbs() {
+    assert(seq_to_nat(seq![7u64, 2u64]) == 7 + 2 * BASE);  // [b]
+}
+
+proof fn three_limbs() {
+    assert(seq_to_nat(seq![1u64, 0u64, 1u64]) == 1 + BASE * BASE);  // [c]
+}
+
+proof fn five_limbs() {
+    assert(seq_to_nat(seq![0u64, 0u64, 0u64, 0u64, 1u64]) == BASE * BASE * BASE * BASE);  // [d]
+}
+
+} // verus!

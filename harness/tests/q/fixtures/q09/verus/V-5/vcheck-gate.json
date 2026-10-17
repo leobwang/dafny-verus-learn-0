@@ -1,0 +1,62 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/V-5"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/V-5/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_vd5",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 1 lint finding(s)",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 0,
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V-5/src/lib.rs",
+    "kind": "rlimit-inflation",
+    "line": 6,
+    "message": "a per-item rlimit above the pin (V22)"
+   }
+  ],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "lemma_sq_nonneg": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/V-5",
+  "verdict": "failed",
+  "verified_count": 2
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "0ba52cf7bca0037ef7a6493c039f31f12c8fedfe004517a7771ffa38d728adc4",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V-5"
+}

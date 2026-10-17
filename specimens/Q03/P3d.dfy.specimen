@@ -1,0 +1,30 @@
+// item: Q03.P3d S7 obligation
+// **P3.** Subset types. `Limb` is the subset type of the naturals below BASE.
+// Each method below assigns one value to a `Limb` variable, on the line
+// labelled `// [x]`. Which labelled assignments does the verifier fail to
+// prove? Answer form: `FAILS` followed by the failing labels in label order,
+// separated by single spaces, or `FAILS none`. Fill the slot line below,
+// record the first try (`scripts/firsttry.sh Q03 --check`), and only then
+// enable it (`// SLOT: FAILS …` becomes `// FAILS …`).
+// SLOT: FAILS ???
+module Q03_P3 {
+  const BASE: nat := 18446744073709551616
+
+  type Limb = x: nat | x < BASE
+
+  method AssignA() {
+    var l: Limb := BASE - 1;  // [a]
+  }
+
+  method AssignB() {
+    var l: Limb := BASE;  // [b]
+  }
+
+  method AssignC() {
+    var l: Limb := 5 + 5;  // [c]
+  }
+
+  method AssignD(x: Limb, y: Limb) {
+    var l: Limb := x + y;  // [d]
+  }
+}

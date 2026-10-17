@@ -1,0 +1,66 @@
+// Card Q02.C1d (`assert … by`), the failure demo: CardAssertBy of the exercise file with
+// the lemma call left out of its `by` block. Open it only after your Q02 predictions are
+// committed. A specimen stands alone, so it carries copies of the L1/L2 declarations it uses.
+// EXPECT @63 "assertion might not hold"
+module Q02_CardC1d {
+  const BASE: nat := 18446744073709551616
+
+  predicate Valid(s: seq<nat>)
+  {
+    forall i | 0 <= i < |s| :: s[i] < BASE
+  }
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  function Pow(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 1 else BASE * Pow(n - 1)
+  }
+
+  function Head(s: seq<nat>): nat
+  {
+    if |s| == 0 then 0 else s[0]
+  }
+
+  function Tail(s: seq<nat>): seq<nat>
+  {
+    if |s| == 0 then [] else s[1..]
+  }
+
+  lemma ValidTail(s: seq<nat>)
+    requires Valid(s)
+    ensures Valid(Tail(s)) && Head(s) < BASE
+  {
+    if |s| > 0 {
+      forall i | 0 <= i < |Tail(s)|
+        ensures Tail(s)[i] < BASE
+      {
+        assert Tail(s)[i] == s[i + 1];
+      }
+    }
+  }
+
+  lemma {:induction false} ToNatBound(s: seq<nat>)
+    requires Valid(s)
+    ensures ToNat(s) < Pow(|s|)
+    decreases |s|
+  {
+    if |s| > 0 {
+      ValidTail(s);
+      ToNatBound(s[1..]);
+    }
+  }
+
+  lemma CardAssertBy(s: seq<nat>)
+    requires Valid(s)
+    ensures ToNat(s) < BASE * Pow(|s|)
+  {
+    assert ToNat(s) < Pow(|s|) by {
+    }
+  }
+}

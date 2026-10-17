@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/D-02/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/D-02/main.dfy",
+    "kind": "axiom-attribute",
+    "line": 5,
+    "message": "an @Axiom declaration is an unproved assumption, silent in verify (Δ3, G1)"
+   },
+   {
+    "file": "<root>/tests/corpus/dafny/D-02/main.dfy",
+    "kind": "audit-axiom",
+    "line": 6,
+    "message": "CubeMonotone: Declaration has explicit `{:axiom}` attribute"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/D-02/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "f2f31cb8b2315f24f45700de6ff71a70994c917d121a67adb5bee032fcc73711",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-02/main.dfy"
+}

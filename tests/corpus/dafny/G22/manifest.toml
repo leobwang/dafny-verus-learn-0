@@ -1,0 +1,27 @@
+# Cheat-corpus manifest (Dafny) G22: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G22"
+lang = "dafny"
+half = "R"
+xclass = "X15"
+kind = "covered-elsewhere"
+title = "toolchain swap: IDE custom dafny version and cliPath; a PATH z3"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused"]
+summary = "the wrapper resolves only the pinned install (a missing or different one is refused), passes the bundled Z3 explicitly and builds each job's environment from nothing; the IDE pins and PATH= prefixes are guard-protected (rule 2g)"
+covered_by = [
+  "tests/wrappers/test_dafny_common.py::Toolchain::test_paths",
+  "tests/wrappers/test_dafny_common.py::Toolchain::test_a_missing_install_is_refused",
+  "tests/wrappers/test_dafny_common.py::RunCapped::test_environment_is_scrubbed",
+  "tests/wrappers/test_dafny_tool.py::Verify::test_pinned_command_line",
+  "tests/wrappers/test_tools_tool.py::Vcheck::test_selftest",
+  "tests/hooks/templates/must_block.tmpl.jsonl (rule 2g: a PATH= prefix on a verifier command)",
+  "tests/hooks/templates/must_block.tmpl.jsonl (rule 2g: Write the IDE pins)",
+]

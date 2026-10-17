@@ -1,0 +1,26 @@
+# rg_oracle — the differential oracle (plain Rust, no verus!): the verified matchers of the
+# regex spike, compiled by plain cargo (ghost code erased), against the Rust `regex` crate on
+# anchored whole-string matching. `regex` is a dev-dependency only.
+[package]
+name = "rg_oracle"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+rg_re_a1 = { path = "../rg_re_a1" }
+rg_re_a2 = { path = "../rg_re_a2" }
+rg_re_a3 = { path = "../rg_re_a3" }
+rg_ref_r09 = { path = "../rg_ref_r09" }
+rg_re_a4 = { path = "../rg_re_a4" }
+rg_re_a5 = { path = "../rg_re_a5" }
+rg_rexc = { path = "../rg_rexc" }
+rg_arena = { path = "../rg_arena" }
+
+[dev-dependencies]
+regex = "1"

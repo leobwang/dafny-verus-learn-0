@@ -1,0 +1,19 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "harness/tests/q/fixtures/q18/C3/main.dfy"
+ ],
+ "document": {
+  "findings": [],
+  "lang": "dafny",
+  "target": "<root>/harness/tests/q/fixtures/q18/C3/main.dfy"
+ },
+ "exit_code": 0,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "3fb70e296c6defcb8925b42d4ddfae7802f0c30ce5cd7cc11b44e84c960b7561",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/C3/main.dfy"
+}

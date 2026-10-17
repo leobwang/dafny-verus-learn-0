@@ -1,0 +1,18 @@
+// Card Q02.C1v (`assert … by`), the failure demo: card_assert_by of the exercise crate with
+// the proof-fn call left out of its `by` block. Open it only after your Q02 predictions are
+// committed.
+// EXPECT @14 "assertion failed"
+use vstd::prelude::*;
+use qg_bignat_l2::*;
+
+verus! {
+
+pub proof fn card_assert_by(a: BigNat)
+    ensures
+        seq_to_nat(a@.push(0)) == a.to_nat(),
+{
+    assert(seq_to_nat(a@.push(0)) == seq_to_nat(a@)) by {
+    }
+}
+
+} // verus!

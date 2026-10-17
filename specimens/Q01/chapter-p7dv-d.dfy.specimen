@@ -1,0 +1,23 @@
+const BASE: nat := 18446744073709551616
+
+function ToNat(s: seq<nat>): nat
+  decreases |s|
+{
+  if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+}
+
+lemma ToNatAppendZero(s: seq<nat>)
+  ensures ToNat(s + [0]) == ToNat(s)
+{
+  if |s| == 0 {
+    assert s + [0] == [0];
+  } else {
+    assert (s + [0])[1..] == s[1..] + [0];
+    ToNatAppendZero(s[1..]);
+  }
+}
+
+// Chapter specimen for docs/Q01_Hello.md, section 4: the scenario of Q01.P7dv (layer
+// L1's BASE, ToNat and worked lemma, copied, with the lemma's `decreases` line removed).
+// The chapter quotes its output; scripts/vcheck runs it once this prediction is recorded.
+// after: Q01.P7dv

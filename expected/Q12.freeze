@@ -1,0 +1,152 @@
+# expected/Q12.freeze — statement-freeze pins for Q12 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q12` from the files as shipped; checked by
+# `scripts/specfreeze --check Q12`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q12"
+unfrozen = ["tools/Q12/holecount.py"]
+
+[[file]]
+path = "dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q12_PracticeIC.NormalizeLiteral" = "a33b37aebc6b31b74f6ffab85437a55e50f5b313815f36eb97a7df72616253c1"
+[file.frozen_imports]
+"Q12_PracticeIC" = ["04a5a9c079ee566fba1e5093ded437b48c87732f1ee6134f6c4202f764d5850a", "158ec61ae108c8831f4cce6ca093f68bc561529a4399d61f307aabb32f866269", "60e03edf4e15a3a9f875538abad998d98ccccfc3e34646a54b9c3eff991f0741", "c6edfea94fb3f2c9ef541a550fbf28e74e74e097bd60ca9f836f5dd7a6fba6aa"]
+
+[[file]]
+path = "dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q12_Lab1Hand.CmpTrailingZero" = "6eb56fbd5476f34f82bfbb93dcab7e4df233686137aa8930b20aeb1e8ecd64e2"
+"Q12_Lab1Hand.MulLimbZeroLimbs" = "eb2c327e0372ec884e25a01ed5f999bea3b256a00d6260517ed0992b02632353"
+"Q12_Lab1Hand.NormalizeShorter" = "2b786037b82ca4564ae1b7b73c028983f39f5bd7321ab7ea3acd12254cc5ef33"
+"Q12_Lab1Hand.ToNatMono" = "37deff75c5d9331c3c29e33c3814326e3297b002e54eabb0e21d12c90470b898"
+[file.frozen_imports]
+"Q12_Lab1Hand" = ["04a5a9c079ee566fba1e5093ded437b48c87732f1ee6134f6c4202f764d5850a", "158ec61ae108c8831f4cce6ca093f68bc561529a4399d61f307aabb32f866269", "60e03edf4e15a3a9f875538abad998d98ccccfc3e34646a54b9c3eff991f0741", "c6edfea94fb3f2c9ef541a550fbf28e74e74e097bd60ca9f836f5dd7a6fba6aa"]
+
+[[file]]
+path = "verus/q/q12_practice_ic/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_chain_le" = "ff161148931c6f5c09d66945b4cf06c427e50b38d374e2844cb083eec3c69221"
+
+[[file]]
+path = "verus/q/q12_practice_ic/src/lab1_hand.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"eq_big" = "a14de4c1256e2fa50900ded073bd600a3eabd36077eefb75f9df336ffe12869f"
+"is_zero" = "b632a97e31ea9526c8f338b78433f38cf902479cfbcf63d4febef732fab3bb80"
+"lemma_seq_to_nat_mono" = "157c009c57fb606422c6249af5cb9d9e8efc66f8ec0c1da71b8c6ebf795ef9a3"
+"size_bound" = "09c2879fac1af2dbeb5f503ca1156a170ba2913ac8aa5a34da38e03a8132bd2f"
+
+[[file]]
+path = "specimens/Q12/P1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q12_P1.AddZero" = "921ccc214ac992d4f5cc0e0a4170275c3a8a8e0a46936851ec6eb8227ac497e8"
+
+[[file]]
+path = "specimens/Q12/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_value_below" = "a24944647894986725454b6766bec0d5e34d14b42b01d401364f2f9bd34ce3b6"
+
+[[file]]
+path = "specimens/Q12/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q12_P3.ToNatOne" = "013c6599c481ae654e6c01908717fbb354efc3afcfc1cb64d1b8df8a678b9a0d"
+
+[[file]]
+path = "specimens/Q12/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"limb_count" = "fad07a05c816cfe0c7aed09128bf179fea6b756125e6bdb960abc6a1203dd423"
+
+[[file]]
+path = "specimens/Q12/P5d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q12_P5.Double" = "f3f229ea1acc80d334af11be579fbe8822eb2316d0ddde15f97c2274bd7d0d19"
+"Q12_P5.DoubleThree" = "c530246a3fb99c984e1ef69346458cabc99c3e6d7addc2415ded984c11523226"
+
+[[file]]
+path = "specimens/Q12/P6v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"same_size" = "008881e888b33aa3e1193f65588f2c06443cbfa2b34dd6c6702c08501e655614"
+
+[[file]]
+path = "dafny/Q/Q12_PracticeIC/exit/Q12_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q12_Exit.AddSmall" = "ec9a47c6971a6932230db0bc02d32aa7440e1c356ba88c0090c787e669d8b7a5"
+
+[[file]]
+path = "verus/q/q12_practice_ic/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_weight_two" = "8bbdceb2f6315c05f6032e314cee9ef6133107de3846896a3afde767e64bc57c"
+
+[[file]]
+path = "harness/q/fvh_q/retry.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"Attempt" = "801025d38550f46842d7a316bc7f161a10d9cb5837d90f914b19ba253a77b64e"
+"BatteryReport" = "bc98564428fa8f6a3265039b314349ee3b6828f88a872a3e24ca4d3d504f84c9"
+"Goal" = "fd8c18e2b6fd226191d262a358adf9a758c5cd8ed7a879452ff739d9adc515cd"
+"course_root" = "bc2d80d1b9872e9da8f2bc6fe6d36207f85fb29a6547de6f413251df22afef24"
+"load_battery" = "f0645cc3a1133aa9904a797ae732c94902d3b8242b9fc53de8962903f4d3b289"
+"main" = "6966159873995dcab0d79301472f2e9946e21597e514dfd6155ea02e67a62f7e"
+"main.<locals>.shown" = "e7d778c1b070316c6b88c234a3d6ba47fe1f33db99d94566c460e2eea9700c53"
+"run_battery" = "7643bd03f4fdcddab98bf0ffcfd83df5c5573753e6b1b224b5f559837aed0243"
+"solve_goal" = "bb32aca2c51398e0967b24de5eefa66589bc33afebd846c184af578e7322c1cb"
+
+[[file]]
+path = "harness/q/fvh_q/policies.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"BestFirst" = "28b4aedbb1850754e785f288d468215c7e338df4e305cc1abf17f34bfd33177d"
+"BestFirst.__init__" = "9bb80cd524c7b80b51e8dd7e45073e2e4ba853aa319959c80e4dfaaf0e762a24"
+"BestFirst.propose" = "efacb9b280acc406eb23159a0f0da2dfeb0dd24c4f0898896fb61e65d4c0cee7"
+"Candidate" = "1149f497941f05e674e798e7738eda8ce3448d5d2ab578895683fa10567d9532"
+"IndependentSampler" = "20e16fa74bfd109e8b65dd38ac9f0f3152435781dbf6014b9ded491246ded9af"
+"IndependentSampler.__init__" = "731a5fa944b9e461c377d4176a0a543cbfae8375ddaa7d7baddba99e1c4d74dd"
+"IndependentSampler.propose" = "efacb9b280acc406eb23159a0f0da2dfeb0dd24c4f0898896fb61e65d4c0cee7"
+"SequentialRepair" = "a192f86053fbf5ac1a7ff2102a87369f1aff100f39a7d1fc0ecdf51dc836820f"
+"SequentialRepair.__init__" = "9bb80cd524c7b80b51e8dd7e45073e2e4ba853aa319959c80e4dfaaf0e762a24"
+"SequentialRepair.propose" = "efacb9b280acc406eb23159a0f0da2dfeb0dd24c4f0898896fb61e65d4c0cee7"
+"failing" = "3c88bc0365e982a90223e34b3d5826e35955198cae455d37f439e1abcf6e4c24"
+"render" = "52241525ada7edb856da0cd8c8a63332d075e1fda7386eec604bab71dd01f104"
+"stop" = "9bc81c218eaa4acba03792dffcffe7dbc8eae92eda466fbde26f95d3309b05b7"
+"submit" = "2c08d82b0336435cb4ccc1d87a8277d1e0646c5fd6fd9ed90ed6b5f1d8bc16a8"
+"verified" = "7afa8654f94ba043adf263fe70566d1f0cefd5ecd489fb62c40d43fb53561287"
+
+[[file]]
+path = "harness/q/fvh_q/report.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"Comparison" = "1097a95b2c55f0ad7cb2c00a49d512432c08f5d1347878de8692522e4a9b9d19"
+"LabRun" = "d8fbb54f7efb5bf9b9251f89af7a7ca931c1db97d1293b35b08f57026c0d6398"
+"PairedTable" = "d87d9aeee6d7ac8981dc7658f0a99a864699b79b6328dfb2374718a0c030d676"
+"compare" = "fd7bafe3a95d0f411d44edd65512745901329cf5d3a738f67544f56df3b20646"
+"paired_table" = "6129f8fda757e00a97c84042cbb11aa9c3ba5b197924f331aa17f499ac50cd77"

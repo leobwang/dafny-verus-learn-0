@@ -1,0 +1,40 @@
+// Demo for card Q05.C8dv (divergence), the Verus column. Open it only after every
+// prediction of Q05 is recorded (scripts/firsttry.sh Q05 --check).
+use vstd::prelude::*;
+
+verus! {
+
+pub struct Odd;
+
+pub enum ParseFail {
+    NotEven,
+}
+
+impl From<Odd> for ParseFail {
+    fn from(e: Odd) -> ParseFail {
+        ParseFail::NotEven
+    }
+}
+
+pub fn half(x: u64) -> (r: Result<u64, Odd>)
+    ensures
+        r is Ok <==> x % 2 == 0,
+        r is Ok ==> r->Ok_0 * 2 == x,
+{
+    if x % 2 == 0 {
+        Ok(x / 2)
+    } else {
+        Err(Odd)
+    }
+}
+
+pub fn quarter(x: u64) -> (r: Result<u64, ParseFail>)
+    ensures
+        r is Ok ==> r->Ok_0 * 4 == x,
+{
+    let h = half(x)?;
+    let q = half(h)?;
+    Ok(q)
+}
+
+} // verus!

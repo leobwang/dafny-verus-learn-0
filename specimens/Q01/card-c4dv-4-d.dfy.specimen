@@ -1,0 +1,10 @@
+// Card demo Q01.C4dv (false friends), row 4 (`old`), Dafny side. Open it only after Q01's
+// predictions are recorded. Run `scripts/vcheck specimens/Q01/card-c4dv-4-d.dfy.specimen` and compare with
+// the Verus side, `specimens/Q01/card-c4dv-4-v.rs.specimen`.
+module Q01_C4dv4d {
+  method OldDemo(x: nat) returns (y: nat)
+    ensures y == old(x) + 1
+  {
+    y := x + 1;
+  }
+}

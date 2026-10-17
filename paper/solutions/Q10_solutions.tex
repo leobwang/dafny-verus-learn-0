@@ -1,0 +1,123 @@
+% Q10_solutions.tex — REFERENCE SOLUTIONS to paper/Q10_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0, Verus 0.2026.09.27.3cf1832) through `scripts/vcheck --module Q10`,
+% on 2026-10-07, one solver job at a time. The four loop files and their
+% outputs are archived under
+% ~/.cache/dafny-verus-learn-0/author-probes/dv5ak/q10-kit/ (OUTPUTS.txt). B2's
+% fields are graded against the learner's own cheatsheets.md; this file
+% records which lines of the pinned range each field draws on and never copies
+% the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q10 --- Practice I-A \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is a concept answer (\texttt{correctness}: the grader runs each of the four
+files with \texttt{scripts/vcheck --module Q10} and tries to counterexample
+each reason). B2 is a paper card (\texttt{card-fidelity}, per field, and the
+ninth line as a short concept answer). The solutions below give the answers;
+the rubric never states them.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (concept): the four loops}
+
+Captured outputs (\texttt{raw output:} lines dropped):
+{\small
+\begin{verbatim}
+vcheck: a.dfy [dafny, learner loop]: failed — 22 verified, 0 holes, 1 error
+a.dfy:4:3: error: a postcondition could not be proved on this return path
+a.dfy:3:15: related: this is the postcondition that could not be proved
+vcheck: b.dfy [dafny, learner loop]: verified — 23 verified, 0 holes, 0 errors
+vcheck: c.dfy [dafny, learner loop]: failed — 22 verified, 0 holes, 1 error
+c.dfy:6:5: error: cannot prove termination; try supplying a decreases clause for the loop
+vcheck: d.rs [verus, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+d.rs:10:5: error: loop must have a decreases clause
+\end{verbatim}
+}
+
+\begin{description}
+\item[A.] Fails at verification: the postcondition \dfy{i == |s|}. Termination
+  is fine (the guessed measure \dfy{|s| - i} decreases and is bounded while the
+  guard holds). The loop has no invariant, so after it the verifier knows only
+  the negated guard, \dfy{i >= |s|}, not \dfy{i <= |s|}. The measure is not the
+  problem; the missing invariant is.
+\item[B.] Verifies. The guessed measure is \dfy{j} (from \dfy{j > 0}); it
+  decreases by one each step and is a \dfy{nat}. After the loop,
+  \dfy{!(j > 0)} with \dfy{j: nat} gives \dfy{j == 0}.
+\item[C.] Fails at verification: termination. The guessed measure for
+  \dfy{i != n} is the distance between the two sides; stepping by 2 from 0 can
+  jump over an odd \dfy{n}, after which the distance grows and the loop does
+  not stop. (The invariant \dfy{i <= n} is not kept for odd \dfy{n} either;
+  Dafny reports the termination obligation. Either reason, with the odd case,
+  is a full answer.) Here the guessed measure is the loop's problem, and no
+  measure fixes it: the loop really does not terminate for odd \dfy{n}.
+\item[D.] Stops at \texttt{resolve}: ``loop must have a decreases clause''.
+  Verus guesses no measure for an exec loop; the invariant is fine, and adding
+  \vrs{decreases v.len() - i} makes it verify (the chapter's \S4 P2 probe has
+  that shape).
+\item[The measure Dafny uses.] When a loop has no \texttt{decreases}, Dafny
+  guesses one from the guard: for \dfy{A < B} (or \dfy{<=}) the difference
+  \dfy{B - A}, for \dfy{A > B} the difference \dfy{A - B}, for \dfy{A != B} the
+  distance between the sides. A guess is checked like a written measure, so it
+  fails exactly when the loop's step does not decrease it toward its bound.
+  Accept any statement that the guess is a difference read off the guard.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (paper card 02.11): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 888--913 (computed 2026-10-07),
+\[ \texttt{sha256 d9fda575ed350eed76ac951aaca5717f1063acb0f78f146ac4ef1201d74c056a}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Proof repair of one gap: a real Dafny lemma from which one
+  assertion that the proof needs has been deleted; the model must supply an
+  assertion (its place and its content) so that the lemma verifies again. The
+  benchmark, DafnyGym, has 145 such tasks from three Amazon-maintained
+  codebases. \emph{Lines 890, 892.}
+\item[Oracle.] The Dafny verifier (4.3.0) accepts the lemma. \emph{Line 892.}
+\item[What is trusted.] Dafny; the lemma's statement and the rest of its proof
+  (only one assertion is missing); the deletion procedure's claim that the
+  assertion is necessary (removing it breaks verification). The limitations
+  call the setting optimistic: the scaffold and every other assertion of the
+  same repository are available. \emph{Lines 892, 911.}
+\item[Cheat surface.] The range does not say how a candidate is checked beyond
+  acceptance (whether an added \dfy{assume}, a changed statement or an edited
+  scaffold is refused). A full answer says so and names what one would need
+  to know: the harness's checks on the edit. \emph{Lines 892, 911 (by
+  absence).}
+\item[Metric.] Solved if any of the first $k \le 10$ samples verifies; 56.6\%
+  (82/145) with proof-similarity retrieval plus the placeholder, against 6.2\%
+  for code only, 29.6\% with error feedback, 34.4\% with the placeholder alone
+  and 51.7--55.0\% with other example selections; Cedar 16.6\% with the
+  placeholder only against about 59\% with similar examples. \emph{Lines 890,
+  892, 898--909.}
+\item[Budget.] At most 10 samples per task, GPT-4o at temperature 1.0; the
+  top 6 retrieved contexts become few-shot examples. \emph{Lines 892, 896.}
+\item[Variance.] Not reported: one model, one run. \emph{Lines 892, 911.}
+\item[Artifact.] DafnyGym (145 tasks over 33k lines of Dafny); the range does
+  not say whether the benchmark or the tool is released. \emph{Line 892.}
+\item[Ninth line (H3).] The verifier's error gives a \emph{where}, the
+  postcondition or assertion that fails and its line, which Laurel's
+  placeholder computes from the control-flow graph; it does not give the
+  \emph{what}. In H3 the learner supplies the missing fact: an equality
+  between two slices of the sequence (Dafny) or an extensional equality
+  between the sequence and its split (Verus), which no message names. A
+  full answer: where from the tool, what from the learner (or from a
+  retrieved similar proof, Laurel's other half).
+\end{description}
+
+\end{document}

@@ -1,0 +1,45 @@
+// item: Q18.P2d S10 verdict
+// **P2.** Build-tool forensic, second pass. This file is the proof text of a contractor's
+// delivery, and the delivery came with configuration of its own (`P2d.root.dfy.companion`, the delivery's root file, and `P2d.dfyconfig.toml.companion`, its project file, beside
+// this file: read it, never run it). The contractor reports the delivery green under its
+// own build. Comments and names are contractor prose: unchecked; only a tool's own output
+// counts as evidence. The one comment that is not contractor prose is the course's
+// `planted:` marker: every Q18 delivery carries exactly one, on the line of its defect.
+// BEFORE you run any instrument on this file, read it and its companion and name, first,
+// what the companion does to the delivery's own check (the species):
+//   mute    a failure the verifier reports is made non-fatal: the run exits 0 with it;
+//   skip    part of the proof text is never given to the verifier;
+//   divert  the build ships code that the verifier never checked;
+//   bypass  the command run in the verifier's place is not a verifier at all;
+// then the instrument that catches it: the FIRST of these, in this order, whose result is
+// not a pass, run by the course on THIS file alone (the pinned command, never the
+// delivery's own configuration):
+//   vcheck  `scripts/vcheck <file>` (a pass: verified, with 0 holes);
+//   gate    `scripts/vcheck --gate <file>` (a pass: verified, exit 0);
+//   vaudit  `scripts/vaudit <file>` (a pass: 0 findings);
+//   test    `scripts/vcheck --test <file>` (a pass: every test ran and passed).
+// Answer form: `<species> <instrument>`, for example `skip vaudit`, in slots/Q18.slots.
+// Record the first try (`scripts/firsttry.sh Q18 --check`) before you run anything on
+// this file; only then enable the switch below (delete `SLOT: ` from its line), run the
+// four instruments in order, and compare.
+// Claim:
+//   `ToNatPushTop(s, d)`: a limb pushed on top of a limb sequence adds BASE times that limb.
+// after: Q18.P2d
+// SLOT: CHECK P2d
+module Q18_P2Helpers {
+  // The definitions this delivery is about, as layer L1 gives them (copies: a specimen
+  // stands alone).
+  const BASE: nat := 18446744073709551616
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  // Delivered: a limb pushed on top adds BASE times the limb (checked by the root file).
+  lemma {:verify false} ToNatPushTop(s: seq<nat>, d: nat)  // planted: Q18.P2d
+    ensures ToNat(s + [d]) == ToNat(s) + BASE * d
+  {
+  }
+}

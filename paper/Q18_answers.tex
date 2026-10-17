@@ -1,0 +1,228 @@
+% Q18_answers.tex — YOUR answers to paper/Q18_problems.tex (learner-owned). One section
+% per problem, keyed by its \label{ans:B<n>} anchor; the GRADER comment convention and the
+% PREREG markers are paper/template_answers.tex's. /grade-paper hashes exactly the lines
+% from PREREG-BEGIN to PREREG-END, inclusive: editing anything between them after grading
+% changes the hash, and the runs stay locked. `make -C paper paper` must stay green.
+%
+% Grader notes arrive in instructor/feedback/Q18_paper.md, one line per finding in this
+% grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q18 --- Practice III-C + Lab 3 + capstone \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal proof first: the capstone blueprint)}\label{ans:B1}
+\begin{answer}
+% For each operation and the round trip: (a) the statement in words and as a
+% formula; (b) the round trip both ways; (c) each loop's invariant and measure;
+% (d) every invented lemma, exact statement and proof shape, and where each
+% layer or library fact enters; (e) the plant you will try; (f) declared gaps.
+% Expect the grader to try to counterexample each formula.
+
+\textbf{Multiplication.}
+(a) \dots \quad (c) \dots \quad (d) \dots
+
+\textbf{Division by one word.}
+(a) \dots \quad (c) \dots \quad (d) \dots
+
+\textbf{\texttt{to\_decimal}.}
+(a) \dots \quad (c) \dots \quad (d) \dots
+
+\textbf{\texttt{from\_decimal}.}
+(a) \dots \quad (c) \dots \quad (d) \dots
+
+\textbf{The round trip.}
+(b) \dots \quad (d) \dots
+
+\textbf{The plant.}
+(e) \dots
+
+\textbf{Gaps.}
+(f) \dots
+\end{answer}
+
+% PREREG-BEGIN
+\section*{Problem B2 (pre-registration)}\label{ans:B2}
+\begin{answer}
+\textbf{Claim} (G against P on re-judged success and on cheat rate, one- or
+two-sided; for each, the outcome that would refute it): \dots
+
+\textbf{Metric and estimator} (re-judged success per task, arm and repeat;
+cheats by X class among the claimed successes; cost in calls, tokens,
+GPU-seconds and wall clock; the unit and the paired estimator of G $-$ P):
+\dots
+
+\textbf{Arms and policies} (G and P for Claude, both harness-executed: the
+harness executes every action the model proposes, and no Lab 3 run puts
+Claude Code in a container; G and P for Qwen, in agent mode; each with its
+policy or agent configuration, the acceptance tool it is given and its
+prompt hash; for G, what a \texttt{Verify} or, in agent mode, a stop runs,
+when a \texttt{Stop} is refused and when a run ends): \dots
+
+\textbf{Tasks} (the stratum's file and its sha256; the twelve tasks for
+Claude; the Qwen draw of four possible and two impossible tasks, and its
+seed): \dots
+
+\textbf{Budget arithmetic} (calls = tasks $\times$ attempts $\times$ rounds
+or turns $\times$ arms $\times$ repeats, per arm, plus the sentinel calls; the
+runs; the throughput assumption and its source; against the registry's
+budget): \dots
+
+\textbf{Generation settings} (the values the Ollama gate pins for every Qwen
+call; the seed list per arm, pairwise disjoint; for Claude the pinned argv):
+\dots
+
+\textbf{Cost per arm} (tokens in and out, GPU-seconds and wall clock per arm,
+against the ceiling; the truncation rate per arm as a sensitivity line; the
+fallback if the per-arm totals exceed the ceiling): \dots
+
+\textbf{MDE} (computed with \texttt{fvh.stats.mde\_two\_proportions}: $n$,
+baseline, pairing, $\alpha$, the call and its value): \dots
+
+\textbf{Seeds and repeats} (Qwen: the per-request seeds; Claude: repeated
+runs): \dots
+
+\textbf{Gate version and false-positive rate} (the sha256 of
+\texttt{harness/q/fvh\_q/gate/gate\_v2.py} at the run and the command that
+computes it; the false positives among the controls with their Wilson
+interval, from \texttt{fp\_report}; how the interval caveats every cheat
+rate): \dots
+
+\textbf{Impossible tasks} (their expected outcome, and how a claimed success
+on one is counted): \dots
+
+\textbf{Cheat surface and re-judging} (the instruments every claimed success
+passes again, in the verification container, from a clean checkout; the
+classes reported \texttt{UNKNOWN}): \dots
+
+\textbf{Exclusions} (\texttt{infra-failed} re-issue; \texttt{truncated:<cause>}
+as failures, with the sensitivity line; a killed instrument run): \dots
+
+\textbf{Stopping rule}: \dots
+
+\textbf{Prediction intervals} (80\%, for each claim's estimate, scored after
+the run): \dots
+
+\textbf{Contamination} (the tasks' authorship after the models' release; the
+seal until the statements are committed; anything possibly seen): \dots
+
+\textbf{Disclosure} (a small-scale replication with model substitution; Claude
+as grader and subject; one machine, one solver pin; every Claude run
+harness-executed, acting through \texttt{fvh}'s action schema): \dots
+
+\textbf{Batch plan} (the plan file \texttt{python -m fvh run Q18 -{}-plan}
+reads: its path, and its sha256 on a line of its own as \texttt{plan-sha256:}
+followed by the 64 hex digits \texttt{sha256sum} prints for the file;
+\texttt{fvh run} opens a lab batch only on the plan this line names;
+separately executed pilot or subset plans need their own binding and a new
+gradebook row after re-grading the changed pre-registration, with the
+registered method held fixed): \dots
+\end{answer}
+% PREREG-END
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (the one-page research proposal)}\label{ans:B3}
+\begin{answer}
+\textbf{Question:} \dots
+
+\textbf{Claim, and what would refute it:} \dots
+
+\textbf{Measurement} (unit, metric, arms or conditions, budget in calls and
+GPU-hours): \dots
+
+\textbf{Cheat surface and gate} (the gate that guards the metric, and its
+false-positive rate as a caveat): \dots
+
+\textbf{What is trusted} (and what would break the result if it were
+wrong): \dots
+
+\textbf{Prior work} (two or three of your cards, by id): \dots
+
+\textbf{What a null result would mean:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.6, lines 737--762 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Nearest part of Lab 3's design, and what the paper's grader does that
+gate v2 does not:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 05.9, lines 2117--2144 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Which context mode Lab 3's tasks resemble, and why it matters:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B6 (lab report)}\label{ans:B6}
+\begin{answer}
+\textbf{Reproduce:} \verb+<one command over research/runs/Q18/ that regenerates every table below>+
+
+\textbf{Re-judged success} (per arm and family, with intervals; G $-$ P with
+its interval): \dots
+
+\textbf{Cheats by X class} (among the claimed successes; the impossible tasks'
+claims): \dots
+
+\textbf{Gate re-runs} (gate v2's verdict on every claimed success, from a clean
+checkout in the verification container): \dots
+
+\textbf{Gate version and false-positive rate} (and how its interval bounds each
+cheat rate): \dots
+
+\textbf{Cost per arm}: \dots
+
+\textbf{Deviations from the pre-registration} (each one, and why): \dots
+
+\textbf{Prediction intervals, scored}: \dots
+
+\textbf{Contamination}: \dots
+
+\textbf{Disclosure}: \dots
+\end{answer}
+
+\end{document}

@@ -1,0 +1,6 @@
+# Wrapper fixture (tests/wrappers): a project resource limit far below the pin;
+# the wrapper's command-line --resource-limit wins (Δ10).
+includes = ["*.dfy"]
+
+[options]
+resource-limit = 100

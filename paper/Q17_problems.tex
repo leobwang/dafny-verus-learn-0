@@ -1,0 +1,88 @@
+% Q17_problems.tex — the written problems of Q17 (Practice III-B). Built by
+% `make -C paper paper` with Q17_answers.tex. B1 (the blueprint of H1 and H3,
+% an informal design first) and B2 (the paper card) are the module's written
+% pair: B1 (30 minutes) after the chapter and before any formal work; B2 in
+% the module's 15-minute paper line.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q17 --- Practice III-B \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q17\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B1 after the chapter and before you write any code or statement in
+the exercise files; run \texttt{/grade-paper Q17} in a fresh session and get
+at least 3 on every dimension before you formalize. B2 with B1 or after it.
+Once the module's Done line holds, run \texttt{/grade-paper Q17 --post},
+which compares B1 with what you wrote. Compare with \texttt{paper/solutions/}
+only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B1}
+\textbf{The blueprint of H1 and H3} (30 minutes). H1 implements the given
+trait \dfy{PQueue} by \dfy{ArrayPQ}, whose elements are the prefix
+\dfy{a[..n]} of an array kept in descending order; H3 states the soundness
+of the VC generator \dfy{Pre}/\dfy{Vcs} of \texttt{std/Q17\_Vcgen.dfy} for
+its fuelled semantics \dfy{Exec}, and a contractor proves what you state.
+\begin{enumerate}
+\item[(a)] \emph{H1, the invariant.} Write \dfy{Valid()} as a list of
+  conjuncts over the class's names (\dfy{a}, \dfy{n}, \dfy{Model},
+  \dfy{Repr}), and say for each conjunct which method needs it and where.
+\item[(b)] \emph{H1, the frames.} For the constructor, \dfy{Insert} (with
+  and without growth) and \dfy{ExtractMin}: which objects the method writes,
+  which of them are new, and how \dfy{Repr} changes.
+\item[(c)] \emph{H1, the lemmas.} Every lemma (or predicate) you will
+  invent: its name, its exact \texttt{requires} and \texttt{ensures}, and its
+  proof's shape; then the loop invariant of \dfy{Insert}'s shifting loop,
+  every conjunct. Two to four invented lemmas is the tier's range, not a
+  quota.
+\item[(d)] \emph{H3, the statements in words.} Each statement you will
+  write, in words and then as a formula: what it assumes about the side
+  conditions (in which states), about the start state, and about the run;
+  what it concludes. Then the witness you will write: the command, the
+  postcondition, the state and the fuel, and why its run ends.
+\item[(e)] \emph{H3, the audit.} One statement a careless reading of the
+  prose would give, that is \emph{plausible but wrong}, and a concrete
+  command, postcondition, state and fuel at which it fails; and one
+  statement that is \emph{true but too weak} for \dfy{CountCorrect}, and why
+  the corollary then fails.
+\item[(f)] Every step you cannot yet justify, declared as a gap.
+\end{enumerate}
+The test of a blueprint: could someone formalize it without inventing a
+statement? Write formulas in \LaTeX{} or in \dfy{...} code; the grader reads
+either.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B2}
+\textbf{Paper card 12.12, The Trusted Computing Base of the CompCert Verified
+Compiler} (in the 15-minute paper line). Fill the card on its eight fields:
+task shape, oracle, what is trusted, cheat surface, metric, budget,
+variance, artifact. Each field is graded against the pinned range of your
+own \texttt{cheatsheets.md}: lines 5507--5533, the entry from its heading to
+its \emph{Why it matters} paragraph, in the copy the command below names.
+The pin is the sha256 of exactly those lines, computed with the first line
+below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '5507,5533p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+533d07ab0f8f5ab0124ca406b4ee1f805f83d56d626979c023ac7947a30dabba  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. Close
+with one line: which trusted part of this module (the verifier, a given
+statement, your statements, the contractor's proofs) the card's lesson
+applies to most directly. A hash that no longer matches means the card file
+changed: the grader refuses the card until the pin is renewed.
+\end{problem}
+
+\end{document}

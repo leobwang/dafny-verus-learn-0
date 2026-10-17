@@ -1,0 +1,16 @@
+// item: Q04.P6v S3 obligation
+// **P6.** Which labelled assertions fail? Answer form: `FAILS` and the failing labels.
+// SLOT: FAILS ???
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn a(x: nat) {
+    assert(x + 0 == x);  // [a]
+}
+
+pub proof fn b(x: nat) {
+    assert(x > 0);  // [b]
+}
+
+} // verus!

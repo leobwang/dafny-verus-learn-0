@@ -1,0 +1,25 @@
+// Companion of specimens/Q09/P13v.rs.specimen: a satisfiability witness, the delivered
+// statement as delivered and one call of it on concrete limbs. `scripts/vcheck --gate` on
+// this file says whether a caller can meet its `requires`. Open it only after P13v's first
+// try is recorded.
+// after: Q09.P13v
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+pub proof fn lemma_top_limb(s: Seq<u64>)
+    requires
+        seq_wf(s),
+        s.len() > 0,
+        s.last() == 0,
+    ensures
+        seq_to_nat(s) >= weight((s.len() - 1) as nat),
+{
+}
+
+pub proof fn witness() {
+    lemma_top_limb(seq![5u64, 1u64]);
+}
+
+} // verus!

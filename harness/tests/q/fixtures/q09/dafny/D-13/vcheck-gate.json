@@ -1,0 +1,54 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/D-13/main.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/D-13/main.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/D-13/main.dfy",
+    "kind": "nothing-verified",
+    "line": 0,
+    "message": "0 verification tasks ran: exit 0 alone is not a pass (Δ11)"
+   }
+  ],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {},
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/D-13/main.dfy",
+  "verdict": "failed",
+  "verified_count": 0
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "dccd1e565f7f36104c2290fdc8374efd05f6c2cfbff95a48fc2cb9c48f531f5a",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-13/main.dfy"
+}

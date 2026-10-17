@@ -1,0 +1,69 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/V12/witness"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/V12/witness/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_v12_witness",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--import",
+   "corpus_v12=<scratch>",
+   "--extern",
+   "corpus_v12=<scratch>",
+   "-L",
+   "<scratch>",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "W-V26",
+    "col": 5,
+    "file": "<root>/tests/corpus/verus/V12/witness/src/lib.rs",
+    "line": 7,
+    "message": "precondition not satisfied",
+    "severity": "error"
+   },
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, Δ11); exit 1",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 1,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "witness": "failed"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/V12/witness",
+  "verdict": "failed",
+  "verified_count": 0
+ },
+ "exit_code": 1,
+ "instrument": "witness",
+ "killed": null,
+ "output_sha256": "2cb2313ba35f8dd30319570aad5ed16326fcb5997c58c8fd4b475f7380515094",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V12"
+}

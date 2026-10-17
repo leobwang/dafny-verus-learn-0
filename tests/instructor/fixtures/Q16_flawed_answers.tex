@@ -1,0 +1,144 @@
+% Q16_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q16_answers.tex (spec §4.7, §6.12). B1 carries one
+% planted flaw; B2 is the clean control. Grade it with the rubric's probes
+% (paper/rubrics/Q16_rubric.md), never by eye.
+%
+% EXPECTED[B1][statement-fidelity][2]: H1's generalized statement (a) is false: it multiplies the accumulator's value by Pow(k) as well, but MulAcc returns acc unchanged when b is empty, so at b = [], acc = [1], k = 1 the left side is 1 and the right side is Pow(1) = BASE. The finding must paste Probe A with that instance and the claim negated (`requires Valid(a) && k == 1`, `ensures !(ToNat(MulAcc(a, [], [1], k)) == Pow(k) * (ToNat([1]) + ToNat(a) * ToNat([])))`): verified, a verified refutation (captured 2026-10-11, Dafny 4.11.0: `verified — 135 verified, 0 holes, 0 errors`; the same probe with the reference generalization's right side, ToNat([1]) + Pow(k) * (ToNat(a) * ToNat([])), fails at its postcondition, so the probe separates the two). Because the generalization is false, its instance in (c) does not give MulCorrect either; that is the same finding (SF.c with SF.b), not a second one. Everything else is right: the lemmas of H2 and H3, the invariants, the order and the named facts (SF.a, IS.a-IS.d, CE.a, CE.b, BQ.a-BQ.c, GA.a hold): no other finding.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 458-481); Variance correctly says what the range does not give. No finding on any field.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4.
+% A calibration run FAILS if B1 scores >= 3, if the planted finding does not paste a
+% verified Probe A refutation of H1's generalization, or if ANY flaw is reported on B2.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q16 --- Practice III-A \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal proof first: the blueprint)}\label{ans:B1}
+\begin{answer}
+\textbf{H1 (\dfy{MulCorrect}).}
+(a) The plain statement cannot be its own hypothesis: unfolding
+\dfy{Times(a, b)} once leaves \dfy{MulAcc(a, b[1..], row, 1)}, with a row in
+the accumulator and the position at 1, while the hypothesis at \dfy{b[1..]}
+is about \dfy{MulAcc(a, b[1..], [], 0)}. So I prove, for every valid
+\dfy{acc} and every \dfy{k}, by induction on $|b|$:
+\[ \mathit{Valid}(\mathit{MulAcc}(a, b, acc, k)) \;\wedge\;
+   \mathit{ToNat}(\mathit{MulAcc}(a, b, acc, k)) = \mathit{Pow}(k)\,
+   (\mathit{ToNat}(acc) + \mathit{ToNat}(a)\cdot\mathit{ToNat}(b)). \]
+(b) Lemmas: \dfy{AccLaw(a, b, acc, k)}, the statement above
+(\dfy{requires Valid(a) && Valid(b) && Valid(acc)}, \dfy{decreases |b|});
+\dfy{ShiftLaw(s, k)}: \dfy{requires Valid(s)}, \dfy{ensures Valid(Shift(s, k))
+&& ToNat(Shift(s, k)) == Pow(k) * ToNat(s)}, by induction on $k$, using
+\dfy{Shift(s, k) == [0] + Shift(s, k - 1)} and L2's \dfy{ToNatCons},
+\dfy{ValidCons}.
+(c) \dfy{ShiftLaw} first. \dfy{AccLaw}: if $b$ is empty, \dfy{MulAcc} returns
+\dfy{acc} and both products are 0 (L4's \dfy{MulZero}). Otherwise, with $A =
+\mathit{ToNat}(a)$, $B' = \mathit{ToNat}(b[1..])$, $P = \mathit{Pow}(k)$: the row
+\dfy{Shift(MulLimb(a, b[0]), k)} is valid and worth $P(A b_0)$ (L4's
+\dfy{MulLimbCorrect}, then \dfy{ShiftLaw}); adding it keeps validity and adds
+the values (L4's \dfy{AddCorrect}); the hypothesis at \dfy{b[1..]},
+\dfy{Add(acc, row)}, \dfy{k + 1} gives the rest, and $\mathit{Pow}(k + 1) = B P$
+by one unfolding. \dfy{MulCorrect} is \dfy{AccLaw} at \dfy{acc = []},
+\dfy{k = 0}.
+(d) $\mathit{ToNat}(b) = b_0 + \mathrm{BASE}\cdot B'$ (L2's
+\dfy{ToNatHeadTail}, \dfy{ValidTail} for \dfy{b[1..]}); the step's identity
+$P(A b_0) + (\mathrm{BASE}\,P)(A B') = P(A (b_0 + \mathrm{BASE}\,B'))$ from
+\dfy{LemmaMulIsDistributive}, \dfy{LemmaMulIsAssociative} and
+\dfy{LemmaMulIsCommutative}; \dfy{MulNonneg} for the \dfy{nat} products;
+\dfy{LemmaMulBasics} for $1 \cdot x$ at the instance.
+(e) No gap.
+
+\textbf{H2 (\vrs{div_limb}).}
+(a) First a vector \vrs{q} of $n = |a|$ zeros. Then $i$ from $n$ down to 0,
+with invariant $i \le n$, $|q| = n$, $\mathit{rem} < d$ and
+$\mathit{val}(a[i..n]) = \mathit{val}(q[i..n]) \cdot d + \mathit{rem}$ (both
+suffixes empty and $\mathit{rem} = 0$ on entry; at $i = 0$ it is the
+\vrs{ensures}, after \vrs{normalize}).
+(b) \vrs{suffix_peel(s, i)}: for $0 \le i < |s|$,
+$\mathit{val}(s[i..]) = s_i + \mathrm{BASE}\cdot\mathit{val}(s[i + 1..])$,
+proved by naming \vrs{s[i..].drop_first() =~= s[i + 1..]}.
+\vrs{digit_ok(r, x, d)}: for $0 < d < \mathrm{BASE}$, $r < d$,
+$x < \mathrm{BASE}$ and $t = r\,\mathrm{BASE} + x$: $t / d < \mathrm{BASE}$,
+$t \bmod d < d$, $t = (t / d)\,d + t \bmod d$.
+(c) Each step: $i$ goes down by one; \vrs{digit_ok} at the remainder and the
+limb, so the 128-bit $t$ splits into a quotient limb $q_i$ and a remainder
+$r' < d$; after writing $q_i$, \vrs{suffix_peel} on $a$ and on $q$ (whose part
+above $i$ did not change) turns the old equation into
+$a_i + \mathrm{BASE}(Q' d + \mathit{rem}) = (q_i + \mathrm{BASE}\,Q') d + r'$.
+(d) \vrs{lemma_fundamental_div_mod}, \vrs{lemma_mod_pos_bound} and
+\vrs{lemma_multiply_divide_lt} from \vrs{vstd::arithmetic::div_mod}; one scoped
+\vrs{nonlinear_arith} step for $t < d\,\mathrm{BASE}$; the step's equation from
+\vrs{lemma_mul_is_distributive_add}, its \vrs{_other_way} form and
+\vrs{lemma_mul_is_associative}.
+(e) No gap.
+
+\textbf{H3 (\vrs{mul} and \dfy{MulLoop}).}
+(a) \vrs{mul}: a vector of $n = |a|$ zeros (value 0 by L1's
+\vrs{lemma_seq_to_nat_push_zero} at each push). Outer loop over $j < m$:
+$|res| = n + j$ and $\mathit{val}(res) = \mathit{val}(a)\cdot\mathit{val}(b[0..j])$.
+Inner loop over $i < n$, with $v_0$ the value when the row starts and $c$
+the carry: $|res| = n + j$, the outer facts restated (Verus loops do not keep
+them), and $\mathit{val}(res) + W(j + i)\,c = v_0 +
+W(j)\,(\mathit{val}(a[0..i])\, b_j)$. After the row the carry is pushed.
+\dfy{MulLoop}: $0 \le k \le |b|$ and \dfy{MulAcc(a, b[k..], r, k) == Times(a, b)}.
+(b) \vrs{value_push(s, x)}: $\mathit{val}(s.push(x)) = \mathit{val}(s) + W(|s|)\,x$
+(from L4's \vrs{lemma_seq_to_nat_append}). \vrs{value_write(s, p, x)}: for
+$0 \le p < |s|$, $\mathit{val}(s[p := x]) + W(p)\,s_p = \mathit{val}(s) + W(p)\,x$,
+by induction on $p$.
+(c) Inner step: $a_i b_j + res_{i+j} + c \le \mathrm{BASE}^2 - 1$
+(\vrs{lemma_mul_upper_bound}), so the 128-bit sum gives a low limb written at
+$i + j$ and a carry below \texttt{BASE}; \vrs{value_write} at $i + j$, the
+prefix of $a$ grown by \vrs{value_push}, $W(j + i + 1) = \mathrm{BASE}\,W(j + i)$
+and $W(j + i) = W(j)\,W(i)$ (\vrs{lemma_weight_succ}, \vrs{lemma_weight_add}),
+then the product identities by name. Row end: \vrs{value_push} on the vector
+and on $b$'s prefix, and distributivity. Exit: $b[0..m] = b$, then
+\vrs{normalize}. \dfy{MulLoop}: entry by \dfy{b[0..] == b}; one step unfolds
+\dfy{MulAcc} once, using \dfy{b[k..][1..] == b[k + 1..]}; at $k = |b|$ the
+invariant says \dfy{r == Times(a, b)}; H1's lemma gives the value conjuncts.
+(d) As named in (c), all from L1--L4, L6 and \vrs{vstd::arithmetic::mul}.
+(e) No gap.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 01.13, lines 458--481 (the pinned range).
+
+\textbf{Task shape:} Isabelle competition problems (miniF2F: 488, split evenly into
+validation and test) proved by turning an informal proof, a human's or a
+model's, into a formal sketch with open conjectures that automation then
+closes.
+
+\textbf{Oracle:} Isabelle itself: an attempt succeeds only when the prover closes
+every open conjecture and the filled-in proof checks.
+
+\textbf{What is trusted:} Only the proof checker; the draft and the sketch are not trusted,
+and the card says the verifier is the trust anchor.
+
+\textbf{Cheat surface:} A correct formal proof can sit on a wrong draft: of 50 checked model
+drafts behind valid proofs, 21 were flawed (13 solved by the prover alone, 8
+corrected while formalizing). The prompt demos come from the validation
+split.
+
+\textbf{Metric:} Success rate on validation and test: DSP with human drafts 42.6 and
+39.3, with Minerva 62B drafts 43.9 and 37.7, against 18.0 and 20.9 for
+Sledgehammer with heuristics and 37.3 and 35.2 for Thor with expert
+iteration.
+
+\textbf{Budget:} 100 drafts sampled per problem; at 200 attempts model drafts solve
+209 problems and human ones 203; compute is not matched across the
+baselines.
+
+\textbf{Variance:} Not given in the range: no seeds or intervals; repeated runs would
+be needed.
+
+\textbf{Artifact:} The aligned informal proofs are released.
+\end{answer}
+
+\end{document}

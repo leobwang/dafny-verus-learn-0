@@ -1,0 +1,86 @@
+% Q07_answers.tex — YOUR answers to paper/Q07_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q07_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q07 --- Internals I: proof engineering, translation \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} \dots
+
+\textbf{The chain} (one line per step: the fact used, by its statement with
+its hypotheses; where it comes from; the arguments of the use; why its
+hypotheses hold there): \dots
+
+\textbf{Facts needed (this is the blueprint;} each by its statement, and
+where it comes from\textbf{):} \dots
+
+\textbf{Steps the solver takes without a named fact} (nonlinear arithmetic
+off), and why: \dots
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): \dots
+
+\textbf{(b) Statement.} \dots
+
+\textbf{The chain} (each fact by its statement; L3's lemmas by name; the
+arguments of each use; how each hypothesis is met): \dots
+
+\textbf{Facts needed (this is the blueprint):} \dots
+
+\textbf{Gaps I know about:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+% Short answers. Expect the grader to try to counterexample them.
+\textbf{(a)} For each edit, in each language: the gate passes? \texttt{specfreeze
+--against} reports a change? \texttt{vaudit} reports a finding? The edit keeps
+``change no statement''? \\
+{[1]} Dafny: \dots \quad Verus: \dots \\
+{[2]} Dafny: \dots \quad Verus: \dots \\
+{[3]} Dafny: \dots \quad Verus: \dots
+
+\textbf{(b)} The fourth edit: \dots \\
+Why it passes all three instruments: \dots \\
+The contract line it breaks: \dots \\
+The artifact that shows the breach: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.8, lines 795--825 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

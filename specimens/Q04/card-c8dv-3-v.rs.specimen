@@ -1,0 +1,26 @@
+// Card Q04.C8dv (false friends), row 3 (lemma recursion), demo v (Verus). Open it only
+// after your Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-3-v.rs.specimen` and compare with
+// specimens/Q04/card-c8dv-3-d.dfy.specimen.
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn double(n: nat) -> nat
+    decreases n,
+{
+    if n == 0 {
+        0
+    } else {
+        double((n - 1) as nat) + 2
+    }
+}
+
+proof fn lemma_double_twice(n: nat)
+    ensures
+        double(n) == 2 * n,
+    decreases n,
+{
+}
+
+} // verus!

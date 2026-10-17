@@ -1,0 +1,21 @@
+{
+ "argv": [
+  "scripts/specfreeze",
+  "--against",
+  "harness/tests/q/fixtures/q18/C2/frozen.rs",
+  "harness/tests/q/fixtures/q18/C2/src/lib.rs"
+ ],
+ "document": {
+  "exit_code": 0,
+  "lines": [
+   "specfreeze: harness/tests/q/fixtures/q18/C2/src/lib.rs: 0 finding(s)"
+  ]
+ },
+ "exit_code": 0,
+ "instrument": "specfreeze --check",
+ "killed": null,
+ "output_sha256": "cbe7c31ebd41214bf9be1a48c1a9c1a19af9dafd41d73caecd020d4c064e5ed6",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/C2"
+}

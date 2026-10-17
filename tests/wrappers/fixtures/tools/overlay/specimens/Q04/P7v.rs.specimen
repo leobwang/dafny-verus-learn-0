@@ -1,0 +1,14 @@
+// item: Q04.P7v S3 error
+// **P7.** Where does Verus object? Answer form: `EXPECT @<line> "<fragment>"`.
+// SLOT: EXPECT @??? "???"
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn p(x: nat)
+    ensures
+        x > 1,
+{
+}
+
+} // verus!

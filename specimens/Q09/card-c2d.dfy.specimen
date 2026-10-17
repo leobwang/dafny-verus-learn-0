@@ -1,0 +1,27 @@
+// Demo for card Q09.C2d (write:trigger-rewrite), the failure half. The success half is
+// `ZerosNonEmpty` in dafny/Q/Q09_InternalsIII/std/Q09_InternalsIII.dfy; here the same step is
+// triggered on `Zeros(k)`, the term each of its instances creates anew. Run it with
+// `scripts/vcheck specimens/Q09/card-c2d.dfy.specimen` (and `--json` for its resource count);
+// the EXPECT line pins the message the verifier gives (line and fragment).
+// after: Q09.P2dv
+// EXPECT @22 "could not be proved"
+module Q09_CardC2d {
+  opaque function Zeros(n: nat): seq<nat>
+  {
+    if n == 0 then [] else [0] + Zeros(n - 1)
+  }
+
+  lemma ZerosSucc(k: nat)
+    ensures |Zeros(k + 1)| == |Zeros(k)| + 1
+  {
+    reveal Zeros();
+  }
+
+  lemma ZerosNonEmpty(m: nat)
+    ensures |Zeros(m + 1)| > 0
+  {
+    forall k: nat {:trigger Zeros(k)} ensures |Zeros(k + 1)| == |Zeros(k)| + 1 {
+      ZerosSucc(k);
+    }
+  }
+}

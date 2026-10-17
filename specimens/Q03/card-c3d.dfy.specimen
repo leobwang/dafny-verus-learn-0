@@ -1,0 +1,14 @@
+// Demo for card Q03.C3d (write:witness), the failure half: the existential
+// lemma with an empty body.
+// EXPECT @12 "a postcondition could not be proved on this return path"
+module Q03_CardC3d {
+  ghost function Square(i: nat): nat
+  {
+    i * i
+  }
+
+  lemma ExistsSquareFour()
+    ensures exists i: nat :: Square(i) == 4
+  {
+  }
+}

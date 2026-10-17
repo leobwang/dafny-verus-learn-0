@@ -1,0 +1,48 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/verus/V1/c1.rs"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/harness/tests/q/fixtures/q12/battery/verus/V1/c1.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "c1",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "BASE": "verified",
+   "lemma_zero_cons": "verified",
+   "seq_to_nat": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/verus/V1/c1.rs",
+  "verdict": "verified",
+  "verified_count": 3
+ },
+ "exit_code": 0,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "5dc0b886f801ff64a806660344864fd2dca789b1cf0d32fa470a1cb1422d67d2",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/verus/V1/c1.rs"
+}

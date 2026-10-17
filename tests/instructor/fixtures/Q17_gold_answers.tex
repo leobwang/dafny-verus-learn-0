@@ -1,0 +1,121 @@
+% Q17_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q17_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the lemma names, the wording and the order of the explanation are
+% deliberately far from the reference, so the grader must recognise correctness by
+% substance (the rubric's probes), not by matching text.
+%
+% EXPECTED[B1][statement-fidelity][4], [induction-soundness][4], [case-exhaustiveness][4], [blueprint-quality][4], [gap-accounting][4]: correct; the invariant's conjuncts and the lemmas are the reference twin's under other names, the statement is the reference statement, and (e)'s counterexample is the run Probe B executes with `1 passed, 0 failed` (captured 2026-10-11, Dafny 4.11.0). The declared gap (the substitution fact, left to the contractor) is honest and allowed: no finding.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 5507-5533); Budget and Variance correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4 (3 is tolerated only with a reading note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a false fact,
+% a false statement, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q17 --- Practice III-B \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal proof first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) H1, the invariant.} \dfy{Valid()} is: \dfy{this in Repr} and
+\dfy{a in Repr} (every method writes the object's fields, and \dfy{Insert} the
+array, under \dfy{modifies Repr}); \dfy{n <= a.Length} (the reads of
+\dfy{a[n - 1]} and the shift's write past the prefix); \dfy{a.Length > 0} (so
+that doubling makes room); the prefix in non-increasing order,
+$\forall i < j < n.\ a[i] \ge a[j]$ (for the minimum); and
+\dfy{Model == multiset(a[..n])}.
+
+\textbf{(b) H1, the frames.} The constructor allocates the array and sets
+\dfy{Repr} to the object and the array: all new. \dfy{Insert} writes the array's
+elements, \dfy{n} and \dfy{Model}; when full, it first allocates an array twice
+as long, copies the prefix, points \dfy{a} at it and adds it to \dfy{Repr}; it
+is the only object added, and it is new. \dfy{ExtractMin} writes \dfy{n} and
+\dfy{Model} only. The copying loop declares that it writes only the new array.
+
+\textbf{(c) H1, the lemmas.} \dfy{Sorted(s)}, the order as a predicate.
+\dfy{LastIsLeast(s)}: requires \dfy{Sorted(s)} and $|s| > 0$; ensures every
+$y \in$ \dfy{multiset(s)} is $\ge s[|s| - 1]$; proof: a multiset member is a
+sequence member at some index. \dfy{InsertAt(s, i, x)}: requires
+\dfy{Sorted(s)}, $i \le |s|$, $i > 0 \Rightarrow x \le s[i - 1]$ and
+$s[j] < x$ for $i \le j$; ensures \dfy{Sorted(s[..i] + [x] + s[i..])} and its
+multiset is \dfy{multiset(s) + multiset\{x\}}; proof: $s = s[..i] + s[i..]$.
+The shifting loop, from $i = n$ down while $a[i - 1] < x$, with $s$ the prefix
+at entry: $0 \le i \le n <$ \dfy{a.Length}; $a[j] = s[j]$ below $i$;
+$a[j] = s[j - 1]$ for $i < j \le n$; $s[j] < x$ for $i \le j < n$; it writes
+only \dfy{a}. At exit, \dfy{a[..n + 1]} is $s[..i] + [x] + s[i..]$ by
+extensionality, and \dfy{InsertAt} gives the order and the multiset.
+
+\textbf{(d) H3, the statements.} In words: for every command, postcondition,
+start state and fuel, if every side condition the generator emits holds in
+\emph{every} state and the computed precondition holds in the start state, then a
+run that ends does so in a state satisfying the postcondition. As a formula:
+\dfy{lemma VcSound(c: Cmd, q: BExp, s: State, fuel: nat)}, whose
+hypotheses are \dfy{forall p :: p in Vcs(c, q) ==> forall u :: Holds(p, u)}
+and \dfy{Holds(Pre(c, q), s)}, and whose one conclusion is: if
+\dfy{Exec(c, s, fuel)} is \dfy{Done(t)}, then \dfy{Holds(q, t)}.
+Nothing about a run that is \dfy{Stuck}. Witness: $c$ the assignment of 1 to
+\dfy{Var(0)}, $q$ the claim $0 < x_0$, any state, fuel 0: no side conditions, the
+precondition is $0 < 1$, and an assignment spends no fuel, so the run ends.
+
+\textbf{(e) H3, the audit.} Plausible but wrong: the side conditions asked to hold
+only in the start state. It fails for the loop \dfy{While(Lt(Var(0), Const(1)),
+Lt(Const(0), Const(1)), Assign(0, Const(1)))} with $q$ the claim $x_0 < 1$, a
+state with $x_0 = 0$ and fuel 2: in that state the guard holds, so the exit
+condition holds there vacuously, the other condition and the invariant are
+trivially true, and one iteration ends with $x_0 = 1$, where $q$ is false. True
+but too weak: the same statement restricted to fuel 0; \dfy{CountCorrect} is
+for every fuel, so its call fails the restriction.
+
+\textbf{(f) Gaps.} The assignment case of the soundness proof needs a fact about
+substitution; I leave it to the contractor.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 12.12, lines 5507--5533 (the pinned range).
+
+\textbf{Task shape:} Not a benchmark but an audit: what CompCert's machine-checked
+correctness theorem still takes on trust, in CompCert and in the KVX and SSA
+forks, worked out from Coq counterexamples and bug-fix commits.
+
+\textbf{Oracle:} The theorem under audit: when compilation succeeds and the source
+has no undefined behaviour, the assembly's observable behaviour is the
+source's, over the CompCert C and Asm models; a defect is what that theorem
+does not cover.
+
+\textbf{What is trusted:} The Coq kernel (tactics and checked oracles are re-checked,
+so they add nothing), three consistent axioms, extraction, the two semantic
+models, and the unverified OCaml glue: elaboration, printing, the expansion of
+pseudo-instructions, the clobber specifications.
+
+\textbf{Cheat surface:} An unrealized axiom whose type is empty proves False; an
+impure OCaml function bound as pure, physical equality and cyclic values break
+soundness; a specification kept in one file drifts from the code in another, so
+proofs pass over wrong code.
+
+\textbf{Metric:} Defects per TCB layer, as the authors tally them: none in the
+kernel, extraction and axioms; three each in elaboration and C semantics,
+printing, expansion and the clobbers (latent); one latent in value modeling.
+
+\textbf{Budget:} The range gives none (it is a qualitative study); I would need the
+effort and the number of commits examined.
+
+\textbf{Variance:} Not applicable: one project, read qualitatively; the range's
+limitation is generality, not spread.
+
+\textbf{Artifact:} The analysis, its counterexamples and the upstream fixes; no tool
+or dataset is named.
+
+\textbf{This module's trusted part the lesson applies to most:} my H3 statements: the
+contractor's proofs are checked, but they prove only what I stated, as CompCert
+is correct only relative to its models.
+\end{answer}
+
+\end{document}

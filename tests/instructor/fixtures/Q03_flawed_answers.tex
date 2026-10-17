@@ -1,0 +1,171 @@
+% Q03_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q03_answers.tex (spec §4.7, §6.12). Three of the
+% four problems carry one planted flaw each; B2 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q03_rubric.md), never by eye.
+%
+% EXPECTED[B1][recomputation][2]: step 3 of (a) simplifies 2y >= 5 to y >= 2 (it is y >= 3 over the integers), so the final formula admits x = -1. The finding must locate that step and exhibit the start state x = -1 (any y): it satisfies the claimed wp, and the run gives y := 2, y := 4, x := 3, with 3 >= 4 false (Probe A's grid test fails naming (-1, -2); Probe A' on the step does not verify, which alone is not the instance). Parts (b) and (c) are correct and must draw no flaw.
+% EXPECTED[B2][recomputation][4]: correct, no finding. A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B3][induction-soundness][2]: the IH is stated for the lemma's own d ("for this d"), but the carry case applies it at the limb 1. The finding must name that use and exhibit s = [BASE - 1], d = 2: the carry step needs ToNat(AddLimb([], 1)), and the stated IH covers only AddLimb([], 2) (an executable check: AddLimb([BASE - 1], 2)[1..] == AddLimb([], 1) and AddLimb([], 1) != AddLimb([], 2) both hold). Statement-fidelity and case-exhaustiveness are correct (4); blueprint-quality and gap-accounting must not score <= 2.
+% EXPECTED[B4][card-fidelity][2]: Budget — the field says up to ten generation attempts with compiler feedback; pinned line 948 says up to three, with each check repeated k in {1, 10} times. The finding must quote line 948.
+% EXPECTED[B4][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Metric, Variance and Artifact — correct, no finding (lines 946, 948, 951, 952, 957–963, 965, 967). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2, B4 = 2.
+% A calibration run FAILS if B1, B3 or B4 scores >= 3, if a planted finding does not locate
+% its step, use or field (with the instance or the quoted line named above), or if ANY flaw
+% is reported on B2 or on a B4 field other than Budget.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q03 --- First syntax II: modes, logic, tooling, trust \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} \\
+Step 1: $\WP{x \assign y - 1}{x \geq 4} = (y - 1 \geq 4)$, that is $y \geq 5$,
+\quad by the assignment rule. \\
+Step 2: $\WP{\mathbf{if}\ y > 10\ \mathbf{then}\ y \assign y - 10\ \mathbf{else}\ y \assign 2y}{y \geq 5}
+= (y > 10 \impl y - 10 \geq 5) \wedge (y \leq 10 \impl 2y \geq 5)$,
+\quad by the conditional rule, then the assignment rule in each branch. \\
+Step 3: $y - 10 \geq 5$ is $y \geq 15$, and $2y \geq 5$ is $y \geq 2$. So the
+conditional's wp is $y \geq 15 \vee 2 \leq y \leq 10$ (if $y > 10$ we need
+$y \geq 15$; otherwise we need $y \geq 2$). \\
+Step 4: $\WP{y \assign x + 3}{\cdot}$ substitutes $x + 3$ for $y$, by the
+assignment rule: $x + 3 \geq 15 \vee 2 \leq x + 3 \leq 10$. The sequence rule
+composes the three steps. \\
+Simplified, over the start value of $x$:
+$\WP{c}{Q} \equiv x \geq 12 \vee -1 \leq x \leq 7$. The start value of $y$ is
+overwritten by the first statement and does not appear.
+
+\textbf{(b)} Verification condition:
+$0 \leq x \leq 8 \impl (x \geq 12 \vee -1 \leq x \leq 7)$. \\
+Decision: it fails, at $x = 8$. \\
+Trace from $x = 8$: $y \assign 11$; $11 > 10$, so $y \assign 1$; $x \assign 0$;
+$0 \geq 4$ is false.
+
+\textbf{(c)} No: the wp holds on two separate ranges of $x$, with a gap
+between $7$ and $12$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} With $I \equiv x \leq n \wedge x + y = n$: \\
+Entry: $n \geq 0 \impl (0 \leq n \wedge 0 + n = n)$, the wp of the
+initialisation $x, y \assign 0, n$. Valid: both conjuncts follow from
+$n \geq 0$ and arithmetic. \\
+Maintenance: $\WP{S}{I}$: first $y \assign y - 1$ gives
+$x \leq n \wedge x + (y - 1) = n$, then $x \assign x + 1$ gives
+$x + 1 \leq n \wedge (x + 1) + (y - 1) = n$. The condition is
+$x \leq n \wedge x + y = n \wedge x < n \impl x + 1 \leq n \wedge x + y = n$.
+Valid: $x < n$ means $x + 1 \leq n$ for integers, and the sum does not change. \\
+Use at exit: $x \leq n \wedge x + y = n \wedge \neg(x < n) \impl y = 0$. Valid:
+the two bounds force $x = n$, so $y = 0$. \\
+Termination: while the loop runs, $x < n$ gives $n - x > 0$, and after the
+body the measure is $n - (x + 1) = (n - x) - 1$, strictly smaller. Valid.
+
+\textbf{(b)} With $I' \equiv x + y = n$: entry is still $0 + n = n$, valid;
+maintenance is $x + y = n \wedge x < n \impl (x + 1) + (y - 1) = n$, valid;
+termination is unchanged (the guard bounds the measure), valid. \\
+The condition that fails: use at exit, $x + y = n \wedge x \geq n \impl y = 0$. \\
+A state that satisfies its hypotheses and violates its conclusion: $n = 0$,
+$x = 1$, $y = -1$. \\
+Reachable by a run? No. Every run starts at $x = 0 \leq n$, and the body runs
+only when $x < n$, so $x \leq n$ holds in every reachable state. \\
+What the failure says: nothing against the program, which the full invariant
+proves correct. It says $I'$ is too weak: the verification condition ranges
+over every state that satisfies $I'$, including unreachable ones such as the
+state above.
+
+\textbf{(c)} Verifies? Yes. \\
+The fact: $y \geq 0$. With $y$ of type \dfy{nat} (or \vrs{u64}), every state
+the verifier considers has $y \geq 0$; Dafny assumes the subset type's
+predicate when it reads $y$ and checks it at each assignment, and Verus
+assumes the range of every \vrs{u64}. Then $x + y = n$ and $x \geq n$ give
+$y = n - x \leq 0$, so $y = 0$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (informal-proof-first)}\label{ans:B3}
+\begin{answer}
+\textbf{Statement.} If $\mathrm{Valid}(s)$ and $d < \mathrm{BASE}$, then
+$\mathrm{ToNat}(\mathrm{AddLimb}(s, d)) = \mathrm{ToNat}(s) + d$.
+
+\textbf{Induction on / decreases measure:} $|s|$, as the lemma's
+\texttt{decreases} says.
+
+\textbf{Base:} $|s| = 0$. If $d = 0$ the result is $[]$ and both sides are
+$0$. Otherwise the result is $[d]$, and $\mathrm{ToNat}([d]) = d$ by
+\texttt{ToNatSingleton}.
+
+\textbf{IH (stated as a formula):} for this $d$, and the tail $s[1..]$:
+$\mathrm{Valid}(s[1..]) \impl \mathrm{ToNat}(\mathrm{AddLimb}(s[1..], d)) = \mathrm{ToNat}(s[1..]) + d$.
+
+\textbf{Step:} $|s| > 0$.
+\emph{No carry} ($s[0] + d < \mathrm{BASE}$): the result is
+$[s[0] + d] + s[1..]$; by \texttt{ToNatCons} its value is
+$s[0] + d + \mathrm{BASE}\cdot\mathrm{ToNat}(s[1..]) = \mathrm{ToNat}(s) + d$.
+\emph{Carry} ($s[0] + d \geq \mathrm{BASE}$): the result is
+$[s[0] + d - \mathrm{BASE}] + \mathrm{AddLimb}(s[1..], 1)$. The tail is valid
+by \texttt{ValidTail}, so by the IH
+$\mathrm{ToNat}(\mathrm{AddLimb}(s[1..], 1)) = \mathrm{ToNat}(s[1..]) + 1$.
+By \texttt{ToNatCons} the value is
+$s[0] + d - \mathrm{BASE} + \mathrm{BASE}(\mathrm{ToNat}(s[1..]) + 1)
+= s[0] + d + \mathrm{BASE}\cdot\mathrm{ToNat}(s[1..]) = \mathrm{ToNat}(s) + d$.
+
+\textbf{Helper lemmas needed (this is the blueprint):} \\
+\texttt{ToNatSingleton(d)}: $\mathrm{ToNat}([d]) = d$ (L2); \\
+\texttt{ToNatCons(d, t)}: $\mathrm{ToNat}([d] + t) = d + \mathrm{BASE}\cdot\mathrm{ToNat}(t)$ (L2); \\
+\texttt{ValidTail(s)}: $\mathrm{Valid}(s) \impl \mathrm{Valid}(\mathrm{Tail}(s)) \wedge \mathrm{Head}(s) < \mathrm{BASE}$ (L2).
+
+\textbf{Gaps I know about:} none.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.13, lines 944--967 (the pinned range).
+
+\textbf{Task shape:} a single-method Dafny program given as code, formal pre-
+and postconditions, and a docstring; the system accepts or rejects the triple
+as consistent. A variant generates code and spec from a docstring and filters
+them the same way.
+
+\textbf{Oracle:} acceptance needs six checks to pass: Dafny verifies the code
+against the annotations; code rebuilt from the annotations and from the
+docstring must agree with the original on five I/O tests; annotations rebuilt
+from the docstring must be proved equivalent by Dafny; and two GPT-4 yes/no
+judgments compare docstring with annotations and with code.
+
+\textbf{What is trusted:} Dafny 4.0 and Z3, GPT-4 as generator and judge, five
+tests as a proxy for equivalence, and the assumption that each component
+fixes one output per input; an error shared by all three components is not
+caught.
+
+\textbf{Cheat surface:} a vacuous \texttt{ensures true} verifies but fails the
+anno-complete reconstruction, so that cheat is closed; still open: a lenient
+LLM docstring judge, five-test equivalence, shared errors, and adversarial
+variants that the authors built themselves.
+
+\textbf{Metric:} counts of acceptances: 45 of 60 correct programs at $k = 1$ and
+52 at $k = 10$; none of 240 adversarial variants; on MBPP-DFY-50, 6 wrong
+programs found and 24 of 27 correct ones accepted; 32 of 36 on the Verus port;
+39 of 60 generated programs accepted with none wrong.
+
+\textbf{Budget:} up to ten generation attempts with compiler feedback; the
+range gives no token or dollar figures.
+
+\textbf{Variance:} only the $k$ repetitions (45 versus 52); no seeds, repeated
+runs or intervals, and the results depend on GPT-4 (CodeLlama-34b reaches 2
+of 60).
+
+\textbf{Artifact:} CloverBench, 60 textbook Dafny programs with four
+adversarial variants each; an MBPP-derived Dafny set; a Verus port of 41
+tasks; its tasks are reused later, for example in AutoVerus's Verus-Bench.
+\end{answer}
+
+\end{document}

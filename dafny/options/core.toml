@@ -1,0 +1,20 @@
+# dafny/options/core.toml — the Dafny [options] of every core-tier verification
+# unit (no standard library). scripts/gen_units.py copies [options] into each
+# generated dafny/{Q,R}/<ID>_<Name>/core/dfyconfig.toml, then applies every
+# [[override]] whose module range holds the unit's module. The checker's units
+# group validates this file and compares every generated project with it.
+#
+# Per-unit knobs live here, never in module {:options}, which rejects them
+# (DELTAS Δ30). A project never sets base, solver-path, library, plugin,
+# allow-warnings, allow-axioms or verification-time-limit: the gate refuses
+# them and passes its own values on the command line, which win (Δ10). Every
+# Dafny command still passes --cores explicitly (Δ59, CLAUDE.md §Resources).
+
+[options]
+# The course resource-limit pin (Δ56): deterministic, unlike a time limit.
+resource-limit = 5000000
+
+# Manual lemma induction from Q03 on (Δ45).
+[[override]]
+modules = "Q03-Q18"
+options = { manual-lemma-induction = true }

@@ -1,0 +1,2575 @@
+{
+ "items": [
+  {
+   "body_lines": 16,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "matches",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "nullable",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "node_count",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "backwards",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "backwards_str",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "is_nullable",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a1",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "copy_re",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 13,
+   "crate": "rg_re_a1b",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_nullable_correct",
+   "mode": "proof",
+   "proof_lines": 13,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_re_a1b",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_cat_eps_left",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 15,
+   "crate": "rg_re_a1b",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_cat_eps_right",
+   "mode": "proof",
+   "proof_lines": 15,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 38,
+   "crate": "rg_re_a1b",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_cat_assoc",
+   "mode": "proof",
+   "proof_lines": 38,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_re_a1b",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_star_one",
+   "mode": "proof",
+   "proof_lines": 5,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_re_a1b",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_star_concat",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 12,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "deriv",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 75,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_deriv_correct",
+   "mode": "proof",
+   "proof_lines": 75,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 15,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "deriv_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 24,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "deriv_match",
+   "mode": "exec",
+   "proof_lines": 16,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 24,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "matches_str",
+   "mode": "exec",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::in_range",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::in_ranges",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 2,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::sorted_ranges",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::lemma_in_ranges_push",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 15,
+   "crate": "rg_re_a2",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "char_class::lemma_in_ranges_drop",
+   "mode": "proof",
+   "proof_lines": 15,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::cover",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::target",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::lemma_insert_step",
+   "mode": "proof",
+   "proof_lines": 11,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::<CharClass as View>::view",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::CharClass::valid",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_re_a2",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E0 seed=1",
+    "E0 seed=2",
+    "E0 seed=3",
+    "E0H seed=1",
+    "E0H seed=2",
+    "E0H seed=3",
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "char_class::CharClass::class_empty",
+   "mode": "exec",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 17,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::CharClass::copy_class",
+   "mode": "exec",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 6,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::CharClass::member_from",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": "failed"
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a2",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::CharClass::class_member",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": "failed"
+  },
+  {
+   "body_lines": 86,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::CharClass::class_insert",
+   "mode": "exec",
+   "proof_lines": 52,
+   "trivial_body": "failed"
+  },
+  {
+   "body_lines": 37,
+   "crate": "rg_re_a2",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "char_class::CharClass::class_union",
+   "mode": "exec",
+   "proof_lines": 27,
+   "trivial_body": "failed"
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "copies",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 7,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "rep_range",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 12,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lower",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 10,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "rx_wf",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 2,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "is_meta",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "is_bound_char",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "bound_value",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 6,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "counted_at",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 4,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "counted_rx",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 4,
+   "crate": "rg_re_a3",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "ok_span",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "equiv",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 20,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_star_star",
+   "mode": "proof",
+   "proof_lines": 20,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 16,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_cat_cong",
+   "mode": "proof",
+   "proof_lines": 16,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "mk_alt",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "mk_cat",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 7,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "mk_star",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "is_norm",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_mk_alt",
+   "mode": "proof",
+   "proof_lines": 1,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 22,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_mk_cat",
+   "mode": "proof",
+   "proof_lines": 22,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 12,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_mk_star",
+   "mode": "proof",
+   "proof_lines": 12,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "eq_re",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "mk_alt_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "mk_cat_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 6,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "mk_star_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 12,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "nderiv",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 39,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_nderiv",
+   "mode": "proof",
+   "proof_lines": 39,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 12,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "nderiv_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::wf",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::re",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 4,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::as_re",
+   "mode": "exec",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::empty",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::eps",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::chr",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::alt",
+   "mode": "exec",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::cat",
+   "mode": "exec",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::star",
+   "mode": "exec",
+   "proof_lines": 7,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::deriv",
+   "mode": "exec",
+   "proof_lines": 7,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 4,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "NormRe::is_nullable",
+   "mode": "exec",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 23,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "matches_norm",
+   "mode": "exec",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "valid",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 25,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_valid_sound",
+   "mode": "proof",
+   "proof_lines": 25,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 56,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_valid_complete",
+   "mode": "proof",
+   "proof_lines": 56,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 15,
+   "crate": "rg_re_a4",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "check_deriv",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 53,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "search",
+   "mode": "exec",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 13,
+   "crate": "rg_re_a4",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "cert_match",
+   "mode": "exec",
+   "proof_lines": 4,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 10,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "accepts",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "clen",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 19,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "emit",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_emit_len",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "code_at",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 2,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_sub_one",
+   "mode": "proof",
+   "proof_lines": 2,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 7,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_code_at_add",
+   "mode": "proof",
+   "proof_lines": 7,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 2,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_code_at_one",
+   "mode": "proof",
+   "proof_lines": 2,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 15,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_sub_alt",
+   "mode": "proof",
+   "proof_lines": 15,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 3,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_sub_cat",
+   "mode": "proof",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_sub_star",
+   "mode": "proof",
+   "proof_lines": 11,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a5",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E0 seed=1",
+    "E0 seed=2",
+    "E0 seed=3",
+    "E0H seed=1",
+    "E0H seed=2",
+    "E0H seed=3",
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "lemma_split_add",
+   "mode": "proof",
+   "proof_lines": 1,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 10,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_star_cons",
+   "mode": "proof",
+   "proof_lines": 10,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 16,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_complete",
+   "mode": "proof",
+   "proof_lines": 16,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_complete_alt",
+   "mode": "proof",
+   "proof_lines": 11,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 12,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_complete_cat",
+   "mode": "proof",
+   "proof_lines": 12,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 20,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_complete_star",
+   "mode": "proof",
+   "proof_lines": 20,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 4,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "sound_post",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 19,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_sound",
+   "mode": "proof",
+   "proof_lines": 19,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_sound_alt",
+   "mode": "proof",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_sound_cat",
+   "mode": "proof",
+   "proof_lines": 11,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 17,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_sound_star",
+   "mode": "proof",
+   "proof_lines": 17,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "prog",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "vm_accepts",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 19,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_vm_correct",
+   "mode": "proof",
+   "proof_lines": 19,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 20,
+   "crate": "rg_re_a5",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "clen_checked",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a5",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E0 seed=1",
+    "E0 seed=2",
+    "E0 seed=3",
+    "E0H seed=1",
+    "E0H seed=2",
+    "E0H seed=3",
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "lemma_app3",
+   "mode": "proof",
+   "proof_lines": 1,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_re_a5",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E0 seed=1",
+    "E0 seed=2",
+    "E0 seed=3",
+    "E0H seed=1",
+    "E0H seed=2",
+    "E0H seed=3",
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "lemma_push",
+   "mode": "proof",
+   "proof_lines": 1,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 66,
+   "crate": "rg_re_a5",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "emit_into",
+   "mode": "exec",
+   "proof_lines": 32,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 13,
+   "crate": "rg_re_a5",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E0 seed=1",
+    "E0 seed=2",
+    "E0 seed=3",
+    "E0H seed=1",
+    "E0H seed=2",
+    "E0H seed=3",
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "emit_prog",
+   "mode": "exec",
+   "proof_lines": 1,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_rexc",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "live",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_rexc",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "thread_ok",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_rexc",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "succ_closed",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 3,
+   "crate": "rg_rexc",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "list_matches",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_rexc",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "count_false",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 7,
+   "crate": "rg_rexc",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_count_update",
+   "mode": "proof",
+   "proof_lines": 7,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 68,
+   "crate": "rg_rexc",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "add_thread",
+   "mode": "exec",
+   "proof_lines": 43,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 19,
+   "crate": "rg_rexc",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": "failed",
+   "gate_verifying_variants": [],
+   "item": "lemma_closure",
+   "mode": "proof",
+   "proof_lines": 19,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 10,
+   "crate": "rg_rexc",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "falses",
+   "mode": "exec",
+   "proof_lines": 4,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 106,
+   "crate": "rg_rexc",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "pike_run",
+   "mode": "exec",
+   "proof_lines": 53,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 10,
+   "crate": "rg_rexc",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "rexc_match",
+   "mode": "exec",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 6,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "copy_inst",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::view",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 4,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::wf",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::len_spec",
+   "mode": "spec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::new",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 1,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::len",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_arena",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::push",
+   "mode": "exec",
+   "proof_lines": 6,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 2,
+   "crate": "rg_arena",
+   "gate": "verified",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [
+    "E0 seed=1",
+    "E0 seed=2",
+    "E0 seed=3",
+    "E0H seed=1",
+    "E0H seed=2",
+    "E0H seed=3",
+    "E1 seed=1",
+    "E1 seed=2",
+    "E1 seed=3"
+   ],
+   "item": "Arena::get",
+   "mode": "exec",
+   "proof_lines": 1,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 9,
+   "crate": "rg_arena",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::set",
+   "mode": "exec",
+   "proof_lines": 6,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 18,
+   "crate": "rg_arena",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::to_vec",
+   "mode": "exec",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 18,
+   "crate": "rg_arena",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "Arena::free_all",
+   "mode": "exec",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 15,
+   "crate": "rg_arena",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "from_prog",
+   "mode": "exec",
+   "proof_lines": 7,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 13,
+   "crate": "rg_arena",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "thread_one",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 13,
+   "crate": "rg_arena",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "arena_match",
+   "mode": "exec",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_ref_r02",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_node_count_backwards",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_ref_r02",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_nullable_backwards",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 3,
+   "crate": "rg_ref_r06",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_backwards_str_length",
+   "mode": "proof",
+   "proof_lines": 3,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 11,
+   "crate": "rg_ref_r06",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_backwards_str_append",
+   "mode": "proof",
+   "proof_lines": 11,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 10,
+   "crate": "rg_ref_r06",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_backwards_str_involution",
+   "mode": "proof",
+   "proof_lines": 10,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 14,
+   "crate": "rg_ref_r06",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_backwards_involution",
+   "mode": "proof",
+   "proof_lines": 14,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 55,
+   "crate": "rg_ref_r06",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_backwards_sound",
+   "mode": "proof",
+   "proof_lines": 55,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_ref_r06",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_backwards_correct",
+   "mode": "proof",
+   "proof_lines": 8,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 40,
+   "crate": "rg_ref_r09",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "NL",
+    "BV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lemma_rep_range",
+   "mode": "proof",
+   "proof_lines": 40,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 39,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse_counted",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": "failed"
+  },
+  {
+   "body_lines": 18,
+   "crate": "rg_ref_r09",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse_alt",
+   "mode": "exec",
+   "proof_lines": 4,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 18,
+   "crate": "rg_ref_r09",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse_cat",
+   "mode": "exec",
+   "proof_lines": 4,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 30,
+   "crate": "rg_ref_r09",
+   "gate": "failed",
+   "gate_modes": [
+    "E0",
+    "E0H",
+    "E1",
+    "INV"
+   ],
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse_post",
+   "mode": "exec",
+   "proof_lines": 4,
+   "trivial_body": "verified"
+  },
+  {
+   "body_lines": 24,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse_atom",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": "verified"
+  },
+  {
+   "body_lines": 5,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "copies_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 7,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "rep_range_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 23,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "lower_exec",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  },
+  {
+   "body_lines": 8,
+   "crate": "rg_ref_r09",
+   "gate": null,
+   "gate_modes": null,
+   "gate_named_return": null,
+   "gate_verifying_variants": [],
+   "item": "parse_and_match",
+   "mode": "exec",
+   "proof_lines": 0,
+   "trivial_body": null
+  }
+ ],
+ "stability": {
+  "rg_arena": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 14,
+    "wall_s": 4.9
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 14,
+    "wall_s": 4.8
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 14,
+    "wall_s": 4.8
+   }
+  },
+  "rg_re_a1": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 7,
+    "wall_s": 1.2
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 7,
+    "wall_s": 0.4
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 7,
+    "wall_s": 0.4
+   }
+  },
+  "rg_re_a1b": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 6,
+    "wall_s": 0.9
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 6,
+    "wall_s": 0.9
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 6,
+    "wall_s": 0.9
+   }
+  },
+  "rg_re_a2": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 19,
+    "wall_s": 1.8
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 19,
+    "wall_s": 1.7
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 19,
+    "wall_s": 1.7
+   }
+  },
+  "rg_re_a3": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 5,
+    "wall_s": 2.1
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 5,
+    "wall_s": 2.2
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 5,
+    "wall_s": 2.1
+   }
+  },
+  "rg_re_a4": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 30,
+    "wall_s": 2.9
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 30,
+    "wall_s": 2.9
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 30,
+    "wall_s": 2.9
+   }
+  },
+  "rg_re_a5": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 26,
+    "wall_s": 3.9
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 26,
+    "wall_s": 3.8
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 26,
+    "wall_s": 3.7
+   }
+  },
+  "rg_ref_r02": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 2,
+    "wall_s": 0.9
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 2,
+    "wall_s": 0.8
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 2,
+    "wall_s": 0.8
+   }
+  },
+  "rg_ref_r06": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 6,
+    "wall_s": 1.4
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 6,
+    "wall_s": 1.5
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 6,
+    "wall_s": 1.4
+   }
+  },
+  "rg_ref_r09": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 14,
+    "wall_s": 2.8
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 14,
+    "wall_s": 2.8
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 14,
+    "wall_s": 2.8
+   }
+  },
+  "rg_rexc": {
+   "seed1": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 8,
+    "wall_s": 5.2
+   },
+   "seed2": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 8,
+    "wall_s": 4.4
+   },
+   "seed3": {
+    "holes": 0,
+    "verdict": "verified",
+    "verified": 8,
+    "wall_s": 4.3
+   }
+  }
+ }
+}

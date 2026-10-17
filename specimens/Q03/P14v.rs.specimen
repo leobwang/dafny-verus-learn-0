@@ -1,0 +1,43 @@
+// item: Q03.P14v S12 verdict
+// **P14.** Fake-green diagnosis. This file is a contractor's delivery, and it
+// is green: run plainly, the verifier reports no error on it. BEFORE you run any
+// instrument on it, read it and name its species and the instrument that
+// exposes it. Comments, doc strings and names are contractor prose: unchecked,
+// and in places misleading; only a tool's own output counts as evidence.
+// The one comment here that is not contractor prose is the course's `planted:`
+// marker: every delivery of Q03 carries exactly one, whatever its species,
+// so it tells you nothing about the answer.
+// Species:
+//   hole       it holds an unfinished placeholder that the course's hole
+//              counter reports;
+//   trusted    it rests on an assumption or axiom that no hole counter reports;
+//   unchecked  part of it was never verified (skipped, filtered, outside the
+//              verified build);
+//   vacuous    its statement is proved but cannot apply (contradictory
+//              assumptions);
+//   weak       verified and honest, but the statement says too little to be
+//              useful;
+//   healthy    none of these.
+// Instruments: `gate` (scripts/vcheck --gate), `audit` (scripts/vaudit),
+//   `witness` (a call on concrete arguments), `reader` (only a reader can
+//   tell), `none`.
+// Answer form: `<species> <instrument>` (two tokens, one space), in
+// slots/Q03.slots. Record the first try (`scripts/firsttry.sh Q03 --check`)
+// before you run anything on this file; only then enable the switch below
+// (delete `SLOT: ` from its line).
+// SLOT: CHECK P14v
+use vstd::prelude::*;
+use qg_bignat_l2::*;
+
+verus! {
+
+// Delivered: doubling a positive number makes it larger.
+pub proof fn lemma_double_gt(x: int)
+    requires
+        x > 0,
+    ensures
+        2 * x > x,  // planted: Q03.P14v
+{
+}
+
+} // verus!

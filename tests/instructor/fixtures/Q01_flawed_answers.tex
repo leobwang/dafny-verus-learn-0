@@ -1,0 +1,74 @@
+% Q01_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q01_answers.tex (spec §4.7, §6.12). Q01's
+% written pair holds one problem, B1, the paper card for cheatsheet entry 02.3,
+% graded per field against the pinned range (lines 642–668 of the learner's
+% cheatsheets.md; the pin is printed in paper/Q01_problems.tex). With a single
+% problem, the clean control sits at the field level: five fields are correct
+% and must draw no finding.
+%
+% EXPECTED[B1][card-fidelity][2]: Oracle — the field says the language's checker alone decides and the bypass scan does not change the verdict; pinned line 649 makes success the conjunction of no bypass pattern (v0) and the checker's acceptance (v1). The finding must quote line 649.
+% EXPECTED[B1][card-fidelity][2]: Metric — the field gives 82% as the best single model's (Opus 4.1) Dafny rate; the results table (line 656) gives 67.5% for the best model and 82.2% for the union of the nine models. The finding must quote line 656 (or the union definition on line 652).
+% EXPECTED[B1][card-fidelity][2]: Variance — the field claims three runs per model and task with 95% confidence intervals; the pinned range reports no repeated runs, seeds or intervals. The finding must name the field and the quoted absence (the setup on line 646 states nine models with 5 turns per task and no repetition; the results, lines 652–661, are point percentages).
+% EXPECTED[B1][card-fidelity][4]: Task shape — correct, no finding (lines 644, 646, 666). A grader that reports a flaw here is hallucinating.
+% EXPECTED[B1][card-fidelity][4]: Trust — correct, no finding ("more than half" of the 10,868 tasks are LLM translations or autoformalizations: 5,735, line 666). A grader that reports a flaw here is hallucinating.
+% EXPECTED[B1][card-fidelity][4]: Cheat surface — correct, no finding (lines 649, 666). A grader that reports a flaw here is hallucinating.
+% EXPECTED[B1][card-fidelity][4]: Budget — correct, no finding (line 646; tokens and cost are indeed absent). A grader that reports a flaw here is hallucinating.
+% EXPECTED[B1][card-fidelity][4]: Artifact — correct, no finding (line 644; the location and licence are indeed absent). A grader that reports a flaw here is hallucinating.
+% Expected per-problem grade (min across fields): B1 = 2.
+% A calibration run FAILS if B1 scores >= 3, if any of the three planted findings is missing,
+% names another field or does not quote its pinned line (or, for Variance, the absence),
+% or if ANY flaw is reported on Task shape, Trust, Cheat surface, Budget or Artifact.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q01 --- Hello, Dafny and Verus: the whole map \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Problem B1 (paper card)}\label{ans:B1}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.3, lines 642--668 (the pinned range).
+
+\textbf{Task shape:} A task is a specification file in one of three languages
+(Dafny, Verus or Lean) with its implementation and its proof cut out and
+replaced by placeholders such as \texttt{sorry} or \texttt{assume(false)}; the
+model must write the missing code and proof so that the whole file checks.
+Tasks are short, under 100 lines.
+
+\textbf{Oracle:} Success is decided by the language's own checker: a run
+counts as solved when Dafny, Verus or Lean accepts the filled file. The
+bypass-pattern scan only flags suspicious constructs for the authors' manual
+review; it does not change the verdict.
+
+\textbf{Trust:} The specifications are taken as correct statements of intent,
+even though more than half of the 10,868 tasks used were produced by an LLM
+translating or autoformalizing them; the checkers and the pattern scan are
+trusted as well.
+
+\textbf{Cheat surface:} A filled file can pass while proving little. Specs
+that are too weak or mistranslated let a trivial body through (the authors'
+spot check of solved tasks found about 9\% too weak and 15\% badly translated;
+an empty list satisfied a sort-and-deduplicate spec), and an escape hatch the
+pattern scan does not know about would pass too.
+
+\textbf{Metric:} The percentage of tasks solved, per language. The best single
+model, Opus 4.1, solves 82\% of the Dafny tasks; Verus and Lean are far lower
+(44\% and 27\%).
+
+\textbf{Budget:} Nine off-the-shelf models, five turns each per task (ten on
+the BigNum tasks), with checker errors as the only feedback between turns. No
+token or cost figures are given.
+
+\textbf{Variance:} Each model was run three times per task and the results come
+with 95\% confidence intervals, so the gap between Dafny and Verus is well
+outside the noise.
+
+\textbf{Artifact:} The released benchmark: 12,504 specifications, 10,868 of
+them kept after quality filtering, across Dafny, Verus and Lean. The card does
+not say where it is hosted or under what licence.
+\end{answer}
+
+\end{document}

@@ -1,0 +1,13 @@
+// The delivery's build script, build.rs (a companion of specimens/Q18/P3v.rs.specimen; a
+// copy for reading: the course never runs a delivery's own configuration). Cargo runs a
+// build script before it compiles the crate; each `cargo:rustc-cfg=<name>` line it prints
+// turns the configuration predicate <name> on for that compilation.
+use std::env;
+
+fn main() {
+    // The verifier wraps the compiler; every other build ships the fast path.
+    let wrapped = env::var("RUSTC_WRAPPER").map(|w| w.contains("verus")).unwrap_or(false);
+    if !wrapped {
+        println!("cargo:rustc-cfg=q18_ship");
+    }
+}

@@ -1,0 +1,75 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D03",
+    "col": 5,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy",
+    "line": 19,
+    "message": "assume statement has no {:axiom} annotation",
+    "severity": "warning"
+   }
+  ],
+  "exit_code": 2,
+  "findings": [
+   {
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy",
+    "kind": "warnings-fail-gate",
+    "line": 0,
+    "message": "warnings fail the gate (W-D04): holes and every other warning must be gone"
+   }
+  ],
+  "holes": [
+   {
+    "col": 5,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy",
+    "kind": "assume",
+    "label": "Battery_D5.HeadTailCons",
+    "line": 19
+   }
+  ],
+  "lang": "dafny",
+  "per_symbol": {
+   "Battery_D5.Head": "verified",
+   "Battery_D5.HeadTailCons": "verified",
+   "Battery_D5.Tail": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy",
+  "verdict": "failed",
+  "verified_count": 3
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "952fcce1c40cdb52917cf21a1fe170ffffb619c70ceb5dad0e91a492430d3a86",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/dafny/D5/c2.dfy"
+}

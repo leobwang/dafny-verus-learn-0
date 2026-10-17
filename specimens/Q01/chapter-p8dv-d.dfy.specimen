@@ -1,0 +1,11 @@
+module P8 {
+  method Check(x: nat)
+  {
+    assert x + 1 > x + 2;
+  }
+}
+
+// Chapter specimen for docs/Q01_Hello.md, section 9: the file p8.dfy of Q01.P8dv. The
+// chapter quotes the output of `dafny verify p8.dfy` on a copy named p8.dfy; scripts/vcheck
+// runs it once this prediction is recorded.
+// after: Q01.P8dv

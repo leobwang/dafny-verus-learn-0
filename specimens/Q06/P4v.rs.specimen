@@ -1,0 +1,56 @@
+// item: Q06.P4v S11 obligation
+// **P4.** Triggers, in Verus. The same four, over `seq_to_nat`, `subrange` and layer
+// L3's `weight` (`use qg_bignat_l3::*;` brings all three layers): each proof fn has the
+// same hypothesis, that every prefix of `s` is below a weight, with an explicit trigger,
+// and an empty body. Its postcondition, labelled `// [x]`, asks for: [a] the bound at an
+// index `k`; [b] the bound for two limbs, written `BASE * BASE`; [c] the same as [b], with
+// the hypothesis triggered on the prefix `s.subrange(0, i as int)`; [d] the bound for two
+// limbs, written `weight(2)`. Which labelled postconditions does the verifier fail to
+// prove?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by single
+// spaces, or `FAILS none`. Fill the slot line below, record the first try
+// (`scripts/firsttry.sh Q06 --check`), and only then enable it (`// SLOT: FAILS …`
+// becomes `// FAILS …`).
+// SLOT: FAILS ???
+use vstd::prelude::*;
+use qg_bignat_l3::*;
+
+verus! {
+
+proof fn bound_at_k(s: Seq<u64>, k: nat)
+    requires
+        forall|i: nat| i <= s.len() ==> seq_to_nat(s.subrange(0, i as int)) < #[trigger] weight(i),
+        k <= s.len(),
+    ensures
+        seq_to_nat(s.subrange(0, k as int)) < weight(k),  // [a]
+{
+}
+
+proof fn two_limbs_product(s: Seq<u64>)
+    requires
+        forall|i: nat| i <= s.len() ==> seq_to_nat(s.subrange(0, i as int)) < #[trigger] weight(i),
+        s.len() >= 2,
+    ensures
+        seq_to_nat(s.subrange(0, 2)) < BASE * BASE,  // [b]
+{
+}
+
+proof fn two_limbs_product_prefix_trigger(s: Seq<u64>)
+    requires
+        forall|i: nat| i <= s.len() ==> seq_to_nat(#[trigger] s.subrange(0, i as int)) < weight(i),
+        s.len() >= 2,
+    ensures
+        seq_to_nat(s.subrange(0, 2)) < BASE * BASE,  // [c]
+{
+}
+
+proof fn two_limbs_weight(s: Seq<u64>)
+    requires
+        forall|i: nat| i <= s.len() ==> seq_to_nat(s.subrange(0, i as int)) < #[trigger] weight(i),
+        s.len() >= 2,
+    ensures
+        seq_to_nat(s.subrange(0, 2)) < weight(2),  // [d]
+{
+}
+
+} // verus!

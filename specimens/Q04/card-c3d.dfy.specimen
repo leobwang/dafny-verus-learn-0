@@ -1,0 +1,24 @@
+// Card demo Q04.C3d (a lemma that calls itself), the failure half. The success half is
+// `FromNatShort` in dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy; this copy leaves out
+// its recursive call. Run it with `scripts/vcheck specimens/Q04/card-c3d.dfy.specimen`;
+// the EXPECT line at the end pins the message the verifier gives (line and fragment).
+module Q04_CardC3d {
+  // Copies of the layer L1 and L2 definitions it uses (dafny/given/Q/QG_L1_BigNat.dfy,
+  // QG_L2_BigNat.dfy): a Dafny specimen is verified alone, so it cannot import the
+  // layers. It is also verified without the unit's options, so the attribute below
+  // switches off, for this one lemma, the automatic induction a specimen has.
+  const BASE: nat := 18446744073709551616
+
+  function FromNat(n: nat): seq<nat>
+    decreases n
+  {
+    if n == 0 then [] else [n % BASE] + FromNat(n / BASE)
+  }
+
+  lemma {:induction false} FromNatShort(n: nat)
+    ensures |FromNat(n)| <= n
+    decreases n
+  {
+  }
+}
+// EXPECT @21 "a postcondition could not be proved on this return path"

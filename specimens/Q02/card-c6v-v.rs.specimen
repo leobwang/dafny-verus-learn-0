@@ -1,0 +1,15 @@
+// Card Q02.C6v, demo v (Verus). Open it only after your Q02 predictions are committed, then
+// run `scripts/vcheck specimens/Q02/card-c6v-v.rs.specimen` and compare with demo d.
+// after: Q02.P7dv
+use vstd::prelude::*;
+
+verus! {
+
+pub fn set_first(v: &Vec<u64>)
+    requires
+        v.len() > 0,
+{
+    v.set(0, 1);
+}
+
+} // verus!

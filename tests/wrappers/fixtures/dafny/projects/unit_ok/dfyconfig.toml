@@ -1,0 +1,6 @@
+# Wrapper fixture (tests/wrappers): a well-formed unit project outside any course tree.
+includes = ["*.dfy"]
+
+[options]
+resource-limit = 5000000
+manual-lemma-induction = true

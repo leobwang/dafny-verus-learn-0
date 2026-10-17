@@ -1,0 +1,105 @@
+% Q11_solutions.tex — REFERENCE SOLUTIONS to paper/Q11_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1's formula was checked on the course pins (Dafny 4.11.0) on 2026-10-07:
+% the rubric's Probe A with this formula spliced in verifies (23 verified, 0
+% holes, 0 errors), and with the over-wide formula x < 2 || x > 7 it fails at
+% the postcondition of Exact; Probe A'' at x = 12 passes (1 passed). The probe
+% files are archived under
+% ~/.cache/dafny-verus-learn-0/author-probes/dv5ak/q11-kit/. B2's fields are
+% graded against the learner's own cheatsheets.md; this file records which
+% lines of the pinned range each field draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q11 --- Practice I-B \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is a hand calculation (\texttt{recomputation}: the grader splices the final
+formula into the rubric's Probe A and checks every claimed state with
+Probe A$''$). B2 is a paper card (\texttt{card-fidelity}, per field). The
+solutions below give the answers; the rubric never states them.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (hand-calculation)}
+
+\textbf{(a) The trace.}
+\begin{enumerate}
+\item The conditional (rule: one-armed conditional, one implication per
+  branch): $\mathit{wp}(\texttt{if } y > 10 \texttt{ then } y := y - 10, Q)
+  \equiv (y > 10 \Rightarrow \mathit{wp}(y := y - 10, Q)) \wedge (\neg (y > 10)
+  \Rightarrow Q)$.
+\item Inside it, the assignment (rule: substitute $y - 10$ for $y$ in $Q$):
+  $\mathit{wp}(y := y - 10, y < 5) \equiv y - 10 < 5$. So the conditional's
+  precondition is $(y > 10 \Rightarrow y - 10 < 5) \wedge (y \le 10
+  \Rightarrow y < 5)$.
+\item The sequence (rule: $\mathit{wp}(c_1; c_2, Q) \equiv
+  \mathit{wp}(c_1, \mathit{wp}(c_2, Q))$), and the first assignment
+  (substitute $x + 3$ for $y$): $(x + 3 > 10 \Rightarrow x + 3 - 10 < 5)
+  \wedge (x + 3 \le 10 \Rightarrow x + 3 < 5)$.
+\end{enumerate}
+\textbf{Simplified.} $x + 3 > 10 \iff x > 7$ and $x - 7 < 5 \iff x < 12$;
+$x + 3 \le 10 \iff x \le 7$ and $x + 3 < 5 \iff x < 2$. So
+$(x > 7 \Rightarrow x < 12) \wedge (x \le 7 \Rightarrow x < 2)$, which is
+$x < 2 \vee (7 < x \wedge x < 12)$ (split on $x \le 7$: the first case gives
+$x < 2$, the second $7 < x < 12$).
+
+\textbf{(b)} For example $x = 1$: $y = 4$, the condition is false, $4 < 5$:
+$Q$ holds. $x = 5$: $y = 8$, the condition is false, $8 < 5$ is false: $Q$
+fails, and $5$ is outside the formula. (Also $x = 9$: $y = 12$, then $2$:
+holds; $x = 12$: $y = 15$, then $5$: fails.) Any pair with the right
+verdicts is correct.
+
+\textbf{(c)} $x \le 1$ or $8 \le x \le 11$, that is $(-\infty, 2) \cup (7,
+12)$ over the integers.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (paper card 02.12): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 917--940 (computed 2026-10-07),
+\[ \texttt{sha256 74c85732bbbea1c675fb6a81de1502d4bc79834e764184c2c35560b609d1378e}. \]
+A field is correct when it agrees with the lines named; wording is free.
+
+\begin{description}
+\item[Task shape.] Prove the absence of a listed subset of undefined
+  behaviour, function by function, in Rust's \texttt{core}, \texttt{alloc}
+  and \texttt{std} (33,955 functions, about 7,500 unsafe), as a crowdsourced
+  campaign of challenges with rewards and a review committee; manual Kani
+  harnesses and contracts beside Autoharness, a symbolic (not LLM) harness
+  generator. \emph{Lines 919, 921, 923.}
+\item[Oracle.] The verification tools run in CI on every pull request: Kani
+  (CBMC) and ESBMC (bounded model checking), Flux, VeriFast; a harness checks
+  ``precondition implies no checked UB and the postcondition'' over all
+  bit-valid inputs. \emph{Lines 921, 923.}
+\item[What is trusted.] The tools themselves, the intrinsic models and the
+  toolchain (unverified, line 938); the contracts and harnesses, which the
+  review committee accepts; bounded checking by default. \emph{Lines 921,
+  938.}
+\item[Cheat surface.] What is not checked: aliasing, data races, inline
+  assembly, some provenance UB, termination (line 921); bounded runs; 622
+  contract-less unsafe passes that are only triage candidates (line 938); a
+  weak contract would pass. The range does not describe how a contribution is
+  audited beyond review. \emph{Lines 921, 938.}
+\item[Metric.] Counts of verified harnesses and functions: 16,748
+  Autoharness harnesses produced, 11,970 verified; 989 contract-verified
+  functions (295 auto, 694 manual); 725 manual harnesses; 4,778 failed
+  harnesses; 0 new memory-safety bugs. \emph{Lines 927--936.}
+\item[Budget.] Not stated in compute terms; the campaign's scale (29
+  challenges, more than 450 PRs, at least 21 external contributors) and a
+  3.97$\times$ compile speedup are the only figures. \emph{Lines 921, 935.}
+\item[Variance.] Not applicable or not reported: the checks are
+  deterministic tool runs; the range gives no repetitions. \emph{By absence.}
+\item[Artifact.] The CI-integrated verification of the standard library
+  with its challenges; the range does not name a release beyond that.
+  \emph{Lines 919, 921, 940.}
+\end{description}
+
+\end{document}

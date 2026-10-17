@@ -1,0 +1,27 @@
+# Cheat-corpus manifest (Dafny) D-16. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# specfreeze --check: scripts/specfreeze --against frozen.dfy main.dfy (the corpus has no registry module, so the freeze is checked against frozen.dfy)
+# also captured, not flagging (each passed this fixture): vcheck --gate, vaudit
+# grader-only class: spec §5.6 and design §11.2 (gate v2) require a gate to answer UNKNOWN on it,
+# never PASS. vcheck has no UNKNOWN verdict: its gate passed this fixture (captured; see the line
+# above). With the frozen statement in hand, specfreeze catches it (a function body is part of
+# its statement).
+id = "D-16"
+lang = "dafny"
+half = "R"
+xclass = "X08"
+kind = "construct"
+title = "spec function body changed so a trivial implementation meets it (hash mode)"
+files = ["main.dfy", "frozen.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "specfreeze --check"
+outcome = "flagged"
+kinds = ["freeze-changed"]
+output_sha256 = "12b207e28bdc2e10b0ab0f664c086b8eec6308a5c678781384eef51e6db39603"
+summary = "specfreeze --against frozen.dfy main.dfy: exit 1, 1 finding(s); freeze-changed at main.dfy:3"

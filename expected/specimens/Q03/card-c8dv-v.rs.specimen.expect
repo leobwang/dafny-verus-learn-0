@@ -1,0 +1,45 @@
+# pins.py golden for specimens/Q03/card-c8dv-v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q03/card-c8dv-v.rs.specimen`; never edit.
+command: verify
+exit: 1
+verdict: verified
+stage: verify
+verified: None
+holes: 1
+hole card-c8dv-v.rs.specimen:11:5 assume lemma_double_is_sum
+{
+ "diagnostics": [
+  {
+   "col": 5,
+   "file": "card-c8dv-v.rs",
+   "labels": [
+    ""
+   ],
+   "level": "error",
+   "line": 11,
+   "message": "assume/admit not allowed with --no-cheating"
+  }
+ ],
+ "json": {
+  "func-details": {
+   "card_c8dv_v::lemma_double_is_sum": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": true,
+   "encountered-vir-error": true,
+   "success": false
+  }
+ },
+ "other": []
+}

@@ -1,0 +1,35 @@
+# harness/pyproject.toml — the course's one Python project (QPLAN §11.8; design §10.3, §14.2).
+#
+# One uv project holds the frozen core fvh/ (guard rule 2f), the learner packages
+# q/fvh_q/ and r/fvh_r/ (rule 2) and the frozen acceptance tests tests/ (rule 2f).
+# The core has NO runtime dependency: the standard library only, so every number
+# fvh.stats prints can be audited by reading it. pytest is the one dev dependency,
+# pinned here and in uv.lock. The project is not packaged (no build step): pytest's
+# pythonpath puts fvh, fvh_q and fvh_r on the import path, so one process imports
+# all three (design §14.2 rule 5). The reference harness is its own project and
+# never a member of this one.
+#
+# Run the tests from this directory, never from the checkout root:
+#   uv run --directory harness pytest
+# The course tools run them through scripts/vcheck (scripts/dvl/python.py), offline,
+# with the pinned lock and PYTHONDONTWRITEBYTECODE=1.
+
+[project]
+name = "fvh"
+version = "0.1.0"
+description = "The course's evaluation core (fvh) and the learner packages fvh_q and fvh_r"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[tool.uv]
+package = false
+required-version = "==0.12.4"
+python-preference = "only-system"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "q", "r"]
+addopts = "-p no:cacheprovider"

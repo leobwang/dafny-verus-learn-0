@@ -1,0 +1,38 @@
+# Q03 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q03 (never a P
+# answer: the chapter reveals those after their boxes; never H1d's, whose informal proof is
+# the written problem B3, so a grader quoting a learner's blueprint would trip it) and is
+# verified against its own reference file (rule 1) and against every learner-visible file
+# (rule 2). Q03 has no A item (its agentic rung is contract v0, written by hand).
+
+# from Solutions/dafny/Q/Q03_FirstSyntaxII/core/Q03_FirstSyntaxII.dfy
+# source:       FromNatCorrect(n / BASE);   (Q03.H2d)
+# verified: solutions=1 public=0
+FromNatCorrect\(n\s*/\s*BASE\)
+# source:     assert Canonical([5]) && ToNat([5]) == 5;   (Q03.H3d)
+# verified: solutions=1 public=0
+Canonical\(\[5\]\)\s*&&\s*ToNat\(\[5\]\)\s*==\s*5
+
+# from Solutions/verus/q/q03_first_syntax_ii/src/lib.rs
+# source:             c[i as int] == carry,   (Q03.H1v)
+# verified: solutions=1 public=0
+c\[i\s+as\s+int\]\s*==\s*carry
+# source:     let w = seq![5u64];   (Q03.H3v)
+# verified: solutions=1 public=0
+let\s+w\s*=\s*seq!\[5u64\]
+
+# from Solutions/dafny/Q/Q03_FirstSyntaxII/exit/Q03_Exit.dfy
+# source:         found, w := true, i;   (Q03.X1d)
+# verified: solutions=1 public=0
+found,\s*w\s*:=\s*true,\s*i
+# source:   type Odd = x: nat | x % 2 == 1 witness 1  // reference-only: the learner declares it (X2)   (Q03.X2d)
+# verified: solutions=1 public=0
+x\s*%\s*2\s*==\s*1\s+witness\s+1
+
+# from Solutions/verus/q/q03_first_syntax_ii/src/exit.rs
+# source:     assert(seq_wf(seq![0u64, 1u64]) && seq![0u64, 1u64].len() == 2);   (Q03.X2v)
+# verified: solutions=1 public=0
+seq_wf\(seq!\[0u64,\s*1u64\]\)
+# source:     if x <= u64::MAX / 2 {   (Q03.X3v)
+# verified: solutions=1 public=0
+x\s*<=\s*u64::MAX\s*/\s*2

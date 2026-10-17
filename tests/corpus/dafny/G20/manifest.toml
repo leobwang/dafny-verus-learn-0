@@ -1,0 +1,33 @@
+# Cheat-corpus manifest (Dafny) G20. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 4; 0 verified, 0 errors, 1 out of resource; 0 warning position(s), 1 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vcheck --gate: scripts/vcheck --gate main.dfy
+# seed-rerun: scripts/vcheck --brittleness main.dfy (every pinned seed)
+# also captured, not flagging (each passed this fixture): vaudit
+# the command-line half of G20 (--verification-time-limit 0, --resource-limit) is refusal-only:
+# tests/wrappers/test_dafny_static.py::CheckArgs::test_refused_everywhere.
+id = "G20"
+lang = "dafny"
+half = "Q"
+xclass = "X16"
+kind = "construct"
+title = "nonlinear goal out of resource under the pinned limit"
+files = ["main.dfy"]
+plain_exit = 4
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["W-D11", "verdict:inconclusive"]
+output_sha256 = "ae5868535247a8cfbd633d98541484766963d83442942e478b2fecc3ae43fce1"
+summary = "vcheck --gate main.dfy: exit 1, verdict inconclusive, 0 tasks verified, verifier exit 4; W-D11 at main.dfy:3"
+
+[[expect]]
+tool = "seed-rerun"
+outcome = "flagged"
+kinds = ["not-stable", "verdict:inconclusive"]
+output_sha256 = "52b4ea706a575acfa27f2ee3012fc859b524d82019f5760cdd1e159575d4d039"
+summary = "vcheck --brittleness main.dfy: exit 1; seed 1: inconclusive, seed 2: inconclusive, seed 3: inconclusive; NOT stable"

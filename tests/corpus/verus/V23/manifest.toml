@@ -1,0 +1,19 @@
+# Cheat corpus row (tests/corpus/verus), covered elsewhere: the row is not
+# a source-level construct (a command-line flag, the environment, build
+# tooling or the IDE), so this lane builds no program and runs nothing for
+# it. The wrappers' existing tests named in covered_by exercise the
+# refusal; plain_exit and output_sha256 are omitted (nothing was run).
+id = "V23"
+lang = "verus"
+half = "Q"
+xclass = "X15"
+kind = "covered-elsewhere"
+title = "IDE binary mismatch (verus-analyzer downloads its own verifier)"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["pinned-toolchain"]
+summary = "the wrappers run only the pinned install (a missing or unverified install is refused); the IDE half (.vscode/settings.json) is guard rule 2g, tested by the tests/hooks fixtures (not run by this lane; kinds other than `refused` are descriptive labels, not reported finding kinds)"
+covered_by = ["tests/wrappers/test_dafny_common.py::Toolchain::test_paths", "tests/wrappers/test_dafny_common.py::Toolchain::test_a_missing_install_is_refused"]

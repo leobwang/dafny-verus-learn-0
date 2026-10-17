@@ -1,0 +1,22 @@
+{
+ "argv": [
+  "scripts/specfreeze",
+  "--against",
+  "tests/corpus/dafny/D-15/frozen.dfy",
+  "tests/corpus/dafny/D-15/main.dfy"
+ ],
+ "document": {
+  "exit_code": 1,
+  "lines": [
+   "tests/corpus/dafny/D-15/main.dfy:0: freeze-detached — no module refines the frozen abstract module CorpusD15Spec",
+   "specfreeze: tests/corpus/dafny/D-15/main.dfy: 1 finding(s)"
+  ]
+ },
+ "exit_code": 1,
+ "instrument": "specfreeze --check",
+ "killed": null,
+ "output_sha256": "58bb6bf52031bc347d8432bb23188bbd8d409231f6a05534db19f82ea88cf88c",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-15/main.dfy"
+}

@@ -1,0 +1,21 @@
+# dafny/options/std.toml — the Dafny [options] of every std-tier verification
+# unit: the core options plus the standard library, which the BigNat layers
+# L3 and up import (DELTAS Δ34). scripts/gen_units.py copies [options] into
+# each generated dafny/{Q,R}/<ID>_<Name>/std/dfyconfig.toml, then applies every
+# [[override]] whose module range holds the unit's module. The checker's units
+# group validates this file and compares every generated project with it.
+#
+# Per-unit knobs live here, never in module {:options} (Δ30). A project never
+# sets base, solver-path, library, plugin, allow-warnings, allow-axioms or
+# verification-time-limit (Δ10). A std unit cannot take --boogie (Δ17).
+
+[options]
+# The course resource-limit pin (Δ56).
+resource-limit = 5000000
+# Std.* modules, from the pinned DafnyStandardLibraries.doo (VERSIONS.md §2.1).
+standard-libraries = true
+
+# Manual lemma induction from Q03 on (Δ45). The R track's setting is DVR1's call.
+[[override]]
+modules = "Q03-Q18"
+options = { manual-lemma-induction = true }

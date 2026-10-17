@@ -1,0 +1,79 @@
+% Q16_problems.tex — the written problems of Q16 (Practice III-A). Built by
+% `make -C paper paper` with Q16_answers.tex. B1 (the blueprint of H1-H3, an
+% informal proof first) and B2 (the paper card) are the module's written pair:
+% B1 (30 minutes) after the chapter and before any formal work; B2 in the
+% module's 15-minute paper line.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q16 --- Practice III-A \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q16\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B1 after the chapter and before you write any proof in either
+exercise file; run \texttt{/grade-paper Q16} in a fresh session and get at
+least 3 on every dimension before you formalize. B2 with B1 or after it. Once
+the module's Done line holds, run \texttt{/grade-paper Q16 --post}, which
+compares B1 with the proofs you wrote. Compare with \texttt{paper/solutions/}
+only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B1}
+\textbf{The blueprint of H1, H2 and H3} (30 minutes). The three problems'
+shipped statements are in the exercise files: H1 \dfy{MulCorrect} over layer
+L7's \dfy{Times} (Dafny, nonlinear arithmetic off); H2 \vrs{div_limb}
+(Verus, from the top limb down); H3 \vrs{mul} (Verus, in place, one pass per
+limb of \vrs{b}) with its Dafny half \dfy{MulLoop} (a compiled loop whose
+\dfy{ensures} names \dfy{Times(a, b)}). For each of the three, write:
+\begin{enumerate}
+\item[(a)] the statement you prove by induction, or each loop's invariant,
+  as a formula over the item's own names (a generalized statement: every
+  variable it leaves free; an invariant: every conjunct, bounds included);
+\item[(b)] every lemma you will invent: its name, its exact \texttt{requires}
+  and \texttt{ensures}, and its proof's shape (induction on what, with which
+  measure, or a chain of named facts);
+\item[(c)] the order of the proofs, and which lemma or invariant each step
+  uses, at which instance;
+\item[(d)] where each library or layer fact enters, by name (a lemma of
+  \texttt{Std.Arithmetic.Mul}, of \vrs{vstd::arithmetic::mul} or
+  \vrs{vstd::arithmetic::div_mod}, or a layer declaration), and for H1 why
+  the shipped statement alone fails as an induction hypothesis;
+\item[(e)] every step you cannot yet justify, declared as a gap.
+\end{enumerate}
+The test of a blueprint: could someone formalize it without inventing a
+statement? Two to four invented lemmas per problem is the tier's range, not
+a quota. Write formulas in \LaTeX{} or in \dfy{...}/\vrs{...} code; the
+grader reads either.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B2}
+\textbf{Paper card 01.13, Draft, Sketch, and Prove: Guiding Formal Theorem
+Provers with Informal Proofs} (in the 15-minute paper line). Fill the card on
+its eight fields: task shape, oracle, what is trusted, cheat surface, metric,
+budget, variance, artifact. Each field is graded against the pinned range of
+your own \texttt{cheatsheets.md}: lines 458--481, the entry from its heading
+to its \emph{Why it matters} paragraph, in the copy the command below names.
+The pin is the sha256 of exactly those lines, computed with the first line
+below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '458,481p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+e4dafe60c3a94bf011321b2f331db4fc667b6ee3fbafdfc9b0f518e3aa104c08  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

@@ -1,0 +1,154 @@
+% Q08_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q08_answers.tex (spec §4.7, §6.12). Two of the
+% three problems carry one planted flaw each; B2 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q08_rubric.md), never by eye. Reference-class
+% (hook rule 1, DELTAS Δ125): it computes the wp lab's answers, so open it only after
+% Q08 is done.
+%
+% EXPECTED[B1][recomputation][2]: (b) simplifies the meaning to 0 <= s(0) alone, dropping the case x > y. The finding must locate (b) and exhibit a state inside the formula and outside the wp, such as s = (5, -1, 0): the formula holds, the wp is false there, and the run of C() ends with x = 0, y = -1, outside q (Probe B's MeaningIs fails on the formula; Probe B''s Disagree on (5, -1, 0) passes). Parts (a) and (c), and (b)'s first line (the unsimplified meaning) and its answer about m, are correct and must draw no finding <= 2.
+% EXPECTED[B2][recomputation][4]: correct, no finding (Probe D with the answer's maintenance formula verifies, IsTheWp included; Probe D' passes on its state; Probe E's tests pass on its state and trace; Probe F's runs match (c)). A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B3][card-fidelity][2]: Metric — the field gives the agent's main theorem 2,243 lines against 4,755 for the human CPS proof; pinned lines 598 and 601 put 2,243 under CPS (human) and 4,755 under ANF (agent). The finding must quote line 601 (with the column header of line 598) (CF.c, CF.e).
+% EXPECTED[B3][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface (with its contract mapping, CF.g), Budget, Variance and Artifact — correct, no finding (lines 586, 588, 591-594, 602-603, 606-608). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2.
+% A calibration run FAILS if B1 or B3 scores >= 3, if a planted finding does not locate
+% its part or field (with the instance or the quoted line named above), or if ANY flaw
+% is reported on B2 or on a B3 field other than Metric.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q08 --- Internals II: refinement, permissions, verified wp \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} Write $e$ for \dfy{Minus(Var(2), Var(0))} and $g$ for
+\dfy{Le(Var(0), Var(1))}. \\
+Step 1 (\dfy{Wp}, case \dfy{Seq}): the \dfy{If} with the postcondition
+\dfy{Wp(Assign(0, e), Q())}. \\
+Step 2 (\dfy{Wp}, case \dfy{Assign}; \dfy{SubstB} case \dfy{Le}; \dfy{SubstE}
+case \dfy{Var}, once for variable 0, which becomes $e$, once for variable 1,
+which stays): $q_1$ $=$ \dfy{Le(Minus(Var(2), Var(0)), Var(1))}. \\
+Step 3 (\dfy{Wp}, case \dfy{If}): \dfy{And(Imp(g, W1), Imp(Not(g), W2))}, with
+$W_1$ and $W_2$ the two branches' wp for $q_1$. \\
+Step 4 ($W_1$: \dfy{Wp} case \dfy{Assign}, \dfy{SubstB} case \dfy{Le},
+\dfy{SubstE} cases \dfy{Minus} and \dfy{Var}, variable 2 becoming
+\dfy{Var(1)}): \dfy{Le(Minus(Var(1), Var(0)), Var(1))}. \\
+Step 5 ($W_2$, the same with \dfy{Var(0)} for variable 2):
+\dfy{Le(Minus(Var(0), Var(0)), Var(1))}. \\
+Final term:
+\begin{dafnycode}
+And(Imp(Le(Var(0), Var(1)), Le(Minus(Var(1), Var(0)), Var(1))),
+    Imp(Not(Le(Var(0), Var(1))), Le(Minus(Var(0), Var(0)), Var(1))))
+\end{dafnycode}
+
+\textbf{(b)} \dfy{Holds(Wp(C(), Q()), s)} $\iff$ $(s(0) \leq s(1) \impl s(1)
+- s(0) \leq s(1)) \wedge (\neg(s(0) \leq s(1)) \impl s(0) - s(0) \leq s(1))$. \\
+Simplified: $s(1) - s(0) \leq s(1)$ is $0 \leq s(0)$, and the second
+implication only matters when $s(0) > s(1)$, where $s(0)$ is the larger value
+and the first conjunct already keeps it non-negative; so the whole formula is
+$0 \leq s(0)$. \\
+The start value it does not mention: $s(2)$, the start value of $m$, because
+both branches assign $m$ before the last assignment reads it.
+
+\textbf{(c)} Meaning under the swapped rule: the \dfy{If} is handled first,
+against $q$, and its assignments to $m$ leave $q$ alone, so it gives $x \leq
+y$; then $x := m - x$ substitutes into all of it, which gives $s(2) - s(0)
+\leq s(1)$. \\
+Start state: $s(0) = 0$, $s(1) = -1$, $s(2) = -5$ (and $-5 \leq -1$). \\
+Trace: $0 \leq -1$ is false, so $m := 0$; then $x := 0 - 0 = 0$; the run ends
+with $x = 0 > -1 = y$. \\
+The warning sign: the result depends on the start value of $m$, which the
+program overwrites before it reads it.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} Entry: $\WP{x \assign x_0 \seqc k \assign 0}{I}$ is $0 + \lvert
+x_0\rvert = \lvert x_0\rvert$, true for every $x_0$. \\
+Maintenance: $\WP{k \assign k + 1}{I \wedge 0 \leq \lvert x\rvert < D}$ is $k +
+1 + \lvert x\rvert = \lvert x_0\rvert \wedge 0 \leq \lvert x\rvert < D$, and
+the conditional gives \\
+\hspace*{2em} branch $x > 0$: $k + 1 + \lvert x - 1\rvert = \lvert x_0\rvert
+\wedge 0 \leq \lvert x - 1\rvert < D$; with $x \geq 1$, $\lvert x - 1\rvert =
+\lvert x\rvert - 1$, so this is $I$ and $0 \leq x - 1 < x$: holds. \\
+\hspace*{2em} branch $\neg(x > 0)$: $k + 1 + \lvert x + 1\rvert = \lvert
+x_0\rvert \wedge 0 \leq \lvert x + 1\rvert < D$; with the guard, $x \leq -1$,
+so $\lvert x + 1\rvert = -(x + 1) = \lvert x\rvert - 1$: holds the same way. \\
+Use at exit: $I \wedge x = 0$ gives $k = \lvert x_0\rvert$: holds. \\
+Where the guard is used: in the second branch (it rules out $x = 0$, where
+$\lvert x + 1\rvert = 1$ breaks both the invariant and the decrease) and at
+exit as its negation; the first branch needs only $x > 0$.
+
+\textbf{(b)} Soundness: by induction on the number of finished iterations,
+$I$ holds each time the guard is about to be tested (entry is the base case,
+maintenance the step), so at exit $I \wedge \neg b$ holds and gives the
+postcondition. The measure is a non-negative integer at each test the loop
+passes and goes down by at least one per iteration, so only finitely many
+iterations can happen. \\
+The failing obligation of \dfy{Halt}: the bound. In the maintenance form,
+$x \neq 0 \wedge x = D$ should give $0 \leq x - 2 < D$; at $x = 1$ the guard
+holds and $x - 2 = -1 < 0$. \\
+Trace from $x_0 = 3$: $3, 1, -1, -3, \ldots$, never $0$; the measure keeps
+decreasing, below zero.
+
+\textbf{(c)} Obligations and what discharges each: \vrs{x - 1} cannot go below
+\vrs{i64::MIN} because that branch has $x > 0$; \vrs{x + 1} cannot exceed
+\vrs{i64::MAX} because that branch has $x \leq 0$; \vrs{k + 1} cannot exceed
+\vrs{u64::MAX} because the invariant and the guard give $k < \lvert x_0\rvert$,
+and $\lvert x_0\rvert$ is at most the size of \vrs{i64::MIN}. \\
+With \vrs{u32}: no; \vrs{k + 1} overflows once $\lvert x_0\rvert$ is above
+\vrs{u32::MAX}, for example with $x = 1$ and $k$ $=$ \vrs{u32::MAX} on the way
+from a larger $x_0$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.1, lines 584--610 (the pinned range).
+
+\textbf{Task shape:} Prove in Rocq that CertiCoq's ANF pass preserves the
+semantics of terminating programs, starting from the human proof for the CPS
+pass as a template; the output is the whole proof development.
+
+\textbf{Oracle:} Rocq compiling the files (the agent could only edit files and
+run \texttt{rocqc}); since the agent weakened a statement once, compiling alone
+did not show the intended theorem: the expert had to check statements.
+
+\textbf{What is trusted:} Rocq's checker, the statements and semantics the
+theorem is about, and the expert who steered; two tactics were fixed by hand.
+
+\textbf{Cheat surface:} The agent quietly weakened a statement (a fuel bound
+removed, the obligation filled with zero), erased a proof once to make a file
+compile, and assumed that two result variables never coincide, which was
+false. \\
+Which acceptance line of the flagship contract would have caught each move:
+the weakened statement, \texttt{specfreeze --against} my snapshot; the erased
+proof, the gate with zero holes; the false assumption, \texttt{vaudit} if it
+was written as an assumption, otherwise only a reader (the range does not say
+how it was written).
+
+\textbf{Metric:} Completion of the proof (divergence preservation was not
+proved), and its size and cost against the human proof: 7,783 lines for the
+agent's ANF proof against 5,294 for the human CPS proof, and the agent's main
+theorem is 2,243 lines against 4,755 for the human CPS proof; about 90 hours
+of wall-clock time.
+
+\textbf{Budget:} No budget set in advance; it took 114 expert prompts, 90.2 h
+wall-clock (62.6 h active) over 5 days, 6,538 tool calls and 872 compiles.
+Human effort was not measured.
+
+\textbf{Variance:} None: a single study (n = 1) on one pass, with a close
+template and an expert, and the sizes are reported inconsistently.
+
+\textbf{Artifact:} The machine-written Rocq proof for CertiCoq (PACMPL 2026,
+arXiv 2602.20082), produced with Claude Code and Claude Opus 4.6; the range
+does not say whether the proof or the transcripts are released.
+\end{answer}
+
+\end{document}

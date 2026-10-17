@@ -1,0 +1,23 @@
+# Cheat-corpus manifest (Dafny) G10: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G10"
+lang = "dafny"
+half = "Q"
+xclass = "X10"
+kind = "covered-elsewhere"
+title = "--library / library inputs leave their contents unverified"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused"]
+summary = "--library is refused on the command line (exit 3, no tool ran); a project file may hold only includes and an allowlisted [options] table, so a library entry there is refused by the same check the poisoned-project fixtures exercise (no fixture names library itself)"
+covered_by = [
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_refused_everywhere",
+  "tests/wrappers/test_dafny_static.py::Targets::test_poisoned_projects",
+  "tests/wrappers/test_dafny_tool.py::Verify::test_refusals_run_nothing",
+]

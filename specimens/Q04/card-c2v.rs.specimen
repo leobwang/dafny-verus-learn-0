@@ -1,0 +1,21 @@
+// Card demo Q04.C2v (`assert forall … by`), the failure half. The success half is
+// `lemma_push_zero_each` in verus/q/q04_proof_craft/src/lib.rs; this copy leaves the
+// call out of the `by` block. Run it with
+// `scripts/vcheck specimens/Q04/card-c2v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+use vstd::prelude::*;
+use qg_bignat_l3::*;
+
+verus! {
+
+pub proof fn lemma_push_zero_each(ss: Seq<Seq<u64>>)
+    ensures
+        forall|j: int| 0 <= j < ss.len() ==> seq_to_nat(#[trigger] ss[j].push(0)) == seq_to_nat(ss[j]),
+{
+    assert forall|j: int| 0 <= j < ss.len() implies seq_to_nat(#[trigger] ss[j].push(0))
+        == seq_to_nat(ss[j]) by {
+    }
+}
+
+} // verus!
+// EXPECT @15 "assertion failed"

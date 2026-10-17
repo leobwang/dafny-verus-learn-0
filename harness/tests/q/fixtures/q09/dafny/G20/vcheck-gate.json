@@ -1,0 +1,58 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/G20/main.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/G20/main.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D11",
+    "col": 9,
+    "file": "<root>/tests/corpus/dafny/G20/main.dfy",
+    "line": 3,
+    "message": "Verification out of resource (CorpusG20.Scale)",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 4,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusG20.Scale": "inconclusive"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/G20/main.dfy",
+  "verdict": "inconclusive",
+  "verified_count": 0
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "81f4bbadfc90156fc6bd8dd120f63e205b1b4ff819c7f21bb8ae541c76864c80",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/G20/main.dfy"
+}

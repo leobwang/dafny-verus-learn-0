@@ -1,0 +1,86 @@
+# pins.py golden for specimens/Q04/card-c8dv-2-v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q04/card-c8dv-2-v.rs.specimen`; never edit.
+command: verify
+exit: 1
+verdict: failed
+stage: verify
+verified: 1
+holes: 0
+{
+ "diagnostics": [
+  {
+   "col": 5,
+   "file": "card-c8dv-2-v.rs",
+   "labels": [
+    ""
+   ],
+   "level": "warning",
+   "line": 24,
+   "message": "using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`"
+  },
+  {
+   "col": 9,
+   "file": "card-c8dv-2-v.rs",
+   "labels": [
+    "",
+    "failed precondition"
+   ],
+   "level": "error",
+   "line": 25,
+   "message": "precondition not satisfied"
+  }
+ ],
+ "json": {
+  "func-details": {
+   "card_c8dv_2_v::all_below": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "card_c8dv_2_v::below": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::Seq::index": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::Seq::len": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::impl&%2::spec_index": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::lemma_seq_ext_equal": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::lemma_seq_ext_equal_deep": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::seq::lemma_seq_index_decreases": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": true,
+   "encountered-vir-error": false,
+   "errors": 1,
+   "is-verifying-entire-crate": true,
+   "success": false,
+   "verified": 1
+  }
+ },
+ "other": []
+}

@@ -1,0 +1,9 @@
+// Demo for card Q03.C2d (write:exec-check), the failure half: the division
+// without its check.
+// EXPECT @7 "possible division by zero"
+module Q03_CardC2d {
+  method Div(a: nat, b: nat) returns (q: nat)
+  {
+    q := a / b;
+  }
+}

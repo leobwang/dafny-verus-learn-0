@@ -1,0 +1,11 @@
+use vstd::prelude::*;
+verus! {
+fn check(x: u64) {
+    assert(x < x);
+}
+} // verus!
+
+// Chapter specimen for docs/Q01_Hello.md, section 9: the file p8.rs of Q01.P8dv. The
+// chapter quotes the output of `verus p8.rs --crate-type=lib` on a copy named p8.rs;
+// scripts/vcheck runs it once this prediction is recorded.
+// after: Q01.P8dv

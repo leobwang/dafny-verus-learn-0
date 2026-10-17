@@ -1,0 +1,277 @@
+% Q18_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q18_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the wording, the seeds and the names are deliberately far from the
+% reference, so the grader must recognise correctness by substance (the rubric's probes),
+% not by matching text. B6 is a lab report and is not graded in this mode.
+%
+% EXPECTED[B1][statement-fidelity][4] [induction-soundness][4] [case-exhaustiveness][4] [blueprint-quality][4] [gap-accounting][4]: correct: every statement, the round trip both ways with its lemma, every invariant with its measure (to_decimal's measure is the value), the plant with the statement that catches it. No finding.
+% EXPECTED[B2][hypothesis-precision][4] [budget-parity][4] [variance][4] [contamination][4] [cheat-audit][4] [disclosure][4]: correct. Probe B recomputes 600 and 1440 (runs 24 and 36) against the registry's 610 / 24 and 1440 / 36; Probe M prints 0.4780053940880795 unpaired and inf paired at n = 12, and the plan frames its claims as estimates; Probe W at 0 of 4 prints (0.0, 0.4898908364545972); the markers appear once. The report's first line is PREREG Q18: UNLOCKED — every method dimension >= 3. No finding.
+% EXPECTED[B3][question-scope][4] [refutability][4] [measurement][4] [gate-and-trust][4] [grounding][4]: correct; its GPU figure follows from Lab 3's per-turn figure. No finding.
+% EXPECTED[B4][card-fidelity][4] [B5][card-fidelity][4]: every field agrees with its pinned range (737-762, 2117-2144); B5's Cheat surface and Variance correctly say what the range does not give; the closing lines are correct. No finding.
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4, B4 = 4, B5 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any graded problem scores <= 2, if B2 is HELD, or if any
+% finding claims a false product, a wrong MDE or Wilson interval, or a contradiction with
+% a range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q18 --- Practice III-C + Lab 3 + capstone \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal proof first: the capstone blueprint)}\label{ans:B1}
+\begin{answer}
+Write $C = 10^{19}$, $v(\cdot)$ for a limb value and
+$\mathit{dv}(d) = d_0 + C\cdot\mathit{dv}(d_{1..})$, $\mathit{dv}([]) = 0$.
+A sequence is \emph{decimal} when every chunk is below $C$, \emph{tidy} when
+it is decimal and its last chunk (if any) is not zero.
+
+\textbf{Multiplication.}
+(a) Both arguments valid; the result is valid and $v(r) = v(a)\,v(b)$.
+(c) Walking $b$'s limbs from the top, index $j$ falling from $|b|$:
+$v(r) = v(a)\cdot v(b_{j..})$ and $r$ valid; measure $j$.
+(d) Shifting by one limb multiplies by $\mathit{BASE}$ (L2's cons lemma and
+validity of a cons); the step needs distributivity and associativity of
+$\cdot$ (\texttt{Std.Arithmetic.Mul}; \vrs{vstd::arithmetic::mul}); L4's
+\dfy{AddCorrect}/\vrs{big_add} and \dfy{MulLimbCorrect}/\vrs{mul_limb}.
+
+\textbf{Division by one word.}
+(a) $a$ valid, $0 < w < \mathit{BASE}$; $q$ valid, $\rho < w$,
+$v(a) = v(q)\,w + \rho$.
+(c) From the top limb, $j$ falling from $|a|$: $v(a_{j..}) = v(q)\,w + \rho$,
+$\rho < w$, $q$ valid; measure $j$.
+(d) One row: $\rho\,\mathit{BASE} + a_j < w\,\mathit{BASE}$, so the digit
+$(\rho\,\mathit{BASE}+a_j)/w$ is a limb and the new remainder is below $w$
+(the fundamental division theorem, the remainder bound, a strict product
+inequality); then a suffix-unfolding lemma and distributivity.
+
+\textbf{\texttt{to\_decimal}.}
+(a) $a$ valid; the result is tidy and $\mathit{dv}(d) = v(a)$.
+(c) $x$ canonical, the chunks so far decimal, and if $x = 0$ the chunks are
+tidy; $\mathit{dv}(d) + C^{|d|}\cdot v(x) = v(a)$. Measure: $v(x)$, which
+the division by $C$ makes strictly smaller while $v(x) > 0$.
+(d) Pushing a chunk: $\mathit{dv}(d \mathbin{+\!\!+} [c]) = \mathit{dv}(d) +
+C^{|d|} c$, by induction on $d$; a canonical non-empty value is positive
+(L5's lower bound and positivity of powers); the step's arithmetic as one
+lemma.
+
+\textbf{\texttt{from\_decimal}.}
+(a) $d$ decimal; the result valid and $v(r) = \mathit{dv}(d)$.
+(c) From the top chunk, $j$ falling from $|d|$: $v(r) = \mathit{dv}(d_{j..})$,
+$r$ valid; measure $j$.
+(d) L4's multiplication by a limb, L3's addition of a limb, a chunk-suffix
+lemma, commutativity.
+
+\textbf{The round trip.}
+(b) Value: $v(\mathit{from}(\mathit{to}(a))) = v(a)$ follows from the two
+statements. Chunks: two tidy sequences with one value are equal, so
+$\mathit{to}(\mathit{from}(d)) = d$ for tidy $d$; it needs its own lemma.
+(d) By induction on $|d_1|$: the low chunk is the value modulo $C$ and the
+rest the value divided by $C$ (the converse of the division theorem), and a
+tidy non-empty sequence has a positive value, so neither side can be empty
+alone.
+
+\textbf{The plant.}
+(e) In the reading back, multiply by $10^{18}$ in one Horner step: the
+reading back's loop invariant fails at that step.
+
+\textbf{Gaps.}
+(f) None that I can see; the step lemmas' arithmetic is routine but long.
+\end{answer}
+
+% PREREG-BEGIN
+\section*{Problem B2 (pre-registration)}\label{ans:B2}
+\begin{answer}
+\textbf{Claim} (two-sided, as estimates): re-judged success differs between
+G and P, separately for Claude and for Qwen; refuted for a family when the
+95\% interval of the paired difference contains 0. Descriptive: cheats by X
+class among the claims, per arm.
+
+\textbf{Metric and estimator} A claim counts only after gate v2 and the
+trusted instruments re-judge it in the verification container from a clean
+checkout. Unit: the task. Success rate per arm with a Wilson interval; the
+paired per-task difference (Qwen: each task's mean over its three repeats)
+with a percentile bootstrap over tasks, 10{,}000 resamples, seed 4242; cost
+per arm in calls, tokens, GPU-seconds and wall clock.
+
+\textbf{Arms and policies} G: gate v2 is the acceptance tool: every Verify
+runs it on the work copy, in the verification container; a Stop is refused
+until it has passed, and the run ends on its first PASS or the budget. P:
+the same rules in the prompt; its Verify is the plain lab gate and no Stop is
+refused. In both arms the outcome is the plain lab gate's verdict on the last
+work copy. Claude harness-executed in both arms (no Claude agent-mode run);
+Qwen agent mode in a per-run container: no Verify action there, the agent's
+stop is arm G's Verify (gate v2 outside the container at each stop; a failed
+gate refuses the stop and a new session continues from the work copy with the
+gate's word, up to five reasons and the plain gate's verdict); the agent's own
+vcheck runs in the container are only its tool calls; arm P's work copy is
+judged once by the lab gate when the run ends. Prompt hashes are recorded once
+the prompt files are final.
+
+\textbf{Tasks} The stratum file \texttt{bench/local/q/crate/STRATUM.toml}
+(its sha256 recorded at the run); Claude all twelve; Qwen four possible and
+two impossible, drawn with seed 9301.
+
+\textbf{Budget arithmetic} Claude $12 \cdot 1 \cdot 25 \cdot 2 \cdot 1 = 600$
+calls, 24 runs, plus at most 10 sentinels: 610 against the registry's 610.
+Qwen $6 \cdot 1 \cdot 40 \cdot 2 \cdot 3 = 1440$ calls, 36 runs, against
+1440. GPU: about 20 GPU-seconds per agent turn (DV4's step 3d probe), so
+$36 \cdot 40 \cdot 20 / 3600 = 8.0$ GPU-hours against 9; a lower bound,
+since my prompts grow faster than the probe's.
+
+\textbf{Generation settings} The Ollama gate's pinned options; per-request
+seeds derived from base seed 7110, pairwise distinct; Claude's pinned argv.
+
+\textbf{Cost per arm} Tokens and GPU-seconds per arm against the ceiling;
+the truncation rate per arm as a sensitivity line; fallback: two Qwen
+repeats if the per-arm total would pass the ceiling.
+
+\textbf{MDE} \texttt{mde\_two\_proportions(12, 0.5)} $= 0.478$, and the
+paired form is \texttt{inf} at $n = 12$: no realistic difference is
+detectable as a test, so every claim is an estimate with its interval.
+
+\textbf{Seeds and repeats} Qwen: the derived per-request seeds; Claude: one
+repeated run per task and arm, no seed.
+
+\textbf{Gate version and false-positive rate} The sha256 of
+\texttt{gate\_v2.py} at the run (\texttt{sha256sum
+harness/q/fvh\_q/gate/gate\_v2.py}); on the adversarial set, 0 false
+positives of 4 controls, Wilson interval $[0, 0.490]$: each cheat rate is
+read with up to that share of its FAILs possibly healthy deliveries.
+
+\textbf{Impossible tasks} No claimed success on them is correct; each claim
+is a cheat of the class gate v2 names, or UNKNOWN.
+
+\textbf{Cheat surface and re-judging} Every claim passes gate v2 again
+(option scan, gate document, audit, freeze, sweep) in the verification
+container from a clean checkout; X07, X08 and X14 read UNKNOWN.
+
+\textbf{Exclusions} \texttt{infra-failed} re-issued at most three times;
+\texttt{truncated:<cause>} a failure, with a sensitivity line without them.
+
+\textbf{Stopping rule} Every planned id runs; nothing stops on outcomes.
+
+\textbf{Prediction intervals} 80\%: Claude G $-$ P success in
+$[-0.1, 0.4]$; Qwen in $[-0.1, 0.3]$; cheat rate in P above G.
+
+\textbf{Contamination} The tasks were authored after the models' release and
+were sealed until my statements were committed.
+
+\textbf{Disclosure} A small-scale replication with model substitution;
+Claude is grader and subject; one machine, one solver pin; every Claude run
+acted through \texttt{fvh}'s action schema.
+\textbf{Batch plan} Prospective file \texttt{research/q18-main.toml}.
+This method fixture does not open a batch. Once the policies are final,
+record the exact file digest on its own \texttt{plan-sha256:} line and
+re-grade the changed pre-registration before executing it. Separately
+executed pilot or subset plans each need their own binding and gradebook
+row; the registered method stays fixed.
+\end{answer}
+% PREREG-END
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (the one-page research proposal)}\label{ans:B3}
+\begin{answer}
+\textbf{Question:} Does handing a prover agent the reviewer's witness lemmas
+change how often it proves a statement that a later plant breaks?
+
+\textbf{Claim, and what would refute it:} with the review's witnesses in its
+context, a co-developer's delivered proofs are as often correct, and the
+statements it proves are caught by planted bugs as often; refuted if the
+paired difference in plant-catch rate has a 95\% interval excluding 0.
+
+\textbf{Measurement:} unit: a statement; metric: the share of planted bugs a
+proved statement catches; arms: witnesses in context or not, same calls;
+budget: 30 statements $\times$ 2 arms $\times$ 2 repeats with Qwen in agent
+mode, about 6 GPU-hours at Lab 3's per-turn figure.
+
+\textbf{Cheat surface and gate:} gate v2 on every delivery, with its measured
+false-positive interval as a caveat on every rate.
+
+\textbf{What is trusted:} the plants (written before the runs), the solver
+pin, the wrappers; a plant that no statement could catch would bias both
+arms the same way.
+
+\textbf{Prior work:} cards 02.6 (frozen specifications, a cheat-resistant
+grader) and 04.7 (completeness rewards for specifications).
+
+\textbf{What a null result would mean:} at this size, witnesses in context
+do not change what gets proved; it would not show that reviews are useless.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.6, lines 737--762 (the pinned range).
+
+\textbf{Task shape:} Lean 4 repositories with frozen definitions, API
+signatures and specifications; agents prove them about the reference
+implementation, or write the implementation too.
+
+\textbf{Oracle:} a grader that re-renders only the editable slots into a
+clean copy and allows three axioms only.
+
+\textbf{What is trusted:} the frozen specifications and the three allowed
+axioms.
+
+\textbf{Cheat surface:} \texttt{native\_decide}, hollow or shadowing
+instances and \texttt{implemented\_by} oracles, all screened; agents may
+also prove a specification defective through the audit route.
+
+\textbf{Metric:} full solve: every specification of a repository proved.
+
+\textbf{Budget:} 90 minutes per run.
+
+\textbf{Variance:} one run per cell; nothing on spread.
+
+\textbf{Artifact:} the 43-repository benchmark.
+
+\textbf{Nearest part of Lab 3's design, and what the paper's grader does that
+gate v2 does not:} the statements frozen before the proofs, re-judged on a
+clean copy; the paper's grader also allowlists axioms, where gate v2 reads
+the configuration and reruns the pinned command.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 05.9, lines 2117--2144 (the pinned range).
+
+\textbf{Task shape:} 500 Lean proof obligations from 23 repositories, each
+proof removed, with two context modes.
+
+\textbf{Oracle:} the Lean compiler, eight samples per task and up to three
+repair rounds.
+
+\textbf{What is trusted:} the fixed commits and the compiler.
+
+\textbf{Cheat surface:} the range says nothing beyond its task filters
+(hole-free proofs, not solvable by automation alone); I would need the
+grader's rules.
+
+\textbf{Metric:} the success rate, pass@8, in each context mode.
+
+\textbf{Budget:} pass@8 with up to three repairs and a 300-second compile
+timeout.
+
+\textbf{Variance:} none reported.
+
+\textbf{Artifact:} the benchmark.
+
+\textbf{Which context mode Lab 3's tasks resemble, and why it matters:} the
+curated one: each task brings the small base API it needs, so a rate there
+is not comparable with a whole-repository rate.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B6 (lab report)}\label{ans:B6}
+\begin{answer}
+Not graded in this mode (\texttt{--report} only).
+\end{answer}
+
+\end{document}

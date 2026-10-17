@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/G03/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/G03/main.dfy",
+    "kind": "abstract-module",
+    "line": 2,
+    "message": "an abstract module silences its bodyless members' hole warnings (Δ3, G3)"
+   },
+   {
+    "file": "<root>/tests/corpus/dafny/G03/main.dfy",
+    "kind": "bodyless-abstract",
+    "line": 5,
+    "message": "a bodyless member of an abstract module or trait is silent (Δ3, G3)"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/G03/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "32e6d2384d0e3c3d46a4fb621bf218bfa62b877bc6765935714128893006f544",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/G03/main.dfy"
+}

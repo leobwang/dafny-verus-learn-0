@@ -1,0 +1,126 @@
+# bench/local/q/lab2pub/STRATUM.toml — Lab 2's public strata (QPLAN §25.6). Learner-owned tree
+# (guard rule 2); written by the author-only `scripts/dvl/lab2pub.py record` from the draw that
+# bench/public/POOLS.toml's [[draw]] records (seed, rule, order and every skipped member).
+#
+# Each card is one public task in Lab 2's form: its specification, its proofs and the
+# definitions only its specification used (when they are not recursive; the user's decision
+# D28) removed by scripts/dvl/benchstrip.py (verus-lab2-form, dafny-lab2-form), the prose (the
+# HumanEval prompt), the executable code and the other definitions kept, an empty witness. A
+# delivery adds the `requires` and `ensures` with any definition they need (Verus: `pub open`),
+# one witness call and, on these cards only, proof annotations (loop invariants, assertions,
+# proof blocks, lemmas; the user's decision D27), and changes no executable code: the lab gate
+# checks it (`scripts/vcheck --gate --lab-task`, dvl.labcode). The reference statements are in
+# no course file, and the removed definitions in no course file of this tree (the forms before
+# D28 held them, so this repository's history before DV6 does): both are sealed with Lab 2's
+# hidden truth for the grader (Hidden/labs/Q15/, QPLAN §30 Q49), and the upstream sets that
+# scripts/get_bench.sh installs under bench/public/ (fetched on the pins) hold them either way,
+# which is why this stratum is no contamination control: the local stratum is (lab2/).
+#
+# `python3 scripts/dvl/lab2pub.py build --check` re-derives every form from the installed sets
+# and compares it with form_sha256; the licences and the change statement are in NOTICE.
+
+schema = 1
+lab = "Q15"
+date = "2026-10-13"
+stratum = "public"
+forms_date = "2026-10-16"   # the forms rebuilt on the same draw (D27, D28)
+
+[[card]]
+id = "vp1-he100"
+lang = "verus"
+name = "make_a_pile"
+set = "humaneval-verus"
+task = "human_eval_100.rs"
+humaneval = 100
+answer_sha256 = "fcb30d0a7b076e73f54a06e6c00d40d54d028a6046df53fb0f71b2828b8380bf"
+form_sha256 = "f9e4ae760ef17e8d40d2cc7f551cce250494336d7364efe7f838ce522c8e9c53"
+
+[[card]]
+id = "vp2-he033"
+lang = "verus"
+name = "sort_third"
+set = "humaneval-verus"
+task = "human_eval_033.rs"
+humaneval = 33
+answer_sha256 = "930f693054b10aa52dce7e011fc59e8b23b60b1b716f04b7420c8725dd3314c0"
+form_sha256 = "04363e6b251f1e3b015d72e640c6f3e8d1ac76ce7391f09c7fc810336ec7619f"
+
+[[card]]
+id = "vp3-he077"
+lang = "verus"
+name = "iscube"
+set = "humaneval-verus"
+task = "human_eval_077.rs"
+humaneval = 77
+answer_sha256 = "5dea91bea514bad2b87a00bda0a4efa1a3684e82a5ca4dcb5f4b6f7ddefc01f5"
+form_sha256 = "6c0072e6be68a6cefb525ba84a91dba483d89a507081f617a93649750a397b4e"
+
+[[card]]
+id = "vp4-he035"
+lang = "verus"
+name = "max_element"
+set = "humaneval-verus"
+task = "human_eval_035.rs"
+humaneval = 35
+answer_sha256 = "885da0f6f163c9ae234431ef986ed16ae8365b7c6f25ef9e5e52b348a8d750e7"
+form_sha256 = "89f12957e83f1da28ba84352bfa7bad0775fddb61326e66a99f127c85f87a869"
+
+[[card]]
+id = "vp5-he060"
+lang = "verus"
+name = "sum_to_n"
+set = "humaneval-verus"
+task = "human_eval_060.rs"
+humaneval = 60
+answer_sha256 = "ce3c39be8e4830e40f8dd2b04dd796a4b75750b9c281d0194e8087efebcfb6f7"
+form_sha256 = "0f5676647f3752618cca16125012928528ad2b5bc97dd78820d40c718055e728"
+
+[[card]]
+id = "dp1-he048"
+lang = "dafny"
+name = "is_palindrome"
+set = "vericoding"
+task = "DH0050.dfy"
+humaneval = 48
+answer_sha256 = "68f0d64cabe9d7a5fb43d0cd7c85724f6d41da221599ec69cd7fac60c2c0535d"
+form_sha256 = "d2b261bf6340dd9f0bb750f4cf2a3d478af9b64656fe98898b3f8d8ae831d493"
+
+[[card]]
+id = "dp2-he052"
+lang = "dafny"
+name = "CheckBelowThreshold"
+set = "vericoding"
+task = "DH0055.dfy"
+humaneval = 52
+answer_sha256 = "b62bbd44abe59e253b4a9ad8e1f23295f813190a7462bb60a79236b39c8c1ba7"
+form_sha256 = "e08a979896e8e07b65b3a4ad1b85161f392547dc0bc9c5c38d71ca1fa8a2e508"
+
+[[card]]
+id = "dp3-he063"
+lang = "dafny"
+name = "fibfib"
+set = "vericoding"
+task = "DH0065.dfy"
+humaneval = 63
+answer_sha256 = "c968e122319bc7d55c421f0e640a04ff7bbacbb34b87b8b366743e53e78e8258"
+form_sha256 = "11bffb3ddcc7fb5428c8aa97525d2923e125915c56a26f89ffbda49d8a8af313"
+
+[[card]]
+id = "dp4-he159"
+lang = "dafny"
+name = "eat"
+set = "vericoding"
+task = "DH0160.dfy"
+humaneval = 159
+answer_sha256 = "38b131176adae9444c838a18e2ff38f38c56fba02e5d2f3b9d0dd4d2e8199d14"
+form_sha256 = "cdeef1b2c0a1f3544ed25708711edd1587acc22d5e8660875544d8b25a5c6c1d"
+
+[[card]]
+id = "dp5-he062"
+lang = "dafny"
+name = "derivative"
+set = "vericoding"
+task = "DH0064.dfy"
+humaneval = 62
+answer_sha256 = "427257ded43e276f941fb35b6a8438ef8b93873f580cf03cfcffaa72a5a2bea8"
+form_sha256 = "19f680ef2a26397a40b9050e3791425b7c10890075b21ad3ab790da141ff76cf"

@@ -1,0 +1,25 @@
+# Cheat-corpus manifest (Dafny) G06: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G06"
+lang = "dafny"
+half = "Q"
+xclass = "X10"
+kind = "covered-elsewhere"
+title = "--allow-warnings / --allow-axioms / --allow-external-contracts on the command line or in a project file"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused"]
+summary = "refused before any run (exit 3, no tool ran); the gate pins --allow-axioms false --allow-warnings false on its own command line, which beats a project [options] value"
+covered_by = [
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_refused_everywhere",
+  "tests/wrappers/test_dafny_static.py::Targets::test_poisoned_projects",
+  "tests/wrappers/test_dafny_tool.py::Verify::test_refusals_run_nothing",
+  "tests/wrappers/test_dafny_tool.py::Verify::test_pinned_command_line",
+  "tests/wrappers/test_tools_static.py::Core::test_passthrough_refusals",
+]

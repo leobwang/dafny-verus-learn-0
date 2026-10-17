@@ -1,0 +1,441 @@
+# expected/Q03.chapter.toml — the chapter pins of Q03's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q03 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "c1d"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c1d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "62f19ea995cc7aca373cf7b187be8564307db58fe6fe2efea0d210461d6ebb93"
+[entry.pinned.inputs]
+"specimens/Q03/card-c1d.dfy.specimen" = "77992eaf496ca253df5976de2a8beec660343884aee5d242b6c55857f7626145"
+
+[[entry]]
+id = "c1v"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c1v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "25d157e52e5c20d84613290146ba007a23673d9fefde1884e3a1e42d8bc098c7"
+[entry.pinned.inputs]
+"specimens/Q03/card-c1v.rs.specimen" = "ce3d1aafd30dcb73e18d5e215e843d3c230f41fbe6e55164ed9e42267bbfbc56"
+
+[[entry]]
+id = "ghost-out-d"
+cmd = ["scripts/vcheck", "--module", "Q03", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/options/core.toml"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "a21b49f8dba1b7a9f6b0ace8871c0b38cd0fb7626ea6f800fd2bd688ffda5f21"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/options/core.toml" = "40cb32a78d9f2024e64e69fe268f117300c17ae103150838cb792119f8e5324a"
+"scratch:probe.dfy" = "2d666d108c591dba45d9f548da5b11e628c37ea594cd7cb856a275620e796950"
+
+[[entry]]
+id = "ghost-out-v"
+cmd = ["scripts/vcheck", "--module", "Q03", "probe.rs"]
+cwd = "scratch"
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "facb0688869eb3023e66aeff091db9d52e268c3c1a8d625e52bf07651cadee71"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "cbb09cb56af4e8eb46b64c8df912f0ee980eaacff27ed34bfabb90c246106b3a"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+
+[[entry]]
+id = "p4v-a"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p4v-a.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "296412836ac976f6d71dce36cac105ba313f0c9437cf85b41281fd997dff089b"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p4v-a.rs.specimen" = "d14d9e08eee10a19014f3b1cf3f9f0dde5085b505c193d6ddb0cc211d3d526a3"
+
+[[entry]]
+id = "p4v-c"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p4v-c.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d3ba58e34121a3e684249587e24770584de05040f89f35a09f95d14ff607af7a"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p4v-c.rs.specimen" = "e2ddd3ba2dd44581cb291fc67375b62c6d60e7ab70f47dacc52aff9f1a9ce3fd"
+
+[[entry]]
+id = "c5v"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c5v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "72fb66701bf580b2813d3399cdcdd64f23de6fbed55b502a81c710876518c61d"
+[entry.pinned.inputs]
+"specimens/Q03/card-c5v.rs.specimen" = "66f4ef6afe8c66eff80d54395c79a8d5b741f5a2a1cc092002988f0e997c812a"
+
+[[entry]]
+id = "c4d"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c4d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d8b7f93e92ac1227e731ebd34f097ee83d7d8e29f0e915e5585d2cd0d62a7ae5"
+[entry.pinned.inputs]
+"specimens/Q03/card-c4d.dfy.specimen" = "5c221e0bd8f360561c5ddfe70582c00aebe26274b62e25a95beb9990709a264b"
+
+[[entry]]
+id = "p3d"
+cmd = ["scripts/vcheck", "specimens/Q03/P3d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "75fcc6737d271e81e9279d547e17070ed1061f6403f20164899a2e5a06677b9e"
+[entry.pinned.inputs]
+"specimens/Q03/P3d.dfy.specimen" = "9e2cc2c55a540c89cf41bc983232f4a62ecdf4b84aa4845f8f6b4050ce828b4a"
+
+[[entry]]
+id = "c2d"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2ca0fc98c3481e0fa74928cb0223c065d8d4003d57b0acaec1e72c46bbf9961d"
+[entry.pinned.inputs]
+"specimens/Q03/card-c2d.dfy.specimen" = "fc5887f97f98bc7a7e57d02df75957f1587e783dad35455d2df8552c0c34d1b9"
+
+[[entry]]
+id = "p8dv-d"
+cmd = ["scripts/vcheck", "--module", "Q03", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/options/core.toml"]
+answers = ["Q03.P8dv"]
+note = "Q03.P8dv's program with the computed precondition and a weaker one; the source is the dafny fence above the pin, after P8's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "59ab51451cf9829c4efc511a2aea656d8149bdcdfaebe8b70b97b67a8b734d84"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/options/core.toml" = "40cb32a78d9f2024e64e69fe268f117300c17ae103150838cb792119f8e5324a"
+"scratch:probe.dfy" = "207948e8272280f360cd60bc74b0f208baedd4790973beace169d4bc6a4be90b"
+
+[[entry]]
+id = "p8dv-v"
+cmd = ["scripts/vcheck", "--module", "Q03", "probe.rs"]
+cwd = "scratch"
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs"]
+answers = ["Q03.P8dv"]
+note = "The Verus column of p8dv-d; the source is the rust fence above the pin."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "2ef75ba69ec0c1f3f850b2e59fc07406409c879ccbb940db5d2150aba963fa09"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "9a712d51c681934fe3ae040dfb877f792ccb691a7506ff7992e7f23631ae4614"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+
+[[entry]]
+id = "p5dv-d-plain"
+cmd = ["dafny", "audit", "probe.dfy"]
+cwd = "scratch"
+answers = ["Q03.P5dv"]
+note = "Q03.P5dv's Dafny half: the pinned dafny binary run plainly on a copy of C8's Dafny demo (one bodyless lemma)."
+[entry.normalize]
+exit = true
+[entry.scratch."probe.dfy"]
+copy = "specimens/Q03/card-c8dv-d.dfy.specimen"
+[entry.pinned]
+body = "2d67d4346ad14206958ce7135b732684ab6b4644d647d56673f4e7648fd2e337"
+[entry.pinned.inputs]
+"scratch:probe.dfy" = "43cbcbe2b5995f2fceec0cb0c10a3d39ac811d757f2ffb3ea9005fddc133cd8a"
+"specimens/Q03/card-c8dv-d.dfy.specimen" = "43cbcbe2b5995f2fceec0cb0c10a3d39ac811d757f2ffb3ea9005fddc133cd8a"
+
+[[entry]]
+id = "p5dv-v-plain"
+cmd = ["verus", "probe.rs", "--crate-type=lib"]
+cwd = "scratch"
+answers = ["Q03.P5dv"]
+note = "Q03.P5dv's Verus half: the pinned verus binary run plainly (no --no-cheating) on a copy of the scenario."
+[entry.normalize]
+exit = true
+[entry.scratch."probe.rs"]
+copy = "specimens/Q03/chapter-p5dv-v.rs.specimen"
+[entry.pinned]
+body = "62f94bda202a1e19d1f1c1a3bb28d7d634991b355eb100f223de5f51a7d79f95"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "31c57b9b83b855462dc2694ded514c3166b2c806e0a8f75ee810be5010623993"
+"specimens/Q03/chapter-p5dv-v.rs.specimen" = "31c57b9b83b855462dc2694ded514c3166b2c806e0a8f75ee810be5010623993"
+
+[[entry]]
+id = "p5dv-v-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p5dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e6b46d446a00a99eaf3b4444b7f64a7492206ff4c96fd00a458acf12ba1a3217"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p5dv-v.rs.specimen" = "31c57b9b83b855462dc2694ded514c3166b2c806e0a8f75ee810be5010623993"
+
+[[entry]]
+id = "c6dv-d"
+cmd = ["scripts/vcheck", "--test", "specimens/Q03/card-c6dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c465905167f5d3bfe252b8d3f4f9d47edee600907d016fe09a5a88d835b41d9f"
+[entry.pinned.inputs]
+"specimens/Q03/card-c6dv-d.dfy.specimen" = "d143c2ca19de181c683d70c64409ae3ec7061700576654af1f115e44db7b9064"
+
+[[entry]]
+id = "c6dv-v"
+cmd = ["scripts/vcheck", "--test", "specimens/Q03/card-c6dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1b46324eef3aa09b7de0be119d95780c3ad79bcf705a4e75e4849a8a15a91289"
+[entry.pinned.inputs]
+"specimens/Q03/card-c6dv-v.rs.specimen" = "0555183385d7452b042735bc9bf2410d81c816fc6ba58ba95e2667a6db596ea9"
+
+[[entry]]
+id = "p6dv-d"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p6dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "16dacb3fef85cb4a7d81ca8a2baab2edd222da39df313c63f60773e3055df2f4"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p6dv-d.dfy.specimen" = "624b717ef6a3c984893f6341d3246ec8b6e9ed1a5d52c89eb15339da965afd45"
+
+[[entry]]
+id = "p6dv-v"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p6dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c0249513bcb0cb1d105ecbe7ab94008ecd1b41ea62c21853d762bdf582ae8bff"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p6dv-v.rs.specimen" = "ecb1fba109c87a8a8260f97ec1dc3a67c95f94382da685418ecb0de8e9a23c10"
+
+[[entry]]
+id = "p7dv-d"
+cmd = ["scripts/vcheck", "--module", "Q03", "p7.dfy"]
+cwd = "scratch"
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/options/core.toml"]
+note = "Q03.P7dv's Dafny lemmas in a scratch copy, with the Q03 unit's options (manual lemma induction)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p7.dfy"]
+copy = "specimens/Q03/chapter-p7dv-d.dfy.specimen"
+[entry.pinned]
+body = "ce7bb0a38488eb2a2365c05d469ae5e6cb7a8c2b276902173f6eb1f83e545548"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/options/core.toml" = "40cb32a78d9f2024e64e69fe268f117300c17ae103150838cb792119f8e5324a"
+"scratch:p7.dfy" = "797e57fe9377b046f42d362c68b531e85347c0f1ca56b326072409d0527f0ea4"
+"specimens/Q03/chapter-p7dv-d.dfy.specimen" = "797e57fe9377b046f42d362c68b531e85347c0f1ca56b326072409d0527f0ea4"
+
+[[entry]]
+id = "p7dv-v"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p7dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4c1b4d6b0c1aaf794837bd835a1e6c97b02f4e99b6b27a7a6987f4785830c310"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p7dv-v.rs.specimen" = "f0df955287fa36e187a8faf8e138d05c2741ce08bacfcdeff3f8bb2b8d764acb"
+
+[[entry]]
+id = "c8dv-d"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c8dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "8a5e93ead53a6bf082cb31b1b2c5414a784ff3fa24955339f944112479fecada"
+[entry.pinned.inputs]
+"specimens/Q03/card-c8dv-d.dfy.specimen" = "43cbcbe2b5995f2fceec0cb0c10a3d39ac811d757f2ffb3ea9005fddc133cd8a"
+
+[[entry]]
+id = "c8dv-v"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c8dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ee8195462c40f8c02bc6ca36ae46b6880a93f59eeaa1dc03264f3bf3505a68d5"
+[entry.pinned.inputs]
+"specimens/Q03/card-c8dv-v.rs.specimen" = "21bb50aeb703d97fcdaaeb80b1913a95e546ac4a41f7ae777b8fec7c3378c8f3"
+
+[[entry]]
+id = "p11d-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q03/P11d.dfy.specimen"]
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b0f0341513334e9e052412cbd72f2b9d4892ce59af178773f3b94938f4a2766d"
+[entry.pinned.inputs]
+"specimens/Q03/P11d.dfy.specimen" = "e0348c041a3cea988f07c193203ebdaf325b066815fed8ff75c182590e6afc8e"
+
+[[entry]]
+id = "p11d-audit"
+cmd = ["scripts/vaudit", "specimens/Q03/P11d.dfy.specimen"]
+[entry.normalize]
+exit = true
+[entry.pinned]
+body = "69cf7ff628d3556f39c727639006a344be357756257ee3be9795db69ecbde3f7"
+[entry.pinned.inputs]
+"specimens/Q03/P11d.dfy.specimen" = "e0348c041a3cea988f07c193203ebdaf325b066815fed8ff75c182590e6afc8e"
+
+[[entry]]
+id = "p12d-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q03/P12d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d9f921f6ab1e29fa2e67de36c110c00fc4a3be99a116118b641929f6249a7ce2"
+[entry.pinned.inputs]
+"specimens/Q03/P12d.dfy.specimen" = "fdbde915f9614e5490db2af8c89b5b76f0d61d92fe2b189d545feb93d092bb70"
+
+[[entry]]
+id = "p12d-audit"
+cmd = ["scripts/vaudit", "specimens/Q03/P12d.dfy.specimen"]
+[entry.pinned]
+body = "ecf227067aa0da8cb4353812f72e9a5bde09a9aede2692a723c95092a5465983"
+[entry.pinned.inputs]
+"specimens/Q03/P12d.dfy.specimen" = "fdbde915f9614e5490db2af8c89b5b76f0d61d92fe2b189d545feb93d092bb70"
+
+[[entry]]
+id = "p13v-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q03/P13v.rs.specimen"]
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "fd834cf5716c2812378789e16ebf95e1d878419cc54d8dbc50d151f8b7c955e5"
+[entry.pinned.inputs]
+"specimens/Q03/P13v.rs.specimen" = "afac030fc7f26fafc557e1d32c8c888339c691bc059c599dea5389aa8fe57ded"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+
+[[entry]]
+id = "p14v-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q03/P14v.rs.specimen"]
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a1bea3c989f82b349229802fad8ea0966d6a4477d622ba795c03987d00074a59"
+[entry.pinned.inputs]
+"specimens/Q03/P14v.rs.specimen" = "e7fa18a6b8e28ae9baa350dad882e9988cb0570e3bade18cb27b617d190f18fc"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+
+[[entry]]
+id = "c7dv-d-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q03/card-c7dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "548c3c87a281632124732f28ca516ee930a36ed9897601ce1986a151a5d3427f"
+[entry.pinned.inputs]
+"specimens/Q03/card-c7dv-d.dfy.specimen" = "9c6de91ce3e731cfb2292a27b1d203b6e5dcadf4c9bac9380153902d1b7977db"
+
+[[entry]]
+id = "c7dv-v-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q03/card-c7dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b659a86bfade5e3eeabec263812bc999c8100dc44e3cd77de8ce5547e5b76417"
+[entry.pinned.inputs]
+"specimens/Q03/card-c7dv-v.rs.specimen" = "ee17e27ef5bd7f0e52d21c72634774196cbb880748ada01e0f7a67fceae32b4b"
+
+[[entry]]
+id = "p2dv-witness"
+cmd = ["scripts/vcheck", "specimens/Q03/chapter-p2dv-witness-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "7489dec660e07030348a171821df277da28902ce92c6a3b4c2e1e5237172c727"
+[entry.pinned.inputs]
+"specimens/Q03/chapter-p2dv-witness-v.rs.specimen" = "04ea108334d42030d4b4857b71d1df05f63cd55e4124f1e2e862e4a3cdfda41d"
+
+[[entry]]
+id = "c7dv-d-analyze"
+cmd = ["scripts/vcheck", "specimens/Q03/card-c7dv-d.dfy.specimen", "--", "--analyze-proofs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "db275fad16faa7398c3f5c002297ddfb63d24eb69dfe2a8fe15c8213564dd9c6"
+[entry.pinned.inputs]
+"specimens/Q03/card-c7dv-d.dfy.specimen" = "9c6de91ce3e731cfb2292a27b1d203b6e5dcadf4c9bac9380153902d1b7977db"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q03"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b6f9038b6b904a7a6e3a9638e2f437f7c9def801ebcbe36071424c6335260e38"
+[entry.pinned.inputs]
+"dafny/Q/Q03_FirstSyntaxII/core/Q03_FirstSyntaxII.dfy" = "05ec4d9ed77452d35cc1bb1cd02c106fd38aa904479f14d942c47b9b0380cc33"
+"dafny/Q/Q03_FirstSyntaxII/exit/Q03_Exit.dfy" = "bac778b010eb3684809f8bde02bbda312daa68007e7ee432bd4b15cc9a567cab"
+"dafny/checks/Q03_checks.dfy" = "1673308071a350ce49cf445cb027ae0d108479d136a53312eba82d2d7b6b6bd9"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"instructor/calib/Q03.tsv" = "absent"
+"slots/Q03.slots" = "a4149c97c6945132502c94ae88b9654bf2565386e872b073354873d19e9301c7"
+"specimens/Q03/P10v.rs.specimen" = "3eced65f4beb3c2ee088099dbca4cd86c1e1c50e9a3d480a1ec570ec250ccbd6"
+"specimens/Q03/P11d.dfy.specimen" = "e0348c041a3cea988f07c193203ebdaf325b066815fed8ff75c182590e6afc8e"
+"specimens/Q03/P12d.dfy.specimen" = "fdbde915f9614e5490db2af8c89b5b76f0d61d92fe2b189d545feb93d092bb70"
+"specimens/Q03/P13v.rs.specimen" = "afac030fc7f26fafc557e1d32c8c888339c691bc059c599dea5389aa8fe57ded"
+"specimens/Q03/P14v.rs.specimen" = "e7fa18a6b8e28ae9baa350dad882e9988cb0570e3bade18cb27b617d190f18fc"
+"specimens/Q03/P3d.dfy.specimen" = "9e2cc2c55a540c89cf41bc983232f4a62ecdf4b84aa4845f8f6b4050ce828b4a"
+"specimens/Q03/card-c1d.dfy.specimen" = "77992eaf496ca253df5976de2a8beec660343884aee5d242b6c55857f7626145"
+"specimens/Q03/card-c1v.rs.specimen" = "ce3d1aafd30dcb73e18d5e215e843d3c230f41fbe6e55164ed9e42267bbfbc56"
+"specimens/Q03/card-c2d.dfy.specimen" = "fc5887f97f98bc7a7e57d02df75957f1587e783dad35455d2df8552c0c34d1b9"
+"specimens/Q03/card-c2v.rs.specimen" = "b4d258c9e1be3f829f560dddbf5393a04cefbca12050455b1bcd46e27579fc8a"
+"specimens/Q03/card-c3d.dfy.specimen" = "17fcb912d559f75eb7eec6d464e03bf1db443fb3dd13444a7f00b6c70d393985"
+"specimens/Q03/card-c3v.rs.specimen" = "a4b61820dd071a478c3f43ee42f6e71050211f3db35108198a10b49a5843f445"
+"specimens/Q03/card-c4d.dfy.specimen" = "5c221e0bd8f360561c5ddfe70582c00aebe26274b62e25a95beb9990709a264b"
+"specimens/Q03/card-c5v.rs.specimen" = "66f4ef6afe8c66eff80d54395c79a8d5b741f5a2a1cc092002988f0e997c812a"
+"specimens/Q03/card-c6dv-d.dfy.specimen" = "d143c2ca19de181c683d70c64409ae3ec7061700576654af1f115e44db7b9064"
+"specimens/Q03/card-c6dv-v.rs.specimen" = "0555183385d7452b042735bc9bf2410d81c816fc6ba58ba95e2667a6db596ea9"
+"specimens/Q03/card-c7dv-d.dfy.specimen" = "9c6de91ce3e731cfb2292a27b1d203b6e5dcadf4c9bac9380153902d1b7977db"
+"specimens/Q03/card-c7dv-v.rs.specimen" = "ee17e27ef5bd7f0e52d21c72634774196cbb880748ada01e0f7a67fceae32b4b"
+"specimens/Q03/card-c8dv-d.dfy.specimen" = "43cbcbe2b5995f2fceec0cb0c10a3d39ac811d757f2ffb3ea9005fddc133cd8a"
+"specimens/Q03/card-c8dv-v.rs.specimen" = "21bb50aeb703d97fcdaaeb80b1913a95e546ac4a41f7ae777b8fec7c3378c8f3"
+"specimens/Q03/chapter-p2dv-witness-v.rs.specimen" = "04ea108334d42030d4b4857b71d1df05f63cd55e4124f1e2e862e4a3cdfda41d"
+"specimens/Q03/chapter-p4v-a.rs.specimen" = "d14d9e08eee10a19014f3b1cf3f9f0dde5085b505c193d6ddb0cc211d3d526a3"
+"specimens/Q03/chapter-p4v-c.rs.specimen" = "e2ddd3ba2dd44581cb291fc67375b62c6d60e7ab70f47dacc52aff9f1a9ce3fd"
+"specimens/Q03/chapter-p5dv-v.rs.specimen" = "31c57b9b83b855462dc2694ded514c3166b2c806e0a8f75ee810be5010623993"
+"specimens/Q03/chapter-p6dv-d.dfy.specimen" = "624b717ef6a3c984893f6341d3246ec8b6e9ed1a5d52c89eb15339da965afd45"
+"specimens/Q03/chapter-p6dv-v.rs.specimen" = "ecb1fba109c87a8a8260f97ec1dc3a67c95f94382da685418ecb0de8e9a23c10"
+"specimens/Q03/chapter-p7dv-d.dfy.specimen" = "797e57fe9377b046f42d362c68b531e85347c0f1ca56b326072409d0527f0ea4"
+"specimens/Q03/chapter-p7dv-v.rs.specimen" = "f0df955287fa36e187a8faf8e138d05c2741ce08bacfcdeff3f8bb2b8d764acb"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/q/q03_first_syntax_ii/src/exit.rs" = "e37e5d2124a3f6194f9c46fdd2205eda7d13d779affd461454be7a7de2e59cd8"
+"verus/q/q03_first_syntax_ii/src/lib.rs" = "0dd72ae8f27e75f9c8e28373f41f19401b8866fc2029af425005023127f67b5a"

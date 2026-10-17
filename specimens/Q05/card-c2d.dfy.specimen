@@ -1,0 +1,23 @@
+// Demo for card Q05.C2d (write:by-method), the failure half: `Triangle` with its method
+// body's loop missing the invariant that ties the running total to the function. Run it
+// with `scripts/vcheck specimens/Q05/card-c2d.dfy.specimen`; the EXPECT line at the end
+// pins the message the verifier gives (line and fragment).
+module Q05_CardC2d {
+  function Triangle(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 0 else n + Triangle(n - 1)
+  } by method {
+    var t := 0;
+    var k := 0;
+    while k < n
+      invariant 0 <= k <= n
+      decreases n - k
+    {
+      k := k + 1;
+      t := t + k;
+    }
+    return t;
+  }
+}
+// EXPECT @20 "a postcondition could not be proved on this return path"

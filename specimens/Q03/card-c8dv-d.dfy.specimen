@@ -1,0 +1,7 @@
+// Demo for card Q03.C8dv (divergence), the Dafny column. Open it only after
+// every prediction of Q03 is recorded (scripts/firsttry.sh Q03 --check).
+// after: Q01.P10dv
+module Q03_CardC8d {
+  lemma DoubleIsSum(x: nat)
+    ensures x + x == 2 * x
+}

@@ -1,0 +1,62 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/V06"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/V06/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_v06",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 1 lint finding(s)",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 0,
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V06/src/lib.rs",
+    "kind": "external-type-specification",
+    "line": 6,
+    "message": "external_type_specification is green under --no-cheating (V6, Δ9)"
+   }
+  ],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "flip": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/V06",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "c6eef6e905694f585bd843c6bb99090ab2b875b4aeaa84582c48e7d0fcc5fa31",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V06"
+}

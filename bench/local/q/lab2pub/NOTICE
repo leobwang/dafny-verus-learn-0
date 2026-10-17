@@ -1,0 +1,86 @@
+Lab 2's public strata (bench/local/q/lab2pub/): the upstream sets, their licences and the
+change statement. The forms are tracked in the course tree with this notice (the user's
+decision D29, 2026-10-14). Each card's task form is derived from one file of a public
+benchmark set that scripts/get_bench.sh fetches on the pins (bench/manifest.toml).
+
+  vp1..vp5  HumanEval-Verus (humaneval-verus)
+            repository  https://github.com/secure-foundations/human-eval-verus
+            commit      bbe93f73b0a5802c438501f9a2106f9126bd2eea
+            licence     MIT, as fetched: the set's LICENSE at that commit (below),
+                        sha256 bcba3de214851cce46ed5af42d6698044616eeace887c3231bc7a20474ab639e
+            checked     2026-10-06: GitHub SPDX detection of LICENSE (api.github.com); the file read
+            upstream    the HumanEval prompts its files carry: OpenAI's HumanEval,
+                        https://github.com/openai/human-eval, MIT (the copyright line
+                        of the LICENSE below)
+  dp1..dp5  vericoding
+            repository  https://github.com/Beneficial-AI-Foundation/vericoding-benchmark
+            commit      387cd69996792d452ead7b0460f36ee4c5cdd148
+            licence     MIT, as fetched: the set's LICENSE at that commit (below),
+                        sha256 57c33f43220e9c50a8a5bec21d86494d17bafcdab1ce50054ecb72eade29899e
+            checked     2026-10-06: GitHub SPDX detection of LICENSE (api.github.com); the file read
+            rows        those whose source-notes say "translated directly from
+                        HumanEval Python source" (vericoding's own translations, under
+                        its MIT licence); the prose above each method is the HumanEval
+                        prompt of the same problem, as HumanEval-Verus ships it
+
+Changes (the change statement): each form is the upstream answer file with its target
+declaration's `requires` and `ensures` removed, its proofs removed (Verus: proof fns, proof
+statements and the comment lines above them, ghost lets, reveals, loop invariants and the
+spec fns only proofs use; Dafny: lemmas, assertions, calc, reveal, ghost variables, proof
+forall statements, lemma calls, loop invariants and the helper definitions only proofs use),
+the definitions only its specification used removed when they are not recursive or used
+under quantifiers (the user’s decision D28, amended by D37; they are sealed with the
+grader's hidden reference, not shipped), (Verus) each kept spec fn made `pub open` (one
+marked `closed` upstream stays closed, made `pub`), an empty witness declaration and a
+header comment added, and (Dafny) the HumanEval prompt added as a comment
+(scripts/dvl/benchstrip.py: verus-lab2-form, dafny-lab2-form; scripts/dvl/lab2pub.py).
+
+================================================================================
+HumanEval-Verus LICENSE (bench/public/humaneval-verus/LICENSE)
+================================================================================
+The MIT License
+
+Copyright (c) OpenAI (https://openai.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+================================================================================
+vericoding LICENSE (bench/public/vericoding/LICENSE)
+================================================================================
+MIT License
+
+Copyright (c) 2025 Beneficial AI Foundation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

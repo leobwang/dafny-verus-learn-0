@@ -1,0 +1,60 @@
+{
+  "func-details": {},
+  "verification-results": {
+    "encountered-error": true,
+    "encountered-vir-error": false,
+    "success": false,
+    "verified": 0,
+    "errors": 0,
+    "is-verifying-entire-crate": true
+  },
+  "times-ms": {
+    "verus-build": {
+      "profile": "release",
+      "version": "0.2026.09.27.3cf1832"
+    },
+    "num-threads": 1,
+    "total": 255,
+    "estimated-cpu-time": 255,
+    "rust": {
+      "total": 4,
+      "init-and-types": 4,
+      "trait-conflicts": 0,
+      "compile": 0
+    },
+    "verification": {
+      "total": 109,
+      "vir": {
+        "total": 109,
+        "hir": 0,
+        "import": 109,
+        "rust-to-vir": 0
+      }
+    },
+    "total-verify": 0,
+    "total-verify-module-times": [],
+    "air": {
+      "total": 0,
+      "module-times": []
+    },
+    "smt": {
+      "total": 0,
+      "smt-init": 0,
+      "rlimit-init": 0,
+      "smt-init-module-times": [],
+      "smt-run": 0,
+      "rlimit-run": 0,
+      "smt-run-module-times": []
+    }
+  },
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.09.27.3cf1832",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.98.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "3cf18325f0fd0c3040fbdec8c0f2255c0504c91a"
+  }
+}

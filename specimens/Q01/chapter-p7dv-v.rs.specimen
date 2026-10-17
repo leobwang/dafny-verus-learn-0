@@ -1,0 +1,37 @@
+use vstd::prelude::*;
+
+verus! {
+
+pub spec const BASE: nat = 0x1_0000_0000_0000_0000;
+
+pub open spec fn seq_to_nat(s: Seq<u64>) -> nat
+    decreases s.len(),
+{
+    if s.len() == 0 {
+        0
+    } else {
+        s[0] as nat + BASE * seq_to_nat(s.drop_first())
+    }
+}
+
+pub proof fn lemma_seq_to_nat_push_zero(s: Seq<u64>)
+    ensures
+        seq_to_nat(s.push(0)) == seq_to_nat(s),
+{
+    if s.len() == 0 {
+        assert(s.push(0).drop_first() =~= Seq::<u64>::empty());
+        assert(seq_to_nat(Seq::<u64>::empty()) == 0);
+    } else {
+        assert(s.push(0).drop_first() =~= s.drop_first().push(0));
+        lemma_seq_to_nat_push_zero(s.drop_first());
+    }
+}
+
+} // verus!
+
+// Chapter specimen for docs/Q01_Hello.md, section 4: the scenario of Q01.P7dv (layer
+// L1's BASE, seq_to_nat and worked proof fn, copied, with the proof fn's `decreases`
+// line removed). The chapter quotes its output; scripts/vcheck runs it once these
+// predictions are recorded.
+// after: Q01.P7dv
+// after: Q01.P8dv

@@ -1,0 +1,9 @@
+method Sub(x: nat, y: nat) returns (d: nat)
+{
+  d := x - y;
+}
+
+// Chapter specimen for docs/Q01_Hello.md, section 1: the scenario of Q01.P1dv. The
+// chapter quotes its output; scripts/vcheck runs it once these predictions are recorded.
+// after: Q01.P1dv
+// after: Q01.P8dv

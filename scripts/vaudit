@@ -1,0 +1,344 @@
+#!/usr/bin/env python3
+"""vaudit — the assumption audit (phases DV1b, DV1c).
+
+Spec §8.3, §11.1 rows 2–3, §3.13 (the pinned per-file audit report); design
+§7.1; DELTAS Δ3, Δ4, Δ7–Δ9, Δ86. The verifier grades the formal; vaudit lists
+every assumption it could not see as proved:
+
+  Dafny   `dafny audit` over the whole program with every file a root (a
+          unit's project; a file plus its given layers), every row a finding
+          (standard-library rows excepted, their count pinned), plus the Δ3
+          lint over the target's own files, which sees the whole program:
+          the silent hole kinds audit misses (dvl.dafny.audit, which lints
+          in the chosen mode). --mode agent|reference adds that mode's lint
+          (every hole form is then a finding too).
+  Verus   one --no-cheating run over the crate and each of its path
+          dependencies (the given layers its proofs trust), every hole a
+          finding unless the trust allowlist names it (<course root>/expected/
+          verus_trust.toml by default; an entry that matches nothing is a
+          finding), plus the lint in the chosen mode (dvl.verus.audit).
+
+Given layers and frozen statements (Δ44). A frozen abstract spec that the
+same program refines in full (an abstract module whose every bodyless member
+a concrete refiner defines) is a statement the program proves, not a hole,
+in a file with the given role: a given layer of a course tree
+(dafny/given/<T>/<QG|RG>_<layer>_*.dfy) or a file a registry record lists in
+`statements`. In a course tree that role comes from the path, in every mode,
+so `vaudit <unit>` and `vaudit <given layer>` already audit it clean; in a
+learner file an abstract module and its bodyless members stay findings.
+`--mode given` grants the role to every own file of a target that lies
+OUTSIDE the course tree (an out-of-tree copy of given layers, a scratch
+unit), with the learner rules; with --ref it adds the role to the reference
+rules (a reference copy of a given layer, such as the DV0 L4 spike). Inside
+the tree it refuses a target whose own files do not already have the role:
+a learner file cannot opt out of the abstract-module rule. Verus has no
+abstract-spec rule (a given crate's holes are the trust allowlist's), so
+--mode given lints a Verus target with the learner rules.
+
+An audit that did not complete is itself a finding, so "0 findings" always
+means a clean audit.
+
+Usage:
+  vaudit [--json] [--mode learner|agent|reference|given] [--trust FILE] <target>...
+  vaudit <ID> [d|v]                        every unit of a module
+  vaudit --compare expected/<name>.audit <target>
+      golden mode: the normalized report (`path:line: kind`, sorted) must
+      equal the pinned one (spec §3.13; a /contract acceptance line)
+  vaudit --write expected/<name>.audit <target>
+      write that report (authors; expected/ is frozen for study sessions)
+  vaudit --ref <target>
+      author-only: a reference target; locations and kinds only. A twin
+      runs in its learner unit; a directory of loose .dfy files that mirrors
+      no learner path (the DV0 spikes) is audited as one program (vcheck's
+      loose_dafny_unit). `--ref --mode given` audits it as a given layer.
+  vaudit --check-trust [--trust FILE]
+      the CI check of the Verus trust allowlist (dvl.verus.check_trust): the
+      allowlist's validation, then a --no-cheating audit of every given layer
+      crate under verus/given/: every given-layer hole the allowlist does not
+      name, every entry that matches no hole and every run that did not
+      complete is a finding. With no given crate and no entry it passes
+      loudly ("nothing to check").
+
+Targets are those of scripts/vcheck. Output: one line per finding,
+`path:line: kind — message` (messages state the rule or the audit issue,
+never code), then a summary line.
+
+Exit: 0 no finding (or the report matches) · 1 findings (or a mismatch) ·
+2 usage · 3 refused (unknown or planned module, missing file, refused target,
+missing toolchain).
+"""
+
+import argparse
+import importlib.machinery
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+sys.dont_write_bytecode = True
+SCRIPTS = Path(__file__).resolve().parent
+
+
+def load_core():
+    """scripts/vcheck as a module: the tools' shared core."""
+    if "vcheck" in sys.modules:
+        return sys.modules["vcheck"]
+    loader = importlib.machinery.SourceFileLoader("vcheck", str(SCRIPTS / "vcheck"))
+    spec = importlib.util.spec_from_loader("vcheck", loader)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["vcheck"] = mod
+    loader.exec_module(mod)
+    return mod
+
+
+core = load_core()
+D, V, common = core.D, core.V, core.common
+
+REPORT_HEADER = ("# vaudit report — {target} ({lang}). Pinned assumption audit (spec §3.13);\n"
+                 "# regenerate with `scripts/vaudit --write <this file> <target>`; one line per "
+                 "finding, `path:line: kind`.\n")
+
+
+MODES = ("learner", "agent", "reference", "given")
+
+
+def lint_modes(mode, ref):
+    """(Dafny lint mode, Dafny given_role, Verus lint mode) for vaudit's --mode
+    (--ref turns the default learner mode into reference)."""
+    if mode == "given":
+        return ("reference", True, "reference") if ref else ("given", False, "learner")
+    if ref and mode == "learner":
+        mode = "reference"
+    return mode, False, mode
+
+
+def audit(t, mode, trust, ref=False):
+    """[Finding] for one Target: dvl.dafny.audit (`dafny audit` plus the lint
+    over the target's own files in the chosen mode, seeing the whole program
+    so a refined frozen spec is recognized) or dvl.verus.audit."""
+    d_mode, given_role, v_mode = lint_modes(mode, ref)
+    if t.lang == "py":           # DV4: the learner Python lint (dvl.python.audit)
+        return core.PY.audit(str(t.path), lint_mode=d_mode, root=t.root)
+    if t.lang == "d":
+        return D.audit(str(t.path), lint_mode=d_mode, given_role=given_role)
+    return V.audit(str(t.path), mode=v_mode, allowlist=trust,
+                   layer=t.module["layer"] if t.module else None,
+                   root=t.root if t.module else None)
+
+
+def has_given_role(t, root):
+    """True when every own file of a target inside the course tree already has
+    the given role (a given layer, or a declared statement for Dafny; a file
+    of a crate under verus/given/ for Verus)."""
+    files = core.own_files(t)
+    if t.lang == "v":
+        rels = [core.rel_to(f, root) for f in files]
+        return bool(rels) and all(r is not None and V.GIVEN_DIR.search(r + "/") for r in rels)
+    return bool(files) and all(D._given_role(f) in ("given", "statement") for f in files)
+
+
+def check_given_mode(targets, root):
+    """--mode given is for out-of-tree copies; inside the tree it adds nothing
+    and must not let a learner file opt out of the abstract-module rule."""
+    for t in targets:
+        if core.rel_to(t.path, root) is None or core.is_reference_path(t.path, root):
+            continue
+        if not has_given_role(t, root):
+            raise core.Refusal(f"--mode given: {t.label} is not a given layer or a declared "
+                               "statement; in the course tree that role comes from the path "
+                               "(dafny/given/, verus/given/, a registry `statements` entry), "
+                               "and a learner file's abstract modules stay findings")
+
+
+def check_trust(a, root):
+    """vaudit --check-trust: dvl.verus.check_trust over the course root."""
+    crates = V.given_crates(root)
+    try:
+        entries = len(V.load_trust(str(a.trust) if a.trust else None, root=root))
+    except V.TrustError:
+        entries = None                    # check_trust reports each problem
+    allow = core.show(a.trust, root) if a.trust else "expected/verus_trust.toml"
+    if not crates and entries == 0:
+        print(f"vaudit --check-trust: no given crate under verus/given/ and no entry in {allow}: "
+              "nothing to check (passing loudly)")
+        return core.EXIT_OK
+    found = V.check_trust(str(a.trust) if a.trust else None, root=root)
+    if any(f.kind == "audit-incomplete" and "get_toolchain" in f.message for f in found):
+        print("vaudit: a pinned toolchain is missing or altered: run "
+              "scripts/get_toolchain.sh verus", file=sys.stderr)
+        return core.EXIT_REFUSED
+    if a.json:
+        print(json.dumps({"check_trust": True, "given_crates": len(crates),
+                          "findings": [dict(file=f.file, line=f.line, kind=f.kind,
+                                            message=f.message) for f in found]},
+                         ensure_ascii=False, sort_keys=True))
+    else:
+        for f in found:
+            print(f"{core.show(f.file, root)}:{f.line}: {f.kind} — {f.message}")
+        n = "an invalid allowlist" if entries is None else \
+            f"{entries} trust entr{'y' if entries == 1 else 'ies'}"
+        print(f"vaudit --check-trust: {len(crates)} given crate(s) under verus/given/, {n} "
+              f"({allow}): {len(found)} finding(s)")
+    return core.EXIT_OK if not found else core.EXIT_FAIL
+
+
+def report_lines(findings, root):
+    """The normalized report: `path:line: kind`, sorted, one per finding."""
+    return sorted({f"{core.show(f.file, root)}:{f.line}: {f.kind}" for f in findings})
+
+
+def read_report(path):
+    lines = []
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        s = line.strip()
+        if s and not s.startswith("#"):
+            lines.append(s)
+    return sorted(set(lines))
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="vaudit", description="The assumption audit.")
+    ap.add_argument("targets", nargs="*", metavar="TARGET")
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--mode", choices=MODES, default="learner")
+    ap.add_argument("--trust", type=Path, help="Verus trust allowlist (default "
+                                               "expected/verus_trust.toml)")
+    ap.add_argument("--check-trust", action="store_true",
+                    help="CI: audit every given crate against the trust allowlist")
+    ap.add_argument("--lang", choices=core.MODULE_LANGS)
+    ap.add_argument("--module", help="a module id: its units")
+    g = ap.add_mutually_exclusive_group()
+    g.add_argument("--compare", type=Path, metavar="FILE", help="compare with a pinned report")
+    g.add_argument("--write", type=Path, metavar="FILE", help="write the pinned report")
+    ap.add_argument("--ref", action="store_true", help="author-only: a reference target")
+    ap.add_argument("--root", type=Path, default=core.REPO, help=argparse.SUPPRESS)
+    try:
+        a = ap.parse_args(sys.argv[1:] if argv is None else argv)
+    except SystemExit as e:
+        return core.EXIT_USAGE if e.code else 0
+    root = a.root.resolve()
+    try:
+        if a.trust is not None and not a.trust.is_file():
+            raise core.Refusal(f"{a.trust}: no such trust allowlist")
+        if a.check_trust:
+            if a.targets or a.module or a.lang or a.compare or a.write or a.ref or \
+                    a.mode != "learner":
+                raise core.Usage("--check-trust takes no target and no other mode "
+                                 "(only --trust FILE and --json)")
+            return check_trust(a, root)
+        args = list(a.targets)
+        modid = a.module
+        langs = [a.lang] if a.lang else None
+        if modid is None and args and core.ID_RE.fullmatch(args[0]) and not Path(args[0]).exists():
+            modid = args.pop(0)
+            if args and args[0] in core.MODULE_LANGS:
+                langs = [args.pop(0)]
+        if modid is not None:
+            if args:
+                raise core.Usage("a module id takes no other target")
+            if not core.ID_RE.fullmatch(modid):
+                raise core.Usage(f"--module {modid!r}: a module id like Q04")
+            targets = core.module_targets(root, core.record(root, modid), langs)
+        else:
+            if not args:
+                raise core.Usage("nothing to audit: name a file, a unit, or a module id")
+            targets = [core.path_target(root, x, a.lang, loose_dir=a.ref) for x in args]
+        if (a.compare or a.write) and len(targets) != 1:
+            raise core.Usage("--compare and --write take exactly one target")
+        if a.ref:
+            core.require_author(root, "vaudit --ref")
+        for t in targets:
+            refpath = core.is_reference_path(t.path, root)
+            if refpath and not a.ref:
+                raise core.Refusal(f"{t.label} is reference material: vaudit never prints it "
+                                   "(the author's CI audits it by name)")
+            if a.ref and not refpath:
+                raise core.Usage(f"--ref is for reference targets; {t.label} is not one")
+            if not a.ref:
+                core.h5_guard(root, t)
+        if a.mode == "given":
+            check_given_mode(targets, root)
+        trust = str(a.trust) if a.trust else None
+        mode = a.mode if a.mode == "given" else lint_modes(a.mode, a.ref)[0]
+        if a.ref and a.mode == "given":
+            mode = "reference, given"
+        all_findings, per_target = [], []
+        for t in targets:
+            shadow, run_t, src, dst = core.run_context(t, root, a.ref)
+            try:
+                found = audit(run_t, a.mode, trust, ref=a.ref)
+                if shadow is not None:
+                    found = core.remap_findings(found, src, dst)
+            finally:
+                core.remove_tree(shadow)
+            per_target.append((t, found))
+            all_findings += found
+        if any(f.kind == "refused" for f in all_findings):
+            for f in all_findings:
+                if f.kind == "refused":
+                    print(f"vaudit: refused: {core.show(f.file, root)}: {f.message}",
+                          file=sys.stderr)
+            return core.EXIT_REFUSED
+        if any(f.kind in ("toolchain",) or (f.kind == "audit-incomplete" and
+                                            "get_toolchain" in f.message)
+               for f in all_findings):
+            print("vaudit: a pinned toolchain is missing or altered: run "
+                  "scripts/get_toolchain.sh dafny|verus", file=sys.stderr)
+            return core.EXIT_REFUSED
+        lines = report_lines(all_findings, root)
+        if a.write:
+            t = targets[0]
+            a.write.parent.mkdir(parents=True, exist_ok=True)
+            body = REPORT_HEADER.format(target=t.label, lang=core.POOL[t.lang])
+            body += "".join(f"{x}\n" for x in lines) + f"# findings: {len(lines)}\n"
+            a.write.write_text(body, encoding="utf-8")
+            print(f"vaudit: wrote {core.show(a.write, root)} ({len(lines)} finding(s))")
+            return core.EXIT_OK
+        if a.compare:
+            if not a.compare.is_file():
+                print(f"vaudit: {a.compare}: no pinned report (a missing pin fails)",
+                      file=sys.stderr)
+                return core.EXIT_FAIL
+            want = read_report(a.compare)
+            missing = [x for x in want if x not in lines]
+            extra = [x for x in lines if x not in want]
+            for x in missing:
+                print(f"- {x}")
+            for x in extra:
+                print(f"+ {x}")
+            same = not missing and not extra
+            print(f"vaudit: {targets[0].label}: {'matches' if same else 'DIFFERS FROM'} "
+                  f"{core.show(a.compare, root)} ({len(lines)} finding(s); "
+                  f"{len(missing)} missing, {len(extra)} new)")
+            return core.EXIT_OK if same else core.EXIT_FAIL
+        if a.json:
+            out = [{"target": str(t.path), "lang": core.POOL[t.lang],
+                    "findings": [dict(file=f.file, line=f.line, kind=f.kind,
+                                      message="" if a.ref else f.message)   # --ref: no message
+                                 for f in found]} for t, found in per_target]
+            print(json.dumps(out[0] if len(out) == 1 else out, ensure_ascii=False,
+                             sort_keys=True))
+        else:
+            for t, found in per_target:
+                for f in found:
+                    where = f"{core.show(f.file, root)}:{f.line}"
+                    print(f"{where}: {f.kind}" if a.ref else f"{where}: {f.kind} — {f.message}")
+                print(f"vaudit: {t.label} [{core.POOL[t.lang]}, {mode}]: "
+                      f"{len(found)} finding(s)")
+        return core.EXIT_OK if not all_findings else core.EXIT_FAIL
+    except core.Usage as e:
+        print(f"vaudit: {e}", file=sys.stderr)
+        return core.EXIT_USAGE
+    except core.Refusal as e:
+        print(f"vaudit: refused: {e}", file=sys.stderr)
+        return core.EXIT_REFUSED
+    except common.ToolchainError as e:
+        print(f"vaudit: {e}; run scripts/get_toolchain.sh dafny|verus", file=sys.stderr)
+        return core.EXIT_REFUSED
+    except common.CapError as e:
+        print(f"vaudit: {e}", file=sys.stderr)
+        return core.EXIT_FAIL
+
+
+if __name__ == "__main__":
+    sys.exit(main())

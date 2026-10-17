@@ -1,0 +1,17 @@
+# Test fixture (tests/wrappers): an invented layer crate with holes a trust
+# allowlist may name (dependency holes, dvl.verus module docstring).
+[package]
+name = "tdep"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+
+[package.metadata.verus]
+verify = true

@@ -1,0 +1,10 @@
+// Demo for card Q03.C1d (write:ghost), the failure half: a ghost value used by
+// compiled code.
+// EXPECT @8 "ghost variables such as g are allowed only in specification contexts"
+module Q03_CardC1d {
+  method LimbCount(s: seq<nat>) returns (n: nat)
+  {
+    ghost var g := |s|;
+    n := g;
+  }
+}

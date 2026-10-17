@@ -1,0 +1,23 @@
+# The ONE list of modules whose agentic exercise the learner writes by hand,
+# with no AI session, while the registry's `agentic` list is empty (DELTAS
+# Δ114). Two readers, no copy anywhere else:
+#   - /contract (SKILL.md, Step 0 item 4) refuses such a module with the
+#     entry's `refusal` line, verbatim;
+#   - scripts/chapter_lint.py requires the module's chapter to have an
+#     `Exercise (agentic)` section that names `exercise` and quotes `refusal`,
+#     and fails an entry whose module has a non-empty `agentic` list (then
+#     /contract runs for it, and the entry is stale).
+# A later phase that ships another hand-written agentic exercise with an empty
+# `agentic` list adds a table here and nowhere else. R01 needs none: its
+# learner also writes contract v0, but its record lists repair files, so
+# /contract R01 runs (Δ114).
+#
+# One table per module id; each has exactly these three keys:
+#   exercise   the exercise's name, as the chapter names it
+#   where      where the learner writes it (for the contractor's own reading)
+#   refusal    the one-line refusal, which names the module and the exercise
+
+[Q03]
+exercise = "contract v0"
+where = "the `### Q-v0 — Q03` section below the `<!-- learner-owned below: contract v0/v1/v2 -->` marker in `CLAUDE.md`"
+refusal = "Q03's agentic exercise is contract v0, which you write by hand with no AI session, below the learner-owned marker in CLAUDE.md, so /contract is closed for it."

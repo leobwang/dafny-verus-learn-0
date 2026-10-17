@@ -1,0 +1,7 @@
+# The delivery's project file (a companion of specimens/Q18/P2d.dfy.specimen; a copy for
+# reading: the course never runs a delivery's own configuration). The delivery's build
+# was `dafny verify --project dfyconfig.toml`.
+includes = ["P2d.root.dfy"]
+
+[options]
+standard-libraries = true

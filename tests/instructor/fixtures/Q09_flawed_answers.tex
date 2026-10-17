@@ -1,0 +1,166 @@
+% Q09_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q09_answers.tex (spec §4.7, §6.12). Three of the
+% four problems carry one planted flaw each; B2 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q09_rubric.md), never by eye. B3's rows name the
+% forensic deliveries' species: this file is reference-class (Δ125).
+%
+% EXPECTED[B1][recomputation][2]: (a) drops the factor 2 under the root (2 p0 q0 / n written as p0 q0 / n = 0.00525), so delta1 is 0.2030 instead of 0.2871. The finding must locate that step and exhibit Probe A's row "var_term  0.00525  0.0105  0.0105  ERROR ENTERS HERE"; the rows root, delta1, p1, pbar, root_a, root_b and n_at_delta1 read "inherited" and are not separate flaws ((b)'s n(delta1) = 90.3 is right for the answer's own delta1, and its "not detectable" follows from it). (b)'s fvh.stats value and substitution, (c) and (d) are correct and must draw no flaw.
+% EXPECTED[B2][recomputation][4]: correct, no finding (every row of Probe B reads ok). A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B2][correctness][4]: (b) correct, no finding.
+% EXPECTED[B3][correctness][2]: (a)'s P10d row accuses a healthy delivery: it claims `scripts/vcheck --brittleness --solvers specimens/Q09/P10d.dfy.specimen` printed "4.14.1 seed 2: inconclusive". The finding must exhibit Probe C's re-run of that command, whose first line ends "4.14.1 seed 3: verified — stable" with all six rows verified (CO.c, CO.e). The other nine rows reproduce, no two catching rows share an instrument, and (b) (P8d by a witness, which fails at the call's precondition) and (c) are correct.
+% EXPECTED[B4][card-fidelity][2]: Metric — the field gives CryptoProver with fable-5 2,114 verified and the opus-4.8 replication 2,031; pinned lines 2865 and 2867 give 2,031 to fable-5 and 2,114 to the replication. The finding must quote those lines (CF.c, CF.e).
+% EXPECTED[B4][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Budget, Variance and Artifact — correct, no finding (lines 2854, 2856, 2858, 2864–2871). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2, B4 = 2.
+% A calibration run FAILS if B1, B3 or B4 scores >= 3, if a planted finding does not locate
+% its step, row or field (with the probe row, the re-run output or the quoted lines named
+% above), or if ANY flaw is reported on B2 or on a B4 field other than Metric.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q09 --- Internals III: brittleness, forensics, gate core \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} \\
+$p_0 q_0 = 0.3 \times 0.7 = 0.21$ \quad $p_0 q_0 / n = 0.21/40 = 0.00525$ \quad its
+root $= 0.07246$ \\
+$z_a + z_b = 1.96 + 0.8416 = 2.8016$ \quad $\delta_1 = 2.8016 \times 0.07246 = 0.2030$
+
+\textbf{(b)} \\
+$p_1 = 0.3 + 0.2030 = 0.5030$ \quad $\bar p = (0.3 + 0.5030)/2 = 0.4015$ \\
+$\sqrt{2 \bar p \bar q} = \sqrt{2 \times 0.4015 \times 0.5985} = 0.6933$ \quad
+$\sqrt{p_0 q_0 + p_1 q_1} = \sqrt{0.21 + 0.5030 \times 0.4970} = 0.6782$ \\
+$n(\delta_1) = (1.96 \times 0.6933 + 0.8416 \times 0.6782)^2 / 0.2030^2 =
+1.9296^2 / 0.04121 = 90.3$ \quad detectable at $n = 40$: no, it needs about 90
+tasks per arm. \\
+\texttt{fvh.stats.mde\_two\_proportions(40, 0.3)} $= 0.3073$ \quad $n$ at that
+value: $(1.96 \times 0.7041 + 0.8416 \times 0.6697)^2 / 0.3073^2 = 3.7775/0.09444 =
+40.0$, which checks.
+
+\textbf{(c)} $n(0.10) = (1.96 \times 0.6745 + 0.8416 \times 0.6708)^2 / 0.01 =
+1.8867^2/0.01 = 356$ tasks per arm. \\
+What the pre-registration must say or change: with 40 tasks per arm the lab can
+only detect a rise of about 31 points, so a 10-point rise is invisible. It must
+state that MDE before the run and either claim only effects of that size or
+move to about 356 tasks per arm, before any result is seen.
+
+\textbf{(d)} The paired value: $0.3181$. \\
+Why it is conservative: the formula plugs in the discordance rate two
+independent arms would have, and arms run on the same tasks agree more often,
+so they discord less and their real MDE is below this value.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} mean $= (38\,400 + 45\,900 + 66\,300)/3 = 50\,200$ \\
+sum of squared deviations $= 11\,800^2 + 4\,300^2 + 16\,100^2 = 416\,940\,000$
+\quad variance (divisor 3) $= 138\,980\,000$ \\
+standard deviation $= 11\,789.0$ \quad CV $= 11\,789/50\,200 = 0.235$ \quad
+flagged: yes, it is above 20\,\%.
+
+\textbf{(b)} Stable: no \quad the row that decides: 4.14.1 seed 3, out of
+resource; stable needs every one of the six rows verified. \\
+What the CV adds: nothing to the decision; the flag is advisory and only says
+the cost moves a lot between seeds. \\
+Why the two solvers' counts are not pooled: they are counts of two different
+solvers' searches, so mixing them would measure the solver change, not the
+noise across seeds.
+
+\textbf{(c)} \texttt{fvh.stats.wilson\_interval(17, 22)} $= (0.566,\ 0.899)$ \\
+The claim sentence: 17 of my 22 Dafny proofs of Q04--Q09 are stable under both
+bundled solvers and seeds 1--3 (77\,\%, 95\,\% Wilson interval 0.57--0.90);
+one machine, one solver pair, three seeds, and I wrote the proofs I measured.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+\textbf{(a)} The ten rows, as in \texttt{research/q09\_forensics.md}:
+% Paste the rows between the two lstlisting lines; long rows wrap on the page only.
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible]
+item  | true? | valid? | useful? | instrument (command)                    | root cause
+P6d   | yes   | no: MulLimbCLength is assumed | yes | the audit: scripts/vaudit specimens/Q09/P6d.dfy.specimen -> 2 finding(s) at line 65 (assume-axiom, audit-assume-axiom) | the length step is an assume {:axiom}, never proved
+P7d   | yes   | no: AddCCommutes is never verified | yes | the lint: scripts/vcheck --gate specimens/Q09/P7d.dfy.specimen -> failed, warnings-fail-gate (W-D04) on the {:verify false} warning at 78:25 | verification switched off on the helper
+P8d   | yes, vacuously | yes | no: no limbs meet the requires | swap to false: copy with ensures false, scripts/vcheck --gate specimens/Q09/P8d-swap.dfy.specimen -> verified, 2 verified, 0 holes, 0 errors | x + d >= 2 * BASE contradicts x < BASE and d < BASE
+P9d   | yes   | yes    | no: <= 0 instead of == 0 | the freeze diff: scripts/specfreeze --against specimens/Q09/P9d-frozen.dfy.specimen specimens/Q09/P9d.dfy.specimen -> freeze-changed, Q09_P9.CmpSelf, line 61 | the delivered ensures is weaker than the frozen one
+P10d  | yes   | no: holds only on some seeds | yes | another seed or solver: scripts/vcheck --brittleness --solvers specimens/Q09/P10d.dfy.specimen -> 4.14.1 seed 2: inconclusive | the assert's proof depends on the seed
+P11v  | no    | no: last_limb is external_body | yes as stated | compiled code on new inputs: copy with test two_limbs (limbs [1, 2], expects 2), scripts/vcheck --test specimens/Q09/P11v-test.rs.specimen -> 2 passed, 1 failed, FAILED delivery_tests::two_limbs | the trusted helper returns the first limb; the delivery's tests only use one-limb numbers
+P12v  | unknown | no: add_three is outside verus! | no: nothing states its claim to the verifier | JSON completeness: scripts/vcheck --json specimens/Q09/P12v.rs.specimen -> "verdict": "verified", "verified_count": 0 | the function is never verified
+P13v  | yes, vacuously | yes | no: no sequence meets the requires | the witness: scripts/vcheck --gate specimens/Q09/P13v-witness.rs.specimen -> failed, precondition not satisfied at 22:5 | s.last() == 0 contradicts seq_wf(s)
+P14v  | yes   | yes    | no: the antecedent reads s[2] | a property sampler: copy with sample() asserting s[1] == 0 and high_limbs_zero(s) for s = seq![5u64, 0u64], scripts/vcheck specimens/Q09/P14v-sample.rs.specimen -> assertion failed at 66:12 | the quantifier's bound runs one past the end
+P15v  | yes   | yes    | yes     | none: gate verified (1), vaudit 0 finding(s) | healthy
+\end{lstlisting}
+The lines each copy changed (one line per copy, if any): P8d-swap: its
+\texttt{ensures} became \texttt{ensures false}. P11v-test: a test
+\texttt{two\_limbs} added to \texttt{delivery\_tests}, building
+\texttt{BigNat \{ limbs: vec![1u64, 2u64] \}} and asserting \texttt{top\_limb} is
+2. P14v-sample: \texttt{proof fn sample()} added inside \texttt{verus!}, with
+\texttt{let s = seq![5u64, 0u64]; assert(s[1] == 0); assert(high\_limbs\_zero(s));}.
+
+\textbf{(b)} The delivery: P8d \quad the second instrument: a satisfiability
+witness, \texttt{CarryIsLimb(1, 1, 1)} in a lemma added to a copy, under
+\texttt{scripts/vcheck --gate}: \texttt{a precondition for this call could not
+be proved} (48:16). \\
+What each sees: the swap shows the premises prove anything, \texttt{false}
+included; the witness shows that not even the claim's own small limbs meet
+them.
+
+\textbf{(c)} P15v: \texttt{scripts/vcheck --gate specimens/Q09/P15v.rs.specimen}
+printed \texttt{verified --- 1 verified, 0 holes, 0 errors}, and
+\texttt{scripts/vaudit specimens/Q09/P15v.rs.specimen} printed \texttt{0
+finding(s)}.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 07.2, lines 2852--2873 (the pinned range).
+
+\textbf{Task shape:} the agent writes the internal specifications and every
+Verus proof of curve25519-dalek, given fixed API contracts, code, spec
+vocabulary, trusted library and target order, and changes no executable code;
+it also verifies RustCrypto chacha20 against RFC 8439.
+
+\textbf{Oracle:} whole-crate Verus verification, judged by a Python driver on
+independent evidence rather than the agent's report, through eight mechanical
+gates over before/after snapshots (admit count down, no new axioms,
+byte-identical specs, siblings re-verified, frozen files untouched, no new
+\texttt{assume} or \texttt{external\_body}, tooling drift, git recovery).
+
+\textbf{What is trusted:} Verus and Z3, the trusted library with its 48
+pre-existing axioms and vstd, and the human-written contracts, spec vocabulary
+and proof order; the gates only block the cheats they list. Only functional
+correctness is claimed, not constant time or side channels.
+
+\textbf{Cheat surface:} admits, made-up axioms, spec drift, frozen-file edits,
+new assumes or external bodies, sibling breaks; the prompt-only campaign
+claimed 97.1\,\% and its audit found 11 fabricated axioms and 5 sibling breaks.
+
+\textbf{Metric:} verified obligations and errors per run: CryptoProver with
+fable-5 2,114 verified, the opus-4.8 replication 2,031; proof-only whole crate
+1,430 of 1,433 obligations; the raw Claude Code baseline ended with 5 compiler
+and 2 verification errors; chacha20 in one round.
+
+\textbf{Budget:} fable-5 11.4 h and USD 466.99; baseline 7.42 h and USD
+1,117.17; opus-4.8 replication 62.3 h and USD 856.55; chacha20 15 minutes and
+USD 4.14; proof-only USD 748.02. The comparison with eight months of human work
+is not like-for-like.
+
+\textbf{Variance:} none: every configuration ran once and was tuned on the
+crate it was evaluated on; the \texttt{nonlinear\_arith} proofs may be fragile on
+large goals, and no seed sweep is reported.
+
+\textbf{Artifact:} CryptoProver (Claude Code, six skills, eight gates, a Python
+driver) and the verified crates, arXiv 2608.00965; the range does not say what
+is released.
+\end{answer}
+
+\end{document}

@@ -1,0 +1,91 @@
+# expected/Q11.freeze — statement-freeze pins for Q11 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q11` from the files as shipped; checked by
+# `scripts/specfreeze --check Q11`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q11"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q11_PracticeIB/std/Q11_PracticeIB.dfy"
+lang = "d"
+open_bodies = ["Q11_PracticeIB.AddCanon", "Q11_VcAnswer.Pre1", "Q11_VcAnswer.Pre2"]
+[file.statements]
+"Q11_PracticeIB.AddCanon" = "c34284a8d546dc7d7a5e0dd11467b99d08a8d5d86ab0664a15a5fd2d1a4c77a2"
+"Q11_PracticeIB.AddCanonCheck" = "d83da1d0ca529597085fdeb3d03892cc31af959be5adbdb83b080a253e508398"
+"Q11_PracticeIB.CanonSeq" = "b31fde736a470e75f67eecd3f035f3bfccf7940e9799e16e48caea6d4f39d3a5"
+"Q11_PracticeIB.CopyCheck" = "b4249824bd4b06c039e50d3036cae6a8b683fba07acd7e410e05bdd665f57fc0"
+"Q11_PracticeIB.LimbVec.CopyFrom" = "373e9d621bf6f819ced1ffd88127b067bfe2890f41e9f78733dd683fc78e0534"
+"Q11_PracticeIB.LimbVec.Set" = "7b81edfaa1037a8aa39ef2e929bb24bb8c26bb536f854e4359ef444cb94fc694"
+"Q11_PracticeIB.LimbVec.Valid" = "dbcde4ff7a1a5ff17eb50c6247abcb0fb2d1f278175a12e2885365171db276dd"
+"Q11_PracticeIB.LimbVec._ctor" = "8182b9ec42c9fae025dc20839af1812e8d098afcbce83edc0ffc6d90f40709d3"
+"Q11_PracticeIB.SetCheck" = "0933259eb039dc6605d66e8a5d3de0ae6680299fad92bf36be548afed5f2511d"
+"Q11_VcAnswer.Pre1" = "8e83df39d0355f9b4b8d868f633c3f0588fe6efe8805c230e0cb4bc37d61fa67"
+"Q11_VcAnswer.Pre2" = "012b741fd61c6b76a8607dd43c90da3769c95f36a01affa681c2cfe3471dd4f7"
+"Q11_VcCheck.Pre1Exact" = "67233510a76c02f5ed19e61055578dc3a1cdf8899738af43ee955bdc442cc76a"
+"Q11_VcCheck.Pre2Exact" = "3a6305214a28dba4e3cb911dbe404ae67c26b39305bf7866bde2b1f065b07933"
+"Q11_VcProg.Post1" = "a1b60ffebee50296babc6cf61c4fab64d3642716fde6e2299530b1182d4493a1"
+"Q11_VcProg.Post2" = "e537ca7e264ee3dc50dfc653b88545d39f9841393be259af68889675cf40063e"
+"Q11_VcProg.Prog1" = "0da3cb1a2d018e25e174c1e28e676a35b81f9798af7ec624d7305431d59bb974"
+"Q11_VcProg.Prog2" = "cc3841eccccb706f91be0a185c05a05005c5d407587a56885751c3f3ed2c0958"
+[file.frozen_imports]
+"Q11_VcAnswer" = []
+
+[[file]]
+path = "dafny/Q/Q11_PracticeIB/std/Q11_Wp.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q11_Wp {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q11_Wp.BExp" = "6f489129a64107b6a9c287fa1ec23c3fdd7e3930c787b1ecca005bc8b4b957b0"
+"Q11_Wp.Cmd" = "e83e6334252f443376503ee4bbb72eac3d3d8121ccd441d6ec70e8c6dbb7bb8c"
+"Q11_Wp.Eval" = "a554e449f09c3623e043136b51c4920075b6af14559103521da81e159fcf3f7b"
+"Q11_Wp.Exec" = "f36bd5410f5ff0c79c2934bff54b2e8694544004fed3e2fa6468402fb3dbbd20"
+"Q11_Wp.Expr" = "aca5907b088033677cc64c33176b7754f5f5af5945d4fb10d9bb6e80410847d7"
+"Q11_Wp.Holds" = "18ed0a9689e47e24ccab481ae7c0667cbe0bc4b1dcb1bf993b519970f7a59b9b"
+"Q11_Wp.State" = "98995003eeda3f8b4d4d7b5e891bab7d71c2b19bb92eb8a61a2f9f12667d8e08"
+"Q11_Wp.SubstB" = "6c82fb3718ca92e28b23977e35c4fc970eb38cbacafa0c1ee48b83cbb9bf9f9d"
+"Q11_Wp.SubstE" = "037decab6b3511a5be721f732d93318cc5f36220ceaf73ace8b62bde2fa7bc32"
+"Q11_Wp.Wp" = "3bbcb0d9a4f05f0a26018286fc4f80985156a3db84a5ff600cdcc08010657b5d"
+"Q11_Wp.WpSoundIfThen" = "78bb3b9ef93a6d880a841d05747699da0ae1ef439361e78f6826c6a5329a8437"
+
+[[file]]
+path = "verus/q/q11_practice_ib/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Acc" = "2f01f2e1c93f3def7583b827bfaade8376901389cee117c573373fff63deaaf0"
+"Acc::add_word" = "ff8237a66f0e2b7e901f5795409d4e50da3f646fd9149b118fd83b2446fb62a8"
+"Acc::take_if_at_least" = "723718ee8677794e96f6bfa9f03718455536296cb903f73b8cab04362b29ea53"
+"AccError" = "1bb07546775e0a92688816466ac3a667a95593aa67401da69b37e3d2a3e8ca2b"
+"acc_check" = "56301e02d928f2d7351ee83f4d2f5ceda8d221a825301ccdd2ff9a8ce47e1a98"
+"value_two" = "3a34244938d462563028f285febd845355e790e548600a382b7c3653b104306a"
+"value_two_check" = "7cfe50c38b2f5895a63fcbe1cbe8d6c4f95935e9b6d265acd4daa8dbc2d54a16"
+
+[[file]]
+path = "verus/q/q11_practice_ib/src/perm.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"max_into" = "6396264c58812b1bf47589f29f238abad29bb485a52d5bc94eed936324065dc1"
+"max_into_check" = "653f4554070cb93b5d7901f3de36cafbc0abd2211666757bb72b7fa5c993cc5d"
+
+[[file]]
+path = "dafny/Q/Q11_PracticeIB/exit/Q11_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q11_Exit.Digits" = "e17841dcbc8e10dc1cd13a39571bfe2e2d56b91009d6c3cf013541937de651d2"
+"Q11_Exit.DigitsLength" = "4dc94cbb3ca1846c3df6686bfb2832253f55a7bf99d386039e55421dd398bfe9"
+
+[[file]]
+path = "verus/q/q11_practice_ib/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Counter2" = "cb46aee092d7f0dc822fbe63e1a747aff5715e8e10f499367104f4f7c9fec6b8"
+"Counter2::incr" = "40191255e64d61c7eb583656b40f424d39c64a491f4547d849afd8fa89c1a899"
+"Counter2::value" = "634a5d6674a45d548aba9741c21ea8c0985eed8fef063bed660baf4e3b09f4a1"

@@ -1,0 +1,22 @@
+// Card Q02.C5d (frames on arrays), the failure demo: a caller of CardSwapLimbs (copied from
+// the exercise file) that relies on an element the call's postcondition does not mention.
+// Open it only after your Q02 predictions are committed.
+// EXPECT @20 "assertion might not hold"
+module Q02_CardC5d {
+  method CardSwapLimbs(a: array<nat>, i: nat, j: nat)
+    requires i < a.Length && j < a.Length
+    modifies a
+    ensures a[i] == old(a[j]) && a[j] == old(a[i])
+  {
+    a[i], a[j] := a[j], a[i];
+  }
+
+  method SwapEnds(a: array<nat>)
+    requires a.Length == 3
+    modifies a
+  {
+    var mid := a[1];
+    CardSwapLimbs(a, 0, 2);
+    assert a[1] == mid;
+  }
+}

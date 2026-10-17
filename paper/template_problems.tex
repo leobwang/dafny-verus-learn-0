@@ -1,0 +1,114 @@
+% template_problems.tex — structure template for paper/<ID>_problems.tex.
+% The author copies it to <ID>_problems.tex (<ID> = Q04, R06, ...) and replaces
+% every demo problem. `make paper` does NOT build this file (it builds only
+% [RQ][0-9][0-9]_problems.tex / _answers.tex pairs), but it compiles standalone:
+%   latexmk -pdf template_problems.tex
+%
+% Conventions:
+%   * one \begin{problem}[<type>] ... \end{problem} per problem, labelled B1, B2,
+%     ... with \label{prob:B<n>} (P<n> is a predict item, so written problems are
+%     B<n> on both tracks). The grader's % GRADER[B<n>][...] notes key off these.
+%   * types: [hand-calculation], [informal-proof-first], [concept], [paper-card],
+%     [pre-registration], [lab-report]. A problem of another kind (a proposal, a
+%     memo, a challenge sketch) gets its dimension labels from the module rubric.
+%   * an informal-proof-first problem MUST say what will later be formalized:
+%     the learner's proof becomes the blueprint a contractor formalizes.
+%   * a hand-calculation problem is recomputed from the rubric's verifier
+%     anchors, whose answer key is an executable check, never a verifier-only
+%     assert.
+%   * a paper-card problem pins its cheatsheet line range with a sha256 and says
+%     exactly how to hash it.
+%   * a pre-registration answer goes between the PREREG marker lines of the
+%     answers template; /grade-paper hashes exactly those lines.
+%   * a lab-report problem asks for a "Reproduce:" command that regenerates every
+%     table from the logs in research/runs/.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{XNN --- Module Title \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{XNN\_answers.tex}. \texttt{make -C paper paper} must stay
+green: a non-compiling answer set is the written track's red build. Run
+\texttt{/grade-paper XNN} in a fresh session \emph{before} you formalize
+anything and before any lab run; compare with \texttt{paper/solutions/} only as
+the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+For the fragment $c$ and the postcondition $Q$ below, compute $\WP{c}{Q}$ one
+rule at a time, naming the rule used at each step, and state the verification
+condition $P \impl \WP{c}{Q}$ that the verifier would have to discharge.
+\begin{dafnycode}
+method Demo(x: int) returns (y: int)
+  requires DemoPre(x)
+  ensures DemoPost(x, y)
+\end{dafnycode}
+(Structure demo: replace with the module's real problem.)
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B2}
+Write the full informal proof of the statement below \emph{before}
+formalizing it, in both languages' terms where they differ. State the induction
+hypothesis or the loop invariant precisely, as a formula, and give the
+\texttt{decreases} measure.
+\begin{dafnycode}
+lemma DemoLemma(xs: seq<int>)
+  ensures DemoSpec(xs)
+\end{dafnycode}
+\begin{veruscode}
+proof fn demo_lemma(xs: Seq<int>)
+    ensures demo_spec(xs),
+\end{veruscode}
+What will be formalized: \texttt{DemoLemma} and \texttt{demo\_lemma}, with every
+helper lemma your proof names. Your proof doubles as the blueprint a contractor
+could formalize without inventing any statement. (Structure demo.)
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B3}
+The sequencing rule of a Hoare logic reads
+\begin{mathpar}
+  \inferrule[Seq]
+    {\hoare{P}{c_1}{R} \\ \hoare{R}{c_2}{Q}}
+    {\hoare{P}{c_1 \seqc c_2}{Q}}
+\end{mathpar}
+In 2--3 sentences: \emph{(a structure demo of a concept question; replace it
+with the module's real question, which the grader will try to counterexample).}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B4}
+Fill the card for cheatsheet entry \texttt{NN.N} on its eight fields (task
+shape, oracle, trust, cheat surface, metric, budget, variance, artifact), each
+from the pinned range of \texttt{cheatsheets.md}, lines $a$--$b$, sha256
+\texttt{PENDING}, hashed as
+\verb+sed -n 'a,bp' cheatsheets.md | sha256sum+. (Structure demo.)
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[pre-registration]\label{prob:B5}
+Pre-register this module's lab in the PREREG section of your answers file,
+on every field of the template. The run unlocks only when
+\texttt{/grade-paper XNN} scores every method dimension at least 3, and the
+harness refuses a run whose pre-registration hash is not on that unlocked
+gradebook row. (Structure demo.)
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[lab-report]\label{prob:B6}
+After the runs, report the experiment against its pre-registration: every table
+regenerated by your \emph{Reproduce} command from the logs in
+\texttt{research/runs/}, every deviation, the cheat audit, variance and
+intervals, contamination, and the disclosure block. It is graded with
+\texttt{/grade-paper XNN --report}, on method and reproducibility, never on
+the numbers. (Structure demo.)
+\end{problem}
+
+\end{document}

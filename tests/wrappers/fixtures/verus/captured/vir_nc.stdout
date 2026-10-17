@@ -1,0 +1,48 @@
+{
+  "func-details": {},
+  "verification-results": {
+    "encountered-error": true,
+    "encountered-vir-error": true,
+    "success": false
+  },
+  "times-ms": {
+    "verus-build": {
+      "profile": "release",
+      "version": "0.2026.09.27.3cf1832"
+    },
+    "num-threads": 1,
+    "total": 288,
+    "estimated-cpu-time": 288,
+    "rust": {
+      "total": 5,
+      "init-and-types": 5,
+      "trait-conflicts": 0,
+      "compile": 0
+    },
+    "verification": {
+      "total": 107,
+      "vir": {
+        "total": 107,
+        "hir": 2,
+        "import": 105,
+        "rust-to-vir": 0
+      }
+    },
+    "total-verify": 0,
+    "total-verify-module-times": [],
+    "air": {
+      "total": 0,
+      "module-times": []
+    }
+  },
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.09.27.3cf1832",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.98.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "3cf18325f0fd0c3040fbdec8c0f2255c0504c91a"
+  }
+}

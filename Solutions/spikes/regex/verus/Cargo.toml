@@ -1,0 +1,9 @@
+# DVR0 (Verus): the regex artifact layers A1, A1b, A2-A5 (PLAN §2.2) as one crate per layer, the
+# module references beside them (rg_ref_r02, rg_ref_r06: R06's decomposer, rg_ref_r09: R09's parser),
+# the R11 gated PointsTo NFA arena (rg_arena), and the differential oracle against the Rust
+# `regex` crate (rg_oracle: a plain Rust test crate, no verus!, regex as a dev-dependency).
+# Reference material: author-only. Its own workspace root, never a member of a learner workspace.
+[workspace]
+members = ["rg_re_a1", "rg_re_a1b", "rg_re_a2", "rg_re_a3", "rg_re_a4", "rg_re_a5", "rg_rexc", "rg_arena",
+           "rg_ref_r02", "rg_ref_r06", "rg_ref_r09", "rg_oracle"]
+resolver = "2"

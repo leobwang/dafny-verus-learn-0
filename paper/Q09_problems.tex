@@ -1,0 +1,138 @@
+% Q09_problems.tex — the written problems of Q09 (Internals III: brittleness,
+% forensics, gate core). Built by `make -C paper paper` with Q09_answers.tex.
+% B1 is the minimum detectable effect on paper (QPLAN §17.9: 10 minutes, after
+% chapter section 5.2; its n and baseline are not P4py's); B2 the brittleness
+% statistics of a sweep and of EVAL.md v1's claim (3 minutes, after section 3.1);
+% B3 the forensic DIAGNOSIS write-up (2 minutes, once the ten rows of
+% research/q09_forensics.md are filled); B4 the paper card 07.2 (10 minutes).
+% B1 + B2 + B3 + B4 = 25 minutes: QPLAN §17.8's "MDE on paper" (10) and "paper"
+% (15) lines. The numbers are the problems' own: neither P4py's nor P5py's
+% inputs, nor the chapter's worked examples.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q09 --- Internals III: brittleness, forensics, gate core \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q09\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B2 after chapter section~3.1; B1 after section~5.2 (10 minutes); B3 once
+every row of \texttt{research/q09\_forensics.md} is filled (chapter
+section~4.1); B4 with the chapter (10 minutes). Then run \texttt{/grade-paper
+Q09} in a fresh session.
+
+The computations are graded step by step: write every step, and name the
+formula it uses. A calculator for the arithmetic is fine. Run
+\texttt{fvh.stats} (chapter section~5 shows the command form) only where a part
+asks for it, and only after you have written the steps before it. Give
+decimals to four significant figures unless a part asks otherwise. Compare with
+\texttt{paper/solutions/} only as the module's last step.
+
+Notation: $n$ is a number of tasks per arm, $p_0$ a baseline success rate,
+$\delta$ a rise in success rate (so $p_1 = p_0 + \delta$), $q = 1 - p$ for any
+rate $p$, $\bar p = (p_0 + p_1)/2$, and $z_a = 1.96$, $z_b = 0.8416$ (the normal
+quantiles for a two-sided $\alpha = 0.05$ and for power $0.8$).
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+\textbf{The minimum detectable effect, by hand} (10 minutes). A lab will
+compare two independent arms of $n = 40$ tasks each, one first attempt per
+task, two-sided $\alpha = 0.05$, power $0.8$, baseline $p_0 = 0.3$.
+\begin{enumerate}
+\item[(a)] The first-order MDE is
+  $\delta_1 \approx (z_a + z_b)\sqrt{2 p_0 q_0 / n}$. Write $p_0 q_0$;
+  $2 p_0 q_0 / n$; its square root; $z_a + z_b$; and $\delta_1$.
+\item[(b)] \texttt{fvh.stats.mde\_two\_proportions} inverts the sample-size
+  formula
+  \[ n(\delta) = \frac{\bigl(z_a \sqrt{2 \bar p \bar q} + z_b \sqrt{p_0 q_0 + p_1 q_1}\bigr)^2}{\delta^2}. \]
+  Compute $n(\delta_1)$ step by step: $p_1$; $\bar p$; $\sqrt{2 \bar p \bar q}$;
+  $\sqrt{p_0 q_0 + p_1 q_1}$; and $n(\delta_1)$. Is a rise of $\delta_1$
+  detectable with power $0.8$ at $n = 40$? Then run
+  \texttt{fvh.stats.mde\_two\_proportions(40, 0.3)}, write its value, and
+  check it by substitution: compute $n$ at that value with the same formula.
+\item[(c)] The lab hopes for a rise of 10 points, from $0.3$ to $0.4$. Compute
+  $n(0.10)$, the tasks per arm that this needs. In two sentences: what does a
+  pre-registration of the 40-task lab have to say or change before its run?
+\item[(d)] With \texttt{paired=True} (both arms on the same 40 tasks),
+  \texttt{fvh.stats} prints another value at the same $n$; write it. Its
+  docstring calls it the conservative value: say in one sentence why.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B2}
+\textbf{Brittleness statistics} (3 minutes). A sweep
+(\texttt{scripts/vcheck -{}-brittleness -{}-solvers}) of one lemma gave these rows,
+each a verdict and the lemma's resource count:
+\begin{center}
+\begin{tabular}{lccc}
+solver & seed 1 & seed 2 & seed 3 \\ \hline
+Z3 4.12.1 (pinned) & verified, 38\,400 & verified, 45\,900 & verified, 66\,300 \\
+Z3 4.14.1 & verified, 52\,700 & verified, 53\,100 & out of resource
+\end{tabular}
+\end{center}
+\begin{enumerate}
+\item[(a)] Compute the coefficient of variation of the lemma's resource count
+  under Z3 4.12.1 as \texttt{scripts/vcheck} does: the mean; the sum of the
+  squared deviations from it; the variance with the \emph{population} divisor
+  (the number of rows, 3); the standard deviation; and the CV (standard
+  deviation over mean). Does \texttt{scripts/vcheck} flag it (above 20\,\%)?
+\item[(b)] Is the lemma stable in the course's sense (chapter section~3.1)?
+  Name the row that decides, and say what the CV of (a) adds to that
+  decision. Why are the 4.14.1 counts never pooled with the 4.12.1 counts?
+\item[(c)] For \texttt{EVAL.md} v1, suppose 17 of your 22 Dafny proofs are
+  stable. Run \texttt{fvh.stats.wilson\_interval(17, 22)} and write its 95\,\%
+  interval. Then write the claim sentence as your report would state it, with
+  $n$, the interval and one line of disclosure.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B3}
+\textbf{The forensic DIAGNOSIS} (2 minutes, once your ten rows are filled).
+\begin{enumerate}
+\item[(a)] Paste the ten rows of the \texttt{DIAGNOSIS} table of
+  \texttt{research/q09\_forensics.md} into the listing block of your
+  answer, unchanged (long rows wrap on the page only). The grader reads
+  them here and re-runs the commands they name: a row's command must run
+  as written from the checkout root, and a row whose catch rests on a copy you made (a swapped conclusion, an added test, a
+  sampled call) states the lines the copy changed.
+\item[(b)] Pick one delivery your table catches. Name a second instrument from
+  the chapter's list that would also catch it, or say why none would; say what
+  each of the two instruments sees.
+\item[(c)] For each delivery your table calls healthy (if any), list the
+  instruments you ran on it and the line each printed.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B4}
+\textbf{Paper card 07.2, An AI Approach to Verified Production Cryptographic
+Libraries} (10 minutes). Fill the card on its eight fields: task shape, oracle,
+what is trusted, cheat surface, metric, budget, variance, artifact. Each field
+is graded against the pinned range of your own \texttt{cheatsheets.md}: lines
+2852--2873, the entry from its heading to its \emph{Why it matters} paragraph,
+in the copy the command below names. The pin is the sha256 of exactly those
+lines, computed with the first line below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '2852,2873p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+bb38472ca1ccae9a442c1ca25cbd87ffe7fabf66042aa9f48d4f9e4d5418410c  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. Keep each
+figure with the run it belongs to: the range reports several runs, each with
+its own model, time and cost. A hash that no longer matches means the card file
+changed: the grader refuses the card until the pin is renewed.
+\end{problem}
+
+\end{document}

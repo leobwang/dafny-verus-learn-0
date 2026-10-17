@@ -1,0 +1,20 @@
+// Demo for card Q06.C2d (write:opaque-reveal), the failure half. The success half is
+// `MidBetween` in dafny/Q/Q06_Machine/std/Q06_Machine.dfy; here the reveal sits inside an
+// `assert … by` about another instance, and the postcondition needs the body after it.
+// Run it with `scripts/vcheck specimens/Q06/card-c2d.dfy.specimen`; the EXPECT line pins
+// the message the verifier gives (line and fragment).
+// after: Q06.P5dv
+// EXPECT @17 "a postcondition could not be proved on this return path"
+module Q06_CardC2d {
+  opaque function Mid(a: nat, b: nat): nat
+  {
+    (a + b) / 2
+  }
+
+  lemma MidBetween(a: nat, b: nat)
+    requires a <= b
+    ensures a <= Mid(a, b) <= b
+  {
+    assert Mid(a, a) == a by { reveal Mid(); }
+  }
+}

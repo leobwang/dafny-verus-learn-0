@@ -1,0 +1,14 @@
+// Demo for card Q06.C3d (write:rlimit), the failure half. The success half is
+// `FourthPowerMono` in dafny/Q/Q06_Machine/std/Q06_Machine.dfy; here the body is empty and
+// the solver searches for the products' order on its own. Run it with
+// `scripts/vcheck specimens/Q06/card-c3d.dfy.specimen`; the EXPECT line pins the message
+// the verifier gives (line and fragment).
+// after: Q06.P2dv
+// EXPECT @9 "Verification out of resource"
+module Q06_CardC3d {
+  lemma FourthPowerMono(x: nat, y: nat)
+    requires x <= y
+    ensures x * x * x * x <= y * y * y * y
+  {
+  }
+}

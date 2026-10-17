@@ -1,0 +1,82 @@
+# expected/Q16.chapter.toml — the chapter pins of Q16's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q16 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "ghost-call"
+cmd = ["scripts/vcheck", "--module", "Q16", "ghost.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "dafny/given/Q/QG_L7_BigNat.dfy"]
+note = "§2: a compiled call of L7's ghost Times, refused at resolution."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."ghost.dfy"]
+fence = "above"
+[entry.pinned]
+body = "ef50ac6d73fd1b99765fa8c61939d9fc79e180e84718f485353dcbff50abaf38"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"dafny/given/Q/QG_L7_BigNat.dfy" = "6f51ccc2345cfdcfd839e04c01213ceeb92d7420de72168b71b5728b8c8ecde5"
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:ghost.dfy" = "04bb1cf84f127743af9637fb1de66c94de306b4dafc8e3e806aa37be61763837"
+
+[[entry]]
+id = "plain-h1d"
+cmd = ["scripts/vcheck", "--module", "Q16", "plain.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "dafny/given/Q/QG_L7_BigNat.dfy"]
+note = "§4: H1d's plain statement proved by plain induction on b fails on both conjuncts (the hard tier's known-to-fail attempt)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."plain.dfy"]
+fence = "above"
+[entry.pinned]
+body = "a24f2e4901198732521b67d8b462600b8402372fb31fc114d91d6cb698e2c30e"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"dafny/given/Q/QG_L7_BigNat.dfy" = "6f51ccc2345cfdcfd839e04c01213ceeb92d7420de72168b71b5728b8c8ecde5"
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:plain.dfy" = "f18be40067c453e029d1d92ef5d39da2463a244224c75b853b8bbee332a368f7"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q16"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "dafny/given/Q/QG_L7_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs", "verus/given/qg_bignat_l7/src/lib.rs", "verus/given/qg_bignat_l7/src/api.rs"]
+note = "The two units as shipped (§8)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b465a8edc53e64cffcc84888f3a04de07ffd4873445662f8c80e90f72e956f71"
+[entry.pinned.inputs]
+"dafny/Q/Q16_PracticeIIIA/std/Q16_PracticeIIIA.dfy" = "bdee3748fd2c04ea8be03b7ea5bf7ca00da42f1847d0faf1bc4ba04b40b68821"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"dafny/given/Q/QG_L7_BigNat.dfy" = "6f51ccc2345cfdcfd839e04c01213ceeb92d7420de72168b71b5728b8c8ecde5"
+"instructor/calib/Q16.tsv" = "absent"
+"slots/Q16.slots" = "absent"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/given/qg_bignat_l7/src/api.rs" = "c570ff153b6cfcbab29c31bd45d5c8891766dc7f84be24017015799db962b08a"
+"verus/given/qg_bignat_l7/src/lib.rs" = "1c2bddd4b7cfd874d2a4cb23c28ed37ed313692b283e5d176a7ec9bb92bf6376"
+"verus/q/q16_practice_iiia/src/lib.rs" = "320aa735e1d1f8b5011a4567e8fbe30cf9a1b3a783bf8dd7313929f6a2238a97"

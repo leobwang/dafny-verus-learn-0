@@ -1,0 +1,42 @@
+# Q07 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H, X or A answer of Q07 (never a P
+# answer: the chapter reveals those after their boxes; never H3d's or H5v's, whose informal
+# proofs are the written problem B1, so a grader quoting a learner's blueprint would trip
+# them; never a line the cards, the worked examples or the agent files ship, such as C1's
+# two-limb steps and its fuel line) and is verified against its own reference file (rule 1)
+# and against every learner-visible file (rule 2). Q07 is detailed tier, so these patterns
+# bind instructor sessions of Q07 onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q07_InternalsI/std/Q07_InternalsI.dfy
+# source:   lemma {:fuel AddC, 3} AddCarriesTwice()   (Q07.H1d)
+# verified: solutions=1 public=0
+\{:fuel\s+AddC,\s*3\}
+# source:     LemmaMultiplyDivideLt(v, d, BASE);   (Q07.H2d)
+# verified: solutions=1 public=0
+LemmaMultiplyDivideLt\(v,\s*d,\s*BASE\)
+
+# from Solutions/verus/q/q07_internals_i/src/lib.rs
+# source:     assert((seq![a, b] + s).drop_first() =~= seq![b] + s);   (Q07.H4v)
+# verified: solutions=1 public=0
+\(seq!\[a,\s*b\]\s*\+\s*s\)\.drop_first\(\)\s*=~=
+
+# from Solutions/verus/q/q07_internals_i/src/port.rs
+# source:         assert(x as u64 == x % 0x1_0000_0000_0000_0000u128) by (bit_vector);  // did: the cast as a remainder   (Q07.H7v)
+# verified: solutions=1 public=0
+x\s+as\s+u64\s*==\s*x\s*%\s*0x1_0000_0000_0000_0000u128
+# source:         seq![(n % BASE) as u64] + from_nat_mirror(n / BASE)   (Q07.H8v)
+# verified: solutions=1 public=0
+seq!\[\(n\s*%\s*BASE\)\s+as\s+u64\]\s*\+\s*from_nat_mirror
+
+# from Solutions/dafny/Q/Q07_InternalsI/exit/Q07_Exit.dfy
+# source:     LemmaModMultiplesBasic(x * Pow(k), BASE);   (Q07.X1d)
+# verified: solutions=1 public=0
+LemmaModMultiplesBasic\(x\s*\*\s*Pow\(k\)
+# source:     LemmaFundamentalDivModConverse(ToNat([a, b]), BASE, b, a);   (Q07.X2d)
+# verified: solutions=1 public=0
+LemmaFundamentalDivModConverse\(ToNat\(\[a,\s*b\]\)
+
+# from Solutions/dafny/Q/Q07_InternalsI/agent/Q07_AgentRefactor.dfy
+# source:     AddScaledValue(MulLimb(s, d), t, d, ToNat(s) * d);   (Q07.A1d)
+# verified: solutions=1 public=0
+AddScaledValue\(

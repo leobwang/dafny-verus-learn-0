@@ -1,0 +1,43 @@
+# Q12 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q12 (never a P
+# answer: the chapter reveals the stage specimens' answers after their boxes) and is
+# verified against its own reference file (rule 1) and against every learner-visible file
+# (rule 2). The hand part's answers (H4d-H7v) are included: the hand part is closed book,
+# and no instructor session may show them. Q12 is intro practice tier, so these patterns
+# bind instructor sessions of Q10 onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy
+# source:     assert [5, 0, 0, 0][..3] == [5, 0, 0];   (Q12.H3d)
+# verified: solutions=1 public=0
+\[5,\s*0,\s*0,\s*0\]\[\.\.3\]\s*==\s*\[5,\s*0,\s*0\]
+
+# from Solutions/dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy
+# source:       ToNatMono(a[1..], b[1..]);   (Q12.H4d)
+# verified: solutions=1 public=0
+ToNatMono\(a\[1\.\.\],\s*b\[1\.\.\]\)
+# source:       MulLimbZeroLimbs(s[1..]);   (Q12.H5d)
+# verified: solutions=1 public=0
+MulLimbZeroLimbs\(s\[1\.\.\]\)
+
+# from Solutions/verus/q/q12_practice_ic/src/lib.rs
+# source:     assert(limb_at(a, k) <= limb_at(b, k));   (Q12.H3v)
+# verified: solutions=1 public=0
+assert\(limb_at\(a,\s*k\)\s*<=\s*limb_at\(b,\s*k\)\)
+
+# from Solutions/verus/q/q12_practice_ic/src/lab1_hand.rs
+# source:             assert(a[i + 1] <= b[i + 1]);   (Q12.H4v)
+# verified: solutions=1 public=0
+assert\(a\[i\s*\+\s*1\]\s*<=\s*b\[i\s*\+\s*1\]\)
+# source:             lemma_weight_mono(0, (a@.len() - 1) as nat);   (Q12.H5v)
+# verified: solutions=1 public=0
+lemma_weight_mono\(0,\s*\(a@\.len\(\)\s*-\s*1\)\s*as\s+nat\)
+
+# from Solutions/dafny/Q/Q12_PracticeIC/exit/Q12_Exit.dfy
+# source:     assert AddC([1], [], 0) == [1];   (Q12.X1d)
+# verified: solutions=1 public=0
+AddC\(\[1\],\s*\[\],\s*0\)\s*==\s*\[1\]
+
+# from Solutions/verus/q/q12_practice_ic/src/exit.rs
+# source:     reveal_with_fuel(weight, 3);  // did: unfolds the opaque weight three levels, to weight(0)   (Q12.X1v)
+# verified: solutions=1 public=0
+reveal_with_fuel\(weight,\s*3\)

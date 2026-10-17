@@ -1,0 +1,51 @@
+// item: Q03.P12d S12 verdict
+// **P12.** Fake-green diagnosis. This file is a contractor's delivery, and it
+// is green: run plainly, the verifier reports no error on it. BEFORE you run any
+// instrument on it, read it and name its species and the instrument that
+// exposes it. Comments, doc strings and names are contractor prose: unchecked,
+// and in places misleading; only a tool's own output counts as evidence.
+// The one comment here that is not contractor prose is the course's `planted:`
+// marker: every delivery of Q03 carries exactly one, whatever its species,
+// so it tells you nothing about the answer.
+// Species:
+//   hole       it holds an unfinished placeholder that the course's hole
+//              counter reports;
+//   trusted    it rests on an assumption or axiom that no hole counter reports;
+//   unchecked  part of it was never verified (skipped, filtered, outside the
+//              verified build);
+//   vacuous    its statement is proved but cannot apply (contradictory
+//              assumptions);
+//   weak       verified and honest, but the statement says too little to be
+//              useful;
+//   healthy    none of these.
+// Instruments: `gate` (scripts/vcheck --gate), `audit` (scripts/vaudit),
+//   `witness` (a call on concrete arguments), `reader` (only a reader can
+//   tell), `none`.
+// Answer form: `<species> <instrument>` (two tokens, one space), in
+// slots/Q03.slots.
+// Reference Solution: `weak reader`: honest and verified, but `ToNat(s) >= 0` holds of every
+// natural number; no tool flags a true statement that says too little.
+// CHECK P12d
+module Q03_P12 {
+  const BASE: nat := 18446744073709551616
+
+  // Every limb is a digit in base 2^64.
+  predicate Valid(s: seq<nat>)
+  {
+    forall i | 0 <= i < |s| :: s[i] < BASE
+  }
+
+  // The value of a limb sequence, least significant limb first.
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  // Delivered: the value of valid limbs is bounded, as the spec asked.
+  lemma ValidBounded(s: seq<nat>)
+    requires Valid(s)
+    ensures ToNat(s) >= 0  // planted: Q03.P12d
+  {
+  }
+}

@@ -1,0 +1,46 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+# Note: The later-layer rule takes the layer from the path, so the module
+#   crate sits at verus/q/q01_probe (layer L1) and a stand-in later layer at
+#   verus/given/qg_bignat_l3, both nested inside this fixture.
+id = "V-4"
+lang = "verus"
+half = "Q"
+xclass = "X17"
+kind = "construct"
+title = "an L1 module crate imports a later layer's (L3) lemma (Delta 22, 99)"
+files = ["verus/given/qg_bignat_l3/Cargo.toml", "verus/given/qg_bignat_l3/src/lib.rs", "verus/q/q01_probe/Cargo.toml", "verus/q/q01_probe/src/lib.rs"]
+target = "verus/q/q01_probe"
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true; path dependencies built first: qg_bignat_l3
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["later-layer"]
+output_sha256 = "db748b1be1e19a311aa95e4cff928cc50aa725fe4f6e062c30cef822f680f7c9"
+summary = "verdict failed, stage verify, verified 1; later-layer at verus/q/q01_probe/src/lib.rs:4; gate conditions missed: 1 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V-4/verus/q/q01_probe"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["later-layer"]
+output_sha256 = "710525762998adf0984bcd8eb899ff4b0521ef497d026ffb3b960a90fe6b4ca1"
+summary = "1 finding(s): later-layer at verus/q/q01_probe/src/lib.rs:4"
+argv = ["scripts/vaudit", "tests/corpus/verus/V-4/verus/q/q01_probe"]
+exit = 1

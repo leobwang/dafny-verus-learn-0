@@ -1,0 +1,273 @@
+% Q04_solutions.tex — REFERENCE SOLUTIONS to paper/Q04_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0, Verus 0.2026.09.27.3cf1832) through scripts/vcheck and scripts/vaudit,
+% run on instructor/scratch/probe.<ext> in a scratch course root, one solver job
+% at a time under a 16G cap, by the DV3a kits phase's kit lane for Q04 on
+% 2026-10-06. The probe files and their outputs are archived under
+% ~/.cache/dafny-verus-learn-0/author-probes/dv3k/q04-kit/ (README there).
+% B3's fields are graded against the learner's own cheatsheets.md; this file
+% records which lines of the pinned range each field draws on and never copies
+% the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q04 --- Proof craft, loops and libraries \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How these are graded}
+B1 is informal-proof-first (the five proof dimensions; its blueprint is
+re-scored by \verb+--post+ against the learner's verified H4d and H4v). B2 is a
+concept answer (\texttt{correctness}: the grader tries to counterexample it,
+with the rubric's Probe B). B3 is a paper card (\texttt{card-fidelity}, per
+field). The solutions below give the answers; the rubric never states them.
+The structure of B1 matches the formal references of H4d and H4v (spec
+section~4.4's author rule).
+
+% ---------------------------------------------------------------------------
+\section*{B1 (informal-proof-first)}
+
+\textbf{(a) Statement.} For all limb sequences $a$, $b$ with
+$\mathit{Valid}(a)$ and $\mathit{Valid}(b)$: $-1 \leq \mathit{Cmp}(a, b) \leq 1$,
+$\mathit{Cmp}(a, b) < 0 \iff \mathit{ToNat}(a) < \mathit{ToNat}(b)$, and
+$\mathit{Cmp}(a, b) = 0 \iff \mathit{ToNat}(a) = \mathit{ToNat}(b)$.
+
+\textbf{Induction on} $|a| + |b|$, the measure of \dfy{Cmp} itself and the
+lemma's shipped \dfy{decreases}.
+
+\textbf{IH (as a formula).} For all valid $a'$, $b'$ with
+$|a'| + |b'| < |a| + |b|$: the three claims hold for $(a', b')$. It is used
+once, at $(\mathit{Tail}(a), \mathit{Tail}(b))$, and only when
+$|a| + |b| > 0$: then at least one sequence is non-empty, \dfy{Tail} removes
+one limb from it and leaves an empty sequence empty, so
+$|\mathit{Tail}(a)| + |\mathit{Tail}(b)| < |a| + |b|$.
+
+\textbf{Base} ($|a| = |b| = 0$). $\mathit{Cmp}(a, b) = 0$ and both values are
+$0$: the range holds, $0 < 0$ is false on both sides, and $0 = 0$ on both.
+
+\textbf{Step} ($|a| + |b| > 0$). Write $h_a = \mathit{Head}(a)$,
+$h_b = \mathit{Head}(b)$, $t_a = \mathit{ToNat}(\mathit{Tail}(a))$,
+$t_b = \mathit{ToNat}(\mathit{Tail}(b))$ and
+$c = \mathit{Cmp}(\mathit{Tail}(a), \mathit{Tail}(b))$. First the facts:
+\begin{enumerate}
+\item L2's \dfy{ValidTail(a)} and \dfy{ValidTail(b)}: the tails are valid and
+  $h_a, h_b < \mathit{BASE}$ (for an empty sequence too: its head reads as 0);
+\item the IH at the tails, whose \dfy{requires} item~1 supplies:
+  $c \in \{-1, 0, 1\}$, $c < 0 \iff t_a < t_b$, $c = 0 \iff t_a = t_b$;
+\item L2's \dfy{ToNatHeadTail(a)} and \dfy{ToNatHeadTail(b)}:
+  $\mathit{ToNat}(a) = h_a + \mathit{BASE} \cdot t_a$ and
+  $\mathit{ToNat}(b) = h_b + \mathit{BASE} \cdot t_b$.
+\end{enumerate}
+\emph{The tails decide} ($c \neq 0$, so $\mathit{Cmp}(a, b) = c$). If $c < 0$
+then $t_a < t_b$, so $t_a + 1 \leq t_b$ over the naturals, and
+\[
+  \mathit{ToNat}(a) = h_a + \mathit{BASE} \cdot t_a
+  < \mathit{BASE} \cdot (t_a + 1) \leq \mathit{BASE} \cdot t_b
+  \leq h_b + \mathit{BASE} \cdot t_b = \mathit{ToNat}(b),
+\]
+the strict step by $h_a < \mathit{BASE}$: one unit of the tails is worth
+$\mathit{BASE}$, more than any head. So $\mathit{Cmp}(a, b) = -1 < 0$ and
+$\mathit{ToNat}(a) < \mathit{ToNat}(b)$; neither side of the third claim
+holds. If $c > 0$ then $c = 1$ and $t_b < t_a$; the same chain with $a$ and
+$b$ exchanged gives $\mathit{ToNat}(b) < \mathit{ToNat}(a)$, and all three
+claims hold with both sides of the second and third false.
+
+\emph{The heads decide} ($c = 0$, so $t_a = t_b$ and
+$\mathit{ToNat}(a) - \mathit{ToNat}(b) = h_a - h_b$). \dfy{Cmp} returns $-1$,
+$1$ or $0$ as $h_a < h_b$, $h_a > h_b$ or $h_a = h_b$, and the values compare
+in the same way.
+
+\textbf{Helper lemmas (the blueprint).} L2's \dfy{ValidTail} (on $a$ and on
+$b$) and \dfy{ToNatHeadTail} (on $a$ and on $b$), and the recursive call at the
+tails. The dominance step ($h_a < \mathit{BASE}$ and $t_a < t_b$ give
+$h_a + \mathit{BASE} \cdot t_a < h_b + \mathit{BASE} \cdot t_b$) is linear
+arithmetic over the constant \dfy{BASE}, which the verifier does unaided;
+naming it as a new lemma with exactly those hypotheses is equally correct
+(captured: the gold fixture's \dfy{Dominance}, empty body,
+\texttt{verified --- 23 verified, 0 holes, 0 errors}).
+
+\textbf{Why the validity hypothesis is needed.} Without $h_a < \mathit{BASE}$
+the tails need not decide: $a = [\mathit{BASE}]$, $b = [0, 1]$ have equal
+values ($\mathit{BASE}$) and $\mathit{Cmp}(a, b) = -1$ (captured: the rubric's
+Probe A$''$ with \dfy{expect (Cmp(a, b) == 0) == (ToNat(a) == ToNat(b))} at
+these sequences, \texttt{FAILED}).
+
+\textbf{Gaps.} None.
+
+\textbf{The formal reference it matches} (H4d's twin):
+\begin{dafnycode}
+lemma CmpCorrect(a: seq<nat>, b: seq<nat>)
+  requires Valid(a) && Valid(b)
+  ensures -1 <= Cmp(a, b) <= 1
+          && (Cmp(a, b) < 0 <==> ToNat(a) < ToNat(b))
+          && (Cmp(a, b) == 0 <==> ToNat(a) == ToNat(b))
+  decreases |a| + |b|
+{
+  if |a| != 0 || |b| != 0 {
+    ValidTail(a);
+    ValidTail(b);
+    CmpCorrect(Tail(a), Tail(b));
+    ToNatHeadTail(a);
+    ToNatHeadTail(b);
+  }
+}
+\end{dafnycode}
+The base case needs no line, and the case split on $c$ is \dfy{Cmp}'s own
+unfolding. This blueprint spliced into the rubric's Probe A (the target under
+the name \dfy{CmpAgrees}) gave \texttt{verified --- 31 verified, 0 holes,
+0 errors} under \texttt{scripts/vcheck --module Q04} (the count includes the
+given layers' tasks).
+
+\textbf{(b) Verus.}
+\begin{itemize}
+\item \textbf{The missing clause:} \vrs{forall|j: int| i <= j < n ==> a@[j] == b@[j]},
+  the limbs from index $i$ to the top agree.
+\item \textbf{On entry} $i = n$ and the range is empty. \textbf{One pass}
+  starts where the guard holds, so $i > 0$ and $a[i - 1] = b[i - 1]$, and
+  ends with $i$ one smaller: the range gains exactly index $i - 1$ of the start
+  of the pass, where the guard gave equality.
+\item \textbf{After the loop}, with equal lengths ($n$ = both lengths):
+  if $i = 0$, the clause covers every index, so the views are equal
+  (\vrs{a@ =~= b@}) and so are the values: \vrs{Equal}. Otherwise the guard
+  failed with $i > 0$, so $a[i - 1] \neq b[i - 1]$. When $a[i - 1] < b[i - 1]$,
+  \vrs{lemma_lt_at(a@, b@, i - 1)}'s four \vrs{requires} hold: equal lengths
+  (the second and third invariant clauses), $0 \leq i - 1 < |a|$ ($i \leq n$),
+  $a[i - 1] < b[i - 1]$ (the branch), and agreement at every index above
+  $i - 1$, which is the missing clause. So $a$'s value is the smaller:
+  \vrs{Less}. The other branch has $b[i - 1] < a[i - 1]$ and calls the lemma
+  with the views exchanged: \vrs{Greater}. Each outcome meets all three
+  \vrs{ensures}, since the value order is total.
+\item \textbf{The length cases.} For $n < m$: $b$ is canonical and non-empty
+  ($m > n \geq 0$), so L3's \vrs{lemma_seq_to_nat_lower} gives
+  $\mathit{weight}(m - 1) \leq \mathit{value}(b)$; L3's
+  \vrs{lemma_seq_to_nat_upper} gives $\mathit{value}(a) <
+  \mathit{weight}(n)$; and L3's \vrs{lemma_weight_mono} at $n \leq m - 1$ gives
+  $\mathit{weight}(n) \leq \mathit{weight}(m - 1)$. Chained:
+  $\mathit{value}(a) < \mathit{weight}(n) \leq \mathit{weight}(m - 1) \leq
+  \mathit{value}(b)$: \vrs{Less}. For $n > m$ the same with $a$ and $b$
+  exchanged: \vrs{Greater}. Canonicity is what makes length decide: $[5, 0]$
+  is longer than $[7]$ and smaller.
+\item \textbf{How the formal proof gets the three facts.} They are the members
+  of L3's group \vrs{group_bignat_bounds}; H4v's twin brings them into the
+  whole body with one \vrs{broadcast use group_bignat_bounds;} line at its top,
+  and their triggers fire on the values and weights the two length cases
+  mention. A blueprint that names the three lemma calls instead is equally
+  correct: the rubric's Probe A$'$ with this clause and the named calls in the
+  two length branches gave \texttt{verified --- 2 verified, 0 holes, 0 errors}.
+\end{itemize}
+The formal reference's two learner regions (H4v's twin): the first line of the
+body, and the invariant's last clause.
+\begin{veruscode}
+    broadcast use group_bignat_bounds;
+    // ...
+        invariant
+            i <= n,
+            n == a@.len(),
+            n == b@.len(),
+            forall|j: int| i <= j < n ==> a@[j] == b@[j],
+\end{veruscode}
+An equivalent formula is not always formalizable as written: the clause
+written as \vrs{a@.subrange(i as int, n as int) =~= b@.subrange(i as int, n as int)}
+is true in every state the loop reaches, yet Probe A$'$ with it fails four
+ways (the invariant at the end of the body, both \vrs{lemma_lt_at}
+preconditions and the equality assertion), because nothing then states the
+per-index agreement \vrs{lemma_lt_at} quantifies over. That is a gap (3) for
+\texttt{blueprint-quality}, never a flaw.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (concept)}
+
+\textbf{(a)} The outcomes are the same in both languages (each captured
+with \texttt{scripts/vcheck --module Q04 --gate} and \texttt{scripts/vaudit}
+on the probe):
+\begin{center}
+\begin{tabular}{llll}
+body & \texttt{vcheck --gate} & \texttt{vaudit} & ``only library calls'' \\
+\hline
+{[1]} call alone & passes & 0 findings & kept \\
+{[2]} call inside an assertion & passes & 0 findings & broken \\
+{[3]} an assumption & fails: the assumption is a hole & 1 finding & broken \\
+\end{tabular}
+\end{center}
+For [3] the gate prints a hole line for the assumption in each language
+(Dafny: \texttt{hole assume ProbeB2.ScaleLe}, with \texttt{warnings-fail-gate};
+Verus: \texttt{hole assume lemma\_scale\_le}), and the audit's finding is
+\texttt{audit-assume} in Dafny and \texttt{hole-assume} in Verus. [2] is the case no instrument sees: the
+assertion states the postcondition, so the proof is correct, green and
+audit-clean, and the contract's acceptance line forbids exactly this (``no
+\dfy{assert}''). With nonlinear arithmetic left on, the Dafny empty body also
+verifies (captured), which is why the race's Dafny file turns it off.
+
+\textbf{(b)} Any body that passes both and is not a bare sequence of library
+calls. The reference: a helper lemma of one's own with the goal's statement,
+whose body is the library call, and the goal's body calling the helper
+(captured: Dafny \texttt{verified --- 32 verified, 0 holes, 0 errors} and
+\texttt{0 finding(s)}; Verus \texttt{verified --- 2 verified, 0 holes, 0
+errors} and \texttt{0 finding(s)}). A \dfy{calc} or \vrs{calc!} chain with the
+call as a hint is another. The breach shows in \texttt{git diff} (an added
+declaration outside the bodies, or a statement inside one that is not a
+call), which the contract's diff and body lines ask the learner to read, and
+in the transcript; the gate, the audit and the hole count all stay clean.
+A claim that the audit or the gate reports [2] or the fourth body is refuted
+by running them (the rubric's Probe B).
+
+% ---------------------------------------------------------------------------
+\section*{B3 (paper card 02.2): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 614--638 (computed 2026-10-06),
+\[ \texttt{sha256 5a0ff58db586d31eb8bde23fb09f5e1c8f4d2a558b339bf970050c8aba407e6a}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Input: a Rust function with its Verus specification
+  (\vrs{requires}/\vrs{ensures}). Output: the same function with proof
+  annotations added (loop invariants, assertions, \vrs{proof fn} lemmas) until
+  Verus verifies it; GPT-4o agents in three phases (generate and merge
+  invariants, refine, repair errors by type). \emph{Lines 616, 618, 622--624.}
+\item[Oracle.] Verus's verdict, read as a score: $V$, the number of verified
+  functions (each loop counting as one), and $E$, the number of errors, rank
+  and accept candidates; Lynette's check that a candidate changed neither code
+  nor specification and added no \vrs{assume} gates them.
+  \emph{Lines 618, 621, 623--624.}
+\item[What is trusted.] Verus and its solver; Lynette, the authors' AST tool;
+  the specifications themselves (the limitations say so); the hand-crafted
+  prompts shape what is tried. Whether other escape hatches (an external body,
+  an \vrs{admit}) are rejected is not stated. \emph{Lines 618, 636.}
+\item[Cheat surface.] Closed by Lynette: editing the code, editing the
+  specification, adding \vrs{assume}. Open or unstated: a weak or wrong
+  specification is trusted, so nothing catches it; escape hatches other than
+  \vrs{assume}; redundant invariants are harmless noise, not a cheat.
+  \emph{Lines 618, 636.}
+\item[Metric.] Tasks proved out of Verus-Bench's 150: 137 for AutoVerus (best
+  of 3 runs; 122 in the first run), 67 for a GPT-4o prompting baseline;
+  ablations in task counts (a generic debugger 17/37 against error-specific
+  agents 37/37; 26, 26, 23 and 18 of a 30-task sample by model).
+  \emph{Lines 616, 618, 628--634.}
+\item[Budget.] The baseline had 10 minutes per task; to reach the baseline's
+  67 tasks AutoVerus needed 22 s and 2 calls, the baseline 458 s and 59 calls;
+  inside the pipeline, 5 samples in phase 1 and up to 10 repair iterations in
+  phase 3. No token, money or per-task time figure for the 137.
+  \emph{Lines 622, 624, 631--632.}
+\item[Variance.] Three runs; the headline is the best of them, and the first
+  run alone proved 122, so the spread (122 to 137) is the only variance
+  signal; no mean, interval or seed count; sampling at temperature 1.0.
+  \emph{Lines 622, 630, 636.}
+\item[Artifact.] Verus-Bench, 150 tasks from four sources (MBPP 78, Diffy 38,
+  Misc 23, CloverBench 11), introduced here and reused by later work (a
+  139-task variant in SAFE; AlphaVerus compares against AutoVerus). Whether
+  the code or prompts are released is not stated. \emph{Lines 616, 618, 638.}
+\end{description}
+A field that says the range is silent where it is silent (a released
+artifact; a cost for the headline; an interval) is correct. A field that
+contradicts a line (for example 137 as a single run, or the 22 s and 2 calls
+given to the baseline) scores 2, quoting that line.
+
+\end{document}

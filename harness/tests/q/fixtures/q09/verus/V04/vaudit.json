@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V04"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V04/src/lib.rs",
+    "kind": "hole-axiom",
+    "line": 6,
+    "message": "an axiom hole (in axiom_mul_is_add) not on the trust allowlist"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V04"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "73dff408c1a6a02a05956ddf9f969e80dccc139e641d183af4b596991964471f",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V04"
+}

@@ -1,0 +1,137 @@
+% Q02_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q02_answers.tex (spec §4.7, §6.12): every answer is
+% correct, and each is worded and organised away from the reference solutions, so a grader
+% must recognise correctness by substance. It holds worked answers to Q02's written
+% problems: open it only after Q02 is done.
+%
+% EXPECTED: every problem scores >= 3 on every dimension (B1 on all five; B2 correctness;
+% B3 card-fidelity on all eight fields), with zero findings that claim a broken step.
+% B1 names Q02.H1d's statement as its one helper instead of the reference's two facts: both
+% are complete (Probe A with this helper pasted verifies with one hole; captured on the
+% pins). B2's example differs from the reference's (Probe B: 1 passed; Probe B': verified;
+% both captured). A calibration run FAILS if any score is <= 2 or any flaw is reported.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q02 --- First syntax I \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} Normalizing never changes the number a limb list
+stands for: $\forall s.\ \mathit{ToNat}(\mathit{Normalize}(s)) =
+\mathit{ToNat}(s)$.
+
+\textbf{Induction on / decreases measure:} how many limbs $s$ has; the
+recursion I will write calls the lemma only on a list one limb shorter.
+
+\textbf{Base:} no limbs. \texttt{Normalize} returns the empty list, i.e.\ $s$
+itself, and there is nothing to show.
+
+\textbf{IH (stated as a formula):} $P(t) :\equiv
+\mathit{ToNat}(\mathit{Normalize}(t)) = \mathit{ToNat}(t)$, assumed for every
+$t$ with fewer limbs than $s$; I use it once, for $t$ = $s$ minus its most
+significant limb.
+
+\textbf{Step} (one paragraph per case of \texttt{Normalize}):
+
+If the most significant limb of $s$ is non-zero, \texttt{Normalize} hands back
+$s$ unchanged, so $P(s)$ is immediate.
+
+If it is zero, write $s'$ for $s$ with that limb removed ($s' = s[..|s|-1]$).
+\texttt{Normalize} recurses: $\mathit{Normalize}(s) = \mathit{Normalize}(s')$.
+By the IH, $\mathit{ToNat}(\mathit{Normalize}(s')) = \mathit{ToNat}(s')$. By the
+helper below, $\mathit{ToNat}(s') = \mathit{ToNat}(s)$. Chaining the three
+equalities gives $P(s)$.
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement,
+and where it comes from\textbf{):} one fact, for any $s$ with $|s| > 0$ and
+$s[|s|-1] = 0$: $\mathit{ToNat}(s[..|s|-1]) = \mathit{ToNat}(s)$. This is the
+statement of hole H1d of this module (Dafny \texttt{ToNatDropLastZero}); I use
+it as proved there.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): none,
+given H1d.
+
+\textbf{(b) Loop invariant (stated as a formula over \texttt{a} and
+\texttt{old(a)}):} $\mathrm{val}(a) = \mathrm{val}(a_0)$, where
+$\mathrm{val}$ is \texttt{to\_nat} and $a_0$ is \texttt{a} as it was passed in.
+It is the IH of (a) turned into a loop: after any number of passes, the stripped
+vector still denotes the original number.
+
+\textbf{What keeps it across one pass:} entering a pass we know the invariant and
+the guard (non-empty, top limb zero). The proof call in the body is H1v's
+statement, the Verus twin of my helper, applied to the current limbs: dropping
+the zero top limb keeps \texttt{seq\_to\_nat}. Then \texttt{pop} drops that very
+limb, so $\mathrm{val}$ is unchanged.
+
+\textbf{What gives each \texttt{ensures} clause at the exit:} on exit the
+guard is false: either no limbs remain or the top one is non-zero, which is
+exactly what \texttt{wf()} asks; the invariant gives the value clause directly.
+Termination: the length shrinks by one each pass.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} Holding before the first pass and surviving every pass are what
+make a clause inductive. Whether the clause, together with the negated guard, is
+enough for what comes after the loop is a separate question: that third
+obligation is about strength, not inductiveness.
+
+\textbf{(b)} The loop: \texttt{x, y := 0, 10; while x < 10 \{ x, y := x + 1, y - 1; \}}
+over integers. \\
+The clause: $y \geq 0$. \\
+Why it holds in every reachable state: the run only visits states with
+$x + y = 10$ and $0 \leq x \leq 10$, hence $y \geq 0$. \\
+The state before one pass, and the clause after it: $x = 0$, $y = 0$. The clause
+and the guard hold; one pass gives $y = -1$.
+
+\textbf{(c)} Pruning re-checks clauses against each other: on its own,
+$y \geq 0$ fails the preservation check and is removed even though no run ever
+breaks it. Kept beside $x + y = 10$ and $x \leq 10$, the three survive together,
+because together they are preserved.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.7, lines 766--791 (the pinned range).
+
+\textbf{Task shape:} proof completion: the program and its specification are
+fixed, and the model supplies the missing loop invariants, asserts and
+\texttt{decreases} clauses without touching the code.
+
+\textbf{Oracle:} acceptance by the Dafny verifier, gated by a diff check (strip
+all annotations from the attempt; it must equal the input program).
+
+\textbf{What is trusted:} the verifier stack (Dafny 4.11.0, the SMT solver),
+Dafny's own parser for the stripping, and the specifications as statements of
+intent. Whether specification edits or \texttt{assume} are rejected is left
+unstated, so that is trusted without a check.
+
+\textbf{Cheat surface:} closed: altering the program text (caught by the diff
+check). Open as far as the card says: weakening the specification, adding
+\texttt{assume}, and hints that may encode benchmark knowledge.
+
+\textbf{Metric:} fraction of programs verified, per benchmark (Clover, MBPP,
+HumanEval, DafnyBench); best DafnyBench figure 86.18\%; ablation deltas for
+hints, pruning and benchmark fixes; 69.5\% for a fine-tuned 14B model on
+197 held-out programs.
+
+\textbf{Budget:} ten attempts per program in the main runs, five in the
+held-out small-model runs; no token, time or money figures.
+
+\textbf{Variance:} not measured: one run, two closed models, no spread, and some
+numbers in the text and the figures disagree.
+
+\textbf{Artifact:} no released code. About 31k distilled training examples are
+built for fine-tuning, but the card does not say they are released.
+\end{answer}
+
+\end{document}

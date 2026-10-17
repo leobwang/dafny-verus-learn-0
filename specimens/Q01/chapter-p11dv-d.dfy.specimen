@@ -1,0 +1,17 @@
+method WeakMax(a: nat, b: nat) returns (m: nat)
+  ensures m >= a && m >= b
+{
+  m := a + b;
+}
+
+method WeakMaxCheck()
+{
+  var m := WeakMax(3, 7);
+  assert m == 7;
+}
+
+// Chapter specimen for docs/Q01_Hello.md, section 13: the scenario of Q01.P11dv, and a
+// use-site check under it. The chapter quotes its output; scripts/vcheck runs it once
+// these predictions are recorded.
+// after: Q01.P11dv
+// after: Q01.P8dv

@@ -1,0 +1,19 @@
+# Solutions/slots/Q01.slots — Q01's reference verdict answers (author-only). Each was
+# captured on the pins through the course wrappers (evidence: the DV2a Q01 lane report
+# and Solutions/plans/Q01-Q03-author-notes.md §2.1, §2.4). expected/Q01.pins holds their
+# hashes, written by `scripts/pins.py --update --ref --module Q01`.
+P1dv = "D:fail V:fail"
+P2dv = "D:fail V:err:resolve"
+P7dv = "D:ok V:err:resolve"
+P8dv = "D:4 V:1"
+P9dv = "D:timeout V:fail"
+P10dv = "D:2 yes V:0 no"
+P11dv = "D:ok V:ok"
+X5dv = "d"
+X6d = "b"
+X8dv = "b"
+X9dv = "--gate 0"
+X10dv = "c"
+X11dv = "b"
+X12d = "2"
+X13v = "a"

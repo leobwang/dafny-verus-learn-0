@@ -1,0 +1,107 @@
+# expected/Q14.freeze — statement-freeze pins for Q14 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q14` from the files as shipped; checked by
+# `scripts/specfreeze --check Q14`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q14"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q14_PracticeIIB/std/Q14_PracticeIIB.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q14_Cached {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q14_Cached.Add" = "1a19c7557349fc1c7488613f48deb2ab1e5ebb1a2860acbba24bfa55582ba76d"
+"Q14_Cached.AddCorrect" = "d12850e41e15438756ed1ffce981bfb8096a2f70aa0b9f3c52163b742414a51c"
+"Q14_Cached.BigNat" = "95dbc9d33bc66c2a7665fbfb64bb9811d70f01b64ae6a78e832db004afc0a37d"
+"Q14_Cached.Cmp" = "dc9ea328084b7c8a3d5652e0f713a850f4f01d206c2001e736ab9ffe8e78259f"
+"Q14_Cached.CmpCorrect" = "9e83fd322a1075c13072cc78fde27126e8055709e48fc2cf9d8b99fc48a96248"
+"Q14_Cached.CmpCorrectCheck" = "5e1cfec0ff3b2057cf77a2754ad3acba1e3efbf6dea9b15eb732f38c940cd65d"
+"Q14_Cached.FromNat" = "a92539c74250fd9474726b63f54bfbc659d82b976e06b8e0c2b2891934d736de"
+"Q14_Cached.FromNatCorrect" = "d8e59a2116cb212d6b9a3e9e9cbd88cb220ac3829b263b11ab05d91f2b4918d0"
+"Q14_Cached.Num" = "78686efa4176297fb61f857b73c798349907cf66bed251ca1b9d73e7c31daec6"
+"Q14_Cached.Val" = "5382c6e2909ad93b37e886c2ad15ece7d3cb445836a67e7037a398b6bbec2d07"
+"Q14_Cached.Wf" = "2f97e10d5285cb0ea399548c3283e4c50ae10e3a6e13a88c175f0440c0702140"
+"Q14_Cached.Zero" = "16d97e5e69b5b6aeffa36f714f6b2d27a6031290bfe1d27c311c5ce5b4b46917"
+"Q14_Cached.ZeroCorrect" = "d1901425954565cf7f1b77d43bd69a62955e9ef95e249cc1f2d8eb0c704c9ebd"
+"Q14_Term.Interleave" = "0852245ddff5a7af2d444d6726db37c833e05fb5d09e9ddd784e38916b8fcd53"
+"Q14_Term.InterleaveSpec" = "1f8f640986c37ed093fa6337762c73a8a6b2e4c3067c2f5d9df71937ac33b665"
+"Q14_Term.InterleaveSpecCheck" = "a6924988a933131581d946516f3d67b5f83b92dd9a7a5756d341e042571d0932"
+
+[[file]]
+path = "dafny/Q/Q14_PracticeIIB/std/Q14_Loop.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q14_Loop {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q14_Loop.BExp" = "6f489129a64107b6a9c287fa1ec23c3fdd7e3930c787b1ecca005bc8b4b957b0"
+"Q14_Loop.Cmd" = "19a84561877cd3a37e3009eb98635256f8744a2d311b362e2e57754750d9968c"
+"Q14_Loop.Eval" = "a554e449f09c3623e043136b51c4920075b6af14559103521da81e159fcf3f7b"
+"Q14_Loop.Exec" = "65f75e5a0a6412f8647fa49c6fcedb10df009bdde8c913779c7ef78656db681b"
+"Q14_Loop.Expr" = "aca5907b088033677cc64c33176b7754f5f5af5945d4fb10d9bb6e80410847d7"
+"Q14_Loop.Holds" = "18ed0a9689e47e24ccab481ae7c0667cbe0bc4b1dcb1bf993b519970f7a59b9b"
+"Q14_Loop.Outcome" = "f001c7132dc22ff0e1d3b925909a5cef15277a012e87c029e75dad32c508c610"
+"Q14_Loop.State" = "98995003eeda3f8b4d4d7b5e891bab7d71c2b19bb92eb8a61a2f9f12667d8e08"
+"Q14_Loop.SubstB" = "6c82fb3718ca92e28b23977e35c4fc970eb38cbacafa0c1ee48b83cbb9bf9f9d"
+"Q14_Loop.SubstE" = "037decab6b3511a5be721f732d93318cc5f36220ceaf73ace8b62bde2fa7bc32"
+"Q14_Loop.Valid" = "0bb9e898e3853304cdeb738d74720de7fd75d8706b027367a8c0644d9c3346d0"
+"Q14_Loop.Vcs" = "8d864d956a6bdeac5561f03b959280bf626c48db75f19ce09543ff25245e6209"
+"Q14_Loop.Wp" = "c646fbcdf3468fd622d72f86cd062e5ca83f45b1a8939efb58cdb58068320502"
+"Q14_Loop.WpSoundWhile" = "ea944bfd99e1e08ce20b89b9d12ef48607c440a11cf1d8342e9d635b62f48dc5"
+
+[[file]]
+path = "verus/q/q14_practice_iib/src/lib.rs"
+lang = "v"
+open_bodies = ["Accum::total"]
+[file.statements]
+"<PairAcc as Accum>::add_word" = "f5ee1f4a64a02e6b321dbf6ba4d9762fe0d75e0fb47407efa1a9f39b99cc066c"
+"<PairAcc as Accum>::from_big" = "2a35dff31ce52fd284366d021db2d2f9f6de431bbf5a75ebc975b787f1d5ac15"
+"<PairAcc as Accum>::read" = "8bc8e08879dccaa3d74805ff277e15f1e82da21bb114379dcb68cedcac2728b6"
+"<PairAcc as Accum>::total" = "66902903bb0aa10a2ccb71637ed6d2bfbd362a4761e5d6795e0aa4516dfe7bbc"
+"Accum::add_word" = "600027adad4740cbd8cd517fa2957674cec0d89c8c3413571dc136156524ac01"
+"Accum::from_big" = "e8b498e6609cf012e6282c8e7fde200d1f0cf95f94015adb167721e4d3d82bb0"
+"Accum::read" = "f50f3938b383fbe82e0f3a50cf94c30411cfdda30f816d5d40b79525e9c4ba45"
+"Accum::total" = "c3e720d7d488cee47acf3379299932d7d6add4eb7c121027d2da46060b934e03"
+"PairAcc" = "2139ba9526447d448bdf634d8914a9a7dddc3e888750d4e15342a95a329df03e"
+"add_both" = "6893d12dff0623e6592fc31fe41ab9a36142db45a5d90ed802a14a981a6e7751"
+"limb_sum" = "6835efc75adce9afb8248b90da75a385992408eae2ab27721e6c6c3cbbc506d0"
+"pair_acc_check" = "4063ab693a1fe2ca47c0649d2d1d2e636accb15ea4136ad25b3195a4b7320b6f"
+"sum_limbs" = "260d95c5eb42d73975b128bdb18a5ccacef5585ce33ce68ec94f8ec27e10c798"
+"sum_limbs_check" = "88f74d412702da6914d790267d4973c642d3055a21770ff4de98db34b99f6d9c"
+
+[[file]]
+path = "verus/q/q14_practice_iib/src/perm.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<List as View>::V" = "20c7e4ca2ecd65bf6bf5c8b89339b6a4589bd47631e64a0ae54503d8f7bb3c8a"
+"<List as View>::view" = "461d33d347404b51adcb6f8d7ece2bc85b0a6e8166979897fa4fa04491e5e2f7"
+"List" = "1cdce0961ea63a316cf55a6ef723aa7b12798042808bc0314493dab59ccd507f"
+"List::new" = "8af7dea778cbcc82d9a635aabeaecb5efd3db7f2908a8b621168286ccf75a949"
+"List::push_front" = "2137093c7d9cfe8fcacb0b388e04710d0291a77a320a3ab1ee7ca97e5bbb4019"
+"List::sum" = "c41a9e89121aada0435186a39cb7df15549f307e75dacb995825d0e8d29478d5"
+"List::wf" = "a5c387d56f4fd45a64d5e0f50f4774a6947fbab813834e018312188ce79065e3"
+"Node" = "f4c4fd1c0aa8bfe512fff6113b197e3782d0cec76b676e4686137e29bbacc678"
+"chain_view" = "84e12372b79ca0499e1134b8e7301dfb21e1c85d6df0c727b13cfe7b35a5ca5c"
+"chain_wf" = "86c2830e9f10664bd47c8ac07cb400c52abdfcf8b1b8dd81ee67d0abe94ac943"
+"list_check" = "06f9b3acfc80a0960268340eb444746a3fb25977adc0c29f440dbf4d75fe53e6"
+"vals_sum" = "7d5953bc7fcdb321ab2232871d297ff4fbb57fff2e4efced58a0bd5d00f127b7"
+
+[[file]]
+path = "dafny/Q/Q14_PracticeIIB/exit/Q14_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q14_Exit.PushAll" = "1de37fb974732f346a66c360e223d1e8c8a9d20bcb5b387eea638e199ce3b7df"
+"Q14_Exit.PushAllConcat" = "821d3d4c27f8e24f1614ddc026fd08c4766b8d4f35a7dcb2c077bded9323d316"
+
+[[file]]
+path = "verus/q/q14_practice_iib/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"no_verus_exit_item" = "17f049ac45dd0cfa344be13f028949ff3327b50621f0fc57a78a32ecfb23ef49"

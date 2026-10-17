@@ -1,0 +1,79 @@
+% Q14_problems.tex — the written problems of Q14 (Practice II-B). Built by
+% `make -C paper paper` with Q14_answers.tex. B1 (which contracts may stand in
+% for a trait's, a concept question) and B2 (the paper card) are the module's
+% written pair: 15 minutes, after the chapter's §1 and before H2v.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q14 --- Practice II-B \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q14\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: after the chapter's \S1, before H2v, the trait item (15 minutes in
+all). Answer B1 without running anything: the grader runs the checks. Then run
+\texttt{/grade-paper Q14} in a fresh session. Compare with
+\texttt{paper/solutions/} only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B1}
+\textbf{Which contracts may stand in for the trait's} (5 minutes). A trait
+declares one method, \dfy{Next(x: int) returns (y: int)} (Verus: a method
+\vrs{next} with result \vrs{y}), with the contract
+\[ P_T(x) \;\equiv\; 0 \le x \le 10 \quad\text{(requires)}, \qquad
+   Q_T(x, y) \;\equiv\; y > x \quad\text{(ensures)}. \]
+A generic client is proved once, from $P_T$ and $Q_T$ alone, for every
+implementation. An implementation whose method carries a contract
+$(P_I, Q_I)$ of its own may stand in for the trait's exactly when both
+conditions hold:
+\begin{enumerate}
+\item[(i)] $P_T(x) \Rightarrow P_I(x)$ for every $x$;
+\item[(ii)] $P_T(x) \wedge Q_I(x, y) \Rightarrow Q_T(x, y)$ for every $x$ and
+  $y$.
+\end{enumerate}
+Five candidates $(P_I, Q_I)$:
+\begin{enumerate}
+\item[$C_1$] $x \ge 0$; \quad $y > x$
+\item[$C_2$] $1 \le x \le 10$; \quad $y > x$
+\item[$C_3$] $0 \le x \le 10$; \quad $y = x + 1$
+\item[$C_4$] \textsf{true}; \quad $y \ge x$
+\item[$C_5$] $x \le 10$; \quad $x \ge 0 \Rightarrow y > x$
+\end{enumerate}
+For each: \textbf{(a)} does (i) hold? does (ii) hold? \textbf{(b)} for every
+condition that fails, a witness: for (i), an $x$ at which $P_T$ holds and $P_I$
+does not; for (ii), a pair $(x, y)$ at which $P_T$ and $Q_I$ hold and $Q_T$
+does not. \textbf{(c)} In one line: which of the two conditions protects the
+generic client's call, and which protects what the client concludes after the
+call?
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B2}
+\textbf{Paper card 06.9, CAPRI: Contract-Aware Proof Repair for Isabelle}
+(10 minutes). Fill the card on its eight fields: task shape, oracle, what is
+trusted, cheat surface, metric, budget, variance, artifact. Each field is
+graded against the pinned range of your own \texttt{cheatsheets.md}: lines
+2588--2631, the entry from its heading to its \emph{Why it matters}
+paragraph, in the copy the command below names. The pin is the sha256 of
+exactly those lines, computed with the first line below; it must print the
+second.
+{\small
+\begin{verbatim}
+sed -n '2588,2631p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+993a2dfbe563247916b85f81105abf302e12b6a340be78e25dc3c9fa8c152b5b  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

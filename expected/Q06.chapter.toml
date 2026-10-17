@@ -1,0 +1,457 @@
+# expected/Q06.chapter.toml — the chapter pins of Q06's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q06 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "p1dv-d"
+cmd = ["dafny", "test", "--no-verify", "--target", "py", "p1.dfy"]
+cwd = "scratch"
+answers = ["Q06.P1dv"]
+note = "Q06.P1dv's Dafny half: the pinned dafny binary run plainly, as the docstring says, on the docstring's p1.dfy (the dafny fence above the pin, after P1's box)."
+[entry.normalize]
+exit = true
+[entry.scratch."p1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "f0f83218735032bcd95dbd5a967f2dca5c2da0237ce587cfbb6377e6d8e45624"
+[entry.pinned.inputs]
+"scratch:p1.dfy" = "517837013722414c7cbea5fa781df4d1de382ff33b2ce9dff047542b9833a515"
+
+[[entry]]
+id = "p1dv-v"
+cmd = ["verus", "p1.rs", "--crate-type=lib", "--no-verify", "--output-json"]
+cwd = "scratch"
+answers = ["Q06.P1dv"]
+excerpt = [1, 9]
+note = "Q06.P1dv's Verus half: the pinned verus binary run plainly, as the docstring says, on the docstring's p1.rs (the rust fence above the pin, after P1's box)."
+[entry.normalize]
+exit = true
+[entry.scratch."p1.rs"]
+fence = "above"
+[entry.pinned]
+body = "3dfc3067ae0822b0e65d4cf0174a80130d5e854a86a0c27c571b3a3448f3573c"
+[entry.pinned.inputs]
+"scratch:p1.rs" = "b935850adf9f210d43a969a39fe897845d07119df718df94348704b34a761076"
+
+[[entry]]
+id = "p2dv-d"
+cmd = ["scripts/vcheck", "--json", "specimens/Q06/card-c3d.dfy.specimen"]
+answers = ["Q06.P2dv"]
+note = "Q06.P2dv's Dafny half on C3's Dafny failure demo (an out-of-resource lemma); the chapter names the two elided JSON values (the command line and the raw-output directory)."
+[entry.normalize]
+exit = true
+replace = [["\"cmd\": \\[[^\\]]*\\], ", "\"cmd\": [...], "], ["\"raw_dir\": \"[^\"]*\", ", "\"raw_dir\": \"...\", "]]
+[entry.pinned]
+body = "604675995f4cd7f5d40890687aed1b3a2bcb4fc4f1f5217a16b395ac61dfaf33"
+[entry.pinned.inputs]
+"specimens/Q06/card-c3d.dfy.specimen" = "dd2c796e830eb7c37017ad19fbcbd81a841a78afc16a2f12b046051be0489cd7"
+
+[[entry]]
+id = "p2dv-v"
+cmd = ["scripts/vcheck", "--json", "specimens/Q06/card-c3v.rs.specimen"]
+answers = ["Q06.P2dv"]
+note = "Q06.P2dv's Verus half on C3's Verus failure demo (an out-of-resource proof fn); the same two JSON values elided."
+[entry.normalize]
+exit = true
+replace = [["\"cmd\": \\[[^\\]]*\\], ", "\"cmd\": [...], "], ["\"raw_dir\": \"[^\"]*\", ", "\"raw_dir\": \"...\", "]]
+[entry.pinned]
+body = "f5094cfb42665df8afe0c98c96b539f18e5e791da2353a31661c044688945888"
+[entry.pinned.inputs]
+"specimens/Q06/card-c3v.rs.specimen" = "75c0792f429bafca9d7346193c545735408aafde712b0a6a8f32ac9f1d0fa6cd"
+
+[[entry]]
+id = "c5dv-d"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c5dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "793841624c575f893dc112651968e76f7b7370f4c07535992f21f7b515d60c0a"
+[entry.pinned.inputs]
+"specimens/Q06/card-c5dv-d.dfy.specimen" = "4a6fe1aecadaa3d1c40203431fd943033fad916cb91e504c73066a2bdf3021d1"
+
+[[entry]]
+id = "c5dv-v"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c5dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "226ea2003d03245a838bff4bc5160cba4fe599d010c4c28d700f5ec7267a0729"
+[entry.pinned.inputs]
+"specimens/Q06/card-c5dv-v.rs.specimen" = "308fac29264c5cef58b818ea5124a1e4c887d0485fe20609941660264bdc58ce"
+
+[[entry]]
+id = "p8dv-d"
+cmd = ["scripts/vaudit", "dafny/Q/Q06_Machine/std"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "scripts/dvl/pins.toml"]
+answers = ["Q06.P8dv"]
+note = "Q06.P8dv's Dafny half: the audit of the shipped std unit, which uses the standard library."
+[entry.normalize]
+exit = true
+[entry.pinned]
+body = "b96684b0969978ea999b2914b18559bd60ab965b358ae1e4e13a203f7739b7ff"
+[entry.pinned.inputs]
+"dafny/Q/Q06_Machine/std/Q06_Machine.dfy" = "4e9fc09a8ac1273b81c26a14e101eab1cfe181eb21113433cbd2b4e5e2f420f7"
+"dafny/Q/Q06_Machine/std/dfyconfig.toml" = "57d3a75e99e828854be44e78b62ea6186e0b0591f9e2785bb9b1f306ac996f8a"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"scripts/dvl/pins.toml" = "b722deb4c79a790b4ddf0ef895062c2f5c96e1175091fc9e9f96b7b4fef2de9c"
+
+[[entry]]
+id = "p8dv-v"
+cmd = ["scripts/vaudit", "verus/q/q06_machine"]
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs"]
+answers = ["Q06.P8dv"]
+note = "Q06.P8dv's Verus half: the audit of the shipped crate (a --no-cheating run), which uses vstd's arithmetic lemmas."
+[entry.normalize]
+exit = true
+[entry.pinned]
+body = "a3060e908d5ac85368470ce3f16d5c956dccccb108d771cc1e222e9668e9216d"
+[entry.pinned.inputs]
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/q/q06_machine/Cargo.toml" = "4f86167c9be9c398fb35f2ffb6332a3f4f9b1cd66e9d51c8921d6cbf697728d8"
+"verus/q/q06_machine/src/exit.rs" = "775c099c8e8415af8b48a87d4d101c686efd49fde54f983601a81bf9e8e311da"
+"verus/q/q06_machine/src/lib.rs" = "7e4fcea7523f9637e9572c1b3bc17f66ab8631a91f4bb3bf0194968a861aa0c4"
+
+[[entry]]
+id = "c6dv-d"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c6dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "cda44c78c56a20c609431b702cdea438b02e14e89bcc42eaaa7ec21923a1d6e6"
+[entry.pinned.inputs]
+"specimens/Q06/card-c6dv-d.dfy.specimen" = "10b90e5f5b46403c9ad8b7604c24994a0be8f99c56c2a215eed446122aee03f5"
+
+[[entry]]
+id = "c6dv-d-plain"
+cmd = ["dafny", "audit", "--standard-libraries", "probe.dfy"]
+cwd = "scratch"
+excerpt = [1, 3]
+note = "C6dv's Dafny demo, copied, audited by the plain dafny binary with the standard library on (as every std unit sets it); the excerpt keeps the first rows, and the chapter says what was cut."
+[entry.normalize]
+exit = true
+[entry.scratch."probe.dfy"]
+copy = "specimens/Q06/card-c6dv-d.dfy.specimen"
+[entry.pinned]
+body = "cc0ce6ec6a84487762a591a202bc524be1e158449a9f2d1ef76aaf6ba7a6c8e3"
+[entry.pinned.inputs]
+"scratch:probe.dfy" = "10b90e5f5b46403c9ad8b7604c24994a0be8f99c56c2a215eed446122aee03f5"
+"specimens/Q06/card-c6dv-d.dfy.specimen" = "10b90e5f5b46403c9ad8b7604c24994a0be8f99c56c2a215eed446122aee03f5"
+
+[[entry]]
+id = "p3d"
+cmd = ["scripts/vcheck", "specimens/Q06/P3d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "fd8b9b6c350c3915ea08f8e6e4c31bf8f20213136e2dce2818d9d66be0e4bdaf"
+[entry.pinned.inputs]
+"specimens/Q06/P3d.dfy.specimen" = "0b92fb504da3330e7cb2d9379e8e16a71adf8b05efd7863785598427640a1640"
+
+[[entry]]
+id = "p4v"
+cmd = ["scripts/vcheck", "specimens/Q06/P4v.rs.specimen"]
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3e0a2e1fb6bc98ba8df6a78d78254a40d1e2ccc646f4cd65c41b69412f041da1"
+[entry.pinned.inputs]
+"specimens/Q06/P4v.rs.specimen" = "aa870c253fe4ce65d5a8a049b3e234e38c19156f200057f99ee5d260445dfc11"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+
+[[entry]]
+id = "c1d"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c1d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "f403a51461b9e6557b71ede0a5c4079ed8556dde6e7b2303b6d45f9c271a2ebb"
+[entry.pinned.inputs]
+"specimens/Q06/card-c1d.dfy.specimen" = "8c3da038ea3eefbe760572b33e346ba6cf7a99912592a96dc3779a162b01e6ec"
+
+[[entry]]
+id = "c1v"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c1v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "254dc6b3a26b8c0484a4f89976ee9d19c62f92db8b69c64c4ad4e29e6f99efa4"
+[entry.pinned.inputs]
+"specimens/Q06/card-c1v.rs.specimen" = "4c2118c888fdc780d5270cf6cc9fcff294e5f7629a6b5b7918de586c8e6990dd"
+
+[[entry]]
+id = "p5dv-d"
+cmd = ["scripts/vcheck", "--module", "Q06", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/options/std.toml"]
+answers = ["Q06.P5dv"]
+note = "Q06.P5dv's Dafny scenario, verbatim from the docstring, as a scratch probe with the Q06 unit's options; the source is the dafny fence above the pin, after P5's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "7dec8345fb91802b314bffe34f660b8aee000aaa52f9a1d2c5c83425581cfa1b"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:probe.dfy" = "b4f35e0130e109560c30c6bc30f7c3b995b39fae6b1d40c23ff599b1c82b105e"
+
+[[entry]]
+id = "p5dv-v"
+cmd = ["scripts/vcheck", "--module", "Q06", "probe.rs"]
+cwd = "scratch"
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs"]
+answers = ["Q06.P5dv"]
+note = "Q06.P5dv's Verus scenario, verbatim from the docstring, as a scratch probe; the source is the rust fence above the pin, after P5's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "160385686b5fc85c9acd80a7b347bfef30eed35f28917ff44e81ea943b1191d4"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "52713fa45b8ee6269f4395914258d3ee336d4c06c96a1e166852ff5baa92f404"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+
+[[entry]]
+id = "c2d"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ffe54b6579fc55a0a6c8d9e3d09df97ccb254054ebddfd5a1805125253be3e9d"
+[entry.pinned.inputs]
+"specimens/Q06/card-c2d.dfy.specimen" = "fb5f3df17864d545bbdc8cf43e54916ac41507f41ab4eae749f5f55c9141339e"
+
+[[entry]]
+id = "c2v"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c2v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e98f942d9363a61317c55f4f99723b315087cb4e7394ca6b91d3a1aa648e8f8c"
+[entry.pinned.inputs]
+"specimens/Q06/card-c2v.rs.specimen" = "2ff34e5b445015b942ab47fc693f5ea8b387b812ba37f1728dc5ea6c5c070109"
+
+[[entry]]
+id = "c4-test-d"
+cmd = ["scripts/vcheck", "--test", "dafny/Q/Q06_Machine/std"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy"]
+note = "The shipped Dafny unit's tests: card C4's two @Test methods (H4's suite ships commented)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "0b0992bf57686c607a7bb3ec12a83e66c89bd86e2dbc3e42cb08d2723ca43dbd"
+[entry.pinned.inputs]
+"dafny/Q/Q06_Machine/std/Q06_Machine.dfy" = "4e9fc09a8ac1273b81c26a14e101eab1cfe181eb21113433cbd2b4e5e2f420f7"
+"dafny/Q/Q06_Machine/std/dfyconfig.toml" = "57d3a75e99e828854be44e78b62ea6186e0b0591f9e2785bb9b1f306ac996f8a"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+
+[[entry]]
+id = "c4-test-v"
+cmd = ["scripts/vcheck", "--test", "verus/q/q06_machine"]
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs"]
+note = "The shipped crate's tests: card C4's two #[test]s (H4's suite ships commented)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a8730c5b45d24da40a96d8ab23e72cba0d5ebd1f88676dddca66749b61a36439"
+[entry.pinned.inputs]
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/q/q06_machine/Cargo.toml" = "4f86167c9be9c398fb35f2ffb6332a3f4f9b1cd66e9d51c8921d6cbf697728d8"
+"verus/q/q06_machine/src/exit.rs" = "775c099c8e8415af8b48a87d4d101c686efd49fde54f983601a81bf9e8e311da"
+"verus/q/q06_machine/src/lib.rs" = "7e4fcea7523f9637e9572c1b3bc17f66ab8631a91f4bb3bf0194968a861aa0c4"
+
+[[entry]]
+id = "c4d"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c4d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "90271e2705cb24da5a926895e32bb7eac65aac7d28e81a856a42c97af97089a5"
+[entry.pinned.inputs]
+"specimens/Q06/card-c4d.dfy.specimen" = "4e5affafab7eadf351030107f82709c5bab3cdb5b6e9de21657324cc62938368"
+
+[[entry]]
+id = "c4v"
+cmd = ["scripts/vcheck", "specimens/Q06/card-c4v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e633398204f1f0fb0bb58ca593a4f3bbc03548b17e4e862016ef019146113e30"
+[entry.pinned.inputs]
+"specimens/Q06/card-c4v.rs.specimen" = "ddfb2c94827a7e4613b04a7b23396fa23126c00f10279c8208c52d5c9cf33ac4"
+
+[[entry]]
+id = "p6dv-a"
+cmd = ["scripts/vaudit", "probe.dfy"]
+cwd = "scratch"
+inputs = ["scripts/dvl/pins.toml"]
+answers = ["Q06.P6dv"]
+note = "Q06.P6dv's file [a], verbatim from the docstring, audited in a scratch directory; the source is the dafny fence above the pin, after P6's box."
+[entry.normalize]
+exit = true
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "dfb1ecb8c6e480e0b215e903105c060c726e211c44b510abb1f4d4b9a4c73e30"
+[entry.pinned.inputs]
+"scratch:probe.dfy" = "01fe617194a66e8db2b3148e54803fd41df1b02736f1fc0e0b366a8beed17861"
+"scripts/dvl/pins.toml" = "b722deb4c79a790b4ddf0ef895062c2f5c96e1175091fc9e9f96b7b4fef2de9c"
+
+[[entry]]
+id = "p6dv-b"
+cmd = ["scripts/vaudit", "probe.rs"]
+cwd = "scratch"
+inputs = ["scripts/dvl/pins.toml"]
+answers = ["Q06.P6dv"]
+note = "Q06.P6dv's file [b], verbatim from the docstring, audited in a scratch directory; the source is the rust fence above the pin."
+[entry.normalize]
+exit = true
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "1cac24e2f63bd5ffd5eb15548e17063f8c6b7c03b26596997f1f78727a1d1b51"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "6e59a45dc369a0a150bb44707ee983c06c184ead1dc91fac7af1ff9a98e05c7f"
+"scripts/dvl/pins.toml" = "b722deb4c79a790b4ddf0ef895062c2f5c96e1175091fc9e9f96b7b4fef2de9c"
+
+[[entry]]
+id = "p6dv-c"
+cmd = ["scripts/vaudit", "probe.rs"]
+cwd = "scratch"
+inputs = ["scripts/dvl/pins.toml"]
+answers = ["Q06.P6dv"]
+note = "Q06.P6dv's file [c], verbatim from the docstring, audited in a scratch directory; the source is the rust fence above the pin."
+[entry.normalize]
+exit = true
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "a0340e3d55f98a0234cb4c056ec2c86811c83cef7f7ed9418fa775983762e652"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "ddc92c4784e66f7922d95aaee396d9f7ff18855018b0e92dbce2fc201e51e72d"
+"scripts/dvl/pins.toml" = "b722deb4c79a790b4ddf0ef895062c2f5c96e1175091fc9e9f96b7b4fef2de9c"
+
+[[entry]]
+id = "c6dv-v"
+cmd = ["scripts/vaudit", "specimens/Q06/card-c6dv-v.rs.specimen"]
+[entry.normalize]
+exit = true
+[entry.pinned]
+body = "381433bcbbae6178093c3e5bb7cf966f1cbe5da8203454cecd5705a17cddf2eb"
+[entry.pinned.inputs]
+"specimens/Q06/card-c6dv-v.rs.specimen" = "a0bd98e54b9e0665e2151f6ab8c497ec904c9d18905ba2fb6b63a6500ece468f"
+
+[[entry]]
+id = "p7py-wilson"
+kind = "recorded"
+answers = ["Q06.P7py"]
+source = "~/.cache/dafny-verus-learn-0/author-probes/dv3k/q06-chapter/stats-wilson.txt"
+note = "fvh.stats.wilson_interval(14, 20), P7's numbers, run through uv in harness/ (the record's README says how). No course command runs Python on a scratch line, so the quote is recorded; re-record it whenever harness/fvh/stats.py or the lock changes."
+[entry.pinned]
+body = "32708bf827df4370b8766200a0526f569bb2410b5c659cb95ce46b3051b96b6a"
+
+[[entry]]
+id = "p9py-passk"
+kind = "recorded"
+answers = ["Q06.P9py"]
+source = "~/.cache/dafny-verus-learn-0/author-probes/dv3k/q06-chapter/stats-passk.txt"
+note = "fvh.stats.pass_at_k(10, 3, 5) and (10, 3, 1), P9's numbers, run through uv in harness/; re-record with the Wilson record."
+[entry.pinned]
+body = "4c59720ac72be85679bf44d4ed42e0818e96e64294866c8d0efb763c0888ed34"
+
+[[entry]]
+id = "stats-mcnemar"
+kind = "recorded"
+source = "~/.cache/dafny-verus-learn-0/author-probes/dv3k/q06-chapter/stats-mcnemar.txt"
+note = "fvh.stats.mcnemar(7, 1), the chapter's own example of a paired comparison (not a paper problem's numbers), run through uv in harness/; re-record with the Wilson record."
+[entry.pinned]
+body = "946f9435e1a5358ae66a4531a1aee6f390d1224d378f51cd98da2f351f781440"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q06"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6ae25feeeef35051dcb162f73f9115a261ab53574b807e1b9dee8e344c9460f5"
+[entry.pinned.inputs]
+"dafny/Q/Q06_Machine/agent/Q06_AgentProver.dfy" = "0c62c5561140c0616b6cf3005982846f4b84cf4f93d7f14ff467415d5d6ad4de"
+"dafny/Q/Q06_Machine/exit/Q06_Exit.dfy" = "a38a9c02d2bf342cfd159a64e2017e18d1149373a18b2ab6d03622d17da562fe"
+"dafny/Q/Q06_Machine/std/Q06_Machine.dfy" = "4e9fc09a8ac1273b81c26a14e101eab1cfe181eb21113433cbd2b4e5e2f420f7"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"instructor/calib/Q06.tsv" = "absent"
+"slots/Q06.slots" = "da063c28b22e5b03cce702ff569d318d0a5dcdf1f394b9fcfe4bda2c474eacf0"
+"specimens/Q06/P3d.dfy.specimen" = "0b92fb504da3330e7cb2d9379e8e16a71adf8b05efd7863785598427640a1640"
+"specimens/Q06/P4v.rs.specimen" = "aa870c253fe4ce65d5a8a049b3e234e38c19156f200057f99ee5d260445dfc11"
+"specimens/Q06/card-c1d.dfy.specimen" = "8c3da038ea3eefbe760572b33e346ba6cf7a99912592a96dc3779a162b01e6ec"
+"specimens/Q06/card-c1v.rs.specimen" = "4c2118c888fdc780d5270cf6cc9fcff294e5f7629a6b5b7918de586c8e6990dd"
+"specimens/Q06/card-c2d.dfy.specimen" = "fb5f3df17864d545bbdc8cf43e54916ac41507f41ab4eae749f5f55c9141339e"
+"specimens/Q06/card-c2v.rs.specimen" = "2ff34e5b445015b942ab47fc693f5ea8b387b812ba37f1728dc5ea6c5c070109"
+"specimens/Q06/card-c3d.dfy.specimen" = "dd2c796e830eb7c37017ad19fbcbd81a841a78afc16a2f12b046051be0489cd7"
+"specimens/Q06/card-c3v.rs.specimen" = "75c0792f429bafca9d7346193c545735408aafde712b0a6a8f32ac9f1d0fa6cd"
+"specimens/Q06/card-c4d.dfy.specimen" = "4e5affafab7eadf351030107f82709c5bab3cdb5b6e9de21657324cc62938368"
+"specimens/Q06/card-c4v.rs.specimen" = "ddfb2c94827a7e4613b04a7b23396fa23126c00f10279c8208c52d5c9cf33ac4"
+"specimens/Q06/card-c5dv-d.dfy.specimen" = "4a6fe1aecadaa3d1c40203431fd943033fad916cb91e504c73066a2bdf3021d1"
+"specimens/Q06/card-c5dv-v.rs.specimen" = "308fac29264c5cef58b818ea5124a1e4c887d0485fe20609941660264bdc58ce"
+"specimens/Q06/card-c6dv-d.dfy.specimen" = "10b90e5f5b46403c9ad8b7604c24994a0be8f99c56c2a215eed446122aee03f5"
+"specimens/Q06/card-c6dv-v.rs.specimen" = "a0bd98e54b9e0665e2151f6ab8c497ec904c9d18905ba2fb6b63a6500ece468f"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/q/q06_machine/src/exit.rs" = "775c099c8e8415af8b48a87d4d101c686efd49fde54f983601a81bf9e8e311da"
+"verus/q/q06_machine/src/lib.rs" = "7e4fcea7523f9637e9572c1b3bc17f66ab8631a91f4bb3bf0194968a861aa0c4"
+
+[[entry]]
+id = "py-shipped"
+cmd = ["scripts/vcheck", "harness/q/fvh_q/q06_stats.py"]
+inputs = ["harness/fvh/stats.py", "harness/fvh/records.py", "harness/fvh/holes.py", "harness/tests/q/test_q06_stats.py", "harness/uv.lock"]
+excerpt = [1, 4]
+note = "The learner Python file as shipped, through its frozen acceptance tests."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "0c364a910660d9097a3e689dfaac999964165ff5b458625c23032728dae417ae"
+[entry.pinned.inputs]
+"harness/fvh/holes.py" = "caca28461b49273e68a1db8ef58d48ead17fc0b6197856a4673167dc4e2fb096"
+"harness/fvh/records.py" = "10dbc75a9c9833798586fe9c1de3a8ac4a467aa73d9872b55a111123e048e5a2"
+"harness/fvh/stats.py" = "feea0b0da574146f6ae0911c92baa29a1fb11d0836326a561ce3c16480bdc353"
+"harness/q/fvh_q/q06_stats.py" = "37107c9077484585b89c7b8f79a44abf47063077e18f008748e27c9748b67637"
+"harness/tests/q/test_q06_stats.py" = "b5fc5570463727a0751d91a50a754fc265e9267150d7d359d273b79188239fe6"
+"harness/uv.lock" = "d3241ce16192ea57ebcb6339fc5acc06c3429fb764da57bd8f1b643f00477eac"
+
+[[entry]]
+id = "agent"
+cmd = ["scripts/vcheck", "dafny/Q/Q06_Machine/agent/Q06_AgentProver.dfy"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "0052900c1c6463154a3569ae71ccc61b65fed543a6d9d07ab4938c5055cc0196"
+[entry.pinned.inputs]
+"dafny/Q/Q06_Machine/agent/Q06_AgentProver.dfy" = "0c62c5561140c0616b6cf3005982846f4b84cf4f93d7f14ff467415d5d6ad4de"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"

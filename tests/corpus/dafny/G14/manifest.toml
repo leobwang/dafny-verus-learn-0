@@ -1,0 +1,22 @@
+# Cheat-corpus manifest (Dafny) G14: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G14"
+lang = "dafny"
+half = "R"
+xclass = "X10"
+kind = "covered-elsewhere"
+title = "--boogie / --solver-option pass-through to Boogie and Z3"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused"]
+summary = "refused before any run (exit 3, no tool ran); never demonstrated live in DV0 (Δ106)"
+covered_by = [
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_refused_everywhere",
+  "tests/wrappers/test_tools_static.py::Core::test_passthrough_refusals",
+]

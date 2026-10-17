@@ -1,0 +1,50 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/q/fixtures/q18/K2"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "verus",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.0247,
+    "max": 1456,
+    "min": 1381,
+    "solver": null,
+    "symbol": "gate2_k2::half_up"
+   },
+   {
+    "cv": 0.004,
+    "max": 711,
+    "min": 705,
+    "solver": null,
+    "symbol": "gate2_k2::add_one"
+   }
+  ],
+  "stable": false,
+  "target": "<root>/harness/tests/q/fixtures/q18/K2",
+  "verdicts": {
+   "1": "failed",
+   "2": "failed",
+   "3": "failed"
+  }
+ },
+ "exit_code": 1,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "934f57b8664c95073a063802feaa16483b6c6fd12b69d1587f7cfc625337b586",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/K2"
+}

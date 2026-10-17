@@ -1,0 +1,25 @@
+// Demo for card Q06.C1v (write:trigger), the failure half. The success half is
+// `lemma_odd_bound` in verus/q/q06_machine/src/lib.rs; here the proof never mentions a
+// term of the trigger's shape. Run it with
+// `scripts/vcheck specimens/Q06/card-c1v.rs.specimen`; the EXPECT line pins the message
+// the verifier gives (line and fragment).
+// after: Q06.P4v
+// EXPECT @21 "postcondition not satisfied"
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn odd(i: int) -> int {
+    2 * i + 1
+}
+
+pub proof fn lemma_odd_bound(s: Seq<u64>)
+    requires
+        s.len() > 3,
+        forall|i: int| 0 <= i < s.len() ==> (s[i] as int) < #[trigger] odd(i),
+    ensures
+        s[3] < 7,
+{
+}
+
+} // verus!

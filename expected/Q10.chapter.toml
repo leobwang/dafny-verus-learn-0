@@ -1,0 +1,148 @@
+# expected/Q10.chapter.toml — the chapter pins of Q10's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q10 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "p1dv-d"
+cmd = ["scripts/vcheck", "--module", "Q10", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/Q/QG_L1_BigNat.dfy"]
+answers = ["Q10.P1dv"]
+note = "Q10.P1dv's Dafny half, the docstring's Low in a module with L1 opened, as a scratch probe with Q10's unit options; the source is the dafny fence above the pin, after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "bd45e65516f7b6c3ed241d8ee89b0581238aae7a5f596719b6a99f22911eea86"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:probe.dfy" = "1dfa12b2672ace0103af44004796c7a69b3f6d9da6cbd8060cce6d2e7ea3a29d"
+
+[[entry]]
+id = "p1dv-v"
+cmd = ["scripts/vcheck", "--module", "Q10", "probe.rs"]
+cwd = "scratch"
+answers = ["Q10.P1dv"]
+note = "Q10.P1dv's Verus half, the docstring's low in a crate of its own; the source is the rust fence above the pin, after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "f8060bb61df61dbabb91df09c44d9b6a5fbe62f269b719699f5ee25e778ca322"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "fefed459e3f681761f6280bc2559f03c0b9acc46867896fc9f2a78a309b9238f"
+
+[[entry]]
+id = "p2dv-d"
+cmd = ["scripts/vcheck", "--module", "Q10", "count.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q10.P2dv"]
+note = "Q10.P2dv's Dafny half, the docstring's Count with no decreases, after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."count.dfy"]
+fence = "above"
+[entry.pinned]
+body = "4d82d02b0e1e1b978b90e06be94305a0b49e8581181560506d879e86c00cf9e8"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:count.dfy" = "11d5ece98f15627702c2351d7be2a42b92d4fb97a87fad68ea0db75bffe735c7"
+
+[[entry]]
+id = "p2dv-v"
+cmd = ["scripts/vcheck", "--module", "Q10", "count.rs"]
+cwd = "scratch"
+answers = ["Q10.P2dv"]
+note = "Q10.P2dv's Verus half, the docstring's count, after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."count.rs"]
+fence = "above"
+[entry.pinned]
+body = "86ef3133ad9da9438493a21a0d340dea35e5446699dd263c07b7906f4b0d139a"
+[entry.pinned.inputs]
+"scratch:count.rs" = "0dcea7b544bd0f9fccc14639e0ed1a3100d543d8f018d6f34557d2c1dd715643"
+
+[[entry]]
+id = "p2dv-d-noinv"
+cmd = ["scripts/vcheck", "--module", "Q10", "count_noinv.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q10.P2dv"]
+note = "P2's Dafny loop without its invariant: the guessed measure's termination check fails; after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."count_noinv.dfy"]
+fence = "above"
+[entry.pinned]
+body = "7568d7af8eb8e920836f1fcb09f47e4a3a3603de007886fa2f56fa6a112e7b90"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:count_noinv.dfy" = "b721fa4e318ae183456d4a20af4a43dd03b7c3411dad7dec7a6a5814c9e25392"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q10"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs"]
+note = "The two units as shipped (§8)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "515a3dd9273dd41d010e907dfb4142df94882825ed5c7e1aac456b6ee6b01a93"
+[entry.pinned.inputs]
+"dafny/Q/Q10_PracticeIA/exit/Q10_Exit.dfy" = "f863dd0d83b4a3cbf9d1d1aef3c56d0b55037e6b1320ad97a5a16af4bb315496"
+"dafny/Q/Q10_PracticeIA/std/Q10_PracticeIA.dfy" = "fde907a59b1bba59079d00c72fab36d11a49e2c6ffb517b9e6f3835fb91a4a21"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"instructor/calib/Q10.tsv" = "absent"
+"slots/Q10.slots" = "3f6aaf1551dfc7ab67c65f5e50444f66bf01ea926927b82bad65a17e5ade30aa"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/q/q10_practice_ia/src/exit.rs" = "5ce725bd05a9ed7900d2b26f28b784397249e221be3976d05e7fdc7f2c811b80"
+"verus/q/q10_practice_ia/src/lib.rs" = "0d5ffac81918bac4ff06aca1cbad2ef5b2fdfd525769cf20228871ce1cc5ec57"
+
+[[entry]]
+id = "p1dv-d-noens"
+cmd = ["scripts/vcheck", "--module", "Q10", "noens.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/Q/QG_L1_BigNat.dfy"]
+answers = ["Q10.P1dv"]
+note = "P1's Dafny method without its ensures: the cast's range check alone verifies; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."noens.dfy"]
+fence = "above"
+[entry.pinned]
+body = "7220ecda46f2dea901c029845c79e437f1e022d725dcf339fbadf4064f92eb02"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:noens.dfy" = "fb9dc97abc30063a45571c15547f17f0370fd661c93ae172663eb94ac78dce76"
+
+[[entry]]
+id = "p2dv-v-noinv"
+cmd = ["scripts/vcheck", "--module", "Q10", "count_noinv.rs"]
+cwd = "scratch"
+answers = ["Q10.P2dv"]
+note = "P2's Verus loop without its invariant: the measure and the increment fail; after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."count_noinv.rs"]
+fence = "above"
+[entry.pinned]
+body = "bfae400aa93d90ddae6908510f58f30f7d11ce0a4eb673bd8f91e3c8328158ff"
+[entry.pinned.inputs]
+"scratch:count_noinv.rs" = "7b597136e2717f6f66a361eb1b805cb856117d5febdd66bcd35bf4aef90d045b"

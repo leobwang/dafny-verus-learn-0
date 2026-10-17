@@ -1,0 +1,168 @@
+% Q16_solutions.tex — REFERENCE SOLUTIONS to paper/Q16_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1's blueprint is the reference twins' (Solutions/dafny/Q/Q16_PracticeIIIA/,
+% Solutions/verus/q/q16_practice_iiia/), each statement checked on the course
+% pins on 2026-10-11 (Dafny 4.11.0, Verus 0.2026.09.27.3cf1832): the twins
+% gate with 0 holes and are stable on seeds 1-3 (Dafny under both bundled
+% solvers); Solutions/plans/Q16-code-notes.md records the runs. B2's fields are
+% graded against the learner's own cheatsheets.md; this file records which
+% lines of the pinned range each field draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q16 --- Practice III-A \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is an informal proof first (the five dimensions: statement-fidelity,
+induction-soundness, case-exhaustiveness, blueprint-quality, gap-accounting;
+the grade is their minimum, and at least 3 on every one unlocks formal work).
+Any blueprint whose statements are true and whose steps compose is correct:
+the reference below is one, not the only one. B2 is a paper card
+(\texttt{card-fidelity}, per field).
+
+Notation: $\mathit{val}$ is \dfy{ToNat} (Dafny) or \vrs{seq_to_nat}
+(Verus), $W(k)$ is \dfy{Pow(k)} or \vrs{weight(k)}, $B$ is \texttt{BASE},
+$s[i..j]$ a subrange.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (the blueprint)}
+
+\subsection*{H1, \dfy{MulCorrect}}
+\begin{description}
+\item[Why the plain statement fails.] \dfy{Times(a, b)} unfolds to
+  \dfy{MulAcc(a, b[1..], Add([], Shift(MulLimb(a, b[0]), 0)), 1)}, while the
+  hypothesis at \dfy{b[1..]} speaks of \dfy{MulAcc(a, b[1..], [], 0)}: a
+  different accumulator and position. (The captured run: two postcondition
+  errors, one per conjunct.)
+\item[(a) The generalization.] For all \dfy{a, b, acc} valid and every
+  \dfy{k}, by induction on $|b|$:
+  \[ \mathit{Valid}(\mathit{MulAcc}(a,b,acc,k)) \;\wedge\;
+     \mathit{val}(\mathit{MulAcc}(a,b,acc,k)) = \mathit{val}(acc) +
+     W(k)\cdot(\mathit{val}(a)\cdot\mathit{val}(b)). \]
+\item[(b) Lemmas.] \dfy{MulAccCorrect} (the statement above; \dfy{decreases
+  |b|}); \dfy{ShiftCorrect(s, k)}: \dfy{Valid(s)} implies
+  \dfy{Valid(Shift(s, k))} and $\mathit{val}(\mathit{Shift}(s,k)) =
+  W(k)\cdot\mathit{val}(s)$, by induction on $k$ (\dfy{Shift(s, k) == [0] +
+  Shift(s, k - 1)}, then L2's \dfy{ToNatCons}, \dfy{ValidCons}).
+\item[(c) Order.] \dfy{ShiftCorrect}; then \dfy{MulAccCorrect}: base case
+  $|b| = 0$ (both products zero, L4's \dfy{MulZero}); step: L4's
+  \dfy{MulLimbCorrect(a, b[0])}, \dfy{ShiftCorrect(MulLimb(a, b[0]), k)},
+  L4's \dfy{AddCorrect(acc, row)}, the hypothesis at
+  \dfy{(a, b[1..], Add(acc, row), k + 1)}; then \dfy{MulCorrect} is the
+  instance \dfy{acc = []}, \dfy{k = 0}, with $W(0) = 1$.
+\item[(d) Library facts.] L2's \dfy{ToNatHeadTail} and \dfy{ValidTail}
+  ($\mathit{val}(b) = b_0 + B\cdot\mathit{val}(b[1..])$), $W(k+1) =
+  B\cdot W(k)$ by unfolding; then the step's identity
+  $W(k)(A b_0) + B W(k)(A B') = W(k)(A(b_0 + B B'))$ by
+  \dfy{LemmaMulIsDistributive}, \dfy{LemmaMulIsAssociative} and
+  \dfy{LemmaMulIsCommutative} (eight calls), \dfy{MulNonneg} for the
+  \dfy{nat} products, \dfy{LemmaMulBasics} for the instance.
+\item[(e) Gaps.] None in the reference. A blueprint that leaves the
+  arithmetic identity as a declared gap with the identity written out scores
+  3 on gap-accounting, not less.
+\end{description}
+
+\subsection*{H2, \vrs{div_limb}}
+\begin{description}
+\item[(a) The invariant] of the loop from the top ($i$ from $n$ down, a
+  quotient vector of $n$ zeros filled first): $i \le n$, $|q| = n$,
+  $\mathit{rem} < d$, and
+  $\mathit{val}(a[i..n]) = \mathit{val}(q[i..n])\cdot d + \mathit{rem}$.
+  Entry: both suffixes empty, $\mathit{rem} = 0$. Exit: $i = 0$.
+\item[(b) Lemmas.] \vrs{lemma_suffix_step(s, i)}: for $0 \le i < |s|$,
+  $\mathit{val}(s[i..]) = s_i + B\cdot\mathit{val}(s[i+1..])$ (one
+  extensional equality). \vrs{lemma_div_step(r, x, d)}: for $0 < d < B$, $r
+  < d$, $x < B$, with $t = rB + x$: $t/d < B$, $t \bmod d < d$ and $t =
+  (t/d)\,d + t \bmod d$ (\vrs{lemma_fundamental_div_mod},
+  \vrs{lemma_mod_pos_bound}, one scoped \vrs{nonlinear_arith} step for $t <
+  dB$, then \vrs{lemma_multiply_divide_lt}).
+\item[(c) Order and the step.] \vrs{lemma_div_step} at the step's
+  remainder and limb, before the 128-bit division; after writing $q_i$:
+  \vrs{lemma_suffix_step} on $a$ and on $q$, the unchanged suffix
+  $q[i+1..]$, then $\mathit{val}(a[i..]) = a_i + B(Q'd + \mathit{rem}) =
+  (q_i d + r') + B Q' d = (q_i + B Q') d + r'$ by distributivity and
+  associativity.
+\item[(d) Library facts.] \vrs{vstd::arithmetic::div_mod} as above;
+  \vrs{lemma_mul_is_distributive_add(_other_way)},
+  \vrs{lemma_mul_is_associative}, \vrs{lemma_mul_basics}; L6's
+  \vrs{normalize} for the canonical quotient.
+\end{description}
+
+\subsection*{H3, \vrs{mul} and \dfy{MulLoop}}
+\begin{description}
+\item[(a) The invariants of \vrs{mul}.] A vector of $n = |a|$ zeros
+  (value 0, L1's \vrs{lemma_seq_to_nat_push_zero}); the outer loop over
+  $j < m = |b|$ keeps $|res| = n + j$ and $\mathit{val}(res) =
+  \mathit{val}(a)\cdot\mathit{val}(b[0..j])$; the inner loop over $i < n$,
+  with $v_0$ the value at the row's start and $c$ the carry, keeps $|res| = n
+  + j$ and
+  \[ \mathit{val}(res) + W(j+i)\cdot c = v_0 + W(j)\cdot(\mathit{val}(a[0..i])
+     \cdot b_j). \]
+  At the row's end the carry is pushed on top.
+\item[(b) Lemmas.] \vrs{lemma_push_value(s, x)}: $\mathit{val}(s.push(x)) =
+  \mathit{val}(s) + W(|s|)\cdot x$ (L4's \vrs{lemma_seq_to_nat_append}).
+  \vrs{lemma_set_limb(s, p, x)}: for $0 \le p < |s|$,
+  $\mathit{val}(s[p := x]) + W(p)\cdot s_p = \mathit{val}(s) + W(p)\cdot x$,
+  by induction on $p$.
+\item[(c) The step.] The 128-bit sum $a_i b_j + res_{i+j} + c \le (B-1)^2 +
+  2(B-1) = B^2 - 1$ (\vrs{lemma_mul_upper_bound}); writing the low half and
+  carrying the high half is \vrs{lemma_set_limb} at $i + j$, the prefix of $a$
+  grows by \vrs{lemma_push_value}, $W(j+i+1) = B\,W(j+i)$ and $W(j+i) =
+  W(j)W(i)$ (L3's \vrs{lemma_weight_succ}, L4's \vrs{lemma_weight_add}),
+  then ten product identities by name. The row's end: \vrs{lemma_push_value}
+  on the vector and on $b$'s prefix, and one scoped \vrs{nonlinear_arith}
+  step (distributivity of $\mathit{val}(a)$).
+\item[(a$'$) \dfy{MulLoop}.] $0 \le k \le |b|$ and
+  \dfy{MulAcc(a, b[k..], r, k) == Times(a, b)} (entry: \dfy{b[0..] == b};
+  step: \dfy{b[k..][1..] == b[k + 1..]} and one unfolding of \dfy{MulAcc};
+  exit: \dfy{MulAcc(a, [], r, |b|) == r}), then \dfy{MulCorrect(a, b)} for
+  the value conjuncts.
+\item[(e) Gaps.] None. The band (one problem): 96 Verus proof lines plus
+  the Dafny half's 6.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (paper card 01.13): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 458--481 (computed 2026-10-11),
+\[ \texttt{sha256 e4dafe60c3a94bf011321b2f331db4fc667b6ee3fbafdfc9b0f518e3aa104c08}. \]
+
+\begin{description}
+\item[Task shape.] Competition problems with formal statements in Isabelle
+  (miniF2F, 488 problems, half validation and half test): an informal proof
+  (human or model-written) becomes a formal sketch with open conjectures, and
+  automation closes each gap. \emph{Lines 460, 462, 464.}
+\item[Oracle.] Isabelle's check of the filled-in proof; an attempt counts
+  only when the prover closes every conjecture and the whole proof checks.
+  \emph{Line 464.}
+\item[What is trusted.] The proof assistant's checker; neither the draft
+  nor the sketch: the verifier, not the model's reasoning, is the trust
+  anchor. \emph{Lines 464, 481.}
+\item[Cheat surface.] A valid formal proof does not certify its informal
+  draft: of 50 hand-checked model drafts behind valid proofs, 21 were flawed
+  (the prover solved 13 alone; the autoformalizer corrected 8). Prompt demos
+  come from the validation split. \emph{Lines 477, 479.}
+\item[Metric.] Success rate on validation and test: Sledgehammer with
+  heuristics 18.0/20.9, Thor with expert iteration 37.3/35.2, DSP with human
+  drafts 42.6/39.3, with Minerva 62B drafts 43.9/37.7, with 540B 42.6/38.9;
+  the ablations (no prover, no informal proof, no comments) all drop.
+  \emph{Lines 468--475.}
+\item[Budget.] 100 drafts sampled per problem; at 200 attempts Minerva
+  drafts solve 209 problems and human drafts 203; more drafts beat more
+  sketches per draft; compute is not matched across baselines. \emph{Lines
+  462, 477, 479.}
+\item[Variance.] Not reported (no seeds or intervals in the range).
+  \emph{By absence.}
+\item[Artifact.] The aligned informal proofs are released. \emph{Line 462.}
+\end{description}
+
+\end{document}

@@ -1,0 +1,23 @@
+# Cheat-corpus manifest (Dafny) D-04. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vaudit: scripts/vaudit main.dfy
+# also captured, not flagging (each passed this fixture): vcheck --gate
+id = "D-04"
+lang = "dafny"
+half = "Q"
+xclass = "X03"
+kind = "construct"
+title = "module-level const without a value used as a spec oracle (Δ98)"
+files = ["main.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["uninitialized-const"]
+output_sha256 = "107d4f4abf7cb1bf31c7fef4a345069378c19b6f476b0d3a16e24523f0c00ff7"
+summary = "vaudit main.dfy: exit 1, 1 finding(s) (0 dafny-audit row(s), 1 lint); uninitialized-const at main.dfy:3"

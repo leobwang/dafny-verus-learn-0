@@ -1,0 +1,16 @@
+// Demo for card Q03.C5v (write:modes), the failure half: an exec variable
+// assigned inside a proof block.
+// EXPECT @11 "cannot mutate exec-mode place in proof-code"
+use vstd::prelude::*;
+
+verus! {
+
+fn reset(x: u64) -> u64 {
+    let mut y: u64 = x;
+    proof {
+        y = 0;
+    }
+    y
+}
+
+} // verus!

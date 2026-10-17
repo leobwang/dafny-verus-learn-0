@@ -1,0 +1,295 @@
+% Q09_solutions.tex — REFERENCE SOLUTIONS to paper/Q09_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every number quoted below was recomputed with the frozen fvh.stats on the
+% pinned lock (harness/uv.lock, uv 0.12.4, /usr/bin/python3 3.12.3) through
+% the rubric's statistics probe, `uv run --directory harness python3
+% ../instructor/scratch/probe_stats.py B<n>`, and every tool line was captured
+% through scripts/vcheck, scripts/vaudit and scripts/specfreeze on the course
+% pins (Dafny 4.11.0 with Z3 4.12.1 pinned and 4.14.1; Verus
+% 0.2026.09.27.3cf1832), in a scratch course root with Q09's first tries
+% recorded, by the DV3b kits phase's Q09 kit lane on 2026-10-07 (probe sources
+% and captures archived under the author probe archive's dv3bk/q09-kit/).
+% B3's rows name the forensic deliveries' species: this file is reference-class.
+% B4's fields are graded against the learner's own cheatsheets.md; this file
+% records which lines of the pinned range each field draws on and never copies
+% the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q09 --- Internals III: brittleness, forensics, gate core \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+\section*{How these are graded}
+B1 and B2 are hand calculations, dimension \texttt{recomputation}: the grader
+fills the rubric's statistics probe (Probes A and B) with the learner's numbers
+and reads, step by step, where an error entered (the probe's \emph{carried}
+column recomputes each step from the learner's own earlier values, its
+\emph{fresh} column from the problem's numbers). B1(c)'s second sentence,
+B1(d)'s reason and B2(b) are read under \texttt{correctness} inside the same
+problem. B3 is a concept problem, dimension \texttt{correctness}: the grader
+re-runs each row's command (Probe C) and tries to counterexample the row. B4 is
+a paper card (\texttt{card-fidelity}, per field). The solutions below give the
+answers; the rubric never states them. The pair holds no blueprint, so
+\texttt{/grade-paper Q09 -{}-post} has nothing to re-score.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (hand-calculation): $n = 40$ per arm, $p_0 = 0.3$}
+
+\textbf{(a)} $p_0 q_0 = 0.3 \times 0.7 = 0.21$; $2 p_0 q_0 / n = 0.42/40 =
+0.0105$; $\sqrt{0.0105} = 0.10247$; $z_a + z_b = 2.8016$; $\delta_1 = 2.8016
+\times 0.10247 = 0.2871$ (28.7 points).
+
+\textbf{(b)} At $\delta_1$: $p_1 = 0.5871$; $\bar p = (0.3 + 0.5871)/2 =
+0.4435$; $2 \bar p \bar q = 2 \times 0.4435 \times 0.5565 = 0.4936$, root
+$0.7026$; $p_0 q_0 + p_1 q_1 = 0.21 + 0.5871 \times 0.4129 = 0.21 + 0.2424 =
+0.4524$, root $0.6726$; bracket $1.96 \times 0.7026 + 0.8416 \times 0.6726 =
+1.3771 + 0.5661 = 1.9431$, squared $3.7758$; $\delta_1^2 = 0.08241$;
+$n(\delta_1) = 3.7758/0.08241 = 45.8$. More than 40 tasks per arm are needed,
+so $\delta_1$ is \emph{not} detectable with power $0.8$ at $n = 40$: the
+first-order value is too small, because the variance at $p_1$ ($p_1 q_1 =
+0.2424$) and at $\bar p$ ($0.4936 > 0.42$) is larger than at $p_0$.
+\texttt{fvh.stats.mde\_two\_proportions(40, 0.3)} prints
+\texttt{0.30730426184449494} (30.7 points). Substitution: at $\delta =
+0.3073$, $p_1 = 0.6073$, $\bar p = 0.4537$, roots $0.7041$ and $0.6697$,
+bracket $1.9436$, squared $3.7775$, $\delta^2 = 0.09444$, $n = 40.0$.
+
+\textbf{(c)} At $\delta = 0.10$: $p_1 = 0.4$, $\bar p = 0.35$, $\sqrt{0.455} =
+0.6745$, $\sqrt{0.21 + 0.24} = 0.6708$, bracket $1.3221 + 0.5646 = 1.8867$,
+squared $3.5595$, $n(0.10) = 3.5595/0.01 = 356$ tasks per arm (355.9). A
+40-task lab cannot detect the hoped-for 10 points: its pre-registration must
+state the MDE (about 31 points) and either scope the claim to effects that
+large, or change the design before the run (about 356 tasks per arm, or a
+paired design and a recomputed MDE). A null result at $n = 40$ is then reported
+as ``no difference larger than about 31 points'', never as ``no difference''.
+Either the scoped claim or the redesign, with the MDE stated before the run, is
+a full answer.
+
+\textbf{(d)} \texttt{mde\_two\_proportions(40, 0.3, paired=True)} prints
+\texttt{0.3181252951216505}. McNemar's test reads only the discordant tasks;
+the formula assumes the discordance rate that independent arms would give,
+$p_0 q_1 + p_1 q_0$, and arms run on the same tasks are positively correlated
+and discord less, so their true MDE is smaller than this value: it errs on the
+safe side. (``Larger than the unpaired one, so it is conservative'' alone names
+no mechanism: a gap, 3.)
+
+\textbf{Probe A on the pins} (the gold fixture's numbers): every step
+\texttt{ok}, exit 0; its last lines print the two \texttt{fvh.stats} values above
+and \texttt{n at delta1 = 45.81; n at the fvh.stats value = 40.00; n at 0.10 =
+355.95}.
+
+\textbf{Typical flaws, with their instances.}
+\begin{itemize}
+\item The factor 2 dropped under the root ($p_0 q_0 / n = 0.00525$, root
+  $0.07246$, $\delta_1 = 0.2030$): Probe A marks \texttt{var\_term}
+  \texttt{ERROR ENTERS HERE} (yours $0.00525$, carried $0.0105$); \texttt{root},
+  \texttt{delta1}, \texttt{p1}, \texttt{pbar}, both roots and
+  \texttt{n\_at\_delta1} ($90.3$) read \texttt{inherited}. This is the flawed
+  fixture's B1; its (b) conclusion (not detectable) happens to survive.
+\item $z_a$ taken one-sided ($1.645$): \texttt{z\_sum} enters ($2.4866$).
+\item $\bar p$ replaced by $p_0$ in the first root ($\sqrt{0.42} = 0.6481$):
+  \texttt{root\_a} enters against the learner's own $\bar p$.
+\item (c) read off a ``per-arm'' formula with $n$ total ($178$): \texttt{n\_at\_10pp}
+  enters.
+\item (d) ``paired is conservative because it uses fewer tasks'': false of
+  the design (same 40 tasks, both arms); the docstring's reason is the assumed
+  discordance rate.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (hand-calculation): a six-row sweep}
+
+\textbf{(a)} Mean $(38\,400 + 45\,900 + 66\,300)/3 = 50\,200$; deviations
+$-11\,800$, $-4\,300$, $+16\,100$; squares $139\,240\,000$, $18\,490\,000$,
+$259\,210\,000$, sum $416\,940\,000$; population variance $416\,940\,000/3 =
+138\,980\,000$; standard deviation $11\,789$; CV $11\,789/50\,200 = 0.2348$
+(23.5\,\%): above 20\,\%, so \texttt{scripts/vcheck} flags it (advisory, never
+gating).
+
+\textbf{(b)} Not stable: the row \emph{4.14.1 seed 3} is out of resource, and
+stable means verified in every row (seeds 1--3 under both bundled solvers).
+The CV adds nothing to that decision: the flag is advisory, a cost signal (here
+a hint that the proof is near the edge, which the failing row confirms), and a
+verified-everywhere proof with a flagged CV is still stable. Counts under two
+solvers are counts of two different programs (different search heuristics), so
+pooling them would measure the solver difference, not seed noise:
+\texttt{scripts/vcheck} computes each spread over one solver's seeds.
+
+\textbf{(c)} \texttt{fvh.stats.wilson\_interval(17, 22)} prints
+\texttt{(0.5656004682477829, 0.898769600147515)}. A claim: ``17 of my 22
+filled Dafny proofs of Q04--Q09 are stable (both bundled solvers, seeds 1--3),
+77\,\% (95\,\% Wilson interval 57--90\,\%); one machine, one solver pair,
+three seeds; I wrote the proofs I measured.'' The interval treats the 22 proofs
+as a sample of the proofs this learner writes; it is not a property of the
+verifier.
+
+\textbf{Probe B on the pins:} every step \texttt{ok} with the gold fixture's
+numbers; the probe prints \texttt{deviations from the mean: [-11800.0,
+-4300.0, 16100.0]}, \texttt{CV 0.2348: above the 20\% flag} and the Wilson
+interval above.
+
+\textbf{Typical flaws.} The sample divisor ($n - 1 = 2$: variance
+$208\,470\,000$, CV $0.2876$): Probe B marks \texttt{variance} \texttt{ERROR ENTERS
+HERE}; the problem fixes the population divisor, as the tool computes it. All
+six counts pooled (CV over six rows): the problem asks for 4.12.1's three. (b)
+``stable, because the CV is below 30\,\%'' or ``unstable, because the CV is
+above 20\,\%'': the verdicts decide, the CV never does. B2 is the flawed
+fixture's clean control.
+
+% ---------------------------------------------------------------------------
+\section*{B3 (concept): the DIAGNOSIS}
+
+\textbf{(a) A correct table} (one feasible assignment; the rubric accepts any
+instrument that catches a delivery, provided no two catching rows name the
+same one, and healthy deliveries are accused of nothing):
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible]
+item | true?  | valid?                 | useful?                  | instrument (command)                          | root cause
+P6d  | yes    | no: helper assumed     | yes                      | audit: vaudit specimens/Q09/P6d.dfy.specimen  | assume {:axiom} states the length step
+P7d  | yes    | no: helper unverified  | yes                      | lint: vcheck --gate .../P7d.dfy.specimen      | {:verify false} on the helper
+P8d  | vacuous| yes                    | no: requires never hold  | swap to false: copy, vcheck --gate            | x + d >= 2*BASE contradicts the limb bounds
+P9d  | yes    | yes                    | no: <= 0, not == 0       | specfreeze --against .../P9d-frozen... P9d... | weakened ensures
+P10d | yes    | yes                    | yes                      | none catches it (gate, vaudit, swap fails)    | healthy
+P11v | no     | no: external_body      | yes as stated            | compiled code on new input: vcheck --test     | trusted helper returns the first limb
+P12v | ?      | no: outside verus!     | no ensures is checked    | JSON: vcheck --json ... verified_count 0      | code outside verus! is never verified
+P13v | vacuous| yes                    | no: requires never hold  | witness: vcheck --gate .../P13v-witness...    | s.last() == 0 contradicts seq_wf
+P14v | yes    | yes                    | no: antecedent unprovable| sampler: assert high_limbs_zero(seq![5,0])    | quantifier bound one past the end
+P15v | yes    | yes                    | yes                      | none catches it (gate, vaudit)                | healthy
+\end{lstlisting}
+The evidence behind each row, captured as above:
+\begin{itemize}
+\item P6d: \texttt{scripts/vaudit specimens/Q09/P6d.dfy.specimen}: 2 findings
+  at line 65 (\texttt{assume-axiom}, \texttt{audit-assume-axiom}); the gate
+  alone verifies it (5 verified, 0 holes).
+\item P7d: \texttt{scripts/vcheck -{}-gate specimens/Q09/P7d.dfy.specimen}:
+  \texttt{failed}, the \texttt{\{:verify false\}} warning at 78:25 and
+  \texttt{warnings-fail-gate (W-D04)}.
+\item P8d: the gate and \texttt{vaudit} pass (3 verified; 0 findings); the copy
+  with \texttt{ensures false} \emph{verifies} under \texttt{-{}-gate} (2
+  verified, 0 holes, 0 errors), whether saved beside the deliveries or as
+  \texttt{instructor/scratch/probe.dfy}.
+\item P9d: \texttt{scripts/specfreeze -{}-against
+  specimens/Q09/P9d-frozen.dfy.specimen specimens/Q09/P9d.dfy.specimen}:
+  \texttt{freeze-changed} --- \texttt{Q09\_P9.CmpSelf} at line 61; gate and audit pass.
+\item P10d: gate verified (3), \texttt{vaudit} 0 findings, the copy with
+  \texttt{ensures false} fails (\texttt{a postcondition could not be
+  proved}), and \texttt{-{}-brittleness -{}-solvers} is stable in all six rows.
+\item P11v: the gate fails on the \texttt{external\_body} hole; the delivery's
+  own tests pass (2 passed); a copy with the test \texttt{two\_limbs}
+  (\texttt{BigNat \{ limbs: vec![1u64, 2u64] \}}, expecting 2) beside the
+  deliveries: \texttt{2 passed, 1 failed}, \texttt{FAILED
+  delivery\_tests::two\_limbs}. The audit and the gate also see the trusted
+  helper; the row needs an instrument no other row uses.
+\item P12v: \texttt{scripts/vcheck -{}-json}: \texttt{"verdict": "verified"},
+  \texttt{"verified\_count": 0}, \texttt{"per\_symbol": \{\}}; the gate fails
+  on \texttt{verified 0 < the unit's minimum 1} and the lint finding
+  \texttt{outside-verus} at line 49.
+\item P13v: gate verified (1), \texttt{vaudit} 0; \texttt{scripts/vcheck -{}-gate
+  specimens/Q09/P13v-witness.rs.specimen}: \texttt{precondition not
+  satisfied} at 22:5.
+\item P14v: gate verified (1), \texttt{vaudit} 0; the sampler (the delivery
+  plus \texttt{proof fn sample()} asserting \texttt{s[1] == 0} and
+  \texttt{high\_limbs\_zero(s)} for \texttt{s = seq![5u64, 0u64]}), beside the
+  deliveries or as \texttt{instructor/scratch/probe.rs} under \texttt{-{}-module
+  Q09}: \texttt{assertion failed} at 66:12, the second assertion. The claim's
+  own input never meets the delivered antecedent, so the lemma says nothing
+  about it. ``Reading the statement'' is the other instrument that sees this.
+\item P15v: gate verified (1), \texttt{vaudit} 0 findings.
+\end{itemize}
+
+\textbf{(b)} Any delivery with a second instrument that the grader can
+confirm. Examples, captured: P13v also falls to the swap (its copy with
+\texttt{ensures false} verifies under \texttt{-{}-gate}); P8d also falls to a
+witness (\texttt{CarryIsLimb(1, 1, 1)}: \texttt{a precondition for this call
+could not be proved}); P11v also to the audit (\texttt{hole-external-body} at line 41);
+P12v also to the lint or the audit (\texttt{outside-verus} at line 49). What each sees: the witness
+that no caller can meet the premises; the swap that the premises prove anything,
+including \texttt{false}; JSON completeness that nothing was counted; the lint
+that the code sits where the verifier never looks. A second instrument named for
+P6d, P10d or P15v that does not catch it (for example ``the gate'' for P6d,
+which verifies) is a refutable claim.
+
+\textbf{(c)} P10d and P15v, each with its gate line, its \texttt{vaudit} line
+and, for P10d, the failing swap copy (and, optionally, the stable sweep).
+
+\textbf{Typical flaws.} A healthy delivery accused, for example P10d called
+seed-dependent with ``4.14.1 seed 2 inconclusive'': the sweep re-run prints
+\texttt{stable}, all six rows verified (this is the flawed fixture's B3). Two
+catching rows naming the same instrument (both vacuous deliveries ``by the
+swap''), which breaks the form's rule 3. A row that pastes a reading
+(``the audit would flag this'') instead of a command's output. P12v's catch
+claimed by ``re-running under another seed'': \texttt{scripts/vcheck -{}-brittleness}
+on it prints \texttt{stable} (every row verified, with nothing to verify), so
+a seed sweep cannot see it.
+
+% ---------------------------------------------------------------------------
+\section*{B4 (paper card 07.2): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 2852--2873 (computed 2026-10-07),
+\[ \texttt{sha256 bb38472ca1ccae9a442c1ca25cbd87ffe7fabf66042aa9f48d4f9e4d5418410c}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Given a production Rust crate (curve25519-dalek) with its
+  code, API contracts, spec vocabulary, trusted library and target order fixed,
+  the agent writes the internal specifications (intermediate lemma statements)
+  and all Verus proofs, changing no executable code; a second target,
+  RustCrypto chacha20, is verified against RFC 8439. \emph{Lines 2854, 2856.}
+\item[Oracle.] Whole-crate Verus (Z3) verification, accepted by a Python driver
+  only on independent evidence, never on the agent's report, through eight
+  mechanical gates, each a predicate over the start snapshot, the trees before
+  and after a round, the target, the edited files and the commands (non-axiom
+  admit count falls; no new axiom names; byte-identical specs; re-verify the
+  edited files and the target's area; no frozen file edited; no new
+  \texttt{assume} or \texttt{external\_body}; tooling drift; git recovery).
+  \emph{Lines 2856, 2858, 2873.}
+\item[What is trusted.] Verus and Z3; the trusted library (field specs,
+  arithmetic facts, axioms, vstd; 48 axioms in the final tree, all
+  pre-existing); the human-supplied API contracts, spec vocabulary and proof
+  order; and the gates themselves, which block only enumerated cheats. The
+  claim is functional correctness only: constant time, side channels and the
+  adequacy of the contracts are outside it. \emph{Lines 2856, 2858, 2871.}
+\item[Cheat surface.] Admits, fabricated axioms, weakened or drifted specs,
+  edits to frozen files (trusted library, spec vocabulary, proved siblings),
+  new \texttt{assume}/\texttt{external\_body}, breaking a sibling module,
+  tooling drift; the prompt-only campaign shows the surface in use (claimed
+  97.1\,\%, audit found 11 fabricated axioms and 5 sibling breaks). Fixed
+  top-level contracts keep internal specs from weakening the claim; cheats
+  outside the enumerated list are not blocked. \emph{Lines 2858, 2864, 2871.}
+\item[Metric.] Verified obligations and errors at the end of a run:
+  CryptoProver with fable-5 2,031 verified, 0 errors; the opus-4.8 replication
+  2,114 verified; proof-only whole crate (opus-4.8) 1,430 of 1,433 obligations;
+  the raw Claude Code baseline left 5 compiler and 2 verification errors;
+  chacha20 done in one round; the prompt-only campaign's 97.1\,\% is a claim
+  its audit overturned. \emph{Lines 2862--2869.}
+\item[Budget.] Wall-clock and dollars per run: fable-5 11.4 h, USD 466.99;
+  baseline 7.42 h, USD 1,117.17; opus-4.8 replication 62.3 h, USD 856.55;
+  chacha20 15 min, USD 4.14; proof-only USD 748.02 (no time given). Against
+  ``eight months'' of human work, not like-for-like, since humans supplied
+  contracts, library and order. Fresh sessions per round counter context
+  pressure. \emph{Lines 2858, 2865--2869, 2871.}
+\item[Variance.] None measured: each configuration ran once, tuned on the
+  evaluated crate, so there are no repeats, seeds or intervals; the proofs lean
+  on \texttt{nonlinear\_arith}, which can be fragile on large goals, so
+  re-verification under other seeds is a live question the range leaves open.
+  \emph{Line 2871.}
+\item[Artifact.] CryptoProver (Claude Code with six skills and eight gates,
+  driven by a Python driver) and the verified curve25519-dalek and chacha20
+  proofs, arXiv 2608.00965. The range does not say what is released (code,
+  gates, transcripts); a field that says so, and what it would need, is correct.
+  \emph{Lines 2854, 2856.}
+\end{description}
+A field that contradicts a line scores 2, quoting that line: for example
+``CryptoProver with fable-5 verified 2,114 obligations; the opus-4.8
+replication 2,031'' (lines 2865 and 2867 give 2,031 to fable-5 and 2,114 to the
+replication; this is the flawed fixture's B4 Metric field), or ``three runs per
+configuration'' (line 2871: each ran once).
+
+\end{document}

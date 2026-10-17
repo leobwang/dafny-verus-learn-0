@@ -1,0 +1,46 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q18/C1"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/harness/tests/q/fixtures/q18/C1/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "gate2_c1",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "larger_word": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q18/C1",
+  "verdict": "verified",
+  "verified_count": 1
+ },
+ "exit_code": 0,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "9fbfcb336e3a80f5246bb6c76a0c747a4efe306ddc32778e0d02a31b8cb3fd25",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/C1"
+}

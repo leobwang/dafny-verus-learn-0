@@ -1,0 +1,24 @@
+// Card Q04.C8dv (false friends), row 1 (`calc`), demo v (Verus). Open it only after your
+// Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-1-v.rs.specimen` and compare with
+// specimens/Q04/card-c8dv-1-d.dfy.specimen.
+// after: Q04.P3dv
+use vstd::prelude::*;
+use vstd::calc;
+
+verus! {
+
+proof fn mixed_chain(x: nat)
+    ensures
+        x < x + 2,
+{
+    calc! {
+        (<=)
+        x; {}
+        x + 1; (<) {}
+        x + 1; {}
+        x + 2;
+    }
+}
+
+} // verus!

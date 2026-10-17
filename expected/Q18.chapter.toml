@@ -1,0 +1,186 @@
+# expected/Q18.chapter.toml — the chapter pins of Q18's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q18 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q18"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "dafny/given/Q/QG_L7_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs", "verus/given/qg_bignat_l7/src/lib.rs", "verus/given/qg_bignat_l7/src/api.rs"]
+note = "The two units as shipped (§1): one hole each."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "30b409f55c8b035629c7ee514101b38bcac79e09362d56d8552a8d79ab87cab5"
+[entry.pinned.inputs]
+"dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy" = "2629e1d507025348b0ce05875ae53a8b88364a94473f80ce72b5434753127338"
+"dafny/Q/Q18_PracticeIIIC/std/Q18_PracticeIIIC.dfy" = "bc5c7a8cfc4ba78d6e7658c5da12be68eb12bde68033409fdb878cf798f23cc8"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"dafny/given/Q/QG_L7_BigNat.dfy" = "6f51ccc2345cfdcfd839e04c01213ceeb92d7420de72168b71b5728b8c8ecde5"
+"instructor/calib/Q18.tsv" = "absent"
+"slots/Q18.slots" = "5cae3c231a42147a199f7636ff48cd3878abe80841506cbe132d902ae9d58880"
+"specimens/Q18/P1d.dfy.specimen" = "f319d926e789d55257d343c37e82a55e630e9f83aedbd67fa2656424f4cc3624"
+"specimens/Q18/P2d.dfy.specimen" = "20982f16443d38bc1dbfec65a7d0148735ef0d68a35ab7a5e8c8b801fc7c7c34"
+"specimens/Q18/P3v.rs.specimen" = "02c5be91978b4930bf5601d23b5862768bb604c559b13ed9d3326f1442e592f6"
+"specimens/Q18/P4v.rs.specimen" = "aa90c391b2a9c1314a199a918b1a72641f170e1ff0a2118cfb91779e66f811de"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/given/qg_bignat_l7/src/api.rs" = "c570ff153b6cfcbab29c31bd45d5c8891766dc7f84be24017015799db962b08a"
+"verus/given/qg_bignat_l7/src/lib.rs" = "1c2bddd4b7cfd874d2a4cb23c28ed37ed313692b283e5d176a7ec9bb92bf6376"
+"verus/q/q18_practice_iiic/src/agent.rs" = "971e98689aac9c13f54077b3d97092ce4b13867963a128b5bfc853f47475175d"
+"verus/q/q18_practice_iiic/src/lib.rs" = "ff0b9e9b2865a1c90db7cbd29826d7a0c5d29341876b03c3d111c34cba4eee38"
+
+[[entry]]
+id = "p1d-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q18/P1d.dfy.specimen"]
+note = "P1d's instrument vcheck, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d6665069cdad2e227b2644063ca4d2a06a8526ec8bd884e7f15b68b8366b6df3"
+[entry.pinned.inputs]
+"specimens/Q18/P1d.dfy.specimen" = "f319d926e789d55257d343c37e82a55e630e9f83aedbd67fa2656424f4cc3624"
+
+[[entry]]
+id = "p2d-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q18/P2d.dfy.specimen"]
+note = "P2d's instrument vcheck; after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c029d297133ce8f40cea7f82f56b31d21089742e14126fafa1a91d8b314749ad"
+[entry.pinned.inputs]
+"specimens/Q18/P2d.dfy.specimen" = "20982f16443d38bc1dbfec65a7d0148735ef0d68a35ab7a5e8c8b801fc7c7c34"
+
+[[entry]]
+id = "p2d-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q18/P2d.dfy.specimen"]
+note = "P2d's instrument gate; after the shared S10 box."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e3e12a2a97126c2e20e104f4b21c83c82cb25d2fcbe03ab39b9ad541249798d8"
+[entry.pinned.inputs]
+"specimens/Q18/P2d.dfy.specimen" = "20982f16443d38bc1dbfec65a7d0148735ef0d68a35ab7a5e8c8b801fc7c7c34"
+
+[[entry]]
+id = "p3v-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q18/P3v.rs.specimen"]
+note = "P3v's instrument vcheck; after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ff12002d409fe1daf4b180326e4335754daa90ab3c7003f7fd44b615f1c5d577"
+[entry.pinned.inputs]
+"specimens/Q18/P3v.rs.specimen" = "02c5be91978b4930bf5601d23b5862768bb604c559b13ed9d3326f1442e592f6"
+
+[[entry]]
+id = "p3v-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q18/P3v.rs.specimen"]
+note = "P3v's instrument gate; after the shared S10 box."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "23a3e6dacd41927238c4e2d8485f8cc502a29c9070e50cf487fa0302b6de5831"
+[entry.pinned.inputs]
+"specimens/Q18/P3v.rs.specimen" = "02c5be91978b4930bf5601d23b5862768bb604c559b13ed9d3326f1442e592f6"
+
+[[entry]]
+id = "p4v-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q18/P4v.rs.specimen"]
+note = "P4v's instrument vcheck; after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "25371e4d75328b4a78d6467bd8fca5109569e9a8cb76b3c7209eb5458508de35"
+[entry.pinned.inputs]
+"specimens/Q18/P4v.rs.specimen" = "aa90c391b2a9c1314a199a918b1a72641f170e1ff0a2118cfb91779e66f811de"
+
+[[entry]]
+id = "pace-sweep"
+cmd = ["scripts/vcheck", "--module", "Q18", "--brittleness", "--solvers", "pace.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+note = "S11: the sweep's form on a scratch lemma with an empty body (a stable row set), Q18's chain and options."
+[entry.normalize]
+drop = ["^raw output: ", "^  resource counts: ", "^  spread above"]
+[entry.scratch."pace.dfy"]
+fence = "above"
+[entry.pinned]
+body = "1b19cde341fb0f7419c4b4f0ed88379ad220415c184ec50350a7cc93b790f91c"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:pace.dfy" = "83508275def45fa6eb317c7dd720298174b615f4269963094bb1e8ad7b7db4b3"
+
+[[entry]]
+id = "bin-shipped"
+cmd = ["scripts/vcheck", "--bin", "verus/q/q18_practice_iiic", "--", "mul", "6", "7"]
+inputs = ["verus/q/q18_practice_iiic/Cargo.toml", "verus/q/q18_practice_iiic/src/lib.rs", "verus/q/q18_practice_iiic/src/main.rs", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs", "verus/given/qg_bignat_l7/src/lib.rs", "verus/given/qg_bignat_l7/src/api.rs"]
+note = "S9, the ship step (D16): the binary route on the crate as shipped; its main.rs prints a usage line and exits 2."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "49326b118b8e6e73562110f25a8daf534e1ce53ed401ab20e4cd049df930651d"
+[entry.pinned.inputs]
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/given/qg_bignat_l7/src/api.rs" = "c570ff153b6cfcbab29c31bd45d5c8891766dc7f84be24017015799db962b08a"
+"verus/given/qg_bignat_l7/src/lib.rs" = "1c2bddd4b7cfd874d2a4cb23c28ed37ed313692b283e5d176a7ec9bb92bf6376"
+"verus/q/q18_practice_iiic/Cargo.toml" = "b3424b28b456807786c02bb75ccf1fddf650a4cca089d844aaf9f85f7157222c"
+"verus/q/q18_practice_iiic/src/agent.rs" = "971e98689aac9c13f54077b3d97092ce4b13867963a128b5bfc853f47475175d"
+"verus/q/q18_practice_iiic/src/lib.rs" = "ff0b9e9b2865a1c90db7cbd29826d7a0c5d29341876b03c3d111c34cba4eee38"
+"verus/q/q18_practice_iiic/src/main.rs" = "283c95fd80d33650a9fafb008f09930a5e38508ef254104411e24afd1b1f9c0c"
+
+[[entry]]
+id = "k3-gate"
+cmd = ["scripts/vcheck", "--gate", "harness/tests/q/fixtures/q18/K3"]
+note = "S12: the third planted cheat passes the done gate on the default run."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5a4355fa4e8438c57e41b031d9969d44ad6bc2c002760293c20c5c25632aa3a3"
+[entry.pinned.inputs]
+"harness/tests/q/fixtures/q18/K3/Cargo.toml" = "14f3ed2f729eefe531f812e1b908063adc60be2030c601eb0b68bf40561ff125"
+"harness/tests/q/fixtures/q18/K3/src/lib.rs" = "5cd1084169efe6053214726212115d63bddd0e678472e10d536fbf8c84adf7bb"
+
+[[entry]]
+id = "k3-sweep"
+cmd = ["scripts/vcheck", "--brittleness", "harness/tests/q/fixtures/q18/K3"]
+note = "S12: the same crate under the seed sweep; the resource-count lines are dropped (advisory, never gating)."
+[entry.normalize]
+exit = true
+drop = ["^raw output: ", "^  resource counts: ", "^  spread above", "^  seed . raw output: "]
+[entry.pinned]
+body = "ea9d775ebe8d139963e4fd9937a8b22c74062d65e71c8d68d5cf73fb7dd0dc31"
+[entry.pinned.inputs]
+"harness/tests/q/fixtures/q18/K3/Cargo.toml" = "14f3ed2f729eefe531f812e1b908063adc60be2030c601eb0b68bf40561ff125"
+"harness/tests/q/fixtures/q18/K3/src/lib.rs" = "5cd1084169efe6053214726212115d63bddd0e678472e10d536fbf8c84adf7bb"
+
+[[entry]]
+id = "dashboard-capstone"
+cmd = ["scripts/vcheck", "--gate", "dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy"]
+note = "Agentic dashboard: shipped state; the reader supplies statement fidelity."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "03e643add9eed793713e1c492e3fe7859fc87478aed500f71f9ee77a42c5badc"
+[entry.pinned.inputs]
+"dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy" = "2629e1d507025348b0ce05875ae53a8b88364a94473f80ce72b5434753127338"

@@ -1,0 +1,26 @@
+# The reference crate of Q18 (author-only): the twins of verus/q/q18_practice_iiic/src/*.rs.
+# Mirrors the generated verus/q/q18_practice_iiic/Cargo.toml (vstd and the layer chain, Δ22;
+# build = false) with the package renamed to start with `solutions` and the given
+# layer crates reached from here. Keep the dependencies equal to the learner crate's.
+[package]
+name = "solutions_q18_practice_iiic"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+qg_bignat_l1 = { path = "../../../../verus/given/qg_bignat_l1" }
+qg_bignat_l2 = { path = "../../../../verus/given/qg_bignat_l2" }
+qg_bignat_l3 = { path = "../../../../verus/given/qg_bignat_l3" }
+qg_bignat_l4 = { path = "../../../../verus/given/qg_bignat_l4" }
+qg_bignat_l5 = { path = "../../../../verus/given/qg_bignat_l5" }
+qg_bignat_l6 = { path = "../../../../verus/given/qg_bignat_l6" }
+qg_bignat_l7 = { path = "../../../../verus/given/qg_bignat_l7" }
+
+[package.metadata.verus]
+verify = true

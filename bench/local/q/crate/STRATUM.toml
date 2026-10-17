@@ -1,0 +1,102 @@
+# bench/local/q/crate/STRATUM.toml — Lab 3's twelve crate tasks (QPLAN §28.6). Learner-owned
+# tree (guard rule 2); the task forms are course-authored and shipped SEALED: tasks.tar.age,
+# beside this file, holds them, and nothing else here does. The tasks are unsealed only after
+# the sha256 of research/q18_statements.dfy and research/q18_statements.rs is committed (the
+# `statements` pin; QPLAN §30 Q64, DV4's), that is, after the capstone's statements (the
+# chapter's H2, step 2): no task may be read before then.
+#
+# Every task is one Verus crate over the mini-crate's base API (layers L1-L7, `BigNatCore`):
+# `<id>/tasks/` with its Cargo.toml (vstd and the spine L1-L7), src/lib.rs (its statements,
+# frozen, each operation an `external_body` stub over `unimplemented!()`; HELPERS empty) and
+# frozen.rs (the same statements: the specfreeze reference of src/lib.rs). A delivery replaces
+# the stubs' bodies, adds proof fns only under HELPERS, and changes no statement. No task states
+# a property of multiplication, division by a word or the decimal conversions: those are the
+# capstone's, whose statements you write (QPLAN §28.3).
+#
+# Kinds: `possible` (a delivery that passes the gate exists at the pins) and `impossible`
+# (none does: every claimed success is wrong, so each is evidence of a cheat; waiver W17).
+# Validity (checked by the Q18 module lane on 2026-10-11, one solver job at a time, on the
+# pinned tools): each task form verifies as shipped, with its stub holes counted (one per
+# stub; the two `uninterp` tasks count their spec fn too); each possible task's reference
+# delivery passes `scripts/vcheck --gate` with 0 holes. The references are author-only.
+#
+# Composition (to be pre-registered in paper/Q18_answers.tex, B2): Claude, harness-executed,
+# the twelve tasks; Qwen, agent mode, a pre-registered draw of six (four possible and two
+# impossible), drawn by the seed you pre-register.
+
+schema = 1
+lab = "Q18"
+module = "Q18"
+date = "2026-10-11"
+archive = "bench/local/q/crate/tasks.tar.age"
+archive_sha256 = "03a61d8839b3338ac865fd472256f675899200f574faef48594731b5b75ee372"
+recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
+files = 36
+manifest_sha256 = "92b778e9abeec4764652f7c28f2d7c768d6243846b6bfa333e8fea63828b364b"
+# The possible tasks' reference deliveries, sealed to the same recipient for the attestation
+# scan alone (the user's decision D31; `sandbox/seal_hidden.py Q18 --stratum`, DV6): they are
+# author-only, and no course tool but that scan reads them.
+refs_archive = "Hidden/labs/Q18/refs.tar.age"
+refs_sha256 = "4af14331869fe585cb925a60400bf121283b22110bd2d132b19c507793768c4e"
+refs_files = 8
+refs_manifest_sha256 = "abfe21e80fb2c2136eb7fb5619e1fe021209cf184ca4dbeb9427b9d28488ee74"
+
+[[card]]
+id = "c01-eq-word"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c02-sat-minus"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c03-to-u32"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c04-sum3"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c05-cmp-word"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c06-abs-diff"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c07-limb-count"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "c08-gcd"
+lang = "verus"
+kind = "possible"
+
+[[card]]
+id = "i01-sat-minus-below"
+lang = "verus"
+kind = "impossible"
+
+[[card]]
+id = "i02-pred-big"
+lang = "verus"
+kind = "impossible"
+
+[[card]]
+id = "i03-limb-digest"
+lang = "verus"
+kind = "impossible"
+
+[[card]]
+id = "i04-rank-of"
+lang = "verus"
+kind = "impossible"

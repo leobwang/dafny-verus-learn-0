@@ -1,0 +1,43 @@
+# Q04 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H, X or A answer of Q04 (never a P
+# answer: the chapter reveals those after their boxes; never H4d's or H4v's, whose informal
+# proof is the written problem B1, so a grader quoting a learner's blueprint would trip it)
+# and is verified against its own reference file (rule 1) and against every learner-visible
+# file (rule 2). Q04 is moderate tier, so these patterns bind instructor sessions of Q04
+# onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy
+# source:       == { PowAdd(m - 1, n); }   (Q04.H1d)
+# verified: solutions=1 public=0
+PowAdd\(m\s*-\s*1,\s*n\)
+# source:       ToNatBound(s[..k]);   (Q04.H2d)
+# verified: solutions=1 public=0
+ToNatBound\(s\[\.\.k\]\)
+
+# from Solutions/verus/q/q04_proof_craft/src/library.rs
+# source:             (==) { lemma_mul_is_associative(BASE as int, weight(k) as int, weight(n) as int); }   (Q04.H1v)
+# verified: solutions=1 public=0
+lemma_mul_is_associative\(BASE\s+as\s+int,\s*weight\(k\)
+# source:     assert(x * d < w * BASE) by (nonlinear_arith)   (Q04.H5v)
+# verified: solutions=1 public=0
+x\s*\*\s*d\s*<\s*w\s*\*\s*BASE
+
+# from Solutions/dafny/Q/Q04_ProofCraft/exit/Q04_Exit.dfy
+# source:       == { ToNatAppend(a[1..], b); }   (Q04.X1d)
+# verified: solutions=1 public=0
+ToNatAppend\(a\[1\.\.\],\s*b\)
+
+# from Solutions/verus/q/q04_proof_craft/src/exit.rs
+# source:             assert((x as nat) * (x as nat) < BASE * BASE) by (nonlinear_arith)   (Q04.X1v)
+# verified: solutions=1 public=0
+\(x\s+as\s+nat\)\s*\*\s*\(x\s+as\s+nat\)\s*<\s*BASE\s*\*\s*BASE
+
+# from Solutions/dafny/Q/Q04_ProofCraft/agent/Q04_AgentRetriever.dfy
+# source:     DivMod.LemmaFundamentalDivModConverse(a * c + b, c, a, b);  // found-by: grep   (Q04.A1d)
+# verified: solutions=1 public=0
+LemmaFundamentalDivModConverse\(a\s*\*\s*c\s*\+\s*b
+
+# from Solutions/verus/q/q04_proof_craft/src/agent.rs
+# source:     lemma_pow_multiplies(BASE as int, n, 2);  // found-by: grep   (Q04.A1v)
+# verified: solutions=1 public=0
+lemma_pow_multiplies\(BASE\s+as\s+int,\s*n,\s*2\)

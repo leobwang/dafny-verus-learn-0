@@ -1,0 +1,25 @@
+# Cheat-corpus manifest (Dafny) G08: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G08"
+lang = "dafny"
+half = "R"
+xclass = "X05"
+kind = "covered-elsewhere"
+title = "--filter-symbol / --filter-position verify a subset and exit 0"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused", "filter-matched-nothing"]
+summary = "the gate refuses every filter (exit 3, no tool ran); in the learner loop a filter that verifies nothing has verdict failed (filter-matched-nothing)"
+covered_by = [
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_filters_only_in_the_loop",
+  "tests/wrappers/test_dafny_tool.py::Verify::test_gate_refuses_filters_and_isolation",
+  "tests/wrappers/test_tools_static.py::Core::test_cli_usage_and_refusals",
+  "tests/wrappers/test_dafny_static.py::Parsers::test_filtered_runs",
+  "tests/wrappers/test_dafny_tool.py::Verify::test_pass_through_filters",
+]

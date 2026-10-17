@@ -1,0 +1,60 @@
+% Q01_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q01_answers.tex (spec §4.7, §6.12): every
+% field of B1, the paper card for cheatsheet entry 02.3, agrees with the pinned
+% range (lines 642–668 of the learner's cheatsheets.md), but the wording, the
+% order of facts and the figures chosen are deliberately far from the reference,
+% so the grader must recognise correctness by substance, not by matching text.
+%
+% EXPECTED[B1][card-fidelity][4]: every field agrees with the pinned range; Variance and the silent parts of Budget and Artifact correctly say the range is silent. No finding on any field.
+% Expected per-problem grade (min across fields): B1 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any field scores <= 2 or if any finding claims a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q01 --- Hello, Dafny and Verus: the whole map \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Problem B1 (paper card)}\label{ans:B1}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.3, lines 642--668 (the pinned range).
+
+\textbf{Task shape:} ``Vericoding'': the model is handed a formal spec in
+Dafny, Verus or Lean with the code and the proof holed out, and must supply
+both so the file passes its checker. Each task stays under 100 lines; the
+specs come from verification and coding benchmarks and from NumPy and BigNum
+documentation.
+
+\textbf{Oracle:} Two conditions, both required: the completed file contains no
+bypass pattern, and the checker accepts it. If either fails, its errors go back
+to the model for another turn.
+
+\textbf{Trust:} The spec is assumed to say what the code should do, although
+5,735 of the tasks are machine translations or autoformalizations; beyond that,
+the three checkers and the bypass scanner.
+
+\textbf{Cheat surface:} Bypasses the scanner does not catch, and specs that are
+too weak or wrong after translation: in the hand check of solved tasks, nearly
+a tenth of the specs were too weak and some 15\% badly translated, and an empty
+output met a spec meant for sort-and-dedupe.
+
+\textbf{Metric:} Share of tasks solved, per language, reported twice: for the
+best single model (Dafny 67.5\%, Verus 30.9\%, Lean 17.9\%) and for the union
+of all nine models (82.2\%, 44.3\%, 26.8\%).
+
+\textbf{Budget:} At most 5 turns per task for each of the 9 models (10 for
+BigNum). My card gives no token, cost or time figures.
+
+\textbf{Variance:} Not reported: no repeated runs and no intervals. To know
+whether the language gaps exceed run-to-run noise I would need several runs per
+model and task; the task pools also differ between languages.
+
+\textbf{Artifact:} A benchmark of 12,504 specs (10,868 after quality checks) in
+all three languages, scored with a weighted issue count. My card does not say
+where it lives or under which licence.
+\end{answer}
+
+\end{document}

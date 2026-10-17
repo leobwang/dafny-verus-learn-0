@@ -1,0 +1,89 @@
+# expected/Q08.counts — Δ11 count pins for Q08: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q08` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q08"
+
+[[unit]]
+path = "dafny/Q/Q08_InternalsII/std"
+lang = "dafny"
+reference_verified = 157
+min_verified = 17
+symbols = ["Q08_InternalsII.AddWithCarry", "Q08_InternalsII.CardNat.Add", "Q08_InternalsII.CardNat.AddCommutes", "Q08_InternalsII.CardNat.Zero", "Q08_InternalsII.SumAbove", "Q08_Wp.Eval", "Q08_Wp.Exec", "Q08_Wp.Holds", "Q08_Wp.SubstB", "Q08_Wp.SubstBOk", "Q08_Wp.SubstE", "Q08_Wp.SubstEOk", "Q08_Wp.Swap", "Q08_Wp.SwapOrders", "Q08_Wp.UpdateApply", "Q08_Wp.Wp", "Q08_Wp.WpSound"]
+
+[[unit]]
+path = "verus/q/q08_internals_ii"
+lang = "verus"
+reference_verified = 22
+min_verified = 10
+symbols = ["advance_twice", "flip_twice", "leave_zero", "perm::bump", "perm::cell_round_trip", "perm::is_small", "perm::peek", "perm::transfer", "scale", "twice_plus_one"]
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/std/Q08_Canon.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/std/Q08_InternalsII.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/std/Q08_Wp.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/perm.rs"
+role = "exercise"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/exit/Q08_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q08_InternalsII/agent/Q08_AgentFlagship.dfy"
+role = "agent"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "verus/q/q08_internals_ii/src/agent.rs"
+role = "agent"
+verdict = "verified"
+holes = 0
+errors = 0

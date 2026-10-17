@@ -1,0 +1,12 @@
+// Demo for card Q03.C2v (write:exec-check), the failure half: the division
+// without its check.
+// EXPECT @9 "possible division by zero"
+use vstd::prelude::*;
+
+verus! {
+
+fn div(a: u64, b: u64) -> u64 {
+    a / b
+}
+
+} // verus!

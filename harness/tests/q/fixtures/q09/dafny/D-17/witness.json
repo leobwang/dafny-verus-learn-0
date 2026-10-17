@@ -1,0 +1,76 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/D-17/witness.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/D-17/witness.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "",
+    "col": 20,
+    "file": "<root>/tests/corpus/dafny/D-17/witness.dfy",
+    "line": 15,
+    "message": "a precondition for this call could not be proved",
+    "severity": "error"
+   },
+   {
+    "code": "",
+    "col": 22,
+    "file": "<root>/tests/corpus/dafny/D-17/witness.dfy",
+    "line": 8,
+    "message": "this is the precondition that could not be proved",
+    "severity": "related"
+   },
+   {
+    "code": "",
+    "col": 46,
+    "file": "<root>/tests/corpus/dafny/D-17/witness.dfy",
+    "line": 4,
+    "message": "this proposition could not be proved",
+    "severity": "related"
+   }
+  ],
+  "exit_code": 4,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusD17.Middle": "verified",
+   "CorpusD17.Ordered3": "verified",
+   "CorpusD17.Witness": "failed"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/D-17/witness.dfy",
+  "verdict": "failed",
+  "verified_count": 3
+ },
+ "exit_code": 1,
+ "instrument": "witness",
+ "killed": null,
+ "output_sha256": "b2df6bb93c996a1a84048126e7b157c628d5bbe427decf6b0c58ac00e971547b",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-17/main.dfy"
+}

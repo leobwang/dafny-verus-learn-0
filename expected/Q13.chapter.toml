@@ -1,0 +1,71 @@
+# expected/Q13.chapter.toml — the chapter pins of Q13's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q13 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "p1dv-d"
+cmd = ["scripts/vcheck", "--module", "Q13", "p1.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy"]
+answers = ["Q13.P1dv"]
+note = "Q13.P1dv's Dafny half, the docstring's TopA/TopB and their clients; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "91bd48755d341fd60c2d6cc588d5c5f1e6a285602a26cee012dc242570b30d4a"
+[entry.pinned.inputs]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:p1.dfy" = "dab7fbaec682b23b50168de2380b109b38d8087c70fc316f9655e8c47a47f237"
+
+[[entry]]
+id = "p1dv-v"
+cmd = ["scripts/vcheck", "--module", "Q13", "p1.rs"]
+cwd = "scratch"
+inputs = ["verus/given/qg_bignat_l1/src/lib.rs"]
+answers = ["Q13.P1dv"]
+note = "Q13.P1dv's Verus half; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p1.rs"]
+fence = "above"
+[entry.pinned]
+body = "167f8e9bc1d3f23c86825c7c07b32184399e7b1bf706e0e2715c69a819e7b3e0"
+[entry.pinned.inputs]
+"scratch:p1.rs" = "4cf58f31e6d50ca1bb098295ed56aee38082a85623b6342552be47fa28f19d31"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q13"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs"]
+note = "The two units as shipped (§8)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "32e12cc49a7366017297d1e018c27c8496c7d1aa9ec807cd0c8c6f0d79b7f617"
+[entry.pinned.inputs]
+"dafny/Q/Q13_PracticeIIA/exit/Q13_Exit.dfy" = "d850c3a13ac9149acac1fba9b91c41a309f7fed7fae992359653ca4a89e07480"
+"dafny/Q/Q13_PracticeIIA/std/Q13_PracticeIIA.dfy" = "bf9a75561effe27ff3583bef631041eab8d8c7d57750f2dc660ce82bb6d83fa7"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"instructor/calib/Q13.tsv" = "absent"
+"slots/Q13.slots" = "4ed9a8abb5cb6de785c81750b7976e488c9b0e3247db31b2d592c82925fb6101"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/q/q13_practice_iia/src/exit.rs" = "6ecc715ca552c1ece7b85e35697ebe6f2d3513dbfa1eb0432f95e5f6be919dbc"
+"verus/q/q13_practice_iia/src/lib.rs" = "9f7d8fcd5eafab36f8550856b95becf4f63edd07bad0b539640f8163f583eaa4"

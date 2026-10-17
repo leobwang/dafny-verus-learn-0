@@ -1,0 +1,24 @@
+// Demo for card Q08.C1d (write:refines), the failure half. The success half is `CardNat`
+// in dafny/Q/Q08_InternalsII/std/Q08_InternalsII.dfy, which refines L4's QG_L4_Spec. A
+// Dafny specimen is verified alone, with no layer, so this one refines a small module of
+// its own instead: `Q08_CardC1Base` states a function and a lemma with no bodies (each is
+// counted as a hole in the output), and `Q08_CardC1d` defines the function and proves the
+// lemma under the statement it inherits. Run it with
+// `scripts/vcheck specimens/Q08/card-c1d.dfy.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+module Q08_CardC1Base {
+  function Add(a: nat, b: nat): nat
+    ensures Add(a, b) >= a
+
+  lemma AddCorrect(a: nat, b: nat)
+    ensures Add(a, b) == a + b
+}
+
+module Q08_CardC1d refines Q08_CardC1Base {
+  function Add(a: nat, b: nat): nat { a + b + 1 }
+
+  lemma AddCorrect(a: nat, b: nat)
+  {
+  }
+}
+// EXPECT @21 "a postcondition could not be proved on this return path"

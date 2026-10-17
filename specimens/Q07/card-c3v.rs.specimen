@@ -1,0 +1,18 @@
+// Demo for card Q07.C3v (write:bit-vector), the failure half. The success half is
+// `lemma_low_byte_value` in verus/q/q07_internals_i/src/lib.rs; here the same assertion is
+// handed to another prover. Run it with `scripts/vcheck specimens/Q07/card-c3v.rs.specimen`;
+// the EXPECT line pins the message the verifier gives (line and fragment).
+// after: Q07.P3v
+// EXPECT @15 "assertion failed"
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn lemma_low_byte_value(x: u64)
+    ensures
+        (x & 0xFF) as nat == x as nat % 256,
+{
+    assert(x & 0xFF == x % 256) by (nonlinear_arith);
+}
+
+} // verus!

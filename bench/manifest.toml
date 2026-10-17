@@ -1,0 +1,218 @@
+# bench/manifest.toml: the course's third-party benchmark sets (DV4-PLAN §7).
+# Frozen (guard rule 2f): written only in authoring mode. scripts/get_bench.sh
+# (scripts/dvl/bench.py) reads it; schema 1.
+#
+# Per [[set]]: the repository and its full commit (never a branch); the
+# licence as checked (SPDX id, date, method) and each upstream source of the
+# subset with its licence as checked; the mode (`fetch`: gitignored, fetched on
+# the pins; `vendor`: committed); `leak_scan` (empty, or the date and DELTAS
+# entry of DV5's scan of the set's answers); the layout map ([[set.layout]]:
+# which upstream paths become tasks/ and which become answers/, everything else
+# is left out; a row's optional `transform` names a content transform of
+# scripts/dvl/benchstrip.py, recorded in the set's CHANGES); an optional subset; the licence and notice files kept verbatim
+# ([[set.keep]], each with its sha256); and `sha256`, the tree digest of the
+# normalized set, written by the author-only `get_bench.sh --pin`.
+#
+# The licence rule (§7.2, P7): `vendor` only when the repository and every
+# recorded upstream are MIT or Apache-2.0 and `leak_scan` names DV5's scan.
+# Every set starts as `fetch`; a set moves to `vendor` only in the DELTAS
+# entry that records its scan. Repository licences are GitHub's SPDX detection
+# of the top-level licence file, and the file itself was read; per-file
+# provenance is DV5's to check before any vendoring.
+#
+# Neutral note: these are public benchmarks. Their answers are never mounted
+# into a sandbox (bench/**/answers/ is a refused source class), the sandbox
+# self-test compares every staged file with them, and while a /contract runs a
+# session may not read them (guard rule 2c).
+
+schema = 1
+
+[[set]]
+name = "dafnybench"
+title = "DafnyBench"
+repo = "https://github.com/sun-wendy/DafnyBench"
+commit = "0cd28feed9cd0179b07fdb9d002f8c39063658e4"
+mode = "fetch"
+leak_scan = ""
+sha256 = "0c1a4218c81f2dfd97ec22f0c87253fc3e7faa5b66cd1acc949cb3891494d6b6"
+licence = { spdx = "Apache-2.0", checked = "2026-10-06", method = "GitHub SPDX detection of LICENSE (api.github.com); the file read" }
+upstream = [
+  { what = "the 782 programs (collected from earlier public repositories, per its paper)", licence = "not recorded", checked = "2026-10-06", method = "not checked here; DV5 checks per-file provenance before any vendoring" },
+]
+notes = "Each program as a ground_truth version (answers) and a hints_removed version (tasks); three ground_truth files have no hints_removed twin."
+
+[[set.layout]]
+from = "DafnyBench/dataset/hints_removed"
+to = "tasks"
+glob = "*.dfy"
+strip_suffix = "_no_hints"
+
+[[set.layout]]
+from = "DafnyBench/dataset/ground_truth"
+to = "answers"
+glob = "*.dfy"
+
+[[set.keep]]
+path = "LICENSE"
+kind = "licence"
+sha256 = "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+
+[[set]]
+name = "humaneval-verus"
+title = "HumanEval-Verus"
+repo = "https://github.com/secure-foundations/human-eval-verus"
+commit = "bbe93f73b0a5802c438501f9a2106f9126bd2eea"
+mode = "fetch"
+leak_scan = ""
+sha256 = "89d53507eab46676c83e960dc3745bda555c4469953476bd7ea6fa7c5e9f9866"
+licence = { spdx = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection of LICENSE (api.github.com); the file read" }
+upstream = [
+  { what = "the HumanEval prompts", repo = "https://github.com/openai/human-eval", licence = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection" },
+]
+notes = "Each upstream tasks/human_eval_*.rs holds the prompt, a specification, the code and the proof annotations: a complete file is an answer as a whole. DV5's stripping step (QPLAN §30 Q57, transform verus-strip-proofs) derives each task form: proofs removed, specification and code kept. The answers lose only the top-level fn main outside verus! (transform verus-drop-main: the course gate refuses code outside verus!). tasks/gpt/ (unverified drafts) and tasks/lib.rs are left out. Its README asks that contributors be acknowledged: CONTRIBUTORS.md is kept verbatim."
+
+[[set.layout]]
+from = "tasks"
+to = "answers"
+glob = "human_eval_*.rs"
+transform = "verus-drop-main"
+
+[[set.layout]]
+from = "tasks"
+to = "tasks"
+glob = "human_eval_*.rs"
+transform = "verus-strip-proofs"
+
+[[set.keep]]
+path = "LICENSE"
+kind = "licence"
+sha256 = "bcba3de214851cce46ed5af42d6698044616eeace887c3231bc7a20474ab639e"
+
+[[set.keep]]
+path = "CONTRIBUTORS.md"
+kind = "notice"
+sha256 = "9dd57ee9906b22b2185099fffa8e34f1cd639fbc332c5551801136198bc13178"
+
+[[set]]
+name = "vericoding"
+title = "vericoding benchmark"
+repo = "https://github.com/Beneficial-AI-Foundation/vericoding-benchmark"
+commit = "387cd69996792d452ead7b0460f36ee4c5cdd148"
+mode = "fetch"
+leak_scan = ""
+sha256 = "0eb0ae378c7594cefb549373bf70364f993fd5fe72e8384058e114e81d7c2101"
+licence = { spdx = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection of LICENSE (api.github.com); the file read" }
+upstream = [
+  { what = "verified_cogen (Verus source)", repo = "https://github.com/JetBrains-Research/verified-cogen", licence = "none", checked = "2026-10-06", method = "GitHub SPDX detection: no licence file" },
+  { what = "humaneval (part, Dafny)", repo = "https://github.com/JetBrains-Research/HumanEval-Dafny", licence = "Apache-2.0", checked = "2026-10-06", method = "GitHub SPDX detection" },
+  { what = "humaneval prompts", repo = "https://github.com/openai/human-eval", licence = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection" },
+  { what = "apps", repo = "https://github.com/hendrycks/apps", licence = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection" },
+  { what = "dafnybench", repo = "https://github.com/sun-wendy/DafnyBench", licence = "Apache-2.0", checked = "2026-10-06", method = "GitHub SPDX detection" },
+  { what = "verina", repo = "https://github.com/sunblaze-ucb/verina", licence = "Apache-2.0", checked = "2026-10-06", method = "GitHub SPDX detection" },
+  { what = "numpy_simple, numpy_triple (derived from NumPy documentation)", licence = "not recorded", checked = "2026-10-06", method = "its README; not checked" },
+]
+notes = "specs/ holds 12,504 tasks over Dafny, Verus and Lean (assume-false or sorry holes; its README says some files do not compile); vericoded/ holds answers; the CSV maps each id to its source. The subset is the Dafny and Verus files, without the bignum source: that big-number set is a near-answer hazard for the course's spine until DV5 compares it (author notes §2.4), so it is left out of the fetched copy. Lean files and fvapps are left out. Normalization (DV5): the Dafny task forms' `assume {:axiom} false;` becomes `assume false;` (transform dafny-axiom-assume-to-hole: the course gate does not count an {:axiom} assume, and the lab gate's lever check allows a lever the task form ships, so a delivery equal to the task form would pass), and the Verus files lose their top-level fn main outside verus! (transform verus-drop-main)."
+subset = { index = "vericoding_benchmark_v1.csv", key = "id", by = "source", exclude = ["bignum"] }
+
+[[set.layout]]
+from = "specs"
+to = "tasks"
+glob = "*.dfy"
+strip_suffix = "_specs"
+transform = "dafny-axiom-assume-to-hole"
+
+[[set.layout]]
+from = "specs"
+to = "tasks"
+glob = "*.rs"
+strip_suffix = "_specs"
+transform = "verus-drop-main"
+
+[[set.layout]]
+from = "vericoded"
+to = "answers"
+glob = "*.dfy"
+strip_suffix = "_vericoded"
+
+[[set.layout]]
+from = "vericoded"
+to = "answers"
+glob = "*.rs"
+strip_suffix = "_vericoded"
+transform = "verus-drop-main"
+
+[[set.layout]]
+from = "vericoding_benchmark_v1.csv"
+to = "tasks/vericoding_benchmark_v1.csv"
+
+[[set.keep]]
+path = "LICENSE"
+kind = "licence"
+sha256 = "57c33f43220e9c50a8a5bec21d86494d17bafcdab1ce50054ecb72eade29899e"
+
+[[set]]
+name = "lemmascript"
+title = "LemmaScript"
+repo = "https://github.com/midspiral/LemmaScript"
+commit = "9ae55b7f64e4e1703f77a802ccfe78e1ff254edd"
+mode = "fetch"
+leak_scan = ""
+sha256 = "56840d69f51d6693a17657f4996d9f42e2fc4bbb7ff3a9d2acb5b0d85fb5051a"
+licence = { spdx = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection of LICENSE (api.github.com); the file read" }
+upstream = []
+notes = "A TypeScript-to-Dafny/Lean verification toolchain with examples/, not a task set: its tasks would be generated Dafny, which needs its own toolchain (npm, Lean). DV5 decides whether it is a pool at all; until then only its licence and source record are installed."
+
+[[set.keep]]
+path = "LICENSE"
+kind = "licence"
+sha256 = "e4456cd4e761f46143818b7d1910d284943523c7d22c889161a20f8697843b0c"
+
+[[set]]
+name = "minif2f-dafny"
+title = "MINIF2F-DAFNY"
+repo = "https://github.com/dafny-lang/miniF2F"
+commit = "c10c49a5e360669422c57e129ab8e6a535b227a5"
+mode = "fetch"
+leak_scan = ""
+sha256 = "72ea2948695d826d7fc1f2b537abe1ae7377decb593d7b1f4f9a638045f31a5a"
+licence = { spdx = "MIT", checked = "2026-10-06", method = "GitHub SPDX detection of LICENSE (api.github.com); the file read" }
+upstream = [
+  { what = "the miniF2F problems (which miniF2F it translates is not named in its README)", licence = "not recorded", checked = "2026-10-06", method = "its README names no upstream; openai/miniF2F has no top-level licence file (its README: MIT for metamath, Apache for lean); facebookresearch/miniF2F is MIT" },
+]
+notes = "dataset/test and dataset/valid (244 problems each) are tasks; dataset/example_solutions holds answers. Both include ../definitions.dfy and ../library.dfy, so those two files are copied beside each. Its README targets Dafny 4.11.0, the course pin."
+
+[[set.layout]]
+from = "dataset/test"
+to = "tasks/test"
+glob = "*.dfy"
+
+[[set.layout]]
+from = "dataset/valid"
+to = "tasks/valid"
+glob = "*.dfy"
+
+[[set.layout]]
+from = "dataset/definitions.dfy"
+to = "tasks/definitions.dfy"
+
+[[set.layout]]
+from = "dataset/library.dfy"
+to = "tasks/library.dfy"
+
+[[set.layout]]
+from = "dataset/example_solutions"
+to = "answers/example_solutions"
+glob = "*.dfy"
+
+[[set.layout]]
+from = "dataset/definitions.dfy"
+to = "answers/definitions.dfy"
+
+[[set.layout]]
+from = "dataset/library.dfy"
+to = "answers/library.dfy"
+
+[[set.keep]]
+path = "LICENSE"
+kind = "licence"
+sha256 = "e91686b267408f7ca5da770a3bb742911872b9cfcab2b1f4364263a86283d0cb"

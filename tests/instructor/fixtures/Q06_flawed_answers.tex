@@ -1,0 +1,145 @@
+% Q06_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q06_answers.tex (spec §4.7, §6.12). Four of the
+% five problems carry one planted flaw each; B3 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q06_rubric.md), never by eye.
+%
+% EXPECTED[B1][recomputation][2]: (a)'s half-width is not divided by the denominator 1 + z^2/n (0.184 instead of 0.154), so the interval (0.610, 0.978) is too wide. The finding must locate that step and exhibit Probe A's row "half_width  0.18400  0.15407  0.15403  ERROR ENTERS HERE" (the lo and hi rows read "inherited" and are not separate flaws). Every other step of (a), and (b) and (c), are correct and must draw no flaw.
+% EXPECTED[B2][recomputation][2]: (a) writes C(3, 2) = 1 for t2, so pass@2 of t2 is 0.9 instead of 0.7. The finding must exhibit Probe B's row "t2  0.90000  0.70000  0.70000  ERROR ENTERS HERE" with the probe's line "t2: c = 2: C(3, 2) = 3, C(5, 2) = 10"; the mean 0.633 in (b) is "inherited", not a second flaw. t1, t3, pass@1 and (c) are correct.
+% EXPECTED[B3][correctness][4]: correct, no finding (Probe C's rows read ok). A grader that reports a flaw on B3 is hallucinating.
+% EXPECTED[B4][recomputation][2]: (b) omits the factor 2 of the two-sided test (p = 12/2048 = 0.00586). The finding must exhibit Probe D's row "p  0.00586  0.01172  0.01172  ERROR ENTERS HERE" (fvh.stats.mcnemar(1, 10) = 0.01171875). The decision happens to survive at 0.05 and is consistent with the stated p: not a second flaw. (a) and (c) are correct.
+% EXPECTED[B5][card-fidelity][2]: Metric — the field gives Sonnet 4.5 81% hands-on and 67% hands-off; pinned line 689 (under line 684's header, Hands-off then Hands-on) gives 81% hands-off and 67% hands-on. The finding must quote line 689 (CF.c, CF.e).
+% EXPECTED[B5][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Budget, Variance and Artifact — correct, no finding (lines 674, 676, 679, 680, 689, 692, 694, 697). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 2, B3 = 4, B4 = 2, B5 = 2.
+% A calibration run FAILS if B1, B2, B4 or B5 scores >= 3, if a planted finding does not locate
+% its step or field (with the probe row or the quoted line named above), or if ANY flaw
+% is reported on B3 or on a B5 field other than Metric.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q06 --- The machine and the verifier loop \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} \\
+$\hat p = 17/20 = 0.85$. \\
+$z^2/n = 3.8416/20 = 0.192$ \quad denominator $1 + z^2/n = 1.192$. \\
+centre $= (\hat p + z^2/(2n))/(1 + z^2/n) = (0.85 + 0.096)/1.192 = 0.794$. \\
+under the root: $\hat p(1 - \hat p)/n + z^2/(4n^2) = 0.1275/20 + 3.8416/1600 =
+0.006375 + 0.002401 = 0.00878$, root $0.0937$. \\
+half-width $= z \times 0.0937 = 1.96 \times 0.0937 = 0.184$. \\
+interval: $(0.794 - 0.184,\ 0.794 + 0.184) = (0.610,\ 0.978)$ \quad width: $0.368$
+
+\textbf{(b)} Wald: $0.85 \pm 1.96\sqrt{0.006375} = 0.85 \pm 0.156 = (0.694,\ 1.006)$. \\
+The property it breaks: its upper end is above 1, and a success rate cannot
+exceed 1. \\
+How its shape differs from Wilson's: it is symmetric about $\hat p = 0.85$,
+while the Wilson interval is centred at $0.794$, pulled toward $1/2$.
+
+\textbf{(c)} Factor: about 4, so 80 goals \quad because the half-width falls
+like $1/\sqrt{n}$: four times the goals halves it.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} $\binom{5}{2} = 10$ for every task. \\
+t1 ($c = 0$): $1 - \binom{5}{2}/\binom{5}{2} = 1 - 10/10 = 0$. \\
+t2 ($c = 2$): $1 - \binom{3}{2}/\binom{5}{2} = 1 - 1/10 = 0.9$. \\
+t3 ($c = 4$): $n - c = 1 < k = 2$, so pass@2 $= 1$.
+
+\textbf{(b)} pass@2 $= (0 + 0.9 + 1)/3 = 0.633$ \quad pass@1 $= (0/5 + 2/5 + 4/5)/3 = 0.4$
+
+\textbf{(c)} Plug-in for t2: $1 - (1 - 2/5)^2 = 1 - 0.36 = 0.64$ \quad above
+or below: below the unbiased value. \\
+What the plug-in assumes: that the two attempts are independent draws with
+replacement at a known rate $c/n$; the definition counts pairs of distinct
+samples among the five observed.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+\textbf{(a)} Pass rate: $1/4 = 0.25$ (only t2 succeeds at its first attempt)
+\quad successes among all records: $3/9 = 0.333$ \quad tasks solved at some
+attempt: $3/4 = 0.75$.
+
+\textbf{(b)} The rate is a claim about tasks: how often one fresh attempt at a
+task like these succeeds, so each task is one observation. The records of one
+task are not independent: they share the task's difficulty, and a second
+record exists only because the first failed, so a hard task leaves more records
+than an easy one. The share of records therefore mixes the prover with the
+retry cap (raise the cap and it moves while the prover stays the same), and the
+share of solved tasks measures success within three tries, a different and
+larger quantity. Counting every record would give $n = 9$ for what is evidence
+about 4 tasks, and an interval narrower than the evidence supports.
+
+\textbf{(c)} The attempt budget (three), whether each retry saw the earlier
+failures or was an independent sample, how many tasks, and what counts as a
+success. Without them the figure compares with neither a first-attempt rate nor
+a pass@$k$ from independent samples.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (hand-calculation)}\label{ans:B4}
+\begin{answer}
+\textbf{(a)} Pass rates: A $15/30 = 0.5$, B $24/30 = 0.8$ \\
+The informative tasks: only the discordant ones, 11 of them; the 14 both solve
+and the 5 both miss say nothing about which is better. \quad $b = 1$, $c = 10$
+
+\textbf{(b)} $X \sim \mathrm{Binomial}(11, 1/2)$, $\min(b, c) = 1$: \\
+$P(X \leq 1) = \bigl(\binom{11}{0} + \binom{11}{1}\bigr)/2^{11} = (1 + 11)/2048 = 12/2048$,
+so $p = 12/2048 = 0.00586$. \\
+Decision at $\alpha = 0.05$: $p < 0.05$, so reject that the two provers are
+equally good; B solves more.
+
+\textbf{(c)} In (a): the rates become $141/156 = 0.904$ and $150/156 = 0.962$,
+much closer. \quad In (b): nothing changes; $b$ and $c$ are still 1 and 10,
+and the concordant tasks never enter the test.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.4, lines 672--699 (the pinned range).
+
+\textbf{Task shape:} each task is one function of a real verified Rust system,
+given as a Verus file that keeps types, spec functions and the signatures it
+depends on, with the proof bodies removed and the spec unchanged; the agent
+must supply the proofs. 849 tasks from 8 systems, long files (about 947 lines,
+496 of them spec), few loops.
+
+\textbf{Oracle:} Verus must accept the file with the spec untouched; a cheat
+checker (\texttt{verus-checker}) catches cheating, and the hands-off agent can
+run both itself.
+
+\textbf{What is trusted:} Verus and its solver, \texttt{vstd}, the extraction
+by \texttt{verus log-all}, the cheat checker, and the given specs and lemma
+signatures, which can be wrong (the Atmosphere run found 5 spec bugs).
+
+\textbf{Cheat surface:} changing the spec or skipping a proof; the specs are
+fixed, the hands-off prompt warns against cheating, and the checker cuts
+cheating from up to 14\,\% to under 1.5\,\%, so a residue stays.
+
+\textbf{Metric:} the share of the 849 tasks proved per model and setting:
+Sonnet 4.5 proves 81\,\% hands-on and 67\,\% hands-off; o4-mini 17 vs 41\,\%,
+GPT-5 50 vs 55\,\%, Sonnet 4 64 vs 58\,\% (hands-off vs hands-on); AutoVerus
+20\,\%. Also 83\,\% on Atmosphere and 16/17 from partial human proofs.
+
+\textbf{Budget:} hands-on stops when verified, after 20 minutes or after 20
+steps; hands-off Sonnet 4.5 took 7.2 minutes and USD 5.61 per task. The two
+settings differ in harness and budget, so the comparison is confounded.
+
+\textbf{Variance:} none reported; the results appear to be single runs, with no
+repeats, seeds or intervals.
+
+\textbf{Artifact:} VeruSAGE-Bench, 849 Verus proof tasks from 8 systems, and the
+hands-on VeruSAGE agent; only Atmosphere is safely held out.
+\end{answer}
+
+\end{document}

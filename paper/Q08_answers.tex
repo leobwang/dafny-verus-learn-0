@@ -1,0 +1,81 @@
+% Q08_answers.tex — YOUR answers to paper/Q08_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q08_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q08 --- Internals II: refinement, permissions, verified wp \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+% One line per step; name the case of Wp, SubstB or SubstE each step uses.
+\textbf{(a)} \\
+Step 1: \dots \quad (case: \dots) \\
+Step 2: \dots \quad (case: \dots) \\
+\dots \\
+Final term: \dots
+
+\textbf{(b)} \dfy{Holds(Wp(C(), Q()), s)} $\iff$ \dots \\
+Simplified: \dots \quad (each step justified) \\
+The start value it does not mention, and why: \dots
+
+\textbf{(c)} Meaning under the swapped rule: \dots \\
+Start state: $s(0) = \dots$, $s(1) = \dots$, $s(2) = \dots$ \\
+Trace: \dots \\
+The warning sign: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} Entry: \dots \\
+Maintenance: \dots \\
+\hspace*{2em} branch $x > 0$: \dots \\
+\hspace*{2em} branch $\neg(x > 0)$: \dots \\
+Use at exit: \dots \\
+Where the guard is used: \dots
+
+\textbf{(b)} Soundness: \dots \\
+The failing obligation of \dfy{Halt}: \dots \quad state: \dots \\
+Trace from $x_0 = 3$: \dots
+
+\textbf{(c)} Obligations and what discharges each: \dots \\
+With \vrs{u32}: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.1, lines 584--610 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots \\
+Which acceptance line of the flagship contract would have caught each move: \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

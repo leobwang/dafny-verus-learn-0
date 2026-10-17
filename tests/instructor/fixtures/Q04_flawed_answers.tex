@@ -1,0 +1,155 @@
+% Q04_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q04_answers.tex (spec §4.7, §6.12). Two of the
+% three problems carry one planted flaw each; B2 is the clean control. Grade it with
+% the rubric's probes (paper/rubrics/Q04_rubric.md), never by eye.
+%
+% EXPECTED[B1][induction-soundness][2]: (a) states its induction on the length of a alone ("for every valid a' with |a'| < |a|"), but the step, which covers every pair with a or b non-empty, uses the IH at (Tail(a), Tail(b)) also when a is empty and b is not, where Tail(a) is as long as a. The finding must name that use and exhibit a = [], b = [7]: the needed instance is ([], []), and |Tail(a)| = 0 is not below |a| = 0 (Probe A'' with expect |Tail(a)| < |a| at these sequences: FAILED). Statement-fidelity and case-exhaustiveness are correct (4); blueprint-quality and gap-accounting must not score <= 2 (Probe A filled from the blueprint's calls verifies: verified, 31 verified, 0 holes, captured); (b) is correct (Probe A' with its clause and named facts: verified, captured).
+% EXPECTED[B2][correctness][4]: correct, no finding (Probe B on each of the three bodies and on the answer's helper-lemma body, in both languages, matches every claim; all captured). A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B3][card-fidelity][2]: Variance — the field says the 137 of 150 is the average of three runs, so run-to-run variation is averaged out; pinned line 630 gives 137/150 as the best of 3 runs with 122 for the first run alone, and line 636 says the headline figure is best of 3 runs. The finding must quote line 630 or line 636.
+% EXPECTED[B3][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Metric, Budget and Artifact — correct, no finding (lines 616, 618, 621-624, 628-634, 636, 638). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2.
+% A calibration run FAILS if B1 or B3 scores >= 3, if a planted finding does not locate
+% its use or field (with the instance or the quoted line named above), or if ANY flaw
+% is reported on B2 or on a B3 field other than Variance.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q04 --- Proof craft, loops and libraries \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} For valid limb sequences $a$ and $b$, the value of
+$\mathit{Cmp}(a, b)$ is $-1$, $0$ or $1$; it is below $0$ exactly when
+$\mathit{ToNat}(a) < \mathit{ToNat}(b)$; and it is $0$ exactly when
+$\mathit{ToNat}(a) = \mathit{ToNat}(b)$.
+
+\textbf{Induction on / decreases measure:} induction on the length of $a$.
+
+\textbf{Base:} $|a| = 0$ and $|b| = 0$. Then \dfy{Cmp} returns 0 and both
+values are 0, so all three claims hold.
+
+\textbf{IH (stated as a formula):} for every valid $a'$ with $|a'| < |a|$ and
+every valid $b'$: $-1 \leq \mathit{Cmp}(a', b') \leq 1$,
+$\mathit{Cmp}(a', b') < 0 \iff \mathit{ToNat}(a') < \mathit{ToNat}(b')$ and
+$\mathit{Cmp}(a', b') = 0 \iff \mathit{ToNat}(a') = \mathit{ToNat}(b')$.
+
+\textbf{Step} ($a$ or $b$ non-empty). Write $h_a, h_b$ for the heads,
+$t_a, t_b$ for the values of the tails and $c$ for
+$\mathit{Cmp}(\mathit{Tail}(a), \mathit{Tail}(b))$. By L2's \dfy{ValidTail} on
+$a$ and on $b$, both tails are valid and $h_a, h_b < \mathit{BASE}$, so the IH
+applies at $(\mathit{Tail}(a), \mathit{Tail}(b))$: $c \in \{-1, 0, 1\}$ and $c$
+orders $t_a$ and $t_b$. By L2's \dfy{ToNatHeadTail},
+$\mathit{ToNat}(a) = h_a + \mathit{BASE} \cdot t_a$ and the same for $b$.
+\begin{itemize}
+\item $c \neq 0$: \dfy{Cmp} returns $c$. Say $c = -1$, so $t_a < t_b$, so
+  $t_a + 1 \leq t_b$. Then $\mathit{ToNat}(a) < \mathit{BASE} + \mathit{BASE}
+  \cdot t_a \leq \mathit{BASE} \cdot t_b \leq \mathit{ToNat}(b)$, because
+  $h_a < \mathit{BASE}$: one unit of a tail is worth $\mathit{BASE}$, more than
+  any head can make up. $c = 1$ is the mirror image.
+\item $c = 0$: $t_a = t_b$, so the values differ exactly as the heads do, and
+  \dfy{Cmp}'s last three branches compare the heads.
+\end{itemize}
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement,
+and where it comes from\textbf{):} L2's \dfy{ValidTail(s)}: \dfy{Valid(s)}
+gives \dfy{Valid(Tail(s))} and \dfy{Head(s) < BASE}; L2's
+\dfy{ToNatHeadTail(s)}: \dfy{ToNat(s) == Head(s) + BASE * ToNat(Tail(s))};
+each on $a$ and on $b$, then the recursive call on the tails.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): none.
+
+\textbf{(b) The missing clause (a formula over \texttt{i}, \texttt{n},
+\texttt{a@} and \texttt{b@}):}
+\vrs{forall|j: int| i <= j < n ==> a@[j] == b@[j]}.
+
+\textbf{Why one pass keeps it:} a pass runs only when $i > 0$ and
+$a[i - 1] = b[i - 1]$; it lowers $i$ by one, so the range gains just the index
+the guard compared.
+
+\textbf{What it gives at each outcome after the loop} (\texttt{i == 0}; the
+two limb comparisons, and which \texttt{requires} of \texttt{lemma\_lt\_at}
+it supplies): with $i = 0$ every limb agrees and the lengths are equal, so
+\vrs{a@ =~= b@} holds and the values are equal. Otherwise the limbs at $i - 1$
+differ; the clause is exactly \vrs{lemma_lt_at}'s last \vrs{requires} (every
+limb above $i - 1$ agrees), and the other three come from \vrs{n == a@.len()},
+\vrs{n == b@.len()}, $i \leq n$ and the branch's comparison.
+
+\textbf{The two length cases} (each fact by its statement, and the lemma of
+L3 that states it): for $n < m$,
+\begin{itemize}
+\item \vrs{lemma_seq_to_nat_upper(a@)} gives \vrs{seq_to_nat(a@) < weight(n)};
+\item \vrs{lemma_weight_mono(n, m - 1)} gives \vrs{weight(n) <= weight(m - 1)};
+\item \vrs{lemma_seq_to_nat_lower(b@)}, for $b$ canonical and non-empty,
+  gives \vrs{weight(m - 1) <= seq_to_nat(b@)}.
+\end{itemize}
+So $a$ is the smaller. For $n > m$ the same with the roles exchanged.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+% Short answers. Expect the grader to try to counterexample them.
+\textbf{(a)} For each body, in each language: the gate passes? \texttt{vaudit}
+reports a finding? The body keeps ``only standard-library lemma calls''? \\
+{[1]} Dafny: the gate passes, no finding, keeps the line. \quad Verus: the
+same. \\
+{[2]} Dafny: the gate passes, no finding, breaks the line (an \dfy{assert} is
+not a library call). \quad Verus: the same. \\
+{[3]} Dafny: the gate fails, because the assumption counts as a hole, and the
+audit reports it. \quad Verus: the same: a hole for the gate, a finding for
+the audit. It breaks the line too.
+
+\textbf{(b)} The fourth body: declare my own lemma \dfy{ProductsKeepOrder}
+with the goal's \dfy{requires} and \dfy{ensures}, prove it by the library call,
+and make the goal's body the one call \dfy{ProductsKeepOrder(a, b, w);} (Verus:
+the same with a \vrs{proof fn}). \\
+Why it passes both instruments: it is a sound proof with no assumption, so the
+gate is green and the audit has nothing to list. \\
+The artifact that shows the breach: \texttt{git diff}, where the new
+declaration appears outside the goals' bodies (the contract forbids adding
+one), and the transcript of the run.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.2, lines 614--638 (the pinned range).
+
+\textbf{Task shape:} a Rust function and its Verus \vrs{requires}/\vrs{ensures}
+come in; the agents add loop invariants, assertions and proof lemmas until
+Verus accepts the function, without touching the code or the specification.
+
+\textbf{Oracle:} Verus itself, counted as the number of verified functions
+(each loop counts as one) and the number of errors, plus the Lynette tool,
+which throws out any candidate that edits the code or the spec or adds
+\vrs{assume}.
+
+\textbf{What is trusted:} Verus and its solver, the Lynette checker, and the
+specifications, which the card says are trusted as given.
+
+\textbf{Cheat surface:} editing code or spec and adding \vrs{assume} are
+blocked; a spec that says too little would go unnoticed, and other escape
+hatches are not mentioned.
+
+\textbf{Metric:} tasks proved out of 150 on Verus-Bench: 137 for AutoVerus
+against 67 for a plain GPT-4o baseline; the ablations are also task counts.
+
+\textbf{Budget:} the baseline got 10 minutes per task; to reach 67 tasks
+AutoVerus spent 22 seconds and 2 LLM calls, the baseline 458 seconds and 59
+calls. No total cost is given.
+
+\textbf{Variance:} AutoVerus was run three times and the 137 of 150 is the
+average of the three runs, so run-to-run variation is already averaged out;
+no interval is given.
+
+\textbf{Artifact:} Verus-Bench, 150 tasks (MBPP, Diffy, Misc, CloverBench),
+reused by later systems; the range does not say whether the code is released.
+\end{answer}
+
+\end{document}

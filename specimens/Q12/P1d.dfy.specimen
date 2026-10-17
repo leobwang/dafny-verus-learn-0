@@ -1,0 +1,21 @@
+// item: Q12.P1d S9 verdict
+// **P1.** Stage attribution, the machine channel. A short Dafny file (below; a specimen
+// stands alone: it imports nothing), run as
+//     scripts/vcheck --json specimens/Q12/P1d.dfy.specimen
+// The command prints one JSON document. BEFORE you run it, predict the value of the
+// document's `stage` field.
+// Answer form: one of `cli`, `parse`, `resolve`, `verify`, `compile`, `test`, `run`, in
+// slots/Q12.slots. Record the first try (`scripts/firsttry.sh Q12 --check`) before you
+// run anything on this file; only then enable the switch below (delete `SLOT: ` from its
+// line) and run the command.
+// after: Q12.P1d
+// SLOT: CHECK P1d
+module Q12_P1 {
+  // Adding zero changes nothing, by cases on x.
+  lemma AddZero(x: nat)
+    ensures x + 0 == x
+  {
+    if x > 0 {
+      assert x - 1 + 1 == x;
+  }
+}

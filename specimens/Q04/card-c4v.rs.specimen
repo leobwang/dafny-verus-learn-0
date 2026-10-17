@@ -1,0 +1,19 @@
+// Card demo Q04.C4v (calling a `vstd::arithmetic` lemma), the failure half. The success
+// half is `lemma_scale_le` in verus/q/q04_proof_craft/src/library.rs; this copy drops the
+// `requires` that the library lemma's precondition needs. Run it with
+// `scripts/vcheck specimens/Q04/card-c4v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+use vstd::prelude::*;
+use vstd::arithmetic::mul::*;
+
+verus! {
+
+pub proof fn lemma_scale_le(a: nat, b: nat, w: nat)
+    ensures
+        a * w <= b * w,
+{
+    lemma_mul_inequality(a as int, b as int, w as int);
+}
+
+} // verus!
+// EXPECT @15 "precondition not satisfied"

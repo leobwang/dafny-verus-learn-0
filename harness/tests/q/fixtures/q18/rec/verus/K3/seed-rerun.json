@@ -1,0 +1,70 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/q/fixtures/q18/K3"
+ ],
+ "document": {
+  "differs": [
+   {
+    "by_row": {
+     "seed 1": "verified",
+     "seed 2": "verified",
+     "seed 3": "failed"
+    },
+    "by_seed": {
+     "1": "verified",
+     "2": "verified",
+     "3": "failed"
+    },
+    "symbol": "mod_word"
+   }
+  ],
+  "flag_cv": 0.2,
+  "flagged": [
+   {
+    "cv": 0.6142,
+    "solver": null,
+    "symbol": "gate2_k3::mod_word"
+   }
+  ],
+  "lang": "verus",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.6142,
+    "max": 6024311,
+    "min": 1099844,
+    "solver": null,
+    "symbol": "gate2_k3::mod_word"
+   },
+   {
+    "cv": 0.0005,
+    "max": 2884,
+    "min": 2881,
+    "solver": null,
+    "symbol": "gate2_k3::seq_to_nat"
+   }
+  ],
+  "stable": false,
+  "target": "<root>/harness/tests/q/fixtures/q18/K3",
+  "verdicts": {
+   "1": "verified",
+   "2": "verified",
+   "3": "inconclusive"
+  }
+ },
+ "exit_code": 1,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "c106bd8695956fa5a0174e0fc82bea50ae72386c12738a16480776f167375803",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/K3"
+}

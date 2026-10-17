@@ -1,0 +1,16 @@
+# Cheat corpus swap-to-false probe (tests/corpus/verus): an invented crate.
+[package]
+name = "corpus_v12_swapped"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+
+[package.metadata.verus]
+verify = true

@@ -1,0 +1,64 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q18/K1"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/harness/tests/q/fixtures/q18/K1/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "gate2_k1",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "W-V03",
+    "col": 9,
+    "file": "<root>/harness/tests/q/fixtures/q18/K1/src/lib.rs",
+    "line": 18,
+    "message": "postcondition not satisfied",
+    "severity": "error"
+   },
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 'success' is false, not true; exit 1",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 1,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "lemma_stair_closed": "failed",
+   "stair": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q18/K1",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "5a545847a2f823dbba98e52f03ecdedd923be6870842bd7dcdb9f4282e6fac12",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/K1"
+}

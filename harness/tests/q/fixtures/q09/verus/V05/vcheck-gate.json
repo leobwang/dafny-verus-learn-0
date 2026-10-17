@@ -1,0 +1,64 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/V05"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/V05/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_v05",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 1 hole(s); exit 1",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 1,
+  "findings": [],
+  "holes": [
+   {
+    "col": 1,
+    "file": "<root>/tests/corpus/verus/V05/src/lib.rs",
+    "kind": "assume_specification",
+    "label": "assume_specification[u64::rotate_left]",
+    "line": 6
+   }
+  ],
+  "lang": "verus",
+  "per_symbol": {
+   "assume_specification[u64::rotate_left]": "hole",
+   "rotate_three": "no-error"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/V05",
+  "verdict": "failed",
+  "verified_count": null
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "a2f5ba6da16d3551411bd8943ba2eaa9433bbf5cf7e88081871b23f9a2c65c05",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V05"
+}

@@ -1,0 +1,187 @@
+# bench/local/q/lab1/STRATUM.toml — Lab 1's task strata (QPLAN §22.6). Learner-owned tree
+# (guard rule 2); the task forms are course-authored and shipped, and this file says which
+# of them the lab draws. The answers are not here: tasks/ holds each task form only.
+#
+# Every local task is one standalone file (it imports nothing: the definitions it is about
+# are copied into it), a lemma or function with its statement and an empty or trivial body.
+# A delivery replaces that body; the lab gate is `scripts/vcheck --gate --lab-task <task form>
+# <delivery>` (QPLAN §30 Q63): the done gate, then the lever check, which refuses a delivery
+# that adds a verification lever the task form does not ship, or drops one it ships (the
+# Dafny task forms ship `{:induction false}`), then `scripts/vaudit`'s assumption rules on
+# the delivery (the user's decision D24): a delivery that keeps an assumption, even one its
+# task form ships (`assume {:axiom}`, an `{:axiom}` lemma), fails.
+#
+# Validity (QPLAN §22.6): each task's answer verifies on the pins (`scripts/vcheck --gate`,
+# 0 holes) and its task form does not; `maxauto_fails` says whether the task form still
+# fails once its shipped lever is dropped (Dafny's automatic induction back on). Checked by
+# the Q12 module lane on 2026-10-07, one solver job at a time.
+#
+# Composition (pre-registered in paper/Q12_answers.tex, B1, "tasks and strata"):
+#   with the lever check in the lab gate (case "levers-refused", the built tool): every
+#   card below with `in_levers_refused = true` (10 Dafny, 10 Verus);
+#   without it (case "maxauto"): only cards with `maxauto_fails = true` qualify, which
+#   gives 3 Dafny tasks of the 10 needed. That case is not drawable as shipped: if the
+#   lab's runs go ahead without the lever check, six more Dafny tasks that fail under
+#   maximal automation must be authored first (Solutions/plans/Q12-code-notes.md §5).
+#
+# The public strata come from bench/manifest.toml (every set `fetch`, Δ152): 20 DafnyBench
+# `hints_removed` tasks and 20 HumanEval-Verus task forms (its stripping step
+# `verus-strip-proofs`: the proofs removed; the specification, the code and each loop's
+# `decreases` kept), drawn by the pre-registered seed from each set's validated pool, after
+# the pilot (QPLAN §22.6). The pools are pinned in bench/public/POOLS.toml: per set its
+# members and their `pool_sha256`; `scripts/get_bench.sh --check` compares an installed
+# validation with that pin. The draw excludes every task another lab's [[draw]] record in
+# POOLS.toml took from the same set (the user's decision D30). D39 also excludes Lab 2's
+# HumanEval problems across both languages, using the public draw records' card ids. The
+# five Verus tasks and four additional matches from the Dafny stratum leave 74 of 83 pool
+# members. Lab 1's forms keep the specification, so either language would expose a later
+# Lab 2 reference. DafnyBench keeps its whole pool. `scripts/get_bench.sh --members <set>
+# --lab Q12 [--seed S]` lists eligible tasks, in seeded order with --seed.
+
+schema = 1
+lab = "Q12"
+date = "2026-10-07"
+
+[[card]]
+id = "dh4-tonat-mono"
+lang = "dafny"
+source = "Q12.H4d"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "dh5-mullimb-zero"
+lang = "dafny"
+source = "Q12.H5d"
+maxauto_fails = true
+in_levers_refused = true
+
+[[card]]
+id = "dh6-cmp-trailing-zero"
+lang = "dafny"
+source = "Q12.H6d"
+maxauto_fails = true
+in_levers_refused = true
+
+[[card]]
+id = "dh7-normalize-shorter"
+lang = "dafny"
+source = "Q12.H7d"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "da1-addlimb-all-max"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "da2-cmp-zeros-empty"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "da3-mullimb-one"
+lang = "dafny"
+source = "author"
+maxauto_fails = true
+in_levers_refused = true
+
+[[card]]
+id = "da4-normalize-valid"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "da5-cmp-empty-left"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "da6-fromnat-last"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = true
+
+[[card]]
+id = "da7-normalize-last"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = false
+
+[[card]]
+id = "da8-normalize-empty-zeros"
+lang = "dafny"
+source = "author"
+maxauto_fails = false
+in_levers_refused = false
+
+[[card]]
+id = "vh4-seq-to-nat-mono"
+lang = "verus"
+source = "Q12.H4v"
+in_levers_refused = true
+
+[[card]]
+id = "vh5-is-zero"
+lang = "verus"
+source = "Q12.H5v"
+in_levers_refused = true
+
+[[card]]
+id = "vh6-eq-big"
+lang = "verus"
+source = "Q12.H6v"
+in_levers_refused = true
+
+[[card]]
+id = "vh7-size-bound"
+lang = "verus"
+source = "Q12.H7v"
+in_levers_refused = true
+
+[[card]]
+id = "va1-shorter-smaller"
+lang = "verus"
+source = "author"
+in_levers_refused = true
+
+[[card]]
+id = "va2-is-one"
+lang = "verus"
+source = "author"
+in_levers_refused = true
+
+[[card]]
+id = "va3-at-least-weight"
+lang = "verus"
+source = "author"
+in_levers_refused = true
+
+[[card]]
+id = "va4-push-ge"
+lang = "verus"
+source = "author"
+in_levers_refused = true
+
+[[card]]
+id = "va5-limb-or-zero"
+lang = "verus"
+source = "author"
+in_levers_refused = true
+
+[[card]]
+id = "va6-prefix-le"
+lang = "verus"
+source = "author"
+in_levers_refused = true

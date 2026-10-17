@@ -1,0 +1,79 @@
+% Q13_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q13_answers.tex (spec §4.7, §6.12). B1 carries one
+% planted flaw; B2 is the clean control. Grade it with the rubric's probes
+% (paper/rubrics/Q13_rubric.md), never by eye.
+%
+% EXPECTED[B1][correctness][2]: Q2 is correctly called complete and not sound, but the pair given for its unsoundness, (-1, 0), does not show it: Q2(-1, 0) holds (0 >= 0 and 0 >= -1) and so does the reference Q(-1, 0) (Ramp(-1) = 0). The finding must paste Probe A' with Q2 spliced in as Cand and the pair (-1, 0): FAILED, "the pair does not show unsoundness" (captured 2026-10-11, Dafny 4.11.0: `FAILED`, the message above; every other pair of the file `PASSED`). Every other claim and pair is right (Probe A on each candidate; Probe A' on each other pair), and (c) agrees with (a): no other finding (CO.b; do not count it again under CO.a).
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 2005-2031); Budget and Variance correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4.
+% A calibration run FAILS if B1 scores >= 3, if the planted finding does not paste a
+% Probe A' run on Q2 at (-1, 0) that fails, or if ANY flaw is reported on B2.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q13 --- Practice II-A \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (concept)}\label{ans:B1}
+\begin{answer}
+$Q_1$: sound? no \quad complete? yes \quad pairs: $(2, 7)$ meets $y \ge 0$,
+but $\mathit{Ramp}(2) = 2$, so it is not sound. \\
+$Q_2$: sound? no \quad complete? yes \quad pairs: $(-1, 0)$ meets $y \ge 0$ and
+$y \ge x$, so it is not sound. \\
+$Q_3$: sound? no \quad complete? yes \quad pairs: $(4, 0)$ meets $y = 0$, but
+$\mathit{Ramp}(4) = 4$. \\
+$Q_4$: sound? yes \quad complete? yes \quad pairs: none needed; the two
+implications cover every $x$ and fix $y$. \\
+$Q_5$: sound? no \quad complete? no \quad pairs: $(-2, -2)$ meets $y = x$, but
+$\mathit{Ramp}(-2) = 0$ (not sound); $(-2, 0)$ is the real output and fails
+$y = x$ (not complete). \\
+\textbf{(c)} A client wants $Q_4$: it is the only one from which it can
+conclude the exact result. The implementer has the easiest time with $Q_1$,
+which the real result meets almost without proof. The caller is helped by
+every output the specification rules out, while the implementer pays for each
+one, so the two pull in opposite directions.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 05.5, lines 2005--2031 (the pinned range).
+
+\textbf{Task shape:} A Lean 4 benchmark of 189 hand-checked tasks, each asking
+for code, a specification and a proof; 108 tasks (VERINA-A) were translated
+from Dafny and 81 (VERINA-B) adapted from course submissions.
+
+\textbf{Oracle:} Lean checks code and proofs; a generated specification is
+compared with the reference pre- and postcondition for soundness and
+completeness, first by an LLM-written proof, then by \texttt{decide} on test
+cases, then by property-based testing, with what is left marked unknown.
+
+\textbf{What is trusted:} Lean, the single reference specification of each
+task, and its positive and negative tests (full line coverage).
+
+\textbf{Cheat surface:} A specification that just restates the code; the
+benchmark scores end-to-end proofs against the ground-truth specification so
+that this cannot make a proof trivial. The spec metric itself is test-based,
+with up to about 30\% unknown on hard postconditions.
+
+\textbf{Metric:} pass@1 per stage and end to end; for o3, 72.6 on code, 52.3
+on specifications, 4.9 on proofs and 3.2 end to end. Proofs certify under 4\%
+of specifications, against 41.6--51.0\% by testing.
+
+\textbf{Budget:} Only the refinement comparison is costed: equal tokens
+against COPRA (o4-mini, 350k), and 64 refinements for one prover. No other
+compute figure is given.
+
+\textbf{Variance:} Not reported in the range; repeated runs or intervals would
+be needed.
+
+\textbf{Artifact:} The benchmark itself, in its two parts.
+\end{answer}
+
+\end{document}

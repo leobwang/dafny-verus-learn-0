@@ -1,0 +1,370 @@
+# expected/Q01.freeze — statement-freeze pins for Q01 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q01` from the files as shipped; checked by
+# `scripts/specfreeze --check Q01`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q01"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q01_Hello/core/Q01_Hello.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["Q01_Hello.AllZeroToNat {:induction false}"]
+[file.statements]
+"Q01_Hello.AllBelow" = "a0d69a5c8498b99cd7272ef72fcecebbd6931d59a0e2e816143a956e27801fcc"
+"Q01_Hello.AllZeroToNat" = "7160f18236f86d037426d5385b7193f8f77fb859090c29a08c058206aef3608d"
+"Q01_Hello.AssertStep" = "e2a088f338ba27ec6aafe2215724599fa93856d4e9750e70ad3868a6b30dc8b3"
+"Q01_Hello.CountTo" = "cd8bcfbcc080eedf7a0e9c58db926bc6bbb1135dc10d65ca15d0bc887b96ba0c"
+"Q01_Hello.GetLimb" = "41f2cbb304ed986c28d276825fa5c4556060dc2384839744d155caddcefb01d6"
+"Q01_Hello.GhostDemo" = "91e27539c7af7450bccb8387c44e274c0c1e863a9eee6ac44c122fd4eeba8f68"
+"Q01_Hello.HeadCall" = "7b204247d1575a7e71bdba3e5809206df722af22a6e4667ffc623e56a3eca247"
+"Q01_Hello.HeadOfNonEmpty" = "bf5b13d941bf04654379e5cada4fae539f98b5b7b0368d05b06188f821509b61"
+"Q01_Hello.Inc" = "6d29bff79b3fd62e857a3b152617b8264900ddd7c113057fdf751a44549dd43d"
+"Q01_Hello.IsZeroLimb" = "09204c86d7a31bba867b31fa311d2ee90bd7c385abfd905d3aa077a24e90e8fd"
+"Q01_Hello.LowLimb" = "ef70277f55c8fc6c7d3cd4d3ebfcc063499b1a29c18f56bc5a7bc0474cbf67f2"
+"Q01_Hello.Max2" = "08fec4eb76dcfc032d85d55b470cecbbd4283bdaab3b12647532d4382a9afb8f"
+"Q01_Hello.ReverseLimbs" = "6afb91bdeae8832998aba671d0c60fc20a78ba269237d83d0387cbf520195fa2"
+"Q01_Hello.ToNatAppendTwoZeros" = "4adc6bc0011fc357bf789108a5c7023ed3c2eacced774d89de9a6e91861addca"
+"Q01_Hello.ToNatAppendZeroStepwise" = "afac8baf9516c67611bf251686106330c52d36ef1c9bc3ba09f6b76e888c8106"
+
+[[file]]
+path = "dafny/checks/Q01_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_Checks.P5d" = "a3de80bc9e6a17e2758002792d4745c732ba3d22f0da5212bde9ed4fbf4a9322"
+
+[[file]]
+path = "verus/q/q01_hello/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"all_below" = "556d094a2c80bdbcee541c8b94925ae90b0f21d4039fd8ea8c17158ed5a99ead"
+"assert_step" = "c6e376c19da99bb173f53046d1fec5ceadd7691fcd7bf0d7cb693ddc85d4d92d"
+"count_to" = "3574bcfd23e284df9602a354deb99c60bdc49c1c02c22682d45e0a0612692f6e"
+"get_limb" = "b0b46a2a355f67cfce4c02cd9a119b4631064102d3536ee0f3223ea0ac18e374"
+"ghost_demo" = "ff4b5a60792d7526e01c98645fddcfc884192f1a0743f44a466af36dbb8b962e"
+"inc" = "0d2bd134d9a48910990b760367849b1d2be8efa765701d0b32fdbbbd8032274b"
+"is_zero_limb" = "1025edd830aa679c66793f2ec3fbbee892e6ea6092c3991ac41550802700226d"
+"lemma_all_zero" = "5ffccd991b866479e1c71ca77c629bfa2009adcc9a7e3114352d7b6efeb25f05"
+"lemma_append_two_zeros" = "f010d594f9832d1012aa05dba36f0763a9367dad50833c876cbb80bfafc4e0b4"
+"lemma_push_zero_stepwise" = "06a21dbaca34d882f8aa2b4f9eef8b60a89b18e8976e6da8e961fcb353cc7288"
+"lemma_wf_push" = "7b6f69be80a0c6a947aa27c1e04f8b47656acb369b895e1586f726c50623cf8c"
+"low_limb" = "cc89018670166a021309f68830a5921e3e6148a30f5f271d3bfdf37b385b4ad2"
+"max2" = "6bfffd37ee9cbbd1dc53fe4f6887cb479b50aee709efb4c1c07a73b343025ba9"
+"reverse_limbs" = "63a6871da5d6911899c6b5803e768573de47f8bbb5e9cfd810dedf6518ba9979"
+"wf_push_call" = "f7ebfb56ca58c2cef6daaa34caa6266b0381d1cb8051825a22ab04c5d708874e"
+
+[[file]]
+path = "specimens/Q01/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_P3d.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q01_P3d.FiveLimbs" = "f982d0558c30779da68381fa4716585e53ea11faf89fb408f5096472494c9d51"
+"Q01_P3d.OneLimb" = "8b65a6b8195118fa190916019f186b6c72c0e17bcc61dc5d4987819e7bef5d57"
+"Q01_P3d.ThreeLimbs" = "b223c15c7a567ca13544e9f84a26ae3c7c9ddf6f75a9ca02bc88b05016522089"
+"Q01_P3d.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q01_P3d.TwoLimbs" = "642051717c28adaf5499c807b965480ee3b2880f6e07f821ebfe1e1ab1d6fd47"
+
+[[file]]
+path = "specimens/Q01/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"five_limbs" = "34cfbfe85670a41553c4b22e3f45134e7a39ba937be2c679bcd9ee10152e19df"
+"one_limb" = "119a90020874b98e805e8c5e32107c761da2acafdb5073e25259a573a15cf8b8"
+"three_limbs" = "ca25fc8e472dc2eca2713a943e3089fcfc945056b760176d4d6fc3319eaeeeb9"
+"two_limbs" = "cbf57e7026ef12ea4035e616083d7a2e5ef405359a5fb85f7d6831cbd25160b7"
+
+[[file]]
+path = "specimens/Q01/P6v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"p6v" = "c4b5064c8e51e8769aebf3e8b6ef18d16db7ce45f31c51b93d22794f46ef4c7d"
+
+[[file]]
+path = "specimens/Q01/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_CardC1d.Inc" = "6d29bff79b3fd62e857a3b152617b8264900ddd7c113057fdf751a44549dd43d"
+
+[[file]]
+path = "specimens/Q01/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"inc" = "0d2bd134d9a48910990b760367849b1d2be8efa765701d0b32fdbbbd8032274b"
+
+[[file]]
+path = "specimens/Q01/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_CardC2d.AssertStep" = "e2a088f338ba27ec6aafe2215724599fa93856d4e9750e70ad3868a6b30dc8b3"
+
+[[file]]
+path = "specimens/Q01/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"assert_step" = "c6e376c19da99bb173f53046d1fec5ceadd7691fcd7bf0d7cb693ddc85d4d92d"
+
+[[file]]
+path = "specimens/Q01/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_CardC3d.Head" = "0fa147b2ad53455b569937dad9c716517dd4c08d9c5807d72608c97186464a23"
+"Q01_CardC3d.HeadCall" = "d76ba74a800a199074ae3c214b0b010e705f42d7d737dc5200ebfa4b137b0e2d"
+"Q01_CardC3d.HeadOfNonEmpty" = "bf5b13d941bf04654379e5cada4fae539f98b5b7b0368d05b06188f821509b61"
+
+[[file]]
+path = "specimens/Q01/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_wf_push" = "7b6f69be80a0c6a947aa27c1e04f8b47656acb369b895e1586f726c50623cf8c"
+"wf_push_call" = "f7ebfb56ca58c2cef6daaa34caa6266b0381d1cb8051825a22ab04c5d708874e"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-1-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_C4dv1d.CalcDemo" = "b98fbc232864468a0a799a5da0fd0d4cd7c666c3532cfa151a56ab5c1812a1ae"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-1-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"calc_demo" = "7847abfb8715d273cfb6cbac97c22630852bfdc5b2f5113ace8972c7b2c3f32a"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-2-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_C4dv2d.Identity" = "5c75680745905903fb7e8dbea07ae7e5001c15482c6d9f97fbe93ba2a23b4760"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-2-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"identity" = "d01891c9e86f0617b57270b1b0b08317babc558009bdbbf4abd30a91aafdb2e4"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-3-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_C4dv3d.Successor" = "5969767332054ab86753d726e69c9cde4f4acad7da275f51085fb776dd12a9d6"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-3-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"successor" = "68702af279d668370989e8f4ceef0514e2a74c582d4ba9564131e13383716e7a"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-4-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_C4dv4d.OldDemo" = "bc6b4a5da63d8b6f44abe919fc38d2495f297ec8c55f3f74ad8a0cf550753533"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-4-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"old_demo" = "17a4d1b2deeeac7a271beffb74ae9b51cd9f77fd6e5deef54111c140ee22af78"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-5-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_C4dv5d.ReverseLimbs" = "6afb91bdeae8832998aba671d0c60fc20a78ba269237d83d0387cbf520195fa2"
+"Q01_C4dv5d.ReverseLimbsLength" = "28ff15cbae26ade462f9f4617b89a0454881ae612ff59c83b301c7d830534b77"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-5-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_reverse_limbs_len" = "63d905621c81f04572fc7be1aecc664c6bca847d3bd5b7a3dbeac2b4e5a3e046"
+"reverse_limbs" = "6a1c63af7235f5f6303e6580e1f06f6e8d29e204e87da2bcdf710ca34ce9d1d9"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-6-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_C4dv6d.ImpliesDemo" = "908f41eb0167b1140f6ae243e89b8ce9bfa88e73da2fcfde8e44d3fedb3ae03c"
+
+[[file]]
+path = "specimens/Q01/card-c4dv-6-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"implies_demo" = "c3027986fa9cb9a6a2b20a08f643a7751db2e621d04e29798e2734ebeb538d6e"
+
+[[file]]
+path = "specimens/Q01/chapter-p10dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"P10.Open" = "ec93cada36a838afa80788759b9409c484d483b8128d0b9629ed8d92dce2147d"
+
+[[file]]
+path = "specimens/Q01/chapter-p11dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"WeakMax" = "96eb80340bf57d0358c97e756ac150247d15094eb362ca78ee0e96403151cd43"
+"WeakMaxCheck" = "65ba22c9376c411026ffb66bdd7a48908b9dabcd31e2bd900bb61a1ba810c48d"
+
+[[file]]
+path = "specimens/Q01/chapter-p11dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"weak_max" = "f186b04bd2c62733328de53ead12ad1c723f18901a3bb42de839635e81c5618f"
+"weak_max_check" = "2ea7e2b854a571fecb0b94aa19f3ed4de45f975bf871f29cd9bf369becc47821"
+
+[[file]]
+path = "specimens/Q01/chapter-p1dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Sub" = "c02aba7677c5e0a24ffd4a25289fe9ed2f777d7506b566c61a56ff5a9ff2ab3a"
+
+[[file]]
+path = "specimens/Q01/chapter-p1dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"sub" = "fb4fecf7d13af921cb829ad9210385128725549b8aac12e752949aa0a51e6f30"
+
+[[file]]
+path = "specimens/Q01/chapter-p2dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Sub" = "7708b9f2e91c99aa49caebeb2ec23ba453a722072288703f64a8790dde1cfa1f"
+
+[[file]]
+path = "specimens/Q01/chapter-p2dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"sub" = "d1f38fdbd57596c61fe07c4a43fcb448d12f6d5f1377cf76759b40d849b1763d"
+
+[[file]]
+path = "specimens/Q01/chapter-p7dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"ToNatAppendZero" = "2ac83be4353b2bea7d3b17edf25e03f9088982c9c5e2dc73ae8c8d82b0f39b6b"
+
+[[file]]
+path = "specimens/Q01/chapter-p7dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"BASE" = "21f29ef75786729343bca528072ffb0dad68a9737345af3587a074c44c8ac7ef"
+"lemma_seq_to_nat_push_zero" = "0a425fcdfb31d00c3cf6b604c52f3e7ee07243a78ef282fcb0d02f97d20e3db8"
+"seq_to_nat" = "8d3b632591b944b3d636183c724cadf5b67a3218fa6c0407c6dd0094e65ce431"
+
+[[file]]
+path = "specimens/Q01/chapter-p8dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"P8.Check" = "4c2574a8112c4f7f3013eed7f6305f50d2c36bb474259d2dca49881b64a76f82"
+
+[[file]]
+path = "specimens/Q01/chapter-p8dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"check" = "aa4e9b66b574158cf47c903c7977eaf79513661cea96e8dcbcbd9938fbcd99cf"
+
+[[file]]
+path = "specimens/Q01/chapter-p9dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"ProductOrder" = "576f73f14bd69844a3ff6cf0586be68add481e4478c5a874f28fb3b88d1f1b3b"
+
+[[file]]
+path = "specimens/Q01/chapter-p9dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"product_order" = "85d738f40aa99d52cc026e2cda522613e2e905993dbba0fc2a6ff1c2025c91ff"
+
+[[file]]
+path = "specimens/Q01/chapter-s8-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Step" = "d357d9c176f32fec345d6d97b4c484bd1db8665d4be0d17884fb8069c5320f33"
+"StepLoose" = "9f4b81949de2f9fb02ed9ca4307195041b8d5269689c8bb76d7ba90dd8ecaf07"
+
+[[file]]
+path = "specimens/Q01/chapter-s8-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"step" = "35c846ab3b8ef6df8d5e314157d3587bd6a7dfc9eefd79059a625923aecd1c5e"
+"step_loose" = "55c31525f2a36b380eb2baef21be11b774978694dc8bf42d626984f804002d86"
+
+[[file]]
+path = "dafny/Q/Q01_Hello/exit/Q01_Map.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["Q01_Map.ZerosToNat {:induction false}"]
+[file.statements]
+"Q01_Map.ZerosToNat" = "b4598e1d75f2b7244df9bd5d0fb63dff961a29e77f638f29d53c5c45dbf82307"
+
+[[file]]
+path = "verus/q/q01_hello/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_append_one_zero" = "77ae9342c79425cb6fc0816e2b19469d97a592c298128fcf36652e886a608ab6"
+
+[[file]]
+path = "dafny/Q/Q01_Hello/agent/Q01_AgentRepair.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q01_AgentRepair.Check" = "a1611391dae8f76f78662bc7e9c0736ccd86997241cd6072043a5502e486cb1c"
+"Q01_AgentRepair.Last" = "139d92a915d8499badb8f0158565dc75aaf9e8076b6e8ccdf1b82a8bae69ef04"
+"Q01_AgentRepair.Pos" = "5d11a2e200ff1c40aefc862581e500a22c9abb6e17b1fc705482cb0e46be490a"
+"Q01_AgentRepair.Succ" = "ffca1508343d31051971fa25f3aa671904a1f554b5b5c4d306f995f21ea9cd79"
+"Q01_AgentRepair.UsePos" = "4fe153a1adc248011c6eab2ba4cf16e714a2c684d570536b705c456341bef16c"
+
+[[file]]
+path = "verus/q/q01_hello/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"check" = "33abdfe236191215ab9bc56cd38f989cb8c2dc5d0130679e6df4257eef469062"
+"count_up" = "96617363acfbdabad026147def1468d449994cb83deaf9f97465033b676b22e7"
+"pos" = "9cb4af5fcecd625d9469a62812c327c5abe1c4022a04b55f9f49cd773d660ec6"
+"succ" = "8358c79d437cc9806804a3ba8f4e913bf9adec7d8758764abc3f21520aad12bb"
+"use_pos" = "fcd12fd22aead844a293c7eac1e724d5f94a486e9bf7ef3a66ad24afa94953bc"

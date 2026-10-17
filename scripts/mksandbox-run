@@ -1,0 +1,527 @@
+#!/usr/bin/env python3
+"""mksandbox-run: the one program that starts a sandbox container (DV4-PLAN §5).
+
+Container and agent runs go only through this script, scripts/contract_local.sh
+and the fvh harness (guard rule 1f, Δ83); everything else in the course calls
+neither docker nor an agent CLI. It takes a manifest (schema 1, TOML or JSON)
+and nothing else that can change what a run sees: no option or variable
+weakens isolation. The library is scripts/dvl/sandbox.py.
+
+Usage:
+  scripts/mksandbox-run [--records DIR] MANIFEST
+                                                  a live run (DV4 step 2b): the
+                                                  checks below, the memory
+                                                  preflight, one sandbox job at a
+                                                  time, docker run, the input
+                                                  stream, the containment
+                                                  controls, the manifest's
+                                                  [[command]] lines, the return
+                                                  stream (agent runs), the
+                                                  removal; an opencode agent run
+                                                  (DV4 step 3a) also takes the GPU
+                                                  calendar lock, gates its model
+                                                  with the apparatus pins and runs
+                                                  the agent after its per-run
+                                                  gate; Claude Code's launch is
+                                                  refused until DV4 step 4c
+  scripts/mksandbox-run --probe [--records DIR] MANIFEST
+                                                  the same, for a probe: a probe
+                                                  agent container ([agent] cli
+                                                  "none") and the controls' doors
+                                                  run only here (the acceptance
+                                                  scripts); no agent CLI starts
+  scripts/mksandbox-run --dry-run MANIFEST        validate, materialize, run the
+                                                  self-test and print the docker
+                                                  argv lines; no container starts
+  scripts/mksandbox-run --selftest-only MANIFEST  validate, materialize and print
+                                                  the self-test report (JSON)
+  scripts/mksandbox-run --materialize MANIFEST    validate, materialize and
+                                                  self-test, keep the run
+                                                  directory and print its path
+                                                  (--release removes it)
+  scripts/mksandbox-run --release RUNDIR          remove a materialized run
+                                                  directory
+  scripts/mksandbox-run --build-verify --target PATH --argv JSON [--module ID]
+                [--kind verify|agent] [--network none|ollama] [--mem-gb N]
+                [--lab-task TASK] [--rev REV]
+                                                  print the manifest (JSON) of one
+                                                  tool command on one target: a
+                                                  course path, or a work copy
+                                                  outside the course root
+                                                  (fvh.tools' ContainerRunner);
+                                                  --lab-task stages a lab task form
+                                                  read-only for the lab gate's
+                                                  lever check, --rev reads every
+                                                  staged course file at a commit
+                                                  (fvh report --reverify)
+  scripts/mksandbox-run --build-agent --task TASK --brief FILE --turns N
+                [--wall-s S] [--gpu-s G] [--mem-gb N] [--module ID]
+                [--run-id ID] [--texts FILE]
+                                                  print the manifest (JSON) of one
+                                                  fvh agent-mode session on a
+                                                  benchmark task (a task file or
+                                                  a crate card's tasks directory;
+                                                  fvh.backends.agent): the brief
+                                                  at TASK.md, the task staged by
+                                                  src, or inline from --texts (a
+                                                  continuation's work copy)
+  scripts/mksandbox-run --agent-session --records DIR --seeds FILE
+                [--calendar-fd N] MANIFEST
+                                                  the live run of one such
+                                                  session: the gate gets the
+                                                  run's per-request seeds (a JSON
+                                                  list) and writes its log and
+                                                  counts into DIR as it goes; DIR
+                                                  gets manifest.json,
+                                                  selftest.json, sandbox.json (the
+                                                  run's record), returned/,
+                                                  patch.diff and the scanned
+                                                  transcript.jsonl.gz;
+                                                  --calendar-fd names an inherited
+                                                  open file that holds the GPU
+                                                  calendar lock (the batch's),
+                                                  checked, never trusted
+  scripts/mksandbox-run --truth ARCHIVE --truth-check manifest|validate
+                [--cards ID,...] [--truth-lang dafny|verus] [--mem-gb N]
+                [--records DIR]
+  scripts/mksandbox-run --truth ARCHIVE --truth-check judge --judge SPEC
+                [--mem-gb N] [--records DIR]
+                                                  the grader container's truth
+                                                  mode (DV4-PLAN §5.9, QPLAN §30
+                                                  Q49): a verification container
+                                                  that binds the sealed archive
+                                                  sandbox/truth.toml pins (named
+                                                  on this line) and the grader's
+                                                  key read-only; only the image's
+                                                  grader unseals it, in the
+                                                  container, and prints
+                                                  verdict-level JSON (validate:
+                                                  each local task's reference
+                                                  program through the gate, one
+                                                  language per run: a container's
+                                                  memory bound is its language's;
+                                                  judge: each candidate of SPEC,
+                                                  a TOML [[candidate]] list or a
+                                                  JSON {"candidates": [...]} of
+                                                  an id and a prose `item` (its
+                                                  `file` defaults to the learner
+                                                  file) or a Lab 2 `card` and the
+                                                  run's returned `file`, judged
+                                                  against its sealed reference
+                                                  (scripts/dvl/judge.py; one
+                                                  language per run): a verdict
+                                                  word per candidate)
+  scripts/mksandbox-run --reap                    remove every dvl.run container
+                                                  whose owner process is gone
+  scripts/mksandbox-run --check-access            the read-only Docker access
+                                                  check and its diagnosis (never
+                                                  sudo, never sg)
+  scripts/mksandbox-run --author --attest CARD    author-only: scan a lab task
+                                                  card against the reference
+                                                  and attest it in
+                                                  sandbox/attested.toml
+  scripts/mksandbox-run --author --attest-rescan  author-only: re-scan every
+                                                  entry of sandbox/attested.toml
+                                                  under the current rule (the
+                                                  sealed references read as
+                                                  twins, in memory: D31); one
+                                                  line per entry
+  scripts/mksandbox-run --author --selftest-only MANIFEST
+                                                  author-only: the self-test
+                                                  with the reference checks too
+  --gate-config FILE, --gate-upstream URL
+                  --probe only: the gate's config (model, options, caps) and a
+                  loopback upstream (the doors' fake model server)
+  --records DIR   write manifest.json and selftest.json into DIR (a run's
+                  record); a live run adds run.json (the controls, every
+                  command's exit code and output, the container's facts) and,
+                  for an agent run, patch.diff, returned/ and, for an opencode
+                  run, transcript.jsonl.gz (the event stream, after the secret
+                  scan)
+
+The author-only forms gate themselves (CI=true, or the three-condition test of
+spec §7.4, Δ103), and guard rule 1b refuses them in a study session.
+
+Exit codes: 0 done (a live run: completed, whatever each command's verdict),
+1 a step failed (the self-test, materialization, the containment controls, a
+stream, the container ended early or was killed for memory), 2 usage,
+3 refused (the manifest, the image lock, Docker access, memory short: the run
+is deferred, the GPU calendar lock is held: the run is deferred, an
+author-only form outside the author's context, Claude Code's launch before
+step 4c), 124 the run's wall clock (the container was killed).
+"""
+
+import argparse
+import json
+import os
+import shlex
+import sys
+from pathlib import Path
+
+SCRIPTS = Path(__file__).resolve().parent
+ROOT = SCRIPTS.parent
+sys.path.insert(0, str(SCRIPTS))
+
+from dvl import sandbox  # noqa: E402
+
+
+
+def say(msg, err=False):
+    print(f"mksandbox-run: {msg}", file=sys.stderr if err else sys.stdout)
+
+
+def refuse(msg):
+    say(f"refused: {msg}", err=True)
+    return 3
+
+
+def roles_line(m):
+    counts = {}
+    for e in m.files:
+        counts[e.role] = counts.get(e.role, 0) + 1
+    return ", ".join(f"{k} {counts[k]}" for k in sandbox.ROLES if k in counts)
+
+
+def selftest_line(rep):
+    c = rep["checks"]
+    parts = [f"closure {c['closure'].get('files', 0)} files",
+             f"canaries {c['canaries'].get('listed', 0)} listed, {c['canaries'].get('hits', 0)} hits",
+             f"attestation {c['attestation'].get('cards', 0)} cards",
+             f"public answers {c['public-answers'].get('answers', 0)} answer files"]
+    parts.append("author checks ran" if c["author"].get("ran") else "author checks skipped (study mode)")
+    return ("OK" if rep["ok"] else "FAILED") + " (" + "; ".join(parts) + ")"
+
+
+def prepare(args, root, author):
+    """(manifest, run, report, image_problem) or an exit code."""
+    try:
+        raw = sandbox.load_manifest(args.manifest)
+        manifest = sandbox.validate(raw, root, check_image=False)
+    except sandbox.ManifestError as e:
+        for p in e.problems:
+            say(f"manifest: {p}", err=True)
+        return refuse(f"the manifest {args.manifest} is refused ({len(e.problems)} problem(s))")
+    except sandbox.SandboxError as e:
+        return refuse(str(e))
+    image_problem = None
+    if manifest.image not in sandbox.read_images_lock(root):
+        image_problem = (f"image {manifest.image} is not in sandbox/images.lock (the images are "
+                         "built at DV4 step 2a)")
+    try:
+        run = sandbox.materialize(manifest, root)
+    except (sandbox.SandboxError, sandbox.ManifestError, OSError) as e:
+        say(f"materialization failed: {e}", err=True)
+        return 1
+    try:
+        report = sandbox.selftest(manifest, run, root, author=author)
+    except BaseException:
+        sandbox.remove_run(run)
+        raise
+    if args.records:
+        sandbox.write_records(args.records, manifest, report)
+    return manifest, run, report, image_problem
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="mksandbox-run", allow_abbrev=False,
+                                 description="The one program that starts a sandbox container "
+                                             "(DV4-PLAN §5).")
+    ap.add_argument("manifest", nargs="?")
+    mode = ap.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true")
+    mode.add_argument("--selftest-only", action="store_true")
+    mode.add_argument("--materialize", action="store_true")
+    mode.add_argument("--release", metavar="RUNDIR")
+    mode.add_argument("--check-access", action="store_true")
+    mode.add_argument("--attest", metavar="CARD")
+    mode.add_argument("--attest-rescan", action="store_true")
+    mode.add_argument("--build-verify", action="store_true")
+    mode.add_argument("--reap", action="store_true")
+    mode.add_argument("--probe", action="store_true")
+    mode.add_argument("--build-agent", action="store_true")
+    mode.add_argument("--agent-session", action="store_true")
+    ap.add_argument("--task")
+    ap.add_argument("--brief", metavar="FILE")
+    ap.add_argument("--turns", type=int)
+    ap.add_argument("--wall-s", type=float, default=2700)
+    ap.add_argument("--gpu-s", type=float)
+    ap.add_argument("--run-id")
+    ap.add_argument("--texts", metavar="FILE")
+    ap.add_argument("--seeds", metavar="FILE")
+    ap.add_argument("--calendar-fd", type=int)
+    ap.add_argument("--author", action="store_true")
+    ap.add_argument("--records", metavar="DIR")
+    ap.add_argument("--target")
+    ap.add_argument("--argv", metavar="JSON")
+    ap.add_argument("--module")
+    ap.add_argument("--kind", choices=("verify", "agent"), default="verify")
+    ap.add_argument("--network", choices=("none", "ollama"), default="none")
+    ap.add_argument("--mem-gb", type=float)
+    ap.add_argument("--lab-task", metavar="TASK")
+    ap.add_argument("--rev", metavar="REV")
+    ap.add_argument("--truth", metavar="ARCHIVE")
+    ap.add_argument("--truth-check", choices=sandbox.TRUTH_MODES)
+    ap.add_argument("--cards", metavar="ID,...")
+    ap.add_argument("--truth-lang", choices=("dafny", "verus"))
+    ap.add_argument("--judge", metavar="SPEC")
+    ap.add_argument("--gate-config", metavar="JSON_FILE")
+    ap.add_argument("--gate-upstream", metavar="URL")
+    ap.add_argument("--root", help=argparse.SUPPRESS)
+    args = ap.parse_args(argv)
+    root = Path(args.root).resolve() if args.root else ROOT
+
+    if args.build_verify:
+        if not args.target or not args.argv or args.manifest:
+            ap.error("--build-verify takes --target and --argv (and no manifest)")
+        try:
+            cmd = json.loads(args.argv)
+            raw, rel = sandbox.build_verify(root, args.target, cmd, module=args.module,
+                                            kind=args.kind, network=args.network,
+                                            mem_gb=args.mem_gb, lab_task=args.lab_task,
+                                            rev=args.rev)
+            sandbox.validate(raw, root, check_image=False)
+        except (ValueError, sandbox.ManifestError) as e:
+            probs = getattr(e, "problems", [str(e)])
+            for p in probs:
+                say(f"build-verify: {p}", err=True)
+            return refuse(f"no verify manifest for {args.target}")
+        print(json.dumps({"target": rel, "manifest": raw}, sort_keys=True))
+        return 0
+
+    if (args.lab_task or args.rev) and not args.build_verify:
+        ap.error("--lab-task and --rev go with --build-verify")
+
+    if args.build_agent:
+        if not args.task or not args.brief or args.turns is None or args.manifest:
+            ap.error("--build-agent takes --task, --brief and --turns (and no manifest)")
+        try:
+            brief = Path(args.brief).read_text(encoding="utf-8")
+            texts = json.loads(Path(args.texts).read_text(encoding="utf-8")) if args.texts else None
+            if texts is not None and not (isinstance(texts, dict) and all(
+                    isinstance(k, str) and isinstance(v, str) for k, v in texts.items())):
+                raise ValueError("--texts is a JSON object of course path -> text")
+            model = sandbox.agent_model(root)
+            raw = sandbox.build_agent(root, args.task, brief=brief, model=model,
+                                      turns=args.turns, module=args.module, run_id=args.run_id,
+                                      wall_s=args.wall_s, gpu_s=args.gpu_s, mem_gb=args.mem_gb,
+                                      texts=texts)
+            sandbox.validate(raw, root, check_image=False)
+        except (OSError, ValueError, sandbox.ManifestError, sandbox.SandboxError) as e:
+            for p_ in getattr(e, "problems", [str(e)]):
+                say(f"build-agent: {p_}", err=True)
+            return refuse(f"no agent manifest for {args.task}")
+        print(json.dumps(raw, sort_keys=True))
+        return 0
+    if (args.task or args.brief or args.turns is not None or args.texts or args.run_id
+            or args.gpu_s is not None) and not args.build_agent:
+        ap.error("--task, --brief, --turns, --texts, --run-id and --gpu-s go with --build-agent")
+    if (args.seeds or args.calendar_fd is not None) and not args.agent_session:
+        ap.error("--seeds and --calendar-fd go with --agent-session")
+    if args.agent_session and (not args.records or not args.seeds or not args.manifest):
+        ap.error("--agent-session takes --records DIR, --seeds FILE and a manifest")
+
+    truth_tmp = None
+    if args.truth or args.truth_check or args.cards or args.judge:
+        if not (args.truth and args.truth_check) or args.manifest or args.build_verify:
+            ap.error("the truth mode takes --truth ARCHIVE --truth-check MODE (and no manifest)")
+        if (args.truth_check == "judge") != bool(args.judge) or \
+                (args.judge and (args.cards or args.truth_lang)):
+            ap.error("--truth-check judge takes --judge SPEC (the candidates; their files give "
+                     "the language) and neither --cards nor --truth-lang")
+        if args.materialize or args.selftest_only:
+            # a kept or self-tested run directory would hold a copy of the grader's key and
+            # the archive outside the key's cache directory (DV5c fix round)
+            ap.error("the truth mode stages the archive and the grader's key only for a live "
+                     "run: --materialize and --selftest-only are refused with --truth")
+        try:
+            labs = [k for k, v in sandbox.truth_pins(root).items() if v.get("archive") == args.truth]
+            if len(labs) != 1:
+                return refuse(f"{args.truth} is not a sealed archive {sandbox.TRUTH_FILE} pins")
+            cards = tuple(c for c in (args.cards or "").split(",") if c)
+            if args.judge:
+                from dvl import judge as judging
+                try:
+                    cands, jlang = judging.candidates(root, labs[0], judging.load_spec(args.judge))
+                except (OSError, ValueError) as e:
+                    say(f"judge: {e}", err=True)
+                    return refuse("no judging run")
+                raw = judging.build_judge(root, labs[0], cands, jlang, mem_gb=args.mem_gb)
+            else:
+                raw = sandbox.build_truth(root, labs[0], args.truth_check, cards=cards,
+                                          mem_gb=args.mem_gb, lang=args.truth_lang)
+        except sandbox.ManifestError as e:
+            for p_ in e.problems:
+                say(f"truth: {p_}", err=True)
+            return refuse("no truth run")
+        import tempfile
+        fd, truth_tmp = tempfile.mkstemp(prefix="dvl-truth-", suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(raw, fh)
+        args.manifest = truth_tmp
+        import atexit
+        atexit.register(lambda: os.path.exists(truth_tmp) and os.unlink(truth_tmp))
+
+    if args.reap:
+        ok, msg = sandbox.check_access()
+        if not ok:
+            return refuse(msg)
+        gone = sandbox.reap(log=say)
+        say(f"reaped {len(gone)} container(s)")
+        return 0
+
+    if args.check_access:
+        if args.manifest or args.author or args.records:
+            ap.error("--check-access takes nothing else")
+        ok, msg = sandbox.check_access()
+        if ok:
+            say(msg)
+            return 0
+        return refuse(msg)
+
+    if args.release:
+        p = Path(args.release).resolve()
+        base = sandbox.runs_base().resolve()
+        if p.parent != base or not p.is_dir():
+            return refuse(f"{args.release} is not a run directory under {base}")
+        sandbox.remove_run(sandbox.RunDir(p))
+        say(f"removed {p}")
+        return 0
+
+    if args.attest_rescan:
+        if not args.author:
+            ap.error("--attest-rescan is an author-only form: --author --attest-rescan")
+        ok, rows = sandbox.rescan_attested(root)
+        tally = {}
+        for r in rows:
+            tally[r["result"]] = tally.get(r["result"], 0) + 1
+            if r["path"]:
+                say(f"{r['result']:<11} {r['sha256'][:16]}  {r['path']}"
+                    + (f"  ({r['detail']})" if r["detail"] else ""))
+        if not ok:
+            return refuse(rows[0]["detail"] if rows else "nothing re-scanned")
+        say("re-scan: " + ", ".join(f"{k} {v}" for k, v in sorted(tally.items()))
+            + f" of {len(rows)} entries (rule {sandbox.SCAN_RULE})")
+        return 0 if not (tally.get("withdrawn") or tally.get("refused") or tally.get("stale")) else 1
+
+    if args.attest:
+        if not args.author:
+            ap.error("--attest is an author-only form: --author --attest CARD")
+        ok, msg = sandbox.attest(root, args.attest)
+        if ok:
+            say(msg)
+            return 0
+        return refuse(msg)
+
+    if not args.manifest:
+        ap.error("a manifest is required")
+    if args.author:
+        if not args.selftest_only:
+            ap.error("--author goes with --selftest-only, --attest or --attest-rescan")
+        why = sandbox.author_gate(root)
+        if why:
+            return refuse(f"--author is author-only and refuses to run here ({why}); the author "
+                          "runs it in the authoring worktree (Δ103)")
+    live = not (args.dry_run or args.selftest_only or args.materialize)
+    if live and args.root:
+        return refuse("--root serves the tests of --dry-run, --selftest-only and --materialize; "
+                      "a live run always uses this checkout")
+
+    got = prepare(args, root, args.author)
+    if isinstance(got, int):
+        return got
+    manifest, run, report, image_problem = got
+    keep = False
+    try:
+        if args.selftest_only:
+            print(json.dumps(report, indent=2, sort_keys=True))
+            if image_problem:
+                say(f"note: {image_problem}", err=True)
+            return 0 if report["ok"] else 1
+        if args.dry_run:
+            say(f"dry run of {args.manifest} (run {manifest.run_id}, module {manifest.module}, "
+                f"kind {manifest.kind}, network {manifest.network})")
+            print(f"manifest: OK (sha256 {manifest.sha256()[:16]}), {len(manifest.files)} files "
+                  f"({roles_line(manifest)}), {len(manifest.returns)} return path(s)")
+            print(f"self-test: {selftest_line(report)}")
+            for name, chk in report["checks"].items():
+                for p in chk.get("problems", []):
+                    print(f"  {name}: {p}")
+            print("image: " + (f"refused: {image_problem}" if image_problem else "OK (in sandbox/images.lock)"))
+            print(f"memory: --memory {manifest.limits['mem_gb']:g}g (the pinned bound for a "
+                  f"{manifest.kind} container of {', '.join(manifest.pools()) or 'no solver language'})")
+            print("docker argv (nothing was run; $RUN is the run directory):")
+            for line in sandbox.docker_argv(manifest, "$RUN"):
+                print("  " + shlex.join(line))
+            if image_problem:
+                return refuse(image_problem)
+            return 0 if report["ok"] else 1
+        if not report["ok"]:
+            say("self-test FAILED: " + selftest_line(report), err=True)
+            for name, chk in report["checks"].items():
+                for p in chk.get("problems", []):
+                    say(f"  {name}: {p}", err=True)
+            return 1
+        if args.materialize:
+            if image_problem:
+                say(f"note: {image_problem}", err=True)
+            keep = True
+            print(run.path)
+            return 0
+        # the live run
+        if image_problem:
+            return refuse(image_problem)
+        ok, msg = sandbox.check_access()
+        if not ok:
+            return refuse(msg)
+        session = {}
+        if args.agent_session:
+            if manifest.kind != "agent" or (manifest.agent or {}).get("cli") != "opencode":
+                return refuse("--agent-session runs an opencode agent manifest")
+            try:
+                seeds = json.loads(Path(args.seeds).read_text(encoding="utf-8"))
+            except (OSError, ValueError) as e:
+                return refuse(f"--seeds {args.seeds}: {e}")
+            held = False
+            if args.calendar_fd is not None:
+                if not sandbox.calendar_held_by(args.calendar_fd):
+                    return refuse(f"--calendar-fd {args.calendar_fd} does not hold the GPU "
+                                  "calendar lock")
+                held = True
+            session = {"seeds": seeds, "gate_dir": args.records, "calendar_held": held}
+        try:
+            gcfg = json.loads(Path(args.gate_config).read_text(encoding="utf-8")) \
+                if args.gate_config else None
+            code, rec = sandbox.live_run(manifest, run, probe=args.probe, log=say, gate_cfg=gcfg,
+                                         gate_upstream=args.gate_upstream, **session)
+        except sandbox.Deferred as e:
+            return refuse(str(e))
+        except sandbox.SandboxError as e:
+            return refuse(str(e))
+        rec["manifest_sha256"] = manifest.sha256()
+        rec["selftest_ok"] = report["ok"]
+        if args.records:
+            sandbox.write_live_records(args.records, rec,
+                                       name="sandbox.json" if args.agent_session else "run.json")
+        else:
+            rec.pop("_returned", None)
+            rec.pop("_transcript", None)
+        if manifest.truth and rec.get("commands"):
+            out = rec["commands"][0].get("stdout") or ""
+            print(out.strip() if isinstance(out, str) else out)
+            if code == 0 and rec["commands"][0].get("exit_code") not in (0, None):
+                code = 1
+        say(f"run {manifest.run_id}: {rec.get('ended_by')} in {rec.get('wall_s')} s; "
+            f"{len(rec.get('commands', []))} command(s)"
+            + (f"; return: {len(rec['return']['returned'])} changed, "
+               f"{len(rec['return']['rejected'])} rejected" if rec.get("return") else "")
+            + ("" if rec.get("removed") else "; the container was NOT removed (--reap)"))
+        return code
+    finally:
+        if not keep:
+            sandbox.remove_run(run)
+        if truth_tmp and os.path.exists(truth_tmp):
+            os.unlink(truth_tmp)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

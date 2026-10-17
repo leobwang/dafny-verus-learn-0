@@ -1,0 +1,63 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+# Note: The witness and swap-to-false probes live in witness/ and swapped/
+#   (each its own crate; the witness depends on this crate by path).
+id = "V12"
+lang = "verus"
+half = "Q"
+xclass = "X07"
+kind = "construct"
+title = "contradictory requires make any conclusion provable"
+files = ["Cargo.toml", "src/lib.rs", "swapped/Cargo.toml", "swapped/src/lib.rs", "witness/Cargo.toml", "witness/src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "unknown"
+kinds = []
+output_sha256 = "4a919c3874783274233e83ea80571d37a144f095f886bdef42f6c126f7bd88bf"
+summary = "the trusted gate passes (verdict verified, exit 0): X07 is grader-only, so a learner's gate must answer UNKNOWN here, never PASS; verdict verified, stage verify, verified 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V12"]
+exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "clean"
+kinds = []
+output_sha256 = "5317f604175133d1a7946a0fa5fde4ba4b0551e2e4e4f2ad7f9c9f0a9ffaccbf"
+summary = "0 finding(s)"
+argv = ["scripts/vaudit", "tests/corpus/verus/V12"]
+exit = 0
+
+[[expect]]
+tool = "witness"
+outcome = "flagged"
+kinds = ["diag:precondition-not-satisfied"]
+output_sha256 = "b3014cd8a8c8a8c4d56c78c34d01c797016b13a3a8fa1f5fa2168abcf77db5fd"
+summary = "the witness crate (witness/) calls the statement with concrete arguments: verdict failed, stage verify, verified 0; error precondition-not-satisfied at witness/src/lib.rs:7; gate conditions missed: 'success' is false, not true, verified 0 < the unit's minimum 1, exit 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V12/witness"]
+exit = 1
+
+[[expect]]
+tool = "swap-to-false"
+outcome = "flagged"
+kinds = ["swap-to-false-verifies"]
+output_sha256 = "816379e95da39ede7ba009316a5213b3df570ed478f9bd20ce9c77fb9e820399"
+summary = "the conclusion replaced by false (swapped/) still verifies, so the context is vacuous: verdict verified, stage verify, verified 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V12/swapped"]
+exit = 0

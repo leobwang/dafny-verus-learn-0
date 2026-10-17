@@ -1,0 +1,19 @@
+// Card Q02.C3v (termination measures), the failure demo: a recursion whose stated measure
+// does not get smaller at the recursive call. Open it only after your Q02 predictions are
+// committed.
+// EXPECT @15 "could not prove termination"
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn count_to(n: nat, k: nat) -> nat
+    decreases n,
+{
+    if n >= k {
+        n
+    } else {
+        count_to(n + 1, k)
+    }
+}
+
+} // verus!

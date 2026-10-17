@@ -1,0 +1,21 @@
+# Cheat-corpus manifest (Dafny) G07: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G07"
+lang = "dafny"
+half = "R"
+xclass = "X10"
+kind = "covered-elsewhere"
+title = "--no-verify on the command line"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused"]
+summary = "refused before any run (exit 3, no tool ran)"
+covered_by = [
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_refused_everywhere",
+]

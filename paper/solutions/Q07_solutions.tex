@@ -1,0 +1,261 @@
+% Q07_solutions.tex — REFERENCE SOLUTIONS to paper/Q07_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0, Verus 0.2026.09.27.3cf1832) through scripts/vcheck, scripts/vaudit
+% and scripts/specfreeze, run on instructor/scratch/<file> in a scratch course
+% root, one solver job at a time under a 16G cap, by the DV3b kits phase's kit
+% lane for Q07 on 2026-10-07. The probe files and their outputs are archived
+% under ~/.cache/dafny-verus-learn-0/author-probes/dv3bk/q07-kit/ (README
+% there). B3's fields are graded against the learner's own cheatsheets.md; this
+% file records which lines of the pinned range each field draws on and never
+% copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q07 --- Internals I: proof engineering, translation \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is informal-proof-first (the five proof dimensions; it has no induction, so
+\texttt{induction-soundness} grades the soundness of the chain, as the rubric
+says; its blueprint is re-scored by \verb+--post+ against the learner's
+verified H3d and H5v). B2 is a concept answer (\texttt{correctness}: the
+grader tries to counterexample it, with the rubric's Probe B). B3 is a paper
+card (\texttt{card-fidelity}, per field). The solutions below give the
+answers; the rubric never states them. The structure of B1 matches the formal
+references of H3d and H5v (spec section~4.4's author rule).
+
+% ---------------------------------------------------------------------------
+\section*{B1 (informal-proof-first)}
+
+\textbf{(a) Statement.} For all naturals $r$, $x$, $d$ with
+$0 < d < \mathit{BASE}$, $r < d$ and $x < \mathit{BASE}$:
+$(r \cdot \mathit{BASE} + x) / d < \mathit{BASE}$, with $/$ the integer
+quotient (Euclidean, which on naturals is the floor).
+
+\textbf{The chain.}
+\begin{enumerate}
+\item $r < d$ gives $r + 1 \leq d$ over the integers. \emph{Solver.}
+\item \textbf{Monotonicity of a product} (\texttt{Std.Arithmetic.Mul}'s
+  \dfy{LemmaMulInequality(x, y, z)}: $x \leq y \wedge z \geq 0 \Rightarrow
+  x \cdot z \leq y \cdot z$) at $(r + 1, d, \mathit{BASE})$: its hypotheses
+  are step~1 and $\mathit{BASE} \geq 0$. It gives
+  $(r + 1) \cdot \mathit{BASE} \leq d \cdot \mathit{BASE}$.
+\item \textbf{Distributivity} (\texttt{Std.Arithmetic.Mul}'s
+  \dfy{LemmaMulIsDistributiveAddOtherWay(x, y, z)}:
+  $(y + z) \cdot x = y \cdot x + z \cdot x$, no hypothesis) at
+  $(\mathit{BASE}, r, 1)$: $(r + 1) \cdot \mathit{BASE} = r \cdot \mathit{BASE}
+  + 1 \cdot \mathit{BASE}$, and $1 \cdot \mathit{BASE} = \mathit{BASE}$ is a
+  product with a constant factor. So
+  $r \cdot \mathit{BASE} + \mathit{BASE} \leq d \cdot \mathit{BASE}$.
+\item $x < \mathit{BASE}$ gives $r \cdot \mathit{BASE} + x <
+  r \cdot \mathit{BASE} + \mathit{BASE} \leq d \cdot \mathit{BASE}$.
+  \emph{Solver}: linear arithmetic, with $r \cdot \mathit{BASE}$ and
+  $d \cdot \mathit{BASE}$ as opaque terms.
+\item \textbf{A bound on a product bounds the quotient}
+  (\texttt{Std.Arithmetic.DivMod}'s \dfy{LemmaMultiplyDivideLt(a, b, c)}:
+  $0 < b \wedge a < b \cdot c \Rightarrow a / b < c$, H2's fact) at
+  $(r \cdot \mathit{BASE} + x, d, \mathit{BASE})$: its hypotheses are $0 < d$
+  (given) and step~4, \emph{strict}. It gives the postcondition.
+\end{enumerate}
+\textbf{Solver steps and why.} Steps~1 and~4 and the constant factor of
+step~3 are linear arithmetic, which nonlinear arithmetic off keeps: a product
+of two variables is an uninterpreted term, so inequalities that treat it as a
+whole cost nothing. Commutativity is free as well (P5dv's answer: Dafny's
+prelude keeps that axiom when nonlinear arithmetic is off), so the order of a
+product's factors needs no step. Distributivity, monotonicity and the
+quotient bound are each a named fact.
+
+\textbf{Facts (the blueprint):} the three library lemmas of steps~2, 3 and~5,
+at the arguments given; no new lemma; no gap. Probe A with the three facts
+pasted bodyless and called in this order gave \texttt{verified --- 25 verified,
+3 holes, 0 errors} under \texttt{scripts/vcheck --module Q07} (one hole per
+fact, nothing else; captured). Each fact, pasted with an empty body in a module
+with Dafny's default arithmetic (Probe A$'''$), verified (captured).
+
+\textbf{The strictness trap.} Step~5 needs $a < b \cdot c$ strictly. A chain
+that weakens step~4 to $\leq$ (for instance by writing $x \leq \mathit{BASE}$)
+must then use a quotient fact with a non-strict hypothesis, which is false:
+at $a = 5 \cdot \mathit{BASE}$, $b = 5$, $c = \mathit{BASE}$ the hypothesis
+$a \leq b \cdot c$ holds and $a / b = \mathit{BASE}$ is not below
+$\mathit{BASE}$ (Probe A$''$ with that claim: \texttt{FAILED}, captured).
+Probe A with that false fact pasted bodyless still verifies (captured): a
+splice shows that the chain closes \emph{given} its facts, never that a fact
+is true.
+
+\textbf{An equally correct route} (the gold fixture's): distributivity over a
+difference, $(d - r) \cdot \mathit{BASE} = d \cdot \mathit{BASE} - r \cdot
+\mathit{BASE}$; then $1 \leq d - r$ and $0 < \mathit{BASE}$ give
+$\mathit{BASE} \leq (d - r) \cdot \mathit{BASE}$ (a product grows with a
+factor of at least one); then the quotient bound. Probe A with these three
+facts verified with three holes (captured).
+
+\textbf{The formal reference it matches} (H3d's twin):
+\begin{dafnycode}
+lemma DivLimbStep(r: nat, x: nat, d: nat)
+  requires 0 < d < BASE && r < d && x < BASE
+  ensures (r * BASE + x) / d < BASE
+{
+  LemmaMulInequality(r + 1, d, BASE);
+  LemmaMulIsDistributiveAddOtherWay(BASE, r, 1);
+  LemmaMultiplyDivideLt(r * BASE + x, d, BASE);
+}
+\end{dafnycode}
+
+\textbf{(b) Statement.} For all naturals $v$, $n$:
+$v / \mathit{weight}(n + 1) = (v / \mathit{weight}(n)) / \mathit{BASE}$.
+
+\textbf{The chain.}
+\begin{enumerate}
+\item L3's \vrs{lemma_weight_succ(n)}: $\mathit{weight}(n + 1) = \mathit{BASE}
+  \cdot \mathit{weight}(n)$. Needed because \vrs{weight} is opaque: without it
+  the two weights are unrelated.
+\item \textbf{The divisor is positive}: L3's \vrs{lemma_weight_zero()}
+  ($\mathit{weight}(0) = 1$) and \vrs{lemma_weight_mono(0, n)} (its
+  \vrs{requires} $0 \leq n$ holds for a natural) give
+  $1 \leq \mathit{weight}(n)$.
+\item \textbf{Division by a product in two steps} (\texttt{vstd}'s
+  \vrs{lemma_div_denominator(x, c, d)}: $0 \leq x \wedge 0 < c \wedge 0 < d
+  \Rightarrow c \cdot d \neq 0 \wedge (x / c) / d = x / (c \cdot d)$) at
+  $(v, \mathit{weight}(n), \mathit{BASE})$: $0 \leq v$ ($v$ is a natural),
+  $0 < \mathit{weight}(n)$ (step~2), $0 < \mathit{BASE}$ (a constant). It gives
+  $(v / \mathit{weight}(n)) / \mathit{BASE} = v / (\mathit{weight}(n) \cdot
+  \mathit{BASE})$.
+\item \textbf{The two products are one}: $\mathit{weight}(n) \cdot
+  \mathit{BASE} = \mathit{BASE} \cdot \mathit{weight}(n)$
+  (\texttt{vstd}'s \vrs{lemma_mul_is_commutative}, or the solver: Probe A$'$
+  without the call verified, captured). With step~1 the two divisors are the
+  same term, and the postcondition follows.
+\end{enumerate}
+\textbf{Facts (the blueprint):} L3's three weight lemmas and \texttt{vstd}'s
+division-by-a-product lemma, at the arguments given; commutativity named or
+left to the solver; no gap. Probe A$'$ with these calls verified
+(\texttt{verified --- 1 verified, 0 holes, 0 errors}); the same with the two
+facts of steps~2 and~3 pasted as helpers verified with two holes; with step~2's
+two calls removed, \texttt{precondition not satisfied} at the division lemma's
+call (all captured). The divisor's positivity is the step a blueprint most often
+leaves out: \vrs{weight} is opaque, so it is a fact to name, not an obvious
+truth the solver sees.
+
+\textbf{The formal reference it matches} (H5v's twin):
+\begin{veruscode}
+pub proof fn lemma_div_weight_succ(v: nat, n: nat)
+    ensures
+        v / weight(n + 1) == (v / weight(n)) / BASE,
+{
+    lemma_weight_succ(n);
+    lemma_weight_zero();
+    lemma_weight_mono(0, n);
+    lemma_mul_is_commutative(BASE as int, weight(n) as int);
+    lemma_div_denominator(v as int, weight(n) as int, BASE as int);
+}
+\end{veruscode}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (concept)}
+
+\textbf{(a)} The outcomes are the same in both languages (each captured with
+\texttt{scripts/vcheck --module Q07 --gate}, \texttt{scripts/specfreeze
+--against} the snapshot and \texttt{scripts/vaudit} on the probe):
+\begin{center}
+\begin{tabular}{lllll}
+edit & gate & freeze & audit & no statement changed? \\
+\hline
+{[1]} \texttt{API} conjunct cut & passes & 0 findings & 0 findings & broken \\
+{[2]} \texttt{FROZEN} \dfy{<} to \dfy{<=} & passes & \texttt{freeze-changed} & 0 findings & broken \\
+{[3]} assumed helper & fails (a hole) & 0 findings & 1 finding & kept \\
+\end{tabular}
+\end{center}
+[1] is the edit no instrument sees: the gate proves the weaker statement, the
+snapshot never held \texttt{API}, and a weaker \dfy{ensures} assumes nothing.
+Only a reader of the diff catches it, which is the point of the \texttt{REVIEW}
+block. [2] is the snapshot's catch
+(\texttt{freeze-changed --- Shelf.PairBelow}; Verus: \texttt{the statement of
+pair\_below changed}). [3] changes no shipped statement (a new helper under
+\texttt{HELPERS} is allowed) but fails the contract's hole and audit lines: the
+gate prints \texttt{hole assume Shelf.SumBelowDouble} (Verus: \texttt{hole
+assume sum\_below\_double}), and the audit reports \texttt{audit-assume}
+(Verus: \texttt{hole-assume}).
+
+\textbf{(b)} Any edit that changes no statement, passes the three
+instruments and breaks one of the contract's reading lines. Captured
+instances: a \dfy{\{:fuel Doubled, 3\}} attribute on a lemma (gate, freeze and
+audit all clean in Dafny), which breaks ``no \dfy{\{:fuel\}} attribute is
+added to any lemma''; a new lemma placed in \texttt{FROZEN} instead of
+\texttt{HELPERS} and called from a body (clean in both languages), which breaks
+``every new lemma sits under \texttt{HELPERS}''; a body longer than the
+\texttt{REFACTOR} bound (the goal's bound). The artifact is \texttt{git diff}
+from the snapshot's commit (for the replay, its \texttt{patch.diff}), which the
+contract's \texttt{git diff} audit line asks the reviewer to read. Not an
+answer: an \dfy{\{:rlimit\}} attribute, which \texttt{vaudit} reports as
+\texttt{resource-attribute} (so does \texttt{specfreeze --against}), and a
+Verus \vrs{#[verifier::rlimit]}, which fails the gate on a lint finding and
+which \texttt{vaudit} reports as \texttt{rlimit-inflation} (all captured). A
+claim that an instrument reports [1] or the fourth edit is refuted by running
+it (the rubric's Probe B).
+
+% ---------------------------------------------------------------------------
+\section*{B3 (paper card 02.8): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 795--825 (computed 2026-10-07),
+\[ \texttt{sha256 dce0012836edfb635ae4f292d262e2ba5cd3895a1ddb494b7f81bf1980ae7847}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Evaluation: given a specification, generate the Verus
+  implementation and its proof annotations so that the verifier accepts them
+  (HumanEval-Verus, 85 functions; MBPP-verified, 78). Bootstrapping: translate
+  DafnyBench's Dafny programs into Verus, repair failing candidates by tree
+  search over verifier errors, filter out reward hacks, and use the survivors
+  as few-shot exemplars; Llama-3.1-70B with no fine-tuning.
+  \emph{Lines 797, 799, 802--805.}
+\item[Oracle.] The Verus verdict ($v = 1$) decides success. Inside the search,
+  a score built from the verifier's counts (verified and unverified functions,
+  errors, warnings) ranks candidates. Survivors must also pass the critique:
+  rule filters, an LLM comparison judge with a rejection threshold, and an
+  exploit LLM. \emph{Lines 799, 803--804.}
+\item[What is trusted.] Verus; the specification, which the verifier never
+  checks against intent (the card calls it the attack surface); the critique's
+  heuristic filters and LLM judge, for the faithfulness of a translation to its
+  Dafny source; DafnyBench as the source. The limitations report one
+  translation whose postcondition does not match its source.
+  \emph{Lines 804, 822, 825.}
+\item[Cheat surface.] Filtered: \vrs{assume(false)}, \vrs{#[verifier::external]},
+  trivial preconditions, and specifications that a trivial program satisfies.
+  Without the critique the loop drifts into \vrs{assume(false)} and vacuous
+  specifications. Open: a mistranslated postcondition that the heuristic
+  critique misses, and added preconditions that weaken the guarantee.
+  \emph{Lines 804, 819, 822--823.}
+\item[Metric.] pass@$K$ (any of $K$ samples verifies), reported as pass@256 in
+  per cent: HumanEval 32.9, MBPP 65.7, against GPT-4o few-shot 27.1 and 35.9
+  and Llama-70B few-shot 11.8 and 26.9; tree search against linear refinement
+  32.9 vs 29.4 and 65.7 vs 62.8; proof annotation on MBPP 75.7 against
+  AutoVerus 65.4 and SAFE 59.0; translation covers about 45\% of DafnyBench
+  after 7 iterations. \emph{Lines 799, 807--818.}
+\item[Budget.] $k = 256$ samples per exploration; tree search of breadth 32
+  and depth 8; 7 translation iterations; the refinement comparison is ``at
+  equal budget''. No wall-clock, token, GPU or money figure, and the baselines'
+  settings are mixed. \emph{Lines 802--803, 815--816, 823.}
+\item[Variance.] Not reported in the range: single numbers per cell, no runs,
+  seeds or intervals; pass@256 is itself a best-of-256 metric, so it hides the
+  spread of single samples. \emph{Lines 807--818 (silent).}
+\item[Artifact.] The translated corpus (247 programs, 102 error trajectories,
+  579 exploit pairs) and the two evaluation sets (HumanEval-Verus 85,
+  MBPP-verified 78). Whether code, prompts or the corpus are released is not
+  stated in the range. \emph{Lines 799, 815.}
+\end{description}
+A field that says the range is silent where it is silent (a release, a cost,
+an interval) is correct. A field that contradicts a line (for example 65.7 as
+a pass@1 figure, the 45\% as a share of the benchmarks solved, or the critique
+as a check the verifier performs) scores 2, quoting that line.
+
+\end{document}

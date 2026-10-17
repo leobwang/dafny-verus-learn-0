@@ -1,0 +1,51 @@
+// item: Q04.P9v S5 obligation
+// **P9.** L3's bounds group, with and without `broadcast use` (Reference Solution: `weight`
+// is opaque, so without the group [b] knows nothing about it; with the group, [a] is
+// `lemma_weight_mono` on the two `weight` terms, [c] is `lemma_seq_to_nat_lower` with
+// `weight(2)` as `weight(s.len() - 1)`, and [d] is `lemma_seq_to_nat_upper` followed by
+// `lemma_weight_mono`). Four proof fns about
+// `weight` and `seq_to_nat`, each with an empty body apart from the group line some of
+// them carry, and one labelled postcondition: [a] an order of two weights, with the
+// group; [b] the same order, without it; [c] a canonical three-limb value above a
+// weight, with the group; [d] a value below the next weight, with the group. Which
+// labelled postconditions does the verifier fail to prove?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by
+// single spaces (for example `FAILS x y`), or `FAILS none`.
+// FAILS b
+#![allow(unused_imports)]
+use vstd::prelude::*;
+use qg_bignat_l3::*;
+
+verus! {
+
+pub proof fn order_with_group()
+    ensures
+        weight(3) <= weight(5),                       // [a]
+{
+    broadcast use group_bignat_bounds;
+}
+
+pub proof fn order_without_group()
+    ensures
+        weight(3) <= weight(5),                       // [b]
+{
+}
+
+pub proof fn canonical_above(s: Seq<u64>)
+    requires
+        seq_wf(s),
+        s.len() == 3,
+    ensures
+        weight(2) <= seq_to_nat(s),                   // [c]
+{
+    broadcast use group_bignat_bounds;
+}
+
+pub proof fn below_next(s: Seq<u64>)
+    ensures
+        seq_to_nat(s) < weight(s.len() + 1),          // [d]
+{
+    broadcast use group_bignat_bounds;
+}
+
+} // verus!

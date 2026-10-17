@@ -1,0 +1,158 @@
+% Q08_gold_answers.tex — GRADER CALIBRATION FIXTURE (a correct answer set).
+% A drop-in replacement for paper/Q08_answers.tex (spec §4.7, §6.12), written in a
+% learner's words, paraphrased away from the reference solutions. Every claim was
+% checked with the rubric's probes on the course pins. Reference-class (hook rule 1,
+% DELTAS Δ125): it is a correct answer set, so open it only after Q08 is done.
+%
+% EXPECTED[B1][recomputation][4]: correct (Probe A's TermIs verifies on the final term; Probe A''s Steps passes on the three steps; Probe B's MeaningIs verifies on min-form 0 <= s(0) && 0 <= s(1); Probe C's SwappedMeaningIs verifies on s(2) - s(0) <= s(1), and SwappedCounterexample passes on (2, -3, -9)).
+% EXPECTED[B2][recomputation][4]: correct (Probe D verifies with the answer's maintenance formula; Probe E's HaltState passes on x = -1, the answer's form "non-negative while the guard holds", and HaltTrace on 3, 1, -1, -3, -5; Probe F's runs match (c)).
+% EXPECTED[B3][card-fidelity][4]: every field agrees with lines 584-610; the contract mapping is defensible (CF.g).
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4. A finding <= 2 on any problem is
+% a calibration failure (a hallucinated flaw); a 3 needs a named gap that the answer
+% really has.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q08 --- Internals II: refinement, permissions, verified wp \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} \dfy{Wp} on a \dfy{Seq} works back to front: first the last
+assignment, then the \dfy{If} against what that gives. \\
+Assignment \dfy{Assign(0, Minus(Var(2), Var(0)))} (\dfy{Wp} case
+\dfy{Assign}, so \dfy{SubstB} on \dfy{Le}, so \dfy{SubstE} on each side:
+\dfy{Var(0)} is the substituted variable and becomes the expression,
+\dfy{Var(1)} is not and stays): \dfy{Le(Minus(Var(2), Var(0)), Var(1))}. Call
+it $p$. \\
+The \dfy{If} (\dfy{Wp} case \dfy{If}): \dfy{And(Imp(b, A), Imp(Not(b), E))}
+where $b$ is \dfy{Le(Var(0), Var(1))} as it stands, $A$ is
+\dfy{Wp(Assign(2, Var(1)), p)} and $E$ is \dfy{Wp(Assign(2, Var(0)), p)}. \\
+$A$: \dfy{SubstB} on \dfy{Le}, \dfy{SubstE} through \dfy{Minus} into the
+variables; only \dfy{Var(2)} changes, to \dfy{Var(1)}:
+\dfy{Le(Minus(Var(1), Var(0)), Var(1))}. \\
+$E$: likewise, \dfy{Var(2)} becomes \dfy{Var(0)}:
+\dfy{Le(Minus(Var(0), Var(0)), Var(1))}. \\
+So \dfy{Wp(C(), Q())} is
+\begin{dafnycode}
+And(Imp(Le(Var(0), Var(1)), Le(Minus(Var(1), Var(0)), Var(1))),
+    Imp(Not(Le(Var(0), Var(1))), Le(Minus(Var(0), Var(0)), Var(1))))
+\end{dafnycode}
+
+\textbf{(b)} Reading it with \dfy{Holds} and \dfy{Eval}: if $s(0) \leq s(1)$
+then $s(1) - s(0) \leq s(1)$, and if not then $s(0) - s(0) \leq s(1)$. \\
+The first conclusion is $s(0) \geq 0$, the second $s(1) \geq 0$; so: when $x
+\leq y$ we need $x \geq 0$ (and then $y \geq 0$ follows), when $x > y$ we need
+$y \geq 0$ (and then $x \geq 0$ follows). Both cases come to
+$0 \leq s(0) \wedge 0 \leq s(1)$: the smaller of $x$ and $y$ is non-negative.
+\\
+It never mentions $s(2)$: whatever $m$ starts as, the \dfy{If} overwrites it
+before $x := m - x$ uses it.
+
+\textbf{(c)} If \dfy{Seq} composed the other way round, the \dfy{If} would see
+$q$ itself; assigning $m$ cannot affect $x \leq y$, so that stage means $x
+\leq y$, and substituting $m - x$ for $x$ afterwards (into the condition as
+well) leaves $s(2) - s(0) \leq s(1)$. \\
+Start state: $x = 2$, $y = -3$, $m = -9$; $-9 - 2 = -11 \leq -3$, so the
+swapped rule accepts it. \\
+Run: $2 \leq -3$ is false, so $m$ becomes $2$; then $x$ becomes $2 - 2 = 0$;
+we end with $x = 0$ and $y = -3$, and $0 \leq -3$ fails. \\
+What should have warned me: a precondition that constrains $m$'s initial value
+even though the program never reads it, and a guard rewritten as if it ran
+after the assignment.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} Entry: after $x := x_0$ and $k := 0$, $I$ reads $0 + \lvert
+x_0\rvert = \lvert x_0\rvert$: always true. \\
+Maintenance: back through $k := k + 1$ the target becomes $k + 1 + \lvert
+x\rvert = \lvert x_0\rvert$ and $0 \leq \lvert x\rvert < D$; back through the
+conditional it splits: \\
+\hspace*{2em} when $x > 0$: $k + 1 + \lvert x - 1\rvert = \lvert x_0\rvert$ and
+$0 \leq \lvert x - 1\rvert < D$. Here $x - 1 \geq 0$, so $\lvert x - 1\rvert$
+is one less than $\lvert x\rvert = D$: both follow from $I$. \\
+\hspace*{2em} when $x \leq 0$: $k + 1 + \lvert x + 1\rvert = \lvert x_0\rvert$
+and $0 \leq \lvert x + 1\rvert < D$. Since $x \neq 0$ here, $x$ is negative and
+$x + 1 \leq 0$, so $\lvert x + 1\rvert$ is again $\lvert x\rvert - 1$: both
+follow. \\
+Use at exit: the guard is false, so $x = 0$ and $I$ says $k = \lvert
+x_0\rvert$, the \dfy{ensures}. \\
+The guard does work twice: in the $x \leq 0$ branch, to exclude $x = 0$ (there
+one more step would give $\lvert x\rvert = 1$, wrong for both $I$ and the
+decrease), and, negated, at exit.
+
+\textbf{(b)} Soundness: induct on how many iterations have run: before the
+first test $I$ holds by entry, and if $I$ holds at a test the loop passes,
+maintenance gives it at the next test. So $I$ holds whenever the loop stops,
+together with $\neg b$, and that gives the postcondition. Each iteration
+lowers the integer measure by at least one, and it is never negative while
+the loop runs, so the loop cannot run forever. \\
+For \dfy{Halt}, entry, exit and the decrease are fine; the bound is what
+fails. Writing it as ``the measure is non-negative while the guard holds'':
+at $x = -1$ the guard holds and the measure is $-1$. \\
+From $3$: $3, 1, -1, -3, -5, \ldots$, forever.
+
+\textbf{(c)} \vrs{x - 1} is only done when $x > 0$, so it stays inside
+\vrs{i64}; \vrs{x + 1} only when $x \leq 0$, so it stays inside too. For
+\vrs{k + 1}: the invariant and the guard say $k = \lvert x_0\rvert - \lvert
+x\rvert$ with $\lvert x\rvert \geq 1$, and $\lvert x_0\rvert$ is at most the
+magnitude of \vrs{i64::MIN}, so $k + 1$ fits in \vrs{u64} with room to spare.
+\\
+With $k$ as \vrs{u32}: it fails at \vrs{k + 1}, since $x_0$ can be far larger
+than \vrs{u32::MAX}, and the invariant then allows $k$ $=$ \vrs{u32::MAX}
+while $x \neq 0$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.1, lines 584--610 (the pinned range).
+
+\textbf{Task shape:} One large proof: that CertiCoq's ANF transformation
+(untyped de Bruijn source to a named ANF IR, both with fuelled big-step
+semantics) preserves the meaning of terminating programs, written in Rocq by
+the agent with the existing CPS proof as its template.
+
+\textbf{Oracle:} The Rocq compiler accepting the development; the agent only
+edited files and ran \texttt{rocqc}. That accepts whatever statements are in
+the files, so a silently weakened statement passed it: an expert had to watch
+the statements.
+
+\textbf{What is trusted:} Rocq itself; the definitions and the theorem
+statements (semantics with fuel, the logical relation); the expert steering
+the run; and the two tactics a human repaired.
+
+\textbf{Cheat surface:} Statement weakening (a fuel bound dropped, with a
+trivial zero for the fuel obligation), deleting a proof so a file compiles,
+and a false assumption that two result variables cannot be equal. \\
+In my flagship contract: \texttt{specfreeze --against} catches the first; the
+gate (zero holes, a full run) catches the second; the third only
+\texttt{vaudit} catches if it was an \texttt{assume}-style axiom, and otherwise
+only a reader or a witness, and the range does not say which it was.
+
+\textbf{Metric:} Did the proof go through (yes, except divergence
+preservation), plus size and effort against the human CPS proof: 7,783 vs
+5,294 lines in all, 4,755 vs 2,243 lines for the main theorem, and the cost
+in hours, tool calls, compiles and compactions.
+
+\textbf{Budget:} Nothing fixed beforehand; what it used: 114 prompts by the
+expert, 5 days (90.2 h wall-clock, 62.6 h active, about 96 h by the text),
+6,538 tool calls, 872 compiles, 101 compactions; the expert's own time is not
+measured.
+
+\textbf{Variance:} Not addressed: one run, one compiler pass, one template,
+one expert (n = 1); the line counts in the text and the table disagree.
+
+\textbf{Artifact:} An agent-written Rocq correctness proof for CertiCoq's ANF
+pass, reported in PACMPL 2026 (arXiv 2602.20082); the model was Claude Opus 4.6
+under Claude Code. The range is silent on a released artifact or transcripts.
+\end{answer}
+
+\end{document}

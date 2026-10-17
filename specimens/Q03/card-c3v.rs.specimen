@@ -1,0 +1,18 @@
+// Demo for card Q03.C3v (write:witness), the failure half: the existential
+// proof fn with an empty body.
+// EXPECT @14 "postcondition not satisfied"
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn square(i: nat) -> nat {
+    i * i
+}
+
+pub proof fn lemma_exists_square_four()
+    ensures
+        exists|i: nat| square(i) == 4,
+{
+}
+
+} // verus!

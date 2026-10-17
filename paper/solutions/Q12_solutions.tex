@@ -1,0 +1,205 @@
+% Q12_solutions.tex — REFERENCE SOLUTIONS to paper/Q12_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1 is a pre-registration and B2 a lab report: they are graded on method and
+% reproducibility, never against numbers, so this file gives a reference plan
+% (one acceptable plan among many, with its arithmetic recomputed) and the
+% checks a grader runs, not values to match. The MDE figures were computed on
+% 2026-10-07 with harness/fvh/stats.py (`uv run python -c ...`, the calls are
+% quoted). B3-B5's fields are graded against the learner's own
+% cheatsheets.md; this file records which lines of each pinned range a field
+% draws on and never copies a card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q12 --- Practice I-C + Lab 1 \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is a pre-registration (the six method dimensions of CORE.md's research
+table; every arithmetic recomputed by the grader; the hash between the PREREG
+markers). B2 is a lab report (\verb+--report+: the method dimensions plus
+\texttt{reproducibility}, against the graded pre-registration). B3--B5 are
+paper cards (\texttt{card-fidelity}, per field; the closing line as a short
+concept answer). Neither B1 nor B2 has a numeric answer.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (pre-registration): a reference plan}
+
+\begin{description}
+\item[Claim.] H1 (two-sided): A2's rate differs from A1's. H2 (two-sided): A3's
+  rate differs from A1's. H3 (two-sided): the difference A2 $-$ A1 is not the
+  same in Dafny as in Verus. A refuting outcome is named for each: an interval
+  for the paired difference that contains 0 at the Holm-adjusted level. The
+  population is the 60 drawn tasks under the pinned toolchain, not ``Dafny and
+  Verus proofs''.
+\item[Metric and estimator.] Per task and repeat: solved within 8 calls (any
+  candidate the gate accepts). An arm's rate is the mean over the 60 tasks of
+  the per-task solved fraction over the 3 repeats; the comparison is the paired
+  per-task difference, with a 95\% percentile bootstrap interval over tasks
+  (the task is the resampling unit; repeats stay inside a task) and McNemar per
+  repeat as a sensitivity line.
+\item[Arms and policies.] A1, A2, A3 from \texttt{policies.py} with their
+  prompt hashes; the Claude arm runs the predicted best (say A2) on 20 tasks,
+  10 per language, drawn with a stated seed and stratified by language and
+  stratum.
+\item[Tasks and strata.] Local 10 + 10 (\texttt{STRATUM.toml}, the
+  levers-refused case, with the lab gate's lever check), public 20 DafnyBench
+  hint-free + 20 HumanEval-Verus task forms; the sets' commits and the
+  validation files' sha256 copied from \texttt{bench/manifest.toml}; one draw
+  seed per stratum; the pilot (80 public candidates, one sample each, its own
+  seeds) with the redraw rule ``a stratum whose pilot rate is below 0.1 or
+  above 0.9 is redrawn once with the next pre-registered seed''. The maxauto
+  case is stated as not drawable without six more Dafny tasks.
+\item[Budget arithmetic.] Qwen arms: $60 \times 8 \times 3 \times 3 = 4{,}320$
+  calls (A1: 8 attempts $\times$ 1 round; A2: 1 attempt $\times$ 8 rounds; A3:
+  8 expansions); pilot $80 \times 1 = 80$; Qwen total 4,400 calls in
+  $60 \times 3 \times 3 = 540$ arm runs + 80 pilot runs. Claude: $20 \times 8
+  = 160$ calls + at most 20 sentinel calls $= 180$, in 20 runs. Against the
+  registry's \texttt{budget} (Claude 180 calls / 20 runs, Qwen 4,400 / 620, 10
+  GPU-hours): equal. GPU: the throughput assumption is the step-3d probe's
+  measurement (not yet available; the course's single DV0 sample gives
+  $\approx 7.3$ s per independent call, $\approx 9$ GPU-hours for 4,400 calls,
+  a lower bound for A2 and A3); the fallback is two repeats if the per-arm
+  totals exceed 10 GPU-hours.
+\item[Generation settings.] As the gate pins them (thinking, \texttt{num\_predict},
+  \texttt{num\_ctx}, temperature), the same for every arm; seed lists per arm
+  and for the pilot, pairwise disjoint (for instance A1 10001--10480, A2
+  20001--20480, A3 30001--30480, pilot 90001--90080; any disjoint lists);
+  Claude's pinned argv.
+\item[Cost per arm.] Tokens in and out, GPU-seconds and wall clock per arm,
+  measured and reported against the ceiling; the truncation rate per arm (A2
+  and A3 carry growing documents) as a sensitivity line.
+\item[MDE.] The task is the unit: $n = 60$ paired tasks per comparison,
+  baseline $p_0 = 0.3$ (the reference's guess from the pilot rule's band),
+  power 0.8, two comparisons under Holm (worst case $\alpha = 0.025$):
+  \texttt{stats.mde\_two\_proportions(60, 0.3, alpha=0.025, paired=True)}
+  $= 0.2845$, about 28 points; at $\alpha = 0.05$ it is $0.2563$. Treating the
+  180 task-repeats as independent pairs would give $0.1586$, an overclaim: the
+  repeats of one task are correlated. A plan that states $n$, $p_0$, the
+  pairing and the $\alpha$ and quotes the call is correct whatever its $p_0$.
+\item[Seeds and repeats.] Qwen: the per-request seed lists above; Claude:
+  ``repeated runs'', never seeds.
+\item[Cheat surface and gate.] The learner's Q09 gate core in the verification
+  container on every claimed success, the lab gate's lever check, the spec
+  freeze of the task form; the grader-only classes reported \texttt{UNKNOWN}.
+\item[Exclusions.] \texttt{infra-failed} re-issued under the same id, prompt
+  hash and seed, at most 3 times, then excluded and counted;
+  \texttt{truncated:<cause>} counted as a failure (primary) with the
+  sensitivity line that excludes it.
+\item[Stopping rule.] A cap or a window reached between attempts defers the
+  batch; no look at outcomes before the plan's last id is scored; no arm
+  stops early on its results.
+\item[Prediction intervals.] Any 80\% intervals, written before the run.
+\item[Contamination.] The local stratum's authorship dates (2026-10-07, after
+  both models' release); the public sets flagged as possibly seen.
+\item[Disclosure.] ``A small-scale replication with model substitution''; Claude
+  as grader and subject; one machine, one solver pin.
+\end{description}
+
+\textbf{What the grader recomputes} (CORE.md's research table): the product
+of every budget line, the sum against the registry, the MDE call at the stated
+inputs, the hash between the markers, and the disjointness of the seed lists.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (lab report)}
+No reference: the numbers come from the learner's runs. A full report's
+Reproduce line regenerates every table (\verb+--report+ runs it), lists every
+deviation, carries the gate's verdict on every claimed success, scores the
+intervals, and discloses Claude as grader and subject.
+
+% ---------------------------------------------------------------------------
+\section*{B3 (paper card 05.10, DafnyBench): reference fields}
+Pinned range lines 2148--2171,
+\texttt{sha256 74302b1e31d99217abb41c683a736c5be938827c3226f9b01fe8390ad58f608f}.
+\begin{description}
+\item[Task shape.] Fill hints: 782 verified single-file Dafny programs with
+  their loop invariants and assertions deleted (sites unmarked); the model puts
+  back enough hints for Dafny to verify. \emph{Lines 2150, 2152.}
+\item[Oracle.] Dafny verifies, with the \texttt{requires}/\texttt{ensures}
+  unchanged and no \texttt{assume false} or \texttt{\{:verify false\}}.
+  \emph{Line 2152.}
+\item[What is trusted.] Dafny (4.3.0), the fixed specifications (some weak or
+  restating the code), the two-pattern cheat check. \emph{Lines 2152, 2169.}
+\item[Cheat surface.] Only two patterns are checked; weak specifications;
+  208 programs verify with no hints. \emph{Lines 2152, 2169.}
+\item[Metric.] $\mathrm{SR}_n$, solved within $n = 10$ feedback-driven
+  attempts: Claude 3 Opus 67.8\%, GPT-4 Turbo 59.8\%, GPT-4o 59.3\%, against
+  26.9\% with no LLM; about 54\% on the first attempt, a plateau near 65\% by
+  $n \approx 5$. \emph{Lines 2154, 2158--2167.}
+\item[Budget.] Up to 10 attempts per program, temperature 0.3, 4,096 max tokens.
+  \emph{Line 2152.}
+\item[Variance.] The table gives $\pm$ figures; the limitations say no
+  repeated runs are reported and temperature is fixed. \emph{Lines 2160--2165,
+  2169.}
+\item[Artifact.] The benchmark (782 programs); no training split.
+  \emph{Lines 2150, 2169.}
+\item[Closest arm.] A2 (one sample and repairs from the error message); its
+  budget counts attempts per program.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B4 (paper card 06.1, Baldur): reference fields}
+Pinned range lines 2312--2338,
+\texttt{sha256 51cbba75eb0f1af238973796c8cfbcf15615f6e0d8ef498a36ce742b90716846}.
+\begin{description}
+\item[Task shape.] Whole-proof generation from an Isabelle/HOL theorem
+  statement, and repair of a failed proof from its error message, by a
+  fine-tuned Minerva. \emph{Lines 2314, 2316, 2319--2320.}
+\item[Oracle.] Isabelle accepts the proof; \texttt{sorry}/\texttt{oops} are
+  rejected; a 10 s per-step timeout. \emph{Line 2316.}
+\item[What is trusted.] Isabelle, the PISA split (theorem-wise, which favours
+  copying from neighbouring proofs). \emph{Lines 2316, 2335.}
+\item[Cheat surface.] \texttt{sorry}/\texttt{oops} rejected; possible
+  pretraining leakage; the SOTA figure is a union with Thor. \emph{Lines
+  2316, 2335.}
+\item[Metric.] Proof rate (any of $k$ samples accepted): 8b generation 34.8\%
+  and 40.7\% at 16 and 64 samples, 47.9\% for 62b with context at 64, 65.7\%
+  for the union with Thor. \emph{Lines 2319, 2324--2331.}
+\item[Budget.] $k \in \{16, 64\}$ samples; about 35 TPU-s for 64 samples
+  against 216 s per proof for step-wise search; repair at matched cost.
+  \emph{Lines 2319, 2322, 2333.}
+\item[Variance.] Not reported beyond the temperature sweep. \emph{By absence,
+  line 2319.}
+\item[Artifact.] The range names none; closed models. \emph{Line 2335.}
+\item[Closest arm.] A1 for generation (independent samples) and A2 for
+  generate-then-repair; its budget counts samples, and the matched-cost
+  comparison of repair against more generation is the lab's own question.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B5 (paper card 04.8, VerMCTS): reference fields}
+Pinned range lines 1681--1706,
+\texttt{sha256 b42259ed8d3f21aea938f7534155e1cd8cf398f5c7f73018363ba6deb0e2b2b8}.
+\begin{description}
+\item[Task shape.] Training-free tree search for Dafny and Coq programs: states
+  are prompt plus partial program, actions one line or command; the verifier
+  prunes rejected prefixes. \emph{Lines 1683, 1685.}
+\item[Oracle.] The verifier on complete programs, plus a hidden check lemma
+  restating the target property. \emph{Line 1685.}
+\item[What is trusted.] Dafny and Coq; the check lemmas, which use
+  model-defined predicates. \emph{Lines 1685, 1704.}
+\item[Cheat surface.] Coarse checks (a whole Dafny function); hints in Coq
+  prompts nearly give away proofs; check lemmas over model-defined
+  predicates. \emph{Lines 1685, 1704.}
+\item[Metric.] pass@$T$ within $T$ sampled tokens, pass@5000: VerMCTS
+  $\approx 0.51$ Dafny and $\approx 0.29$ Coq, against whole sampling $\approx
+  0.14$ and $\approx 0$. \emph{Lines 1691, 1693--1700.}
+\item[Budget.] 5000 tokens per problem (the pass@$T$ budget); tuned
+  hyperparameters. \emph{Lines 1693, 1702.}
+\item[Variance.] Averages read from a figure; no repeats stated. \emph{Lines
+  1693, 1704 (by absence).}
+\item[Artifact.] A 15-problem suite (9 Dafny, 6 Coq). \emph{Line 1685.}
+\item[Closest arm.] A3 (best-first over states ranked by the verifier); its
+  budget counts sampled tokens, not calls, so a matched-calls comparison
+  needs a conversion.
+\end{description}
+
+\end{document}

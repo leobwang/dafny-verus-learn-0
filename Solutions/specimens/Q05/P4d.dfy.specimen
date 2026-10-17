@@ -1,0 +1,109 @@
+// item: Q05.P4d S6 obligation
+// **P4d.** Frames at a call (Reference Solution: [b] fails. `Push` may modify every
+// object of `s.Repr`, and without `s.Repr !! t.Repr` those may be objects `t.Valid()`
+// reads, so the verifier cannot keep `t.Valid()` across the call. [a] holds: `t.Valid()`
+// reads only `t` and `t.Repr`, which lie outside `s.Repr`. [c] holds: what is new in
+// `s.Repr` is fresh, so it is not in `t.Repr`. [d] holds by `Push`'s postcondition,
+// twice; the second call's precondition is the first call's `Valid()`.) `LimbStack` below is a copy of the given stack of
+// dafny/Q/Q05_Frames/std/Q05_Frames.dfy whose `Push` is declared by its contract only
+// (no body, so `scripts/vcheck` lists it as a hole; at a call the verifier uses the
+// contract only). Each client method calls `s.Push(x)` and then asserts one fact, on the
+// line labelled `// [x]`: [a] the other stack is still valid, the two representations
+// being disjoint; [b] the same, without the disjointness requirement; [c] the two
+// representations are still disjoint; [d] after two pushes, the contents.
+// Which labelled assertions does the verifier fail to prove? Answer form: `FAILS`
+// followed by the failing labels in label order, separated by single spaces, or
+// `FAILS none`.
+// FAILS b
+module Q05_P4 {
+  class LimbStack {
+    var a: array<nat>
+    var n: nat
+    ghost var Contents: seq<nat>
+    ghost var Repr: set<object>
+
+    ghost predicate Valid()
+      reads this, Repr
+    {
+      this in Repr && a in Repr && n <= a.Length && Contents == a[..n]
+    }
+
+    constructor (cap: nat)
+      requires cap > 0
+      ensures Valid() && fresh(Repr) && Contents == []
+    {
+      a := new nat[cap];
+      n := 0;
+      Contents := [];
+      Repr := {this, a};
+    }
+
+    function Size(): nat
+      reads this, Repr
+      requires Valid()
+      ensures Size() == |Contents|
+    {
+      n
+    }
+
+    method Push(x: nat)
+      requires Valid()
+      modifies Repr
+      ensures Valid() && Contents == old(Contents) + [x] && fresh(Repr - old(Repr))
+    {
+      // reference body (the learner's specimen declares the contract only; a caller sees
+      // the contract either way, so the labels fail alike)
+      if n == a.Length {
+        var b := new nat[2 * a.Length + 1];
+        var i := 0;
+        while i < n
+          invariant 0 <= i <= n <= a.Length < b.Length
+          invariant b[..i] == a[..i]
+          modifies b
+          decreases n - i
+        {
+          b[i] := a[i];
+          i := i + 1;
+        }
+        a := b;
+        Repr := Repr + {b};
+      }
+      a[n] := x;
+      n := n + 1;
+      Contents := Contents + [x];
+    }
+  }
+
+  method WithDisjoint(s: LimbStack, t: LimbStack, x: nat)
+    requires s.Valid() && t.Valid() && s.Repr !! t.Repr
+    modifies s.Repr
+  {
+    s.Push(x);
+    assert t.Valid();  // [a]
+  }
+
+  method WithoutDisjoint(s: LimbStack, t: LimbStack, x: nat)
+    requires s.Valid() && t.Valid()
+    modifies s.Repr
+  {
+    s.Push(x);
+    assert t.Valid();  // [b]
+  }
+
+  method StillDisjoint(s: LimbStack, t: LimbStack, x: nat)
+    requires s.Valid() && t.Valid() && s.Repr !! t.Repr
+    modifies s.Repr
+  {
+    s.Push(x);
+    assert s.Repr !! t.Repr;  // [c]
+  }
+
+  method SameStackTwice(s: LimbStack, x: nat, y: nat)
+    requires s.Valid()
+    modifies s.Repr
+  {
+    s.Push(x);
+    s.Push(y);
+    assert s.Contents == old(s.Contents) + [x, y];  // [d]
+  }
+}

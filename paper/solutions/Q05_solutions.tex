@@ -1,0 +1,364 @@
+% Q05_solutions.tex — REFERENCE SOLUTIONS to paper/Q05_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0, Verus 0.2026.09.27) through scripts/vcheck, one solver job at a time,
+% by the DV3k kit lane for Q05 on 2026-10-06 (the problems' code extracted
+% verbatim from the problems file into instructor/scratch/probe.{dfy,rs} of a
+% scratch course root; probe sources archived under
+% ~/.cache/dafny-verus-learn-0/author-probes/dv3k/q05-kit/). B4's fields are
+% graded against the learner's own cheatsheets.md; this file records which
+% lines of the pinned range each field draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q05 --- Frames, ownership, modes, wp$\to$VC \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How these are graded}
+B1 and B2 are hand calculations, dimension \texttt{recomputation}: the grader
+re-derives each step with the rubric's Probe A and Probe B and diffs the
+learner's trace step by step. B3 is informal-proof-first (the five proof
+dimensions); B4 is a paper card (\texttt{card-fidelity}, per field). The
+solutions below give the answers; the rubric never states them.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (hand-calculation)}
+
+Write $L$ for \dfy{a.Length}, $s$ for the contents at the start, $c$ for the
+contents after the first call and $c'$ after the second.
+$R \equiv t = s[0] + s[1] \wedge c'[0] = 0 \wedge c'[1] = 0$. By the sequence
+rule, $\WP{\mathit{body}}{R} = \WP{x \assign \mathit{Drain}(a,0)}{\WP{y \assign
+\mathit{Drain}(a,1)}{\WP{t \assign x + y}{R}}}$.
+
+\textbf{(a)}
+\begin{enumerate}
+\item Assignment: $R_1 \equiv \subst{R}{t}{x + y} \equiv x + y = s[0] + s[1]
+  \wedge c[0] = 0 \wedge c[1] = 0$, over the contents $c$ before the
+  assignment.
+\item Call \dfy{y := Drain(a, 1)}, from contents $c$:
+  \[ \begin{aligned} R_2 = {} & 1 < L \wedge \forall c', y' .\; \bigl(y' = c[1] \wedge c'[1] = 0
+     \wedge \forall j .\; 0 \leq j < L \wedge j \neq 1 \impl c'[j] = c[j]\bigr) \\
+     & \impl \bigl(x + y' = s[0] + s[1] \wedge c'[0] = 0 \wedge c'[1] = 0\bigr). \end{aligned} \]
+  Simplify. The first hypothesis fixes $y' = c[1]$; the second gives the third
+  conclusion; the frame hypothesis at $j = 0$ (in range: $0 < 1 < L$) fixes
+  $c'[0] = c[0]$. The hypotheses are satisfiable ($c'$ = $c$ with limb 1 set to
+  $0$), so the $\forall$ is equivalent to its conclusion at that outcome:
+  \[ R_2 \equiv 1 < L \wedge x + c[1] = s[0] + s[1] \wedge c[0] = 0. \]
+\item Call \dfy{x := Drain(a, 0)}, from the start contents $s$:
+  \[ \begin{aligned} R_3 = {} & 0 < L \wedge \forall c, x' .\; \bigl(x' = s[0] \wedge c[0] = 0
+     \wedge \forall j .\; 0 \leq j < L \wedge j \neq 0 \impl c[j] = s[j]\bigr) \\
+     & \impl \bigl(1 < L \wedge x' + c[1] = s[0] + s[1] \wedge c[0] = 0\bigr). \end{aligned} \]
+  Simplify. $1 < L$ does not mention $c$ or $x'$ and the hypotheses are
+  satisfiable, so it leaves the $\forall$. Under $1 < L$ the frame hypothesis at
+  $j = 1$ fixes $c[1] = s[1]$, and $x' = s[0]$, so $x' + c[1] = s[0] + s[1]$;
+  $c[0] = 0$ is a hypothesis. Hence
+  \[ \WP{\mathit{body}}{R} \equiv 0 < L \wedge 1 < L \;\equiv\; L \geq 2, \]
+  with no constraint on $s$.
+\end{enumerate}
+The two call steps are the chapter's four steps each: prove the precondition,
+forget the frame, assume the postcondition, continue. Simplifying only at the
+end gives the same result if each step is an equivalence.
+
+\textbf{(b)} The verification condition is $L = 2 \impl L \geq 2$: valid.
+Without the frame postcondition, step 2 loses the hypothesis that fixed
+$c'[0]$, and step 3 the one that fixed $c[1]$:
+\[ \begin{aligned} R_2' = {} & 1 < L \wedge \forall c', y' .\; (y' = c[1] \wedge c'[1] = 0) \\
+   & \impl (x + y' = s[0] + s[1] \wedge c'[0] = 0 \wedge c'[1] = 0), \end{aligned} \]
+which is false (an outcome with $c'[0] = 7$ is allowed), and so is the wp: the
+verification condition fails for every start state. Two conjuncts of $R$ can
+no longer be proved: $t = s[0] + s[1]$ and $c'[0] = 0$; the third,
+$c'[1] = 0$, is the second call's own postcondition and still holds.
+Instance: $s = [3, 4]$; the first call returns $x = 3$ and leaves $c = [0, 9]$
+(allowed: $x = s[0]$, $c[0] = 0$); the second returns $y = 9$ and leaves
+$c' = [7, 0]$ (allowed: $y = c[1]$, $c'[1] = 0$). Then $t = 12 \neq 7$ and
+$c'[0] = 7 \neq 0$. ($c' = [0, 0]$ instead breaks the sum alone.) No run ends
+that way: \dfy{Drain}'s body writes only \dfy{a[i]}, and every run from
+$[3, 4]$ returns $7$ and leaves $[0, 0]$. The failure is about the contract,
+not the program: a caller knows a call only through its contract, and the
+deleted \dfy{ensures} was all that told \dfy{Collect} that limb 1 survives the
+first call and limb 0 the second. On the pins, the Dafny program with that
+line deleted gives two errors, both \texttt{a postcondition could not be
+proved on this return path} at \dfy{Collect}'s body, related to the first and
+the second conjunct of its \dfy{ensures} (columns 13 and 46); the program as
+given verifies (\texttt{4 verified}).
+
+\textbf{(c)} (i) The \vrs{&mut} parameter: \vrs{v: &mut Vec<u64>} lends
+\vrs{*v}, all of it, length included, and nothing else the caller holds; the
+\vrs{forall} clause (with the length clause) is what the Dafny frame
+postcondition is, the part of \vrs{*v} that stayed. (ii) The overflow
+obligation of \vrs{x + y} on \vrs{u64}: $x + y \leq 2^{64} - 1$. It rests on
+\vrs{collect}'s bounds \vrs{old(v)@[0] < 1000} and \vrs{old(v)@[1] < 1000},
+on \vrs{drain}'s \vrs{x == old(v)@[i as int]} for each call, and on the
+\vrs{forall} clause of the first call, which carries limb 1 to the second call
+unchanged. Dafny's \dfy{nat} addition has no such obligation. (iii) With the
+\vrs{forall} clause deleted, two obligations fail: the overflow check
+(\texttt{possible arithmetic underflow/overflow} at \vrs{x + y}) and the
+postcondition. Verus reports one \texttt{postcondition not satisfied} per
+return path, at the first failing clause (\vrs{t == old(v)@[0] + old(v)@[1]});
+\vrs{final(v)@[0] == 0} fails too (a probe without the first clause reports
+it), and \vrs{final(v)@[1] == 0} holds. As given, \vrs{collect} verifies
+(\texttt{2 verified}).
+
+\textbf{Probe A on the pins.} With $L \geq 2$ spliced into \texttt{LearnerWp},
+Probe A's \texttt{Sufficient} verifies (\texttt{4 verified}); in Probe A$''$,
+\texttt{Included} on $[3, 4]$ passes and \texttt{Excluded} on a one-limb array
+fails at \texttt{Drain's requires fails}: neither state is a counterexample.
+With a formula too strong ($L = 2 \wedge s[0] > 0$, guarded by $|s| = 2$),
+\texttt{Excluded} on $[0, 5]$ passes: a refutation of necessity. With
+\texttt{true}, \texttt{Sufficient} fails at both calls' preconditions and at
+the postcondition's indexing. Probe A$'$ on step 3, with the direction from
+the quantified formula naming the outcome $s[0 \mapsto 0]$ (\dfy{s[0 := 0]}),
+verifies in both directions (\texttt{4 verified}); with $L \geq 1$ as the
+result, \texttt{StepUp} fails. Probe A$'''$ with the instance of (b) passes
+(\texttt{PASSED WeakenedRun}) for each of the two conjuncts, and fails at
+\texttt{that conjunct of R holds} for $c'[1] = 0$.
+
+\textbf{Typical flaws, with their failing instances.}
+\begin{itemize}
+\item \emph{The body read instead of the contract} in (b): ``the VC still holds,
+  since \dfy{Drain} only writes \dfy{a[i]}''. Failing instance: the outcome
+  above ($s = [3, 4]$, $c = [0, 9]$, $c' = [7, 0]$), allowed by the weakened
+  contract, on which $R$ fails; Probe A$'''$ passes on it.
+\item \emph{A precondition dropped} in step 3 (the result $0 < L$, i.e.\
+  $L \geq 1$): a one-limb array satisfies the claimed wp, and the second
+  call's precondition $1 < L$ fails on it: Probe A$''$'s \texttt{Included}
+  on it fails at \texttt{Drain's requires fails} (and Probe A's
+  \texttt{Sufficient} reports the second call).
+\item \emph{A result over an intermediate state} ($L \geq 2 \wedge c[1] = s[1]$,
+  which names the contents after the first call): the wp is a formula over
+  the start state, so the simplification of step 3 is unfinished; a gap (3),
+  unless the formula is false at an exhibited start state.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (hand-calculation)}
+
+$I \equiv 0 \leq i \leq L \wedge \forall j .\; 0 \leq j < i \impl c[j] = 0$,
+$b \equiv i < L$, $S \equiv x \assign \mathit{Drain}(a, i) \seqc i \assign i + 1$,
+measure $L - i$.
+
+\textbf{(a)}
+\begin{itemize}
+\item \emph{Entry:} $\WP{i \assign 0}{I} = 0 \leq 0 \leq L \wedge \forall j .\;
+  0 \leq j < 0 \impl c[j] = 0$. Valid: $L \geq 0$ for an array, and the range
+  is empty.
+\item \emph{Maintenance:} $\WP{i \assign i + 1}{I} = 0 \leq i + 1 \leq L \wedge
+  \forall j .\; 0 \leq j < i + 1 \impl c[j] = 0$; then the call rule:
+  \[ \begin{aligned} \WP{S}{I} = {} & i < L \wedge \forall c', x' .\; \bigl(x' = c[i] \wedge c'[i] = 0
+     \wedge \forall j .\; 0 \leq j < L \wedge j \neq i \impl c'[j] = c[j]\bigr) \\
+     & \impl \bigl(0 \leq i + 1 \leq L \wedge \forall j .\; 0 \leq j < i + 1 \impl
+     c'[j] = 0\bigr). \end{aligned} \]
+  $I \wedge b \impl \WP{S}{I}$ is valid: $i < L$ is the guard and gives
+  $i + 1 \leq L$; for $j < i$, the frame gives $c'[j] = c[j]$ and $I$ gives
+  $c[j] = 0$; for $j = i$, $c'[i] = 0$ by the postcondition.
+\item \emph{Use at exit:} $I \wedge \neg b \impl \forall j .\; 0 \leq j < L
+  \impl c[j] = 0$. Valid: $i \leq L$ and $i \geq L$ give $i = L$.
+\item \emph{Termination:} bounded, $I \wedge b \impl L - i \geq 0$ (indeed
+  $> 0$); decreasing, $I \wedge b \impl \WP{S}{L - i < V_0}$ with $V_0 = L - i$
+  at the start of the iteration, that is $i < L \wedge \forall c', x' .\;
+  (\dots) \impl L - (i + 1) < L - i$. Valid: the call cannot change $L$, and
+  $i$ goes up by one.
+\end{itemize}
+
+\textbf{(b)} Without the frame postcondition, entry, use at exit and
+termination are unchanged (none uses the frame) and stay valid.
+\emph{Maintenance fails}: the call outcome is constrained only by
+$x' = c[i] \wedge c'[i] = 0$, so $c'[j] = 0$ for $j < i$ no longer follows.
+Instance: $L = 2$, $i = 1$, $c = [0, 5]$ (it satisfies $I \wedge b$), and the
+outcome $x' = 5$, $c' = [9, 0]$; the conclusion needs $c'[0] = 0$. No run
+reaches it: \dfy{Drain}'s body writes only \dfy{a[i]}. No invariant repairs
+it: the postcondition needs every limb $0$ after the last call, and the
+weakened contract lets that call (at $i = L - 1$) leave any value in every
+other limb, so nothing an invariant says before it survives it (for
+$L \geq 2$). The failure is about the callee's contract, which is too weak for
+its callers; in Q03's B2 the program and the code were fine and the
+\emph{invariant} was too weak (an unreachable state satisfied it). Both are
+verification conditions that fail with a correct program; what differs is
+which annotation is too weak, and so where the repair goes: here the
+\dfy{ensures} of \dfy{Drain}, there the invariant. On the pins: as given,
+\texttt{4 verified}; with the line deleted, one error, \texttt{this invariant
+could not be proved to be maintained by the loop}, at the second invariant.
+
+\textbf{(c)} Two conditions fail: maintenance of \vrs{i <= v.len()} (after
+the call the length is unknown) and termination (the measure
+\vrs{v.len() - i} reads the length the call may now change). On the pins:
+\texttt{invariant not satisfied at end of loop body} at \vrs{i <= v.len()}
+and \texttt{decreases not satisfied at end of loop}; as given, \vrs{drain_all}
+verifies (\texttt{3 verified}). The Dafny \dfy{Drain} needs no such line: an
+array's length is fixed when the array is allocated, and \dfy{modifies a} lets
+the callee change \dfy{a}'s elements, never \dfy{a.Length}. A Verus
+\vrs{Vec}'s length is part of its value, and \vrs{&mut v} lends all of it. (With
+\vrs{drain}'s \vrs{forall} clause deleted instead, the \vrs{forall} invariant
+fails to be maintained, as in (b).)
+
+\textbf{Typical flaws.} Maintenance computed without the call rule (treating
+the call as an assignment to \dfy{a[i]} alone, which is reading the body);
+the use condition written with $b$ instead of $\neg b$; (b) answered ``use at
+exit fails'' (Probe B's \texttt{UseAtExit} verifies, untouched by the
+weakened contract: a verified refutation of the claim); (b) answered ``a stronger invariant
+fixes it'' (the outcome above refutes any invariant: the last call may break
+limb 0); (c) answered with the \vrs{forall} invariant (Probe B$''$'s verdict
+names \vrs{i <= v.len()} and the measure). On the pins, Probe B filled with
+the four conditions of (a) verifies (\texttt{8 verified}); with the weakened
+contract in the call's \dfy{requires}, only \texttt{Maintenance} fails, and
+Probe B$'$ on the state of (b) passes (\texttt{PASSED WeakenedMaintenance}).
+
+% ---------------------------------------------------------------------------
+\section*{B3 (informal-proof-first): the reference blueprint}
+
+\textbf{Statement.} For every sequence $s$ of naturals, the loop ends with
+$c = \mathrm{Ones}(s)$ (and, in Verus, under $\mathrm{ones}(v) \leq 2^{64} - 1$,
+no arithmetic overflows).
+
+\textbf{Loop invariant and measure.}
+\[ I \;\equiv\; 0 \leq i \leq |s| \;\wedge\; c + \mathrm{BitCount}(x) +
+   \mathrm{Ones}(s[i..]) = \mathrm{Ones}(s), \]
+\[ d \;\equiv\; (|s| - i,\; x) \text{ compared left to right.} \]
+The count so far, the bits still in $x$ and the bits of the limbs not yet
+loaded add up to the total.
+
+\textbf{Entry.} $i = 0$, $x = 0$, $c = 0$: $\mathrm{BitCount}(0) = 0$ and
+$s[0..] = s$, so $0 + 0 + \mathrm{Ones}(s) = \mathrm{Ones}(s)$.
+
+\textbf{Maintenance} (the guard is $x > 0 \vee i < |s|$), one case per branch:
+\begin{enumerate}
+\item $x > 0$: $c' = c + x \bmod 2$, $x' = x / 2$, $i$ unchanged. One
+  unfolding of BitCount ($x \neq 0$): $\mathrm{BitCount}(x) = x \bmod 2 +
+  \mathrm{BitCount}(x/2)$, so $c' + \mathrm{BitCount}(x') = c +
+  \mathrm{BitCount}(x)$ and the sum is unchanged. Measure: first component
+  unchanged, $x/2 < x$ because $x > 0$.
+\item $x = 0$, so $i < |s|$ by the guard: $x' = s[i]$, $i' = i + 1$, $c$
+  unchanged. $s[i..]$ is non-empty, so one unfolding of Ones gives
+  $\mathrm{Ones}(s[i..]) = \mathrm{BitCount}(s[i]) + \mathrm{Ones}(s[i..][1..])$,
+  and the given assertion $s[i..][1..] = s[i+1..]$ turns the tail into
+  $s[i+1..]$. With $\mathrm{BitCount}(0) = 0$:
+  $c + \mathrm{BitCount}(s[i]) + \mathrm{Ones}(s[i+1..]) = c + 0 +
+  \mathrm{Ones}(s[i..])$. $0 \leq i + 1 \leq |s|$. Measure: the first
+  component drops by one; $x$ may grow, which a lexicographic order allows.
+\end{enumerate}
+Bounded below: both components are naturals ($|s| - i \geq 0$ by $I$).
+Neither component alone goes down at every pass, which is why the pair is
+needed.
+
+\textbf{Use at exit.} $\neg(x > 0 \vee i < |s|)$ gives $x = 0$ and $i \geq |s|$,
+so $i = |s|$ by $I$; $\mathrm{BitCount}(0) = 0$ and $\mathrm{Ones}(s[|s|..])
+= \mathrm{Ones}([]) = 0$, so $c = \mathrm{Ones}(s)$.
+
+\textbf{Overflow in H4v.} The update $c + x \bmod 2$ happens only when
+$x > 0$, where $\mathrm{bit\_count}(x) = x \bmod 2 + \mathrm{bit\_count}(x/2)
+\geq x \bmod 2$. So $c + x \bmod 2 \leq c + \mathrm{bit\_count}(x) \leq
+\mathrm{ones}(v) \leq 2^{64} - 1$ by $I$ and the precondition, which the loop
+must carry as an invariant (a loop sees only its invariants). Loading
+\vrs{v[i]} into the \vrs{u64} $x$ and $i + 1 \leq$ \vrs{v.len()} cannot
+overflow.
+
+\textbf{Helper facts} (no new lemma): one unfolding of BitCount at $x > 0$ and
+its value at $0$; one unfolding of Ones on a non-empty sequence and its value
+on the empty one; the given $s[i..][1..] = s[i+1..]$; $s[0..] = s$ at entry
+(Dafny proves it unaided; in Verus it is an extensional equality,
+\vrs{v@.subrange(0, len) =~= v@}, asserted before the loop, and the load
+step's tail fact is the \vrs{drop_first} of the suffix asserted with
+\vrs{=~=}).
+
+\textbf{Gaps:} none.
+
+\textbf{Structure match (spec \S4.4 author rule).} The formal references
+follow this blueprint: the Dafny twin's H4d region is the two invariants and
+\dfy{decreases |s| - i, x}; the Verus twin's \vrs{count_ones} keeps the same
+invariant over \vrs{v@.subrange(i, len)}, carries
+\vrs{ones(v@) <= u64::MAX} as a third invariant, asserts the entry equality
+and the load step's \vrs{drop_first} fact with \vrs{=~=}, and decreases
+\vrs{v.len() - i, x}.
+
+\textbf{Probe C on the pins.} The problem's code with these two invariants and
+this measure spliced in verifies under \texttt{scripts/vcheck --module Q05}
+(\texttt{25 verified}, the spine's tasks included; \texttt{3 verified} alone).
+With the measure reversed (\dfy{decreases x, |s| - i}) or shortened to
+\dfy{decreases |s| - i}: \texttt{decreases expression might not decrease}.
+With the BitCount term dropped from the invariant: \texttt{this invariant
+could not be proved to be maintained by the loop}. Probe C$''$'s overflow lemma,
+with the facts above as its hypotheses, verifies (\texttt{25 verified} under
+\texttt{--module Q05}); with $c + \mathrm{rest} \leq \mathrm{total}$ in place of
+the equation it does not.
+
+\textbf{Typical flaws.}
+\begin{itemize}
+\item \emph{The measure in the wrong order} ($x$ first, claimed to drop when a
+  limb is loaded): induction-soundness 2. Failing instance: $s = [5]$,
+  $i = 0$, $x = 0$, $c = 0$: the load pass gives $(x, |s| - i)$ from $(0, 1)$
+  to $(5, 0)$, larger in the first component; Probe C$'$'s one-pass test passes
+  with the decrease negated.
+\item \emph{One component only} ($|s| - i$): the $x > 0$ branch leaves it
+  unchanged. Instance: $s = [2]$, $i = 1$, $x = 2$.
+\item \emph{The bits of $x$ left out of the invariant}
+  ($c + \mathrm{Ones}(s[i..]) = \mathrm{Ones}(s)$): not maintained at the load
+  step. Instance: $s = [1]$, $i = 0$, $x = 0$, $c = 0$ satisfies it; after the
+  load, $0 + \mathrm{Ones}([]) = 0 \neq 1$.
+\item \emph{The overflow paragraph says ``$c \leq \mathrm{ones}(v)$''} without
+  the step $x \bmod 2 \leq \mathrm{bit\_count}(x)$: true, but the step is
+  unjustified, a gap (3).
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section*{B4 (paper card 03.12): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 1366--1386 (computed 2026-10-06),
+\[ \texttt{sha256 a821f639a8a72dc663372dad601c93a6ea0fbc8cee85faf9421669c8ac521414}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Input: a small C program with a property to prove, a
+  predicate at a program line. Output: a proof that the property holds on
+  every execution (success) or that it does not (fail), found by a calculus of
+  eight rules over configurations (program, at most one assumption, a trail
+  of goals) in which a language model proposes loop invariants and sub-goals
+  as assertions at marked lines. \emph{Lines 1368, 1370, 1373, 1376.}
+\item[Oracle.] A conventional C verifier (esbmc or UAutomizer), sound but
+  incomplete (True, False or Unknown). Every step is decided by it: a
+  proposal is used only after the verifier proves the implication it is
+  meant for, and the calculus's theorems make success imply the property and
+  fail imply its negation, whatever the model proposes. \emph{Lines 1368,
+  1370, 1373, 1374.}
+\item[What is trusted.] Soundness of the verifier and of the calculus: its
+  two soundness theorems, and Lemma 2.1's case split, which needs a stable
+  assumption; the stability check itself, which the paper does not describe.
+  Not the language model, whose output only steers speed and completeness.
+  \emph{Lines 1368, 1373, 1374, 1384, 1386.}
+\item[Cheat surface.] Closed: a wrong or vacuous proposal cannot produce a
+  verdict, because the checker decides every implication (the canonical trust
+  boundary). Open: the unspecified stability check; a hard set whose
+  properties are all true, so the fail rule is never exercised there, and
+  which was selected because the baselines fail on it; possible contamination
+  of the tiny programs. \emph{Lines 1373, 1374, 1384, 1386.}
+\item[Metric.] Benchmarks solved within a wall-clock limit: Code2Inv (133, 10
+  minutes) 103 with GPT-3.5 and 107 with GPT-4, against esbmc's 68 and
+  Code2Inv's quoted 92 (at 1 hour); a hard SV-COMP subset (47, 15 minutes)
+  14--15 and 24--25 (19--20 without repair), against 1 for UAutomizer and
+  esbmc (2 and 4 at 12 hours). \emph{Lines 1379--1382.}
+\item[Budget.] A budget of $k$ proposals per goal (needed for termination,
+  with every proposal at an earlier line), 30 seconds per verifier call, and
+  10 or 15 minutes per benchmark; no token, call-count or dollar figure (token
+  limits appear only as a limitation). \emph{Lines 1375, 1376, 1381, 1382,
+  1384.}
+\item[Variance.] Each configuration ran 3 times; the hard-set results are
+  ranges over those runs (14--15, 24--25, 19--20); no intervals or seeds are
+  reported. \emph{Lines 1382, 1384.}
+\item[Artifact.] The calculus with its eight rules and Algorithm 1,
+  instantiated with GPT-3.5 or GPT-4 and esbmc or UAutomizer, evaluated on
+  Code2Inv and a hard SV-COMP subset; the range does not say whether code or
+  prompts are released. \emph{Lines 1368, 1373, 1375, 1379--1382.}
+\end{description}
+A field that says the range is silent where it is silent (a code release; a
+token or dollar budget; intervals) is correct. A field that contradicts a line
+(for example ``each configuration ran once'', or ``the model's invariants are
+trusted when the verifier times out'') scores 2, quoting that line.
+
+\end{document}

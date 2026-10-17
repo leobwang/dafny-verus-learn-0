@@ -1,0 +1,28 @@
+// Demo for card Q07.C1d (write:fuel), the failure half. The success half is
+// `TwoLimbsByHand` and `TwoLimbsByFuel` in
+// dafny/Q/Q07_InternalsI/std/Q07_InternalsI.dfy; here the same statement has
+// an empty body, in a module of the exercise file's options (with copies of
+// layer L1's definitions). Run it with
+// `scripts/vcheck specimens/Q07/card-c1d.dfy.specimen`; the EXPECT line pins
+// the message the verifier gives (line and fragment).
+// after: Q07.P1dv
+// EXPECT @26 "a postcondition could not be proved on this return path"
+module {:disableNonlinearArithmetic} Q07_CardC1d {
+  // Copied from the given spine, layer L1 (QG_L1_BigNat), verbatim.
+
+  // The limb base, 2^64, written as a literal.
+  const BASE: nat := 18446744073709551616
+
+  // The value of a limb sequence, least significant limb first:
+  // s[0] + BASE * (the value of the remaining limbs).
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  lemma TwoLimbs(a: nat, b: nat)
+    ensures ToNat([a, b]) == a + BASE * b
+  {
+  }
+}

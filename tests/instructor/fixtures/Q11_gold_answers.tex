@@ -1,0 +1,91 @@
+% Q11_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q11_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the route, the wording and the examples are deliberately far from the
+% reference, so the grader must recognise correctness by substance (the rubric's
+% probes), not by matching text. B1 splits on the condition first and substitutes in
+% each case, ends with the formula x <= 1 || (x >= 8 && x <= 11) (equivalent over the
+% integers to the reference's), and checks x = 10 and x = 3; B2 words every field its
+% own way.
+%
+% EXPECTED[B1][recomputation][4]: correct; Probe A with x <= 1 || (x >= 8 && x <= 11) spliced in verifies (the formula is equivalent over the integers to the reference's x < 2 || (7 < x && x < 12)), and Probe A'' at x = 10 (y = 13, then 3: Q holds) and at x = 3 (y = 6: Q fails) agrees with (b). The conditional is handled by a case split, an equivalent form of the two implications (RC.b). No finding.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 917-940); Budget, Variance and Artifact correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4 (3 is tolerated only with a reading note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a false fact,
+% a wrong step, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q11 --- Practice I-B \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) The trace.}
+\begin{enumerate}
+\item The conditional (rule: conditional, as a case split on the condition
+  just before it). If $y > 10$, the assignment runs: by the assignment rule,
+  $Q$ with $y - 10$ for $y$, that is $y - 10 < 5$. If $y \le 10$, nothing
+  runs, so $Q$ itself, $y < 5$, must already hold. Together:
+  $(y > 10 \wedge y - 10 < 5) \vee (y \le 10 \wedge y < 5)$.
+\item The sequence: the first assignment is substituted into that formula
+  (rule: assignment, $x + 3$ for $y$):
+  $(x + 3 > 10 \wedge x + 3 - 10 < 5) \vee (x + 3 \le 10 \wedge x + 3 < 5)$.
+\end{enumerate}
+\textbf{Simplified, over $x$ alone:} the first disjunct is $x \ge 8 \wedge
+x \le 11$ (integers: $x > 7$ is $x \ge 8$, $x < 12$ is $x \le 11$); the
+second is $x \le 7 \wedge x \le 1$, that is $x \le 1$. So $x \le 1 \vee
+(x \ge 8 \wedge x \le 11)$.
+
+\textbf{(b)} $x = 10$ satisfies it: $y = 13 > 10$, then $y = 3$; $3 < 5$:
+$Q$ holds. $x = 3$ does not: $y = 6$, unchanged; $6 < 5$ is false: $Q$
+fails.
+
+\textbf{(c)} $\{\dots, -1, 0, 1\} \cup \{8, 9, 10, 11\}$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.12, lines 917--940 (the pinned range).
+
+\textbf{Task shape:} An industrial campaign to show, function by function,
+that the Rust standard library (about 34k functions, roughly 7,500 of them
+unsafe) has none of a chosen set of undefined behaviours; challenges with
+bounties and a review committee, plus a non-LLM harness generator for the
+bulk.
+
+\textbf{Oracle:} CI runs the tools on every PR: bounded model checkers (Kani
+over CBMC, ESBMC), Flux and VeriFast; a harness passes when, for every
+bit-valid input, the contract's precondition rules out the checked UB and
+gives the postcondition.
+
+\textbf{What is trusted:} Unverified intrinsic models and toolchain, the
+tools themselves, and whatever contract a reviewer accepted; checks are
+bounded unless said otherwise.
+
+\textbf{Cheat surface:} The UB not on the list (aliasing, races, inline
+assembly, part of provenance, termination); bounds; 622 unsafe functions
+that pass without a contract and so prove little. How a weak contract would
+be caught, beyond review, is not described.
+
+\textbf{Metric:} Numbers of harnesses and functions: of 16,748 generated
+harnesses, 11,970 verify; 989 functions are contract-verified (694 by hand,
+295 automatically); 4,778 harnesses fail; zero new memory-safety bugs.
+
+\textbf{Budget:} The range has no compute or cost figure; only the scale of
+the effort (29 challenges, over 450 PRs, 21 or more outside contributors) and
+a 3.97x compile speedup.
+
+\textbf{Variance:} Nothing on repeated runs; tool verdicts, not samples.
+
+\textbf{Artifact:} The verification setup in the standard library's CI; the
+range names no separate release.
+\end{answer}
+
+\end{document}

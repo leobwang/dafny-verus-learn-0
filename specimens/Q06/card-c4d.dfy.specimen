@@ -1,0 +1,24 @@
+// Demo for card Q06.C4d (write:property-test), the failure half. The success half is
+// `AllBelow` in dafny/Q/Q06_Machine/std/Q06_Machine.dfy; here the checker's postcondition
+// is one-sided, so a body that always answers `false` verifies, and a caller learns nothing
+// from a correct candidate. Run it with
+// `scripts/vcheck specimens/Q06/card-c4d.dfy.specimen`; the EXPECT line pins the message
+// the verifier gives (line and fragment).
+// EXPECT @22 "assertion might not hold"
+module Q06_CardC4d {
+  method AllBelow(f: nat -> nat, samples: seq<nat>, bound: nat) returns (ok: bool)
+    ensures ok ==> forall k | 0 <= k < |samples| :: f(samples[k]) < bound
+  {
+    ok := false;
+  }
+
+  function Clip(x: nat): nat
+  {
+    if x < 1000 then x else 999
+  }
+
+  method ClipChecked() {
+    var ok := AllBelow(Clip, [0, 999, 1000], 1000);
+    assert ok;
+  }
+}

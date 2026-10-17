@@ -1,0 +1,42 @@
+# Q11 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q11 (never a P
+# answer: the chapter reveals those after their boxes) and is verified against its own
+# reference file (rule 1) and against every learner-visible file (rule 2). Q11 is intro
+# practice tier, so these patterns bind instructor sessions of Q10 onward (the README's
+# tier rule).
+
+# from Solutions/dafny/Q/Q11_PracticeIB/std/Q11_PracticeIB.dfy
+# source:         invariant i <= other.n && a[..i] == other.a[..i]   (Q11.H2d)
+# verified: solutions=1 public=0
+a\[\.\.i\]\s*==\s*other\.a\[\.\.i\]
+# source:   ghost predicate Pre1(x: int, y: int) { x + 2 * y > 0 && x + y < 10 }   (Q11.H7d)
+# verified: solutions=1 public=0
+x\s*\+\s*2\s*\*\s*y\s*>\s*0\s*&&\s*x\s*\+\s*y\s*<\s*10
+# source:     (x > y ==> 2 * x - y >= 5 && x - y <= 3) && (x <= y ==> y >= 5 && y - x <= 3)   (Q11.H8d)
+# verified: solutions=1 public=0
+2\s*\*\s*x\s*-\s*y\s*>=\s*5
+
+# from Solutions/dafny/Q/Q11_PracticeIB/std/Q11_Wp.dfy
+# source:     assert Holds(Imp(b, Wp(c, q)), s) && Holds(Imp(Not(b), q), s);   (Q11.H9d)
+# verified: solutions=1 public=0
+Holds\(Imp\(b,\s*Wp\(c,\s*q\)\),\s*s\)\s*&&\s*Holds\(Imp\(Not\(b\),\s*q\),\s*s\)
+
+# from Solutions/verus/q/q11_practice_ib/src/lib.rs
+# source:         core::mem::swap(&mut out, &mut self.total);   (Q11.H4v)
+# verified: solutions=1 public=0
+swap\(&mut\s+out,\s*&mut\s+self\.total\)
+
+# from Solutions/verus/q/q11_practice_ib/src/perm.rs
+# source:     let d = dst.read(Tracked(&*pd));   (Q11.H10v)
+# verified: solutions=1 public=0
+dst\.read\(Tracked\(&\*pd\)\)
+
+# from Solutions/dafny/Q/Q11_PracticeIB/exit/Q11_Exit.dfy
+# source:       DigitsLength(n / BASE);   (Q11.X1d)
+# verified: solutions=1 public=0
+DigitsLength\(n\s*/\s*BASE\)
+
+# from Solutions/verus/q/q11_practice_ib/src/exit.rs
+# source:             self.lo = 0;  (then)  self.hi = self.hi + 1;   (Q11.X1v)
+# verified: solutions=1 public=0
+self\.lo\s*=\s*0;\s*self\.hi\s*=\s*self\.hi\s*\+\s*1

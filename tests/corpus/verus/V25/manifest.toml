@@ -1,0 +1,19 @@
+# Cheat corpus row (tests/corpus/verus), covered elsewhere: the row is not
+# a source-level construct (a command-line flag, the environment, build
+# tooling or the IDE), so this lane builds no program and runs nothing for
+# it. The wrappers' existing tests named in covered_by exercise the
+# refusal; plain_exit and output_sha256 are omitted (nothing was run).
+id = "V25"
+lang = "verus"
+half = "R"
+xclass = "X05"
+kind = "covered-elsewhere"
+title = "a cached cargo-verus result answers for a changed crate (Delta 19)"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["direct-verus-only"]
+summary = "no instrument flag: the wrappers never call cargo-verus, so its content cache cannot answer (Delta 19, 99); the covering tests assert the direct command (not run by this lane; kinds other than `refused` are descriptive labels, not reported finding kinds)"
+covered_by = ["tests/wrappers/test_verus_tool.py::Verify::test_clean_gate_passes", "tests/wrappers/test_verus_tool.py::Chain::test_module_crate"]

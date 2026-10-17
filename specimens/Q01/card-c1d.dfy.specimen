@@ -1,0 +1,13 @@
+// Card demo Q01.C1d (`ensures`), the failure half. The success half is `Inc` in
+// dafny/Q/Q01_Hello/core/Q01_Hello.dfy; this copy returns the wrong value. Run it with
+// `scripts/vcheck specimens/Q01/card-c1d.dfy.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+// after: Q01.P8dv
+module Q01_CardC1d {
+  method Inc(x: nat) returns (y: nat)
+    ensures y == x + 1
+  {
+    y := x;
+  }
+}
+// EXPECT @9 "a postcondition could not be proved on this return path"

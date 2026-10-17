@@ -1,0 +1,19 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/C-01/main.dfy"
+ ],
+ "document": {
+  "findings": [],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/C-01/main.dfy"
+ },
+ "exit_code": 0,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "fb27c14da014ac6fa9ac263cfcc9c39b827e7935f36f8f6b6a52fe954a4517ef",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/C-01/main.dfy"
+}

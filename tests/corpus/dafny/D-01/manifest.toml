@@ -1,0 +1,23 @@
+# Cheat-corpus manifest (Dafny) D-01. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vaudit: scripts/vaudit main.dfy
+# also captured, not flagging (each passed this fixture): vcheck --gate
+id = "D-01"
+lang = "dafny"
+half = "R"
+xclass = "X03"
+kind = "construct"
+title = "fabricated {:axiom} lemma with a false statement proves false (Δ3)"
+files = ["main.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["audit-axiom", "axiom-attribute"]
+output_sha256 = "2fea6c36fb057931b412efbe4cc2b6e17c50a95be849cfdc7bed470f9cab0006"
+summary = "vaudit main.dfy: exit 1, 2 finding(s) (1 dafny-audit row(s), 1 lint); audit-axiom at main.dfy:3, axiom-attribute at main.dfy:3"

@@ -1,0 +1,30 @@
+// item: Q12.P6v S10 verdict
+// **P6.** Stage attribution, the pipeline. A short Verus file (below; a specimen of Q12
+// gets Q12's given layer chain), run as
+//     scripts/vcheck specimens/Q12/P6v.rs.specimen
+// BEFORE you run it, predict the stage `scripts/vcheck` reports: the stage its summary
+// line names (`…, stage <s>`), or `verify` when the summary line names none.
+// Answer form: one of `cli`, `parse`, `resolve`, `verify`, `compile`, `test`, `run`, in
+// slots/Q12.slots.
+// Reference Solution: `parse`: the `requires` clause misses the comma between its two
+// expressions; the `verus!` macro cannot parse the signature (`expected curly braces`)
+// and the summary line ends `stage parse`.
+// after: Q12.P6v
+// CHECK P6v
+use vstd::prelude::*;
+use qg_bignat_l5::*;
+
+verus! {
+
+// Do two canonical numbers have the same number of limbs?
+pub fn same_size(a: &BigNat, b: &BigNat) -> (r: bool)
+    requires
+        a.wf()
+        b.wf(),
+    ensures
+        r == (a.limbs@.len() == b.limbs@.len()),
+{
+    a.limbs.len() == b.limbs.len()
+}
+
+} // verus!

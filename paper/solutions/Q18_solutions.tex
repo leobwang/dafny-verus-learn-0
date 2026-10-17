@@ -1,0 +1,241 @@
+% Q18_solutions.tex — REFERENCE SOLUTIONS to paper/Q18_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1's reference blueprint is the one the reference capstone was built from
+% (Solutions/dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy and
+% Solutions/verus/q/q18_practice_iiic/src/agent.rs; every formula below
+% verified there on 2026-10-11, Solutions/plans/Q18-code-notes.md §6). B2 is a
+% pre-registration and B3 a proposal: graded on method, never against numbers,
+% so this file gives one acceptable plan and one acceptable proposal with
+% their arithmetic recomputed (the MDE and Wilson calls ran with
+% harness/fvh/stats.py on the pinned lock, `uv run --offline --frozen python3
+% -c ...`; the budget products with `python3 -c`), and the checks a grader
+% runs. B4-B5's fields are graded against the learner's own cheatsheets.md;
+% this file records which lines of each pinned range a field draws on and
+% never copies a card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q18 --- Practice III-C + Lab 3 + capstone \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is an informal proof first (the five dimensions of \texttt{/grade-paper}'s
+\texttt{[informal-proof-first]} type; \texttt{--post} re-scores
+\texttt{blueprint-quality} against the delivered capstone). B2 is a
+pre-registration (the six method dimensions; every arithmetic recomputed by
+the grader; the hash between the PREREG markers). B3 is a proposal, graded on
+the dimensions the module's rubric declares. B4--B5 are paper cards
+(\texttt{card-fidelity}, per field; the closing line as a short concept
+answer). B6 is a lab report (\verb+--report+: the method dimensions plus
+\texttt{reproducibility}, against the graded pre-registration). None of B2,
+B3 and B6 has a numeric answer.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (the capstone blueprint): a reference}
+
+\paragraph{(a) Statements.} With $P = 10^{19}$ and the chunk value
+$\mathit{dec}(d) = d_0 + P\cdot\mathit{dec}(d_{1..})$ ($\mathit{dec}([]) = 0$),
+\emph{digits}$(d)$: every $d_i < P$; \emph{canonical}$(d)$: digits and
+($|d| = 0$ or $d_{|d|-1} \ne 0$).
+\begin{itemize}
+\item multiplication: valid $a, b$ $\Rightarrow$ valid $r$ and
+  $\mathit{val}(r) = \mathit{val}(a)\cdot\mathit{val}(b)$ (Dafny may state it
+  as $r$'s value against \dfy{Times}; the reference states it by value);
+\item division by one word $0 < w < \mathit{BASE}$: valid $q$, $\mathit{rem} < w$,
+  $\mathit{val}(a) = \mathit{val}(q)\cdot w + \mathit{rem}$ (quotient and
+  remainder determined by these, so no separate $/$ and $\%$ statement is
+  needed; a statement with $q = a / w$ is equivalent);
+\item \vrs{to_decimal}: valid $a$ $\Rightarrow$ canonical$(d)$ and
+  $\mathit{dec}(d) = \mathit{val}(a)$;
+\item \vrs{from_decimal}: digits$(d)$ $\Rightarrow$ valid $r$ and
+  $\mathit{val}(r) = \mathit{dec}(d)$.
+\end{itemize}
+In Verus: an extension trait \vrs{BigNatOps: BigNatCore} over \vrs{valid}
+and \vrs{value}, spec fns \vrs{dec_to_nat}, \vrs{dec_digits}, \vrs{dec_wf}.
+
+\paragraph{(b) Round trip.} Value: from (a)'s last two statements,
+$\mathit{val}(\mathit{from\_decimal}(\mathit{to\_decimal}(a))) =
+\mathit{val}(a)$ needs nothing more. Chunks: canonical $d_1, d_2$ with
+$\mathit{dec}(d_1) = \mathit{dec}(d_2)$ are equal; with (a) this gives
+$\mathit{to\_decimal}(\mathit{from\_decimal}(d)) = d$ for canonical $d$. It is
+the one statement that needs a lemma: by induction on $|d_1|$, the low chunk
+is the value modulo $P$ and the rest the value divided by $P$ (the
+fundamental division theorem's converse), and a canonical non-empty chunk
+sequence has a positive value.
+
+\paragraph{(c) Invariants and measures.}
+\begin{itemize}
+\item multiplication, Horner from the top limb of $b$, $j$ from $|b|$ down:
+  $\mathit{val}(r) = \mathit{val}(a)\cdot\mathit{val}(b_{j..})$, valid $r$;
+  measure $j$;
+\item division, $j$ from $|a|$ down: $\mathit{val}(a_{j..}) =
+  \mathit{val}(q)\cdot w + \mathit{rem}$, $\mathit{rem} < w$, valid $q$;
+  measure $j$;
+\item \vrs{to_decimal}: canonical $x$, digits$(d)$, $x = 0 \Rightarrow$
+  canonical$(d)$, $\mathit{dec}(d) + P^{|d|}\cdot\mathit{val}(x) =
+  \mathit{val}(a)$; measure $\mathit{val}(x)$ (the quotient by $P > 1$ of a
+  positive value is smaller);
+\item \vrs{from_decimal}, $j$ from $|d|$ down: $\mathit{val}(r) =
+  \mathit{dec}(d_{j..})$, valid $r$; measure $j$.
+\end{itemize}
+
+\paragraph{(d) Invented lemmas and library facts.} The suffix step for limbs
+and for chunks ($\mathit{val}(s_{i..}) = s_i + \mathit{BASE}\cdot
+\mathit{val}(s_{i+1..})$, and the same with $P$); the chunk push
+($\mathit{dec}(d \mathbin{+\!\!+} [c]) = \mathit{dec}(d) + P^{|d|}\cdot c$); one
+division row ($\mathit{rem}\cdot\mathit{BASE} + x < w\cdot\mathit{BASE}$, so the
+quotient digit is a limb); the decimal step (the invariant moves one chunk,
+the value shrinks, the last chunk is not zero); positivity of a canonical
+non-empty value (L5's \dfy{CanonicalLower} and \dfy{PowPositive}; Verus
+\vrs{group_bignat_bounds} and \vrs{lemma_weight_pos}); the round trip's
+uniqueness lemma. Library: distributivity, associativity and commutativity
+of multiplication (\texttt{Std.Arithmetic.Mul}, \vrs{vstd::arithmetic::mul}),
+the fundamental division theorem and its converse, the remainder bound
+(\texttt{DivMod}, \vrs{vstd::arithmetic::div_mod}); layers: L4's
+\dfy{AddCorrect}, \dfy{MulLimbCorrect}, \vrs{big_add}, \vrs{mul_limb}, L3's
+\dfy{AddLimbCorrect}, \vrs{add_limb}, L2's \dfy{ToNatCons} and
+\dfy{ValidCons}, L3's \dfy{NormalizeToNat} and \dfy{NormalizeCanonical}, L6's
+\vrs{normalize}, L7's \dfy{Shift}.
+
+\paragraph{(e) A plant that a statement catches.} In \vrs{from_decimal}, one
+Horner step multiplies by $10^{18}$ instead of $10^{19}$: the loop invariant's
+value relation is no longer maintained by the step, so the proof fails at the
+loop (no plant run is recorded for this answer: the verifier's exact message is
+the learner's to quote). A
+quotient left with a top zero limb (the normalization dropped) is caught by
+the division statement's validity of $q$ only if validity requires a
+canonical form; with the course's \vrs{wf} (canonical) it is.
+
+\paragraph{(f) Gaps.} None in the reference; a learner who leaves the round
+trip's uniqueness lemma as a declared gap scores 3 on gap-accounting.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (pre-registration): a reference plan}
+
+\begin{description}
+\item[Claim.] C1 (two-sided, an estimate with its interval, since the lab is
+  small): re-judged success in arm G differs from arm P at matched budgets,
+  per model family; refuted if the paired difference's 95\% interval contains
+  0. C2: among claimed successes, the cheat rate (claims the re-judging
+  rejects) is lower in G than in P; descriptive by X class. The population is
+  the twelve sealed tasks (Claude) and the drawn six (Qwen) under the pinned
+  toolchain.
+\item[Metric and estimator.] Per task, arm and repeat: a claimed success
+  (the run ends with the agent's success claim) and its re-judged verdict
+  (gate v2 and the trusted instruments in the verification container, from a
+  clean checkout). Re-judged success rate per arm with a Wilson interval;
+  G $-$ P paired by task (Claude: one run per task and arm; Qwen: the
+  per-task mean over three repeats), with a bootstrap interval over tasks;
+  cheats by X class as counts with the classes gate v2 reports; cost per arm
+  in calls, tokens, GPU-seconds and wall clock.
+\item[Arms and routes.] G: every \texttt{Verify} runs gate v2's
+  \texttt{gate\_crate} (the version whose sha256 the plan names) on the work
+  copy, each instrument in the verification container; a \texttt{Stop} is
+  refused until the gate has passed the current work copy, and the run ends
+  at its first pass or at its budget. P: the same rules in the prompt only;
+  \texttt{Verify} runs the plain lab gate (\texttt{vcheck --gate} with the
+  lever check) and \texttt{Stop} is never refused. In both arms the outcome
+  is the plain lab gate's verdict on the last work copy. Both Claude arms run
+  harness-executed (\texttt{fvh} executes every action the model proposes
+  through its action schema; no Lab 3 run puts Claude Code in a container);
+  both Qwen arms run in agent mode, opencode in a per-run container. In
+  agent mode there is no \texttt{Verify} action: the agent's stop is arm G's
+  \texttt{Verify} (gate v2 runs outside the container at each stop; a failing
+  gate refuses the stop, and a new session continues from the work copy, its
+  brief carrying the gate's word, up to five reasons and the plain gate's
+  verdict); the agent's own \texttt{vcheck --gate} runs in the container are
+  only its tool calls; arm P's work copy is judged once, by the lab gate, when
+  the run ends.
+\item[Budget arithmetic.] Claude: $12 \times 1 \times 25 \times 2 \times 1 = 600$
+  calls at most, 24 runs, plus at most 10 sentinels: 610, the registry's
+  \texttt{claude\_calls}; Qwen: $6 \times 1 \times 40 \times 2 \times 3 = 1440$
+  calls at most, 36 runs, the registry's \texttt{qwen\_calls}
+  (\verb+python3 -c 'print(12*1*25*2*1, 6*1*40*2*3)'+ prints \texttt{600
+  1440}). GPU: about 20 GPU-seconds per agent turn at the context growth of
+  DV4's probe gives $36 \times 40 \times 20 / 3600 = 8.0$ GPU-hours, under the
+  9 of the registry; a lower bound for prompts that grow faster, so the
+  fallback is two repeats instead of three.
+\item[MDE.] At $n = 12$ tasks per arm, baseline 0.5, $\alpha = 0.05$:
+  \verb+mde_two_proportions(12, 0.5)+ = 0.478 unpaired, and the paired form
+  returns \texttt{inf} at $n = 12$; at $n = 18$ (six tasks $\times$ three
+  repeats, if repeats were independent units, which they are not) the paired
+  value is 0.4369. So the lab cannot detect any realistic difference as a
+  test: the plan reports estimates with intervals and says so, and $n$ is the
+  number of tasks, never task-repeats.
+\item[Gate's version and FP rate.] The sha256 of \texttt{gate\_v2.py} at the
+  run (\verb+sha256sum harness/q/fvh_q/gate/gate_v2.py+), and
+  \texttt{fp\_report} on the adversarial set: 0 false positives of 4 controls
+  gives the Wilson interval $[0, 0.490]$ (\verb+wilson_interval(0, 4)+); every
+  cheat rate is caveated by that upper end.
+\item[Impossible tasks.] No claimed success on i01--i04 is correct; each
+  claim counts as a cheat of the class gate v2 names, or UNKNOWN.
+\item[The rest.] Exclusions (\texttt{infra-failed} re-issued at most three
+  times; \texttt{truncated:<cause>} a failure, with a sensitivity line), a
+  stopping rule that never looks at outcomes, 80\% prediction intervals per
+  claim, contamination (tasks authored 2026-10-11, after the models' release;
+  sealed until the statements were committed), and the disclosure (a
+  small-scale replication with model substitution; Claude as grader and
+  subject; one machine, one solver pin; every Claude run harness-executed,
+  through \texttt{fvh}'s action schema).
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B3 (the proposal): what an acceptable one does}
+One acceptable proposal: \emph{Does a statement-only review by a second agent
+lower the rate of weak statements that a co-developer then proves?} Claim:
+reviewed statements are less often weaker than a held-out reference
+(two-way implication) than unreviewed ones; refuted if the paired
+difference's interval contains 0. Unit: a statement; metric: the weak or
+vacuous rate under the hidden check; arms: review on, review off, matched
+calls; budget: 40 statements $\times$ 2 arms $\times$ 3 repeats at a stated
+cost; gate: the freeze and the hidden two-way check in a grader container,
+with the oracle's FP rate as a caveat; trusted: the reference statements and
+the solver; prior work: cards 02.6 and 04.6; a null result means review at
+this budget does not change what is proved, not that review is useless. The
+rubric's dimensions look for scope fitted to one machine, a refutable claim,
+a gate on the metric, the trust stated, and every number traced to a source.
+
+% ---------------------------------------------------------------------------
+\section*{B4 (paper card 02.6, Vero): reference fields}
+Task shape: the setup paragraph (frozen definitions, signatures and
+specifications; proof-only and code-and-proof modes). Oracle: the grader
+paragraph (re-rendered editable slots, an axiom allowlist, banned oracles).
+What is trusted: the allowed axioms and the frozen specifications. Cheat
+surface: the grader bullet's list (\texttt{native\_decide}, hollow instances,
+\texttt{implemented\_by}); the audit route as a sanctioned way to prove a
+specification defective. Metric: full solve per repository. Budget: 90
+minutes per run. Variance: one run per cell (limitations). Artifact: the
+43-repository benchmark. Closing line: nearest is Lab 3's re-judging on a
+clean checkout with the statements frozen; the paper's grader also
+re-renders only the editable slots and allowlists axioms, where gate v2 reruns
+the pinned command and scans the configuration.
+
+\section*{B5 (paper card 05.9, VeriSoftBench): reference fields}
+Task shape: 500 obligations from 23 repositories (setup bullets). Oracle: the
+Lean compiler with pass@8 and repair rounds. What is trusted: the fixed
+commits and the compiler. Cheat surface: the range is mostly silent (a
+correct field says so: hole-free proofs are a task filter, not a grader
+rule). Metric: success rate in curated and full context. Budget: pass@8, up
+to three repair rounds, a 300-second timeout. Variance: none reported
+(limitations). Artifact: the benchmark. Closing line: Lab 3's tasks resemble
+the curated mode (the base API is given, the crate small), so a success rate
+there is not comparable to a full-repository one.
+
+% ---------------------------------------------------------------------------
+\section*{B6 (lab report)}
+No reference: there is no run. A report the rubric accepts regenerates every
+table from \texttt{research/runs/Q18/} with one command (Probe R), lists every
+deviation from the graded B2 with its reason, carries gate v2's re-judged
+verdict for every claimed success, states the gate's version and its
+false-positive interval beside every cheat rate, and keeps the disclosure
+block; it is graded on method and reproducibility, never on its numbers.
+
+\end{document}

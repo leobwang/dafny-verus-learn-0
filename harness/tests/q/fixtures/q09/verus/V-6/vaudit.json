@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V-6"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V-6/src/lib.rs",
+    "kind": "arbitrary",
+    "line": 7,
+    "message": "arbitrary() leaves a spec value unconstrained and passes --no-cheating (Δ8)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V-6"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "5ea2ab313b08b77fa61018041b8a7806106678639c4ea761bfb698b57be5874e",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V-6"
+}

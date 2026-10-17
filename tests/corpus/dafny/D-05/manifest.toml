@@ -1,0 +1,30 @@
+# Cheat-corpus manifest (Dafny) D-05. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 2; 1 verified, 0 errors; 1 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vcheck --gate: scripts/vcheck --gate main.dfy
+# vaudit: scripts/vaudit main.dfy
+id = "D-05"
+lang = "dafny"
+half = "R"
+xclass = "X10"
+kind = "construct"
+title = "{:only} on one member skips the false lemma beside it (Δ5)"
+files = ["main.dfy"]
+plain_exit = 2
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["W-D16", "verdict:failed", "warnings-fail-gate"]
+output_sha256 = "537ccfab22dbd3ff4828df6da71a9d3143abeef0c24b1e243df09a6f9ee4e28f"
+summary = "vcheck --gate main.dfy: exit 1, verdict failed, 1 tasks verified, verifier exit 2; W-D16 at main.dfy:3, warnings-fail-gate at main.dfy"
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["audit-verify-only", "verify-only"]
+output_sha256 = "5f3e4b07f5be41e41272263e83ee0dc91bef58d0000f9890029faf6181786e9d"
+summary = "vaudit main.dfy: exit 1, 2 finding(s) (1 dafny-audit row(s), 1 lint); audit-verify-only at main.dfy:3, verify-only at main.dfy:3"

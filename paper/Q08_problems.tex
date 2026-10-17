@@ -1,0 +1,201 @@
+% Q08_problems.tex — the written problems of Q08 (Internals II: refinement,
+% permissions, verified wp). Built by `make -C paper paper` with Q08_answers.tex.
+% B1 and B2 are the wp lab of QPLAN §16.5 (the weakest precondition of a
+% loop-free program as the term W2d's `Wp` computes, then the loop rule written
+% out for one loop: loops stay on paper, §16.3); B3 is the paper card 02.1. The
+% three are the module's written pair: 15 minutes, after chapter §3.4 and
+% before H8d–H10d. The programs are the problems' own: neither P5dv's, nor
+% W2d's `Swap()`, nor the chapter's.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q08 --- Internals II: refinement, permissions, verified wp \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q08\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B1 and B2 after chapter section~3.4 (the wp lab, 10 minutes),
+\emph{before} you write H8d--H10d, which mechanize the same rules; B3 with the
+chapter (5 minutes). Then run \texttt{/grade-paper Q08} in a fresh session,
+still before H8d--H10d.
+
+Hand calculations are graded step by step: write every step, and name the rule
+or the case of the definition it uses. Derive first; check with the verifier
+afterwards. Compare with \texttt{paper/solutions/} only as the module's last
+step.
+
+Notation, as in chapter section~3.2: $\WP{c}{Q}$ is the weakest precondition of
+$c$ for $Q$, and $\subst{Q}{x}{e}$ is $Q$ with $e$ substituted for $x$. In B1,
+the language is W2d's, in
+\begin{quote}
+\texttt{dafny/Q/Q08\_InternalsII/std/Q08\_Wp.dfy}:
+\end{quote}
+\noindent \dfy{Expr}, \dfy{BExp}, \dfy{Cmd}, \dfy{Eval}, \dfy{Holds}, \dfy{Exec},
+\dfy{SubstE}, \dfy{SubstB} and \dfy{Wp} are that file's, unchanged. Variables
+0, 1 and 2 are called $x$, $y$ and $m$, and $s$ is the start state, so $s(0)$
+is the start value of $x$.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+\textbf{The weakest precondition as a term} (5 minutes). The program $c$ sets
+$m$ to the larger of $x$ and $y$, then $x$ to $m - x$; the postcondition $q$
+is $x \leq y$. In W2d's syntax:
+\begin{dafnycode}
+function C(): Cmd
+{
+  Seq(If(Le(Var(0), Var(1)), Assign(2, Var(1)), Assign(2, Var(0))),
+      Assign(0, Minus(Var(2), Var(0))))
+}
+
+function Q(): BExp
+{
+  Le(Var(0), Var(1))
+}
+\end{dafnycode}
+\begin{enumerate}
+\item[(a)] Compute \dfy{Wp(C(), Q())}, the term that \dfy{Wp} returns, one
+  step at a time. At each step name the case of \dfy{Wp} it applies, and for
+  each substitution the cases of \dfy{SubstB} and \dfy{SubstE} it goes
+  through. Do not simplify: write the final term exactly as \dfy{Wp} builds it.
+\item[(b)] Write \dfy{Holds(Wp(C(), Q()), s)} as a formula over $s(0)$,
+  $s(1)$ and $s(2)$, by the cases of \dfy{Holds} and \dfy{Eval}. Simplify it
+  over the integers to a formula with as few comparisons as you can, and
+  justify each step. Which start value does it not mention, and why can that
+  value not matter?
+\item[(c)] Suppose \dfy{Wp}'s \dfy{Seq} case read \dfy{Wp(c2, Wp(c1, q))}, the
+  two commands in the wrong order. Compute the meaning of what it would return
+  for $c$ and $q$ (you may work with meanings instead of terms). Give a start
+  state that satisfies it from which $c$ ends outside $q$, and trace $c$ on it.
+  What in the result should have warned you?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B2}
+\textbf{The loop rule, written out} (5 minutes). A loop steps $x$ to 0 one
+unit at a time, from either side, and counts the steps. Write $\lvert v\rvert$
+for \dfy{Mag(v)}:
+\begin{dafnycode}
+function Mag(v: int): int
+{
+  if v >= 0 then v else -v
+}
+
+method Walk(x0: int) returns (k: int)
+  ensures k == Mag(x0)
+{
+  var x := x0;
+  k := 0;
+  while x != 0
+    invariant k + Mag(x) == Mag(x0)
+    decreases Mag(x)
+  {
+    if x > 0 {
+      x := x - 1;
+    } else {
+      x := x + 1;
+    }
+    k := k + 1;
+  }
+}
+\end{dafnycode}
+\begin{veruscode}
+pub open spec fn mag(v: int) -> int {
+    if v >= 0 {
+        v
+    } else {
+        -v
+    }
+}
+
+fn walk(x0: i64) -> (k: u64)
+    ensures
+        k as int == mag(x0 as int),
+{
+    let mut x = x0;
+    let mut k: u64 = 0;
+    while x != 0
+        invariant
+            k + mag(x as int) == mag(x0 as int),
+        decreases mag(x as int),
+    {
+        if x > 0 {
+            x = x - 1;
+        } else {
+            x = x + 1;
+        }
+        k = k + 1;
+    }
+    k
+}
+\end{veruscode}
+Work with the Dafny version (integers) in (a) and (b). Write $I$ for the
+invariant $k + \lvert x\rvert = \lvert x_0\rvert$, $b$ for the guard
+$x \neq 0$, $S$ for the body, $d$ for the measure $\lvert x\rvert$ and $D$ for
+its value at the start of an iteration.
+\begin{enumerate}
+\item[(a)] Write out the loop rule of chapter section~3.4 for this loop, as
+  formulas over $x$, $k$ and $x_0$: \emph{entry} ($I$ after the two
+  initialising assignments); \emph{maintenance},
+  $I \wedge b \wedge \lvert x\rvert = D \impl \WP{S}{I \wedge 0 \leq \lvert
+  x\rvert < D}$, with the wp computed by B1's rules (assignment, sequence,
+  conditional), one conjunct per branch; and \emph{use at exit}. Decide each
+  with a one-line argument, and name every place where the argument uses the
+  guard $b$.
+\item[(b)] Why is the rule sound? In two or three sentences: by induction on
+  what do entry and maintenance give $I$ at the start of every iteration, and
+  why do the measure's two conditions (bounded below while the loop runs,
+  smaller after each iteration) make every run stop? Then take this loop, with
+  the postcondition $x = 0$ and the invariant \dfy{true}:
+\begin{dafnycode}
+method Halt(x0: int) returns (x: int)
+  ensures x == 0
+{
+  x := x0;
+  while x != 0
+    decreases x
+  {
+    x := x - 2;
+  }
+}
+\end{dafnycode}
+  Which obligation of the rule fails? Exhibit a state that satisfies its
+  hypotheses and violates its conclusion, and trace the loop from $x_0 = 3$.
+\item[(c)] In the Verus version, name each arithmetic obligation that the body
+  adds and the hypotheses that discharge it. Would the loop still verify with
+  $k$ of type \vrs{u32} (the \vrs{ensures} unchanged)? Say why or why not.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B3}
+\textbf{Paper card 02.1, Machine-Generated, Machine-Checked Proofs for a
+Verified Compiler (Experience Report)} (5 minutes). Fill the card on its eight
+fields: task shape, oracle, what is trusted, cheat surface, metric, budget,
+variance, artifact. Each field is graded against the pinned range of your own
+\texttt{cheatsheets.md}: lines 584--610, the entry from its heading to its
+\emph{Why it matters} paragraph, in the copy the command below names. The pin
+is the sha256 of exactly those lines, computed with the first line below; it
+must print the second.
+{\small
+\begin{verbatim}
+sed -n '584,610p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+cddeddc6d44ba2753605107e143e54670958cea3e6ae527172e6989225baa631  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. Read the
+cheat surface beside your own flagship contract (chapter section~7): for each
+move the range reports, which acceptance line of that contract would have
+caught it, if any? A hash that no longer matches means the card file changed:
+the grader refuses the card until the pin is renewed.
+\end{problem}
+
+\end{document}

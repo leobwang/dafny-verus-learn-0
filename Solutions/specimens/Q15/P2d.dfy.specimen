@@ -1,0 +1,55 @@
+// item: Q15.P2d S10 verdict
+// **P2.** Pipeline forensic, first pass. This file is a contractor's delivery, and it
+// looks green: run plainly, the verifier reports no error on it. Comments and names
+// are contractor prose: unchecked; only a tool's own output counts as evidence. The one
+// comment that is not contractor prose is the course's `planted:` marker: every Q15
+// delivery carries exactly one, on the line of its defect, so it says where to look and
+// nothing about the stage or the instrument. BEFORE
+// you run any instrument on this file, read it and name, first, the stage of the
+// delivery's pipeline where its defect lives:
+//   input    part of what the claim rests on was never given to the verifier to
+//            check: the verifier saw less of the delivery than the claim needs,
+//            whatever it said about the rest;
+//   options  a setting changes how the verifier checks what it does see, so a
+//            pass means less than a plain pass;
+//   trust    the verifier was told to take a step without proof: it checked what
+//            follows from the step, never the step itself;
+//   test     the delivery's own test never ran, or ran and did not pass;
+// then the instrument that shows it: the FIRST of these, in this order, whose result is
+// not a pass:
+//   vcheck   `scripts/vcheck <file>` (a pass: verified, with 0 holes);
+//   gate     `scripts/vcheck --gate <file>` (a pass: verified, exit 0);
+//   vaudit   `scripts/vaudit <file>` (a pass: 0 findings);
+//   test     `scripts/vcheck --test <file>` (a pass: every test ran and passed).
+// Answer form: `<stage> <instrument>`, for example `trust vaudit`, in slots/Q15.slots.
+// Reference Solution: `input gate`: the helper's `{:only}` makes Dafny verify that
+// member alone, so the claimed lemma (whose empty body does not prove it) is never
+// checked; the learner loop says verified with one warning, and the gate fails on the
+// warning (warnings-fail-gate); vaudit names verify-only.
+// Claim:
+//   `ToNatZeroTop(s)`: a zero limb put on top of a limb sequence changes no value.
+// after: Q15.P2d
+// CHECK P2d
+module Q15_P2 {
+  // The definitions this delivery is about, as layer L1 gives them (copies: a specimen
+  // stands alone).
+  const BASE: nat := 18446744073709551616
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  // Delivered: a zero limb on top changes no value.
+  lemma ToNatZeroTop(s: seq<nat>)
+    ensures ToNat(s + [0]) == ToNat(s)
+  {
+  }
+
+  // Delivered helper: the value of the empty sequence, checked first.
+  lemma {:only} ToNatEmpty()  // planted: Q15.P2d
+    ensures ToNat([]) == 0
+  {
+  }
+}

@@ -1,0 +1,23 @@
+# Cheat-corpus manifest (Dafny) D-22. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 2 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vaudit: scripts/vaudit main.dfy
+# also captured, not flagging (each passed this fixture): vcheck --gate
+id = "D-22"
+lang = "dafny"
+half = "Q"
+xclass = "X13"
+kind = "construct"
+title = "decreases * on mutually recursive methods"
+files = ["main.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["audit-decreases-star", "decreases-star"]
+output_sha256 = "9dc9d55371409aca0b6d570602205260f23abb58c1075c5f7ec0c1fe1d4684fb"
+summary = "vaudit main.dfy: exit 1, 4 finding(s) (2 dafny-audit row(s), 2 lint); audit-decreases-star at main.dfy:3, decreases-star at main.dfy:5, audit-decreases-star at main.dfy:10, decreases-star at main.dfy:12"

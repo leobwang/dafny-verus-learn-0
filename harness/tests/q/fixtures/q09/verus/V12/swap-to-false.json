@@ -1,0 +1,46 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/V12/swapped"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/V12/swapped/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_v12_swapped",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "lemma_between": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/V12/swapped",
+  "verdict": "verified",
+  "verified_count": 1
+ },
+ "exit_code": 0,
+ "instrument": "swap-to-false",
+ "killed": null,
+ "output_sha256": "0572c009dfe25953894ca58a7cdfea39675d9d004832bb95eddfbc152a673ac4",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V12"
+}

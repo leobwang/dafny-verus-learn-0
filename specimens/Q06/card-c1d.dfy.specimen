@@ -1,0 +1,20 @@
+// Demo for card Q06.C1d (write:trigger), the failure half. The success half is
+// `OddBound` in dafny/Q/Q06_Machine/std/Q06_Machine.dfy; here the proof never
+// mentions a term of the trigger's shape. Run it with
+// `scripts/vcheck specimens/Q06/card-c1d.dfy.specimen`; the EXPECT line pins the
+// message the verifier gives (line and fragment).
+// after: Q06.P3d
+// EXPECT @18 "a postcondition could not be proved on this return path"
+module Q06_CardC1d {
+  function Odd(i: nat): nat
+  {
+    2 * i + 1
+  }
+
+  lemma OddBound(s: seq<nat>)
+    requires |s| > 3
+    requires forall i {:trigger Odd(i)} | 0 <= i < |s| :: s[i] < Odd(i)
+    ensures s[3] < 7
+  {
+  }
+}

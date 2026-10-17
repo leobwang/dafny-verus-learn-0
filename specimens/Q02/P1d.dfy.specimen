@@ -1,0 +1,23 @@
+// item: Q02.P1d S4 obligation
+// **P1d.** A loop that zeroes an array: it states its `decreases`, and one of its
+// invariants stops one step short. Which labelled lines does the verifier fail to prove
+// (an error reported on the line, or the line named as the postcondition that failed)?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by single
+// spaces (for example `FAILS x y`), or `FAILS none`.
+// SLOT: FAILS ???
+module Q02_P1d {
+  method ZeroAll(a: array<nat>)
+    modifies a
+    ensures forall i | 0 <= i < a.Length :: a[i] == 0           // [a]
+  {
+    var j := 0;
+    while j < a.Length
+      decreases a.Length - j                                     // [b]
+      invariant 0 <= j <= a.Length                               // [c]
+      invariant forall i | 0 <= i < j - 1 :: a[i] == 0           // [d]
+    {
+      a[j] := 0;
+      j := j + 1;
+    }
+  }
+}

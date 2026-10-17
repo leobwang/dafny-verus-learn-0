@@ -1,0 +1,30 @@
+# Cheat-corpus manifest (Dafny) G02. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 2; 2 verified, 0 errors; 1 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vcheck --gate: scripts/vcheck --gate main.dfy
+# vaudit: scripts/vaudit main.dfy
+id = "G02"
+lang = "dafny"
+half = "R"
+xclass = "X02"
+kind = "construct"
+title = "bodyless helper lemma with an ensures, used by a proved lemma"
+files = ["main.dfy"]
+plain_exit = 2
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["W-D01", "bodyless-method", "verdict:failed", "warnings-fail-gate"]
+output_sha256 = "d65740f75b0d9e4b2d580a424a9383a40bb8bca91e3ace4f852313a6ee7056c1"
+summary = "vcheck --gate main.dfy: exit 1, verdict failed, 2 tasks verified, verifier exit 2; bodyless-method at main.dfy:6, warnings-fail-gate at main.dfy"
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["audit-bodyless-ghost"]
+output_sha256 = "b8676647edae57227d2f2a1e90a439fda85935814c432e08e7a3b6a30875d1ef"
+summary = "vaudit main.dfy: exit 1, 1 finding(s) (1 dafny-audit row(s), 0 lint); audit-bodyless-ghost at main.dfy:5"

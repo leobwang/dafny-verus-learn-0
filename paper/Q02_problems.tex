@@ -1,0 +1,128 @@
+% Q02_problems.tex — the written problems of Q02 (First syntax I). Built by
+% `make -C paper paper` with Q02_answers.tex. B1 (a blueprint), B2 (a concept
+% question) and B3 (the paper card) are the module's written pair: 15 minutes,
+% after the chapter and before the holes.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q02 --- First syntax I \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q02\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: after the chapter, before you start the holes (15 minutes in all). Write
+B1 \emph{before} you open the hints under H3d and H2v in the exercise files.
+Then run \texttt{/grade-paper Q02} in a fresh session. Once H3d and H2v verify,
+\verb+/grade-paper Q02 --post+ re-scores B1's blueprint against your own
+proofs. Compare with \texttt{paper/solutions/} only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B1}
+\textbf{Normalizing keeps the value} (6 minutes). The definitions are those of
+the given layers L1 and L2 (\texttt{dafny/given/Q/}); limbs are little-endian,
+so \dfy{s[0]} is the least significant limb:
+\begin{dafnycode}
+const BASE: nat := 18446744073709551616
+
+function ToNat(s: seq<nat>): nat
+  decreases |s|
+{
+  if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+}
+
+function Normalize(s: seq<nat>): seq<nat>
+  decreases |s|
+{
+  if |s| == 0 then []
+  else if s[|s| - 1] != 0 then s
+  else Normalize(s[..|s| - 1])
+}
+\end{dafnycode}
+\begin{enumerate}
+\item[(a)] Prove informally that $\mathit{ToNat}(\mathit{Normalize}(s)) =
+  \mathit{ToNat}(s)$ for every limb sequence $s$. State what your induction is
+  on and the induction hypothesis as a formula, cover every case of
+  \dfy{Normalize}, and name every helper fact by its statement (an equation
+  between the values of named sequences), with where it comes from: a lemma of
+  the given layers (read their files), another hole of this module, or a gap
+  you declare.
+\item[(b)] The Verus exercise crate strips the same limbs in place with a loop,
+  whose code, measure and proof call are given:
+\begin{veruscode}
+pub fn normalize(a: &mut BigNat)
+    ensures
+        final(a).wf(),
+        final(a).to_nat() == old(a).to_nat(),
+{
+    while a.limbs.len() > 0 && a.limbs[a.limbs.len() - 1] == 0
+        decreases a.limbs.len(),
+    {
+        proof {
+            lemma_seq_to_nat_drop_last_zero(a@);
+        }
+        a.limbs.pop();
+    }
+}
+\end{veruscode}
+  State, as a formula over \vrs{a} and \vrs{old(a)}, the loop invariant that
+  your argument in (a) becomes, and say which fact keeps it across one pass and
+  what gives each \vrs{ensures} clause at the exit.
+\end{enumerate}
+\emph{What will be formalized:} Q02.H3d, \dfy{NormalizeToNat} in the Dafny
+exercise file, and Q02.H2v, the invariant of \vrs{normalize} in the Verus crate:
+\begin{quote}
+\texttt{dafny/Q/Q02\_FirstSyntaxI/core/Q02\_FirstSyntaxI.dfy} \\
+\texttt{verus/q/q02\_first\_syntax\_i/src/lib.rs}
+\end{quote}
+\noindent Plan each use of the induction hypothesis as a call you would write.
+Your proof is the blueprint: someone else should be able to formalize it
+without inventing any statement.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B2}
+\textbf{True is not inductive} (3 minutes). Card 02.7's pruning step drops every
+loop-invariant clause that is not inductive.
+\begin{enumerate}
+\item[(a)] Of the three obligations of chapter section~4.1 (on entry, maintained,
+  at exit), which decide whether a clause is inductive, and which does not?
+\item[(b)] Give a loop and one invariant clause that holds in every state the
+  loop reaches, yet is not inductive on its own. Exhibit a state (the value of
+  every variable before one pass) from which one pass of the body breaks the
+  clause.
+\item[(c)] In one or two sentences: what does pruning do with your clause
+  alone, and with your clause beside the invariant clauses that make it
+  inductive?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B3}
+\textbf{Paper card 02.7, DafnyPro: LLM-Assisted Automated Verification for
+Dafny Programs} (6 minutes). Fill the card on its eight fields: task shape,
+oracle, what is trusted, cheat surface, metric, budget, variance, artifact.
+Each field is graded against the pinned range of your own
+\texttt{cheatsheets.md}: lines 766--791, the entry from its heading to its
+\emph{Why it matters} paragraph, in the copy the command below names. The pin
+is the sha256 of exactly those lines, computed with the first line below; it
+must print the second.
+{\small
+\begin{verbatim}
+sed -n '766,791p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+04b270b5bf2545aa6727055642d13097d8abedc941d775dc6dc78ec3ae7be6cc  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

@@ -1,0 +1,84 @@
+% Q10_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q10_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the route, the wording and the examples are deliberately far from the
+% reference, so the grader must recognise correctness by substance (the rubric's
+% probes), not by matching text. B1 explains A by the strongest fact the loop exit
+% gives, C by the invariant that breaks at an odd n (not by the measure), and D by the
+% Verus rule rather than the error text; B2 words every field its own way.
+%
+% EXPECTED[B1][correctness][4]: correct; Probe A on each of the four files matches every verdict and stage (A: postcondition; B: verified; C: termination; D: resolve), and Probe A' confirms each reason (A with the invariant i <= |s| added verifies; C at n = 1 never stops). The answer's C names the broken invariant and the non-termination, both true, while Dafny reports termination: a true different reason is correct (CO.c). No finding.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 888-913); Cheat surface, Variance and Artifact correctly say what the range does not give. No finding on any field.
+% EXPECTED[B2][correctness][4]: the ninth line is correct. No finding.
+% Expected per-problem grades: B1 = 4, B2 = 4 (3 is tolerated only with a reading note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a false fact,
+% a wrong verdict, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q10 --- Practice I-A \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (concept)}\label{ans:B1}
+\begin{answer}
+\textbf{A.} (a) Does not verify; verification fails on the \texttt{ensures}.
+\quad (b) The exit leaves only ``not \dfy{i < |s|}'': the loop never says
+\dfy{i} cannot overshoot, so equality is out of reach. \\
+\textbf{B.} (a) Verifies. \quad (b) Counting a natural down to the first
+non-positive value lands on exactly 0, and the count itself is the
+measure. \\
+\textbf{C.} (a) Does not verify. \quad (b) For an odd \dfy{n}, say 3, the
+values are 0, 2, 4, \dots: the step from 2 breaks \dfy{i <= n}, and \dfy{i}
+never equals \dfy{n}, so the loop does not stop; Dafny reports the
+termination obligation. \\
+\textbf{D.} (a) Refused before verification, at \texttt{resolve}. \quad (b)
+In Verus every exec loop states its own \texttt{decreases}; there is no
+default. \\
+\textbf{The measure Dafny uses when none is written:} the gap between the
+two sides of the guard, oriented by its comparison. It is A's problem only in
+appearance (A terminates) and is exactly C's problem (the gap can grow).
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.11, lines 888--913 (the pinned range).
+
+\textbf{Task shape:} Fill one hole in a real proof: an assertion the proof
+needed was removed from a lemma of a production Dafny codebase, and the model
+must say what to assert and where. DafnyGym collects 145 of these.
+
+\textbf{Oracle:} Whether Dafny (version 4.3.0) verifies the lemma again.
+
+\textbf{What is trusted:} The verifier, the lemma as written apart from the
+gap, and the benchmark's construction (the removed assertion really was
+necessary). The authors themselves call it optimistic that the rest of the
+proof and the repository's other assertions stay available.
+
+\textbf{Cheat surface:} Not described in the range: nothing says whether a
+candidate that assumes its way through, or edits the statement, is caught. I
+would want the check applied to each edit.
+
+\textbf{Metric:} Success within $k \le 10$ samples (any one verifying):
+56.6\% for the full method, rising from 6.2\% with code alone; with only the
+placeholder, 34.4\%; Cedar gains most from similar examples (16.6\% to about
+59\%).
+
+\textbf{Budget:} Ten samples per task at most, GPT-4o, temperature 1.0.
+
+\textbf{Variance:} Not given; one model, one run, so no spread.
+
+\textbf{Artifact:} DafnyGym, 145 tasks over about 33k lines; release status
+not stated in the range.
+
+\textbf{Ninth line (H3: where and what):} The verifier pointed at the failing
+obligation, which is the placeholder's job in Laurel; what to state there was
+mine to supply, which is the retrieval's job.
+\end{answer}
+
+\end{document}

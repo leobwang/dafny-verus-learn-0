@@ -1,0 +1,58 @@
+# avoid.curated — the curated source of scripts/avoid.sh (spec §2.7 source 4, design §9.1,
+# PLAN.md §5.5): names from the Lean course (lean-learn-0) that this course must not reuse.
+#
+# Names only, copied from the R lane's accepted names-only scan of the Lean learner
+# checkout's EXERCISE files (orchestrator decision, DV5a): never from its solutions, its
+# reference trees or its proofs. Future scans of the Lean course go through this file
+# only: refresh it by a names-only read of the Lean course's exercise files and record
+# the date here (PLAN.md §8 R13 proposes the integration lane of each R phase).
+# Lean Q's spine identifiers beyond `Bin` are not yet recorded (no accepted scan names
+# them); add them at the next refresh.
+#
+# Columns (tab-separated): name, kind, applies, origin.
+#   kind    name  = a hit when an own declaration's key equals this name's key;
+#           type  = also a hit when this name's key occurs as a word run of an own key
+#                   (`Tree` in `TreeSize`);
+#           never = a hit when this exact token occurs anywhere in an own file.
+#   applies Q, R or QR: the track(s) whose declarations are checked against the name
+#           (Lean R's names against R, Lean Q's against Q; waiver direction Lean→<track>).
+# `type` is kept for distinctive type names (Tree, Expr, Instr, Vect, Monoid, Bin: PLAN.md
+# §5.5's examples and the R lane's note on Instr); Lean's `Value` is a `name`, since as a
+# word it would fire on every R key that says "value" (`bound_value`) without any transfer.
+# Keys are normalized as avoid.sh normalizes declarations (camelCase and snake_case
+# split into words, lower-cased, joined with `_`).
+name	kind	applies	origin
+size	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+mirror	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+size_mirror	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+mirror_mirror	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+reverse	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+reverse_append	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+reverse_reverse	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+length_append	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+eval	name	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Tree	type	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Expr	type	R	Lean R01-R06 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Step	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+compile	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+compile_correct	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+compile_correct_gen	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Instr	type	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+run	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+run_append	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+check	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+append_assoc	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+infer	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+preservation	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+progress	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Value	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+encode	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+decode	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Sorted	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+merge	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+insertionSort	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Vect	type	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Monoid	type	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+constFold	name	R	Lean R07-R16 exercise files, names only (R lane scan 2026-10-07, R-author-notes §8)
+Bin	type	Q	Lean Q's spine numeral (design §10.1: BigNat replaces it so that nothing transfers by renaming)
+LeanLearn0	never	QR	the Lean course's library namespace: no file of this course names or imports it

@@ -1,0 +1,43 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/q/fixtures/q18/C4/main.dfy"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "dafny",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.0004,
+    "max": 3497,
+    "min": 3494,
+    "solver": null,
+    "symbol": "Gate2C4.MinOf"
+   }
+  ],
+  "stable": true,
+  "target": "<root>/harness/tests/q/fixtures/q18/C4/main.dfy",
+  "verdicts": {
+   "1": "verified",
+   "2": "verified",
+   "3": "verified"
+  }
+ },
+ "exit_code": 0,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "bc4ec12f7d05af5537c73c86fabbc980f585275b6d1bd059297491a93e82dc35",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/C4/main.dfy"
+}

@@ -1,0 +1,38 @@
+// Card demo Q04.C2d (the `forall` statement), the failure half. The success half is
+// `AppendZeroEach` in dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy; this copy leaves
+// the call out of the statement's body. Run it with
+// `scripts/vcheck specimens/Q04/card-c2d.dfy.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+module Q04_CardC2d {
+  // Copies of layer L1's definitions it uses (dafny/given/Q/QG_L1_BigNat.dfy): a Dafny
+  // specimen is verified alone, so it cannot import the layer.
+  const BASE: nat := 18446744073709551616
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  lemma ToNatAppendZero(s: seq<nat>)
+    ensures ToNat(s + [0]) == ToNat(s)
+    decreases |s|
+  {
+    if |s| == 0 {
+      assert s + [0] == [0];
+    } else {
+      assert (s + [0])[1..] == s[1..] + [0];
+      ToNatAppendZero(s[1..]);
+    }
+  }
+
+  lemma AppendZeroEach(ss: seq<seq<nat>>)
+    ensures forall j | 0 <= j < |ss| :: ToNat(ss[j] + [0]) == ToNat(ss[j])
+  {
+    forall j | 0 <= j < |ss|
+      ensures ToNat(ss[j] + [0]) == ToNat(ss[j])
+    {
+    }
+  }
+}
+// EXPECT @33 "possible violation of postcondition of forall statement"

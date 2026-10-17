@@ -1,0 +1,179 @@
+% Q07_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q07_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the route, the facts, the wording and the examples are deliberately far
+% from the reference, so the grader must recognise correctness by substance (the
+% rubric's probes), not by matching text.
+% B1 (a) bounds the gap d * BASE - r * BASE from below (distributivity over a
+% difference, then a product that grows with a factor of at least one) instead of
+% scaling r + 1 <= d; (b) states the division by a product as a fact by its statement
+% only and declares the divisor's positivity as a new lemma proved by induction, instead
+% of L3's monotonicity. B2's fourth edit is a new lemma outside HELPERS, not a fuel
+% attribute. B3 words every field its own way.
+%
+% EXPECTED[B1][statement-fidelity][4] [induction-soundness][4] [case-exhaustiveness][4] [blueprint-quality][4] [gap-accounting][4]: correct. Probe A filled from (a)'s chain (the three facts pasted bodyless) verifies with exactly three holes (verified, 25 verified, 3 holes, captured), and each of the three facts verifies with an empty body under Probe A''' (captured). Probe A' filled from (b)'s chain (its two stated facts as helpers, L3's lemma by name) verifies with two holes (captured), and the declared new lemma verifies as the answer proves it (captured). No finding.
+% EXPECTED[B2][correctness][4]: correct; Probe B on each edit and on the answer's lemma-outside-HELPERS edit, in both languages, matches every claim (all captured). No finding.
+% EXPECTED[B3][card-fidelity][4]: every field agrees with the pinned range (lines 795-825); Budget, Variance and Artifact correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a false fact,
+% a wrong step, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q07 --- Internals I: proof engineering, translation \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} Whenever $d$ is a nonzero limb, $r$ is a remainder
+below $d$ and $x$ is a limb, the next quotient digit
+$\lfloor (r \cdot \mathit{BASE} + x) / d \rfloor$ is itself a limb, that is,
+below $\mathit{BASE}$.
+
+\textbf{The chain} (one line per step: the fact used, by its statement with
+its hypotheses; where it comes from; the arguments of the use; why its
+hypotheses hold there):
+\begin{enumerate}
+\item A product distributes over a difference:
+  $(p - q) \cdot m = p \cdot m - q \cdot m$, no hypotheses (library). At
+  $(d, r, \mathit{BASE})$: $d \cdot \mathit{BASE} - r \cdot \mathit{BASE} =
+  (d - r) \cdot \mathit{BASE}$.
+\item A positive number scaled by a factor of at least one does not shrink: if
+  $0 < k$ and $0 < m$ then $m \leq k \cdot m$ (library). At
+  $(d - r, \mathit{BASE})$: $d - r \geq 1$ because $r < d$, and
+  $\mathit{BASE} > 0$. So $\mathit{BASE} \leq (d - r) \cdot \mathit{BASE}$.
+\item With step 1: $r \cdot \mathit{BASE} + \mathit{BASE} \leq
+  d \cdot \mathit{BASE}$, and since $x$ is strictly below $\mathit{BASE}$,
+  $r \cdot \mathit{BASE} + x < d \cdot \mathit{BASE}$, strictly.
+\item A strict bound by a product bounds the quotient: if $0 < n$ and
+  $u < n \cdot m$ then $u / n < m$ (library, the same fact H2 asks for). At
+  $(r \cdot \mathit{BASE} + x, d, \mathit{BASE})$, with $0 < d$ given and the
+  strict bound of step 3.
+\end{enumerate}
+
+\textbf{Facts needed (this is the blueprint;} each by its statement, and
+where it comes from\textbf{):} the three library facts of steps 1, 2 and 4,
+from \texttt{Std.Arithmetic.Mul} (1, 2) and \texttt{Std.Arithmetic.DivMod}
+(4); nothing new.
+
+\textbf{Steps the solver takes without a named fact} (nonlinear arithmetic
+off), and why: step 3 and the hypotheses' small facts ($d - r \geq 1$,
+$\mathit{BASE} > 0$): they are linear arithmetic with each product as one
+unknown term. The three library facts relate products to one another, which
+is exactly what is switched off.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones):
+none.
+
+\textbf{(b) Statement.} For every natural $v$ and every $n$, dividing $v$ by
+$\mathit{weight}(n + 1)$ equals dividing it by $\mathit{weight}(n)$ and then
+by $\mathit{BASE}$.
+
+\textbf{The chain} (each fact by its statement; L3's lemmas by name; the
+arguments of each use; how each hypothesis is met):
+\begin{enumerate}
+\item \vrs{lemma_weight_succ(n)} of L3: $\mathit{weight}(n + 1) =
+  \mathit{BASE} \cdot \mathit{weight}(n)$. \vrs{weight} is opaque, so this is
+  the only way to relate the two weights.
+\item A new lemma, \emph{every weight is at least 1}: \vrs{1 <= weight(n)} for
+  every \vrs{n}, by induction on \vrs{n}: \vrs{lemma_weight_zero()} for 0, and
+  for $n + 1$ the hypothesis at $n$ with \vrs{lemma_weight_succ(n)}, a product
+  of the positive constant \vrs{BASE} with a number at least 1.
+\item Dividing twice is dividing by the product, a fact of
+  \texttt{vstd::arithmetic::div\_mod}, by its statement: for $a \geq 0$,
+  $b > 0$, $c > 0$, $(a / b) / c = a / (b \cdot c)$. At
+  $(v, \mathit{weight}(n), \mathit{BASE})$: $v$ is a natural, step 2 gives
+  $\mathit{weight}(n) > 0$, and $\mathit{BASE} > 0$.
+\item The divisor of step 3 is $\mathit{weight}(n) \cdot \mathit{BASE}$, that
+  of step 1 is $\mathit{BASE} \cdot \mathit{weight}(n)$: the same product in
+  the other order, which the solver identifies without a call.
+\end{enumerate}
+
+\textbf{Facts needed (this is the blueprint):} L3's \vrs{lemma_weight_succ}
+and \vrs{lemma_weight_zero}; the new lemma of step 2 (statement and proof
+above); the division fact of step 3.
+
+\textbf{Gaps I know about:} none.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+% Short answers. Expect the grader to try to counterexample them.
+\textbf{(a)} For each edit, in each language: the gate passes? \texttt{specfreeze
+--against} reports a change? \texttt{vaudit} reports a finding? The edit keeps
+``change no statement''? \\
+{[1]} Dafny: yes; no; no; no, the \texttt{API} lemma now promises less, and
+nothing but a reader of the diff notices. \quad Verus: yes; no; no; no. \\
+{[2]} Dafny: yes, the weaker claim is still proved; yes, the snapshot's
+\dfy{PairBelow} differs; no; no. \quad Verus: yes; yes (\vrs{pair_below});
+no; no. \\
+{[3]} Dafny: no, the gate counts the assumed helper as a hole; no; yes, one
+finding for the assumption; yes, the shipped statements are intact (the helper
+is new and sits where helpers belong), though the edit fails the contract's
+other lines. \quad Verus: no; no; yes; yes.
+
+\textbf{(b)} The fourth edit: prove the helper honestly but put it in the
+\texttt{FROZEN} section, above \dfy{PairBelow}, and call it from the
+\texttt{API} lemma's body. \\
+Why it passes all three instruments: the proof is real, so the gate and the
+audit are clean, and the freeze compares only the statements the snapshot
+holds, which are unchanged; an extra lemma is not one of them. \\
+The contract line it breaks: the \texttt{git diff} line, ``every new lemma
+sits under \texttt{HELPERS}''. \\
+The artifact that shows the breach: the diff against the snapshot's commit
+(for the replay, its \texttt{patch.diff}).
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.8, lines 795--825 (the pinned range).
+
+\textbf{Task shape:} at test time, a Verus specification goes in and an
+implementation with its proof comes out; the system gets there by
+bootstrapping, translating Dafny programs from DafnyBench into Verus with an
+off-the-shelf 70B Llama, fixing failures with a verifier-guided tree search,
+and recycling the clean results as prompt examples.
+
+\textbf{Oracle:} acceptance by Verus. During search, candidates are ranked by
+a weighted count of what the verifier reports (verified functions, errors,
+warnings), and a separate critique (rule filters, an LLM judge voting on
+faithfulness, an exploit-hunting LLM) can veto a verified candidate.
+
+\textbf{What is trusted:} the Verus checker; the specification text, which
+nothing checks against what was meant; the critique's heuristics to catch an
+unfaithful translation (the card's own observation of one mismatched
+postcondition shows they can miss).
+
+\textbf{Cheat surface:} the known escapes (\vrs{assume(false)}, external
+bodies, trivial preconditions, a specification a trivial program meets) are
+filtered, and switching the critique off lets them take over. What remains
+open: specifications quietly weakened by added preconditions, and
+translations that verify against the wrong postcondition.
+
+\textbf{Metric:} pass@256 in per cent on two benchmarks: 32.9 (HumanEval)
+and 65.7 (MBPP), against 27.1 and 35.9 for few-shot GPT-4o; tree search beats
+linear refinement (29.4, 62.8); on proof annotation, 75.7 on MBPP against
+65.4 and 59.0 for AutoVerus and SAFE.
+
+\textbf{Budget:} 256 samples per program in exploration, a tree of breadth 32
+and depth 8, seven bootstrapping rounds; the search comparison is at matched
+budget. The range gives no wall-clock, token or hardware cost, and notes that
+baseline settings differ.
+
+\textbf{Variance:} the range is silent: no repeated runs, seeds or intervals,
+and pass@256 itself reports the best of 256 samples; I would need per-run
+numbers and their spread.
+
+\textbf{Artifact:} the bootstrapped data (247 translated programs, 102 error
+trajectories, 579 exploit pairs) and the HumanEval-Verus and MBPP-verified
+sets; whether any of it is released is not stated here.
+\end{answer}
+
+\end{document}

@@ -1,0 +1,43 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/q/fixtures/q18/C2"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "verus",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.0,
+    "max": 1446,
+    "min": 1446,
+    "solver": null,
+    "symbol": "gate2_c2::bound_into"
+   }
+  ],
+  "stable": true,
+  "target": "<root>/harness/tests/q/fixtures/q18/C2",
+  "verdicts": {
+   "1": "verified",
+   "2": "verified",
+   "3": "verified"
+  }
+ },
+ "exit_code": 0,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "4a0cd68899f754ea635cfd597b312fe6334f67ff818912c5032fae44899dd191",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/C2"
+}

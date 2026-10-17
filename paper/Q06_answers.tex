@@ -1,0 +1,98 @@
+% Q06_answers.tex — YOUR answers to paper/Q06_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q06_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q06 --- The machine and the verifier loop \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+% One line per step; name the formula each step uses.
+\textbf{(a)} \\
+$\hat p = \dots$ \\
+$z^2/n = \dots$ \quad denominator $1 + z^2/n = \dots$ \\
+centre $= \dots$ \\
+under the root: $\hat p(1 - \hat p)/n + z^2/(4n^2) = \dots$ \\
+half-width $= \dots$ \\
+interval: $(\dots,\ \dots)$ \quad width: $\dots$
+
+\textbf{(b)} Wald: $\dots \pm \dots = (\dots,\ \dots)$ \\
+The property it breaks: \dots \\
+How its shape differs from Wilson's: \dots
+
+\textbf{(c)} Factor: \dots \quad because \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} \\
+t1: \dots \\
+t2: \dots \\
+t3: \dots
+
+\textbf{(b)} pass@2 $= \dots$ \quad pass@1 $= \dots$
+
+\textbf{(c)} Plug-in for t2: \dots \quad above or below: \dots \\
+What the plug-in assumes: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+\textbf{(a)} Pass rate: \dots \quad successes among all records: \dots \quad
+tasks solved at some attempt: \dots
+
+\textbf{(b)} \dots
+
+\textbf{(c)} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (hand-calculation)}\label{ans:B4}
+\begin{answer}
+\textbf{(a)} Pass rates: A \dots, B \dots \\
+The informative tasks: \dots \quad $b = \dots$, $c = \dots$
+
+\textbf{(b)} $p = \dots$ (each binomial term written) \\
+Decision at $\alpha = 0.05$: \dots
+
+\textbf{(c)} In (a): \dots \quad In (b): \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.4, lines 672--699 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

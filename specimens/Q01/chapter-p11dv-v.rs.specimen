@@ -1,0 +1,26 @@
+use vstd::prelude::*;
+
+verus! {
+
+fn weak_max(a: u64, b: u64) -> (m: u64)
+    requires
+        a <= 1000,
+        b <= 1000,
+    ensures
+        m >= a && m >= b,
+{
+    a + b
+}
+
+fn weak_max_check() {
+    let m = weak_max(3, 7);
+    assert(m == 7);
+}
+
+} // verus!
+
+// Chapter specimen for docs/Q01_Hello.md, section 13: the scenario of Q01.P11dv, and a
+// use-site check under it. The chapter quotes its output; scripts/vcheck runs it once
+// these predictions are recorded.
+// after: Q01.P11dv
+// after: Q01.P8dv

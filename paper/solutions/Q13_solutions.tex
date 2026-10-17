@@ -1,0 +1,94 @@
+% Q13_solutions.tex — REFERENCE SOLUTIONS to paper/Q13_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1's claims were checked on the course pins (Dafny 4.11.0) on 2026-10-11:
+% the five true implications verify as empty-bodied lemmas, and the five
+% counterexample tests pass (scripts/vcheck --test). The probe file is archived
+% under ~/.cache/dafny-verus-learn-0/author-probes/dv5b/q13-kit/b1.dfy. B2's
+% fields are graded against the learner's own cheatsheets.md; this file records
+% which lines of the pinned range each field draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q13 --- Practice II-A \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is a concept answer (\texttt{correctness}: the grader checks each claimed
+implication with an empty-bodied lemma and each counterexample with a
+compiled test). B2 is a paper card (\texttt{card-fidelity}, per field).
+
+% ---------------------------------------------------------------------------
+\section*{B1 (concept)}
+
+\begin{description}
+\item[$Q_1$] Complete, not sound: $(1, 5)$ meets $y \ge 0$, and the reference
+  gives $1$.
+\item[$Q_2$] Complete, not sound: $(1, 5)$ again ($5 \ge 0$ and $5 \ge 1$).
+  Adding a conjunct made it stronger and still not sound.
+\item[$Q_3$] Complete, not sound: $(-3, -3)$ meets $y = x$, and the reference
+  gives $0$.
+\item[$Q_4$] Sound and complete: it is the reference split by cases.
+\item[$Q_5$] Neither: $(-1, -1)$ is allowed and wrong (not sound); $(-1, 0)$ is
+  the reference output and not allowed (not complete).
+\item[(c)] A client prefers a sound postcondition (everything it may conclude
+  is true of the real result; $Q_4$ tells it the most); an implementer finds a
+  weak, complete one easiest ($Q_1$ holds of the reference with almost no
+  proof). Strength helps the caller and costs the callee, so a specification
+  is judged from both sides (Q10's spec items; the client checks of H3v).
+  Note: completeness here is relative to the reference outputs; an
+  incomplete postcondition makes the correct implementation fail to verify.
+\end{description}
+Any pairs that show the same failures are correct.
+
+\emph{Checks (captured 2026-10-11, Dafny 4.11.0, \texttt{scripts/vcheck}).}
+The five claimed implications as empty-bodied lemmas (complete: $Q \Rightarrow
+Q_k$ for $k = 1, \dots, 4$; sound: $Q_4 \Rightarrow Q$) in one module, run with
+\texttt{--module Q13}: \texttt{verified --- 27 verified, 0 holes, 0 errors}.
+The five pairs above as \texttt{@Test} methods (\texttt{expect} the candidate
+and not the reference, or the reference and not the candidate), run with
+\texttt{--test}: \texttt{5 passed, 0 failed}. The rubric's Probe A as shipped
+(candidate \textsf{true}) fails only at \texttt{Sound}; its Probe A$'$ as
+shipped prints \texttt{1 passed, 0 failed}. Probe archive:
+\texttt{author-probes/dv5b/q13/rubric/}.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (paper card 05.5): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 2005--2031 (computed 2026-10-11),
+\[ \texttt{sha256 6c9b00d83e072910f2c5c6a2a298646045a89ffae04a90bdc0821436413f67f0}. \]
+
+\begin{description}
+\item[Task shape.] Lean 4 tasks (189, hand-checked) asking for code, a
+  specification (pre- and postcondition) and a proof, scored separately and
+  end to end; VERINA-A translated from Dafny, VERINA-B from course
+  submissions. \emph{Lines 2007, 2009.}
+\item[Oracle.] Lean checks proofs; generated specifications are judged sound
+  and complete against the reference ones, by an LLM proof, then
+  \texttt{decide} on tests, then property-based testing, with the rest
+  ``unknown''. \emph{Lines 2012--2014.}
+\item[What is trusted.] Lean; the one reference specification per task; the
+  tests (full line coverage). \emph{Lines 2009, 2029.}
+\item[Cheat surface.] A specification that restates the code is guarded
+  against by proving end to end against the ground-truth specification; the
+  spec metric is test-based, up to about 30\% unknown on hard postconditions.
+  \emph{Lines 2015, 2029.}
+\item[Metric.] pass@1 per stage: o3 72.6 code, 52.3 spec, 4.9 proof, 3.2 end
+  to end; proofs certify under 4\% of specs against 41.6--51.0\% by testing.
+  \emph{Lines 2017--2027.}
+\item[Budget.] Refinement against COPRA at equal tokens (o4-mini, 350k), 64
+  refinements for DeepSeek Prover V2; otherwise not stated. \emph{Lines
+  2024, 2026.}
+\item[Variance.] Not reported. \emph{By absence.}
+\item[Artifact.] The benchmark (189 tasks, two parts). \emph{Lines 2007,
+  2009.}
+\end{description}
+
+\end{document}

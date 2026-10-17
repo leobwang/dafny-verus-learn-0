@@ -1,0 +1,64 @@
+% Q01_problems.tex — the written problems of Q01 (Hello, Dafny and Verus: the
+% whole map). Built by `make -C paper paper` with Q01_answers.tex. The survey's
+% written pair holds one problem, B1, the paper card for cheatsheet entry 02.3:
+% 15 minutes, after the chapter and before the holes.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q01 --- Hello, Dafny and Verus: the whole map \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q01\_answers.tex}; keep its \verb+\label{ans:B1}+ anchor.
+\texttt{make -C paper paper} must stay green: a non-compiling answer set is the
+written track's red build.
+
+Order: after the chapter, before you start the holes (15 minutes). Re-read
+entry 02.3 in your own \texttt{cheatsheets.md} first. Then run
+\texttt{/grade-paper Q01} in a fresh session. Compare with
+\texttt{paper/solutions/} only as the module's last step.
+
+This is the course's first paper card. Every later card is filled on the same
+eight fields, and graded the same way: field by field, against the lines of
+your own card that the problem pins, with the card's grade the lowest of its
+field scores.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Paper card 02.3, A benchmark for vericoding: formally verified program
+synthesis} (15 minutes). Fill the card on its eight fields. Each field is
+graded against the pinned range of your own \texttt{cheatsheets.md}: lines
+642--668, the entry from its heading to its \emph{Why it matters} paragraph, in
+the copy the command below names. The pin is the sha256 of exactly those
+lines, computed with the first line below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '642,668p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+0cb3f94d3982d6d1826d4ef44b71a1a7b634d27d249086bc2281ef61febe5a38  -
+\end{verbatim}
+}
+What each field asks:
+\begin{description}
+\item[Task shape:] what goes in, what must come out, in which languages, and
+  how large a task is.
+\item[Oracle:] what decides that a run succeeded.
+\item[Trust:] what the success criterion takes on faith.
+\item[Cheat surface:] how a run could be counted as a success without being
+  one.
+\item[Metric:] the number reported, and what it is computed over.
+\item[Budget:] what each task gets: models, attempts or turns, tokens, time.
+\item[Variance:] how the spread of the result is measured (repeated runs,
+  intervals), or that it is not.
+\item[Artifact:] what was released for others to reuse.
+\end{description}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

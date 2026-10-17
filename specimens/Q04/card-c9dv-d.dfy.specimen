@@ -1,0 +1,12 @@
+// Card Q04.C9dv (divergence), demo d (Dafny). Open it only after your Q04 predictions are
+// committed, then run `scripts/vcheck specimens/Q04/card-c9dv-d.dfy.specimen` and compare
+// with specimens/Q04/card-c9dv-v.rs.specimen.
+// after: Q04.P8dv
+module Q04_CardC9dvD {
+  lemma ScaleLe(a: nat, b: nat, w: nat)
+    requires a <= b
+    ensures a * w <= b * w
+  {
+    Std.Arithmetic.Mul.LemmaMulInequality(a, b, w);
+  }
+}

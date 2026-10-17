@@ -1,0 +1,251 @@
+# scripts/dvl/pins.toml — the ONE source of the course's pinned verifier
+# settings (spec §3.1 rule 6: pin the verifier flags in exactly one place and
+# make every course command read them from there). dvl.common.load_pins()
+# parses it; dvl.dafny, dvl.verus, vcheck, vaudit, specfreeze, pins.py and
+# firsttry read every pin from it and hard-code none.
+#
+# Sources: VERSIONS.md §1 (toolchains), §2.4 (message wordings, copied
+# verbatim; tests/wrappers/test_dafny_static.py checks every Dafny and Verus
+# wording and the Dafny templates against VERSIONS.md), §2.5 (limits); DELTAS
+# Δ10, Δ13, Δ17, Δ47, Δ56–Δ59; CLAUDE.md §Resources (memory caps, concurrency).
+#
+# Changing a value here is a toolchain or policy change: re-run the wrapper
+# suites (python3 -m unittest discover -s tests/wrappers) and re-capture every
+# golden that quotes a resource outcome (Δ56).
+
+[dafny]
+# The install, as scripts/get_toolchain.sh pins it (VERSIONS.md §1.1).
+install = "dafny-4.11.0"
+binary = "dafny/dafny"                                 # relative to the install root
+version_output = "4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2"
+# The solver: the bundled Z3 4.12.1, always passed as --solver-path, never PATH
+# (Δ10; G15, G22). Relative to the install root.
+solver = "dafny/z3/bin/z3-4.12.1"
+solver_version = "Z3 version 4.12.1 - 64 bit"
+# Δ56: the course resource-limit pin (deterministic; never a wall-clock limit).
+resource_limit = 5000000
+# Δ59, CLAUDE.md §Resources: --cores is always explicit (the default is 16 here);
+# concurrent z3 per job = cores.
+cores = 2
+# CLAUDE.md §Resources: every Dafny job runs under an 8 GB cgroup cap.
+mem_gb = 8
+# Δ58: wall-clock safety kill (seconds). A kill is a failure, never a verdict.
+wall_clock_s = 1800
+# Concurrent Dafny jobs across processes when DVL_DAFNY_JOBS is unset.
+jobs = 1
+# Δ45, Δ59: seeded runs use `dafny measure-complexity --random-seed S
+# --mutations 1` (std units cannot take --boogie, Δ17).
+seeds = [1, 2, 3]
+seed_mutations = 1
+# QPLAN §6 Q29: `vcheck --brittleness` flags (never gates) a symbol whose
+# resource counts across the seeds spread above this coefficient of variation.
+spread_flag_cv = 0.20
+# Flags every verifying command carries (Δ6, Δ10: --allow-axioms false beats a
+# project value); the done gate adds `gate`, the learner loop adds `loop`
+# (spec §3.3: the loop runs with --allow-warnings, the gate without it).
+always = ["--allow-axioms", "false"]
+gate = ["--allow-warnings", "false"]
+loop = ["--allow-warnings"]
+# Compiled checks (Δ32, Δ43): dafny test --target py, always in a scratch copy.
+test_target = "py"
+# Rows `dafny audit` reports inside the bundled standard library, which it
+# audits whole whenever a unit sets standard-libraries (captured on the pin,
+# 2026-10-04; tests/wrappers/test_dafny_tool.py). These rows are the pinned
+# toolchain's trusted base, not course findings; a different count is a finding.
+stdlib_audit_rows = 81
+stdlib_files = ["DafnyStandardLibraries.dfy", "DafnyStandardLibraries-notarget.dfy"]
+
+# QPLAN §6 Q29 (Q09's brittleness measurement): the Z3 binaries bundled with
+# Dafny 4.11.0, by name, with their version line and sha256 (VERSIONS.md
+# §1.1; the install's tree digest covers them too). The first is the pinned
+# solver (`solver` above, Δ10): every gate, audit and plain run uses it.
+# `vcheck --solver <name>` and `vcheck --brittleness --solvers` run another
+# one for a measurement; the done gate and the reference gate refuse both.
+[dafny.solvers]
+"4.12.1" = { path = "dafny/z3/bin/z3-4.12.1", version = "Z3 version 4.12.1 - 64 bit", sha256 = "22214e518eed9eec867d18b485e7b2570d09cbf1d94a47c8eec6ec4de0287eff" }
+"4.14.1" = { path = "dafny/z3/bin/z3-4.14.1", version = "Z3 version 4.14.1 - 64 bit", sha256 = "5a4f295b2e64abd2e2463a321d33f8054585083230203a55fa57982a1843d559" }
+
+# VERSIONS.md §2.4, verbatim: the fixed Dafny wordings the wrapper matches.
+[dafny.messages]
+W-D01 = "This ensures clause is part of a bodyless method. Add the {:axiom} attribute to it or the enclosing method to suppress this warning"
+W-D02 = "This ensures clause is part of a bodyless function. Add the {:axiom} attribute to it or the enclosing function to suppress this warning"
+W-D03 = "assume statement has no {:axiom} annotation"
+W-D04 = "Compilation failed because warnings were found and --allow-warnings is false"
+W-D05 = "Translation was aborted because warnings were found and --allow-warnings was not specified"
+W-D06 = "Translation was aborted because errors were found"
+W-D07 = "Dafny program verifier did not attempt verification"
+W-D09 = "assertion might not hold"
+W-D10 = "a postcondition could not be proved on this return path"
+W-D10-related = "Related location: this is the postcondition that could not be proved"
+W-D15 = "The {:verify false} attribute should only be used during development. Consider using a bodyless lemma together with the {:axiom} attribute instead"
+W-D16 = "Members with @VerifyOnly temporarily disable the verification of other members in the entire file"
+W-D17 = "Assertion with {:only} temporarily transforms other assertions into assumptions"
+W-D18 = "when a method is imported, meaning it has no body and an {:extern} annotation, Dafny can not guarantee that its implementation satisfies its post-conditions (its ensures clauses and outputs that are subset types). To silence this warning, please add an {:axiom} attribute or use the option '--allow-external-contracts'."
+W-D19 = "a refining method is not allowed to add preconditions"
+W-D22-vacuous = "ensures clause proved using contradictory assumptions"
+W-D22-unneeded = "unnecessary requires clause"
+W-D23 = "Warning: this way of using the CLI is deprecated. Use 'dafny --help' to see help for the new Dafny CLI format"
+W-D24 = "CLI: Error: Z3 is not found. Please either provide a path to the `z3` executable using the `--solver-path <path>` option, manually place the `z3` directory next to the `dafny` executable you are using (this directory should contain `bin/z3-4.12.1` or `bin/z3-4.12.1.exe`), or set the PATH environment variable to also include a directory containing the `z3` executable."
+W-D28 = "no Dafny source files were specified as input"
+W-D29 = "A '*' expression is not allowed here"
+W-D30 = "only Dafny project files named dfyconfig.toml are recognised by the Dafny IDE."
+
+# VERSIONS.md §2.4 templates, as regular expressions (Python `re`).
+[dafny.patterns]
+W-D06 = '''^(?:Method|Function) (?P<name>\S+) has no body so it cannot be compiled$'''
+W-D07 = '''^Dafny program verifier finished with (?P<verified>\d+) verified, (?P<errors>\d+) errors?(?:, (?P<oor>\d+) out of resource)?(?:, (?P<timeouts>\d+) time outs?)?$'''
+W-D08 = '''^Dafny program verifier finished with (?P<verified>\d+) assertions verified, (?P<errors>\d+) errors?'''
+W-D11 = '''^Verification out of resource \((?P<name>[^)]*)\)$'''
+W-D12 = '''^Verification of '(?P<name>[^']*)' timed out after (?P<seconds>\d+) seconds'''
+W-D13-resolution = '''^(?P<n>\d+) resolution/type errors detected in (?P<file>.+)$'''
+W-D13-parse = '''^(?P<n>\d+) parse errors detected in (?P<file>.+)$'''
+W-D14-row = '''^(?P<file>.+)\((?P<line>\d+),(?P<col>\d+)\): Warning: (?P<name>[^:]+): (?P<issue>.*?)\. Possible mitigation: (?P<mitigation>.*)$'''
+W-D14-summary = '''^Dafny auditor completed with (?P<n>\d+) findings$'''
+W-D20 = '''^The file '(?P<file>[^']*)' was passed to --library\.'''
+W-D21-result = '''^(?P<name>\S+): (?P<status>PASSED|FAILED)$'''
+W-D21-detail = '''^\t(?P<file>[^\t]+)\((?P<line>\d+),(?P<col>\d+)\): (?P<message>.*)$'''
+W-D21-halted = '''^\[Program halted\] (?P<file>.+)\((?P<line>\d+),(?P<col>\d+)\): (?P<message>.*)$'''
+W-D25 = '''^module Std does not exist'''
+W-D26 = '''^Option (?P<option>\S+) unrecognized or unsupported in ':options' attributes\.$'''
+# A text diagnostic line under --show-snippets false.
+text-diagnostic = '''^(?P<file>.+)\((?P<line>\d+),(?P<col>\d+)\): (?P<severity>Error|Warning|Info|Related location): ?(?P<message>.*)$'''
+
+# W-D14 audit issues (VERSIONS.md §2.4), keyed by the finding kind vaudit
+# reports (audit-<key>; an unlisted text is audit-other). `assume-cross-module-
+# termination` was first captured in DV1b on the standard library's rows
+# (tests/wrappers/fixtures/dafny/captured/audit_std_unit.txt); `extern-requires`
+# on the cheat corpus's D-18, an `{:extern}` method with `nat` parameters
+# (DV1c, Δ108, Δ109).
+[dafny.audit_issues]
+bodyless-ghost = "Ghost declaration has no body and has an ensures clause"
+bodyless-compiled = "Compiled declaration has no body and has an ensures clause"
+assume = "Definition has `assume` statement in body"
+assume-axiom = "Definition has `assume {:axiom}` statement in body"
+axiom = "Declaration has explicit `{:axiom}` attribute"
+decreases-star = "Method may not terminate (uses `decreases *`)"
+verify-false = "Declaration has `{:verify false}` attribute"
+verify-only = "Member has explicit temporary `@VerifyOnly` attribute"
+assert-only = "Assertion has explicit temporary `{:only}` attribute"
+extern = "Declaration with `{:extern}` has a ensures clause"
+extern-requires = "Declaration with `{:extern}` has a requires clause"
+assume-cross-module-termination = "Trait method calls may not terminate (uses `@AssumeCrossModuleTermination`)"
+
+[verus]
+# The install, as scripts/get_toolchain.sh pins it (VERSIONS.md §1.2).
+install = "verus-0.2026.09.27.3cf1832"
+binary = "verus-x86-linux/verus"                       # relative to the install root
+cargo_verus = "verus-x86-linux/cargo-verus"
+version = "0.2026.09.27.3cf1832"
+commit = "3cf18325f0fd0c3040fbdec8c0f2255c0504c91a"
+solver = "verus-x86-linux/z3"
+solver_version = "Z3 version 4.16.0 - 64 bit"
+rust_toolchain = "1.98.1-x86_64-unknown-linux-gnu"
+vstd = "=0.0.0-2026-09-20-0158"
+# Δ56: the course pin, --rlimit 2 = Z3 rlimit 6,000,000 per query
+# (--rlimit N = 3,000,000 × N, VERSIONS.md §1.2).
+rlimit = 2
+z3_rlimit_per_unit = 3000000
+# Δ56: --num-threads always explicit.
+num_threads = 1
+# Δ57: at least 16 GiB per Verus job (measured peak 15.0 GB with
+# group_mul_properties); CLAUDE.md §Resources.
+mem_gb = 16
+# Δ58: wall-clock safety kill (a front-end hang is not bounded by --rlimit).
+# timeout_s is the name dvl.verus reads; wall_clock_s mirrors [dafny].
+wall_clock_s = 1800
+timeout_s = 1800
+# Δ47: the E0H empty-body mode runs at 10 x the rlimit pin (--rlimit 20).
+high_rlimit_factor = 10
+# Empty-body gate (Δ47, Δ58; DV2a fix round): per-mode wall clocks, shorter
+# than the course net above; a kill counts as that variant failing (Δ58),
+# never as a pass. BV is one whole-goal `assert(...) by (bit_vector)`. On the
+# pin it either closes within seconds or not at all: measured 2026-10-04,
+# every closing BV job (64-bit and, or, shifts, a masked 64-bit product) took
+# 0.4-1.2 s including the front end, while on goals over Seq and recursive
+# spec fns (Q01-Q03's seven Verus proof holes, Δ113) the front end spun to the
+# 1800 s net on every seed, about 1.5 h per hole. 120 s is 100x the slowest
+# closing run and brings that cost to 6 min per hole.
+eb_mode_timeout_s = { BV = 120 }
+# Concurrent Verus jobs across processes when DVL_VERUS_JOBS is unset.
+jobs = 1
+# Δ59: seeds via --smt-option smt.random_seed=<S> (changes rlimit counts, not
+# verdicts, on small files). Δ13: the only --smt-option the wrapper accepts.
+seeds = [1, 2, 3]
+seed_smt_option = "smt.random_seed"
+# QPLAN §6 Q29: `vcheck --brittleness` flags (never gates) a function whose
+# rlimit counts across the seeds spread above this coefficient of variation.
+# Verus checks its Z3's version, so it has one solver (VERSIONS.md §1.2).
+spread_flag_cv = 0.20
+# Δ13: the --smt-option names the wrapper accepts (as <name>=<int> only).
+smt_options = ["smt.random_seed"]
+# Δ13, Δ21, Δ85: scrubbed from every Verus job's environment (dvl.verus builds
+# the job environment from nothing and refuses a job these would reach).
+scrub_env = ["VERUS_Z3_PATH", "VERUS_EXTRA_ARGS", "RUSTFLAGS", "RUSTC_WRAPPER"]
+# Δ13: refused on any Verus command line (and any --rlimit other than the pin,
+# any --smt-option other than smt.random_seed=<int>).
+refused_args = ["--no-verify", "--no-lifetime", "--no-erasure-check", "-V no-solver-version-check", "-V allow-inline-air"]
+# Δ12: the done gate is one run of `verus <root> --crate-type=lib --rlimit <pin>
+# --no-cheating --output-json` (plus --num-threads, Δ56).
+gate_args = ["--crate-type=lib", "--no-cheating", "--output-json"]
+# Δ13: exit codes. 134 (panic) is never a verdict.
+exit_ok = 0
+exit_verify = 1
+exit_usage = 255
+exit_panic = 134
+exit_cargo = 101
+
+# VERSIONS.md §2.4, verbatim as rendered (rustc JSON `message` fields carry the
+# text after the `error: ` / `warning: ` / `note: ` level prefix).
+[verus.messages]
+W-V02 = "verification results:: 1 verified, 0 errors (partial verification with `--verify-*`)"
+W-V03 = "error: postcondition not satisfied"
+W-V04 = "error: assertion failed"
+W-V05 = "error: function body check: Resource limit (rlimit) exceeded; consider rerunning with --profile for more details"
+W-V06 = "error: possible arithmetic underflow/overflow"
+W-V07 = "error: assume/admit not allowed with --no-cheating"
+W-V08 = "error: external_body/assume_specification not allowed with --no-cheating"
+W-V09 = "error: #[verifier::assume_termination] not allowed with --no-cheating"
+W-V10 = "error: unknown prover name for assert-by (supported provers: 'compute_only', 'compute', 'bit_vector', and 'nonlinear_arith')"
+W-V11 = "note: diagnostics via expansion"
+W-V12 = "note: automatically chose triggers for this expression:"
+W-V13 = "error: loop must have a decreases clause"
+W-V15 = "Error: When using --verify-function, use --verify-only-module instead of --verify-module"
+W-V16 = "Error: --verify-function option requires --verify-only-module or --verify-root"
+W-V18 = "warning: uninterpreted functions (`spec` functions defined without a body) need to be marked as `uninterp`"
+W-V19 = "error: Error: The verus_builtin crate was not imported but it is necessary to run Verus. You likely need to add `use vstd::prelude::*;` at the top of a lib.rs or main.rs file."
+W-V22 = "error: to dereference a mutable reference parameter in a postcondition, disambiguate by wrapping it in either `old` or `final`"
+W-V23 = "error: package ID specification `solutions` did not match any packages"
+W-V24 = "Error: Args forwarded to Cargo must precede args forwarded to Verus"
+# W-V26: a failing precondition at a call (captured on the cheat corpus's V12
+# witness crate, DV1c, Δ108).
+W-V26 = "error: precondition not satisfied"
+
+# VERSIONS.md §2.4 Verus templates, as regular expressions (Python `re`).
+[verus.patterns]
+W-V01 = '''^verification results:: (?P<verified>\d+) verified, (?P<errors>\d+) errors?$'''
+# W-V05 with any context before the colon (captured 2026-10-04 by the DV1b Verus
+# lane: `assert_nonlinear_by: Resource limit …` for an `assert … by
+# (nonlinear_arith)`); the [verus.messages] form is the function-body one.
+W-V05 = '''^error: (?P<context>[^\n:]+): Resource limit \(rlimit\) exceeded; consider rerunning with --profile for more details$'''
+# W-V14, also with the warning count a run with warnings appends (captured
+# 2026-10-04: `aborting due to 1 previous error; 1 warning emitted`).
+W-V14 = '''^error: aborting due to (?:(?P<n>\d+) )?previous errors?(?:; (?P<w>\d+) warnings? emitted)?$'''
+W-V17 = '''^error: more than one match found for --verify-function (?P<name>\S+)'''
+W-V21 = '''^error: `(?P<path>[^`]+)` is not supported'''
+W-V25 = '''^The verifier expects z3 version "(?P<want>[^"]+)", found version "(?P<got>[^"]+)"$'''
+
+[container]
+# DV4-PLAN §5.9 and §5.10 (DV4 step 1c): the two container modes of
+# dvl.common.run_capped (DVL_CAP=container-verify | container-agent, set by
+# scripts/mksandbox-run) and the sandbox's memory arithmetic. Read from these
+# read-only pins only, never from the environment. All sizes in GiB [A].
+# A container's --memory (= --memory-swap) is the largest pinned job cap of
+# its languages + margin_gb + the three tmpfs caps (Dafny 8 + 1 + 2.5 = 11.5,
+# Verus 16 + 1 + 2.5 = 19.5), plus agent_allowance_gb in an agent container
+# (15.5, 23.5). In container mode a solver job runs only when the
+# container's own memory.max is set and at most that bound.
+margin_gb = 1
+work_gb = 0.5
+tmp_gb = 1.5
+home_gb = 0.5
+agent_allowance_gb = 4

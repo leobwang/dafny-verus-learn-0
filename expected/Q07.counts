@@ -1,0 +1,82 @@
+# expected/Q07.counts — Δ11 count pins for Q07: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q07` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q07"
+
+[[unit]]
+path = "dafny/Q/Q07_InternalsI/std"
+lang = "dafny"
+reference_verified = 134
+min_verified = 9
+symbols = ["Q07_InternalsI.AddCarriesTwice", "Q07_InternalsI.DivLimbBound", "Q07_InternalsI.DivLimbStep", "Q07_InternalsI.FromNatSource", "Q07_InternalsI.LimbProductBelow", "Q07_InternalsI.NonzeroLimbProduct", "Q07_InternalsI.ThreeLimbs", "Q07_InternalsI.TwoLimbsByFuel", "Q07_InternalsI.TwoLimbsByHand"]
+
+[[unit]]
+path = "verus/q/q07_internals_i"
+lang = "verus"
+reference_verified = 20
+min_verified = 10
+symbols = ["lemma_div_weight_succ", "lemma_limb_product_at_most", "lemma_low_byte_value", "lemma_mask_is_rem", "lemma_three_limbs", "lemma_two_limbs_by_fuel", "lemma_two_limbs_by_hand", "lemma_two_limbs_then", "port::lemma_mirror_meets_port", "split_word"]
+
+[[file]]
+path = "dafny/Q/Q07_InternalsI/std/Q07_InternalsI.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "verus/q/q07_internals_i/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "verus/q/q07_internals_i/src/port.rs"
+role = "exercise"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "dafny/checks/Q07_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q07_InternalsI/exit/Q07_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q07_internals_i/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q07_InternalsI/agent/Q07_AgentRefactor.dfy"
+role = "agent"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "verus/q/q07_internals_i/src/agent.rs"
+role = "agent"
+verdict = "verified"
+holes = 0
+errors = 0

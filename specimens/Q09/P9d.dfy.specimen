@@ -1,0 +1,69 @@
+// item: Q09.P9d S12 verdict
+// **P9.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots. Record the first
+// try (`scripts/firsttry.sh Q09 --check`) before you run anything on this file;
+// only then enable the switch below (delete `SLOT: ` from its line), catch the
+// delivery with an instrument, and fill its DIAGNOSIS row in
+// research/q09_forensics.md (ten deliveries: each catch with a different
+// instrument).
+// Claim:
+//   `CmpSelf(a)`: every limb sequence compares equal to itself,
+//   `Cmp(a, a) == 0`.
+// SLOT: CHECK P9d
+module Q09_P9 {
+  // The definitions this delivery is about, as layers L1 and L3 give them
+  // (copies: a specimen stands alone).
+  function Head(s: seq<nat>): nat
+  {
+    if |s| == 0 then 0 else s[0]
+  }
+
+  function Tail(s: seq<nat>): seq<nat>
+  {
+    if |s| == 0 then [] else s[1..]
+  }
+
+  // Three-way comparison of two limb sequences: -1, 0 or 1.
+  function Cmp(a: seq<nat>, b: seq<nat>): int
+    decreases |a| + |b|
+  {
+    if |a| == 0 && |b| == 0 then 0
+    else
+      var c := Cmp(Tail(a), Tail(b));
+      if c != 0 then c
+      else if Head(a) < Head(b) then -1
+      else if Head(a) > Head(b) then 1
+      else 0
+  }
+
+  // Delivered: a sequence never compares above itself.
+  lemma CmpSelf(a: seq<nat>)
+    ensures Cmp(a, a) <= 0  // planted: Q09.P9d
+    decreases |a|
+  {
+    if |a| > 0 {
+      CmpSelf(Tail(a));
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/q/fixtures/q18/K1"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "verus",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.0343,
+    "max": 15811,
+    "min": 14689,
+    "solver": null,
+    "symbol": "gate2_k1::lemma_stair_closed"
+   },
+   {
+    "cv": 0.0,
+    "max": 976,
+    "min": 976,
+    "solver": null,
+    "symbol": "gate2_k1::stair"
+   }
+  ],
+  "stable": false,
+  "target": "<root>/harness/tests/q/fixtures/q18/K1",
+  "verdicts": {
+   "1": "failed",
+   "2": "failed",
+   "3": "failed"
+  }
+ },
+ "exit_code": 1,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "4a661b9019ca3f57697f7956243c0c068fd9c6d1e817522e25837fbfde7f140f",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/K1"
+}

@@ -1,0 +1,25 @@
+// Card demo Q01.C3d (calling a lemma), the failure half. The success half is `HeadCall`
+// in dafny/Q/Q01_Hello/core/Q01_Hello.dfy; here the caller cannot establish the lemma's
+// `requires`. Run it with `scripts/vcheck specimens/Q01/card-c3d.dfy.specimen`; the
+// EXPECT line at the end pins the message the verifier gives (line and fragment).
+// after: Q01.P8dv
+module Q01_CardC3d {
+  // A copy of layer L1's `Head` (a Dafny specimen is verified alone, so it cannot import
+  // the layer).
+  function Head(s: seq<nat>): nat
+  {
+    if |s| == 0 then 0 else s[0]
+  }
+
+  lemma HeadOfNonEmpty(s: seq<nat>)
+    requires |s| > 0
+    ensures Head(s) == s[0]
+  {
+  }
+
+  method HeadCall(s: seq<nat>)
+  {
+    HeadOfNonEmpty(s);
+  }
+}
+// EXPECT @22 "a precondition for this call could not be proved"

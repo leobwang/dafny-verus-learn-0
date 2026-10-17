@@ -1,0 +1,22 @@
+// Demo for card Q07.C7dv (divergence), the Dafny column. Open it only after
+// every prediction of Q07 is recorded (scripts/firsttry.sh Q07 --check). Its
+// pinned run is `scripts/vcheck` (the sidecar's command); run it the same way.
+// after: Q07.P2dv
+module Q07_CardC7d {
+  lemma DivideMinusSeven()
+    ensures (-7) / 2 == -4 && (-7) % 2 == 1
+  {
+  }
+
+  method HalfOfMinusSeven(x: int) returns (r: int)
+    requires x == -7
+    ensures r == -4
+  {
+    r := x / 2;
+  }
+
+  function Ratio(x: int, d: int): int
+  {
+    x / d
+  }
+}

@@ -1,0 +1,50 @@
+// item: Q15.P3d S10 verdict
+// **P3.** Pipeline forensic, first pass. This file is a contractor's delivery, and it
+// looks green: run plainly, the verifier reports no error on it. Comments and names
+// are contractor prose: unchecked; only a tool's own output counts as evidence. The one
+// comment that is not contractor prose is the course's `planted:` marker: every Q15
+// delivery carries exactly one, on the line of its defect, so it says where to look and
+// nothing about the stage or the instrument. BEFORE
+// you run any instrument on this file, read it and name, first, the stage of the
+// delivery's pipeline where its defect lives:
+//   input    part of what the claim rests on was never given to the verifier to
+//            check: the verifier saw less of the delivery than the claim needs,
+//            whatever it said about the rest;
+//   options  a setting changes how the verifier checks what it does see, so a
+//            pass means less than a plain pass;
+//   trust    the verifier was told to take a step without proof: it checked what
+//            follows from the step, never the step itself;
+//   test     the delivery's own test never ran, or ran and did not pass;
+// then the instrument that shows it: the FIRST of these, in this order, whose result is
+// not a pass:
+//   vcheck   `scripts/vcheck <file>` (a pass: verified, with 0 holes);
+//   gate     `scripts/vcheck --gate <file>` (a pass: verified, exit 0);
+//   vaudit   `scripts/vaudit <file>` (a pass: 0 findings);
+//   test     `scripts/vcheck --test <file>` (a pass: every test ran and passed).
+// Answer form: `<stage> <instrument>`, for example `trust vaudit`, in slots/Q15.slots.
+// Reference Solution: `test vaudit`: `TestLowLimb` has no `{:test}` attribute, so no
+// test runs (and its expectation is wrong: the low limb of BASE + 5 is 5); vcheck and
+// the gate verify, and vaudit reports expect-outside-test; `vcheck --test` says no test
+// ran.
+// Claim:
+//   `LowLimb(n)`: the low limb of a number given as a nat, below BASE; tested by
+//   `TestLowLimb`.
+// after: Q15.P3d
+// CHECK P3d
+module Q15_P3 {
+  const BASE: nat := 18446744073709551616
+
+  // Delivered: the low limb of a number given as a nat.
+  method LowLimb(n: nat) returns (d: nat)
+    ensures d < BASE
+  {
+    d := n % BASE;
+  }
+
+  // Delivered test: the low limb of BASE + 5.
+  method TestLowLimb()
+  {
+    var d := LowLimb(BASE + 5);
+    expect d == 6;  // planted: Q15.P3d
+  }
+}

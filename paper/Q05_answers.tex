@@ -1,0 +1,112 @@
+% Q05_answers.tex — YOUR answers to paper/Q05_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q05_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q05 --- Frames, ownership, modes, wp$\to$VC \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+% Work backwards from R. One line per step; name the rule you apply. Write c
+% for the contents before a call and c' for the contents after it.
+\textbf{(a)} \\
+Step 1: $\WP{t \assign x + y}{R} = \dots$ \quad by the rule for \dots \\
+Step 2: $\WP{y \assign \mathit{Drain}(a, 1)}{\dots} = \dots$ \quad by the rule for \dots \\
+\hspace*{2em} simplified: $\dots$ \quad (which hypothesis fixes which value) \\
+Step 3: $\WP{x \assign \mathit{Drain}(a, 0)}{\dots} = \dots$ \quad by the rule for \dots \\
+\hspace*{2em} simplified: $\dots$ \\
+Result, over $L$ and $s$: $\dots$
+
+\textbf{(b)} Verification condition: $L = 2 \impl \dots$ \quad Decision: \dots \\
+Without the frame postcondition, the step that changes: $\dots$ \\
+Conjuncts of $R$ that can no longer be proved: \dots \\
+For each: start contents $s$, then after each call its result and the contents: \dots \\
+Can a run end that way? \dots \\
+What the failure says, and about what: \dots
+
+\textbf{(c)} The role of \dfy{modifies a}: \dots \\
+The extra obligation, and what discharges it: \dots \\
+With the \vrs{forall} clause deleted, the obligations that fail: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} With $I \equiv 0 \leq i \leq L \wedge \forall j .\; 0 \leq j < i \impl c[j] = 0$: \\
+Entry: $\dots$ \quad Decision: \dots \\
+Maintenance ($\WP{S}{I}$, step by step, the call last): $\dots$ \quad Decision: \dots \\
+Use at exit: $\dots$ \quad Decision: \dots \\
+Termination: $\dots$ \quad Decision: \dots
+
+\textbf{(b)} Without the frame postcondition: \\
+Entry: \dots \quad Maintenance: \dots \quad Use at exit: \dots \quad Termination: \dots \\
+The condition that fails: \dots \\
+A state and a call outcome that satisfy its hypotheses and violate its conclusion: \dots \\
+Reachable by a run? \dots \\
+Could a stronger invariant repair it? \dots \\
+What the failure is about, against Q03's B2: \dots
+
+\textbf{(c)} The conditions that fail: \dots \\
+Why the Dafny \dfy{Drain} needs no such line: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (informal-proof-first)}\label{ans:B3}
+\begin{answer}
+\textbf{Statement.} \dots
+
+\textbf{Induction on / loop invariant / decreases measure:} \dots
+
+\textbf{Base} (entry: the invariant holds before the first iteration)\textbf{:} \dots
+
+\textbf{IH or invariant (stated as a formula):} \dots
+
+\textbf{Step} (one paragraph per branch of the body: the invariant is kept,
+and the measure goes down while staying bounded below)\textbf{:} \dots
+
+\textbf{Use at exit:} \dots
+
+\textbf{Overflow in H4v} (why \texttt{c + x \% 2} fits in a \vrs{u64})\textbf{:} \dots
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement:
+an unfolding, the given assertion, or a new lemma\textbf{):} \dots
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 03.12, lines 1366--1386 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

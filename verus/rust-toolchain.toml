@@ -1,0 +1,6 @@
+# The Rust toolchain the pinned Verus release requires (VERSIONS.md §1.2:
+# 1.98.1-x86_64-unknown-linux-gnu; the minimal profile is enough for verify and
+# --compile). `cargo verus new` writes no such file, so the course ships one (Δ42).
+[toolchain]
+channel = "1.98.1"
+profile = "minimal"

@@ -1,0 +1,18 @@
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 3, "payload": "Z3 version 4.12.1"}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 2, "payload": "<redacted>"}}
+{"jsonrpc": "2.0", "method": "serverStarted", "params": ["4.11.0.0"]}
+{"jsonrpc": "2.0", "method": "dafnyLanguageServerVersionReceived", "params": ["4.11.0.0"]}
+{"id": 1, "jsonrpc": "2.0", "result": {"capabilities": {"experimental": {}, "textDocumentSync": 2, "workspace": {"fileOperations": {}, "workspaceFolders": {"changeNotifications": false}}}, "serverInfo": {"name": "Dafny", "version": "4.11.0.0"}}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"activity": "parsing", "hits": 0, "pruned": 0, "resource": "file:///work/q15/transcript.dfy", "subject": "caching", "total": 1}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 4, "payload": {"activity": "Parse", "resource": "file:///work/q15/transcript.dfy", "time": 25.2734}}}
+{"jsonrpc": "2.0", "method": "dafny/compilation/status", "params": {"message": null, "status": "ResolutionStarted", "uri": "file:///work/q15/transcript.dfy", "version": 1}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 4, "payload": {"activity": "ModuleResolution", "resource": "_module.TranscriptProbe", "time": 39.8524}}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 4, "payload": {"activity": "ModuleResolution", "resource": "_module", "time": 0.4955}}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"activity": "resolution", "hits": 0, "pruned": 0, "resource": "file:///work/q15/transcript.dfy", "subject": "caching", "total": 2}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 4, "payload": {"activity": "Resolution", "resource": "file:///work/q15/transcript.dfy", "time": 88.7301}}}
+{"jsonrpc": "2.0", "method": "telemetry/event", "params": {"kind": 4, "payload": {"activity": "LegacyServerResolution", "resource": "file:///work/q15/transcript.dfy", "time": 10.4186}}}
+{"jsonrpc": "2.0", "method": "dafny/textDocument/symbolStatus", "params": {"namedVerifiables": [{"nameRange": {"end": {"character": 17, "line": 1}, "start": {"character": 11, "line": 1}}, "status": 1}, {"nameRange": {"end": {"character": 19, "line": 3}, "start": {"character": 8, "line": 3}}, "status": 1}, {"nameRange": {"end": {"character": 19, "line": 8}, "start": {"character": 8, "line": 8}}, "status": 1}], "uri": "file:///work/q15/transcript.dfy", "version": 1}}
+{"jsonrpc": "2.0", "method": "dafny/compilation/status", "params": {"message": null, "status": "ResolutionSucceeded", "uri": "file:///work/q15/transcript.dfy", "version": 1}}
+{"jsonrpc": "2.0", "method": "textDocument/publishDiagnostics", "params": {"diagnostics": [{"code": 0, "message": "a postcondition could not be proved on this return path", "range": {"end": {"character": 3, "line": 10}, "start": {"character": 2, "line": 10}}, "relatedInformation": [{"location": {"range": {"end": {"character": 23, "line": 9}, "start": {"character": 22, "line": 9}}, "uri": "file:///work/q15/transcript.dfy"}, "message": "this is the postcondition that could not be proved"}], "severity": 1, "source": "Verifier"}], "uri": "file:///work/q15/transcript.dfy", "version": 1}}
+{"jsonrpc": "2.0", "method": "dafny/textDocument/symbolStatus", "params": {"namedVerifiables": [{"nameRange": {"end": {"character": 17, "line": 1}, "start": {"character": 11, "line": 1}}, "status": 5}, {"nameRange": {"end": {"character": 19, "line": 3}, "start": {"character": 8, "line": 3}}, "status": 5}, {"nameRange": {"end": {"character": 19, "line": 8}, "start": {"character": 8, "line": 8}}, "status": 4}], "uri": "file:///work/q15/transcript.dfy", "version": 1}}
+{"id": 2, "jsonrpc": "2.0", "result": null}

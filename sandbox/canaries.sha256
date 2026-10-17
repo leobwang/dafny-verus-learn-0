@@ -1,0 +1,21 @@
+# sandbox/canaries.sha256: canary tokens by hash (DV4-PLAN §5.4 item 2).
+# One line per canary: the sha256 of the full token (the public prefix
+# DVLCANARY- and a random suffix), two spaces, and the tree it marks. The
+# sandbox self-test refuses any staged file that carries the public prefix and
+# names the tree by the token's hash, so a study-mode run needs no secret and
+# reads no reference tree. Planted by the DV5c gaps lane (DV4-PLAN §14 Q5):
+# one file named DVLCANARY at the top of each reference tree, the hidden
+# truth, the author cache and each public set's answers/ (the last written by
+# scripts/get_bench.sh from the set's name and pinned commit, outside the
+# set's digest). The token is the file's first line; nothing else is secret.
+67a71b90b1272f450b34bc861016fa624bac2feaf760cf5677bc6fe3ff185e30  Solutions/
+627593c50e7dc2ca384c935f9f09e87c11442722862c326e3c278aca1c6880e9  paper/solutions/
+fe92544652afb45414314bc870c5d1a85426b0c706ca5aa6d0563d24229e6404  tests/instructor/leak_patterns/
+0da275fd8252013f531377fd0e5b9aaea67a61268d4cc66dcf1969b3b71b0bcb  tests/instructor/fixtures/
+ec4c8ab38a6fb0cbb4dcf39cd4727fa68fd8298b6c590e75c52779d296efa316  Hidden/
+f4e37ffe19ae17c024d47d91ffd9dbb94fcbce000b9ef31e010caf433c4967fc  ~/.cache/dafny-verus-learn-0/
+0142eaf16ce224324d0d8fdbd8741d0aa26c3225eed7006e1774e406cb55fe9c  bench/public/dafnybench/answers/
+03891650e52b8d70bcaee9b9bbc861ab4e00060a1d9daf002daada32f6a864e6  bench/public/humaneval-verus/answers/
+2ca659a92035413a33686b3e0b970b09be0b82e0e0a8da5aec157ce76629682a  bench/public/vericoding/answers/
+110267cc77c207291787de78b19e3d89344f99dbc392dedebd37f2fd67210cf6  bench/public/lemmascript/answers/
+1584f4b943876686af8abc94a3302554931e82bc4816fb7e475913930d5c2622  bench/public/minif2f-dafny/answers/

@@ -1,0 +1,372 @@
+# expected/Q15.chapter.toml — the chapter pins of Q15's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q15 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "p1d-client"
+kind = "recorded"
+answers = ["Q15.P1d"]
+source = "~/.cache/dafny-verus-learn-0/author-probes/dv5b/q15ch/p1d-client.txt"
+note = "Q15.P1d settled, after P1's box: the author's run of the reference client's live check (fvh_q.lsp_client's main) on P1's file, the pinned server through fvh.lsp.start_server; recorded 2026-10-11 (the record names the copy of the reference client used). The file path is redacted to p1.dfy."
+[entry.normalize]
+replace = [["/tmp/dvl0-dv5b-q15ch/p1/", ""]]
+[entry.pinned]
+body = "9072f70b320fb556427b63f5aa11b8fb0d93a208551ee066d6d4eca3a6d2c105"
+
+[[entry]]
+id = "p1-vcheck"
+cmd = ["scripts/vcheck", "--module", "Q15", "p1.dfy"]
+cwd = "scratch"
+answers = ["Q15.P1d"]
+note = "S9: the same file through the wrapper, which counts the bodyless lemma as a hole; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "b7f46e973ae8150b0c3d3eb90f3156d8e9881de2429a79ada88acf8da42eedac"
+[entry.pinned.inputs]
+"scratch:p1.dfy" = "4d2b37183e049f2c8843d01a0791e0c1125cd184e88f86426b9e63cb429c6130"
+
+[[entry]]
+id = "p2d-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q15/P2d.dfy.specimen"]
+note = "P2d's instrument vcheck, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "241f5cc3e930301dade151c50a2481e683d82a158800d15bb2d3b98b83f73b12"
+[entry.pinned.inputs]
+"specimens/Q15/P2d.dfy.specimen" = "16bb17fd79d0ed9ed4c405fd2b9f5bf405d283c4824421e84b26d5e11cdfe6b0"
+
+[[entry]]
+id = "p2d-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q15/P2d.dfy.specimen"]
+note = "P2d's instrument gate, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2f66455e58566eaaae784092f740a49105571b5a629fddf8c275bc2044793bd1"
+[entry.pinned.inputs]
+"specimens/Q15/P2d.dfy.specimen" = "16bb17fd79d0ed9ed4c405fd2b9f5bf405d283c4824421e84b26d5e11cdfe6b0"
+
+[[entry]]
+id = "p3d-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q15/P3d.dfy.specimen"]
+note = "P3d's instrument vcheck, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ce258c96dc8929b290d3e349670e8a9d7a68cb73f1ded4ef02ea8b4ae0a4a413"
+[entry.pinned.inputs]
+"specimens/Q15/P3d.dfy.specimen" = "3514ed65e3f501bf4ba1f0b73c8b18d083b78aa01503ab3ae3e0ed468a0ed887"
+
+[[entry]]
+id = "p3d-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q15/P3d.dfy.specimen"]
+note = "P3d's instrument gate, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d1aae7d44bb7e5ff1a5c5c1101355666ad2ef9489f1a1a67446859657ac49620"
+[entry.pinned.inputs]
+"specimens/Q15/P3d.dfy.specimen" = "3514ed65e3f501bf4ba1f0b73c8b18d083b78aa01503ab3ae3e0ed468a0ed887"
+
+[[entry]]
+id = "p3d-vaudit"
+cmd = ["scripts/vaudit", "specimens/Q15/P3d.dfy.specimen"]
+note = "P3d's instrument vaudit, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4ce49f655e67668e7bce358e735f2ebda121a9c172399ee3e23c65cf6a33e9ed"
+[entry.pinned.inputs]
+"specimens/Q15/P3d.dfy.specimen" = "3514ed65e3f501bf4ba1f0b73c8b18d083b78aa01503ab3ae3e0ed468a0ed887"
+
+[[entry]]
+id = "p4v-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q15/P4v.rs.specimen"]
+note = "P4v's instrument vcheck, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1f26b5916acb0d58078ea7df2c4da976087021bef45e90a4d2da5d702344df38"
+[entry.pinned.inputs]
+"specimens/Q15/P4v.rs.specimen" = "6c948134ed8ddfbe3aaf09c06829d443ab65057e8ac708fd5e75a7d8fa751ba5"
+
+[[entry]]
+id = "p5v-vcheck"
+cmd = ["scripts/vcheck", "specimens/Q15/P5v.rs.specimen"]
+note = "P5v's instrument vcheck, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a738c382128fdd1ddaa80ad8417a525cd9017f6a3b2ed08b90ef3948925c8392"
+[entry.pinned.inputs]
+"specimens/Q15/P5v.rs.specimen" = "613f2b69acd1f9ab8a514a8c5f37f3b6364d8da42c3dc1ead931f36dda7e9d07"
+
+[[entry]]
+id = "p5v-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/Q15/P5v.rs.specimen"]
+note = "P5v's instrument gate, in the specimen header's order; after the shared S10 box (its after: line)."
+[entry.normalize]
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "faa1b235bc470d91a7948a44db119bd70a22f584e9f080c2d2bfce36530774ad"
+[entry.pinned.inputs]
+"specimens/Q15/P5v.rs.specimen" = "613f2b69acd1f9ab8a514a8c5f37f3b6364d8da42c3dc1ead931f36dda7e9d07"
+
+[[entry]]
+id = "g01"
+cmd = ["scripts/vcheck", "tools/Q15/battery/dafny/G01.dfy", "tools/Q15/battery/verus/G01.rs"]
+answers = ["Q15.P6dv"]
+note = "Battery goal G01 as shipped, both forms (Q15.P6dv); after the shared S11 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2adda556533dabcdb6bcf806fc0a2d4584beed20c61ccd22a6db93d7eae9bbec"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G01.dfy" = "1d5b1a78515056c8ec8875bd861ac659f70fb989d6aab8ecceba7b6cc7298c1e"
+"tools/Q15/battery/verus/G01.rs" = "440a61948f85bb24b9aa64f7e4773ed093ad97736ffcb73ce4322b841c3a1521"
+
+[[entry]]
+id = "g02"
+cmd = ["scripts/vcheck", "tools/Q15/battery/dafny/G02.dfy", "tools/Q15/battery/verus/G02.rs"]
+answers = ["Q15.P7dv"]
+note = "Battery goal G02 as shipped, both forms (Q15.P7dv); after the shared S11 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "36b4e627f42eca9ed5c87d4591fc38e16770469810106e31396b24e809a25fe8"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G02.dfy" = "4e3458642a0debcb492e8a734a859f83119d520d6ac005d5567c061d429a37b7"
+"tools/Q15/battery/verus/G02.rs" = "199666497986047ace173007157b7d2667f1c002100cb88bc1b20470d49a364f"
+
+[[entry]]
+id = "g03"
+cmd = ["scripts/vcheck", "tools/Q15/battery/dafny/G03.dfy", "tools/Q15/battery/verus/G03.rs"]
+answers = ["Q15.P8dv"]
+note = "Battery goal G03 as shipped, both forms (Q15.P8dv); after the shared S11 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e8ce118921b498573800d76f670c662c90cbcd2d51d794e26fc03e8f9b99565a"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G03.dfy" = "c3be697367153c8fa67b82c73952b017ec6d6beda619f817c15e2805db2e7cdb"
+"tools/Q15/battery/verus/G03.rs" = "cb3ba02b3a36a928794d1d0bff2335707cec9c32b64c8e0ea3452a836c90f46b"
+
+[[entry]]
+id = "g07"
+cmd = ["scripts/vcheck", "tools/Q15/battery/dafny/G07.dfy", "tools/Q15/battery/verus/G07.rs"]
+answers = ["Q15.P9dv"]
+note = "Battery goal G07 as shipped, both forms (Q15.P9dv); after the shared S11 box."
+[entry.normalize]
+drop = ["^raw output: ", "^   at ", "^--- End of stack trace"]
+[entry.pinned]
+body = "a55ae7445f36c2221f3114f568a8559517d04a4acbc8749c57486327ce360345"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G07.dfy" = "87ece0bd6c93abd97a1d30858a0a065752f09af16695618758f13c5dc25c2f63"
+"tools/Q15/battery/verus/G07.rs" = "3cb5b735a14325269e0a495fdf763d66abdd89081ac8c8b57d09990cef8380ef"
+
+[[entry]]
+id = "g09"
+cmd = ["scripts/vcheck", "tools/Q15/battery/dafny/G09.dfy", "tools/Q15/battery/verus/G09.rs"]
+answers = ["Q15.P10dv"]
+note = "Battery goal G09 as shipped, both forms (Q15.P10dv); after the shared S11 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "051d8388f3d64767e151457e5d1ee228175738425e923a3a8cf42a9047b05296"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G09.dfy" = "17e3b49b006adcf1d5a49528f0760ba0c4898488c5c30911906cb42d20eaa8af"
+"tools/Q15/battery/verus/G09.rs" = "b5d188210f3cad677a3569bbf55310e99a57c1ce38bba1b39f58a24f11ddef2a"
+
+[[entry]]
+id = "g10"
+cmd = ["scripts/vcheck", "tools/Q15/battery/dafny/G10.dfy", "tools/Q15/battery/verus/G10.rs"]
+answers = ["Q15.P11dv"]
+note = "Battery goal G10 as shipped, both forms (Q15.P11dv); after the shared S11 box."
+[entry.normalize]
+drop = ["^raw output: ", "^   at ", "^--- End of stack trace"]
+[entry.pinned]
+body = "249abdf40a004507bc1bfe73d2ea23d9fd89e79cef96439c603778be5dc7b88e"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G10.dfy" = "c46ffa5507cb80750ba78070163b70cd0d45f3c4f90d90660c76ba681e34e2fb"
+"tools/Q15/battery/verus/G10.rs" = "2c75baf5ede5175c279ca59014bbff56453e2aefa324eae5855055f52edebc39"
+
+[[entry]]
+id = "refute-claim"
+cmd = ["scripts/vcheck", "--module", "Q15", "refute1.dfy"]
+cwd = "scratch"
+note = "S12 on a toy: a false claim with an empty proof fails, which does not show it false."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."refute1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "6bedcca17fc3c677adac141f8c1e4f543aeda2f78534994b37fec1d3d2a010b1"
+[entry.pinned.inputs]
+"scratch:refute1.dfy" = "f1947ff9b807ab293d74a19a58ff5664a0e7aa8317d82339f3682d71185032c7"
+
+[[entry]]
+id = "refute-repair"
+cmd = ["scripts/vcheck", "--module", "Q15", "refute2.dfy"]
+cwd = "scratch"
+note = "S12 on a toy: the refutation lemma and the repaired claim both verify."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."refute2.dfy"]
+fence = "above"
+[entry.pinned]
+body = "978d36db9b510047f7316f0e1855bce8668d17e5781fe62e4466a6c7585fff9b"
+[entry.pinned.inputs]
+"scratch:refute2.dfy" = "c002ae329360a183a76c355226e179d6b96a06e926c5de6e93e9f8d37feb8d3d"
+
+[[entry]]
+id = "mutant-weak"
+cmd = ["scripts/vcheck", "--module", "Q15", "next1.dfy"]
+cwd = "scratch"
+note = "S13 on a toy: a lit+ mutant survives a weak specification."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."next1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "4b4c30e9cf6b6397f39c4443b14f2e360ce52745cb6f786e5d19e78ae6cebe5d"
+[entry.pinned.inputs]
+"scratch:next1.dfy" = "c19cd83cbf33fa152313292fe7ac14feecdeba29642dbc647da9c70a4d98ea77"
+
+[[entry]]
+id = "mutant-faithful"
+cmd = ["scripts/vcheck", "--module", "Q15", "next2.dfy"]
+cwd = "scratch"
+note = "S13 on a toy: the same mutant is killed by a specification that pins the result."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."next2.dfy"]
+fence = "above"
+[entry.pinned]
+body = "b283b71a748a5a0f98a47c1ca716fb9b430d109b773e29315e0740e897cb5631"
+[entry.pinned.inputs]
+"scratch:next2.dfy" = "52dc01f913060fd35acfcf25658e518055ae696dac23d9aa1e7e572f872f2aab"
+
+[[entry]]
+id = "vacuity-container"
+kind = "recorded"
+source = "~/.cache/dafny-verus-learn-0/author-probes/dv5b/fix/vac-container.txt"
+note = "S13: the author's run of the given vacuity oracle on a toy task on its default route (write_target's Lab 2 layout, fvh.tools.run's own ContainerRunner, module Q15 from the stratum), each generated lemma verified in a fresh verification container, 2026-10-11 (DV5b review fix); the probe script is in the record's directory."
+[entry.pinned]
+body = "33ae4d663885f578f9ad15f920cd5ba729af0314d6dc31f40118831d7dceb648"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q15"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs"]
+note = "The two verifier units as shipped (§10)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "cbcb3220a1f97018bcea3d85388de6b98666a5b5aa03d6b191593a6c55e3077f"
+[entry.pinned.inputs]
+"dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy" = "9eeac2844082ab0da1ee9e9fae1a129a3910b3ece59e5285046e9a38e35f3ddb"
+"dafny/Q/Q15_PracticeIIC/exit/Q15_Exit.dfy" = "12de6acd5b4e50929b71282c9735c7a30a95ad13fe8531f378f2dd75cdedc284"
+"dafny/Q/Q15_PracticeIIC/std/Q15_Lab2Specs.dfy" = "f33a5472ddc99ea4048bdf2300eebb411ac2c789d68fe271396911f39b46ba71"
+"dafny/Q/Q15_PracticeIIC/std/Q15_PracticeIIC.dfy" = "d77af38a524b30c38a058e6eb2cc375dfc1620afeb16e0f42f533949d28c1332"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"instructor/calib/Q15.tsv" = "absent"
+"slots/Q15.slots" = "bdd113685a2485df843969fdb381c307ab7da10ff226ef303bc874e88e71fd24"
+"specimens/Q15/P2d.dfy.specimen" = "16bb17fd79d0ed9ed4c405fd2b9f5bf405d283c4824421e84b26d5e11cdfe6b0"
+"specimens/Q15/P3d.dfy.specimen" = "3514ed65e3f501bf4ba1f0b73c8b18d083b78aa01503ab3ae3e0ed468a0ed887"
+"specimens/Q15/P4v.rs.specimen" = "6c948134ed8ddfbe3aaf09c06829d443ab65057e8ac708fd5e75a7d8fa751ba5"
+"specimens/Q15/P5v.rs.specimen" = "613f2b69acd1f9ab8a514a8c5f37f3b6364d8da42c3dc1ead931f36dda7e9d07"
+"tools/Q15/toolsmith.py" = "0089a52310939a59f1cdf7d46e59821561ecef9f1d777301d81c6b08c2a27ce4"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/q/q15_practice_iic/src/agent.rs" = "201fb679647924aef91a73e71d64086706efd48ad9a9a2953cc92d74986cda03"
+"verus/q/q15_practice_iic/src/exit.rs" = "0ecf6a0b9e29b58489e935408efdb35b91eaefe0e5471c9571f31012fadce901"
+"verus/q/q15_practice_iic/src/lab2_specs.rs" = "45ba4e4e7202b3fe331b5f34649b989f6dcd09d55dcdf4e6b74e85d57c343148"
+"verus/q/q15_practice_iic/src/lib.rs" = "52519735e3d9f5920c16d7eb5ed69e516500a8e5121b3e3e94a34876f9736d3c"
+
+[[entry]]
+id = "py-lsp"
+cmd = ["scripts/vcheck", "harness/q/fvh_q/lsp_client.py"]
+excerpt = [1, 4]
+note = "The client's file through its frozen tests (§10); the failing-test lines are cut."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "aed699234ad343d55f9977edd5c3899e92dee52133b47f7b7c62b83fb00e9287"
+[entry.pinned.inputs]
+"harness/q/fvh_q/lsp_client.py" = "b559352312f98986dd3024ab7a72827f205444717eadc8563d6cd244ca764265"
+
+[[entry]]
+id = "py-oracles"
+cmd = ["scripts/vcheck", "harness/q/fvh_q/oracles.py"]
+excerpt = [1, 5]
+note = "The oracles' file through its frozen tests (§10); the failing-test lines are cut."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "7c63ae1aa84d88c492cc6fa15ff8c4b49cfbc965f26402f1bc0d8f8fc2e00400"
+[entry.pinned.inputs]
+"harness/q/fvh_q/oracles.py" = "949f51dfa31832fe0f90b1f5f326dbb74082ed45ee32dcd6ad77859aaf27edd1"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy"]
+note = "Rung 11's Dafny file as shipped (§11)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "635d5f25ccea514b4f3991f4492438a7fecb89c07c5d03a1f85617304b40ed0f"
+[entry.pinned.inputs]
+"dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy" = "9eeac2844082ab0da1ee9e9fae1a129a3910b3ece59e5285046e9a38e35f3ddb"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/q/q15_practice_iic/src/agent.rs"]
+note = "Rung 11's Verus file as shipped (§11)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "8a8ba6c4d5e4eb93545ec64dd4bd50211402804db58035f8927e11ae552c686a"
+[entry.pinned.inputs]
+"verus/q/q15_practice_iic/src/agent.rs" = "201fb679647924aef91a73e71d64086706efd48ad9a9a2953cc92d74986cda03"
+
+[[entry]]
+id = "dashboard-localizer"
+cmd = ["scripts/vcheck", "--gate", "dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy"]
+note = "Agentic dashboard: shipped state; the reader supplies statement fidelity."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ca78dcfd60050a4fdb334a654c4863d84913a1d0c3fe29958306eec3db8f77c7"
+[entry.pinned.inputs]
+"dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy" = "9eeac2844082ab0da1ee9e9fae1a129a3910b3ece59e5285046e9a38e35f3ddb"
+
+[[entry]]
+id = "dashboard-toolsmith"
+cmd = ["scripts/vcheck", "--gate", "tools/Q15/battery/dafny/G01.dfy"]
+note = "Agentic dashboard: shipped state; the reader supplies statement fidelity."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3a13d640e7a38d913b7f3c043270c1260b3d32ed47452f720073eed3a6b61078"
+[entry.pinned.inputs]
+"tools/Q15/battery/dafny/G01.dfy" = "1d5b1a78515056c8ec8875bd861ac659f70fb989d6aab8ecceba7b6cc7298c1e"

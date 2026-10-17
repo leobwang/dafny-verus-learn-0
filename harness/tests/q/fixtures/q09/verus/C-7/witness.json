@@ -1,0 +1,52 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/C-7/witness"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/C-7/witness/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_vc7_witness",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--import",
+   "corpus_vc7=<scratch>",
+   "--extern",
+   "corpus_vc7=<scratch>",
+   "-L",
+   "<scratch>",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "witness": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/C-7/witness",
+  "verdict": "verified",
+  "verified_count": 1
+ },
+ "exit_code": 0,
+ "instrument": "witness",
+ "killed": null,
+ "output_sha256": "9f6ce04eb1bfd47187a6b895949aa0e764d6928dab1ae3ba0b4d3eb0e68c86af",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/C-7"
+}

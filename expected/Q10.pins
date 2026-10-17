@@ -1,0 +1,5 @@
+# expected/Q10.pins — one salted sha256 per verdict answer: sha256 of "Q10:<item id>:<answer>",
+# the answer normalized (trimmed, whitespace collapsed). Written by
+# `scripts/pins.py --update --ref --module Q10` from the reference answers. Never the answer itself.
+P1dv  salted-sha256 2c909ca89f9bbf55fcea10d6514dcfda813ef9a0dbf15ce05a78c54fb355c236
+P2dv  salted-sha256 74336fdb44cb2ab195078666dd67cf6cc89a474334c8cfbd8c9565c844edd47a

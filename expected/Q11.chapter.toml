@@ -1,0 +1,133 @@
+# expected/Q11.chapter.toml — the chapter pins of Q11's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q11 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "p1dv-d"
+cmd = ["scripts/vcheck", "--module", "Q11", "cell.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q11.P1dv"]
+note = "Q11.P1dv's Dafny half, the docstring's Cell.CopyTo with modifies this; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."cell.dfy"]
+fence = "above"
+[entry.pinned]
+body = "081f822e649afd3fefbc352b5a45b07bf47ba1e1d124fecc94095b7c8da6d3a3"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:cell.dfy" = "f1a887450cd3c44a65db964e973305e405ceeaf197127cccc2ca1a23d96c3da7"
+
+[[entry]]
+id = "p1dv-d-other"
+cmd = ["scripts/vcheck", "--module", "Q11", "cell_other.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q11.P1dv"]
+note = "P1's Dafny method with modifies other; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."cell_other.dfy"]
+fence = "above"
+[entry.pinned]
+body = "5de4d5c026c0d1956012f61b1a8f63245226ad5018ca71381dfa385e53781487"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:cell_other.dfy" = "7835181e3d696914400ea966cb1a43fb9f977500154a19e8cb78efe239bf32f7"
+
+[[entry]]
+id = "p1dv-v"
+cmd = ["scripts/vcheck", "--module", "Q11", "cell.rs"]
+cwd = "scratch"
+answers = ["Q11.P1dv"]
+note = "Q11.P1dv's Verus half, the docstring's copy_to; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."cell.rs"]
+fence = "above"
+[entry.pinned]
+body = "c5972105f000ef26a245692083a6e05ad01b7255b3db7fdddf28a5b9a64453e9"
+[entry.pinned.inputs]
+"scratch:cell.rs" = "d70d352796eabb99f6216d4e8b486403bc3a7b00546b3b52b2f1007efeecf7c9"
+
+[[entry]]
+id = "p2dv-d"
+cmd = ["scripts/vcheck", "--module", "Q11", "bump.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q11.P2dv"]
+note = "Q11.P2dv's Dafny half, the docstring's Bump; after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."bump.dfy"]
+fence = "above"
+[entry.pinned]
+body = "ba98415824c1fe3353ba3d36da7d380e4c41acf62f803c15087a14f58a0946cf"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:bump.dfy" = "6ae96e2a6c95173e04fb334a1088296db85a12fce06ca1efa9c751610d7f34cc"
+
+[[entry]]
+id = "p2dv-v"
+cmd = ["scripts/vcheck", "--module", "Q11", "bump.rs"]
+cwd = "scratch"
+answers = ["Q11.P2dv"]
+note = "Q11.P2dv's Verus half, the docstring's bump; after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."bump.rs"]
+fence = "above"
+[entry.pinned]
+body = "f7c16b457c41646d79569e0b7d5dc741d84a9e6d366ea57b4ec444d752f1ec76"
+[entry.pinned.inputs]
+"scratch:bump.rs" = "955e18410dfef90857b36e854b8e6395351f01074b39700b9d1d247ca613d457"
+
+[[entry]]
+id = "p2dv-d-ret"
+cmd = ["scripts/vcheck", "--module", "Q11", "bump_ret.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q11.P2dv"]
+note = "P2's Dafny method with y as an out-parameter: refused at resolve; after P2's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."bump_ret.dfy"]
+fence = "above"
+[entry.pinned]
+body = "2560bb0351cfed7c8ada444fa9df48c2c8df8295915f5518f3b2a6c9003e3299"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:bump_ret.dfy" = "0ed5354b435c64cb12c6b957803272d84722e9e9740c81a981784a2f97fa004b"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q11"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs"]
+note = "The two units as shipped (§6)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4e7d4fa76f89167d0e5cf2a3ddfc6e4ac7a9997aa604357b064fda3c8fc7b164"
+[entry.pinned.inputs]
+"dafny/Q/Q11_PracticeIB/exit/Q11_Exit.dfy" = "9ef43ccc49a3cd2738e3ee6f84ca6e86a1f45c8ed6a6f87e80e3b28593ff0469"
+"dafny/Q/Q11_PracticeIB/std/Q11_PracticeIB.dfy" = "a195c41a18995aa876dc4deece729f26259914e7a6171a2dc6dc507b3a2e4422"
+"dafny/Q/Q11_PracticeIB/std/Q11_Wp.dfy" = "54b795a063bc9e140cb179980e2cb29b20b5ade53f16947d8eadf3bb85e87944"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"instructor/calib/Q11.tsv" = "absent"
+"slots/Q11.slots" = "5a5f6ceecb5396a3f954363bd6e0168a23256a51a0ddd4dd01319c40897c9ff0"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/q/q11_practice_ib/src/exit.rs" = "38d84c28fc8a3c707b5a9708d2a89e50109b41e4d2247596d1296a06bc239258"
+"verus/q/q11_practice_ib/src/lib.rs" = "a261a1b8e5a75eaae5fe07eaf458ffaf8d72b3d033429c245e6639de3cab3967"
+"verus/q/q11_practice_ib/src/perm.rs" = "cd1c5bd58df37774ecf0b74441ddd58fff276dd81ba5ce2679713e895febb8d0"

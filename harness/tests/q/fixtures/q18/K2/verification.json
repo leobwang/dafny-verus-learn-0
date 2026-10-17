@@ -1,0 +1,34 @@
+{
+  "cmd": [
+    "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "<root>/harness/tests/q/fixtures/q18/K2/src/lib.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "gate2_k2",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time",
+    "--verify-root",
+    "--verify-function",
+    "add_one"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [],
+  "exit_code": 0,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+    "add_one": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/harness/tests/q/fixtures/q18/K2",
+  "verdict": "verified",
+  "verified_count": 1
+}

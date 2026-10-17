@@ -1,0 +1,43 @@
+# avoid.waivers.tsv — the accepted exceptions of scripts/avoid.sh (spec §2.7, design §9.3,
+# PLAN.md §5.4-§5.5). Author-written; under scripts/, so guard rule 2g keeps it out of every
+# learner and contractor edit. Every exception to the disjointness gate is one row here.
+#
+# Columns (tab-separated): id, state, key, source, direction, reason, cost.
+#   id         W<n> / X<n>: a waiver of design §9.3 (X = cross-course); N<n>: a name-only
+#              waiver (a name collision with no shared genre, cost "none").
+#   state      adopted | provisional (the orchestrator adopted it pending a probe).
+#   key        `-`: a GENRE row, a shared genre a name scan cannot see; it is listed, never
+#              claimed as caught, and its item homes in armed modules must exist.
+#              Otherwise a normalized key: a NAME row, waiving the hits with that key whose
+#              source descriptor matches `source` (fnmatch: hole:<item>, bank:<ID>,
+#              paper:<ID>, chapter:<ID>, curated:<name>, artifact:<owner>:<words>,
+#              owner:<owner>:<tag>, corpus:<half>) in that direction. A name row that waives
+#              no hit is an error (stale, like a stale pin) whenever its target track has
+#              declarations in the run.
+#   source     a genre row's homes: "<Q home> → <R home>".
+#   direction  Q→R (Q is the home, R repeats it), R→Q, Lean→R or Lean→Q.
+#   reason     the genre, or why the name stands.
+#   cost       the insight pre-empted for a learner who does the home first.
+# W15-W18 adopted by the orchestrator (DV5a; PLAN.md §5.4, QPLAN §19.7 F23). W19 (provisional) was dropped in DV5c:
+# Q14.H5v and Q17.H2v move no permission out of a tracked map (DELTAS Δ177, Δ211, Δ217).
+id	state	key	source	direction	reason	cost
+W1	adopted	-	Q01–Q18 → R01–R16	Q→R	role ladder: every agentic rung, on harder objects in R	each role's first failure mode (gaming checks, weakening statements)
+W2	adopted	-	Q01 → R01	Q→R	hole contract and the three doors (R01's census and repair files)	silent vs loud holes (about 1.2 h of R01 becomes test-out)
+W3	adopted	-	Q-vN → R-vN (CLAUDE.md contract, EVAL.md, TRUST.md)	Q→R	contract, EVAL.md and TRUST.md sections: R-v0 (R01), R-v1 (R15), R-v2 (R16); EVAL.md R-v0 (R07); TRUST.md R-v0 (R13)	that unenforced contract rules are suggestions
+W4	adopted	-	Q07 → R09	Q→R	port and fidelity audit (R09: the parser port)	that implication lemmas alone are circular
+W5	adopted	-	Q (wp/VC by hand) → R04, R06, R11	Q→R	wp/VC by hand (R: the matcher loop's VCs)	the wp calculus itself (about 30 min of R11 is review)
+W6	adopted	-	Q08–Q17 → R11 (gated)	Q→R	permissions (R: the NFA arena, gated)	the linearity error
+W7	adopted	-	Q13, Q16 → R06	Q→R	invariant generalization (R: the derivative matcher's loop)	"generalize the invariant before proving"
+W8	adopted	-	Q12 → R12	Q→R	agent loop: Q12's retry client, R12's obligation loop (the obligation extractor)	that a verdict loop needs a parser before a model
+W9	adopted	-	Q12 → R12 (Lab α)	Q→R	matched compute (R: one parametric engine, three regimes)	compare at equal calls, not equal attempts (curve crossings stay new)
+W10	adopted	-	Q15 → R15 (Lab β)	Q→R	spec oracles (R: spectest and roundtrip on R cards)	vacuous specs pass verification; mutation kill measures strength (oracle agreement stays new)
+W11	adopted	-	Q09, Q18 → R16	Q→R	the gate: Q09/Q18 in Python, R16 in Rust (rexc trust-report)	fresh-process pinned re-runs (V20) and UNKNOWN on grader-only classes (inflation stays new)
+W12	adopted	-	Q18 → R16	Q→R	framing: Q18's proposal, R16's card and memo	scoping a claim to a small-n replication
+W13	adopted	-	R12, R15 → Q32, Q33	R→Q	R pre-empting the solo agentic modules (avoided under design D2's default order: the agentic topic before the R core)	R12/R15 code may make the solo Q32/Q33 start easier
+W14	adopted	-	Q05 → R09	Q→R	parse with errors (R: the regex-syntax parser)	`:-`/`?` propagation (positions and fidelity stay new)
+W15	adopted	-	Q03.P6dv, Q12 (stage specimens) → R13	Q→R	stage attribution (R: R13's --log evidence on the regex pipeline)	that a failure's stage is read from the tool's own stage report, not guessed from the message (what each stage's fake green exploits stays new)
+W16	adopted	-	Q15.H2d, Q15.H2v → R06.H3, R06.H4	Q→R	refute → repair → prove: Q15's "smallest change", R06's "no stronger one" (a claim about Star and Cat)	that the repair is derived from the counterexample, not chosen to make the proof easy
+W17	adopted	-	Q18 (Lab 3) → R16 (Lab γ)	Q→R	possible and impossible crate tasks as cheat attractors (R: rexc's parser, classes, printer and CLI; impossible kinds Q does not use, PLAN.md §4.3)	that an impossible task turns every claimed success into evidence of a cheat (inflation per class stays new)
+W18	adopted	-	Q15 (Lab 2) → R15 (Lab β)	Q→R	card contamination audit (R: the 24 R cards, audited against card 05.2's defect list)	post-cutoff authorship, novelty review and perturbation probes as controls
+X1	adopted	-	Lean R16 → R16	Lean→R	compiler correctness by generalized simulation (cross-course; R: the VM compiler)	"generalize over the code that follows" (nondeterministic Split stays new)
+N1	adopted	split	chapter:Q07	Q→R	R16's Pike-VM instruction Split (design §8.2: Char, Split, Jmp, Match) vs the u128 word split in Q07's chapter fence: different objects, no shared genre	none (a name only; nothing transfers by renaming)

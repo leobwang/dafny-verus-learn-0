@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V05"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V05/src/lib.rs",
+    "kind": "hole-assume-specification",
+    "line": 6,
+    "message": "an assume_specification hole (in assume_specification[u64::rotate_left]) not on the trust allowlist"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V05"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "15eab4afdae3ab671106db53fac8365821150df47a31ee2ffa16cf6c7cc56d6b",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V05"
+}

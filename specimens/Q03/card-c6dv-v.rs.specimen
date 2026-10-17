@@ -1,0 +1,24 @@
+// Demo for card Q03.C6dv (divergence), the Verus column. Open it only after
+// every prediction of Q03 is recorded (scripts/firsttry.sh Q03 --check).
+// Run it compiled: its pinned run is `verus --compile --test` (the sidecar's
+// command).
+// after: Q03.P1dv
+// after: Q03.P5dv
+use vstd::prelude::*;
+
+verus! {
+
+pub fn seven() -> (r: u64)
+    ensures
+        r == 7,
+{
+    assume(false);
+    8
+}
+
+} // verus!
+
+#[test]
+fn seven_test() {
+    assert_eq!(seven(), 7);
+}

@@ -1,0 +1,14 @@
+// Chapter specimen for docs/Q03_FirstSyntaxII.md §4: the Verus file of Q03.P6dv,
+// verbatim. Open it only after your Q03 predictions are committed; scripts/vcheck
+// refuses it until P6dv's first try is recorded.
+// after: Q03.P6dv
+use vstd::prelude::*;
+
+verus! {
+
+fn m() {
+    let b: bool = 1;
+    assert(1 + 1 == 3);
+}
+
+} // verus!

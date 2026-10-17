@@ -1,0 +1,16 @@
+// Demo for card Q05.C1d (write:dynamic-frames), the failure half: a function that reads
+// the state of `Meter` (the card's class in dafny/Q/Q05_Frames/std/Q05_Frames.dfy) with
+// no `reads` clause. Run it with `scripts/vcheck specimens/Q05/card-c1d.dfy.specimen`;
+// the EXPECT line at the end pins the message the verifier gives (line and fragment).
+// after: Q05.P1dv
+module Q05_CardC1d {
+  class Meter {
+    var count: nat
+
+    function Count(): nat
+    {
+      count
+    }
+  }
+}
+// EXPECT @12 "insufficient reads clause to read field"

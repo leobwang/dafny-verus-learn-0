@@ -1,0 +1,49 @@
+// item: Q09.P12v S12 verdict
+// **P12.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots.
+// Reference Solution: `unchecked`: `add_three` is outside `verus!`, so nothing about it
+// was verified: the run verifies 0 functions (JSON completeness: `verified_count` 0,
+// the symbol absent) and the gate and the audit report code outside `verus!`.
+// Claim:
+//   `add_three(a, b, c)`: for canonical `a`, `b` and `c`, a canonical `BigNat`
+//   whose value is the sum of the three (`requires a.wf(), b.wf(), c.wf();
+//   ensures r.wf(), r.to_nat() == a.to_nat() + b.to_nat() + c.to_nat()`).
+// CHECK P12v
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+// The value the delivery below promises.
+pub open spec fn sum_of_three(a: BigNat, b: BigNat, c: BigNat) -> nat {
+    a.to_nat() + b.to_nat() + c.to_nat()
+}
+
+} // verus!
+
+// Delivered: the sum of three canonical numbers. It is canonical and its value is
+// sum_of_three(*a, *b, *c), because big_add (layer L4) keeps both, twice.
+pub fn add_three(a: &BigNat, b: &BigNat, c: &BigNat) -> BigNat {  // planted: Q09.P12v
+    big_add(&big_add(a, b), c)
+}

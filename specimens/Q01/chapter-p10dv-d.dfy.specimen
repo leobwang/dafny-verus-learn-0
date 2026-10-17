@@ -1,0 +1,9 @@
+module P10 {
+  lemma Open(x: nat)
+    ensures x + 0 == x
+}
+
+// Chapter specimen for docs/Q01_Hello.md, section 12: the file p10.dfy of Q01.P10dv. The
+// chapter quotes the output of `dafny verify p10.dfy` on a copy named p10.dfy, and of
+// scripts/vcheck on this file, which runs it once this prediction is recorded.
+// after: Q01.P10dv

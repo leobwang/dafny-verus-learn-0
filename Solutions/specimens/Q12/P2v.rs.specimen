@@ -1,0 +1,30 @@
+// item: Q12.P2v S9 verdict
+// **P2.** Stage attribution, the machine channel. A short Verus file (below; a specimen
+// of Q12 gets Q12's given layer chain, so `use qg_bignat_l5::*;` resolves), run as
+//     scripts/vcheck --json specimens/Q12/P2v.rs.specimen -- --no-verify
+// (everything after `--` is passed through towards the verifier). The command prints one
+// JSON document. BEFORE you run it, predict the value of the document's `stage` field.
+// Answer form: one of `cli`, `parse`, `resolve`, `verify`, `compile`, `test`, `run`, in
+// slots/Q12.slots.
+// Reference Solution: `cli`: the wrapper refuses `--no-verify` from its pins before
+// any tool runs (it verifies nothing and still exits 0, V18, Δ11); the document says
+// `stage` "cli", `verdict` "refused", `exit_code` null, and vcheck exits 3. Without the
+// flag the file verifies.
+// after: Q12.P2v
+// CHECK P2v
+use vstd::prelude::*;
+use qg_bignat_l5::*;
+
+verus! {
+
+// The value of a canonical number is below the weight of its length.
+pub proof fn lemma_value_below(s: Seq<u64>)
+    requires
+        seq_wf(s),
+    ensures
+        seq_to_nat(s) < weight(s.len()),
+{
+    lemma_seq_to_nat_upper(s);
+}
+
+} // verus!

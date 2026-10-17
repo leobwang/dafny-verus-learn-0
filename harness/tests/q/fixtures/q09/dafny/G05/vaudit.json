@@ -1,0 +1,32 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/G05/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/G05/main.dfy",
+    "kind": "audit-verify-false",
+    "line": 3,
+    "message": "Wrong: Declaration has `{:verify false}` attribute"
+   },
+   {
+    "file": "<root>/tests/corpus/dafny/G05/main.dfy",
+    "kind": "verify-false",
+    "line": 3,
+    "message": "{:verify …} switches verification of a declaration off or on by hand (G5)"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/G05/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "806a365f7e53a6abce4ae08605aefd6fefb244df2b5365105bd1fe7efa6de40a",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/G05/main.dfy"
+}

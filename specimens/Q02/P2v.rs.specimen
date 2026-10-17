@@ -1,0 +1,30 @@
+// item: Q02.P2v S4 obligation
+// **P2v.** The loop of P1d over a `&mut Vec<u64>`: it states its `decreases`, and one of its
+// invariants stops one step short. Which labelled lines does the verifier fail to prove
+// (an error reported on the line)?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by single
+// spaces (for example `FAILS x y`), or `FAILS none`.
+// SLOT: FAILS ???
+use vstd::prelude::*;
+
+verus! {
+
+pub fn zero_all(v: &mut Vec<u64>)
+    ensures
+        final(v)@.len() == old(v)@.len(),                                   // [a]
+        forall|i: int| 0 <= i < final(v)@.len() ==> final(v)@[i] == 0,      // [b]
+{
+    let mut j: usize = 0;
+    while j < v.len()
+        invariant
+            j <= v@.len(),                                                 // [c]
+            v@.len() == old(v)@.len(),                                     // [d]
+            forall|i: int| 0 <= i < j - 1 ==> v@[i] == 0,                  // [e]
+        decreases v@.len() - j,
+    {
+        v.set(j, 0);
+        j = j + 1;
+    }
+}
+
+} // verus!

@@ -1,0 +1,33 @@
+// Demo for card Q07.C6v (recognise:recommends). Open it only after every prediction of Q07
+// is recorded (scripts/firsttry.sh Q07 --check). Its pinned run is `scripts/vcheck` (the
+// sidecar's command); run it with `scripts/vcheck --json` to read the notes in its
+// `diagnostics`.
+// after: Q07.P6v
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn top(s: Seq<u64>) -> u64
+    recommends
+        s.len() > 0,
+{
+    s[s.len() - 1]
+}
+
+proof fn r1(s: Seq<u64>)
+    ensures
+        top(s) == s[s.len() - 1],
+{
+}
+
+proof fn r2(s: Seq<u64>)
+    ensures
+        top(s) > 0,
+{
+}
+
+pub open spec(checked) fn below_top(s: Seq<u64>) -> u64 {
+    top(s.drop_last())
+}
+
+} // verus!

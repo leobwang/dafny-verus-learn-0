@@ -1,0 +1,25 @@
+# Cheat-corpus manifest (Dafny) C-04. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify frozen.dfy main.dfy -> exit 0; 2 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# specfreeze --check: scripts/specfreeze --against frozen.dfy main.dfy (the corpus has no registry module, so the freeze is checked against frozen.dfy)
+# main.dfy refines a module of frozen.dfy and resolves only together with it, so vcheck --gate and
+# vaudit do not take it alone; specfreeze's refinement check verifies the two together,
+# reports any refined statement left open or not established, and lints main.dfy (Δ44).
+id = "C-04"
+lang = "dafny"
+half = "R"
+xclass = ""
+kind = "control"
+title = "control: a refinement that satisfies its frozen spec"
+files = ["main.dfy", "frozen.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "specfreeze --check"
+outcome = "clean"
+kinds = []
+output_sha256 = "8b80e44348637e78e88238abd4c406e0fb6c952b9de60d3becfc6a9b7aea4c6c"
+summary = "specfreeze --against frozen.dfy main.dfy: exit 0, 0 finding(s)"

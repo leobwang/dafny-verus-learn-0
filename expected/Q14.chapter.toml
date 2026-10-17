@@ -1,0 +1,139 @@
+# expected/Q14.chapter.toml — the chapter pins of Q14's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q14 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "trait-ensures"
+cmd = ["scripts/vcheck", "--module", "Q14", "ticker.rs"]
+cwd = "scratch"
+note = "S6, H2v's lesson on a toy: an impl whose body breaks the trait's ensures."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."ticker.rs"]
+fence = "above"
+[entry.pinned]
+body = "1e1360217522accdeb8da117a1a38df0f553156d40d5763809700ab2f984f012"
+[entry.pinned.inputs]
+"scratch:ticker.rs" = "793a13ac4fc2548cff0a3900600f57413ce34ffc856febadc0e14e3907919f56"
+
+[[entry]]
+id = "trait-requires"
+cmd = ["scripts/vcheck", "--module", "Q14", "ticker_req.rs"]
+cwd = "scratch"
+note = "S6: an impl that declares a requires of its own is refused at resolution."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."ticker_req.rs"]
+fence = "above"
+[entry.pinned]
+body = "99f54605d741ab62746f5bcf00795bdfc708442a3c589310628cd4b99b9d9132"
+[entry.pinned.inputs]
+"scratch:ticker_req.rs" = "bfc7bc4d0d75d0fc2ca8a84920bbab76018163384d6bef0fa60ec5c7fbfa53e1"
+
+[[entry]]
+id = "p1dv-d"
+cmd = ["scripts/vcheck", "--module", "Q14", "p1.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml"]
+answers = ["Q14.P1dv"]
+note = "Q14.P1dv's Dafny half, the docstring's Swap2 with no decreases; after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "bfb4d01564e785c7d6110987807e612e668eae4b2abc04b5c730e3baf2c24fd2"
+[entry.pinned.inputs]
+"dafny/options/std.toml" = "3729f64c68c6ce0ee1e6f9e4faa1eee50aba7fcefd99bd685e2356c722000f0e"
+"scratch:p1.dfy" = "f440230d01d6526d7577333d5051095badc526633fd11da757249a7a64d5eac7"
+
+[[entry]]
+id = "p1dv-v"
+cmd = ["scripts/vcheck", "--module", "Q14", "p1.rs"]
+cwd = "scratch"
+answers = ["Q14.P1dv"]
+note = "Q14.P1dv's Verus half, the docstring's swap2 with decreases a.len(), b.len(); after P1's box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p1.rs"]
+fence = "above"
+[entry.pinned]
+body = "e0ee88242bfc5a1d38c2eaa2b7af5676d03cd093adc72c5862f1577efac0b8ca"
+[entry.pinned.inputs]
+"scratch:p1.rs" = "091e89d23f7c315a8b4c8bd86b9321129f88e5d82b558072c6c63a8577e31006"
+
+[[entry]]
+id = "ghost-spec"
+cmd = ["scripts/vcheck", "--module", "Q14", "first_or_zero.rs"]
+cwd = "scratch"
+note = "S7, H3v's rule on a toy: a Ghost<nat> parameter used in the specification only."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."first_or_zero.rs"]
+fence = "above"
+[entry.pinned]
+body = "3e690e1d99ec61f841d268d294dbfd97d2c56c6c3446e532dc00309a3286ab03"
+[entry.pinned.inputs]
+"scratch:first_or_zero.rs" = "54ad8e9bf3da83d45ca273985f3edee2db5c378c454ead11c98ae26e38a67989"
+
+[[entry]]
+id = "ghost-exec"
+cmd = ["scripts/vcheck", "--module", "Q14", "first_or_zero_read.rs"]
+cwd = "scratch"
+note = "S7: the same toy with one exec line reading the ghost parameter, refused at resolution."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."first_or_zero_read.rs"]
+fence = "above"
+[entry.pinned]
+body = "6d24749be7fba5a48fd51905e93633a4f001de00ef0adf6b3314b0e88a416eb9"
+[entry.pinned.inputs]
+"scratch:first_or_zero_read.rs" = "9627a6e7f298837c85a3ba10321dcba4cf21e77aedbddda8bd0a86683f38e8a8"
+
+[[entry]]
+id = "perm-moved"
+cmd = ["scripts/vcheck", "--module", "Q14", "hold.rs"]
+cwd = "scratch"
+note = "S8, H5v's background on a toy: a PointsTo moved into a struct cannot be lent again by its old name."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."hold.rs"]
+fence = "above"
+[entry.pinned]
+body = "0d75bfba1b83ad7ce394d9647d0c25cf48b28f737daea2c342d42842862c923e"
+[entry.pinned.inputs]
+"scratch:hold.rs" = "8e07195bb8dc513699b14bdc4a640b9b5ed78a1976d0debe605c7f0e7389825f"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q14"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "dafny/given/Q/QG_L6_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs", "verus/given/qg_bignat_l6/src/lib.rs"]
+note = "The two units as shipped (§6)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "0bb86695c662d1df6f3182d3a4de5fd5ac53e0c5f34eafaeb279738ec3882dbf"
+[entry.pinned.inputs]
+"dafny/Q/Q14_PracticeIIB/exit/Q14_Exit.dfy" = "3f670c6a5cab470fb3593004d157359922c4cd231761ec69d6d3b95c4d16e8bd"
+"dafny/Q/Q14_PracticeIIB/std/Q14_Loop.dfy" = "09fea9973a237455cc560443e3fa0b9216cd585b91c1e100d8538edcacd73b8f"
+"dafny/Q/Q14_PracticeIIB/std/Q14_PracticeIIB.dfy" = "b059072bd5b0511a30c0d78108d485a35cbf4a7a74e8c39e52683e30ff3a1cd6"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"dafny/given/Q/QG_L6_BigNat.dfy" = "6664f4319cbfd2a64718c7f1c58d173b3d3e142e7a829b9f221421769a2defb5"
+"instructor/calib/Q14.tsv" = "absent"
+"slots/Q14.slots" = "24e80c4d9621ce79236c532fa6f819c375c3ba249e13d769d64c72458fca8af6"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/given/qg_bignat_l6/src/lib.rs" = "8172831054a839fc5017212d950a436f9f777c102a810862e96a720e0d5829be"
+"verus/q/q14_practice_iib/src/exit.rs" = "b65dc75a2afa6db348c6b04456b668878ba7af638c290a2e0468f6a477ecc68d"
+"verus/q/q14_practice_iib/src/lib.rs" = "87bf42c5009a63d2f1c0eb162e2687698ab1cae72e79e0213d210db39018c7c5"
+"verus/q/q14_practice_iib/src/perm.rs" = "088b3f3c20af0baeecf78d387c17ef3bc6d9d61072dfa31ce86d23c4a4b60711"

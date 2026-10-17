@@ -1,0 +1,42 @@
+// item: Q02.P5d S2 obligation
+// **P5d.** Four lemmas with EMPTY bodies, each on its own. `Valid` is a copy of the L1
+// definition (a specimen stands alone). Which labelled postconditions does the verifier
+// fail to prove?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by single
+// spaces (for example `FAILS x y`), or `FAILS none`.
+// SLOT: FAILS ???
+module Q02_P5d {
+  const BASE: nat := 18446744073709551616
+
+  predicate Valid(s: seq<nat>)
+  {
+    forall i | 0 <= i < |s| :: s[i] < BASE
+  }
+
+  // The tail of a valid sequence.
+  lemma TailValid(s: seq<nat>)
+    requires Valid(s) && |s| > 0
+    ensures Valid(s[1..])                                              // [a]
+  {
+  }
+
+  // Two valid sequences, concatenated.
+  lemma ConcatValid(s: seq<nat>, t: seq<nat>)
+    requires Valid(s) && Valid(t)
+    ensures Valid(s + t)                                               // [b]
+  {
+  }
+
+  // An existential over indices, with the index `k` named in the `requires`.
+  lemma SomeZeroLimb(s: seq<nat>, k: nat)
+    requires k < |s| && s[k] == 0
+    ensures exists i :: 0 <= i < |s| && s[i] == 0                      // [c]
+  {
+  }
+
+  // An existential over sequences; no sequence is named anywhere.
+  lemma SomeLimbSequence()
+    ensures exists s: seq<nat> :: |s| == 1 && s[0] == 5                // [d]
+  {
+  }
+}

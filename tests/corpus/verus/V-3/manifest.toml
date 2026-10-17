@@ -1,0 +1,47 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+# Note: The done gate alone passes here: the wrappers build a path dependency
+#   without --no-cheating, and under --no-cheating Verus never shows a crate
+#   its dependency's assume (Delta 95). Only vaudit, which audits every crate
+#   of the chain, flags it; done = vcheck --gate AND vaudit.
+id = "V-3"
+lang = "verus"
+half = "R"
+xclass = "X02"
+kind = "construct"
+title = "a path dependency's assume-closed lemma used by the target crate (Delta 95)"
+files = ["lower/Cargo.toml", "lower/src/lib.rs", "upper/Cargo.toml", "upper/src/lib.rs"]
+target = "upper"
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true; path dependencies built first: corpus_vd3_lower
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "clean"
+kinds = []
+output_sha256 = "82ca24df913973d046a97978b7912ed36d57993e7912bf5e0e3d610d20689afb"
+summary = "verdict verified, stage verify, verified 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V-3/upper"]
+exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["hole-assume"]
+output_sha256 = "0e0813907b8c0dfea8517181ae8da4861700939775a4374003893b5fdf0f6600"
+summary = "1 finding(s): hole-assume at lower/src/lib.rs:10"
+argv = ["scripts/vaudit", "tests/corpus/verus/V-3/upper"]
+exit = 1

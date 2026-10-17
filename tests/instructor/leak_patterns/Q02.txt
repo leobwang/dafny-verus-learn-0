@@ -1,0 +1,40 @@
+# Q02 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H, X or A answer of Q02 (never a P
+# answer: the chapter reveals those after their boxes; never H1d's, H2v's or H3d's, whose
+# informal proof or invariant is the written problem B1, so a grader quoting a learner's
+# blueprint would trip it) and is verified against its own reference file (rule 1) and
+# against every learner-visible file (rule 2).
+
+# from Solutions/dafny/Q/Q02_FirstSyntaxI/core/Q02_FirstSyntaxI.dfy
+# source:       invariant Normalize(s[..n]) == Normalize(s)   (Q02.H2d)
+# verified: solutions=1 public=0
+invariant\s+Normalize\(s\[\.\.n\]\)\s*==\s*Normalize\(s\)
+# source:       NormalizeCanonical(s[..|s| - 1]);   (Q02.H4d)
+# verified: solutions=1 public=0
+NormalizeCanonical\(s\[\.\.\|s\|\s*-\s*1\]\)
+
+# from Solutions/verus/q/q02_first_syntax_i/src/lib.rs
+# source:                 0 <= i < v@.len() ==> v@[i] == (if i < k || i >= j {   (Q02.H6v)
+# verified: solutions=1 public=0
+\(if\s+i\s*<\s*k\s*\|\|\s*i\s*>=\s*j\s*\{
+# source:         assert(s + Seq::new(k, |i: int| 0u64) =~= (s + z).push(0));   (Q02.H8v)
+# verified: solutions=1 public=0
+=~=\s*\(s\s*\+\s*z\)\.push\(0\)
+
+# from Solutions/dafny/Q/Q02_FirstSyntaxI/exit/Q02_Exit.dfy
+# source:   { if i >= n then [] else [i] + Upto(i + 1, n) }   (Q02.X1d)
+# verified: solutions=1 public=0
+\[i\]\s*\+\s*Upto\(i\s*\+\s*1,\s*n\)
+# source:     ensures forall j | 0 <= j < a.Length :: a[j] == (if j == i then 0 else old(a[j]))   (Q02.X2d)
+# verified: solutions=1 public=0
+a\[j\]\s*==\s*\(if\s+j\s*==\s*i\s+then\s+0\s+else\s+old\(a\[j\]\)\)
+
+# from Solutions/verus/q/q02_first_syntax_i/src/exit.rs
+# source:         assert(seq![b].drop_first() =~= Seq::<u64>::empty());   (Q02.X3v)
+# verified: solutions=1 public=0
+seq!\[b\]\.drop_first\(\)\s*=~=
+
+# from Solutions/dafny/Q/Q02_FirstSyntaxI/agent/Q02_AgentImplement.dfy
+# source:     if |s| == 0 then -1 else if s[|s| - 1] != 0 then |s| - 1 else TopIndex(s[..|s| - 1])   (Q02.A1d)
+# verified: solutions=1 public=0
+TopIndex\(s\[\.\.\|s\|\s*-\s*1\]\)

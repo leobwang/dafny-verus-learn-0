@@ -1,0 +1,134 @@
+# expected/Q12.chapter.toml — the chapter pins of Q12's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter Q12 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "p1d"
+cmd = ["scripts/vcheck", "--json", "specimens/Q12/P1d.dfy.specimen"]
+note = "P1d's specimen with its command, after P1's box (its after: line)."
+[entry.normalize]
+exit = true
+replace = [["\"cmd\": \\[[^\\]]*\\], ", "\"cmd\": [...], "], ["\"raw_dir\": \"[^\"]*\", ", "\"raw_dir\": \"...\", "]]
+[entry.pinned]
+body = "73104cb77d72b85649d0af78e184c564c13008925ad5097a70d74e1e67184bbc"
+[entry.pinned.inputs]
+"specimens/Q12/P1d.dfy.specimen" = "198118740c7755db3caffdbad542a471a7aeba6af4c1e3c441faef64c8af5ceb"
+
+[[entry]]
+id = "p2v"
+cmd = ["scripts/vcheck", "--json", "specimens/Q12/P2v.rs.specimen", "--", "--no-verify"]
+note = "P2v's specimen with its command, after P2's box."
+[entry.normalize]
+exit = true
+replace = [["\"cmd\": \\[[^\\]]*\\], ", "\"cmd\": [...], "], ["\"raw_dir\": \"[^\"]*\", ", "\"raw_dir\": \"...\", "]]
+[entry.pinned]
+body = "05f376b9a7e3578312c2b8e6c57e1709f92243dcdb778e0c94276d43f44afbf8"
+[entry.pinned.inputs]
+"specimens/Q12/P2v.rs.specimen" = "7c2968642f1d18dbe8ce4e1b2d34f8d3acbe9a7bc47e0331e0578fd73dabf384"
+
+[[entry]]
+id = "p3d"
+cmd = ["scripts/vcheck", "specimens/Q12/P3d.dfy.specimen"]
+note = "P3D's specimen with its command, after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "73b8336a282fdeebc8d9f28e596dc1690b526929aa2fdfed67e0dd51838c066d"
+[entry.pinned.inputs]
+"specimens/Q12/P3d.dfy.specimen" = "bc270fad4a3416b7e99bad719daa28bd9aed5f4d0279b5eb5f1232631edbe67e"
+
+[[entry]]
+id = "p4v"
+cmd = ["scripts/vcheck", "specimens/Q12/P4v.rs.specimen"]
+note = "P4V's specimen with its command, after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a86eb2c1aef8553930bef5a1d14580bcf07f7bdf72fe46643236e18081b64232"
+[entry.pinned.inputs]
+"specimens/Q12/P4v.rs.specimen" = "1a212455ff5d81272cb25f1c28a1576192bdb8f99803a374e609bd713cd45aed"
+
+[[entry]]
+id = "p5d"
+cmd = ["scripts/vcheck", "--test", "specimens/Q12/P5d.dfy.specimen"]
+note = "P5D's specimen with its command, after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ec1be49c07b5398c007b2ec79eec85e65cc84f557f0887de87046f0702cebab3"
+[entry.pinned.inputs]
+"specimens/Q12/P5d.dfy.specimen" = "88dcb0c0fbabe032cb37f9382d4c7f4c3f1efd8ac023b7eacdca7660cfbf92f7"
+
+[[entry]]
+id = "p6v"
+cmd = ["scripts/vcheck", "specimens/Q12/P6v.rs.specimen"]
+note = "P6V's specimen with its command, after the shared S10 box."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9ccc1e52399d2d6358833f4cd7165d0c38eb57fc5778e557573ea8e9c3ce8a0a"
+[entry.pinned.inputs]
+"specimens/Q12/P6v.rs.specimen" = "bc885828e6687240cd49d477e696f5c2acd37d35780cde893f70b89b4ae97499"
+
+[[entry]]
+id = "units"
+cmd = ["scripts/vcheck", "Q12"]
+inputs = ["dafny/given/Q/QG_L1_BigNat.dfy", "dafny/given/Q/QG_L2_BigNat.dfy", "dafny/given/Q/QG_L3_BigNat.dfy", "dafny/given/Q/QG_L4_BigNat.dfy", "dafny/given/Q/QG_L5_BigNat.dfy", "verus/given/qg_bignat_l1/src/lib.rs", "verus/given/qg_bignat_l2/src/lib.rs", "verus/given/qg_bignat_l3/src/lib.rs", "verus/given/qg_bignat_l4/src/lib.rs", "verus/given/qg_bignat_l5/src/lib.rs"]
+note = "The two verifier units as shipped (§8)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d5d1fd835583cf2ca8d683fe30e177fb90ceae9f590bbcbf54ca894e99f617e2"
+[entry.pinned.inputs]
+"dafny/Q/Q12_PracticeIC/exit/Q12_Exit.dfy" = "cda0a6ca3d75d44abaf6536381ebc65e099c3cabf145e3c504bb6cdb3c31cc3e"
+"dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy" = "721ff9e67d1e2fdd3ee3c9a5e4044571cd4d8e9887d9e4aee616cac4509bd4a8"
+"dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy" = "c25c358ce32e57a797ca1e5cd2c50672ad61cba5f9e0b31de2f27b1b447212d3"
+"dafny/given/Q/QG_L1_BigNat.dfy" = "6c6448bd1bb03e0c0c903c9c8a737e981df449e85db8b60edbc2d94d9ea21815"
+"dafny/given/Q/QG_L2_BigNat.dfy" = "ce90383c5649fd409eb7cb4c438d21bf0d10e57fc683056874fbd974a9698e47"
+"dafny/given/Q/QG_L3_BigNat.dfy" = "4eba92b2b0f48125ee8f26218fc8397e65b947ca32862c4eee748b6eb7ffb199"
+"dafny/given/Q/QG_L4_BigNat.dfy" = "b908f4fa8ae0f06fd121ee2e67879f403d161bd632c02e1b4fcd4d3b6e158811"
+"dafny/given/Q/QG_L5_BigNat.dfy" = "2e6b5c934cd85a87dfd16cf2bd2318925689ece46e296fea3eaa31b78f80bfff"
+"instructor/calib/Q12.tsv" = "absent"
+"slots/Q12.slots" = "f568bc1f4412a839dbf4d468c33cf8d6260732841a2d909498cddc9f6e406043"
+"specimens/Q12/P1d.dfy.specimen" = "198118740c7755db3caffdbad542a471a7aeba6af4c1e3c441faef64c8af5ceb"
+"specimens/Q12/P2v.rs.specimen" = "7c2968642f1d18dbe8ce4e1b2d34f8d3acbe9a7bc47e0331e0578fd73dabf384"
+"specimens/Q12/P3d.dfy.specimen" = "bc270fad4a3416b7e99bad719daa28bd9aed5f4d0279b5eb5f1232631edbe67e"
+"specimens/Q12/P4v.rs.specimen" = "1a212455ff5d81272cb25f1c28a1576192bdb8f99803a374e609bd713cd45aed"
+"specimens/Q12/P5d.dfy.specimen" = "88dcb0c0fbabe032cb37f9382d4c7f4c3f1efd8ac023b7eacdca7660cfbf92f7"
+"specimens/Q12/P6v.rs.specimen" = "bc885828e6687240cd49d477e696f5c2acd37d35780cde893f70b89b4ae97499"
+"tools/Q12/holecount.py" = "182a095542017444c12622b32b9c935c63a5a31932ceca5425b229d10ec6589d"
+"verus/given/qg_bignat_l1/src/lib.rs" = "7eb0d9f55f1aa8be9aa8a177cf1d734804f8ef7d4e7a75d52492ad5cf5a69d34"
+"verus/given/qg_bignat_l2/src/lib.rs" = "63a4eee867446760b85852b129b82427b512e12fcd4fcc47330d09b8e9c2385b"
+"verus/given/qg_bignat_l3/src/lib.rs" = "e5c11dc23077965e8a05293646459b701e5000c09eac52de0f0e2b12bd36c280"
+"verus/given/qg_bignat_l4/src/lib.rs" = "77d079b10816091f8cc0eb93d62b65f2166fe826552e81d002078ad7fcc62aa3"
+"verus/given/qg_bignat_l5/src/lib.rs" = "ff6f2a34598307f657db0545a37df1118208c8500b410e19fe01824545e5d9c5"
+"verus/q/q12_practice_ic/src/exit.rs" = "a017b495bf529676d354e76afba25f5fdaed6716e698181a286fb158c8dad9ae"
+"verus/q/q12_practice_ic/src/lab1_hand.rs" = "4b268f780a912c61a48fbd206dd9427f8f138d5526dc1775f6da7e0b025a501c"
+"verus/q/q12_practice_ic/src/lib.rs" = "e5ce0a4ee4c5619e5937403a65c6ba5beda7c5700c0f83ce0f0f09a753a04226"
+
+[[entry]]
+id = "py-retry"
+cmd = ["scripts/vcheck", "harness/q/fvh_q/retry.py"]
+excerpt = [1, 3]
+note = "The retry client's file through its frozen tests (§8); the failing-test lines are cut."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "78ac4012624a3f16c9340d26358f2f9aa4b29de3a7b17d9a15da0ccdd2353336"
+[entry.pinned.inputs]
+"harness/q/fvh_q/retry.py" = "e719d9caab307efc35719df769e0084d6e893124e30dfe7284aeeabfaef65502"
+
+[[entry]]
+id = "py-report"
+cmd = ["scripts/vcheck", "harness/q/fvh_q/report.py"]
+excerpt = [1, 3]
+note = "The report client's file through its frozen tests (§8); the failing-test lines are cut."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "30bf621e7b2d7d32eeb4e1096e4d7f92308b01dc1fb6c16d0998f372e1454805"
+[entry.pinned.inputs]
+"harness/q/fvh_q/report.py" = "d76f96115cd55ba138cc21622f8d1b1d894231f7bb833112f09bdabee933480e"

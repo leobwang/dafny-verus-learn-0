@@ -1,0 +1,67 @@
+// item: Q09.P6d S12 verdict
+// **P6.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots. Record the first
+// try (`scripts/firsttry.sh Q09 --check`) before you run anything on this file;
+// only then enable the switch below (delete `SLOT: ` from its line), catch the
+// delivery with an instrument, and fill its DIAGNOSIS row in
+// research/q09_forensics.md (ten deliveries: each catch with a different
+// instrument).
+// Claim:
+//   `MulLimbLengthBound(s, d)`: multiplying a limb sequence by one limb gives at
+//   most one more limb, `|MulLimb(s, d)| <= |s| + 1`.
+// SLOT: CHECK P6d
+module Q09_P6 {
+  // The definitions this delivery is about, as layers L1 and L4 give them
+  // (copies: a specimen stands alone).
+  const BASE: nat := 18446744073709551616
+
+  // Multiply a limb sequence by one limb d, with an incoming carry c.
+  function MulLimbC(s: seq<nat>, d: nat, c: nat): seq<nat>
+    decreases |s|
+  {
+    if |s| == 0 then (if c == 0 then [] else [c])
+    else
+      var t := s[0] * d + c;
+      [t % BASE] + MulLimbC(s[1..], d, t / BASE)
+  }
+
+  function MulLimb(s: seq<nat>, d: nat): seq<nat>
+  {
+    MulLimbC(s, d, 0)
+  }
+
+  // Delivered: multiplying by one limb adds at most one limb.
+  lemma MulLimbLengthBound(s: seq<nat>, d: nat)
+    ensures |MulLimb(s, d)| <= |s| + 1
+  {
+    MulLimbCLength(s, d, 0);
+  }
+
+  // The length step the delivery relies on, for every carry.
+  lemma MulLimbCLength(s: seq<nat>, d: nat, c: nat)
+    ensures |MulLimbC(s, d, c)| <= |s| + 1
+  {
+    assume {:axiom} |MulLimbC(s, d, c)| <= |s| + 1;  // planted: Q09.P6d
+  }
+}

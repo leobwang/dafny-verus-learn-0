@@ -1,0 +1,18 @@
+// The delivery's root file (a companion of specimens/Q18/P2d.dfy.specimen, which the
+// delivery shipped as P2d.dfy; a copy for reading: the course never runs a delivery's
+// own configuration).
+include "P2d.dfy"
+
+module Q18_P2Root {
+  import opened Q18_P2Helpers
+
+  // The delivery's check: one limb pushed on top of [5].
+  lemma PushOnFive(d: nat)
+    ensures ToNat([5] + [d]) == 5 + BASE * d
+  {
+    assert ToNat([5]) == 5 by {
+      assert [5][1..] == [];
+    }
+    ToNatPushTop([5], d);
+  }
+}

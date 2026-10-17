@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V01"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V01/src/lib.rs",
+    "kind": "hole-admit",
+    "line": 20,
+    "message": "an admit hole (in lemma_tri_closed) not on the trust allowlist"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V01"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "939f229c58c17bd348b716dc00b00e38de8e311cb321071287c05083be8a5f62",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V01"
+}

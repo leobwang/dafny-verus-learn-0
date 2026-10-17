@@ -1,0 +1,89 @@
+% Q14_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q14_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the route, the wording and the examples are deliberately far from the
+% reference, so the grader must recognise correctness by substance (the rubric's
+% probes), not by matching text. B1 reasons from the interval 0..10 first and uses a
+% witness of its own for C4 (the reference's is another); B2 words every field its own
+% way and orders the facts differently.
+%
+% EXPECTED[B1][correctness][4]: correct; Probe A on each candidate agrees with every yes and no of (a), and Probe A' passes on every witness of (b): x = 0 for C2's (i) and (10, 10) for C4's (ii) (captured 2026-10-11: 1 passed, 0 failed, each). No finding.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 2588-2631); Budget and Variance correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4 (3 is tolerated only with a reading note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a false fact,
+% a wrong witness, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q14 --- Practice II-B \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (concept)}\label{ans:B1}
+\begin{answer}
+The trait admits exactly the arguments $0, 1, \dots, 10$, and on those it
+promises a result strictly above the argument; both conditions are about that
+interval only. \\
+$C_1$: (i)? yes \quad (ii)? yes \quad witnesses: none; the interval sits
+inside $x \ge 0$, and the promise is unchanged. \\
+$C_2$: (i)? no \quad (ii)? yes \quad witnesses: (i) at $x = 0$, the one
+argument of the interval that $1 \le x \le 10$ leaves out. \\
+$C_3$: (i)? yes \quad (ii)? yes \quad witnesses: none; the precondition is
+the trait's, and a result of exactly $x + 1$ is above $x$. \\
+$C_4$: (i)? yes \quad (ii)? no \quad witnesses: (ii) at $(10, 10)$: $10$ is
+admitted, $10 \ge 10$ holds, $10 > 10$ does not. \\
+$C_5$: (i)? yes \quad (ii)? yes \quad witnesses: none; every admitted $x$
+is at most $10$, and on the interval the hypothesis $x \ge 0$ is true, so the
+promise is $y > x$ there. Outside the interval it promises nothing, which no
+client of the trait can notice. \\
+\textbf{(c)} (i) is what makes the call legal: a generic client proves only
+the trait's precondition before it calls. (ii) is what makes the client's next
+step sound: after the call it uses the trait's postcondition, so the result
+must satisfy it.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 06.9, lines 2588--2631 (the pinned range).
+
+\textbf{Task shape:} Proof repair in Isabelle: a model is handed one of 12
+frozen broken proofs (half real past failures, half injected corruptions) from
+four developments and must make it build, under one of five repair workflows.
+
+\textbf{Oracle:} Two checks, both required: the theory builds, and an
+independent check finds the protected text byte-identical, the target
+declaration present and none of \texttt{sorry}, \texttt{oops},
+\texttt{axiomatization}, \texttt{oracle} used.
+
+\textbf{What is trusted:} The Isabelle build, plus a contract checker that is
+only syntactic and itself unverified.
+
+\textbf{Cheat surface:} Editing what was supposed to stay fixed. A green build
+can hide it: 4.2\% of the Isabelle-accepted candidates (6 of 144) touched
+protected text, every one from an iterative workflow over the full theory.
+Limiting edits to the proof body removes this but also forbids helper lemmas.
+
+\textbf{Metric:} Per workflow, valid repairs out of 36 and false successes:
+C4 reached 32 and C1 31, each with 3 false successes; C2 29, C3 24, C0 22 with
+none; 10 or 11 of the 12 tasks solved. A paired comparison of C4 with C0 gives
+$p = 0.001953$.
+
+\textbf{Budget:} Counted in runs and attempts only: 12 $\times$ 5 $\times$ 3
+= 180 runs, four attempts per run in C1 and C2, one high-effort model. Tokens
+and cost are not reported; they would be needed to compare the workflows at
+equal spend.
+
+\textbf{Variance:} Each cell was replicated three times, and iteration is said
+to help consistency more than coverage, but no per-replicate spread or
+confidence interval is in the range.
+
+\textbf{Artifact:} The checker (CAPRI, with a full audit trail) and the small
+author-maintained set of 12 tasks; nothing in the range says they are public.
+\end{answer}
+
+\end{document}

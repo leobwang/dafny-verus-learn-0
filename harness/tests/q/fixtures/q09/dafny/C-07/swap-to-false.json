@@ -1,0 +1,66 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/C-07/swap.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/C-07/swap.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D10",
+    "col": 3,
+    "file": "<root>/tests/corpus/dafny/C-07/swap.dfy",
+    "line": 6,
+    "message": "a postcondition could not be proved on this return path",
+    "severity": "error"
+   },
+   {
+    "code": "W-D10",
+    "col": 13,
+    "file": "<root>/tests/corpus/dafny/C-07/swap.dfy",
+    "line": 5,
+    "message": "this is the postcondition that could not be proved",
+    "severity": "related"
+   }
+  ],
+  "exit_code": 4,
+  "findings": [],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusC07.Between": "failed"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/C-07/swap.dfy",
+  "verdict": "failed",
+  "verified_count": 0
+ },
+ "exit_code": 1,
+ "instrument": "swap-to-false",
+ "killed": null,
+ "output_sha256": "800e8e15248b73f021b8a862ac53194079cec72cace2b8659eeb1d73e52e465d",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/C-07/main.dfy"
+}

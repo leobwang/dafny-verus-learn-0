@@ -1,0 +1,29 @@
+// Card Q04.C8dv (false friends), row 2 (`forall`), demo v (Verus). Open it only after your
+// Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-2-v.rs.specimen` and compare with
+// specimens/Q04/card-c8dv-2-d.dfy.specimen.
+use vstd::prelude::*;
+
+verus! {
+
+proof fn below(s: Seq<u64>, i: int)
+    requires
+        0 <= i < s.len(),
+        forall|j: int| 0 <= j < s.len() ==> s[j] < 10,
+    ensures
+        s[i] * 2 < 20,
+{
+}
+
+proof fn all_below(s: Seq<u64>)
+    requires
+        forall|j: int| 0 <= j < s.len() ==> s[j] < 10,
+    ensures
+        forall|i: int| 0 <= i < s.len() ==> s[i] * 2 < 20,
+{
+    assert forall|i: int| 0 <= i < s.len() ==> s[i] * 2 < 20 by {
+        below(s, i);
+    }
+}
+
+} // verus!

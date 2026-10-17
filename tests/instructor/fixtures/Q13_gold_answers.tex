@@ -1,0 +1,83 @@
+% Q13_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q13_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the route, the wording and the examples are deliberately far from the
+% reference, so the grader must recognise correctness by substance (the rubric's
+% probes), not by matching text. B1 uses pairs of its own for every missing property
+% (none of the reference's) and argues (c) from what each side must prove; B2 words
+% every field its own way.
+%
+% EXPECTED[B1][correctness][4]: correct; Probe A on each candidate agrees with every yes and no of (a), and Probe A' passes on every pair of (b): Q1 at (0, 3), Q2 at (6, 9), Q3 at (7, 0), Q5 at (-4, -4) for unsoundness and at (-4, 0) for incompleteness (captured 2026-10-11, Dafny 4.11.0: each `PASSED`; Probe A verified Complete for Q1-Q4 and Sound for Q4). No finding.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 2005-2031); Budget and Variance correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4 (3 is tolerated only with a reading note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a false fact,
+% a wrong pair, a wrong instrument outcome or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q13 --- Practice II-A \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (concept)}\label{ans:B1}
+\begin{answer}
+Every true output of Ramp is non-negative and at least $x$, and is $x$ or $0$;
+so the first three candidates all let every true output through.
+
+$Q_1$: sound? no \quad complete? yes \quad pairs: at $x = 0$ it accepts
+$y = 3$, while Ramp gives $0$. \\
+$Q_2$: sound? no \quad complete? yes \quad pairs: at $x = 6$ it accepts
+$y = 9$ ($9 \ge 0$, $9 \ge 6$), while Ramp gives $6$. \\
+$Q_3$: sound? no \quad complete? yes \quad pairs: at $x = 7$ the disjunct
+$y = 0$ accepts $0$, while Ramp gives $7$. \\
+$Q_4$: sound? yes \quad complete? yes \quad pairs: none; for each sign of $x$
+it names exactly Ramp's value. \\
+$Q_5$: sound? no \quad complete? no \quad pairs: at $x = -4$ it accepts
+$y = -4$ (Ramp gives $0$), and it rejects Ramp's own $(-4, 0)$. \\
+\textbf{(c)} A caller of Ramp can only use what the postcondition promises, so
+it is best served by the sound and complete $Q_4$; the body that must
+establish the postcondition has least to prove under the loosest one, $Q_1$.
+Strength is a benefit on the calling side and a cost on the proving side.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 05.5, lines 2005--2031 (the pinned range).
+
+\textbf{Task shape:} 189 Lean 4 problems, checked by hand, where a system must
+write the program, its pre- and postcondition, and a proof that they hold; two
+splits, one translated from Dafny (108) and one from course submissions (81).
+
+\textbf{Oracle:} The Lean kernel for code and proofs. For a generated
+specification, soundness and completeness against the task's reference
+specification are tried by a proof from the model, then by deciding test
+instances, then by property-based tests; anything still open is ``unknown''.
+
+\textbf{What is trusted:} Lean itself, one reference specification per task,
+and the tests that come with it (positive and negative, covering every line).
+
+\textbf{Cheat surface:} Writing a specification that mirrors the code would
+make a proof easy, so end-to-end proofs must target the ground-truth
+specification; the test-based spec metric leaves up to roughly 30\% of hard
+postconditions unknown.
+
+\textbf{Metric:} Pass@1 for code, specification, proof and the whole chain:
+o3 reaches 72.6, 52.3, 4.9 and 3.2. Fewer than 4\% of specifications are
+certified by proof, versus 41.6 to 51.0\% by testing.
+
+\textbf{Budget:} The range gives a token budget only for the refinement
+comparison with COPRA (o4-mini, 350k tokens) and 64 refinement rounds for
+DeepSeek Prover V2; total compute is not stated.
+
+\textbf{Variance:} The range reports no repeated runs or spreads; I would need
+seeds or confidence intervals.
+
+\textbf{Artifact:} The VERINA benchmark, both splits.
+\end{answer}
+
+\end{document}

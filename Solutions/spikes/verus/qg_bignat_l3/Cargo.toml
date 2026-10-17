@@ -1,0 +1,15 @@
+[package]
+name = "qg_bignat_l3"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+qg_bignat_l2 = { path = "../qg_bignat_l2" }
+
+[package.metadata.verus]
+verify = true

@@ -1,0 +1,72 @@
+// item: Q04.P5d S4 obligation
+// **P5.** Empty proofs about recursive definitions. Four lemmas, each with an empty body
+// and one labelled postcondition: [a] `Pow(n)` is at least 1; [b] normalizing keeps the
+// value; [c] valid limbs are below the power of their length; [d] adding one limb makes
+// a sequence at most one limb longer. The file is verified as every specimen is: alone,
+// with no unit options (no dfyconfig.toml of any unit applies to it). Which labelled
+// postconditions does the verifier fail to prove?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by
+// single spaces (for example `FAILS x y`), or `FAILS none`. Fill the SLOT line below,
+// keep it a comment, then run `scripts/firsttry.sh Q04 --check` (scripts/vcheck refuses
+// this file until then).
+// SLOT: FAILS ???
+module Q04_P5d {
+  // Copies of the layer L1 and L2 definitions it uses (dafny/given/Q/QG_L1_BigNat.dfy,
+  // QG_L2_BigNat.dfy): a Dafny specimen is verified alone, so it cannot import the layers.
+  const BASE: nat := 18446744073709551616
+
+  predicate Valid(s: seq<nat>)
+  {
+    forall i | 0 <= i < |s| :: s[i] < BASE
+  }
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  function Pow(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 1 else BASE * Pow(n - 1)
+  }
+
+  function Normalize(s: seq<nat>): seq<nat>
+    decreases |s|
+  {
+    if |s| == 0 then []
+    else if s[|s| - 1] != 0 then s
+    else Normalize(s[..|s| - 1])
+  }
+
+  function AddLimb(s: seq<nat>, d: nat): seq<nat>
+    decreases |s|
+  {
+    if |s| == 0 then (if d == 0 then [] else [d])
+    else if s[0] + d < BASE then [s[0] + d] + s[1..]
+    else [s[0] + d - BASE] + AddLimb(s[1..], 1)
+  }
+
+  lemma PowAtLeastOne(n: nat)
+    ensures Pow(n) >= 1                       // [a]
+  {
+  }
+
+  lemma NormalizeValue(s: seq<nat>)
+    ensures ToNat(Normalize(s)) == ToNat(s)   // [b]
+  {
+  }
+
+  lemma ValidBelowPow(s: seq<nat>)
+    requires Valid(s)
+    ensures ToNat(s) < Pow(|s|)               // [c]
+  {
+  }
+
+  lemma AddLimbLength(s: seq<nat>, d: nat)
+    requires Valid(s) && d < BASE
+    ensures |AddLimb(s, d)| <= |s| + 1        // [d]
+  {
+  }
+}

@@ -1,0 +1,16 @@
+// item: Q04.P9v S3 obligation
+// Which labelled assertion fails? Answer form: `FAILS` followed by the labels.
+// SLOT: FAILS ???
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn demo(x: nat)
+    requires
+        x > 3,
+{
+    assert(x > 2);  // [a]
+    assert(x > 4);  // [b]
+}
+
+} // verus!

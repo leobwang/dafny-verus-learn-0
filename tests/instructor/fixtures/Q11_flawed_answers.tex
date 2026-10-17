@@ -1,0 +1,84 @@
+% Q11_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q11_answers.tex (spec §4.7, §6.12). B1 carries one
+% planted flaw; B2 is the clean control. Grade it with the rubric's probes
+% (paper/rubrics/Q11_rubric.md), never by eye.
+%
+% EXPECTED[B1][recomputation][2]: the conditional step keeps only the implication for the branch that runs the assignment and drops the one for the branch in which nothing happens (RC.b), so the final formula is x < 12. The finding must exhibit a start value that satisfies x < 12 and ends outside Q, e.g. x = 5 (y = 8, and 8 < 5 is false): Probe A'' at x = 5 with expect y < 5: FAILED, "Q fails" (the rubric's template at x = 5; captured 2026-10-07). Probe A with x < 12 spliced in fails at Exact's postcondition. (b)'s claim about x = 5 ("Q holds") is the same flaw seen in a run (RC.e) and may be reported with it; (c) agrees with the flawed (a) and is not a separate flaw (RC.f).
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 917-940); Budget and Variance correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4.
+% A calibration run FAILS if B1 scores >= 3, if the planted finding does not exhibit a
+% start value below 12 whose run ends outside Q (with Probe A'' pasted), or if ANY flaw
+% is reported on B2.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q11 --- Practice I-B \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) The trace.}
+\begin{enumerate}
+\item The conditional (rule: conditional). The assignment inside it runs only
+  when $y > 10$, so the precondition is $y > 10 \Rightarrow
+  \mathit{wp}(y := y - 10, y < 5)$; when the condition is false nothing
+  happens, so nothing is required.
+\item The assignment inside (rule: assignment, substitute $y - 10$ for $y$):
+  $y - 10 < 5$. So the conditional's precondition is $y > 10 \Rightarrow
+  y < 15$.
+\item The sequence, and the first assignment (rule: assignment, substitute
+  $x + 3$ for $y$): $x + 3 > 10 \Rightarrow x + 3 < 15$.
+\end{enumerate}
+\textbf{Simplified, over $x$ alone:} $x > 7 \Rightarrow x < 12$. For
+$x \le 7$ the implication holds; for $x > 7$ it needs $x < 12$. So the
+formula is $x < 12$.
+
+\textbf{(b)} A value that satisfies the formula: $x = 5$; $y = 8$, the
+condition is false, so $y$ stays $8$; $Q$ holds. \\
+A value that does not: $x = 13$; $y = 16$, then $6$; $Q$ fails.
+
+\textbf{(c)} The allowed values of $x$: every integer below $12$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.12, lines 917--940 (the pinned range).
+
+\textbf{Task shape:} Proving that Rust's \texttt{core}, \texttt{alloc} and
+\texttt{std} are free of a listed set of undefined behaviours, one function at
+a time, as a crowdsourced campaign of challenges with rewards and a review
+committee; Autoharness, a symbolic generator built on Kani, supplies breadth.
+
+\textbf{Oracle:} The verifiers in CI on every pull request (Kani and ESBMC by
+bounded model checking, Flux, VeriFast), checking that the precondition
+implies no checked UB and the postcondition, for all bit-valid inputs.
+
+\textbf{What is trusted:} The tools, the intrinsic models and the toolchain,
+none of them verified; the reviewed contracts and harnesses.
+
+\textbf{Cheat surface:} Everything outside the checked UB list (aliasing,
+data races, inline assembly, some provenance UB, termination), bounded
+checking, and contract-less unsafe passes, which are only triage candidates.
+
+\textbf{Metric:} Counts: 11,970 of 16,748 automatically produced harnesses
+verified, 989 functions verified against contracts, 725 manual harnesses,
+4,778 failed harnesses, and no new memory-safety bugs.
+
+\textbf{Budget:} Not given as compute; the campaign had 29 challenges, more
+than 450 PRs and at least 21 external contributors.
+
+\textbf{Variance:} Not reported; the checks are tool runs with no
+repetitions given.
+
+\textbf{Artifact:} The CI-integrated verification of the standard library
+and its challenges.
+\end{answer}
+
+\end{document}

@@ -1,0 +1,9 @@
+# pins.py golden for specimens/Q01/card-c4dv-3-d.dfy.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q01/card-c4dv-3-d.dfy.specimen`; never edit.
+command: verify
+exit: 0
+verdict: verified
+stage: verify
+verified: 1
+holes: 0
+card-c4dv-3-d.dfy.specimen:6:13: warning: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section on quantifier instantiation rules in the reference manual.

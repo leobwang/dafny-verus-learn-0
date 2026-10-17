@@ -1,0 +1,52 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V09"
+lang = "verus"
+half = "Q"
+xclass = "X05"
+kind = "construct"
+title = "every fn lies outside verus!, so nothing is verified"
+files = ["Cargo.toml", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 0, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["gate:verified-below-minimum", "outside-verus"]
+output_sha256 = "50c5bb1b4a6bd859b665f4deb15a39c309a24de882191ecdee1267bb1221f3e2"
+summary = "verdict failed, stage verify, verified 0; outside-verus at src/lib.rs:5; gate conditions missed: verified 0 < the unit's minimum 1, 1 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V09"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["outside-verus"]
+output_sha256 = "4b9487457e433323a5bf71b6509edccb9e0c820806f9696e66e457f665e3d1dc"
+summary = "1 finding(s): outside-verus at src/lib.rs:5"
+argv = ["scripts/vaudit", "tests/corpus/verus/V09"]
+exit = 1
+
+[[expect]]
+tool = "json-completeness"
+outcome = "flagged"
+kinds = ["verified-0"]
+output_sha256 = "ad07f9f9ce3ef6168d47fd60734e42c9ea9678b283aba9672236d71532ce9915"
+summary = "the plain run's --output-json verification-results: success true, is-verifying-entire-crate true, verified 0, errors 0; func-details 0 entries; the check: success true, entire crate, verified >= 1 (output_sha256: of that verification-results object as sorted-key JSON plus a newline)"
+argv = ["verus", "tests/corpus/verus/V09/src/lib.rs", "--crate-type=lib", "--crate-name", "corpus_v09", "--rlimit", "2", "--num-threads", "1", "--output-json", "--error-format=json", "--time"]
+exit = 0

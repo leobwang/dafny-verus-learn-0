@@ -1,0 +1,75 @@
+# expected/Q02.counts — Δ11 count pins for Q02: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q02` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q02"
+
+[[unit]]
+path = "dafny/Q/Q02_FirstSyntaxI/core"
+lang = "dafny"
+reference_verified = 48
+min_verified = 14
+symbols = ["Q02_FirstSyntaxI.CardAssertBy", "Q02_FirstSyntaxI.CardEvens", "Q02_FirstSyntaxI.CardExists", "Q02_FirstSyntaxI.CardIndices", "Q02_FirstSyntaxI.CardInvariant", "Q02_FirstSyntaxI.CardOld", "Q02_FirstSyntaxI.CardSwapLimbs", "Q02_FirstSyntaxI.ClearFrom", "Q02_FirstSyntaxI.FirstZero", "Q02_FirstSyntaxI.NormalizeCanonical", "Q02_FirstSyntaxI.NormalizeLoop", "Q02_FirstSyntaxI.NormalizeToNat", "Q02_FirstSyntaxI.ToNatDropLastZero", "Q02_FirstSyntaxI.Zeros"]
+
+[[unit]]
+path = "verus/q/q02_first_syntax_i"
+lang = "verus"
+reference_verified = 21
+min_verified = 13
+symbols = ["card_assert_by", "card_evens", "card_exists", "card_indices", "card_invariant", "card_old", "clear_from", "first_zero", "lemma_push_zeros", "lemma_seq_to_nat_drop_last_zero", "lemma_wf_value_pos", "normalize", "zeros"]
+
+[[file]]
+path = "dafny/Q/Q02_FirstSyntaxI/core/Q02_FirstSyntaxI.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 6
+errors = 0
+
+[[file]]
+path = "verus/q/q02_first_syntax_i/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 6
+errors = 0
+
+[[file]]
+path = "dafny/checks/Q02_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q02_FirstSyntaxI/exit/Q02_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 1
+errors = 0
+
+[[file]]
+path = "verus/q/q02_first_syntax_i/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q02_FirstSyntaxI/agent/Q02_AgentImplement.dfy"
+role = "agent"
+verdict = "failed"
+holes = 3
+errors = 6
+
+[[file]]
+path = "verus/q/q02_first_syntax_i/src/agent.rs"
+role = "agent"
+verdict = "failed"
+holes = 6
+errors = 1

@@ -1,0 +1,50 @@
+# sandbox/images.lock: the sandbox images by digest (DV4-PLAN §5.2), schema 1.
+# Written by sandbox/build-images.sh (DV4 step 2a); a manifest names its image
+# as <name>@<digest> from here, and scripts/mksandbox-run refuses any other.
+# `sandbox/build-images.sh --check` compares this file with the local images
+# and the current inputs. The digests are copied into VERSIONS.md §1.4.
+schema = 1
+
+[[image]]
+name = "dvl-toolchain"
+digest = "sha256:ee8b0f7c7bb302adde24a3c35585a221ee700c6b0b1fe5dec466b17cc4e503de"
+built = "2026-10-13"
+base = "ubuntu@sha256:008173c23f95b170204355c12626cb5a965d779a7e1283b09e9cffbb1bf33ca3"
+python = "Python 3.12.3"
+packages_sha256 = "cb84114ed9d4cc20bca31a731c7a1d9ebcf40d83008474839868c7a7b7ba9732"
+[image.inputs]
+apt_snapshot = "20261010T000000Z"
+dafny_tree = "290 e879bb85aee36a99b7169535ef94ba8785da308996d5fb4b4d4f5e1b34ad701f"
+verus_tree = "3873 57f0bd81b99b7b10f3cc5be5e72b087d15c096b500a0cd85f7c1693e509bad14"
+rust_toolchain = "1.98.1-x86_64-unknown-linux-gnu"
+rust_toolchain_tree = "153 a7e14f88a8eeba297b1f78823973667ce9bf11baa8cd4cae4c8db3bb10f33be5"
+rustup_sha256 = "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c"
+image_sources_sha256 = "8fbb64f955b357ed026ab8eb399dfcf587fa965a1cc923c646fa6fd449be9ad3"
+uv_version = "0.12.4"
+uv_sha256 = "47884be1ceaf3e73c6b6e5abed5cba5eba55109505b796c459503a48b70ba49d"
+uv_lock_sha256 = "d3241ce16192ea57ebcb6339fc5acc06c3429fb764da57bd8f1b643f00477eac"
+age_version = "v1.3.2"
+age_sha256 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c"
+
+[[image]]
+name = "dvl-agent"
+digest = "sha256:bb5b5439f601fb5b082715a25f9723f121766ff0616520d6ca8a8f0b1169c79e"
+built = "2026-10-13"
+base = "dvl-toolchain@sha256:ee8b0f7c7bb302adde24a3c35585a221ee700c6b0b1fe5dec466b17cc4e503de"
+python = "Python 3.12.3"
+packages_sha256 = "cb84114ed9d4cc20bca31a731c7a1d9ebcf40d83008474839868c7a7b7ba9732"
+[image.inputs]
+apt_snapshot = "20261010T000000Z"
+dafny_tree = "290 e879bb85aee36a99b7169535ef94ba8785da308996d5fb4b4d4f5e1b34ad701f"
+verus_tree = "3873 57f0bd81b99b7b10f3cc5be5e72b087d15c096b500a0cd85f7c1693e509bad14"
+rust_toolchain = "1.98.1-x86_64-unknown-linux-gnu"
+rust_toolchain_tree = "153 a7e14f88a8eeba297b1f78823973667ce9bf11baa8cd4cae4c8db3bb10f33be5"
+rustup_sha256 = "20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c"
+image_sources_sha256 = "8fbb64f955b357ed026ab8eb399dfcf587fa965a1cc923c646fa6fd449be9ad3"
+uv_version = "0.12.4"
+uv_sha256 = "47884be1ceaf3e73c6b6e5abed5cba5eba55109505b796c459503a48b70ba49d"
+uv_lock_sha256 = "d3241ce16192ea57ebcb6339fc5acc06c3429fb764da57bd8f1b643f00477eac"
+age_version = "v1.3.2"
+age_sha256 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c"
+opencode_version = "1.18.25"
+opencode_sha256 = "5750524bbdd592157a3e1b4451038c1d05075365336cd74b8ec573f92b2924c0"

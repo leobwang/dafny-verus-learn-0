@@ -1,0 +1,19 @@
+// Demo for card Q07.C1v (write:fuel), the failure half. The success half is
+// `lemma_two_limbs_by_hand` and `lemma_two_limbs_by_fuel` in
+// verus/q/q07_internals_i/src/lib.rs; here the same statement has an empty body. Run it
+// with `scripts/vcheck specimens/Q07/card-c1v.rs.specimen`; the EXPECT line pins the
+// message the verifier gives (line and fragment).
+// after: Q07.P1dv
+// EXPECT @15 "postcondition not satisfied"
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+pub proof fn lemma_two_limbs(a: u64, b: u64)
+    ensures
+        seq_to_nat(seq![a, b]) == a + BASE * b,
+{
+}
+
+} // verus!

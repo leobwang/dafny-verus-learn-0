@@ -1,0 +1,266 @@
+% Q15_solutions.tex — REFERENCE SOLUTIONS to paper/Q15_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1 is a pre-registration and B2 a lab report: they are graded on method and
+% reproducibility, never against numbers, so this file gives a reference plan
+% (one acceptable plan among many, with its arithmetic recomputed) and the
+% checks a grader runs, not values to match. The MDE figures and the Wilson
+% interval were computed on 2026-10-11 with harness/fvh/stats.py on the pinned
+% lock (`uv run --directory harness python3 -c ...`, the calls are quoted);
+% the budget products with `python3 -c`. B3-B5's fields are graded against the
+% learner's own cheatsheets.md; this file records which lines of each pinned
+% range a field draws on and never copies a card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q15 --- Practice II-C + Lab 2 \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+\section*{How these are graded}
+B1 is a pre-registration (the six method dimensions of CORE.md's research
+table; every arithmetic recomputed by the grader; the hash between the PREREG
+markers). B2 is a lab report (\verb+--report+: the method dimensions plus
+\texttt{reproducibility}, against the graded pre-registration). B3--B5 are
+paper cards (\texttt{card-fidelity}, per field; the closing line as a short
+concept answer). Neither B1 nor B2 has a numeric answer.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (pre-registration): a reference plan}
+
+\begin{description}
+\item[Claim.] C1 (oracle separation, an estimate, not a test): the learner's
+  oracles' verdicts agree with the hidden verdicts beyond chance, $\kappa$
+  with its 95\% interval; refuted if the interval contains 0. C2 (two-sided):
+  the faithful rate of S1 differs from S0's at matched calls; refuted when the
+  paired difference's 95\% interval contains 0. C3 (descriptive, on its own):
+  V's re-judged failure rate in Dafny and in Verus, each with its Wilson
+  interval, and their difference; never compared with S0 or S1, which spend a
+  different number of calls on a different task (a specification, not an
+  implementation). The population is the 30 drawn tasks under the pinned
+  toolchain.
+\item[Feedback signals.] After each S1 sample, three signals, each computed
+  from the candidate, the shipped implementation and the task file only: the
+  mutant kill rate of the candidate against the shipped code's mutants
+  (\texttt{mutants}, \texttt{kill\_rate}); the vacuity outcome
+  (\texttt{vacuity}); the witness check (the candidate's witness call
+  verifies). None names the reference: \texttt{implication} and
+  \texttt{classify} are not called in the loop, and the policy's prompt
+  carries none of their output.
+\item[Metric and estimator.] Per task and repeat, an arm's output is the
+  specification it keeps; its verdict is \texttt{classify} against the hidden
+  reference, run after the batch in the grader container; ``faithful'' means
+  \texttt{FAITHFUL}, and \texttt{UNDECIDED} counts as unfaithful. C2: per task,
+  the faithful fraction over the 3 repeats, per arm; the paired per-task
+  difference S1 $-$ S0 with a 95\% percentile bootstrap interval over tasks
+  (\texttt{fvh.stats.bootstrap\_ci}; the task is the resampling unit), McNemar
+  per repeat as a sensitivity line. C1: the $5 \times 5$ confusion matrix of
+  the learner's verdicts against the hidden verdicts over every kept
+  specification of every arm, Cohen's $\kappa = (p_o - p_e)/(1 - p_e)$ from
+  its margins, with a bootstrap interval over tasks. The verified-but-unfaithful
+  rate per arm (verified with its witness, judged not \texttt{FAITHFUL}), with
+  \texttt{fvh.stats.wilson\_interval}; for instance 4 of 20 gives
+  $(0.081, 0.416)$.
+\item[Arms and policies.] S0, S1 and V from Q12's \texttt{policies.py} through
+  \texttt{render}'s modes (S0 the plain prose prompt, S1 the prose with the
+  last sample's signals, V the vericoding mode), each with its prompt hash once
+  the file is final; the Claude arm runs S1 on 20 tasks, 7 local Dafny, 7
+  local Verus, 3 public of each language, drawn with a stated seed.
+\item[Tasks and strata.] Local: the 20 cards of \texttt{STRATUM.toml} (its
+  sha256 recorded), authored 2026-10-11; public: 5 HumanEval-Verus and 5
+  HumanEval-Dafny (vericoding's \texttt{humaneval} source) task forms, the
+  sets' commits and the validation files' sha256 copied from
+  \texttt{bench/manifest.toml}; one draw seed per public stratum; no pilot.
+\item[Budget arithmetic.] S0 and S1: $30 \times 1 \times 4 \times 2 \times 3
+  = 720$ calls in $30 \times 2 \times 3 = 180$ runs; V: $30 \times 1 \times 8
+  \times 1 \times 2 = 480$ calls in $30 \times 2 = 60$ runs; Qwen 1,200 calls
+  in 240 runs. Claude: $20 \times 1 \times 4 \times 1 \times 1 = 80$ calls plus
+  at most 10 sentinels, 90 calls in 20 runs. Against the registry's
+  \texttt{budget} (Claude 90 / 20, Qwen 1,200 / 240, 3 GPU-hours): equal. GPU:
+  the throughput assumption is DV4 step 3d's measurement (\texttt{VERSIONS.md}
+  \S1.4, 2026-10-11): a call with thinking off and a 768-token cap takes a
+  median 3.7 s at a $\approx 0.8$k-token prompt, plus $\approx 0.3$ s per
+  further 1k prompt tokens (prefill 2,900--3,600 tok/s); thinking on costs
+  $\approx 30$ s per call. With thinking off: S0 $360 \times 3.7$ s $\approx
+  0.37$ h; S1 and V at $\approx 8$k-token prompts ($\approx 6$ s per call),
+  $360 \times 6$ s $\approx 0.6$ h and $480 \times 6$ s $\approx 0.8$ h;
+  $\approx 1.8$ h in all, inside 3, and a lower bound for S1 and V, whose
+  prompts grow with their feedback. A plan that pins thinking on states its
+  smaller call count (about an eighth).
+\item[Generation settings.] As the gate pins them (thinking, \texttt{num\_predict},
+  \texttt{num\_ctx}, temperature), the same for every arm; seed lists per arm,
+  pairwise disjoint (for instance S0 11001--11360, S1 12001--12360, V
+  13001--13480; any disjoint lists); Claude's pinned argv.
+\item[Cost per arm.] Tokens in and out, GPU-seconds and wall clock per arm,
+  measured and reported against the ceiling; the truncation rate per arm as a
+  sensitivity line. Fallback, fixed now: if the per-arm totals redone from the
+  measured cost exceed 3 GPU-hours, S0 and S1 run two repeats instead of
+  three (480 calls), and V stays at two.
+\item[MDE.] The task is the unit: $n = 30$ paired tasks, baseline $p_0 = 0.3$,
+  power 0.8, one test at $\alpha = 0.05$:
+  \texttt{stats.mde\_two\_proportions(30, 0.3, paired=True)} $= 0.3706$, about
+  37 points; so the lab can detect only a large feedback effect, and the plan
+  says so. Treating the 90 task-repeats as independent pairs would give
+  \texttt{mde\_two\_proportions(90, 0.3, paired=True)} $= 0.2066$, an overclaim:
+  the repeats of one task are correlated. A plan that states $n$, $p_0$, the
+  pairing and the $\alpha$ and quotes the call is correct whatever its $p_0$.
+\item[Seeds and repeats.] Qwen: the per-request seed lists above; Claude:
+  ``repeated runs'', never seeds.
+\item[Oracles' version.] \texttt{sha256sum harness/q/fvh\_q/oracles.py} at the
+  commit the runs start from, recorded in every run's record; a changed file
+  after the plan is a deviation.
+\item[Cheat surface and gate.] The learner's Q09 gate core in the
+  verification container on every kept specification and every V
+  implementation (zero holes, the task's code unchanged for S0 and S1, the
+  task form's statement frozen for V); \texttt{implication} and
+  \texttt{classify} only after the batch, in the grader container;
+  grader-only classes reported \texttt{UNKNOWN}; \texttt{UNDECIDED} counted as
+  unfaithful.
+\item[Exclusions.] \texttt{infra-failed} re-issued under the same id, prompt
+  hash and seed, at most 3 times, then excluded and counted;
+  \texttt{truncated:<cause>} counted as a failure (primary) with the
+  sensitivity line that excludes it; an oracle run that is killed or refused
+  is \texttt{unknown}, never a kill and never a pass.
+\item[Stopping rule.] A cap or a window reached between attempts defers the
+  batch; no look at outcomes before the plan's last id is scored; no arm stops
+  early on its results.
+\item[Prediction intervals.] Any 80\% intervals, written before the run.
+\item[Contamination.] The local stratum authored 2026-10-11, after both
+  models' release; the card contamination audit on the local tasks: a novelty
+  review (each card's name and statement searched against public sources and
+  the course), perturbation probes (a renamed or reordered variant of a sample
+  of cards, the arm's rate compared descriptively); the public sets flagged as
+  possibly seen.
+\item[Disclosure.] ``A small-scale replication with model substitution''; Claude
+  as grader and subject; the oracles are the learner's own; one machine, one
+  solver pin.
+\end{description}
+
+\textbf{What the grader recomputes} (CORE.md's research table): the product
+of every budget line and the runs, the sums against the registry, the MDE call
+at the stated inputs, a Wilson call where one is quoted, the hash between the
+markers, and the disjointness of the seed lists.
+
+% ---------------------------------------------------------------------------
+\section*{B2 (lab report)}
+No reference: the numbers come from the learner's runs. A full report's
+Reproduce line regenerates every table (\verb+--report+ runs it), the
+confusion matrix and $\kappa$ included; it lists every deviation, carries the
+gate's verdict on every claimed success and the grader container's
+reproduction of every claimed faithful verdict, reports V on its own, lists
+the reward and bench audits' findings, scores the intervals, and discloses
+Claude as grader and subject.
+
+% ---------------------------------------------------------------------------
+\section*{B3 (paper card 04.6, Re:Form): reference fields}
+Pinned range lines 1618--1649,
+\texttt{sha256 0652aa5774df67acf6924a7912ace1d9bc9f1910dbc9aa28ddd444cf561329b3}.
+\begin{description}
+\item[Task shape.] Qwen-2.5 models (0.5B to 14B) write Dafny specifications:
+  re-emit the given code with specification clauses, no chain of thought;
+  small SFT, then GRPO on verifier rewards. \emph{Lines 1620, 1622.}
+\item[Oracle.] Dafny verification, and the subset check: Dafny proves
+  $GT_{pre} \Rightarrow GEN_{pre}$ and $GT_{pre} \Rightarrow (GEN_{post}
+  \Rightarrow GT_{post})$ against the ground-truth specification.
+  \emph{Line 1625.}
+\item[What is trusted.] Dafny; the ground-truth specifications, written by
+  Claude 3.5 Sonnet and checked only by Dafny; superiority judged against the
+  code, not the intent. \emph{Lines 1622, 1644.}
+\item[Cheat surface.] A verification-only reward is hacked with tautological
+  specifications; full-program output could edit the code; the ground truth
+  is model-written. \emph{Lines 1620, 1644--1645.}
+\item[Metric.] Verification rate and SSR (outputs passing the subset check),
+  pass@1: 14B RL with the subset reward 85.9\% / 55.3\% against the
+  verification reward's 92.6\% / 37.3\%; GPT-4o 12.1\% / 7.0\%; DafnyComp
+  verification 14.0\% for 14B RL. \emph{Lines 1627, 1631--1637, 1639.}
+\item[Budget.] $G = 4$ samples per prompt in RL; 128 rollouts for the novel
+  postconditions figure; evaluation at pass@1. \emph{Lines 1622, 1629, 1640.}
+\item[Variance.] Not reported: no seeds or intervals in the range; the entropy
+  bonus collapses training after about 100 steps, and the range notes internal
+  inconsistencies. \emph{Lines 1646--1647 (and by absence).}
+\item[Artifact.] The datasets (about 20k programs, the splits, DafnyComp's
+  300 programs); the range names no code release. \emph{Line 1622 (and by
+  absence).}
+\item[Closest oracle.] \texttt{implication}, one direction plus a weaker
+  precondition: it accepts a specification stronger than the reference as
+  ``superior'', which Lab 2's \texttt{classify} calls \texttt{STRONG}. It needs
+  the reference, so S1 cannot receive it.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B4 (paper card 04.7, SpecRL): reference fields}
+Pinned range lines 1653--1677,
+\texttt{sha256 2ee2bc96c9712432918e5b28957c63b7df3e7a72811311e9e82390e6c13c9202}.
+\begin{description}
+\item[Task shape.] Given a stripped, deterministic Dafny method whose body is
+  fixed, generate \texttt{requires}, \texttt{ensures} and invariants; Qwen2.5
+  0.5B--7B from ReForm SFT checkpoints, GRPO with $G = 8$ on Py2Dfy-Spec
+  (4,389 programs). \emph{Line 1657.}
+\item[Oracle.] Dafny verification (soundness) and spectests: the real program
+  runs on an LLM-proposed input, the LLM mutates the output, and the test
+  passes when the specification rejects the mutated pair. \emph{Lines 1655,
+  1660.}
+\item[What is trusted.] Dafny; the spectest suites (LLM-built, from the
+  reference specification's weaknesses); executable SpecCheck predicates;
+  deterministic methods. \emph{Lines 1660, 1675.}
+\item[Cheat surface.] Reward 0 for \texttt{assume}, body edits and trivial
+  specifications; without the verify gate the model games the tests;
+  completeness only empirical; public benchmarks. \emph{Lines 1661, 1673,
+  1675.}
+\item[Metric.] Verifiable and completeness pass@1 and pass@8 on
+  DafnyComp-Spec, 7B: SpecRL 10.40 / 16.81 / 24.30 / 27.00 against SFT 5.44 /
+  11.21 / 18.15 / 21.35; GPT-5.1 11.10 / 22.84 / 19.60 / 26.33. \emph{Lines
+  1664--1671; the ablation, line 1673.}
+\item[Budget.] Group size 8; 58,256 offline spectests at about \$250 of API
+  cost. \emph{Line 1657.}
+\item[Variance.] No variance or multiple seeds reported. \emph{Line 1675.}
+\item[Artifact.] The datasets (Py2Dfy-Spec, DafnyComp-Spec, DafnyBench-Spec);
+  the paper names no code release. \emph{Lines 1657, 1675.}
+\item[Closest oracle.] \texttt{kill\_rate}: rejected wrong outputs are killed
+  wrong behaviours, mutated outputs rather than mutated code. Spectests from
+  executing the shipped program alone would need no reference specification,
+  so S1 could receive such a signal; the paper's suites were built from the
+  reference specification's weaknesses (line 1675), so as built they do not
+  qualify. Either reading, argued from the range, is correct.
+\end{description}
+
+% ---------------------------------------------------------------------------
+\section*{B5 (paper card 03.8, nl2postcond): reference fields}
+Pinned range lines 1257--1282,
+\texttt{sha256 837a45587f1cad82ced01ce9f6e2b15ac6a5c3a9ad914e0fff23e11c9812dde4}.
+\begin{description}
+\item[Task shape.] An LLM turns a natural-language description into an
+  executable \texttt{assert} postcondition; base or simple prompts, with or
+  without the reference implementation, 10 samples each; EvalPlus and
+  Defects4J. \emph{Lines 1259, 1261.}
+\item[Oracle.] Tests: correct when the postcondition holds on every test input
+  with the reference implementation's output; bug-completeness, the share of
+  buggy mutants some test rejects; bug-discriminating on Defects4J.
+  \emph{Lines 1264--1267.}
+\item[What is trusted.] The reference implementation and the hidden tests;
+  the GPT-3.5-sampled mutant set. \emph{Lines 1261, 1265, 1280.}
+\item[Cheat surface.] Weak postconditions (a lone type check kills 0.27 of
+  mutants against 0.89 for arithmetic equality); checked by tests only, never
+  proved; possible leakage. \emph{Lines 1276, 1280, 1282.}
+\item[Metric.] accept@1 / @10 0.77 / 0.96 (GPT-4, simple, NL only);
+  bug-completeness 0.85 (all) / 0.81 (natural); Defects4J correct@10 0.75;
+  64 of 525 bugs discriminated. \emph{Lines 1273--1278.}
+\item[Budget.] 10 samples per prompt; accept@k over them. \emph{Lines 1261,
+  1264.}
+\item[Variance.] One test reported ($p = 0.008$, simple against base); no
+  intervals or repeats otherwise. \emph{Line 1275 (and by absence).}
+\item[Artifact.] Existing benchmarks (EvalPlus, Defects4J); the range names
+  no release. \emph{Line 1261 (and by absence).}
+\item[Closest oracle.] \texttt{kill\_rate} (killed buggy programs), beside a
+  correctness check on the reference implementation's outputs. It needs a
+  reference implementation (line 1280), not a reference specification: in
+  Lab 2 the shipped implementation plays that part, so S1 can receive it.
+\end{description}
+
+\end{document}

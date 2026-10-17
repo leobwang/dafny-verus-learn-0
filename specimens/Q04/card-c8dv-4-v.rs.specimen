@@ -1,0 +1,22 @@
+// Card Q04.C8dv (false friends), row 4 (bringing in a library), demo v (Verus). Open it
+// only after your Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-4-v.rs.specimen` and compare with
+// specimens/Q04/card-c8dv-4-d.dfy.specimen.
+// after: Q04.P8dv
+use vstd::prelude::*;
+use vstd::arithmetic::power::*;
+
+verus! {
+
+// A local function named like the library's, which the glob import above also brings in.
+pub open spec fn pow(b: int, e: nat) -> int {
+    b + 2 * e
+}
+
+proof fn local_pow()
+    ensures
+        pow(1, 2) == 5,
+{
+}
+
+} // verus!

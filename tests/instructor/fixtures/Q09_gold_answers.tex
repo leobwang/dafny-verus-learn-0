@@ -1,0 +1,176 @@
+% Q09_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q09_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the wording, the precision, the order of the arguments, the instrument
+% assignment of B3 and the card's field order are deliberately far from the reference,
+% so the grader must recognise correctness by substance (the rubric's probes), not by
+% matching text. B1 carries six significant figures; B2 states the CV as a percentage;
+% B3 catches P8d by a witness, P13v by the swap and P14v by reading the statement
+% (the reference uses the other three); B4 orders its fields differently. B3's rows
+% name the forensic deliveries' species: this file is reference-class (Δ125).
+%
+% EXPECTED[B1][recomputation][4]: correct; every row of Probe A, filled with these numbers, reads ok. No finding.
+% EXPECTED[B2][recomputation][4]: correct; every row of Probe B reads ok. No finding.
+% EXPECTED[B2][correctness][4]: (b) correct. No finding.
+% EXPECTED[B3][correctness][4]: every row reproduces under Probe C (the P13v swap copy rebuilt as instructor/scratch/probe.rs verifies under `scripts/vcheck --module Q09 --gate`; the P8d witness copy rebuilt as instructor/scratch/probe.dfy fails at the call's precondition under `--gate`); the eight catching rows name eight different instruments; P14v's row quotes the claim's line and the delivered quantifier, which is that instrument's evidence; P10d and P15v are accused of nothing; (b)'s second instrument for P12v (the audit) prints its catch. No finding.
+% EXPECTED[B4][card-fidelity][4]: every field agrees with the pinned range (lines 2852–2873); Artifact correctly says the range does not state what is released; Variance computes no interval it attributes to the card. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4, B4 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a wrong step,
+% a wrong count, an output that does not reproduce, or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q09 --- Internals III: brittleness, forensics, gate core \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\sloppy
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} The variance of one arm's rate is $p_0 q_0 / n$, two arms double it: \\
+$p_0 q_0 = 0.21$ \quad $2 p_0 q_0 / n = 0.42/40 = 0.0105$ \quad its root $= 0.102470$ \\
+$z_a + z_b = 2.8016$ \quad $\delta_1 = 2.8016 \times 0.102470 = 0.287079$
+
+\textbf{(b)} Plugging $\delta_1$ into the sample-size formula: \\
+$p_1 = 0.587079$ \quad $\bar p = 0.443539$ \\
+$\sqrt{2 \bar p \bar q} = \sqrt{0.493624} = 0.702584$ \quad
+$\sqrt{p_0 q_0 + p_1 q_1} = \sqrt{0.21 + 0.242417} = 0.672620$ \\
+$n(\delta_1) = (1.377065 + 0.566077)^2 / 0.0824143 = 3.775801/0.0824143 = 45.81$
+\quad detectable at $n = 40$: not with power 0.8; 40 tasks fall short of the
+45.81 that $\delta_1$ needs, because the variance near $p_1$ and $\bar p$ is
+larger than at $p_0$, which the first-order formula uses throughout. \\
+\texttt{fvh.stats.mde\_two\_proportions(40, 0.3)} $= 0.307304$ \quad $n$ at that
+value: $p_1 = 0.607304$, $\bar p = 0.453652$, roots $0.704062$ and $0.669691$,
+$(1.379962 + 0.563612)^2 / 0.0944360 = 40.00$.
+
+\textbf{(c)} $n(0.10)$: $p_1 = 0.4$, $\bar p = 0.35$, roots $0.674537$ and
+$0.670820$, $(1.322092 + 0.564562)^2/0.01 = 355.95$, so 356 tasks in each arm. \\
+What the pre-registration must say or change: the plan has to write down, before
+any run, that 40 tasks per arm can only see differences of roughly 31 points at
+this baseline; a hoped-for 10-point gain is far below that. So either the
+claim is limited to large effects, with a null result reported as ``no
+difference above about 31 points'', or the design changes now (more tasks per
+arm, or one task set run by both arms).
+
+\textbf{(d)} The paired value: $0.318125$. \\
+Why it is conservative: it assumes the two arms disagree on as many tasks as
+independent arms would ($p_0 q_1 + p_1 q_0$); two arms on the same tasks are
+correlated and disagree less, and fewer discordant tasks at the same
+difference means a smaller true MDE than the one printed.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} mean $= 150\,600/3 = 50\,200$ \\
+deviations $-11\,800$, $-4\,300$, $+16\,100$; sum of their squares
+$= 139.24 + 18.49 + 259.21 = 416.94$ million \quad variance (divisor 3)
+$= 138.98$ million \\
+standard deviation $= \sqrt{138\,980\,000} = 11\,788.98$ \quad CV $= 23.48\,\%$
+\quad flagged: yes ($23.48\,\% > 20\,\%$), as an advisory line only.
+
+\textbf{(b)} Stable: no \quad the row that decides: the sixth, Z3 4.14.1 with
+seed 3, which ran out of resource; one non-verified row is enough. \\
+What the CV adds: a warning about cost, not a verdict: a lemma verified in
+all six rows with the same CV would be stable. \\
+Why the two solvers' counts are not pooled: a resource count belongs to one
+solver's search; 4.12.1 and 4.14.1 are two programs, so their counts are not
+two samples of the same noise, and \texttt{scripts/vcheck} keeps one spread
+per solver.
+
+\textbf{(c)} \texttt{fvh.stats.wilson\_interval(17, 22)} $= (0.5656,\ 0.8988)$ \\
+The claim sentence: Of the 22 Dafny holes I filled in Q04--Q09, 17 have proofs
+that verify under both bundled Z3 versions and seeds 1--3, a share of 0.77 with
+95\,\% Wilson interval $[0.566, 0.899]$; measured on one machine with one pair of
+solvers and three seeds, by the person who wrote the proofs.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+\textbf{(a)} The ten rows, as in \texttt{research/q09\_forensics.md}:
+% Paste the rows between the two lstlisting lines; long rows wrap on the page only.
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible]
+item  | true? | valid? | useful? | instrument (command)                    | root cause
+P6d   | yes | no: one step is an axiom | yes | audit: scripts/vaudit specimens/Q09/P6d.dfy.specimen -> line 65: assume-axiom, audit-assume-axiom (2 findings) | MulLimbCLength's body assumes its own ensures
+P7d   | yes | no: a helper is skipped | yes | lint rule W-D04: scripts/vcheck --gate specimens/Q09/P7d.dfy.specimen -> failed; {:verify false} warning at 78:25, warnings-fail-gate | {:verify false} on AddCCommutes
+P8d   | vacuous | yes | no | witness: copy adding UseCarryIsLimb() { CarryIsLimb(1, 1, 1); }, scripts/vcheck --gate specimens/Q09/P8d-witness.dfy.specimen -> failed, a precondition for this call could not be proved (48:16) | the fourth requires conjunct can never hold for limbs
+P9d   | yes | yes | no: says <= 0 | freeze: scripts/specfreeze --against specimens/Q09/P9d-frozen.dfy.specimen specimens/Q09/P9d.dfy.specimen -> freeze-changed -- Q09_P9.CmpSelf (line 61) | ensures weakened from the frozen == 0
+P10d  | yes | yes | yes | none: gate verified (3), vaudit 0, swap copy fails, --brittleness --solvers stable | healthy
+P11v  | no | no: trusted body | yes | new inputs: copy with test two_limbs on vec![1u64, 2u64], scripts/vcheck --test specimens/Q09/P11v-test.rs.specimen -> FAILED delivery_tests::two_limbs (2 passed, 1 failed) | last_limb's code reads v[0]; the tests never had two limbs
+P12v  | ? | no: outside the macro | no | JSON: scripts/vcheck --json specimens/Q09/P12v.rs.specimen -> verdict verified with verified_count 0, per_symbol {} | add_three is plain Rust the verifier never sees
+P13v  | vacuous | yes | no | swap: copy with ensures false, scripts/vcheck --gate specimens/Q09/P13v-swap.rs.specimen -> verified, 1 verified, 0 holes, 0 errors | s.last() == 0 contradicts seq_wf(s)
+P14v  | yes | yes | no | reading the statement: claim "s[1] == 0 ==> seq_to_nat(s) == s[0]" against the delivered "forall|i: int| 1 <= i <= s.len() ==> #[trigger] s[i] == 0" | for s.len() == 2 the antecedent also needs s[2] == 0, past the end, so the lemma says nothing about the claim's inputs
+P15v  | yes | yes | yes | none: gate verified (1), vaudit 0 | healthy
+\end{lstlisting}
+The lines each copy changed (one line per copy, if any): P8d-witness: a lemma
+\texttt{UseCarryIsLimb()} whose body is \texttt{CarryIsLimb(1, 1, 1);}, added
+inside the module. P11v-test: in \texttt{delivery\_tests}, a test
+\texttt{two\_limbs} with \texttt{let a = BigNat \{ limbs: vec![1u64, 2u64] \};
+assert\_eq!(top\_limb(\&a), 2);}. P13v-swap: the \texttt{ensures} clause became
+\texttt{false,}.
+
+\textbf{(b)} The delivery: P12v \quad the second instrument: the audit,
+\texttt{scripts/vaudit specimens/Q09/P12v.rs.specimen}, which reports
+\texttt{outside-verus} at line 49. \\
+What each sees: JSON completeness sees that the run counted nothing, whatever
+the reason; the audit sees where the reason is: code outside \texttt{verus!}.
+
+\textbf{(c)} P10d: \texttt{scripts/vcheck --gate} printed \texttt{verified ---
+3 verified, 0 holes, 0 errors}; \texttt{scripts/vaudit} printed \texttt{0
+finding(s)}; the copy with \texttt{ensures false} failed with \texttt{a
+postcondition could not be proved}; \texttt{scripts/vcheck --brittleness
+--solvers} ended \texttt{--- stable}. P15v: \texttt{scripts/vcheck --gate} printed
+\texttt{verified --- 1 verified, 0 holes, 0 errors}; \texttt{scripts/vaudit}
+printed \texttt{0 finding(s)}.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 07.2, lines 2852--2873 (the pinned range).
+
+\textbf{Metric:} counts of verified obligations: 2,031 verified and 0 errors for
+CryptoProver on fable-5, 2,114 for the opus-4.8 replication, 1,430 of 1,433 for
+the proof-only whole-crate run; chacha20 closed in one round; the raw Claude Code
+baseline was left with 5 compiler and 2 verification errors; the prompt-only
+campaign's claimed 97.1\,\% did not survive its audit.
+
+\textbf{Budget:} USD 466.99 over 11.4 h (fable-5), USD 1,117.17 over 7.42 h
+(baseline), USD 856.55 over 62.3 h (opus-4.8 replication), USD 4.14 in 15
+minutes (chacha20), USD 748.02 (proof-only, no time given); fresh sessions per
+round; the eight-month human comparison is not like-for-like.
+
+\textbf{Task shape:} from fixed API contracts and a fixed spec vocabulary,
+trusted library and target order, produce the intermediate lemma statements and
+all Verus proofs for curve25519-dalek without touching executable code, and
+verify RustCrypto chacha20 against RFC 8439.
+
+\textbf{Variance:} not measured: one run per configuration, tuned on the crate
+it reports; and the proofs rest on \texttt{nonlinear\_arith}, which can be
+fragile on big goals, so other seeds or solvers might not reproduce them.
+
+\textbf{Oracle:} the verifier over the whole crate, read by a Python driver that
+trusts evidence, never the agent's account, and applies eight gates, each a
+predicate over snapshots, the target, the edited files and the commands run.
+
+\textbf{Cheat surface:} admits, invented axioms, edited or weakened specs,
+edits to frozen files, new \texttt{assume} or \texttt{external\_body}, broken
+siblings, tooling drift; the gates block only these listed cheats.
+
+\textbf{What is trusted:} Z3 and Verus, vstd, the trusted library (field specs,
+arithmetic facts, the 48 axioms, all of them present before the run), and the
+contracts, vocabulary and proof order that humans wrote; the result is
+functional correctness, and says nothing of side channels or whether the
+contracts are adequate.
+
+\textbf{Artifact:} the CryptoProver agent (Claude Code with six skills, eight
+gates, a Python driver) and the verified curve25519-dalek and chacha20, in arXiv
+2608.00965; what is released is not stated in the range, and I would need the
+paper's artifact section.
+\end{answer}
+
+\end{document}

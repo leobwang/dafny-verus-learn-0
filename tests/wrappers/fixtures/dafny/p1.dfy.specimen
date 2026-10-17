@@ -1,0 +1,11 @@
+// item: Q04.P1d S3 obligation
+// Wrapper fixture (tests/wrappers): an invented obligation specimen.
+// SLOT: FAILS ???
+module Fx_P1 {
+  method Demo(a: array<int>, i: int)
+    requires 0 <= i < a.Length
+  {
+    assert a[i] == a[i];          // [a]
+    assert i + 1 < a.Length;      // [b]
+  }
+}

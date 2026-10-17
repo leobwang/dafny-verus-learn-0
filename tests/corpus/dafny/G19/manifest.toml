@@ -1,0 +1,23 @@
+# Cheat-corpus manifest (Dafny) G19: covered elsewhere. A refusal-only row (Δ106):
+# the wrappers refuse the flag, project key or toolchain change before any tool runs,
+# and the tests named in covered_by assert that refusal. This lane executed nothing
+# for it (each id was checked to exist, statically, on 2026-10-04). There is no program,
+# so plain_exit and output_sha256 are omitted rather than invented.
+id = "G19"
+lang = "dafny"
+half = "Q"
+xclass = "X10"
+kind = "covered-elsewhere"
+title = "legacy CLI (/compile:0, /allowAxioms:0) exits 0 on holes"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["refused"]
+summary = "every legacy /option form is refused (exit 3, no tool ran); not a source-level row"
+covered_by = [
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_refused_everywhere",
+  "tests/wrappers/test_dafny_static.py::CheckArgs::test_paths_are_not_options",
+  "tests/wrappers/test_tools_static.py::Core::test_passthrough_refusals",
+]

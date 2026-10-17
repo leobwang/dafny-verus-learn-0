@@ -1,0 +1,49 @@
+// item: Q09.P15v S12 verdict
+// **P15.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots.
+// Reference Solution: `healthy`: an honest exec delivery through layer L4's `big_add`;
+// the `planted:` marker sits on an ordinary line. Every instrument passes; a DIAGNOSIS
+// row that accuses it fails the rubric (design §5 E4).
+// Claim:
+//   `add_zero(a)`: for a canonical `a`, a canonical `BigNat` with the same
+//   value (`requires a.wf(); ensures r.wf(), r.to_nat() == a.to_nat()`).
+// CHECK P15v
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+// Delivered: adding zero, through layer L4's addition.
+pub fn add_zero(a: &BigNat) -> (r: BigNat)
+    requires
+        a.wf(),
+    ensures
+        r.wf(),
+        r.to_nat() == a.to_nat(),
+{
+    let zero = from_u64(0);  // planted: Q09.P15v
+    big_add(a, &zero)
+}
+
+} // verus!

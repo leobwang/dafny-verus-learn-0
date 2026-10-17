@@ -1,0 +1,272 @@
+% Q03_solutions.tex — REFERENCE SOLUTIONS to paper/Q03_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0, Verus 0.2026.09.27) through scripts/vcheck, one solver job at a time,
+% by the DV2b kit lane for Q03 on 2026-10-05 (probe files in lane scratch,
+% not archived). B4's fields are graded against the learner's own
+% cheatsheets.md; this file records which lines of the pinned range each field
+% draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q03 --- First syntax II: modes, logic, tooling, trust \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How these are graded}
+B1 and B2 are hand calculations, dimension \texttt{recomputation}: the grader
+re-derives each step with the rubric's Probe A and Probe B and diffs the
+learner's trace step by step. B3 is informal-proof-first (the five proof
+dimensions); B4 is a paper card (\texttt{card-fidelity}, per field). The
+solutions below give the answers; the rubric never states them.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (hand-calculation)}
+
+\textbf{(a)} Write $c = c_1 \seqc c_2 \seqc c_3$ with $c_1 \equiv y \assign x + 3$,
+$c_2$ the conditional and $c_3 \equiv x \assign y - 1$. By the sequence rule,
+$\WP{c}{Q} = \WP{c_1}{\WP{c_2}{\WP{c_3}{Q}}}$.
+\begin{enumerate}
+\item Assignment ($c_3$): $\WP{x \assign y - 1}{x \geq 4} = \subst{(x \geq 4)}{x}{y-1}
+  = (y - 1 \geq 4) \equiv y \geq 5$.
+\item Conditional ($c_2$):
+  $\WP{c_2}{y \geq 5} = (y > 10 \impl \WP{y \assign y - 10}{y \geq 5}) \wedge
+  (\neg(y > 10) \impl \WP{y \assign 2y}{y \geq 5})$, and by the assignment rule
+  twice $= (y > 10 \impl y - 10 \geq 5) \wedge (y \leq 10 \impl 2y \geq 5)$.
+\item Simplify over the integers: $y - 10 \geq 5 \equiv y \geq 15$, and
+  $2y \geq 5 \equiv y \geq 3$ (the least integer at least $5/2$). So
+  $(y > 10 \impl y \geq 15) \wedge (y \leq 10 \impl y \geq 3)$; splitting on
+  $y > 10$, this is $y \geq 15 \vee 3 \leq y \leq 10$.
+\item Assignment ($c_1$): substitute $x + 3$ for $y$:
+  $x + 3 \geq 15 \vee 3 \leq x + 3 \leq 10$, that is
+  \[ \WP{c}{Q} \equiv x \geq 12 \;\vee\; 0 \leq x \leq 7. \]
+  The start value of $y$ does not occur: $c_1$ overwrites it.
+\end{enumerate}
+Substituting before simplifying gives the same result; either order is
+correct if each step is an equivalence.
+
+\textbf{(b)} The verification condition is
+$0 \leq x \leq 8 \impl (x \geq 12 \vee 0 \leq x \leq 7)$. It fails exactly at
+$x = 8$ (any $y$). Trace: $y \assign 11$; $11 > 10$, so $y \assign 1$;
+$x \assign 0$; and $0 \geq 4$ is false. Verifier: the Dafny method of the
+problem gives \texttt{a postcondition could not be proved on this return path},
+the Verus \texttt{proof fn} gives \texttt{postcondition not satisfied}; with
+the precondition replaced by the computed wp both verify. Probe A's
+counterexample test on $(8, 0)$ passes (\texttt{PASSED Counterexample}).
+
+\textbf{(c)} No: it is the union $[0, 7] \cup [12, \infty)$. The start values
+$8$--$11$ put $y$ in $11$--$14$, where the then-branch leaves $1$--$4$.
+
+\textbf{Probe A on the pins.} With the wp above spliced into
+\texttt{LearnerWp}, the file holding \texttt{Sufficient}, \texttt{Necessary},
+a \texttt{Step} lemma ($2y \geq 5 \Leftrightarrow y \geq 3$) and the
+counterexample test verifies (\texttt{5 verified}) and its test passes. With
+the flawed wp $x \geq 12 \vee -1 \leq x \leq 7$ and the flawed step
+$2y \geq 5 \Leftrightarrow y \geq 2$, \texttt{Sufficient} and \texttt{Step}
+fail, and the grid tester fails with \texttt{expectation violation}, its raw
+output printing \texttt{disagree at x = -1, y = -2}.
+
+\textbf{Typical flaws, with their failing instances.}
+\begin{itemize}
+\item $2y \geq 5$ rounded to $y \geq 2$, giving $-1 \leq x \leq 7$ in the second
+  disjunct: start $x = -1$ satisfies the claimed wp, but $y \assign 2$,
+  $y \assign 4$, $x \assign 3$, and $3 \geq 4$ fails.
+\item The then-branch constraint dropped (answer $x \geq 0$, or
+  $x \geq 8 \vee \dots$): start $x = 8$ satisfies it and ends at $x = 0$.
+\item Computing forwards from $P$ (a strongest postcondition) instead of
+  backwards: the step does not compute the asked quantity; the grader shows
+  it with the start state at which the claimed formula and the program
+  disagree.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (hand-calculation)}
+
+$I \equiv x \leq n \wedge x + y = n$, $b \equiv x < n$,
+$S \equiv x \assign x + 1 \seqc y \assign y - 1$.
+
+\textbf{(a)}
+\begin{itemize}
+\item \emph{Entry:} $n \geq 0 \impl \WP{x, y \assign 0, n}{I}$, that is
+  $n \geq 0 \impl 0 \leq n \wedge 0 + n = n$. Valid.
+\item \emph{Maintenance:} $\WP{S}{I} = \WP{x \assign x + 1}{x \leq n \wedge x + (y - 1) = n}
+  = (x + 1 \leq n \wedge (x + 1) + (y - 1) = n)$. The condition
+  $x \leq n \wedge x + y = n \wedge x < n \impl x + 1 \leq n \wedge x + y = n$ is valid:
+  $x < n$ gives $x + 1 \leq n$ over the integers, and the sum is unchanged.
+\item \emph{Use at exit:} $x \leq n \wedge x + y = n \wedge x \geq n \impl y = 0$.
+  Valid: $x = n$, so $y = 0$.
+\item \emph{Termination:} $I \wedge b \impl n - x > 0$ (bounded below by $0$) and
+  $\WP{S}{n - x < V_0}$ with $V_0 = n - x$ at the start of the iteration, that is
+  $n - (x + 1) < n - x$. Both valid. (Dafny states the bound as
+  $0 \leq n - x$ at the start of an iteration; either form is accepted.)
+\end{itemize}
+
+\textbf{(b)} With $I' \equiv x + y = n$: entry ($0 + n = n$), maintenance
+($(x+1) + (y-1) = n$) and termination (the guard alone gives $n - x > 0$) stay
+valid. \emph{Use at exit fails:} $x + y = n \wedge x \geq n \impl y = 0$ is
+false at, for example, $n = 0$, $x = 1$, $y = -1$ (any $x > n$ with $y = n - x$).
+No run reaches that state: every run keeps $x \leq n$. The program is
+correct, and $I$ proves it; $I'$ is true of every reachable state but too weak
+to carry the postcondition, because a verification condition quantifies over
+every state that satisfies the invariant, reachable or not. The failure is a
+verdict about the annotation, not the program (``could not be proved'' is not
+``false''). Verifier: the Dafny method with $I'$ gives
+\texttt{a postcondition could not be proved on this return path} at the
+method's return path, and only that.
+
+\textbf{(c)} Yes, it verifies. The type puts $y \geq 0$ into every state the
+verifier considers: Dafny assumes the subset-type predicate of \dfy{nat}
+wherever \texttt{y} is read and checks it at every assignment (\dfy{y := y - 1}
+needs $y - 1 \geq 0$, which $x + y = n \wedge x < n$ gives); Verus assumes the
+range $0 \leq y \leq 2^{64} - 1$ of every \vrs{u64} value and checks the
+subtraction for underflow from the same facts. The use condition becomes
+$x + y = n \wedge x \geq n \wedge y \geq 0 \impl y = 0$: $x = n - y \leq n$, so
+$x = n$ and $y = 0$. On the pins: Dafny with \dfy{y: nat} and $I'$ verifies;
+the Verus \vrs{u64} version with only \vrs{x + y == n} verifies; a Verus
+\vrs{i64} version (with \vrs{requires n >= 0}) and only \vrs{x + y == n} fails
+with \texttt{postcondition not satisfied}.
+
+\textbf{Typical flaws.} The use condition written without $\neg b$, or with
+$b$; maintenance computed as $I \impl I$ with no substitution; (b) answered
+``the program is wrong'' (a run of the program from any $n \geq 0$ refutes
+that: it ends with $y = 0$); (c) answered ``no'' (the Dafny \dfy{y: nat} run
+verifies, which is a verified answer under the asymmetry rule).
+
+% ---------------------------------------------------------------------------
+\section*{B3 (informal-proof-first): the reference blueprint}
+
+\textbf{Statement.} For every $s$ with $\mathrm{Valid}(s)$ and every
+$d < \mathrm{BASE}$:
+\[ \mathrm{ToNat}(\mathrm{AddLimb}(s, d)) = \mathrm{ToNat}(s) + d. \]
+
+\textbf{Induction on} $|s|$ (the lemma's \texttt{decreases}), the
+hypothesis quantified over \emph{every} limb, not only the given $d$:
+
+\textbf{IH:} for every $s'$ with $|s'| < |s|$ and every $d'$,
+\[ \mathrm{Valid}(s') \wedge d' < \mathrm{BASE} \impl
+\mathrm{ToNat}(\mathrm{AddLimb}(s', d')) = \mathrm{ToNat}(s') + d'. \]
+
+\textbf{Cases} (one per branch of \texttt{AddLimb}):
+\begin{enumerate}
+\item $|s| = 0$. If $d = 0$, $\mathrm{AddLimb}([], 0) = []$ and both sides are
+  $0$ by the definition of ToNat. Otherwise $\mathrm{AddLimb}([], d) = [d]$
+  and $\mathrm{ToNat}([d]) = d = 0 + d$ (L2 \texttt{ToNatSingleton}).
+\item $|s| > 0$, $s[0] + d < \mathrm{BASE}$ (no carry).
+  $\mathrm{AddLimb}(s, d) = [s[0] + d] + s[1..]$; by L2 \texttt{ToNatCons},
+  its value is $s[0] + d + \mathrm{BASE}\cdot\mathrm{ToNat}(s[1..])$, which is
+  $\mathrm{ToNat}(s) + d$ by one unfolding of ToNat. No IH.
+\item $|s| > 0$, $s[0] + d \geq \mathrm{BASE}$ (carry).
+  $\mathrm{AddLimb}(s, d) = [s[0] + d - \mathrm{BASE}] + \mathrm{AddLimb}(s[1..], 1)$,
+  and $s[0] + d - \mathrm{BASE}$ is a natural because of the case condition.
+  The IH applies at the instance $(s[1..], 1)$: $|s[1..]| < |s|$, $1 < \mathrm{BASE}$,
+  and $\mathrm{Valid}(s[1..])$ by L2 \texttt{ValidTail} (its $\mathrm{Tail}(s)$
+  is $s[1..]$ when $|s| > 0$). It gives
+  $\mathrm{ToNat}(\mathrm{AddLimb}(s[1..], 1)) = \mathrm{ToNat}(s[1..]) + 1$.
+  By \texttt{ToNatCons}, the value is
+  $s[0] + d - \mathrm{BASE} + \mathrm{BASE}\cdot(\mathrm{ToNat}(s[1..]) + 1)
+  = s[0] + d + \mathrm{BASE}\cdot\mathrm{ToNat}(s[1..]) = \mathrm{ToNat}(s) + d$.
+\end{enumerate}
+
+\textbf{Helper lemmas} (all in L2; no new lemma):
+\begin{itemize}
+\item \texttt{ToNatSingleton(d)}: $\mathrm{ToNat}([d]) = d$;
+\item \texttt{ToNatCons(d, s)}: $\mathrm{ToNat}([d] + s) = d + \mathrm{BASE}\cdot\mathrm{ToNat}(s)$;
+\item \texttt{ValidTail(s)}: $\mathrm{Valid}(s) \impl \mathrm{Valid}(\mathrm{Tail}(s)) \wedge \mathrm{Head}(s) < \mathrm{BASE}$.
+\end{itemize}
+
+\textbf{Gaps:} none. The hypothesis $d < \mathrm{BASE}$ is not used by the
+value arithmetic; the IH instance needs only $1 < \mathrm{BASE}$.
+
+\textbf{Structure match (spec \S4.4 author rule).} The formal reference twin
+follows this blueprint case for case: an empty case closed by the singleton
+lemma, a no-carry case closed by one cons step, and a carry case that first
+establishes the tail's validity, then makes the recursive call at
+$(s[1..], 1)$, then takes one cons step. Under the Q03 unit's
+\texttt{manual-lemma-induction}, the empty body fails on every seed and the
+twin verifies (author notes, Q03 code notes \S3).
+
+\textbf{Probe C on the pins.} The two splices of the rubric's Probe C, filled
+with this blueprint's IH instance and helpers (\texttt{ToNatCons} for the
+carry step, \texttt{ValidTail} for the instance's requires), verify with
+\texttt{scripts/vcheck --module Q03} (\texttt{26 verified}).
+
+\textbf{Typical flaws.}
+\begin{itemize}
+\item \emph{IH fixed at the lemma's own $d$} (``assume the claim for $s[1..]$
+  and $d$'') and then used at $1$: induction-soundness 2. Failing instance:
+  $s = [\mathrm{BASE} - 1]$, $d = 2$. The carry step consumes
+  $\mathrm{AddLimb}([], 1) = [1]$, but the stated IH covers only
+  $\mathrm{AddLimb}([], 2) = [2]$; an executable check with
+  \dfy{expect AddLimb([BASE - 1], 2)[1..] == AddLimb([], 1)} and
+  \dfy{expect AddLimb([], 1) != AddLimb([], 2)} exhibits it.
+\item \emph{IH applied without establishing $\mathrm{Valid}(s[1..])$}: the fact
+  is true, so there is no failing instance and this is a gap, scored 3
+  (blueprint-quality, or gap-accounting when undeclared): the blueprint omits
+  the helper a formalizer needs.
+\item \emph{Two cases only} (empty and non-empty), with the carry folded into
+  the no-carry arithmetic: case-exhaustiveness 2. Failing instance:
+  $s = [\mathrm{BASE} - 1]$, $d = 1$, where $\mathrm{AddLimb}$ returns
+  $[0, 1]$, not $[\mathrm{BASE}] + s[1..]$.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section*{B4 (paper card 02.13): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 944--967 (computed 2026-10-05),
+\[ \texttt{sha256 d323712a0a7d430510ca9b9f14daa83c0c6ca9ad876eaffa542ed9c6bc56a38e}. \] A field is correct when it agrees with the lines named;
+wording is free. Each entry: the reference content (paraphrased), then the
+lines it draws on.
+
+\begin{description}
+\item[Task shape.] Input: a single-method Dafny program as a triple of code,
+  formal annotations (pre- and postconditions) and docstring. Output: accept
+  or reject, i.e.\ whether the three are mutually consistent; a second task
+  generates code and spec from a docstring and filters them the same way.
+  \emph{Lines 946, 948, 963.}
+\item[Oracle.] Six checks, all of which must pass: Dafny verifies the code
+  against the annotations; reconstruction from the annotations and from the
+  docstring, compared on five input/output tests; annotations reconstructed
+  from the docstring, proved equivalent by Dafny lemmas; two GPT-4 yes/no
+  judgments (annotations to docstring, code to docstring).
+  \emph{Lines 948, 951.}
+\item[What is trusted.] Dafny 4.0 with Z3; GPT-4 as generator and as judge;
+  five I/O tests standing in for code equivalence; the assumption that each
+  component determines a unique output per input; and, implicitly, that the
+  three components do not share an error (errors common to all three pass).
+  \emph{Lines 948, 951, 965.}
+\item[Cheat surface.] What it closes: a trivially weak spec (\texttt{ensures true})
+  verifies but fails the anno-complete reconstruction. What stays open: a
+  lenient LLM docstring judge, five-test equivalence, errors shared by code,
+  annotations and docstring, and adversarial variants built by the authors
+  (so robustness is measured only against their mutations).
+  \emph{Lines 952, 965.}
+\item[Metric.] Acceptance counts: correct ground-truth programs accepted
+  (45 of 60 at $k = 1$, 52 at $k = 10$); adversarial variants accepted (0 of
+  240); wrong programs found and correct ones accepted on MBPP-DFY-50 (6 found;
+  24 of 27 accepted); the Verus port (32 of 36); docstring-to-code-and-spec
+  generation (39 of 60 accepted, none wrong). \emph{Lines 957--963.}
+\item[Budget.] Up to three generation attempts with compiler feedback; each
+  check repeated $k \in \{1, 10\}$ times, passing if any repetition passes;
+  every check that is an LLM call costs GPT-4 calls. No token, dollar or
+  wall-clock figure in the range. \emph{Line 948 (and 959 for $k$).}
+\item[Variance.] Only through $k$: 45 versus 52 accepted at $k = 1$ and
+  $k = 10$, a sign that single runs vary; no intervals, seeds or repeated
+  runs are reported, and the result is tied to GPT-4 (CodeLlama-34b reaches
+  2 of 60). \emph{Lines 948, 959, 965.}
+\item[Artifact.] CloverBench: 60 single-method textbook Dafny programs, each
+  with four adversarial variants that still verify; an MBPP-derived Dafny set;
+  a Verus port of 41 tasks; later benchmarks (AutoVerus's Verus-Bench) reuse
+  its tasks. \emph{Lines 948, 961, 962, 967.}
+\end{description}
+A field that says the range is silent where it is silent (budget in tokens or
+money; variance intervals) is correct. A field that contradicts a line (for
+example ten feedback rounds instead of three, or ``GPT-4 alone decides'')
+scores 2, quoting that line.
+
+\end{document}

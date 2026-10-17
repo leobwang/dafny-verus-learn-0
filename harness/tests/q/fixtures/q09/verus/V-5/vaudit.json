@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V-5"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V-5/src/lib.rs",
+    "kind": "rlimit-inflation",
+    "line": 6,
+    "message": "a per-item rlimit above the pin (V22)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V-5"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "0f92d7536e606058fd935283ee29ee2ed71d069d7eaae87f59455ad8c3c09747",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V-5"
+}

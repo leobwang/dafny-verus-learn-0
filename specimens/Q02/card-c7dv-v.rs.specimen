@@ -1,0 +1,24 @@
+// Card Q02.C7dv, demo v (Verus). Open it only after your Q02 predictions are committed, then
+// run `scripts/vcheck specimens/Q02/card-c7dv-v.rs.specimen` and compare with demo d.
+// after: Q02.P3dv
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn count(n: nat) -> nat
+    decreases n,
+{
+    if n == 0 {
+        0
+    } else {
+        1 + count((n - 1) as nat)
+    }
+}
+
+pub proof fn count_id(n: nat)
+    ensures
+        count(n) == n,
+{
+}
+
+} // verus!

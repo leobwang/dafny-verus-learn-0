@@ -1,0 +1,271 @@
+# expected/Q05.freeze — statement-freeze pins for Q05 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q05` from the files as shipped; checked by
+# `scripts/specfreeze --check Q05`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q05"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q05_Frames/std/Q05_Frames.dfy"
+lang = "d"
+open_bodies = []
+open_frames = ["Q05_Frames.LimbStack.Pop"]
+[file.statements]
+"Q05_Frames.Ack" = "843aade684264d48cd93bf2cbac6fb14d827a915cffd1f54324acad2102d24d3"
+"Q05_Frames.AllDigits" = "b2119ee9a3ddc63a4efdda3c309bebd2d78ac1a4cd9f1aa741e9adf45ad96b22"
+"Q05_Frames.BitCount" = "a4d484fd54f1b3874d673a356f4a2956124285c731a19c1b7405961eb991ca52"
+"Q05_Frames.CmpFast" = "2571465681fd3d4bee8311fb7e8abdaad8af7e160657ab9722afbd7b94816650"
+"Q05_Frames.CountOnes" = "3116acc5644e5e39b2bae9cab5207f103801447374da6043c69ea4995f6c99bc"
+"Q05_Frames.CountOnesCheck" = "a48eb240408702c1f04a585823c06a34415f1485f1929ea7e971039dba9b894d"
+"Q05_Frames.DecValue" = "4c26ee1fda2d4f1060b708f530b8797af6978439d60491db00d8055001b456d3"
+"Q05_Frames.Digit" = "852728f5c4b9390ef179ade0d0a55df1b7360a5ebff84a25dabb0707c23d1826"
+"Q05_Frames.FirstIsZero" = "287fd248bfe4bbeff44a9b2600b64619f0ab47cbda0f5f2005cf0955b2f2aedf"
+"Q05_Frames.FirstLimb" = "4523884465773a44bfff91140ff782e94297f449e97e630d2d0e7afda9715a63"
+"Q05_Frames.LimbStack.Pop" = "ea28bf89e7ba6ed7357eb7c463ad618e098e1170cc63165c21224e7196c87c67"
+"Q05_Frames.LimbStack.Push" = "f350240cfe5557f0610f26a42ac34f537cbf895e1902d74679a4a2fbcc4d2c73"
+"Q05_Frames.LimbStack.Size" = "f2f48265079a64d78029dc6682afb35c87b8ad88f6b5fa6ef2948e7ba74bdaa4"
+"Q05_Frames.LimbStack.Valid" = "dbcde4ff7a1a5ff17eb50c6247abcb0fb2d1f278175a12e2885365171db276dd"
+"Q05_Frames.LimbStack._ctor" = "3040ef7c19cfc3235edf447314b8e0919dc6033f8edb7af0ffe6377cebd067ff"
+"Q05_Frames.Meter.Tick" = "96ce03721138f4ef76a63b90ae71443dfc5c032516fdfa748a48ead9737a7545"
+"Q05_Frames.Meter.Valid" = "fc8bb2332f3307a3b4df2c4d411ebf2b67367160ca74ae3578bbb4bd4d5fc6ee"
+"Q05_Frames.Meter._ctor" = "b4283dbbbcdbfbc0bc8207b67638583e819329b464ec962af442aace5faaa603"
+"Q05_Frames.Ones" = "870ade9733805b03095a4627c91e09b28919301ebda09124f7ea4157874a7209"
+"Q05_Frames.ParseDecimal" = "7666b98df545e5eb5e18ce05f31a7661444a294d914b385dbfff32cb305e768d"
+"Q05_Frames.ParseDecimalCheck" = "5d2fd96ef2d2c40d034eb6116311e8d55978856936fed639e9772b7451d1994e"
+"Q05_Frames.PushCheck" = "9dc1da755ee41e26c30c3ec12d9cd6bc4c2aea828f6e103444e5bcaf7f686d80"
+"Q05_Frames.Triangle" = "47efd9e03724a593a17625cf508ce135245fe6edabacb6150c0e8b3af2a819cb"
+"Q05_Frames.WalkPairs" = "3ada0e2c84a3831c06eca7158a3116fe1a9b157a8d93637898e7e2786d13b859"
+[file.frame_ensures]
+"Q05_Frames.LimbStack.Pop" = ["d679c94c7b29027a27e1add4a9651b439888786fba1cd432f4d21bf5f1642bb3"]
+
+[[file]]
+path = "dafny/checks/Q05_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_Checks.P8d" = "d93091f0ebcb330e82101f59f0b156765f4268b153705009e713458144dcca93"
+
+[[file]]
+path = "verus/q/q05_frames/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<LimbStack as View>::V" = "20c7e4ca2ecd65bf6bf5c8b89339b6a4589bd47631e64a0ae54503d8f7bb3c8a"
+"<LimbStack as View>::view" = "1998a653ccc85f3722e647fffc1128974dbef0a8c4b2cf930f4fd41a4c8a9acc"
+"Counter" = "ddcb103a1d2a64cc62ef3a6ed98d338f75d10d005bee0b682677d6c90a6e0294"
+"Counter::bump" = "7a64399e797303ca647203ea5ac3522f44ddff02561eb0a78707082d92e00287"
+"Counter::reset" = "81177abd502b73e3b0c2d4ce5c14a5452d2f601c9f764ea14714cf37a1972722"
+"Full" = "d61c243e392a0393908d5de9353f232dcbb72442620723d669162a2e46814afa"
+"LimbStack" = "7c665a49a74dcf8074c56a200f6e3b7b531074466f9532146ea6800a271dc1e3"
+"LimbStack::inv" = "6eafb8dc62964a68527268c51faf4d77848b969a5c114c4b0f248e0dec026b7b"
+"LimbStack::new" = "e11dc96173b72145be29b89b2c989abca3a3e053f96d93347186648752d86645"
+"LimbStack::try_push" = "d2903b63d103552187f7862c4112ab4d1a6c739f644aa62ece32b084a9050133"
+"NoLimb" = "7c3f73a387ab61e78ccdddc46f47a491a568e560804bcfa80986e01ff21aed8c"
+"OutOfRange" = "1e739f07977efc33f3eff0bc782a27433fe392ac7de78fa15e323e5978375b05"
+"ParseError" = "08b96f31f29805e1a50797639d571b4fded1e3e6c300f29035add970331c23e9"
+"ack" = "dc2cd9cf78173c489660b286558c54f8af27e006bca09fba005dab8f254f924c"
+"all_digits" = "9f0ea2a0289f4315e81f2d481cf983cf7972c8e1e67a07fe56ea292ee424e255"
+"bit_count" = "1b321c906b78dd96adcb5694243d8402ca2b1e89bed3ae5375ab592c8cdeaec4"
+"count_ones" = "c96889ed2f2dbef26ccde248cec7d392e0cb5edb41d2a78a2bea6d349313d4a8"
+"count_ones_check" = "6bcc988b6d4bd5c5025188fe01b5de0a09dd380478c9fc45d0e610f0841cf1ca"
+"counter_demo" = "ba727ba06c842b41f40f7909d31a315e0ca505a9165e24212926f4f48e9584c1"
+"dec_value" = "19bed4fe030b77f954f2cee895300d1bc8591fee9c27217bb0b9c7b8ff697ffb"
+"digit" = "675e2aa7e59c356ee33e0e77aad2e8c3a1a29aa9e1793981ae8a60f07fc7e8a5"
+"first_is_zero" = "41f29b55f9929a8d01421551c2c0df4ab50d1727b4e8cc4ce7f5dea678d5cc1d"
+"first_limb" = "87ff3cc54d22fcbfefb8c1f85df704e32db12db1e005f6fbbc3b6abac5dbff9f"
+"get_limb" = "d1579086818a8b6ed02e0e0df8817e39acdc13cbd1a56f6cdaf4c934b31abedf"
+"is_digit" = "f7d69b90aafb67ab8da89344c854b2af59f1d2660c328d020658ff37cf4adcb0"
+"mul10_add" = "d0ffd1db6a56b82096a757072aa30c549f5a14546b85fa75f844c8a947937626"
+"ones" = "75f3b491329d98cd0075c2df6d36c6f9aac56579251879cac80463dcd74a2eae"
+"parse_decimal" = "7640d1f86592b07ecbe836b107285ad08ca7c65516f1536a40c760f7102ba01d"
+"parse_decimal_check" = "6f3124f8843d14096819860a0eef9a286a0809341603018bc8833d2d1520c6be"
+"shift_up" = "0ca03877c86ddde5f935c0d5384e8f76560f88c11681dc0047a4c55928753e74"
+"shift_up_check" = "3736bda8abeeefa9d774c207765b6e9ae67d73e82cdb1a4ba762526149b41c82"
+"swap_limbs" = "a63de922e9350c8582351b0bc574b6f75aeb8654127b746e33ce65cb07e7aca8"
+"try_push_check" = "6bdf14b473ada9c571f9e471b877f4cce7502dc30ee5683f1c4ba518e8026aa6"
+"walk_pairs" = "3832063423e73ce7dda71879bb59f18caef16f05d2688ba69da110a8fe8592d2"
+
+[[file]]
+path = "specimens/Q05/P4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_P4.LimbStack.Push" = "f350240cfe5557f0610f26a42ac34f537cbf895e1902d74679a4a2fbcc4d2c73"
+"Q05_P4.LimbStack.Size" = "f2f48265079a64d78029dc6682afb35c87b8ad88f6b5fa6ef2948e7ba74bdaa4"
+"Q05_P4.LimbStack.Valid" = "dbcde4ff7a1a5ff17eb50c6247abcb0fb2d1f278175a12e2885365171db276dd"
+"Q05_P4.LimbStack._ctor" = "3040ef7c19cfc3235edf447314b8e0919dc6033f8edb7af0ffe6377cebd067ff"
+"Q05_P4.SameStackTwice" = "944b83f1167cabe996096461908952bf6bd4edf011b7f76a6797f8bc42636b3f"
+"Q05_P4.StillDisjoint" = "03b066d84376afe4564a8dfeeb494c01cd9e6d9d992857e43b93ea6e8660fec1"
+"Q05_P4.WithDisjoint" = "e9256e257d6839098c1628a56d7ce6879eaacfaa53990dc65f59c366d03606d2"
+"Q05_P4.WithoutDisjoint" = "292c71e0d11e3f7ad1885027761f6637cab9e5456429369f24616dad4f9c2d74"
+
+[[file]]
+path = "specimens/Q05/P5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<Bounded as View>::V" = "20c7e4ca2ecd65bf6bf5c8b89339b6a4589bd47631e64a0ae54503d8f7bb3c8a"
+"<Bounded as View>::view" = "7eb79df49d8dc37c69b4c86931026d36f7dc1b016557987acbfbd1a4ff3b5830"
+"Bounded" = "948c57ab26c399e019cb41ae4103181e8bafb86de312117bd3237aec983c7904"
+"Bounded::inv" = "3548766065750b2b788a4574ffb0fc5d1f9d156bce9cba691a3713fa8bba8981"
+"Bounded::maybe_push" = "153392e85f861735277fef7b30a76e49f8b2db2621c8821ec4075488c7e94419"
+"Bounded::new" = "d66c435dabc2b6f60e4824008d078cb4ee9efe13aa8dcf0d74f5992e2fed0f9d"
+"Rejected" = "ad0c6ba2f3dd0d9884e3bada8e61e1ccfe7c3c9de89959a622a767f24e3333f8"
+"length_bounded" = "493c2adec595c13d7cbd3f76485811a8eccab586a0605d21c07ab758b6621de2"
+"limit_unchanged" = "ace855688ed5e853be229f39a029e5e23aba41972bf3a6525e0c119e4ee1c97e"
+"other_unchanged" = "ff1d7ad4ad7e75d9aa38c5855a6271f85cfd72a2caad3cc74620b92353141be2"
+"same_unchanged_on_err" = "9a7d4555a236687ac59847ee7ffbeaeb45bf0c6857dafc4ef34525b3fad84538"
+
+[[file]]
+path = "specimens/Q05/P6d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_P6.CallPre" = "a331f690580110d11c36e2097b07aaa7b852b3d6b57c427ac7939edc3558509a"
+"Q05_P6.FirstLimb" = "35d06a2abbd9f604f87c4f9bc892d13ff6435222fc532257f1066a72d4350aa2"
+"Q05_P6.OtherLimb" = "5e88eb06b0001acf2def0b77759fc32806886b6970ed716551537a837b29dae5"
+"Q05_P6.OtherLimbNoFrame" = "1e33a53e786cd5927c345e8864833ba669eec98416c03646edd233f358310148"
+
+[[file]]
+path = "specimens/Q05/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_CardC1d.Meter.Count" = "780fdca4569f464e66ebd655e03f1b4165f4d618704e2a7aecf711e02b861e03"
+
+[[file]]
+path = "specimens/Q05/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_CardC2d.Triangle" = "47efd9e03724a593a17625cf508ce135245fe6edabacb6150c0e8b3af2a819cb"
+
+[[file]]
+path = "specimens/Q05/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_CardC3d.FirstIsZero" = "d63c1fe56db2676ce16fc52f51295ed27ff080e39d84722e420fe4a483ddd73d"
+"Q05_CardC3d.FirstLimb" = "4523884465773a44bfff91140ff782e94297f449e97e630d2d0e7afda9715a63"
+
+[[file]]
+path = "specimens/Q05/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"NoLimb" = "7c3f73a387ab61e78ccdddc46f47a491a568e560804bcfa80986e01ff21aed8c"
+"first_is_zero" = "2b685cc9e510850cf2b7feb58deb825eed37ee3a4f36c1159c3bb4626e947809"
+"first_limb" = "87ff3cc54d22fcbfefb8c1f85df704e32db12db1e005f6fbbc3b6abac5dbff9f"
+
+[[file]]
+path = "specimens/Q05/card-c4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_CardC4d.Steps" = "a9157bb46c4f74360928fb7b6b7c8eea3f30993d26e00cd4338655ebf129ebf4"
+
+[[file]]
+path = "specimens/Q05/card-c4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"steps" = "c05e8b174cde5f6998a82cb99efa3a7400052d0c09f4036e56cbe2f66a805504"
+
+[[file]]
+path = "specimens/Q05/card-c5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Counter" = "ddcb103a1d2a64cc62ef3a6ed98d338f75d10d005bee0b682677d6c90a6e0294"
+"Counter::check_room" = "bd15f0bd81a29171638467fd5700fffe4c607bf09bb7f1e2c410b479655f1f69"
+"Locked" = "2c59011f38c03416242fbcd9478b94a52cfd3d7c91d2acacd24dffe47050a751"
+"client" = "3a29edc48dad3e6130895aad6bfc62ee85824f54b4a0017cd2b1881cf5fbb3d9"
+
+[[file]]
+path = "specimens/Q05/card-c6v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"OutOfRange" = "1e739f07977efc33f3eff0bc782a27433fe392ac7de78fa15e323e5978375b05"
+"get_limb" = "d1579086818a8b6ed02e0e0df8817e39acdc13cbd1a56f6cdaf4c934b31abedf"
+
+[[file]]
+path = "specimens/Q05/card-c7dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_CardC7d.ShadowLength" = "0673f6b61f399d840588b55371e432337c48c074d0d7dc86c349713e71328f91"
+"Q05_CardC7d.Tagged._ctor" = "962bbf77161d39c230df8956e168245df67020fc98774465039cd869e8f97401"
+
+[[file]]
+path = "specimens/Q05/card-c7dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Plain" = "a15938b8d01cbefd2ede0323365f19652abfc149b67ec69a9f5ca9ef0605201e"
+"Tagged" = "4c55b6211ce182debb5993ed2832273b195ea5185740e7fa4cd1c2ec58caa3c7"
+
+[[file]]
+path = "specimens/Q05/card-c8dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_CardC8d.Half" = "ed64474cd6130aea0676a47e4f36adc782b45adad030dac07bc2a71b06e15bea"
+"Q05_CardC8d.Outcome" = "ce2481e488fa739afd0a80296b3f4367e8a64ec0edeea20e4d04e9a7fe348c3e"
+"Q05_CardC8d.Outcome.Extract" = "05fe58fccd461f20e4c3c308dd9e587a2b659910b1b7d1224502f5419011403c"
+"Q05_CardC8d.Outcome.IsFailure" = "c29e33ba14d90079eddcbccad17720ecb89c003cbbb5d3939a08ee63c5e47c15"
+"Q05_CardC8d.Outcome.PropagateFailure" = "e7f1e41eaa9b704cea33d3800bd7918499a4589d43ea9511a37288be28208787"
+"Q05_CardC8d.Quarter" = "f3190853c599596a980c1418fd8f4bc2c452d0ffa23f383ddab7f9517e56d457"
+
+[[file]]
+path = "specimens/Q05/card-c8dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<ParseFail as From<Odd>>::from" = "b727ca32d6c1b32c958550cea6c647c430d0c8e510d2fe0bcde7f71a64ee2af1"
+"Odd" = "076cc6b32f6e70b933cfb69388b079faa8f43d0988d22fd864f4797b9db787a5"
+"ParseFail" = "eb3a903bdd2ba2777bc9e9cd4ceac91e85095ba3e445027f6a68bcaaeb13b361"
+"half" = "c26999839430c518b07706ad4dc38f2f4ea8df929a3ff0de6908789b9331c778"
+"quarter" = "a9ba260b8b93cb26413a9c7b3d385893d01aabbc970ae571de40690a014b68f2"
+
+[[file]]
+path = "dafny/Q/Q05_Frames/exit/Q05_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_Exit.AllDigits" = "b2119ee9a3ddc63a4efdda3c309bebd2d78ac1a4cd9f1aa741e9adf45ad96b22"
+"Q05_Exit.CountFull" = "b0de8e7128786bd8ca5aa100257b7e313b69bb1918776a5faf69291517e030f8"
+"Q05_Exit.ParseField" = "9f49a5834e7fe47933a79ca5e19696141ae483ae6a51e5e56162b34521028c9b"
+"Q05_Exit.ParseTwo" = "b297bfb5bd13a66823b2b04bc2f2a8ff72913877f95b06cd878db05d0223db59"
+
+[[file]]
+path = "verus/q/q05_frames/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Account" = "445637f40e8c20d2d3a3ddc3a4e243583dfd4daffa3bce97242e681a4d01df0d"
+"ParseError" = "08b96f31f29805e1a50797639d571b4fded1e3e6c300f29035add970331c23e9"
+"Short" = "0663bd0e473ccf9dc6b8d10d0ed9969440953a766588accee90f8c7601664564"
+"is_digit" = "f7d69b90aafb67ab8da89344c854b2af59f1d2660c328d020658ff37cf4adcb0"
+"parse_digit" = "b8655c9def109cb6767e773fc1529e5e8ca8672e5ec068acd0d8801cb7497cb4"
+"parse_pair" = "56f622ef185d26560ba73aea873cc5e6289d23e23277ada8ebeb4c43b8967c4f"
+"transfer" = "5e9aaabad1cd13f626a4b67a9290c7751a6671e67891ad26b706fc3a83ebef2e"
+
+[[file]]
+path = "dafny/Q/Q05_Frames/agent/Q05_AgentInfra.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q05_AgentInfra.Larger" = "4ce9bd8959c5686c3e53e79a75b8de41172f87aa76311990047fab2f66495894"
+"Q05_AgentInfra.Width" = "ce6c373e2b39491ec7e565d270d340b3e15df93cccce812ee231f587759bd156"
+
+[[file]]
+path = "verus/q/q05_frames/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"one_more" = "48bbe0080164c8343448d7de00483c2307908c7c95be59febbd992dc925f19c5"

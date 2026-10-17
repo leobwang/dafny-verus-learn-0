@@ -1,0 +1,6 @@
+// Demo for card Q03.C4d (write:subset-type), the failure half: a subset type
+// declared with a witness outside its predicate.
+// EXPECT @5 "the given witness expression might not satisfy constraint"
+module Q03_CardC4d {
+  type Pos = x: nat | x > 0 witness 0
+}

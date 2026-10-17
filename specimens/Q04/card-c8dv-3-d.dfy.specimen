@@ -1,0 +1,24 @@
+// Card Q04.C8dv (false friends), row 3 (lemma recursion), demo d (Dafny). Open it only
+// after your Q04 predictions are committed, then run
+// `scripts/vcheck specimens/Q04/card-c8dv-3-d.dfy.specimen` and compare with
+// specimens/Q04/card-c8dv-3-v.rs.specimen.
+// after: Q04.P5d
+module Q04_CardC8dv3D {
+  function Double(n: nat): nat
+    decreases n
+  {
+    if n == 0 then 0 else Double(n - 1) + 2
+  }
+
+  lemma {:induction false} DoubleTwiceManual(n: nat)
+    ensures Double(n) == 2 * n
+    decreases n
+  {
+  }
+
+  lemma DoubleTwiceDefault(n: nat)
+    ensures Double(n) == 2 * n
+    decreases n
+  {
+  }
+}

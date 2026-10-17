@@ -1,0 +1,23 @@
+# Test fixture (tests/wrappers): an invented crate with one binary target, for
+# `vcheck --bin` (dvl.verus.run_bin, the user's decision D16). Its library depends on
+# the chain fixture's bottom crate, so the route builds a layer chain too.
+[package]
+name = "tcli"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "tally"
+path = "src/main.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+tla = { path = "../chain/tla" }
+
+[package.metadata.verus]
+verify = true

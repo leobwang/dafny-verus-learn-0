@@ -1,0 +1,7 @@
+# pins.py golden for specimens/Q02/card-c6v-d.dfy.specimen: SEALED. This demo waits for Q02.P7dv,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q02/card-c6v-d.dfy.specimen`; never edit.
+command: verify
+after: Q02.P7dv
+outcome: salted-sha256 dd8a7d173a99df1759e215097200ce37723a6795507a9ed7c0a92a1b7670ec7c

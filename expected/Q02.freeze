@@ -1,0 +1,245 @@
+# expected/Q02.freeze — statement-freeze pins for Q02 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q02` from the files as shipped; checked by
+# `scripts/specfreeze --check Q02`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q02"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q02_FirstSyntaxI/core/Q02_FirstSyntaxI.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["Q02_FirstSyntaxI.NormalizeCanonical {:induction false}"]
+[file.statements]
+"Q02_FirstSyntaxI.CardAssertBy" = "1d31e7ca2ce8327f8f17893c318112b03be0125dfb69c449bcc665a937e4b980"
+"Q02_FirstSyntaxI.CardEvens" = "3cc6e472a3d36fcc8cf119bd49d09982d58c8f3f85a44738441271dfe255b994"
+"Q02_FirstSyntaxI.CardExists" = "2f2790fca844d0d3be52c2d97a2bfe0b1445a22952b2858e0df38d8bbaa85ec5"
+"Q02_FirstSyntaxI.CardIndices" = "12c02668272adc72d6a21578d4b6ee8362fc1ac65decb75d40903f6be318d318"
+"Q02_FirstSyntaxI.CardInvariant" = "e94d54113f2f374cfd7f3698bcb97e134dc93314a83b321958d39ab0e4b697e8"
+"Q02_FirstSyntaxI.CardOld" = "0e0a3489db42f703d4d4e67ba1ea584b64a19382d7bfbe40f218515600ad4b15"
+"Q02_FirstSyntaxI.CardSwapLimbs" = "6b54bcc6e111050a93361eb87d53573499ccbad1a1e490d9a4a2413444ebb22d"
+"Q02_FirstSyntaxI.ClearFrom" = "04db48c2f58fa479f11d4ea505396cb80b3602ce549b12c731b63113dd16f409"
+"Q02_FirstSyntaxI.FirstZero" = "318f64550deef8151518f7bd80b718b74fbb4be0ec056d0067cc9d40b287cc7d"
+"Q02_FirstSyntaxI.NormalizeCanonical" = "2c860726d975f773d3473a8554579d882ad3681b262889c2954c054d9c0bcd93"
+"Q02_FirstSyntaxI.NormalizeLoop" = "e00ddbdf09af9cfcf73d6c8d2a333e065140bf39ea63b1185321c235e6731ed6"
+"Q02_FirstSyntaxI.NormalizeToNat" = "73208e30680c5e473261e3b832b8ea830bf667221d7f21654f83d8c89c13c686"
+"Q02_FirstSyntaxI.ToNatDropLastZero" = "12362a77589a17fb8334031b34672665e41a664d02970868dd06fac326bd3ce7"
+"Q02_FirstSyntaxI.Zeros" = "531438f199f4c8a40bcd0369238b3653f74b774e64b6edf1808ca355a40d2509"
+
+[[file]]
+path = "dafny/checks/Q02_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_Checks.P9d" = "9fa390c5468b801cc4bf5a6d9b0011da0c3bd295e1e4ff43f986279747901832"
+
+[[file]]
+path = "verus/q/q02_first_syntax_i/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"card_assert_by" = "c6f6a45775dbd5e62101af4de84dbef35aa30d47f251b0121710bb6da244b5f0"
+"card_evens" = "70c4104dbe2d3142558328cb6602d699164ac288964a6c8a39a9f97b2ced404e"
+"card_exists" = "8e2313c454245650675c57cd975824ee33d5dd2569a353eea21b0830e5272434"
+"card_indices" = "18567677b7b0e0e9c05caded3adf1bd90cbfc18bf796476be36348a7dd664d84"
+"card_invariant" = "011cc436e4c59c013a2358f81daeebb949577247301f4eb0323fe2dc58bb3b46"
+"card_old" = "e6a0c8dacb5a199b7cf4c72f7bbb3a9d72e1117c8805e97bdf7470f1903f3d77"
+"clear_from" = "239c2e2dc7604e837d8d28b3e67ce714829e216a8dae263427144aff93b3fef4"
+"first_zero" = "258eac8c2869f9689147abce2d9e3617e5b9b929149e80f88071fca2431ce444"
+"lemma_push_zeros" = "a7267fe73e1d6f762548c03cf5e57d38ad7106efca8d246f107f476c03a4c51b"
+"lemma_seq_to_nat_drop_last_zero" = "613aa8086d890b4884ecd7f05280e3c24c8501b5bc7b21dbd205f2cd674d0a80"
+"lemma_wf_value_pos" = "84286a641adeb72c90f9a5d154d4b3b291d6340c8eee850db711b3b61b3bf702"
+"normalize" = "71d8ca23b5ef98f57d660d9ee1d8167137876e963246ea0d8915461329a8fe64"
+"zeros" = "86e8641edd9fdab8b46eb420222beddabbf2135b0526a5db41e753a592fc403f"
+
+[[file]]
+path = "specimens/Q02/P1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_P1d.ZeroAll" = "88cf083f04a419b80f91c7a9eba21bf77aa4a161d56735589cb8984048fc4f32"
+
+[[file]]
+path = "specimens/Q02/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"zero_all" = "11a552c0dd96ee72649ea00662a8f582d3b64f68760523e34b79e4be1089ecf6"
+
+[[file]]
+path = "specimens/Q02/P5d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_P5d.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q02_P5d.ConcatValid" = "f643338daad4dced85ae936f31b9086248510c60e0ef8e8bb295e1063e65f660"
+"Q02_P5d.SomeLimbSequence" = "1f012218b35413b11433e00986e7733e27e4711c606a1ff5163c45bba2cb8bee"
+"Q02_P5d.SomeZeroLimb" = "cab58b8b9538634bcd695a9507700e7011f3ee9923e2ae25791ca654395a5c51"
+"Q02_P5d.TailValid" = "4e9d4abe709b2801e3c219f07177b75dad9cbc72d5588bcea305624edea9b711"
+"Q02_P5d.Valid" = "9c0ded0dae394d5a6a344d3c31b5f68242eb31bf7a4d015dd30ed78360614a48"
+
+[[file]]
+path = "specimens/Q02/P6v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"push_then_drop" = "d36e583880ea233c674c85ad752795cf6b7f4190890b7b79092b7da23969a680"
+"some_limb_sequence" = "25b166624334a572228cc3a21f03c233901f942116a2e7b73791bc653d6aa986"
+"some_zero_limb" = "f52d8f794beb9dc8cadb73013a804d0b780d49c06c8f3c6a2ddb01c1bf26fe17"
+"subrange_whole" = "905434df783822499e512542aab7fa1446ab6d6d9078b800fe1ccff1f5eb12ef"
+
+[[file]]
+path = "specimens/Q02/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+frozen_levers = ["Q02_CardC1d.ToNatBound {:induction false}"]
+[file.statements]
+"Q02_CardC1d.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q02_CardC1d.CardAssertBy" = "1d31e7ca2ce8327f8f17893c318112b03be0125dfb69c449bcc665a937e4b980"
+"Q02_CardC1d.Head" = "0fa147b2ad53455b569937dad9c716517dd4c08d9c5807d72608c97186464a23"
+"Q02_CardC1d.Pow" = "8f92835a4d3a9a08348fbf9d7efeb7ee7a2ae326d9e40978412f455a797633d4"
+"Q02_CardC1d.Tail" = "a4969e9ca8b0d9debbd1f5446eb3bc4d4194ee9f996699f585f593efa4962aff"
+"Q02_CardC1d.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q02_CardC1d.ToNatBound" = "f8e6f1e7b10bb2356ec3eaa2a9c2950754a7176480ad7d0aa087dbd5f98642d9"
+"Q02_CardC1d.Valid" = "9c0ded0dae394d5a6a344d3c31b5f68242eb31bf7a4d015dd30ed78360614a48"
+"Q02_CardC1d.ValidTail" = "0c515be4fd1d56452d58bc61a23462e1d0ac1e5572521f3132f9359dfeb4c2fe"
+
+[[file]]
+path = "specimens/Q02/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"card_assert_by" = "c6f6a45775dbd5e62101af4de84dbef35aa30d47f251b0121710bb6da244b5f0"
+
+[[file]]
+path = "specimens/Q02/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_CardC2d.CardInvariant" = "e94d54113f2f374cfd7f3698bcb97e134dc93314a83b321958d39ab0e4b697e8"
+
+[[file]]
+path = "specimens/Q02/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"card_invariant" = "011cc436e4c59c013a2358f81daeebb949577247301f4eb0323fe2dc58bb3b46"
+
+[[file]]
+path = "specimens/Q02/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_CardC3d.CountTo" = "cdf80fb88454f64237a9f394a67d8ec131a001122c18f6bb340d53e26f66a890"
+
+[[file]]
+path = "specimens/Q02/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"count_to" = "c7498e15328cf027cdf73ad64dc0b9e5814d1d52ccfc186e61c46aaf65ed48bd"
+
+[[file]]
+path = "specimens/Q02/card-c4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_CardC4d.CardIndices" = "12c02668272adc72d6a21578d4b6ee8362fc1ac65decb75d40903f6be318d318"
+
+[[file]]
+path = "specimens/Q02/card-c4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"card_indices" = "18567677b7b0e0e9c05caded3adf1bd90cbfc18bf796476be36348a7dd664d84"
+
+[[file]]
+path = "specimens/Q02/card-c5d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_CardC5d.CardSwapLimbs" = "6b54bcc6e111050a93361eb87d53573499ccbad1a1e490d9a4a2413444ebb22d"
+"Q02_CardC5d.SwapEnds" = "26a1e1279b17a114711e336801dd4a9d5edd04cd357387a8907e0ab20b3bcf8e"
+
+[[file]]
+path = "specimens/Q02/card-c6v-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_CardC6vD.SetFirst" = "d1e4a66fcd4ac5a47b01ae1e1d57901d638a262cf5bedc4dc732d7c4198fae9e"
+
+[[file]]
+path = "specimens/Q02/card-c6v-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"set_first" = "86ee38979e6848515cf8a8afb674499e4ed14440807802c37c4e1ebe631cf7fe"
+
+[[file]]
+path = "specimens/Q02/card-c7dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_CardC7dvD.Count" = "cbc93da424eeffa7e8aa3599a842c7e3a2444a9d43fd014ec3bcc0efe7b8abc9"
+"Q02_CardC7dvD.CountId" = "6c54a20bb0f39996dc43eb854e694336ea966a65d99f5bf741c54bcc6360b970"
+
+[[file]]
+path = "specimens/Q02/card-c7dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"count" = "a603ec1da51e75fc11a8bd90e75cad62ab4789d8c41d2c1f18e92454fd3983de"
+"count_id" = "80a76a2bef47fca181b7affb1e166d3432ede7db259db6c482814d2195cc116f"
+
+[[file]]
+path = "dafny/Q/Q02_FirstSyntaxI/exit/Q02_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q02_Exit.ToNatDropTwoZeros" = "0e9063d569c8a5a7b791d5ff60208d60e21890da31385215dcc26c4b3dd74206"
+
+[[file]]
+path = "verus/q/q02_first_syntax_i/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"all_nonzero" = "c57ede60e4ff6ba693ce7631f67c58b2e10906f9e83dc16c162d47694f7f787b"
+"bump_low" = "1a1a0ee64c721720a2909de64f71bdd70aa690fa78a508049b11222e05a2f45f"
+"lemma_two_limbs" = "ff26b44f4420c64ad67b15f56b70d84a1d8a998d6c917b7ffbb32dcc5ab73dad"
+
+[[file]]
+path = "dafny/Q/Q02_FirstSyntaxI/agent/Q02_AgentImplement.dfy"
+lang = "d"
+open_bodies = ["Q02_AgentImplement.CountZeroLimbs", "Q02_AgentImplement.SumLimbs", "Q02_AgentImplement.TopIndex"]
+[file.statements]
+"Q02_AgentImplement.CheckCountZeroLimbs1" = "2ba25a3ecf5cb4b496335e2129290e4bb4d3ca468a0a606f23a2df7b3c3ca3c1"
+"Q02_AgentImplement.CheckCountZeroLimbs2" = "4cc48d85be49fd17a2b9b5e1dc201855f90fc884026c60ab1ba6f45aeb8c32d8"
+"Q02_AgentImplement.CheckSumLimbs1" = "51f222b6457360864d6f3de5817406be52ed3b05f11f1defd87e3e702ea3a829"
+"Q02_AgentImplement.CheckSumLimbs2" = "8a5d37b596d907a681c59923feac1aad1df5b1ae4d15c4b113af959053fd3d3b"
+"Q02_AgentImplement.CheckTopIndex1" = "59bbeae79cb866c0fde2e73bb155d7a7ac4dbdcfce7ace25cd3ef9149bf52075"
+"Q02_AgentImplement.CheckTopIndex2" = "78c4251f369e349e539e785d35c14c529f825853b2610b54921929c0aa3e6f3f"
+"Q02_AgentImplement.CountZeroLimbs" = "535c72c7afe80bae3628dd4dcd849bb0cf72a034c37dc7a95e5671c599547ce2"
+"Q02_AgentImplement.SumLimbs" = "eba0831db5a72f66ddc5610592282a021e964a2bd8f57311cf7ee5e9b0ed2dc0"
+"Q02_AgentImplement.TopIndex" = "68ab8291a8a8b6e255445d6c0e27362e7d79138ebce3321395a0cb15ffa2e065"
+
+[[file]]
+path = "verus/q/q02_first_syntax_i/src/agent.rs"
+lang = "v"
+open_bodies = ["count_zero_limbs", "sum_limbs", "top_index"]
+[file.statements]
+"check_count_zero_limbs_1" = "9eadf2c144dc0accf980457fd05eeb112b2318552d35dac378ce54b309765266"
+"check_count_zero_limbs_2" = "2bfa88b3c4181f355428edf3c181ef43b32ff8733b8f1f9605458149a26fae8b"
+"check_sum_limbs_1" = "5576576ef32a272629217de0526bb31697348cc94a0cb656b8c2ce411692a971"
+"check_sum_limbs_2" = "57cb4ae453aeb027006ba5f2cee132e0d63a5cce6005ffd1bfd0eab87f69ff5e"
+"check_top_index_1" = "0a25f65b3893b24332a85c09662689219e85dd25177beaa9c362f014cf392528"
+"check_top_index_2" = "a9c616638a97c0121ca2efab27fe2c47495cbe460df95c0e26bec152e020adfe"
+"count_zero_limbs" = "08e9d76321854ee5011db516b2410c4aa1491846830178605cc4698a261e1c5f"
+"lemma_count_zero_limbs_bound" = "363654bc1dc17d51d26de8c3175ac832764a3635c894503b4bfc66c2baf62aa8"
+"lemma_sum_limbs_empty" = "b7338b2316615babc150a9c0df99b4070d27169c8f8506de349af385fd50b490"
+"lemma_top_index_bound" = "1dad9e853dc96d057620c5ef4db8114311a553118fd87b0ec38f85a8cfd0992a"
+"sum_limbs" = "63c18e5e6d5b98e683726e8573a77bc8e286af4cbbf2f979bd1fe85a8b9b424e"
+"top_index" = "222e7f3065b44cb8ba9975c7f234c322656dabc11d52992454f584023f1c4caa"

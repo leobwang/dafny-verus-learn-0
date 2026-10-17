@@ -1,0 +1,8 @@
+# Q02 verdict answers (Reference Solution; author-only). Captured on the pins through
+# scripts/vcheck (evidence: Solutions/plans/Q02-author-notes.md §1). expected/Q02.pins holds
+# their sha256 hashes, written by `scripts/pins.py --update --ref --module Q02`.
+P3dv = "D:ok D-off:fail V:fail"
+P4dv = "D:ok V:err:resolve"
+P7dv = "D:verify V:resolve"
+P8dv = "D:fail V:fail"
+P10dv = "D:err:resolve V:ok"

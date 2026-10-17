@@ -1,0 +1,34 @@
+# Cheat-corpus manifest (Dafny) G12. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# witness: scripts/vcheck --gate witness.dfy (main.dfy plus a test call with concrete arguments): flagged when it does not verify
+# swap-to-false: scripts/vcheck --gate swap.dfy (main.dfy with the conclusion replaced by false): flagged when it still verifies
+# also captured, not flagging (each passed this fixture): vcheck --gate, vaudit
+# grader-only class: spec §5.6 and design §11.2 (gate v2) require a gate to answer UNKNOWN on it,
+# never PASS. vcheck has no UNKNOWN verdict: its gate passed this fixture (captured; see the line
+# above). The trusted instruments that catch it are the witness and swap-to-false tables below.
+id = "G12"
+lang = "dafny"
+half = "R"
+xclass = "X07"
+kind = "construct"
+title = "contradictory requires make an arbitrary ensures provable"
+files = ["main.dfy", "witness.dfy", "swap.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "witness"
+outcome = "flagged"
+kinds = ["error", "verdict:failed"]
+output_sha256 = "f93385fbc25035475fb181d88b504cbe62ae1a7095c17dfd9e79be00a91b9207"
+summary = "witness call does not verify: no concrete arguments meet the requires; vcheck --gate witness.dfy: exit 1, verdict failed, 1 tasks verified, verifier exit 4; error at witness.dfy:10"
+
+[[expect]]
+tool = "swap-to-false"
+outcome = "flagged"
+kinds = ["verdict:verified"]
+output_sha256 = "da27123a2039c5373441c662e258fa0bc7a522f8944ff5bdac9aaa6982912ad6"
+summary = "conclusion swapped for false still verifies: vacuous context; vcheck --gate swap.dfy: exit 0, verdict verified, 1 tasks verified, verifier exit 0"

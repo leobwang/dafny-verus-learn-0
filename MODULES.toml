@@ -1,0 +1,3181 @@
+# MODULES.toml — the module registry: one [[module]] table per module, Q01–Q33
+# (the depth-ordered track, studied first) then R01–R16 (the topic-ordered
+# track), then one [[coverage]] table per goal payload.
+#
+# Skills, hooks, scripts and CI read module facts from here; nothing hard-codes
+# them. Check after every edit (scripts/ci.sh runs the same):
+#
+#     python3 scripts/check_course_map.py                 # exit 0 = consistent
+#     python3 scripts/check_course_map.py --resolve Q04   # one record, as JSON
+#     python3 scripts/check_course_map.py --items Q04 --json
+#     python3 scripts/gen_units.py                         # regenerate the units
+#
+# (`--only registry|units|import-tiers|isolation|coverage|vocab` runs one group;
+# `--list-nonplanned Q01-Q18` prints the armed ids.)
+#
+# LEARNER-VISIBLE by design: the registry names chapters, exercise files, banks,
+# rubrics and cards, never reference or held-out material. The checker rejects
+# any path into a reference tree and any field whose name mentions solutions.
+# Author tooling finds a reference twin by convention (same stem). Changing this
+# file is an authoring act (guard rule 2g).
+#
+# Fields (every one required, in this order; a planned module may name files
+# that do not exist yet, following the naming below):
+#   id                "Q01".."Q33" | "R01".."R16"
+#   legacy_id         a pre-rename id or "" (none so far); --resolve accepts it
+#   track             "Q" | "R", from the id
+#   status            "shipped" (every path exists) | "authoring" (paths may be
+#                     missing; a skill checks its own inputs) | "planned"
+#                     (skills refuse; no unit is generated)
+#   title
+#   tier              Q, by id: survey (Q01) | intro (Q02–Q03) | moderate
+#                     (Q04–Q06) | detailed (Q07–Q09) | practice-intro (Q10–Q12) |
+#                     practice-intermediate (Q13–Q15) | practice-hard (Q16–Q18) |
+#                     challenge (Q19–Q33);  R: ""
+#   topic             Q19–Q33, by id: algorithms | quant | numerics | pl | agentic,
+#                     three modules each;  otherwise ""
+#   strands           Q: the strands S1..S13 the module sweeps. Each tier
+#                     partitions S1–S13; from moderate on by family, in order
+#                     A (S1–S5), B (S6–S8), C (S9–S13). Challenges: all 13.  R: []
+#   langs             the module's languages, in this order: "d" (Dafny), "v"
+#                     (Verus), "py" (Python). Equal to the languages of its files
+#                     (exercises, exits, agentic, harness). Q01–Q18 and R carry d
+#                     and v; py only from Q06 / R05
+#   chapter           docs/<ID>_<Name>.md
+#   exercises         learner files. Dafny dafny/<T>/<ID>_<Name>/{core,std}/*.dfy,
+#                     Verus verus/<t>/<id>_<name>/src/*.rs (<name> = <Name> in
+#                     snake_case), specimens specimens/<ID>/ (a trailing "/" names
+#                     a directory), challenges under Challenges/<Topic>/
+#   exits             closed-book exit files, outside every unit: Dafny
+#                     dafny/<T>/<ID>_<Name>/exit/*.dfy, Verus src/exit.rs (never
+#                     mod-declared). Required past planned for Q01–Q15, R06, R11
+#   agentic           files a /contract session works in ([] = no contract run):
+#                     Dafny .../agent/*.dfy, Verus src/agent.rs (never
+#                     mod-declared), tools under tools/<ID>/
+#   harness           the module's learner Python: harness/q/fvh_q/… (Q01–Q18),
+#                     harness/r/fvh_r/… (R), agents/… (Q19–Q33). A Q01–Q18 gate
+#                     file sits under harness/q/fvh_q/gate/ (guard rule 2s keeps
+#                     Q's gate solo). Past planned, R16 lists its trust-report in
+#                     exercises or harness, at a path under dafny/r/, verus/r/ or
+#                     harness/r/ whose name holds trust_report or trust-report
+#                     (rule 2s); no other module names such a path
+#   bank              .claude/skills/instructor/banks/<ID>.md (Q19–Q33: the
+#                     topic's defense_<topic>.md)
+#   paper             true ⇔ paper/<ID>_problems.tex + paper/<ID>_answers.tex.
+#                     True wherever card is non-empty (/grade-paper grades a card
+#                     only as a [paper-card] problem of the pair, so every
+#                     Q01–Q18 and R module) and wherever engines holds policy or
+#                     agent (the lab's [pre-registration] problem, which unlocks
+#                     its runs). OD11's "only where it pays" scopes the other
+#                     written problems: R01, R03 and R07 hold cards only
+#   rubric            paper/rubrics/<ID>_rubric.md ("" = none; required when
+#                     paper = true)
+#   card              the module's paper cards: cheatsheets.md ids "NN.N"; never
+#                     shared between modules. Required for Q01–Q18 and R
+#   build_target      "Q" (Q01–Q18, the default build) | "R" (built by name) |
+#                     "Challenges" (Q19–Q33, built by the challenge gate)
+#   units             the module's verification units, derived from exercises:
+#                     one per (module, language, library tier), Dafny core, Dafny
+#                     std, then the Verus crate. scripts/gen_units.py writes them
+#                     for every non-planned module
+#   layer             the spine layer of its tier, by id: Q01 L1, Q02–Q03 L2,
+#                     Q04–Q06 L3, Q07–Q09 L4, Q10–Q12 L5, Q13–Q15 L6, Q16–Q18 L7;
+#                     R02–R05 A1, R06 A1b (the band-1 facts layer, PLAN.md §2.2),
+#                     R07–R08 A2, R09 A3, R10–R15 A4, R16 A5; else ""
+#   engines           ⊆ contract (an interactive /contract session; ⇔ agentic is
+#                     non-empty) | policy (headless `claude -p` / opencode policy
+#                     runs, harness-executed runs) | agent (a tool-using agent in
+#                     a per-run container), in that order
+#   statements        Q19–Q33: the frozen statement files, each
+#                     { path = "...", sha256 = "<64 hex>" | "PENDING" }; required
+#                     past planned. A statement file's name holds "Statement"
+#                     (guard rule 2f freezes Challenges/**/*Statement*).
+#                     Otherwise []
+#   deep_dive         Q only: R ids the chapter links as "Deep dive → Rnn".  R: []
+#                     (no R record names a Q module)
+#   review_bar        /review-code bar: it-reads | proof-shape |
+#                     library-conventions | design-lite | design-judgment |
+#                     library-pr | production | harness
+#   persona           /discuss persona: sharp-dev | smt-skeptic | ml-engineer |
+#                     journal-referee | risk-engineer | numerical-analyst |
+#                     compiler-engineer | eval-skeptic
+#   viva_mode         module (every R module) | tier (Q03, Q06, Q09, Q12, Q15,
+#                     Q18) | defense (Q19–Q33) | none
+#   tutor_max_rung    the highest hint rung /tutor may give, 1–5 (solo: ≤ 2)
+#   solo              Q19–Q33: /contract refuses; agentic = []
+#   solutions_policy  solutions-first (Q01–Q18, R) | verifier-graded |
+#                     harness-graded | reference-impl (Q19–Q33)
+#   write_d, write_v  the WRITE constructs per language, as slugs (`assert-by`;
+#                     "/" joins alternatives). A slug in both lists is one paired
+#                     WRITE unit: at most 6 units and 10 slugs per module. Every
+#                     entry is tagged `uses:` by ≥ 2 checked H/X/T items of that
+#                     language once the module leaves planned. Verus never lists
+#                     integer-ring (rejected at the pin, Δ47)
+#   recognise_d, recognise_v
+#                     RECOGNISE constructs (a card, never required); disjoint from
+#                     WRITE per language.  Q10–Q33: []
+#   budget            the module's model-run ceilings, which fvh enforces:
+#                     { claude_calls, claude_runs, qwen_calls, qwen_runs,
+#                     gpu_hours }, non-negative integers; non-zero iff engines
+#                     holds policy or agent. gpu_hours ≤ 10 per module (design
+#                     §3: ≤ 10 GPU-h per lab) and ≤ 45 summed over the registry
+#                     (design §11.3: the six labs' Qwen work in ≤ 45 GPU-h; Q07's
+#                     replay hour comes out of the same pool). The lab caps scale
+#                     with planned Qwen work: Q12, R12 10 (4,400 / 4,800 calls);
+#                     Q15, R15 3 (1,200 / 960 calls); Q18, R16 9 (36 agent runs
+#                     each) [A: design §11; DELTAS Δ176]
+#   admissible        item id → { admitted, minutes, fallback } (design §7.5): a
+#                     gated item carries 0 minutes and names its fallback. Past
+#                     planned, every H item of Q10–Q18 has an entry. An admitted
+#                     item outside its tier's line band adds exception =
+#                     "<kind>: <why>", kind short-format band (D2, D7),
+#                     statement-item (D6, D9) or hidden-check spec (D21); the
+#                     item, its proof lines, kind and decision are recorded in
+#                     check_course_map.py's OUT_OF_BAND, and an exception on any
+#                     other item is refused (DELTAS)
+#   imports           every .dfy/.rs/.py file of the module → its import tier:
+#                     Dafny core | std | std-all, Verus prelude | seq_lib |
+#                     arithmetic | all, Python py-std | py-fvh (allowlists in
+#                     check_course_map.py). A given layer's files are declared by
+#                     the first module of its layer. Past planned: every file.
+#   concept_items     the D4 matrix, Q01–Q09 only: "S<k>.<concept>" (both
+#                     languages) or "S<k>.<concept>@d|@v|@py" = [item ids] | "R"
+#                     (reading) | "prose" (S12, S13 only)
+#
+# Empty values are written inline (`imports = {}`); a non-empty admissible,
+# imports or concept_items table is written as a [module.<name>] sub-table after
+# the record's last inline field (TOML attaches it to the [[module]] above).
+#
+# Item markers in course files (scripts/course_items.py is the one parser):
+#   // item: <ID>.<K><n><lang> [S<k>] [format] [min=<m>]     (`#` in Python)
+#   // uses: <slug>, …   // need: <fragment>   // pair: <ID>.<K><n><lang>
+#
+# After R16: the [[coverage]] rows (design §5), with the rule in their banner.
+
+schema = 1
+
+# ============================================================================
+# Q track — depth-ordered, Q01–Q18 core, Q19–Q33 challenges (all planned)
+# ============================================================================
+
+[[module]]
+id = "Q01"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Hello, Dafny and Verus: the whole map"
+tier = "survey"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v"]
+chapter = "docs/Q01_Hello.md"
+exercises = ["dafny/Q/Q01_Hello/core/Q01_Hello.dfy", "dafny/checks/Q01_checks.dfy", "verus/q/q01_hello/src/lib.rs", "specimens/Q01/"]
+exits = ["dafny/Q/Q01_Hello/exit/Q01_Map.dfy", "verus/q/q01_hello/src/exit.rs"]
+agentic = ["dafny/Q/Q01_Hello/agent/Q01_AgentRepair.dfy", "verus/q/q01_hello/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q01.md"
+paper = true
+rubric = "paper/rubrics/Q01_rubric.md"
+card = ["02.3"]
+build_target = "Q"
+units = ["dafny/Q/Q01_Hello/core", "verus/q/q01_hello"]
+layer = "L1"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "it-reads"
+persona = "sharp-dev"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["ensures", "assert", "lemma-call"]
+write_v = ["ensures", "assert", "lemma-call"]
+recognise_d = ["requires", "decreases", "invariant", "forall", "ghost", "function"]
+recognise_v = ["requires", "decreases", "invariant", "forall", "ghost", "function"]
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/given/Q/QG_L1_BigNat.dfy" = "core"
+"verus/given/qg_bignat_l1/src/lib.rs" = "prelude"
+"dafny/Q/Q01_Hello/core/Q01_Hello.dfy" = "core"
+"dafny/checks/Q01_checks.dfy" = "core"
+"dafny/Q/Q01_Hello/exit/Q01_Map.dfy" = "core"
+"dafny/Q/Q01_Hello/agent/Q01_AgentRepair.dfy" = "core"
+"verus/q/q01_hello/src/lib.rs" = "prelude"
+"verus/q/q01_hello/src/exit.rs" = "prelude"
+"verus/q/q01_hello/src/agent.rs" = "prelude"
+
+[module.concept_items]
+"S1.exec-and-overflow" = ["Q01.P1dv", "Q01.P5d", "Q01.P6v", "Q01.X1v"]
+"S2.specs" = ["Q01.H1d", "Q01.H1v", "Q01.P2dv", "Q01.X2d"]
+"S3.proof-statements" = ["Q01.H2d", "Q01.H2v", "Q01.P3d", "Q01.P4v", "Q01.X3v"]
+"S4.recursion" = ["Q01.H3d", "Q01.H3v", "Q01.P7dv", "Q01.X4d"]
+"S5.libraries" = ["Q01.X5dv"]
+"S6.frames@d" = ["Q01.X6d"]
+"S6.ownership@v" = "R"
+"S7.modes@v" = ["Q01.X7v"]
+"S7.ghost@d" = "R"
+"S8.wp" = ["Q01.X8dv"]
+"S9.interfaces" = ["Q01.P8dv", "Q01.X9dv"]
+"S10.trust-base" = ["Q01.X10dv"]
+"S11.smt-limits" = ["Q01.P9dv", "Q01.X11dv"]
+"S12.hole-contract" = ["Q01.P10dv", "Q01.X12d"]
+"S12.repairer" = ["Q01.A1d", "Q01.A1v"]
+"S12.three-doors" = "prose"
+"S13.spec-quality" = ["Q01.P11dv", "Q01.X13v"]
+
+[[module]]
+id = "Q02"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "First syntax I"
+tier = "intro"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5", "S6"]
+langs = ["d", "v"]
+chapter = "docs/Q02_FirstSyntaxI.md"
+exercises = ["dafny/Q/Q02_FirstSyntaxI/core/Q02_FirstSyntaxI.dfy", "dafny/checks/Q02_checks.dfy", "verus/q/q02_first_syntax_i/src/lib.rs", "specimens/Q02/"]
+exits = ["dafny/Q/Q02_FirstSyntaxI/exit/Q02_Exit.dfy", "verus/q/q02_first_syntax_i/src/exit.rs"]
+agentic = ["dafny/Q/Q02_FirstSyntaxI/agent/Q02_AgentImplement.dfy", "verus/q/q02_first_syntax_i/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q02.md"
+paper = true
+rubric = "paper/rubrics/Q02_rubric.md"
+card = ["02.7"]
+build_target = "Q"
+units = ["dafny/Q/Q02_FirstSyntaxI/core", "verus/q/q02_first_syntax_i"]
+layer = "L2"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "it-reads"
+persona = "sharp-dev"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["assert-by", "invariant", "decreases", "quantified-ensures", "frame"]
+write_v = ["assert-by", "invariant", "decreases", "quantified-ensures"]
+recognise_d = ["old", "exists"]
+recognise_v = ["old", "exists"]
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/given/Q/QG_L2_BigNat.dfy" = "core"
+"verus/given/qg_bignat_l2/src/lib.rs" = "prelude"
+"dafny/Q/Q02_FirstSyntaxI/core/Q02_FirstSyntaxI.dfy" = "core"
+"dafny/checks/Q02_checks.dfy" = "core"
+"dafny/Q/Q02_FirstSyntaxI/exit/Q02_Exit.dfy" = "core"
+"dafny/Q/Q02_FirstSyntaxI/agent/Q02_AgentImplement.dfy" = "core"
+"verus/q/q02_first_syntax_i/src/lib.rs" = "prelude"
+"verus/q/q02_first_syntax_i/src/exit.rs" = "prelude"
+"verus/q/q02_first_syntax_i/src/agent.rs" = "prelude"
+
+[module.concept_items]
+"S1.computed-values@d" = ["Q02.P9d"]
+# nominal: H5v builds a Vec<u64> limb by limb; its marker strand is S2
+"S1.exec-vectors@v" = ["Q02.H5v"]
+"S2.quantified-specs" = ["Q02.H4d", "Q02.H5d", "Q02.H5v", "Q02.P5d", "Q02.P6v"]
+"S3.assert-by" = ["Q02.H1d", "Q02.H1v", "Q02.P8dv", "Q02.X3d", "Q02.X3v"]
+"S3.fast-channel" = ["Q02.A1d", "Q02.A1v"]
+"S4.loop-invariants" = ["Q02.H2d", "Q02.H2v", "Q02.P1d", "Q02.P2v", "Q02.X1v"]
+"S4.termination" = ["Q02.T1d", "Q02.T1v", "Q02.P4dv", "Q02.X1d"]
+"S4.induction" = ["Q02.H3d", "Q02.H7v", "Q02.P3dv"]
+"S5.search-and-staging" = ["Q02.H8v", "Q02.P10dv"]
+"S6.frames-and-ownership" = ["Q02.H6d", "Q02.H6v", "Q02.P7dv", "Q02.X2d", "Q02.X2v"]
+
+[[module]]
+id = "Q03"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "First syntax II: modes, logic, tooling, trust"
+tier = "intro"
+topic = ""
+strands = ["S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v"]
+chapter = "docs/Q03_FirstSyntaxII.md"
+exercises = ["dafny/Q/Q03_FirstSyntaxII/core/Q03_FirstSyntaxII.dfy", "dafny/checks/Q03_checks.dfy", "verus/q/q03_first_syntax_ii/src/lib.rs", "specimens/Q03/"]
+exits = ["dafny/Q/Q03_FirstSyntaxII/exit/Q03_Exit.dfy", "verus/q/q03_first_syntax_ii/src/exit.rs"]
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/Q03.md"
+paper = true
+rubric = "paper/rubrics/Q03_rubric.md"
+card = ["02.13"]
+build_target = "Q"
+units = ["dafny/Q/Q03_FirstSyntaxII/core", "verus/q/q03_first_syntax_ii"]
+layer = "L2"
+engines = []
+statements = []
+deep_dive = []
+review_bar = "it-reads"
+persona = "sharp-dev"
+viva_mode = "tier"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["ghost", "exec-check", "witness", "subset-type"]
+write_v = ["ghost", "exec-check", "witness", "modes"]
+recognise_d = ["trigger", "audit"]
+recognise_v = ["trigger", "audit"]
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/Q/Q03_FirstSyntaxII/core/Q03_FirstSyntaxII.dfy" = "core"
+"dafny/checks/Q03_checks.dfy" = "core"
+"dafny/Q/Q03_FirstSyntaxII/exit/Q03_Exit.dfy" = "core"
+"verus/q/q03_first_syntax_ii/src/lib.rs" = "prelude"
+"verus/q/q03_first_syntax_ii/src/exit.rs" = "prelude"
+
+[module.concept_items]
+"S7.ghost" = ["Q03.H1v", "Q03.T1d", "Q03.T1v", "Q03.X1d", "Q03.X1v"]
+"S7.subset-types@d" = ["Q03.H4d", "Q03.P3d", "Q03.X2d"]
+"S7.modes@v" = ["Q03.H2v", "Q03.P4v", "Q03.X3v"]
+"S7.exec-checks" = ["Q03.H4d", "Q03.H4v", "Q03.X3d", "Q03.X3v"]
+# nominal: H1d and H2d recurse under the decreases that ships with their statements; Q03 writes no new measure
+"S7.termination@d" = ["Q03.H1d", "Q03.H2d"]
+"S7.computed-values" = ["Q03.P9d", "Q03.P10v"]
+"S8.wp" = ["Q03.P8dv"]
+"S9.naive-grader-signals" = ["Q03.P5dv"]
+"S10.compiled-code" = ["Q03.P1dv"]
+"S10.stages" = ["Q03.P6dv"]
+"S11.failure-messages" = ["Q03.P7dv"]
+"S12.fake-green" = ["Q03.P11d", "Q03.P12d", "Q03.P13v", "Q03.P14v"]
+"S12.contract-v0" = "prose"
+"S13.witness" = ["Q03.H3d", "Q03.H3v", "Q03.X2v"]
+"S13.spec-assumptions" = ["Q03.P2dv"]
+
+[[module]]
+id = "Q04"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Proof craft, loops and libraries"
+tier = "moderate"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5"]
+langs = ["d", "v"]
+chapter = "docs/Q04_ProofCraft.md"
+exercises = ["dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy", "dafny/Q/Q04_ProofCraft/std/Q04_Library.dfy", "dafny/checks/Q04_checks.dfy", "verus/q/q04_proof_craft/src/lib.rs", "verus/q/q04_proof_craft/src/library.rs", "specimens/Q04/"]
+exits = ["dafny/Q/Q04_ProofCraft/exit/Q04_Exit.dfy", "verus/q/q04_proof_craft/src/exit.rs"]
+agentic = ["dafny/Q/Q04_ProofCraft/agent/Q04_AgentRetriever.dfy", "verus/q/q04_proof_craft/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q04.md"
+paper = true
+rubric = "paper/rubrics/Q04_rubric.md"
+card = ["02.2"]
+build_target = "Q"
+units = ["dafny/Q/Q04_ProofCraft/core", "dafny/Q/Q04_ProofCraft/std", "verus/q/q04_proof_craft"]
+layer = "L3"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["calc", "forall", "lemma-recursion", "library-call"]
+write_v = ["calc", "forall", "lemma-recursion", "library-call", "broadcast-use", "nonlinear-arith"]
+recognise_d = ["induction-auto"]
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/given/Q/QG_L3_BigNat.dfy" = "std"
+"verus/given/qg_bignat_l3/src/lib.rs" = "prelude"
+"dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy" = "core"
+"dafny/Q/Q04_ProofCraft/std/Q04_Library.dfy" = "std"
+"dafny/checks/Q04_checks.dfy" = "std"
+"dafny/Q/Q04_ProofCraft/exit/Q04_Exit.dfy" = "std"
+"dafny/Q/Q04_ProofCraft/agent/Q04_AgentRetriever.dfy" = "std"
+"verus/q/q04_proof_craft/src/lib.rs" = "prelude"
+"verus/q/q04_proof_craft/src/library.rs" = "arithmetic"
+"verus/q/q04_proof_craft/src/exit.rs" = "prelude"
+"verus/q/q04_proof_craft/src/agent.rs" = "arithmetic"
+
+[module.concept_items]
+"S1.carries" = ["Q04.P1dv"]
+"S1.computed-values@d" = ["Q04.P2d"]
+"S2.quantified-proofs" = ["Q04.H2d", "Q04.H2v"]
+"S3.calc" = ["Q04.P3dv", "Q04.P4d"]
+"S3.prover-choice@v" = ["Q04.P6v"]
+"S4.lemma-recursion" = ["Q04.T1d", "Q04.T1v", "Q04.H1d", "Q04.H4d", "Q04.X1d"]
+"S4.auto-vs-manual-induction@d" = ["Q04.P5d"]
+# nominal: H4v's hole is a loop invariant (S4's concept); its marker strand is S5 because it also brings L3's bounds group in
+"S4.loop-invariants@v" = ["Q04.H4v"]
+"S5.standard-libraries" = ["Q04.H1v", "Q04.H3d", "Q04.H3v", "Q04.X2d", "Q04.P8dv"]
+"S5.nonlinear-arith@v" = ["Q04.H5v", "Q04.X1v"]
+"S5.broadcast-groups@v" = ["Q04.P7v", "Q04.P9v", "Q04.X2v"]
+"S5.retriever-race" = ["Q04.A1d", "Q04.A1v"]
+
+[[module]]
+id = "Q05"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Frames, ownership, modes, wp→VC"
+tier = "moderate"
+topic = ""
+strands = ["S6", "S7", "S8"]
+langs = ["d", "v"]
+chapter = "docs/Q05_Frames.md"
+exercises = ["dafny/Q/Q05_Frames/std/Q05_Frames.dfy", "dafny/checks/Q05_checks.dfy", "verus/q/q05_frames/src/lib.rs", "specimens/Q05/"]
+exits = ["dafny/Q/Q05_Frames/exit/Q05_Exit.dfy", "verus/q/q05_frames/src/exit.rs"]
+agentic = ["dafny/Q/Q05_Frames/agent/Q05_AgentInfra.dfy", "verus/q/q05_frames/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q05.md"
+paper = true
+rubric = "paper/rubrics/Q05_rubric.md"
+card = ["03.12"]
+build_target = "Q"
+units = ["dafny/Q/Q05_Frames/std", "verus/q/q05_frames"]
+layer = "L3"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["dynamic-frames", "by-method", "error-propagation", "lexicographic-decreases"]
+write_v = ["mut-ref", "result", "error-propagation", "lexicographic-decreases"]
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/Q/Q05_Frames/std/Q05_Frames.dfy" = "std"
+"dafny/checks/Q05_checks.dfy" = "std"
+"dafny/Q/Q05_Frames/exit/Q05_Exit.dfy" = "std"
+"dafny/Q/Q05_Frames/agent/Q05_AgentInfra.dfy" = "std"
+"verus/q/q05_frames/src/lib.rs" = "prelude"
+"verus/q/q05_frames/src/exit.rs" = "prelude"
+"verus/q/q05_frames/src/agent.rs" = "prelude"
+
+[module.concept_items]
+"S6.frames-and-ownership" = ["Q05.H1d", "Q05.H2d", "Q05.H1v", "Q05.H2v", "Q05.P4d", "Q05.P5v"]
+"S6.reads-and-state" = ["Q05.P1dv"]
+"S6.error-propagation" = ["Q05.H5d", "Q05.H5v", "Q05.X2d", "Q05.X2v"]
+"S6.mutation-and-results@v" = ["Q05.X1v"]
+"S6.wiring" = ["Q05.A1d", "Q05.A1v"]
+"S7.measures" = ["Q05.T1d", "Q05.T1v", "Q05.H4d", "Q05.H4v", "Q05.P2dv"]
+"S7.erasure" = ["Q05.P3dv"]
+"S7.function-by-method@d" = ["Q05.H3d", "Q05.X1d"]
+"S7.computed-values@d" = ["Q05.P8d"]
+"S8.verification-conditions" = ["Q05.P6d", "Q05.P9dv"]
+
+[[module]]
+id = "Q06"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "The machine and the verifier loop"
+tier = "moderate"
+topic = ""
+strands = ["S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q06_Machine.md"
+exercises = ["dafny/Q/Q06_Machine/std/Q06_Machine.dfy", "verus/q/q06_machine/src/lib.rs", "specimens/Q06/"]
+exits = ["dafny/Q/Q06_Machine/exit/Q06_Exit.dfy", "verus/q/q06_machine/src/exit.rs"]
+agentic = ["dafny/Q/Q06_Machine/agent/Q06_AgentProver.dfy"]
+harness = ["harness/q/fvh_q/q06_stats.py"]
+bank = ".claude/skills/instructor/banks/Q06.md"
+paper = true
+rubric = "paper/rubrics/Q06_rubric.md"
+card = ["02.4"]
+build_target = "Q"
+units = ["dafny/Q/Q06_Machine/std", "verus/q/q06_machine"]
+layer = "L3"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "tier"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["trigger", "opaque-reveal", "rlimit", "property-test"]
+write_v = ["trigger", "opaque-reveal", "rlimit", "property-test"]
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/Q/Q06_Machine/std/Q06_Machine.dfy" = "std"
+"dafny/Q/Q06_Machine/exit/Q06_Exit.dfy" = "std"
+"dafny/Q/Q06_Machine/agent/Q06_AgentProver.dfy" = "std"
+"verus/q/q06_machine/src/lib.rs" = "arithmetic"
+"verus/q/q06_machine/src/exit.rs" = "arithmetic"
+"harness/q/fvh_q/q06_stats.py" = "py-fvh"
+
+[module.concept_items]
+"S9.doors-and-exit-codes" = ["Q06.P1dv", "Q06.P2dv"]
+"S9.json-records@py" = ["Q06.H5py"]
+# nominal: TRUST.md v0, S10's prose artifact, is keyed under S12.trust-md-v0 (only S12 and S13 keys may rest on prose)
+"S10.trusted-base" = ["Q06.P8dv"]
+"S11.triggers" = ["Q06.T1d", "Q06.T1v", "Q06.H1d", "Q06.H1v", "Q06.P3d", "Q06.P4v"]
+"S11.opacity" = ["Q06.H2d", "Q06.H2v", "Q06.P5dv"]
+"S11.resource-limits" = ["Q06.H3d", "Q06.H3v", "Q06.X2d", "Q06.X2v"]
+"S12.property-tests" = ["Q06.H4d", "Q06.H4v", "Q06.X1d", "Q06.X1v"]
+"S12.resource-attributes" = ["Q06.P6dv"]
+"S12.audited-prover@d" = ["Q06.A1d"]
+"S12.trust-md-v0" = "prose"
+"S13.statistics@py" = ["Q06.H6py", "Q06.H7py", "Q06.P7py", "Q06.P9py"]
+"S13.eval-md-v0" = "prose"
+
+[[module]]
+id = "Q07"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Internals I: proof engineering, translation"
+tier = "detailed"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5"]
+langs = ["d", "v"]
+chapter = "docs/Q07_InternalsI.md"
+exercises = ["dafny/Q/Q07_InternalsI/std/Q07_InternalsI.dfy", "dafny/checks/Q07_checks.dfy", "verus/q/q07_internals_i/src/lib.rs", "verus/q/q07_internals_i/src/port.rs", "specimens/Q07/"]
+exits = ["dafny/Q/Q07_InternalsI/exit/Q07_Exit.dfy", "verus/q/q07_internals_i/src/exit.rs"]
+agentic = ["dafny/Q/Q07_InternalsI/agent/Q07_AgentRefactor.dfy", "verus/q/q07_internals_i/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q07.md"
+paper = true
+rubric = "paper/rubrics/Q07_rubric.md"
+card = ["02.8"]
+build_target = "Q"
+units = ["dafny/Q/Q07_InternalsI/std", "verus/q/q07_internals_i"]
+layer = "L4"
+engines = ["contract", "agent"]
+statements = []
+deep_dive = []
+review_bar = "library-conventions"
+persona = "smt-skeptic"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["fuel", "arithmetic-library"]
+write_v = ["fuel", "arithmetic-library", "bit-vector"]
+recognise_d = ["isolate", "bv-types"]
+recognise_v = ["recommends"]
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 40, qwen_runs = 1, gpu_hours = 1 }
+admissible = {}
+
+[module.imports]
+"dafny/given/Q/QG_L4_BigNat.dfy" = "std"
+"verus/given/qg_bignat_l4/src/lib.rs" = "arithmetic"
+"dafny/Q/Q07_InternalsI/std/Q07_InternalsI.dfy" = "std"
+"dafny/checks/Q07_checks.dfy" = "std"
+"dafny/Q/Q07_InternalsI/exit/Q07_Exit.dfy" = "std"
+"dafny/Q/Q07_InternalsI/agent/Q07_AgentRefactor.dfy" = "std"
+"verus/q/q07_internals_i/src/lib.rs" = "arithmetic"
+"verus/q/q07_internals_i/src/port.rs" = "arithmetic"
+"verus/q/q07_internals_i/src/exit.rs" = "arithmetic"
+"verus/q/q07_internals_i/src/agent.rs" = "arithmetic"
+
+[module.concept_items]
+"S1.machine-words@v" = ["Q07.H6v", "Q07.X1v", "Q07.P3v"]
+"S1.bit-vector-types@d" = ["Q07.P4d"]
+"S1.port-fidelity" = ["Q07.P2dv"]
+"S1.port@v" = ["Q07.H7v"]
+"S2.spec-partiality@v" = ["Q07.P6v", "Q07.H8v"]
+"S3.assertion-batches@d" = ["Q07.P7d"]
+"S4.fuel" = ["Q07.T1d", "Q07.T1v", "Q07.H1d", "Q07.H4v", "Q07.H9v", "Q07.X2d", "Q07.P1dv"]
+"S5.arithmetic-library" = ["Q07.H2d", "Q07.H3d", "Q07.H5v", "Q07.X1d", "Q07.X2v", "Q07.P5dv"]
+"S5.refactor-under-harness" = ["Q07.A1d", "Q07.A1v", "Q07.A2d"]
+
+[[module]]
+id = "Q08"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Internals II: refinement, permissions, verified wp"
+tier = "detailed"
+topic = ""
+strands = ["S6", "S7", "S8"]
+langs = ["d", "v"]
+chapter = "docs/Q08_InternalsII.md"
+exercises = ["dafny/Q/Q08_InternalsII/std/Q08_InternalsII.dfy", "dafny/Q/Q08_InternalsII/std/Q08_Canon.dfy", "dafny/Q/Q08_InternalsII/std/Q08_Wp.dfy", "verus/q/q08_internals_ii/src/lib.rs", "verus/q/q08_internals_ii/src/perm.rs", "specimens/Q08/"]
+exits = ["dafny/Q/Q08_InternalsII/exit/Q08_Exit.dfy", "verus/q/q08_internals_ii/src/exit.rs"]
+agentic = ["dafny/Q/Q08_InternalsII/agent/Q08_AgentFlagship.dfy", "verus/q/q08_internals_ii/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q08.md"
+paper = true
+rubric = "paper/rubrics/Q08_rubric.md"
+card = ["02.1"]
+build_target = "Q"
+units = ["dafny/Q/Q08_InternalsII/std", "verus/q/q08_internals_ii"]
+layer = "L4"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "library-conventions"
+persona = "smt-skeptic"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["refines"]
+write_v = ["trait-spec", "tracked"]
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q08.H5v" = { admitted = true, minutes = 6, fallback = "F-H5v: a Ghost-history counter on a struct the module owns (no permission)" }
+"Q08.H6v" = { admitted = true, minutes = 8, fallback = "F-H6v: a two-field transfer through &mut self on a struct the module owns (no permission)" }
+
+[module.imports]
+"dafny/Q/Q08_InternalsII/std/Q08_InternalsII.dfy" = "std"
+"dafny/Q/Q08_InternalsII/std/Q08_Canon.dfy" = "std"
+"dafny/Q/Q08_InternalsII/std/Q08_Wp.dfy" = "std"
+"dafny/Q/Q08_InternalsII/exit/Q08_Exit.dfy" = "std"
+"dafny/Q/Q08_InternalsII/agent/Q08_AgentFlagship.dfy" = "std"
+"verus/q/q08_internals_ii/src/lib.rs" = "arithmetic"
+"verus/q/q08_internals_ii/src/perm.rs" = "all"
+"verus/q/q08_internals_ii/src/exit.rs" = "arithmetic"
+"verus/q/q08_internals_ii/src/agent.rs" = "arithmetic"
+
+[module.concept_items]
+"S6.refinement@d" = ["Q08.H1d", "Q08.H2d", "Q08.H7d", "Q08.X1d", "Q08.P3d"]
+"S6.trait-specs@v" = ["Q08.T1v", "Q08.H3v", "Q08.H4v", "Q08.X1v", "Q08.P6v"]
+"S6.refinement-vs-traits" = ["Q08.P1dv"]
+"S6.spec-to-proof" = ["Q08.A1d", "Q08.A1v"]
+"S7.subset-types@d" = ["Q08.T1d"]
+"S7.termination" = ["Q08.P4dv", "Q08.X2d"]
+"S7.ghost-state@v" = ["Q08.X2v"]
+"S8.permissions@v" = ["Q08.H5v", "Q08.H6v", "Q08.P2v"]
+"S8.verified-wp@d" = ["Q08.H8d", "Q08.H9d", "Q08.H10d"]
+"S8.wp-by-hand" = ["Q08.P5dv"]
+
+[[module]]
+id = "Q09"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Internals III: brittleness, forensics, gate core"
+tier = "detailed"
+topic = ""
+strands = ["S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q09_InternalsIII.md"
+exercises = ["dafny/Q/Q09_InternalsIII/std/Q09_InternalsIII.dfy", "dafny/Q/Q09_InternalsIII/std/Q09_Triggers.dfy", "verus/q/q09_internals_iii/src/lib.rs", "specimens/Q09/"]
+exits = ["dafny/Q/Q09_InternalsIII/exit/Q09_Exit.dfy", "verus/q/q09_internals_iii/src/exit.rs"]
+agentic = ["dafny/Q/Q09_InternalsIII/agent/Q09_AgentRedTeam.dfy", "verus/q/q09_internals_iii/src/agent.rs"]
+harness = ["harness/q/fvh_q/gate/core.py"]
+bank = ".claude/skills/instructor/banks/Q09.md"
+paper = true
+rubric = "paper/rubrics/Q09_rubric.md"
+card = ["07.2"]
+build_target = "Q"
+units = ["dafny/Q/Q09_InternalsIII/std", "verus/q/q09_internals_iii"]
+layer = "L4"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "library-conventions"
+persona = "smt-skeptic"
+viva_mode = "tier"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = ["proof-split", "trigger-rewrite"]
+write_v = ["proof-split", "trigger-rewrite"]
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+
+[module.imports]
+"dafny/Q/Q09_InternalsIII/std/Q09_InternalsIII.dfy" = "std"
+"dafny/Q/Q09_InternalsIII/std/Q09_Triggers.dfy" = "std"
+"dafny/Q/Q09_InternalsIII/exit/Q09_Exit.dfy" = "std"
+"dafny/Q/Q09_InternalsIII/agent/Q09_AgentRedTeam.dfy" = "std"
+"verus/q/q09_internals_iii/src/lib.rs" = "arithmetic"
+"verus/q/q09_internals_iii/src/exit.rs" = "arithmetic"
+"verus/q/q09_internals_iii/src/agent.rs" = "arithmetic"
+"harness/q/fvh_q/gate/core.py" = "py-fvh"
+
+[module.concept_items]
+"S9.machine-records" = ["Q09.P3dv"]
+"S9.json-completeness@py" = ["Q09.H2py"]
+"S10.lsp-framing" = "R"
+# nominal: H1v and X1v cite proof-split through their nl-steps:2 form, which checks that two scoped steps are present, not that the proof needs both
+"S11.brittleness" = ["Q09.P1d", "Q09.P2dv", "Q09.H1d", "Q09.H1v", "Q09.X1d", "Q09.X1v"]
+# nominal: T1d and T1v cite trigger-rewrite through their trigger form, which checks that an explicit trigger is present, not that the proof needs it
+"S11.trigger-rewrite" = ["Q09.T1d", "Q09.T1v", "Q09.X2d", "Q09.X2v"]
+"S12.forensics" = ["Q09.P6d", "Q09.P7d", "Q09.P8d", "Q09.P9d", "Q09.P10d", "Q09.P11v", "Q09.P12v", "Q09.P13v", "Q09.P14v", "Q09.P15v"]
+"S12.gate-core@py" = ["Q09.H3py", "Q09.H4py"]
+"S12.red-team" = ["Q09.A1d", "Q09.A1v"]
+"S12.contract-v1" = "prose"
+"S13.gate-report@py" = ["Q09.H5py", "Q09.P5py"]
+"S13.mde@py" = ["Q09.P4py"]
+"S13.eval-md-v1" = "prose"
+
+[[module]]
+id = "Q10"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice I-A"
+tier = "practice-intro"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5"]
+langs = ["d", "v"]
+chapter = "docs/Q10_PracticeIA.md"
+exercises = ["dafny/Q/Q10_PracticeIA/std/Q10_PracticeIA.dfy", "verus/q/q10_practice_ia/src/lib.rs"]
+exits = ["dafny/Q/Q10_PracticeIA/exit/Q10_Exit.dfy", "verus/q/q10_practice_ia/src/exit.rs"]
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/Q10.md"
+paper = true
+rubric = "paper/rubrics/Q10_rubric.md"
+card = ["02.11"]
+build_target = "Q"
+units = ["dafny/Q/Q10_PracticeIA/std", "verus/q/q10_practice_ia"]
+layer = "L5"
+engines = []
+statements = []
+deep_dive = []
+review_bar = "design-lite"
+persona = "smt-skeptic"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q10.H1d" = { admitted = true, minutes = 10, fallback = "F-H1d: ToU64 on a restricted input" }
+"Q10.H1v" = { admitted = true, minutes = 14, fallback = "F-H1v: to_u64 on a restricted input" }
+"Q10.H2d" = { admitted = true, minutes = 7, fallback = "F-H2d: the spec of a one-line accessor (the lowest limb)" }
+"Q10.H2v" = { admitted = true, minutes = 8, fallback = "F-H2v: the spec of the length accessor" }
+"Q10.H3d" = { admitted = true, minutes = 8, fallback = "F-H3d: a shorter assertion repair" }
+"Q10.H3v" = { admitted = true, minutes = 8, fallback = "F-H3v: a shorter assertion repair" }
+"Q10.H4d" = { admitted = true, minutes = 12, fallback = "F-H4d: the forward scan without the Normalize conjunct" }
+"Q10.H4v" = { admitted = true, minutes = 12, fallback = "F-H4v: the forward scan of the first zero limb" }
+"Q10.H5d" = { admitted = true, minutes = 10, fallback = "F-H5d: PowPositive's analogue for a product of two powers" }
+"Q10.H5v" = { admitted = true, minutes = 10, fallback = "F-H5v: a smaller search-then-name fact" }
+"Q10.H6v" = { admitted = true, minutes = 10, fallback = "F-H6v: get on a restricted buffer" }
+"Q10.H7v" = { admitted = true, minutes = 10, fallback = "F-H7v: push_back on a restricted buffer" }
+
+[module.imports]
+"dafny/given/Q/QG_L5_BigNat.dfy" = "std"
+"verus/given/qg_bignat_l5/src/lib.rs" = "arithmetic"
+"dafny/Q/Q10_PracticeIA/std/Q10_PracticeIA.dfy" = "std"
+"dafny/Q/Q10_PracticeIA/exit/Q10_Exit.dfy" = "std"
+"verus/q/q10_practice_ia/src/lib.rs" = "arithmetic"
+"verus/q/q10_practice_ia/src/exit.rs" = "arithmetic"
+
+[module.concept_items]
+
+[[module]]
+id = "Q11"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice I-B"
+tier = "practice-intro"
+topic = ""
+strands = ["S6", "S7", "S8"]
+langs = ["d", "v"]
+chapter = "docs/Q11_PracticeIB.md"
+exercises = ["dafny/Q/Q11_PracticeIB/std/Q11_PracticeIB.dfy", "dafny/Q/Q11_PracticeIB/std/Q11_Wp.dfy", "verus/q/q11_practice_ib/src/lib.rs", "verus/q/q11_practice_ib/src/perm.rs"]
+exits = ["dafny/Q/Q11_PracticeIB/exit/Q11_Exit.dfy", "verus/q/q11_practice_ib/src/exit.rs"]
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/Q11.md"
+paper = true
+rubric = "paper/rubrics/Q11_rubric.md"
+card = ["02.12"]
+build_target = "Q"
+units = ["dafny/Q/Q11_PracticeIB/std", "verus/q/q11_practice_ib"]
+layer = "L5"
+engines = []
+statements = []
+deep_dive = []
+review_bar = "design-lite"
+persona = "smt-skeptic"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q11.H1d" = { admitted = true, minutes = 10, fallback = "F-H1d: Set without the frame conjunct in its ensures" }
+"Q11.H2d" = { admitted = true, minutes = 10, fallback = "F-H2d: CopyFrom of a fixed two-limb prefix" }
+"Q11.H3v" = { admitted = true, minutes = 10, fallback = "F-H3v: add_word without the step count" }
+"Q11.H4v" = { admitted = true, minutes = 10, fallback = "F-H4v: reset (no Result)" }
+"Q11.H5d" = { admitted = true, minutes = 12, fallback = "F-H5d: a smaller subset-type function into CanonSeq" }
+"Q11.H6v" = { admitted = true, minutes = 12, fallback = "F-H6v: value_two restricted to one limb" }
+"Q11.H7d" = { admitted = true, minutes = 10, fallback = "F-H7d: a precondition for one assignment" }
+"Q11.H8d" = { admitted = true, minutes = 10, fallback = "F-H8d: a precondition for a branch-free program" }
+"Q11.H9d" = { admitted = true, minutes = 15, fallback = "F-H9d: the Skip case with a sequence hypothesis" }
+"Q11.H10v" = { admitted = true, minutes = 15, fallback = "F-H10v: max_into on a struct the module owns, through &mut self (no permission)" }
+
+[module.imports]
+"dafny/Q/Q11_PracticeIB/std/Q11_PracticeIB.dfy" = "std"
+"dafny/Q/Q11_PracticeIB/std/Q11_Wp.dfy" = "std"
+"dafny/Q/Q11_PracticeIB/exit/Q11_Exit.dfy" = "std"
+"verus/q/q11_practice_ib/src/lib.rs" = "arithmetic"
+"verus/q/q11_practice_ib/src/perm.rs" = "all"
+"verus/q/q11_practice_ib/src/exit.rs" = "arithmetic"
+
+[module.concept_items]
+
+[[module]]
+id = "Q12"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice I-C + Lab 1"
+tier = "practice-intro"
+topic = ""
+strands = ["S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q12_PracticeIC.md"
+exercises = ["dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy", "dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy", "verus/q/q12_practice_ic/src/lib.rs", "verus/q/q12_practice_ic/src/lab1_hand.rs", "specimens/Q12/"]
+exits = ["dafny/Q/Q12_PracticeIC/exit/Q12_Exit.dfy", "verus/q/q12_practice_ic/src/exit.rs"]
+agentic = ["tools/Q12/holecount.py"]
+harness = ["harness/q/fvh_q/retry.py", "harness/q/fvh_q/policies.py", "harness/q/fvh_q/report.py"]
+bank = ".claude/skills/instructor/banks/Q12.md"
+paper = true
+rubric = "paper/rubrics/Q12_rubric.md"
+card = ["05.10", "06.1", "04.8"]
+build_target = "Q"
+units = ["dafny/Q/Q12_PracticeIC/std", "verus/q/q12_practice_ic"]
+layer = "L5"
+engines = ["contract", "policy"]
+statements = []
+deep_dive = []
+review_bar = "design-lite"
+persona = "smt-skeptic"
+viva_mode = "tier"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 180, claude_runs = 20, qwen_calls = 4400, qwen_runs = 620, gpu_hours = 10 }
+
+[module.admissible]
+"Q12.H1py" = { admitted = true, minutes = 10, fallback = "F-H1py: solve_goal over recorded documents only (no runner)" }
+"Q12.H2py" = { admitted = true, minutes = 10, fallback = "F-H2py: the solved count only" }
+"Q12.H3d" = { admitted = true, minutes = 7, fallback = "F-H3d: Normalize of a three-limb literal" }
+"Q12.H3v" = { admitted = true, minutes = 8, fallback = "F-H3v: the one-hypothesis trigger chain" }
+"Q12.H4d" = { admitted = true, minutes = 12, fallback = "F-H4d: the hand item of the next local card" }
+"Q12.H5d" = { admitted = true, minutes = 12, fallback = "F-H5d: the hand item of the next local card" }
+"Q12.H6d" = { admitted = true, minutes = 12, fallback = "F-H6d: the hand item of the next local card" }
+"Q12.H7d" = { admitted = true, minutes = 12, fallback = "F-H7d: the hand item of the next local card" }
+"Q12.H4v" = { admitted = true, minutes = 12, fallback = "F-H4v: the hand item of the next local card" }
+"Q12.H5v" = { admitted = true, minutes = 12, fallback = "F-H5v: the hand item of the next local card" }
+"Q12.H6v" = { admitted = true, minutes = 12, fallback = "F-H6v: the hand item of the next local card" }
+"Q12.H7v" = { admitted = true, minutes = 12, fallback = "F-H7v: the hand item of the next local card" }
+"Q12.H8py" = { admitted = true, minutes = 15, fallback = "F-H8py: the independent sampler given; the learner reviews it and its prompt" }
+"Q12.H9py" = { admitted = true, minutes = 20, fallback = "F-H9py: the repair arm given; the learner reviews it" }
+"Q12.H10py" = { admitted = true, minutes = 30, fallback = "F-H10py: best-first over a given frontier class; the learner writes the ranking only" }
+"Q12.H11py" = { admitted = true, minutes = 10, fallback = "F-H11py: DV4's neutral renderer; the learner writes the feedback section only" }
+"Q12.H12py" = { admitted = true, minutes = 15, fallback = "F-H12py: the table over synthetic records only" }
+"Q12.H13py" = { admitted = true, minutes = 20, fallback = "F-H13py: the comparison without the McNemar sensitivity line" }
+
+[module.imports]
+"dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy" = "std"
+"dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy" = "std"
+"dafny/Q/Q12_PracticeIC/exit/Q12_Exit.dfy" = "std"
+"verus/q/q12_practice_ic/src/lib.rs" = "arithmetic"
+"verus/q/q12_practice_ic/src/lab1_hand.rs" = "arithmetic"
+"verus/q/q12_practice_ic/src/exit.rs" = "arithmetic"
+"harness/q/fvh_q/retry.py" = "py-fvh"
+"harness/q/fvh_q/policies.py" = "py-fvh"
+"harness/q/fvh_q/report.py" = "py-fvh"
+"tools/Q12/holecount.py" = "py-std"
+
+[module.concept_items]
+
+[[module]]
+id = "Q13"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice II-A"
+tier = "practice-intermediate"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5"]
+langs = ["d", "v"]
+chapter = "docs/Q13_PracticeIIA.md"
+exercises = ["dafny/Q/Q13_PracticeIIA/std/Q13_PracticeIIA.dfy", "verus/q/q13_practice_iia/src/lib.rs"]
+exits = ["dafny/Q/Q13_PracticeIIA/exit/Q13_Exit.dfy", "verus/q/q13_practice_iia/src/exit.rs"]
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/Q13.md"
+paper = true
+rubric = "paper/rubrics/Q13_rubric.md"
+card = ["05.5"]
+build_target = "Q"
+units = ["dafny/Q/Q13_PracticeIIA/std", "verus/q/q13_practice_iia"]
+layer = "L6"
+engines = []
+statements = []
+deep_dive = []
+review_bar = "design-judgment"
+persona = "ml-engineer"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q13.H1v" = { admitted = true, minutes = 35, fallback = "F-H1v: sub on a restricted input" }
+"Q13.H2d" = { admitted = true, minutes = 30, fallback = "F-H2d: the concatenation law alone" }
+"Q13.H3v" = { admitted = true, minutes = 25, fallback = "F-H3v: the same prose for sequences of equal length" }
+"Q13.H4d" = { admitted = true, minutes = 15, fallback = "F-H4d: RepeatValue for d = BASE - 1 (the largest n-limb value)" }
+"Q13.H4v" = { admitted = true, minutes = 15, fallback = "F-H4v: lemma_repeat_value for d = u64::MAX" }
+"Q13.H5d" = { admitted = true, minutes = 20, fallback = "F-H5d: a value loop in the other direction" }
+
+[module.imports]
+"dafny/given/Q/QG_L6_BigNat.dfy" = "std"
+"verus/given/qg_bignat_l6/src/lib.rs" = "arithmetic"
+"dafny/Q/Q13_PracticeIIA/std/Q13_PracticeIIA.dfy" = "std"
+"dafny/Q/Q13_PracticeIIA/exit/Q13_Exit.dfy" = "std"
+"verus/q/q13_practice_iia/src/lib.rs" = "arithmetic"
+"verus/q/q13_practice_iia/src/exit.rs" = "arithmetic"
+
+[module.concept_items]
+
+
+[[module]]
+id = "Q14"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice II-B"
+tier = "practice-intermediate"
+topic = ""
+strands = ["S6", "S7", "S8"]
+langs = ["d", "v"]
+chapter = "docs/Q14_PracticeIIB.md"
+exercises = ["dafny/Q/Q14_PracticeIIB/std/Q14_PracticeIIB.dfy", "dafny/Q/Q14_PracticeIIB/std/Q14_Loop.dfy", "verus/q/q14_practice_iib/src/lib.rs", "verus/q/q14_practice_iib/src/perm.rs"]
+exits = ["dafny/Q/Q14_PracticeIIB/exit/Q14_Exit.dfy", "verus/q/q14_practice_iib/src/exit.rs"]
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/Q14.md"
+paper = true
+rubric = "paper/rubrics/Q14_rubric.md"
+card = ["06.9"]
+build_target = "Q"
+units = ["dafny/Q/Q14_PracticeIIB/std", "verus/q/q14_practice_iib"]
+layer = "L6"
+engines = []
+statements = []
+deep_dive = []
+review_bar = "design-judgment"
+persona = "ml-engineer"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q14.H1d" = { admitted = true, minutes = 35, fallback = "F-H1d: a restricted CmpCorrect" }
+"Q14.H2v" = { admitted = true, minutes = 30, fallback = "F-H2v: Accum for a one-word accumulator" }
+"Q14.H3d" = { admitted = true, minutes = 12, fallback = "F-H3d: none with a reference yet (QPLAN §24.3)" }
+"Q14.H3v" = { admitted = true, minutes = 13, fallback = "F-H3v: sum_limbs with the bound as a runtime argument" }
+"Q14.H4d" = { admitted = true, minutes = 30, fallback = "F-H4d: the loop rule on paper (not built; no rubric rows or model answer)" }
+"Q14.H5v" = { admitted = true, minutes = 30, fallback = "F-H5v: a Vec-backed node list (indices, no permission)" }
+
+[module.imports]
+"dafny/Q/Q14_PracticeIIB/std/Q14_PracticeIIB.dfy" = "std"
+"dafny/Q/Q14_PracticeIIB/std/Q14_Loop.dfy" = "std"
+"dafny/Q/Q14_PracticeIIB/exit/Q14_Exit.dfy" = "std"
+"verus/q/q14_practice_iib/src/lib.rs" = "arithmetic"
+"verus/q/q14_practice_iib/src/perm.rs" = "all"
+"verus/q/q14_practice_iib/src/exit.rs" = "arithmetic"
+
+[module.concept_items]
+
+
+[[module]]
+id = "Q15"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice II-C + Lab 2"
+tier = "practice-intermediate"
+topic = ""
+strands = ["S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q15_PracticeIIC.md"
+exercises = ["dafny/Q/Q15_PracticeIIC/std/Q15_PracticeIIC.dfy", "dafny/Q/Q15_PracticeIIC/std/Q15_Lab2Specs.dfy", "verus/q/q15_practice_iic/src/lib.rs", "verus/q/q15_practice_iic/src/lab2_specs.rs", "specimens/Q15/"]
+exits = ["dafny/Q/Q15_PracticeIIC/exit/Q15_Exit.dfy", "verus/q/q15_practice_iic/src/exit.rs"]
+agentic = ["dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy", "verus/q/q15_practice_iic/src/agent.rs", "tools/Q15/toolsmith.py"]
+harness = ["harness/q/fvh_q/lsp_client.py", "harness/q/fvh_q/oracles.py"]
+bank = ".claude/skills/instructor/banks/Q15.md"
+paper = true
+rubric = "paper/rubrics/Q15_rubric.md"
+card = ["04.6", "04.7", "03.8"]
+build_target = "Q"
+units = ["dafny/Q/Q15_PracticeIIC/std", "verus/q/q15_practice_iic"]
+layer = "L6"
+engines = ["contract", "policy"]
+statements = []
+deep_dive = []
+review_bar = "design-judgment"
+persona = "ml-engineer"
+viva_mode = "tier"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 90, claude_runs = 20, qwen_calls = 1200, qwen_runs = 240, gpu_hours = 3 }
+
+[module.admissible]
+"Q15.H1d" = { admitted = true, minutes = 8, fallback = "F-H1d: the trigger rewrite without the stable form", exception = "short-format band: the S11 line is short by design (5 proof lines, below 10; the user's decision D2)" }
+"Q15.H1v" = { admitted = true, minutes = 7, fallback = "F-H1v: the trigger rewrite without the stable form", exception = "short-format band: the S11 line is short by design (4 proof lines, below 15; the user's decision D2)" }
+"Q15.H2d" = { admitted = true, minutes = 8, fallback = "F-H2d: refute and repair only (the proof given)", exception = "short-format band: the S12 line is short by design (7 proof lines, below 10); the user’s decision D40" }
+"Q15.H2v" = { admitted = true, minutes = 7, fallback = "F-H2v: refute and repair only", exception = "short-format band: the S12 line is short by design (13 proof lines, below 15); the user’s decision D40" }
+"Q15.H3d" = { admitted = true, minutes = 18, fallback = "F-H3d: the same prose task graded by use-site checks and review only", exception = "hidden-check spec: a prose specification graded by its hidden two-way check in the grader container (Δ220: it holds), not by a proof's lines (0 proof lines, a 2-line statement and a one-line witness; below 10); the user's decision D21" }
+"Q15.H4d" = { admitted = true, minutes = 18, fallback = "F-H4d: as F-H3d", exception = "hidden-check spec: as Q15.H3d (0 proof lines, a 3-line statement; below 10); the user's decision D21" }
+"Q15.H5d" = { admitted = true, minutes = 18, fallback = "F-H5d: as F-H3d", exception = "hidden-check spec: as Q15.H3d (0 proof lines, a 3-line statement; below 10); the user's decision D21" }
+"Q15.H3v" = { admitted = true, minutes = 18, fallback = "F-H3v: as F-H3d", exception = "hidden-check spec: as Q15.H3d (7 proof lines with a 4-line spec fn of the learner's; below 15); the user's decision D21" }
+"Q15.H4v" = { admitted = true, minutes = 18, fallback = "F-H4v: as F-H3d" }
+"Q15.H5v" = { admitted = true, minutes = 18, fallback = "F-H5v: as F-H3d", exception = "hidden-check spec: as Q15.H3d (0 proof lines, a 7-line statement: its code needs no proof; below 15); the user's decision D21" }
+"Q15.H6py" = { admitted = true, minutes = 5, fallback = "F-H6py: the framing given; the learner tests it" }
+"Q15.H7py" = { admitted = true, minutes = 7, fallback = "F-H7py: the reader given; the learner tests it" }
+"Q15.H8py" = { admitted = true, minutes = 15, fallback = "F-H8py: the client over the recorded transcript only" }
+"Q15.H9py" = { admitted = true, minutes = 15, fallback = "F-H9py: mutants given; the learner reviews them" }
+"Q15.H10py" = { admitted = true, minutes = 20, fallback = "F-H10py: kill rate over recorded results" }
+"Q15.H11py" = { admitted = true, minutes = 20, fallback = "F-H11py: implication over given lemma templates" }
+"Q15.H12py" = { admitted = true, minutes = 20, fallback = "F-H12py: the classifier over given oracle results" }
+
+[module.imports]
+"dafny/Q/Q15_PracticeIIC/std/Q15_PracticeIIC.dfy" = "std"
+"dafny/Q/Q15_PracticeIIC/std/Q15_Lab2Specs.dfy" = "std"
+"dafny/Q/Q15_PracticeIIC/exit/Q15_Exit.dfy" = "std"
+"dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy" = "std"
+"verus/q/q15_practice_iic/src/lib.rs" = "arithmetic"
+"verus/q/q15_practice_iic/src/lab2_specs.rs" = "arithmetic"
+"verus/q/q15_practice_iic/src/exit.rs" = "arithmetic"
+"verus/q/q15_practice_iic/src/agent.rs" = "arithmetic"
+"harness/q/fvh_q/lsp_client.py" = "py-fvh"
+"harness/q/fvh_q/oracles.py" = "py-fvh"
+"tools/Q15/toolsmith.py" = "py-std"
+
+[module.concept_items]
+
+
+[[module]]
+id = "Q16"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice III-A"
+tier = "practice-hard"
+topic = ""
+strands = ["S1", "S2", "S3", "S4", "S5"]
+langs = ["d", "v"]
+chapter = "docs/Q16_PracticeIIIA.md"
+exercises = ["dafny/Q/Q16_PracticeIIIA/std/Q16_PracticeIIIA.dfy", "verus/q/q16_practice_iiia/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/Q16.md"
+paper = true
+rubric = "paper/rubrics/Q16_rubric.md"
+card = ["01.13"]
+build_target = "Q"
+units = ["dafny/Q/Q16_PracticeIIIA/std", "verus/q/q16_practice_iiia"]
+layer = "L7"
+engines = []
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "ml-engineer"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q16.H1d" = { admitted = true, minutes = 45, fallback = "F-H1d: part of the decomposition given; one statement still the learner's" }
+"Q16.H2v" = { admitted = true, minutes = 50, fallback = "F-H2v: part of the decomposition given" }
+"Q16.H3v" = { admitted = true, minutes = 35, fallback = "F-H3: none with a reference yet (QPLAN §26.4)" }
+"Q16.H3d" = { admitted = true, minutes = 20, fallback = "F-H3: none with a reference yet (QPLAN §26.4)" }
+
+[module.imports]
+"dafny/given/Q/QG_L7_BigNat.dfy" = "std"
+"verus/given/qg_bignat_l7/src/lib.rs" = "arithmetic"
+"verus/given/qg_bignat_l7/src/api.rs" = "arithmetic"
+"dafny/Q/Q16_PracticeIIIA/std/Q16_PracticeIIIA.dfy" = "std"
+"verus/q/q16_practice_iiia/src/lib.rs" = "arithmetic"
+
+[module.concept_items]
+
+
+
+[[module]]
+id = "Q17"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice III-B"
+tier = "practice-hard"
+topic = ""
+strands = ["S6", "S7", "S8"]
+langs = ["d", "v"]
+chapter = "docs/Q17_PracticeIIIB.md"
+exercises = ["dafny/Q/Q17_PracticeIIIB/std/Q17_PracticeIIIB.dfy", "dafny/Q/Q17_PracticeIIIB/std/Q17_Vcgen.dfy", "verus/q/q17_practice_iiib/src/lib.rs", "verus/q/q17_practice_iiib/src/perm.rs"]
+exits = []
+agentic = ["dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy"]
+harness = []
+bank = ".claude/skills/instructor/banks/Q17.md"
+paper = true
+rubric = "paper/rubrics/Q17_rubric.md"
+card = ["12.12"]
+build_target = "Q"
+units = ["dafny/Q/Q17_PracticeIIIB/std", "verus/q/q17_practice_iiib"]
+layer = "L7"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "ml-engineer"
+viva_mode = "none"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+
+[module.admissible]
+"Q17.H1d" = { admitted = true, minutes = 50, fallback = "F-H1d: a sorted-seq priority queue in a class without arrays (frames on this only)" }
+"Q17.H2v" = { admitted = true, minutes = 50, fallback = "F-H2v: a Vec-backed ring buffer with pop_front and wrap-around (no permission)" }
+"Q17.H3d" = { admitted = true, minutes = 35, fallback = "F-H3d: the soundness statements for the loop-free fragment only", exception = "statement-item: the learner writes the soundness statements and their witness (10 proof lines, below 30), the metatheory contractor (A1d) their proof (59 in all); the user's decision D6" }
+
+[module.imports]
+"dafny/Q/Q17_PracticeIIIB/std/Q17_PracticeIIIB.dfy" = "std"
+"dafny/Q/Q17_PracticeIIIB/std/Q17_Vcgen.dfy" = "std"
+"dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy" = "std"
+"verus/q/q17_practice_iiib/src/lib.rs" = "arithmetic"
+"verus/q/q17_practice_iiib/src/perm.rs" = "all"
+
+[module.concept_items]
+
+
+[[module]]
+id = "Q18"
+legacy_id = ""
+track = "Q"
+status = "shipped"
+title = "Practice III-C + Lab 3 + capstone"
+tier = "practice-hard"
+topic = ""
+strands = ["S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q18_PracticeIIIC.md"
+exercises = ["dafny/Q/Q18_PracticeIIIC/std/Q18_PracticeIIIC.dfy", "verus/q/q18_practice_iiic/src/lib.rs", "specimens/Q18/"]
+exits = []
+agentic = ["dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy", "verus/q/q18_practice_iiic/src/agent.rs"]
+harness = ["harness/q/fvh_q/gate/gate_v2.py"]
+bank = ".claude/skills/instructor/banks/Q18.md"
+paper = true
+rubric = "paper/rubrics/Q18_rubric.md"
+card = ["02.6", "05.9"]
+build_target = "Q"
+units = ["dafny/Q/Q18_PracticeIIIC/std", "verus/q/q18_practice_iiic"]
+layer = "L7"
+engines = ["contract", "policy", "agent"]
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "ml-engineer"
+viva_mode = "tier"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 610, claude_runs = 24, qwen_calls = 1440, qwen_runs = 36, gpu_hours = 9 }
+
+[module.admissible]
+"Q18.H1d" = { admitted = true, minutes = 25, fallback = "F-H1d: the repair of a seed-brittle Dafny proof (one solver)", exception = "short-format band: the S11 pair line is short by design (12 proof lines, below 30): a repair that must hold under a solver swap and a seed sweep; the user's decision D7" }
+"Q18.H1v" = { admitted = true, minutes = 15, fallback = "F-H1v: a smaller seed-brittle repair", exception = "short-format band: the S11 pair line is short by design (19 proof lines, below 45); the user's decision D7" }
+"Q18.H2d" = { admitted = true, minutes = 12, fallback = "F-H2d: the statements of multiplication and division only", exception = "statement-item: the learner writes the capstone's statements, the co-developer (A2dv) their proof; no shipped hole: firsttry --empty-body's statement route (the reference delivery verifies, specfreeze --against its reference statements 0); the user's decision D9" }
+"Q18.H2v" = { admitted = true, minutes = 13, fallback = "F-H2v: as F-H2d", exception = "statement-item: as Q18.H2d, for the crate's extension trait; the user's decision D9" }
+"Q18.H3py" = { admitted = true, minutes = 15, fallback = "F-H3py: gate_crate over recorded documents only" }
+"Q18.H4py" = { admitted = true, minutes = 10, fallback = "F-H4py: completeness only (no minimum counts)" }
+"Q18.H5py" = { admitted = true, minutes = 20, fallback = "F-H5py: the option allowlist only" }
+"Q18.H6py" = { admitted = true, minutes = 15, fallback = "F-H6py: the spread over recorded runs" }
+"Q18.H7py" = { admitted = true, minutes = 10, fallback = "F-H7py: the FP count without its interval" }
+
+[module.imports]
+"dafny/Q/Q18_PracticeIIIC/std/Q18_PracticeIIIC.dfy" = "std"
+"dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy" = "std"
+"verus/q/q18_practice_iiic/src/lib.rs" = "arithmetic"
+"verus/q/q18_practice_iiic/src/agent.rs" = "arithmetic"
+"verus/q/q18_practice_iiic/src/main.rs" = "arithmetic"
+"harness/q/fvh_q/gate/gate_v2.py" = "py-fvh"
+
+[module.concept_items]
+
+
+[[module]]
+id = "Q19"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Sorting"
+tier = "challenge"
+topic = "algorithms"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v"]
+chapter = "docs/Q19_Sorting.md"
+exercises = ["Challenges/Algorithms/Q19_Sorting/Q19_Sorting.dfy", "Challenges/Algorithms/Q19_Sorting/q19_sorting/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_algorithms.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "journal-referee"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "verifier-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q20"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Hash map"
+tier = "challenge"
+topic = "algorithms"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["v"]
+chapter = "docs/Q20_HashMap.md"
+exercises = ["Challenges/Algorithms/Q20_HashMap/q20_hash_map/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_algorithms.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "journal-referee"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q21"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Graphs"
+tier = "challenge"
+topic = "algorithms"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d"]
+chapter = "docs/Q21_Graphs.md"
+exercises = ["Challenges/Algorithms/Q21_Graphs/Q21_Graphs.dfy"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_algorithms.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "journal-referee"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q22"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Codec & sequencer"
+tier = "challenge"
+topic = "quant"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["v"]
+chapter = "docs/Q22_Codec.md"
+exercises = ["Challenges/Quant/Q22_Codec/q22_codec/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_quant.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "risk-engineer"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q23"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Matching engine"
+tier = "challenge"
+topic = "quant"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["v"]
+chapter = "docs/Q23_MatchingEngine.md"
+exercises = ["Challenges/Quant/Q23_MatchingEngine/q23_matching_engine/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_quant.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "risk-engineer"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q24"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Service"
+tier = "challenge"
+topic = "quant"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["v"]
+chapter = "docs/Q24_Service.md"
+exercises = ["Challenges/Quant/Q24_Service/q24_service/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_quant.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "risk-engineer"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q25"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Exact money"
+tier = "challenge"
+topic = "numerics"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v"]
+chapter = "docs/Q25_ExactMoney.md"
+exercises = ["Challenges/Numerics/Q25_ExactMoney/Q25_ExactMoney.dfy", "Challenges/Numerics/Q25_ExactMoney/q25_exact_money/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_numerics.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "numerical-analyst"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q26"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Bit tricks"
+tier = "challenge"
+topic = "numerics"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v"]
+chapter = "docs/Q26_BitTricks.md"
+exercises = ["Challenges/Numerics/Q26_BitTricks/Q26_BitTricks.dfy", "Challenges/Numerics/Q26_BitTricks/q26_bit_tricks/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_numerics.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "numerical-analyst"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "verifier-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q27"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Multi-precision"
+tier = "challenge"
+topic = "numerics"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["v"]
+chapter = "docs/Q27_MultiPrecision.md"
+exercises = ["Challenges/Numerics/Q27_MultiPrecision/q27_multi_precision/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_numerics.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "numerical-analyst"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q28"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "VC generator"
+tier = "challenge"
+topic = "pl"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d"]
+chapter = "docs/Q28_VcGen.md"
+exercises = ["Challenges/PL/Q28_VcGen/Q28_VcGen.dfy"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_pl.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "compiler-engineer"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "verifier-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q29"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Bytecode verifier"
+tier = "challenge"
+topic = "pl"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["v"]
+chapter = "docs/Q29_BytecodeVerifier.md"
+exercises = ["Challenges/PL/Q29_BytecodeVerifier/q29_bytecode_verifier/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_pl.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "compiler-engineer"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "reference-impl"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q30"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Re-check the oracle"
+tier = "challenge"
+topic = "pl"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v"]
+chapter = "docs/Q30_Recheck.md"
+exercises = ["Challenges/PL/Q30_Recheck/Q30_Recheck.dfy", "Challenges/PL/Q30_Recheck/q30_recheck/src/lib.rs"]
+exits = []
+agentic = []
+harness = []
+bank = ".claude/skills/instructor/banks/defense_pl.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "library-pr"
+persona = "compiler-engineer"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "verifier-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q31"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Gate & bench"
+tier = "challenge"
+topic = "agentic"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q31_GateBench.md"
+exercises = ["Challenges/Agentic/Q31_GateBench/Q31_GateBench.dfy", "Challenges/Agentic/Q31_GateBench/q31_gate_bench/src/lib.rs"]
+exits = []
+agentic = []
+harness = ["agents/q31_gate_bench/bench.py"]
+bank = ".claude/skills/instructor/banks/defense_agentic.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "harness"
+persona = "eval-skeptic"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "harness-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q32"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Proof-search agent"
+tier = "challenge"
+topic = "agentic"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q32_ProofSearch.md"
+exercises = ["Challenges/Agentic/Q32_ProofSearch/Q32_ProofSearch.dfy", "Challenges/Agentic/Q32_ProofSearch/q32_proof_search/src/lib.rs"]
+exits = []
+agentic = []
+harness = ["agents/q32_proof_search/agent.py"]
+bank = ".claude/skills/instructor/banks/defense_agentic.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "harness"
+persona = "eval-skeptic"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "harness-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "Q33"
+legacy_id = ""
+track = "Q"
+status = "planned"
+title = "Statement problem"
+tier = "challenge"
+topic = "agentic"
+strands = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13"]
+langs = ["d", "v", "py"]
+chapter = "docs/Q33_StatementProblem.md"
+exercises = ["Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblem.dfy", "Challenges/Agentic/Q33_StatementProblem/q33_statement_problem/src/lib.rs"]
+exits = []
+agentic = []
+harness = ["agents/q33_statement_problem/pipeline.py"]
+bank = ".claude/skills/instructor/banks/defense_agentic.md"
+paper = false
+rubric = ""
+card = []
+build_target = "Challenges"
+units = []
+layer = ""
+engines = []
+statements = []
+deep_dive = []
+review_bar = "harness"
+persona = "eval-skeptic"
+viva_mode = "defense"
+tutor_max_rung = 2
+solo = true
+solutions_policy = "harness-graded"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+
+# ============================================================================
+# R track — topic-ordered, R01–R16 (all planned; standalone, ungated)
+# ============================================================================
+
+[[module]]
+id = "R01"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Hello, two verifiers"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R01_Hello.md"
+exercises = ["dafny/R/R01_Hello/core/R01_Hello.dfy", "verus/r/r01_hello/src/lib.rs", "specimens/R01/"]
+exits = []
+agentic = ["dafny/R/R01_Hello/agent/R01_AgentRepair.dfy", "verus/r/r01_hello/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R01.md"
+paper = true
+rubric = "paper/rubrics/R01_rubric.md"
+card = ["12.11"]
+build_target = "R"
+units = ["dafny/R/R01_Hello/core", "verus/r/r01_hello"]
+layer = ""
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "it-reads"
+persona = "sharp-dev"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R02"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Datatypes and recursion"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R02_Datatypes.md"
+exercises = ["dafny/R/R02_Datatypes/core/R02_Datatypes.dfy", "verus/r/r02_datatypes/src/lib.rs", "specimens/R02/"]
+exits = []
+agentic = ["dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy", "verus/r/r02_datatypes/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R02.md"
+paper = true
+rubric = "paper/rubrics/R02_rubric.md"
+card = ["05.6"]
+build_target = "R"
+units = ["dafny/R/R02_Datatypes/core", "verus/r/r02_datatypes"]
+layer = "A1"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "it-reads"
+persona = "sharp-dev"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R03"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Modules and APIs"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R03_Modules.md"
+exercises = ["dafny/R/R03_Modules/core/R03_Modules.dfy", "verus/r/r03_modules/src/lib.rs", "specimens/R03/"]
+exits = []
+agentic = ["dafny/R/R03_Modules/agent/R03_AgentApi.dfy", "verus/r/r03_modules/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R03.md"
+paper = true
+rubric = "paper/rubrics/R03_rubric.md"
+card = ["03.2"]
+build_target = "R"
+units = ["dafny/R/R03_Modules/core", "verus/r/r03_modules"]
+layer = "A1"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "it-reads"
+persona = "sharp-dev"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R04"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Specs as logic"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R04_Specs.md"
+exercises = ["dafny/R/R04_Specs/core/R04_Specs.dfy", "verus/r/r04_specs/src/lib.rs", "specimens/R04/"]
+exits = []
+agentic = ["dafny/R/R04_Specs/agent/R04_AgentProver.dfy", "verus/r/r04_specs/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R04.md"
+paper = true
+rubric = "paper/rubrics/R04_rubric.md"
+card = ["12.5"]
+build_target = "R"
+units = ["dafny/R/R04_Specs/core", "verus/r/r04_specs"]
+layer = "A1"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R05"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "No goal state"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v", "py"]
+chapter = "docs/R05_NoGoalState.md"
+exercises = ["dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy", "verus/r/r05_no_goal_state/src/lib.rs", "specimens/R05/"]
+exits = []
+agentic = ["dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy", "verus/r/r05_no_goal_state/src/agent.rs"]
+harness = ["harness/r/fvh_r/variance.py"]
+bank = ".claude/skills/instructor/banks/R05.md"
+paper = true
+rubric = "paper/rubrics/R05_rubric.md"
+card = ["06.3"]
+build_target = "R"
+units = ["dafny/R/R05_NoGoalState/core", "verus/r/r05_no_goal_state"]
+layer = "A1"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R06"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Induction and loops"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R06_Induction.md"
+exercises = ["dafny/R/R06_Induction/core/R06_Induction.dfy", "verus/r/r06_induction/src/lib.rs", "specimens/R06/"]
+exits = ["dafny/R/R06_Induction/exit/R06_Checkpoint.dfy", "verus/r/r06_induction/src/exit.rs"]
+agentic = ["dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy", "verus/r/r06_induction/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R06.md"
+paper = true
+rubric = "paper/rubrics/R06_rubric.md"
+card = ["03.4"]
+build_target = "R"
+units = ["dafny/R/R06_Induction/core", "verus/r/r06_induction"]
+layer = "A1b"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "proof-shape"
+persona = "sharp-dev"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R07"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Libraries: what they cost"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R07_Libraries.md"
+exercises = ["dafny/R/R07_Libraries/std/R07_Libraries.dfy", "verus/r/r07_libraries/src/lib.rs", "specimens/R07/"]
+exits = []
+agentic = ["dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy", "verus/r/r07_libraries/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R07.md"
+paper = true
+rubric = "paper/rubrics/R07_rubric.md"
+card = ["06.5"]
+build_target = "R"
+units = ["dafny/R/R07_Libraries/std", "verus/r/r07_libraries"]
+layer = "A2"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "library-conventions"
+persona = "smt-skeptic"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R08"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Abstraction"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R08_Abstraction.md"
+exercises = ["dafny/R/R08_Abstraction/std/R08_Abstraction.dfy", "verus/r/r08_abstraction/src/lib.rs", "specimens/R08/"]
+exits = []
+agentic = ["dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy", "verus/r/r08_abstraction/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R08.md"
+paper = true
+rubric = "paper/rubrics/R08_rubric.md"
+card = ["06.7"]
+build_target = "R"
+units = ["dafny/R/R08_Abstraction/std", "verus/r/r08_abstraction"]
+layer = "A2"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "library-conventions"
+persona = "smt-skeptic"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R09"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Effects"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R09_Effects.md"
+exercises = ["dafny/R/R09_Effects/std/R09_Effects.dfy", "verus/r/r09_effects/src/lib.rs", "specimens/R09/"]
+exits = []
+agentic = ["dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy", "verus/r/r09_effects/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R09.md"
+paper = true
+rubric = "paper/rubrics/R09_rubric.md"
+card = ["06.11"]
+build_target = "R"
+units = ["dafny/R/R09_Effects/std", "verus/r/r09_effects"]
+layer = "A3"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "library-conventions"
+persona = "smt-skeptic"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R10"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Invariants in types"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R10_TypeInvariants.md"
+exercises = ["dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy", "verus/r/r10_type_invariants/src/lib.rs", "specimens/R10/"]
+exits = []
+agentic = ["dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy", "verus/r/r10_type_invariants/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R10.md"
+paper = true
+rubric = "paper/rubrics/R10_rubric.md"
+card = ["03.5"]
+build_target = "R"
+units = ["dafny/R/R10_TypeInvariants/std", "verus/r/r10_type_invariants"]
+layer = "A4"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "design-judgment"
+persona = "smt-skeptic"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R11"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Theory"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R11_Theory.md"
+exercises = ["dafny/R/R11_Theory/std/R11_Theory.dfy", "verus/r/r11_theory/src/lib.rs", "specimens/R11/"]
+exits = ["dafny/R/R11_Theory/exit/R11_Checkpoint.dfy", "verus/r/r11_theory/src/exit.rs"]
+agentic = ["dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy", "verus/r/r11_theory/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R11.md"
+paper = true
+rubric = "paper/rubrics/R11_rubric.md"
+card = ["12.10"]
+build_target = "R"
+units = ["dafny/R/R11_Theory/std", "verus/r/r11_theory"]
+layer = "A4"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "design-judgment"
+persona = "smt-skeptic"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R12"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Driving the verifier + Lab α"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v", "py"]
+chapter = "docs/R12_Driving.md"
+exercises = ["dafny/R/R12_Driving/std/R12_Driving.dfy", "verus/r/r12_driving/src/lib.rs", "specimens/R12/"]
+exits = []
+agentic = ["tools/R12/profiler.py"]
+harness = ["harness/r/fvh_r/extractor.py", "harness/r/fvh_r/loop.py", "harness/r/fvh_r/engine.py"]
+bank = ".claude/skills/instructor/banks/R12.md"
+paper = true
+rubric = "paper/rubrics/R12_rubric.md"
+card = ["06.10", "01.12"]
+build_target = "R"
+units = ["dafny/R/R12_Driving/std", "verus/r/r12_driving"]
+layer = "A4"
+engines = ["contract", "policy"]
+statements = []
+deep_dive = []
+review_bar = "harness"
+persona = "ml-engineer"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 110, claude_runs = 10, qwen_calls = 4800, qwen_runs = 480, gpu_hours = 10 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R13"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Pipelines and trust"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R13_Pipelines.md"
+exercises = ["dafny/R/R13_Pipelines/std/R13_Pipelines.dfy", "verus/r/r13_pipelines/src/lib.rs", "specimens/R13/"]
+exits = []
+agentic = ["dafny/R/R13_Pipelines/agent/R13_AgentForensic.dfy", "verus/r/r13_pipelines/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R13.md"
+paper = true
+rubric = "paper/rubrics/R13_rubric.md"
+card = ["12.3"]
+build_target = "R"
+units = ["dafny/R/R13_Pipelines/std", "verus/r/r13_pipelines"]
+layer = "A4"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "ml-engineer"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R14"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "SMT mechanics"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v", "py"]
+chapter = "docs/R14_Smt.md"
+exercises = ["dafny/R/R14_Smt/std/R14_Smt.dfy", "verus/r/r14_smt/src/lib.rs", "specimens/R14/"]
+exits = []
+agentic = ["tools/R14/trigscan.py"]
+harness = []
+bank = ".claude/skills/instructor/banks/R14.md"
+paper = true
+rubric = "paper/rubrics/R14_rubric.md"
+card = ["02.5"]
+build_target = "R"
+units = ["dafny/R/R14_Smt/std", "verus/r/r14_smt"]
+layer = "A4"
+engines = ["contract"]
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "ml-engineer"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R15"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Verifier loop + Lab β"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v", "py"]
+chapter = "docs/R15_VerifierLoop.md"
+exercises = ["dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy", "verus/r/r15_verifier_loop/src/lib.rs", "specimens/R15/"]
+exits = []
+agentic = ["dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy", "verus/r/r15_verifier_loop/src/agent.rs"]
+harness = ["harness/r/fvh_r/spectest.py", "harness/r/fvh_r/roundtrip.py"]
+bank = ".claude/skills/instructor/banks/R15.md"
+paper = true
+rubric = "paper/rubrics/R15_rubric.md"
+card = ["03.10", "05.2"]
+build_target = "R"
+units = ["dafny/R/R15_VerifierLoop/std", "verus/r/r15_verifier_loop"]
+layer = "A4"
+engines = ["contract", "policy"]
+statements = []
+deep_dive = []
+review_bar = "harness"
+persona = "ml-engineer"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 90, claude_runs = 20, qwen_calls = 960, qwen_runs = 288, gpu_hours = 3 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+[[module]]
+id = "R16"
+legacy_id = ""
+track = "R"
+status = "planned"
+title = "Capstone + Lab γ"
+tier = ""
+topic = ""
+strands = []
+langs = ["d", "v"]
+chapter = "docs/R16_Capstone.md"
+exercises = ["dafny/R/R16_Capstone/std/R16_Capstone.dfy", "verus/r/r16_capstone/src/lib.rs", "specimens/R16/"]
+exits = []
+agentic = ["dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy", "verus/r/r16_capstone/src/agent.rs"]
+harness = []
+bank = ".claude/skills/instructor/banks/R16.md"
+paper = true
+rubric = "paper/rubrics/R16_rubric.md"
+card = ["07.3", "12.9"]
+build_target = "R"
+units = ["dafny/R/R16_Capstone/std", "verus/r/r16_capstone"]
+layer = "A5"
+engines = ["contract", "policy", "agent"]
+statements = []
+deep_dive = []
+review_bar = "production"
+persona = "ml-engineer"
+viva_mode = "module"
+tutor_max_rung = 5
+solo = false
+solutions_policy = "solutions-first"
+write_d = []
+write_v = []
+recognise_d = []
+recognise_v = []
+budget = { claude_calls = 610, claude_runs = 24, qwen_calls = 1440, qwen_runs = 36, gpu_hours = 9 }
+admissible = {}
+imports = {}
+concept_items = {}
+
+# ============================================================================
+# Coverage (design §5): one row per goal payload
+# ============================================================================
+#
+# Every payload has a core home in BOTH tracks, in every language it lists:
+#   q_homes    Q01–Q18 homes: a strand anchor Qxx.S<k> (S<k> among Qxx's
+#              strands; it covers Qxx's languages), an item id Qxx.<K><n><lang>
+#              (it covers its language; dv covers d and v), or a paper item
+#              Qxx.B<n> (language-free; needs paper = true)
+#   r_homes    R01–R16 homes: a module anchor Rxx (it covers Rxx's languages),
+#              an item id, or a paper item Rxx.B<n>
+#   langs      the languages the payload must be homed in ([] = language-free)
+#   deepening  bare Q19–Q33 ids only: a challenge never counts as a home
+#   gap        a deliberate hole or asymmetry, with its reason ("" = none)
+# A home in a planned module is pending (counted, not an error). Once its module
+# is past planned it must resolve: a strand anchor through a checked item in
+# that strand (Q01–Q09: a concept_items key of that strand citing items), a
+# module anchor through a checked item in each required language, an item id
+# through its marker, a paper item through `% item: <id>` in the problems file.
+# A home on a gated item (admitted = false) needs a gap that says so.
+
+[[coverage]]
+payload_id = "S1.datatypes-and-pattern-matching"
+langs = ["d", "v"]
+q_homes = ["Q01.S1", "Q02.S1"]
+r_homes = ["R02"]
+deepening = ["Q19"]
+gap = ""
+
+[[coverage]]
+payload_id = "S1.int-vs-machine-integers"
+langs = ["d", "v"]
+q_homes = ["Q01.S1", "Q02.S1", "Q10.S1"]
+r_homes = ["R01", "R09"]
+deepening = ["Q25", "Q26", "Q27"]
+gap = ""
+
+[[coverage]]
+payload_id = "S1.spec-and-exec-code"
+langs = ["d", "v"]
+q_homes = ["Q01.S1", "Q04.S1"]
+r_homes = ["R02", "R03"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S1.sequences-and-collections"
+langs = ["d", "v"]
+q_homes = ["Q02.S1", "Q07.S1"]
+r_homes = ["R02", "R07"]
+deepening = ["Q20"]
+gap = ""
+
+[[coverage]]
+payload_id = "S1.running-verified-code"
+langs = ["d", "v"]
+q_homes = ["Q01.S1", "Q04.S1"]
+r_homes = ["R01", "R02"]
+deepening = ["Q22"]
+gap = ""
+
+[[coverage]]
+payload_id = "S2.requires-and-ensures"
+langs = ["d", "v"]
+q_homes = ["Q01.S2", "Q02.S2"]
+r_homes = ["R01", "R04"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S2.quantified-specs"
+langs = ["d", "v"]
+q_homes = ["Q02.S2", "Q04.S2"]
+r_homes = ["R04", "R14"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S2.vacuity-and-witnesses"
+langs = ["d", "v"]
+q_homes = ["Q02.S2", "Q07.S2"]
+r_homes = ["R04"]
+deepening = ["Q33"]
+gap = ""
+
+[[coverage]]
+payload_id = "S2.spec-strength"
+langs = ["d", "v"]
+q_homes = ["Q04.S2", "Q13.S2"]
+r_homes = ["R04", "R10"]
+deepening = ["Q33"]
+gap = ""
+
+[[coverage]]
+payload_id = "S3.assert-and-assert-by"
+langs = ["d", "v"]
+q_homes = ["Q01.S3", "Q02.S3"]
+r_homes = ["R01", "R04"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S3.calc-chains"
+langs = ["d", "v"]
+q_homes = ["Q04.S3", "Q07.S3"]
+r_homes = ["R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S3.lemma-calls"
+langs = ["d", "v"]
+q_homes = ["Q01.S3", "Q04.S3"]
+r_homes = ["R02", "R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S3.verdicts-and-failure-triage"
+langs = ["d", "v"]
+q_homes = ["Q01.S3", "Q02.S3", "Q07.S3"]
+r_homes = ["R01", "R05"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S3.obligations-without-a-goal-state"
+langs = ["d", "v"]
+q_homes = ["Q02.S3", "Q04.S3"]
+r_homes = ["R05"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S3.false-friends"
+langs = ["d", "v"]
+q_homes = ["Q01.S3", "Q04.S3"]
+r_homes = ["R01"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S4.loop-invariants"
+langs = ["d", "v"]
+q_homes = ["Q02.S4", "Q04.S4", "Q10.S4"]
+r_homes = ["R06"]
+deepening = ["Q19", "Q21"]
+gap = ""
+
+[[coverage]]
+payload_id = "S4.termination-measures"
+langs = ["d", "v"]
+q_homes = ["Q02.S4", "Q04.S4"]
+r_homes = ["R02", "R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S4.lemma-recursion-as-induction"
+langs = ["d", "v"]
+q_homes = ["Q04.S4", "Q07.S4"]
+r_homes = ["R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S4.auto-vs-manual-induction"
+langs = ["d"]
+q_homes = ["Q02.S4", "Q04.S4"]
+r_homes = ["R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S4.fuel-and-unfolding"
+langs = ["d", "v"]
+q_homes = ["Q07.S4"]
+r_homes = ["R14"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S4.invariant-generalization"
+langs = ["d", "v"]
+q_homes = ["Q13.S4", "Q16.S4"]
+r_homes = ["R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S5.standard-libraries"
+langs = ["d", "v"]
+q_homes = ["Q04.S5", "Q07.S5"]
+r_homes = ["R07"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S5.import-tiers"
+langs = ["d", "v"]
+q_homes = ["Q04.S5"]
+r_homes = ["R07"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S5.toolchain-mismatch-lab"
+langs = ["d", "v"]
+q_homes = ["Q04.S5"]
+r_homes = ["R07"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S5.broadcast-groups"
+langs = ["v"]
+q_homes = ["Q04.S5"]
+r_homes = ["R07"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S5.search-then-name"
+langs = ["d", "v"]
+q_homes = ["Q04.S5", "Q10.S5"]
+r_homes = ["R07"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S5.retriever-race"
+langs = ["d", "v"]
+q_homes = ["Q04.S5"]
+r_homes = ["R07"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S6.frames-and-ownership"
+langs = ["d", "v"]
+q_homes = ["Q02.S6", "Q05.S6", "Q11.S6"]
+r_homes = ["R09", "R11"]
+deepening = ["Q24"]
+gap = ""
+
+[[coverage]]
+payload_id = "S6.mutation-and-old-state"
+langs = ["d", "v"]
+q_homes = ["Q05.S6"]
+r_homes = ["R09"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S6.modules-and-visibility"
+langs = ["d", "v"]
+q_homes = ["Q02.S6", "Q05.S6"]
+r_homes = ["R03"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S6.abstraction-and-opacity"
+langs = ["d", "v"]
+q_homes = ["Q05.S6", "Q08.S6"]
+r_homes = ["R08"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S6.traits-and-interfaces"
+langs = ["d", "v"]
+q_homes = ["Q08.S6", "Q14.S6"]
+r_homes = ["R08"]
+deepening = ["Q20"]
+gap = ""
+
+[[coverage]]
+payload_id = "S6.refinement"
+langs = ["d", "v"]
+q_homes = ["Q08.S6", "Q14.S6"]
+r_homes = ["R08"]
+deepening = ["Q23"]
+gap = ""
+
+[[coverage]]
+payload_id = "S7.ghost-code-and-modes"
+langs = ["d", "v"]
+q_homes = ["Q01.S7", "Q03.S7"]
+r_homes = ["R03", "R10"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S7.subset-types-and-type-invariants"
+langs = ["d", "v"]
+q_homes = ["Q03.S7", "Q11.S7"]
+r_homes = ["R10"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S7.erasure"
+langs = ["d", "v"]
+q_homes = ["Q03.S7", "Q05.S7"]
+r_homes = ["R10"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S7.termination-of-definitions"
+langs = ["d", "v"]
+q_homes = ["Q03.S7", "Q05.S7", "Q14.S7"]
+r_homes = ["R02"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S7.ghost-and-tracked-wrappers"
+langs = ["v"]
+q_homes = ["Q08.S7"]
+r_homes = ["R11"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S7.function-by-method"
+langs = ["d"]
+q_homes = ["Q05.S7"]
+r_homes = ["R10"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S8.wp-and-vcs-by-hand"
+langs = []
+q_homes = ["Q03.S8", "Q05.S8"]
+r_homes = ["R04", "R11"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S8.hoare-logic-and-invariants-as-ih"
+langs = []
+q_homes = ["Q05.S8", "Q08.S8"]
+r_homes = ["R06", "R11"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S8.verified-metatheory"
+langs = ["d"]
+q_homes = ["Q08.S8", "Q11.S8"]
+r_homes = ["R11"]
+deepening = ["Q28", "Q30"]
+gap = "Q verifies a wp for assign, sequence and if; R a derivation checker: one skill on different objects"
+
+[[coverage]]
+payload_id = "S8.permissions"
+langs = ["v"]
+q_homes = ["Q11.S8", "Q14.S8", "Q17.S8"]
+r_homes = ["R11"]
+deepening = []
+gap = "gated in both tracks: no minutes until the admissibility gate admits the items (design §7.5)"
+
+[[coverage]]
+payload_id = "S8.vc-generator-soundness"
+langs = ["d"]
+q_homes = ["Q17.S8"]
+r_homes = ["R11"]
+deepening = ["Q28"]
+gap = "R11 proves a derivation checker sound, not a VC generator; stands unless DVR2 adds a soundness item for the checker's rules (DELTAS Δ179)"
+
+[[coverage]]
+payload_id = "S9.cli-doors-and-exit-codes"
+langs = ["d", "v"]
+q_homes = ["Q01.S9", "Q03.S9", "Q06.S9"]
+r_homes = ["R01", "R12"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S9.json-verdict-channels"
+langs = ["d", "v", "py"]
+q_homes = ["Q06.S9", "Q12.S9"]
+r_homes = ["R12"]
+deepening = ["Q31"]
+gap = ""
+
+[[coverage]]
+payload_id = "S9.lsp-and-dafny-server"
+langs = ["d"]
+q_homes = ["Q09.S9", "Q15.S9"]
+r_homes = ["R12"]
+deepening = []
+gap = "Q writes an LSP client (Q15); R reads a captured trace (R12)"
+
+[[coverage]]
+payload_id = "S9.pinned-wrapper-and-fast-channel"
+langs = ["d", "v"]
+q_homes = ["Q03.S9", "Q06.S9"]
+r_homes = ["R05", "R12"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S9.verdict-loop-client"
+langs = ["py"]
+q_homes = ["Q12.S9"]
+r_homes = ["R12"]
+deepening = ["Q32"]
+gap = ""
+
+[[coverage]]
+payload_id = "S10.pipeline-stages"
+langs = ["d", "v"]
+q_homes = ["Q01.S10", "Q03.S10", "Q09.S9"]
+r_homes = ["R13"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S10.trusted-computing-base"
+langs = ["d", "v"]
+q_homes = ["Q03.S10", "Q06.S10"]
+r_homes = ["R07", "R13"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S10.loud-and-silent-holes"
+langs = ["d", "v"]
+q_homes = ["Q01.S10", "Q03.S10"]
+r_homes = ["R01", "R04"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S10.fake-green-forensics"
+langs = ["d", "v"]
+q_homes = ["Q09.S12", "Q15.S10", "Q18.S10"]
+r_homes = ["R13", "R16"]
+deepening = ["Q31"]
+gap = ""
+
+[[coverage]]
+payload_id = "S10.build-tool-poisoning"
+langs = ["d", "v"]
+q_homes = ["Q18.S10"]
+r_homes = ["R13", "R16"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S10.trust-ledger"
+langs = []
+q_homes = ["Q06.S10", "Q18.S10"]
+r_homes = ["R13", "R16"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S11.triggers-and-matching-loops"
+langs = ["d", "v"]
+q_homes = ["Q06.S11", "Q09.S11", "Q15.S11"]
+r_homes = ["R14"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S11.resource-limits-and-verdict-kinds"
+langs = ["d", "v"]
+q_homes = ["Q06.S11", "Q12.S11"]
+r_homes = ["R05", "R14"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S11.brittleness-and-stability"
+langs = ["d", "v"]
+q_homes = ["Q09.S11", "Q15.S11", "Q18.S11"]
+r_homes = ["R14", "R16"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S11.nonlinear-and-bit-vector-reasoning"
+langs = ["d", "v"]
+q_homes = ["Q04.S5", "Q07.S5"]
+r_homes = ["R14"]
+deepening = ["Q26", "Q27"]
+gap = ""
+
+[[coverage]]
+payload_id = "S11.proof-splitting-and-isolation"
+langs = ["d", "v"]
+q_homes = ["Q07.S3", "Q09.S11"]
+r_homes = ["R14"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S12.contract-and-allowlists"
+langs = []
+q_homes = ["Q03.S12", "Q09.S12", "Q18.S12"]
+r_homes = ["R01", "R15", "R16"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S12.agent-role-ladder"
+langs = ["d", "v"]
+q_homes = ["Q01.S12", "Q06.S12", "Q09.S12"]
+r_homes = ["R01", "R04", "R10"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S12.escalation-ladder-with-property-testing"
+langs = ["d", "v"]
+q_homes = ["Q06.S12"]
+r_homes = ["R02", "R15"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S12.grade-the-grader"
+langs = []
+q_homes = ["Q12.S12"]
+r_homes = ["R15"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S12.gate-design"
+langs = []
+q_homes = ["Q09.S12", "Q18.S12"]
+r_homes = ["R13", "R16"]
+deepening = ["Q31"]
+gap = "Q builds its gate in Python, R in Rust (waiver W11)"
+
+[[coverage]]
+payload_id = "S12.refute-repair-prove"
+langs = ["d", "v"]
+q_homes = ["Q15.S12"]
+r_homes = ["R06"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S12.matched-compute-search"
+langs = ["py"]
+q_homes = ["Q12.S12"]
+r_homes = ["R12"]
+deepening = ["Q32"]
+gap = ""
+
+[[coverage]]
+payload_id = "S12.frozen-statements-and-review"
+langs = ["d", "v"]
+q_homes = ["Q18.S12"]
+r_homes = ["R15", "R16"]
+deepening = ["Q33"]
+gap = ""
+
+[[coverage]]
+payload_id = "S12.agent-output-is-data"
+langs = []
+q_homes = ["Q12.S12"]
+r_homes = ["R12"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.statistics"
+langs = ["py"]
+q_homes = ["Q06.S13", "Q09.S13"]
+r_homes = ["R05", "R07"]
+deepening = ["Q31"]
+gap = ""
+
+[[coverage]]
+payload_id = "S13.eval-reporting-and-disclosure"
+langs = []
+q_homes = ["Q06.S13", "Q09.S13"]
+r_homes = ["R07", "R12"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.pre-registration-and-budgets"
+langs = []
+q_homes = ["Q12.S13", "Q15.S13", "Q18.S13"]
+r_homes = ["R12", "R15", "R16"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.spec-quality-oracles"
+langs = ["d", "v"]
+q_homes = ["Q15.S13"]
+r_homes = ["R15"]
+deepening = ["Q33"]
+gap = ""
+
+[[coverage]]
+payload_id = "S13.prose-to-spec"
+langs = ["d", "v"]
+q_homes = ["Q13.S2", "Q15.S13"]
+r_homes = ["R04", "R10", "R15"]
+deepening = ["Q33"]
+gap = ""
+
+[[coverage]]
+payload_id = "S13.contamination-control"
+langs = []
+q_homes = ["Q12.S13", "Q15.S13"]
+r_homes = ["R15"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.vericoding-self-spec"
+langs = ["d", "v"]
+q_homes = ["Q15.S13"]
+r_homes = ["R15"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.cross-language-fidelity"
+langs = ["d", "v"]
+q_homes = ["Q07.S1"]
+r_homes = ["R09"]
+deepening = ["Q19"]
+gap = ""
+
+[[coverage]]
+payload_id = "S13.research-framing"
+langs = []
+q_homes = ["Q18.S13"]
+r_homes = ["R16"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.paper-cards"
+langs = []
+q_homes = ["Q01.S13", "Q06.S13"]
+r_homes = ["R01", "R12"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.reward-and-bench-audits"
+langs = []
+q_homes = ["Q15.S13"]
+r_homes = ["R15"]
+deepening = []
+gap = ""
+
+[[coverage]]
+payload_id = "S13.grader-inflation"
+langs = []
+q_homes = ["Q18.S13"]
+r_homes = ["R16"]
+deepening = []
+gap = ""

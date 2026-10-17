@@ -1,0 +1,25 @@
+// Card demo Q04.C1v (`calc!`), the failure half. The success half is
+// `lemma_seq_to_nat_two_steps` in verus/q/q04_proof_craft/src/lib.rs; this copy leaves
+// out its casts to `nat`, so the lines of the chain do not all have one type. Run it
+// with `scripts/vcheck specimens/Q04/card-c1v.rs.specimen`; the EXPECT line at the end
+// pins the message the tool gives (line and fragment).
+// after: Q04.P3dv
+use vstd::prelude::*;
+use vstd::calc;
+use qg_bignat_l3::*;
+
+verus! {
+
+pub proof fn lemma_seq_to_nat_two_steps(s: Seq<u64>)
+    requires
+        s.len() >= 2,
+{
+    calc! {
+        (==)
+        seq_to_nat(s); {}
+        s[0] + BASE * seq_to_nat(s.drop_first());
+    }
+}
+
+} // verus!
+// EXPECT @20 "mismatched types"

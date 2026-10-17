@@ -1,0 +1,19 @@
+# Cheat corpus row (tests/corpus/verus), covered elsewhere: the row is not
+# a source-level construct (a command-line flag, the environment, build
+# tooling or the IDE), so this lane builds no program and runs nothing for
+# it. The wrappers' existing tests named in covered_by exercise the
+# refusal; plain_exit and output_sha256 are omitted (nothing was run).
+id = "V24"
+lang = "verus"
+half = "R"
+xclass = "X15"
+kind = "covered-elsewhere"
+title = "VERUS_EXTRA_ARGS / VERUS_Z3_PATH / RUSTFLAGS in the environment"
+files = []
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["env-scrubbed"]
+summary = "every Verus job's environment is built from nothing; VERUS_Z3_PATH, VERUS_EXTRA_ARGS, RUSTFLAGS and RUSTC_WRAPPER never reach it (not run by this lane; kinds other than `refused` are descriptive labels, not reported finding kinds)"
+covered_by = ["tests/wrappers/test_verus_static.py::Pins::test_job_environment", "tests/wrappers/test_verus_tool.py::Verify::test_environment_is_scrubbed", "tests/wrappers/test_dafny_common.py::RunCapped::test_environment_is_scrubbed"]

@@ -1,0 +1,173 @@
+% Q12_answers.tex — your answers to paper/Q12_problems.tex (learner-owned). One section
+% per problem, keyed by its \label{ans:B<n>} anchor; the GRADER comment convention and the
+% PREREG markers are paper/template_answers.tex's. /grade-paper hashes exactly the lines
+% from PREREG-BEGIN to PREREG-END, inclusive: editing anything between them after grading
+% changes the hash, and the runs stay locked.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q12 --- Practice I-C + Lab 1 \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% PREREG-BEGIN
+\section*{Problem B1 (pre-registration)}\label{ans:B1}
+\begin{answer}
+\textbf{Claim} (the three hypotheses, A2 vs A1, A3 vs A1 and the language
+interaction, each one- or two-sided): \dots
+
+\textbf{Metric and estimator} (per task and repeat: solved within $B$ calls; the
+arm's rate; the paired difference per comparison): \dots
+
+\textbf{Arms and policies} (the three Qwen arms and the Claude arm's pick, each
+with its policy file and prompt hash; the Claude subset's seed and its
+stratification): \dots
+
+\textbf{Tasks and strata} (the sets' commits, the validation files' sha256, the
+draw seed and the members it draws from: each pool less the tasks another lab's
+\texttt{[[draw]]} record took, excluding Lab 2's HumanEval problems across both languages
+(the five Verus tasks and four matching problems from the Dafny stratum; D39); the pilot rule; the local stratum's composition in each case): \dots
+
+\textbf{Budget arithmetic} (calls = tasks $\times$ attempts $\times$ rounds
+$\times$ arms $\times$ repeats, per arm, plus the sentinel calls; the
+throughput assumption and its source; against the registry's budget): \dots
+
+\textbf{Generation settings} (the values the Ollama gate pins for every Qwen
+call; the seed list per arm and for the pilot, pairwise disjoint; for Claude
+the pinned argv): \dots
+
+\textbf{Cost per arm} (tokens in and out, GPU-seconds and wall clock per arm,
+against the ceiling; the truncation rate per arm as a sensitivity line): \dots
+
+\textbf{MDE} (computed with \texttt{fvh.stats.mde\_two\_proportions}: $n$,
+baseline, pairing, Holm-adjusted $\alpha$, the call and its value): \dots
+
+\textbf{Seeds and repeats} (Qwen: the per-request seeds; Claude: repeated
+runs): \dots
+
+\textbf{Cheat surface and gate} (the instruments every claimed success passes,
+the X classes, \texttt{UNKNOWN} handling): \dots
+
+\textbf{Exclusions} (\texttt{infra-failed} re-issue; \texttt{truncated:<cause>}
+as failures, with the sensitivity line): \dots
+
+\textbf{Stopping rule}: \dots
+
+\textbf{Prediction intervals} (80\%, for each arm's rate and each difference,
+scored after the run): \dots
+
+\textbf{Contamination} (the local stratum's authorship dates; the public sets
+flagged as possibly seen): \dots
+
+\textbf{Disclosure} (a small-scale replication with model substitution; Claude as
+grader and subject; one machine, one solver pin): \dots
+
+\textbf{Batch plan} (the plan file \texttt{python -m fvh run Q12 -{}-plan}
+reads: its path, and its sha256 on a line of its own as \texttt{plan-sha256:}
+followed by the 64 hex digits \texttt{sha256sum} prints for the file;
+\texttt{fvh run} opens a lab batch only on the plan this line names;
+separately executed pilot or subset plans need their own binding and a new
+gradebook row after re-grading the changed pre-registration, with the
+registered method held fixed): \dots
+\end{answer}
+% PREREG-END
+
+\section*{Problem B2 (lab report)}\label{ans:B2}
+\begin{answer}
+\textbf{Reproduce:} \verb+<one command over research/runs/Q12/ that regenerates every table below>+
+
+\textbf{Results} (the paired tables and comparisons, with intervals): \dots
+
+\textbf{Deviations from the pre-registration} (each one, and why): \dots
+
+\textbf{Transcript and cheat audit} (the gate's verdict on every claimed
+success; \texttt{UNKNOWN} classes): \dots
+
+\textbf{Prediction intervals, scored}: \dots
+
+\textbf{The hand part beside the arms} (the shared local tasks; descriptive
+only): \dots
+
+\textbf{Variance and intervals}: \dots
+
+\textbf{Contamination}: \dots
+
+\textbf{Disclosure}: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 05.10, lines 2148--2171 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Closest arm, and what its budget counts:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 06.1, lines 2312--2338 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Closest arm, and what its budget counts:} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 04.8, lines 1681--1706 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+
+\textbf{Closest arm, and what its budget counts:} \dots
+\end{answer}
+
+\end{document}

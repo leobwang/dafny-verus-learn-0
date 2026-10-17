@@ -1,0 +1,250 @@
+% Q08_solutions.tex — REFERENCE SOLUTIONS to paper/Q08_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% Every verifier result quoted below was captured on the course pins (Dafny
+% 4.11.0 with Z3 4.12.1, Verus 0.2026.09.27) through scripts/vcheck, one solver
+% job at a time in a 16 GB scope, by the DV3b kit lane for Q08 on 2026-10-07:
+% the problems' code extracted verbatim from the problems file into
+% instructor/scratch/probe.{dfy,rs} of a scratch course root, with W2d's given
+% definitions (Expr through Wp) copied from
+% dafny/Q/Q08_InternalsII/std/Q08_Wp.dfy where a probe needs them. B3's fields
+% are graded against the learner's own cheatsheets.md; this file records which
+% lines of the pinned range each field draws on and never copies the card.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q08 --- Internals II: refinement, permissions, verified wp \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How these are graded}
+B1 and B2 are hand calculations, dimension \texttt{recomputation}: the grader
+re-derives each step with the rubric's Probes A--E and diffs the learner's
+trace step by step. B3 is a paper card (\texttt{card-fidelity}, per field). The
+solutions below give the answers; the rubric never states them.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (hand-calculation)}
+
+Write $e_0$ for \dfy{Minus(Var(2), Var(0))} and $g$ for
+\dfy{Le(Var(0), Var(1))}.
+
+\textbf{(a)}
+\begin{enumerate}
+\item \dfy{Wp}, case \dfy{Seq}: \dfy{Wp(C(), Q())} $=$
+\begin{dafnycode}
+Wp(If(g, Assign(2, Var(1)), Assign(2, Var(0))), Wp(Assign(0, e0), Q()))
+\end{dafnycode}
+\item \dfy{Wp}, case \dfy{Assign}: \dfy{Wp(Assign(0, e0), Q())} $=$
+  \dfy{SubstB(Le(Var(0), Var(1)), 0, e0)}; \dfy{SubstB}, case \dfy{Le}:
+  \dfy{Le(SubstE(Var(0), 0, e0), SubstE(Var(1), 0, e0))}; \dfy{SubstE}, case
+  \dfy{Var} with $y = x$ (gives $e_0$) and with $y \neq x$ (keeps
+  \dfy{Var(1)}). Result $q_1$ $=$ \dfy{Le(Minus(Var(2), Var(0)), Var(1))}.
+\item \dfy{Wp}, case \dfy{If}: \dfy{And(Imp(g, Wp(Assign(2, Var(1)), q1)),}
+  \dfy{Imp(Not(g), Wp(Assign(2, Var(0)), q1)))}.
+\item \dfy{Wp}, case \dfy{Assign}, in the then branch:
+  \dfy{SubstB(q1, 2, Var(1))}; \dfy{SubstB} case \dfy{Le}, \dfy{SubstE} case
+  \dfy{Minus}, then case \dfy{Var} three times (variable 2 becomes
+  \dfy{Var(1)}; variables 0 and 1 stay): \dfy{Le(Minus(Var(1), Var(0)), Var(1))}.
+\item The same in the else branch, with \dfy{Var(0)} for variable 2:
+  \dfy{Le(Minus(Var(0), Var(0)), Var(1))}.
+\end{enumerate}
+The final term:
+\begin{dafnycode}
+And(Imp(Le(Var(0), Var(1)), Le(Minus(Var(1), Var(0)), Var(1))),
+    Imp(Not(Le(Var(0), Var(1))), Le(Minus(Var(0), Var(0)), Var(1))))
+\end{dafnycode}
+The condition $g$ is never substituted: it is evaluated in the state before
+the \dfy{If}, which is the start state. On the pins, Probe A with this term
+(\dfy{lemma TermIs() ensures Wp(C(), Q()) == ...} over W2d's definitions)
+verifies (\texttt{39 verified}, with Probe B's and Probe C's lemmas in the
+same file), and Probe A$'$'s step test with these terms passes.
+
+\textbf{(b)} By \dfy{Holds} (its cases \dfy{And}, \dfy{Imp}, \dfy{Not} and
+\dfy{Le}) and \dfy{Eval} (its cases \dfy{Var} and \dfy{Minus}), with $x$, $y$
+and $m$ for $s(0)$, $s(1)$ and $s(2)$:
+\[ (x \leq y \impl y - x \leq y) \wedge (\neg(x \leq y) \impl x - x \leq y). \]
+$y - x \leq y \iff 0 \leq x$, and $x - x = 0$, so this is
+$(x \leq y \impl 0 \leq x) \wedge (x > y \impl 0 \leq y)$, which is
+$0 \leq x \wedge 0 \leq y$: ($\Leftarrow$) each conclusion holds; ($\Rightarrow$)
+if $x \leq y$ then $0 \leq x \leq y$, and if $x > y$ then $x > y \geq 0$. (Equally:
+$0 \leq \min(x, y)$.) It does not mention $m$: the program assigns $m$ on both
+paths before it reads it, and steps 4 and 5 replaced every \dfy{Var(2)}.
+Probe B, \dfy{Holds(Wp(C(), Q()), s) <==> 0 <= s(0) && 0 <= s(1)}, verifies.
+
+\textbf{(c)} With the swapped rule, the \dfy{If} is processed first, against
+$q$ itself: its two branches assign only $m$, which $q$ does not mention, so
+the inner result means $(x \leq y \impl x \leq y) \wedge (x > y \impl x \leq
+y)$, that is $x \leq y$. The assignment to $x$ is processed last, substituting
+$m - x$ for $x$ everywhere, the condition included:
+$(m - x \leq y \impl m - x \leq y) \wedge (\neg(m - x \leq y) \impl m - x \leq
+y)$, that is $s(2) - s(0) \leq s(1)$. Start state $s = (0, -1, -5)$: $-5 - 0 =
+-5 \leq -1$ holds. Trace: $0 \leq -1$ is false, so $m := x = 0$; then $x := m
+- x = 0$; the run ends with $x = 0$, $y = -1$, and $0 \leq -1$ is false. The
+warning: the result constrains $m$'s start value, which the program overwrites
+before reading it; and it substituted into the \dfy{If}'s condition as though
+the condition were evaluated after the assignment. (The real wp is false at
+this state, since $y < 0$.) Probe C on the pins: \dfy{SwappedMeaning} with
+$s(2) - s(0) \leq s(1)$ verifies, and the test \dfy{SwappedIsNotSufficient} on
+$(0, -1, -5)$ passes (\texttt{PASSED}): the state satisfies the swapped
+result, falsifies the real wp, and $c$ ends with $x = 0$, $y = -1$.
+
+\textbf{Typical flaws, with their failing instances.}
+\begin{itemize}
+\item \emph{A simplification that drops a case} in (b): ``$0 \leq x$'' alone.
+  Failing instance: $s = (5, -1, 0)$ satisfies it, and $c$ ends with $x = 0$,
+  $y = -1$. On the pins, Probe B's \dfy{MeaningIs} fails on \dfy{0 <= s(0)},
+  and Probe B$'$'s \dfy{Disagree} on $(5, -1, 0)$ passes (\texttt{PASSED}):
+  the formula and the wp differ there, and the run agrees with the wp.
+\item \emph{The condition substituted} in step 3 (writing the then branch's
+  guard as \dfy{Le(Minus(Var(2), Var(0)), Var(1))}): the term differs, and
+  Probe A$'$'s step test fails at that step (captured: \texttt{step 2 differs
+  from Wp}, with the \dfy{If} step written second).
+\item \emph{An unsimplified answer} for (a) is what (a) asks; a simplified one
+  in (a) is a gap (3) unless it is also wrong.
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+\section*{B2 (hand-calculation)}
+
+\textbf{(a)} $I \equiv k + \lvert x\rvert = \lvert x_0\rvert$, $b \equiv x \neq
+0$, $d \equiv \lvert x\rvert$.
+\begin{itemize}
+\item \emph{Entry}: $\WP{x \assign x_0 \seqc k \assign 0}{I} = 0 + \lvert
+  x_0\rvert = \lvert x_0\rvert$: valid for every $x_0$.
+\item \emph{Maintenance}: $\WP{k \assign k + 1}{I \wedge 0 \leq d < D} = k + 1
+  + \lvert x\rvert = \lvert x_0\rvert \wedge 0 \leq \lvert x\rvert < D$; through
+  the conditional:
+  \[ \begin{aligned} & \bigl(x > 0 \impl k + 1 + \lvert x - 1\rvert = \lvert
+  x_0\rvert \wedge 0 \leq \lvert x - 1\rvert < D\bigr) \\ \wedge\; &
+  \bigl(\neg(x > 0) \impl k + 1 + \lvert x + 1\rvert = \lvert x_0\rvert \wedge 0
+  \leq \lvert x + 1\rvert < D\bigr). \end{aligned} \]
+  Under $I \wedge b \wedge \lvert x\rvert = D$. Then branch: $x \geq 1$, so
+  $\lvert x - 1\rvert = x - 1 = \lvert x\rvert - 1$; the invariant conjunct is
+  $k + \lvert x\rvert = \lvert x_0\rvert$, which is $I$, and $0 \leq x - 1 < x =
+  D$. Else branch: $x \leq 0$ and, by the guard, $x \neq 0$, so $x \leq -1$,
+  $x + 1 \leq 0$ and $\lvert x + 1\rvert = -x - 1 = \lvert x\rvert - 1$: the same
+  two facts. Valid.
+\item \emph{Use at exit}: $I \wedge \neg b$ gives $x = 0$, so $k = \lvert
+  x_0\rvert$, the postcondition. Valid.
+\item \emph{The guard is used} in the else branch, both for the invariant and
+  for the decrease (at $x = 0$ the branch would give $\lvert 1\rvert = 1$:
+  $k + 2 \neq \lvert x_0\rvert = k$, and $1 < 0$ fails), and at exit (as
+  $\neg b$). The then branch needs only its own condition $x > 0$; the bound
+  $0 \leq d$ needs nothing.
+\end{itemize}
+On the pins: the Dafny method verifies (\texttt{23 verified}); the four
+obligations as lemmas (entry, maintenance, exit, bound) verify, and the
+maintenance lemma without $x \neq 0$ fails at the else conjunct. Probe D
+with this maintenance formula verifies (\texttt{26 verified}: \dfy{IsTheWp},
+\dfy{Entry}, \dfy{Maintenance}, \dfy{UseAtExit}); without the guard,
+\dfy{Maintenance} fails; Probe D$'$ on $x = 0$, $k = x_0 = 3$ passes.
+
+\textbf{(b)} Partial correctness by induction on the number $n$ of iterations
+completed: if the loop is about to test $b$ after $n$ iterations, $I$ holds
+(base: entry; step: $I \wedge b$ before an iteration, so by maintenance $I$
+after it). Hence $I \wedge \neg b$ at exit, and use at exit gives the
+postcondition. Termination: the values of $d$ at successive tests of $b$ that
+the loop passes are integers, each at least $0$ and each smaller than the one
+before, so there are at most $d_0 + 1$ of them: no infinite run. \dfy{Halt}:
+entry and use at exit hold ($I$ is \dfy{true}; $\neg b$ is $x = 0$), and the
+decrease holds ($x - 2 < x$); the bound fails. In the problem's form,
+$\WP{x \assign x - 2}{0 \leq x < D} = 0 \leq x - 2 < x$, false at $x = 1$
+($b$ holds, $D = 1$, and $x - 2 = -1 < 0$); in the form ``$I \wedge b \impl d
+\geq 0$'' the state is $x = -1$ (any $x < 0$). Trace from $3$: $3, 1, -1, -3,
+\ldots$: the guard holds forever and the measure decreases forever, through
+the negatives. On the pins Dafny reports exactly this obligation:
+\texttt{decreases expression must be bounded below by 0 at end of loop
+iteration} at the \dfy{decreases} line (line 6 of the extracted method).
+Probe E's \dfy{HaltState} passes on $x = 1$ (and on $x = -1$) and fails on
+$x = 5$; \dfy{HaltTrace} passes on $3, 1, -1, -3$.
+
+\textbf{(c)} Three arithmetic obligations: \vrs{x - 1} stays at or above
+\vrs{i64::MIN} (the branch condition $x > 0$); \vrs{x + 1} stays at or below
+\vrs{i64::MAX} (the branch condition $x \leq 0$); and \vrs{k + 1} stays at or
+below \vrs{u64::MAX}: the invariant with the guard gives $\lvert x\rvert \geq
+1$, so $k = \lvert x_0\rvert - \lvert x\rvert < \lvert x_0\rvert$, and $\lvert
+x_0\rvert$ is at most the magnitude of \vrs{i64::MIN}, far below
+\vrs{u64::MAX}. The spec expressions (\vrs{mag}, the casts to \vrs{int}) carry
+none. With \vrs{k: u32} the loop fails at \vrs{k + 1}: a state with $x = 1$,
+$x_0$ one more than \vrs{u32::MAX} and $k$ $=$ \vrs{u32::MAX} satisfies $I
+\wedge b$, and the increment overflows. On the pins: the Verus version as
+given verifies (\texttt{2 verified}); with \vrs{u32}, one error,
+\texttt{possible arithmetic underflow/overflow} at \vrs{k = k + 1}; with the
+invariant deleted, that same overflow error and \texttt{postcondition not
+satisfied}, and no error at \vrs{x - 1}, \vrs{x + 1} or the \vrs{decreases}.
+
+\textbf{Typical flaws.} Maintenance argued in the else branch without the
+guard (the instance $x = 0$, $k = \lvert x_0\rvert$, which satisfies $I$ but not
+$b$, is where the conjunct fails); the bound of \dfy{Halt} placed in the
+decrease (``$x - 2 < x$ fails''), refuted by any $x$; ``\vrs{u32} is enough
+because the loop counts down'' (refuted by the state above).
+
+% ---------------------------------------------------------------------------
+\section*{B3 (paper card 02.1): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 584--610 (computed 2026-10-07),
+\[ \texttt{sha256 cddeddc6d44ba2753605107e143e54670958cea3e6ae527172e6989225baa631}. \]
+A field is correct when it agrees with the lines named; wording is free. Each
+entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Input: CertiCoq's ANF pass (from $\lambda_{\text{DS}}$, untyped
+  call-by-value de Bruijn terms, to the named IR $\lambda_{\text{ANF}}$), both
+  with fuelled big-step semantics, and the human-written CPS proof as a
+  template; output: a complete Rocq proof that the pass preserves semantics
+  for terminating programs (the logical-relation theorem and its corollary).
+  One proof development, not a benchmark of tasks. \emph{Lines 586, 588,
+  591--594.}
+\item[Oracle.] Rocq accepting the development (\texttt{rocqc}, the only tool
+  the agent could run besides editing files), with the expert steering; the
+  range says the agent silently weakened a statement and once erased a proof,
+  so compilation alone did not certify the intended theorem: the statements
+  had to be checked by the human. \emph{Lines 586, 588, 607.}
+\item[What is trusted.] Rocq's checker; the theorem statements and the
+  semantics they are about (the relations and the fuelled semantics); the
+  expert, who steered and must catch changed statements; the two hand-fixed
+  tactics are human code. \emph{Lines 586, 588, 594, 607, 610.}
+\item[Cheat surface.] Weakening a statement (a fuel bound removed and the fuel
+  obligation filled with a trivial zero), erasing a proof so that a file
+  compiles, and an unjustified assumption (two result variables cannot
+  coincide, which was false). \emph{Line 607.} Against the flagship contract
+  (the learner's own mapping, graded for being defensible): the weakened
+  statement is \texttt{specfreeze --against} (and the \texttt{git diff} scope);
+  the erased proof is the gate with zero holes (a deleted proof leaves a hole
+  or an error); an assumption written as an \texttt{assume} or an axiom is
+  \texttt{vaudit}; a false hypothesis stated as part of a statement is seen
+  only by a reader or a witness. The range does not say how the assumption
+  was written.
+\item[Metric.] Whether the proof was completed (yes, divergence preservation
+  excepted), with its size and cost against the human CPS proof: 7,783 against
+  5,294 lines of Rocq, main theorem 4,755 against 2,243 lines; about 96 h in
+  the text, 90.2 h wall-clock and 62.6 h active over 5 days; 6,538 tool calls,
+  872 compiles, 101 compactions. \emph{Lines 586, 598--603, 606.}
+\item[Budget.] No budget fixed in advance in the range; spent: 114 expert
+  prompts, about 5 days (90.2 h wall-clock, 62.6 h active), 6,538 tool calls,
+  872 compiles; human effort was not measured. \emph{Lines 588, 602--603,
+  608.}
+\item[Variance.] None: n = 1, one run on one pass, with a close template and a
+  domain expert; sizes are reported inconsistently (text against table).
+  \emph{Line 608.}
+\item[Artifact.] The machine-generated Rocq proof of CertiCoq's ANF pass
+  (PACMPL 2026, arXiv 2602.20082) and the experience report; the range does
+  not say whether the proof or the transcripts are released. The model and
+  harness: Claude Code with Claude Opus 4.6. \emph{Lines 586, 588.}
+\end{description}
+A field that says the range is silent where it is silent (a fixed budget,
+the release of the proof or the transcripts, how the false assumption was
+written) is correct. A field that contradicts a line scores 2, quoting that
+line: for example ``the agent's main theorem is 2,243 lines against 4,755 for
+the human proof'' (lines 598 and 601 put 2,243 under CPS (human) and 4,755
+under ANF (agent); this is the flawed fixture's Metric field), or ``fully
+autonomous, no human input'' (line 588: 114 prompts from an expert; line 586:
+two hand-fixed tactics).
+
+\end{document}

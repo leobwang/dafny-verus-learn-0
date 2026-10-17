@@ -1,0 +1,89 @@
+% Q04_answers.tex — YOUR answers to paper/Q04_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q04_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q04 --- Proof craft, loops and libraries \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} \dots
+
+\textbf{Induction on / decreases measure:} \dots
+
+\textbf{Base:} \dots
+
+\textbf{IH (stated as a formula):} \dots
+
+\textbf{Step} (one paragraph per case of \texttt{Cmp}; in the case where the
+tails decide, why their difference outweighs the heads'): \dots
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement,
+and where it comes from\textbf{):} \dots
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): \dots
+
+\textbf{(b) The missing clause (a formula over \texttt{i}, \texttt{n},
+\texttt{a@} and \texttt{b@}):} \dots
+
+\textbf{Why one pass keeps it:} \dots
+
+\textbf{What it gives at each outcome after the loop} (\texttt{i == 0}; the
+two limb comparisons, and which \texttt{requires} of \texttt{lemma\_lt\_at}
+it supplies): \dots
+
+\textbf{The two length cases} (each fact by its statement, and the lemma of
+L3 that states it): \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+% Short answers. Expect the grader to try to counterexample them.
+\textbf{(a)} For each body, in each language: the gate passes? \texttt{vaudit}
+reports a finding? The body keeps ``only standard-library lemma calls''? \\
+{[1]} Dafny: \dots \quad Verus: \dots \\
+{[2]} Dafny: \dots \quad Verus: \dots \\
+{[3]} Dafny: \dots \quad Verus: \dots
+
+\textbf{(b)} The fourth body: \dots \\
+Why it passes both instruments: \dots \\
+The artifact that shows the breach: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.2, lines 614--638 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

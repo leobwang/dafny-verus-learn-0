@@ -1,0 +1,176 @@
+% Q03_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q03_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the order of the steps, the wording, the chosen witnesses and the
+% blueprint's case order are deliberately far from the reference, so the grader must
+% recognise correctness by substance (the rubric's probes), not by matching text.
+% B1 substitutes before it simplifies; B2 exhibits a different state; B3 proves the
+% empty case by unfolding the definition instead of naming a lemma and takes the
+% cases in another order; B4 orders and words its fields differently.
+%
+% EXPECTED[B1][recomputation][4]: correct; Probe A's two triples verify with this wp spliced in, and the counterexample test (Probe A'') on x = 8 passes. No finding.
+% EXPECTED[B2][recomputation][4]: correct; Probe B verifies each condition decided valid, and Probe B' passes on n = 2, x = 5, y = -3. No finding.
+% EXPECTED[B3][statement-fidelity][4] [induction-soundness][4] [case-exhaustiveness][4] [blueprint-quality][4] [gap-accounting][4]: correct; Probe C, filled from this blueprint, verifies case by case (the empty case needs no named lemma). No finding.
+% EXPECTED[B4][card-fidelity][4]: every field agrees with the pinned range (lines 944–967); Budget correctly says the range gives no token, money or wall-clock figure. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4, B4 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a wrong step,
+% an uncovered instance or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q03 --- First syntax II: modes, logic, tooling, trust \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} The sequence rule lets me push $Q$ back through the three
+statements, last first. \\
+Last statement, assignment rule: replace $x$ by $y - 1$ in $x \geq 4$, giving
+$y - 1 \geq 4$. \\
+Middle statement, conditional rule (each branch by the assignment rule):
+$(y > 10 \impl (y - 10) - 1 \geq 4) \wedge (\neg(y > 10) \impl 2y - 1 \geq 4)$. \\
+First statement, assignment rule: replace $y$ by $x + 3$:
+$(x + 3 > 10 \impl x + 3 - 11 \geq 4) \wedge (x + 3 \leq 10 \impl 2x + 6 - 1 \geq 4)$. \\
+Now simplify. First conjunct: $x > 7 \impl x \geq 12$. Second conjunct:
+$x \leq 7 \impl 2x \geq -1$, and since $x$ is an integer, $2x \geq -1$ holds
+exactly when $x \geq 0$. Splitting on $x > 7$:
+$\WP{c}{Q} \equiv (0 \leq x \wedge x \leq 7) \vee x \geq 12$; the initial
+$y$ plays no part.
+
+\textbf{(b)} $P \impl \WP{c}{Q}$ reads
+$0 \leq x \leq 8 \impl (0 \leq x \leq 7 \vee x \geq 12)$. It does not hold:
+$x = 8$ is in $P$ but not in the wp. The program does not reach $Q$ from it:
+$y$ becomes $11$, the then-branch makes it $1$, and $x$ ends at $0 < 4$.
+(Another start state outside the wp, $x = 9$, also ends below $4$, but it is not
+in $P$.)
+
+\textbf{(c)} It is not an interval: the values $8, 9, 10, 11$ sit between the
+two pieces.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} Writing $I(x, y)$ for $x \leq n \wedge x + y = n$:
+\begin{itemize}
+\item Entry. The loop starts from $x = 0$, $y = n$, so the condition is
+  $n \geq 0 \impl I(0, n)$, i.e.\ $n \geq 0 \impl 0 \leq n \wedge n = n$.
+  Holds.
+\item Maintenance. Pushing $I$ back through the body (decrement of $y$ first,
+  then increment of $x$) gives $I(x + 1, y - 1)$, i.e.\
+  $x + 1 \leq n \wedge x + y = n$. The condition
+  $I(x, y) \wedge x < n \impl I(x + 1, y - 1)$ holds, because $x < n$ is
+  $x + 1 \leq n$ on the integers.
+\item Exit. $I(x, y) \wedge x \geq n \impl y = 0$ holds: $x \leq n$ and
+  $x \geq n$ give $x = n$, then $y = n - x = 0$.
+\item Termination. Under the guard, $n - x \geq 1 > 0$; one iteration lowers
+  $n - x$ by exactly $1$. Holds.
+\end{itemize}
+
+\textbf{(b)} Only the exit condition changes status. Entry ($0 + n = n$),
+maintenance (the sum is preserved) and termination (the guard alone bounds
+the measure) still hold, but
+$x + y = n \wedge x \geq n \impl y = 0$ fails, for instance at $n = 2$, $x = 5$,
+$y = -3$. No run gets there, since $x$ never passes $n$. So the program is
+fine; the weakened invariant forgot a fact that every run maintains, and the
+verifier, which reasons about all states satisfying the invariant, cannot
+rule the unreachable ones out.
+
+\textbf{(c)} Yes, it verifies: declaring $y$ as a natural (or a \vrs{u64})
+makes $y \geq 0$ true in every state, as part of the type. At exit
+$x = n - y \leq n$, together with $x \geq n$, forces $y = 0$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (informal-proof-first)}\label{ans:B3}
+\begin{answer}
+\textbf{Statement.} For every limb sequence $s$ with all limbs below
+$\mathrm{BASE}$ and every $d < \mathrm{BASE}$, the value of
+$\mathrm{AddLimb}(s, d)$ is the value of $s$ plus $d$.
+
+\textbf{Induction on / decreases measure:} the length of $s$; the claim is
+proved for all $d$ at once.
+
+\textbf{Base:} $s$ empty. For $d = 0$ the result is empty, value $0 = 0 + 0$.
+For $d > 0$ the result is the one-limb sequence $[d]$, whose value unfolds
+(definition of ToNat, the tail of $[d]$ being empty) to
+$d + \mathrm{BASE} \cdot 0 = d$.
+
+\textbf{IH (stated as a formula):}
+\[ \forall t, e.\ |t| < |s| \wedge \mathrm{Valid}(t) \wedge e < \mathrm{BASE} \impl
+\mathrm{ToNat}(\mathrm{AddLimb}(t, e)) = \mathrm{ToNat}(t) + e. \]
+
+\textbf{Step:} $s$ non-empty; write $h = s[0]$ and $t = s[1..]$.
+\emph{Case $h + d \geq \mathrm{BASE}$ (a carry).} AddLimb returns
+$[h + d - \mathrm{BASE}]$ followed by $\mathrm{AddLimb}(t, 1)$. The
+instance $(t, 1)$ of the IH is available: $t$ is shorter, $1 < \mathrm{BASE}$,
+and $t$ is valid because $s$ is (L2's \texttt{ValidTail}, whose
+$\mathrm{Tail}(s)$ is $t$ here). By L2's \texttt{ToNatCons} the value is
+$(h + d - \mathrm{BASE}) + \mathrm{BASE}(\mathrm{ToNat}(t) + 1) = h + d +
+\mathrm{BASE}\cdot\mathrm{ToNat}(t)$, which is $\mathrm{ToNat}(s) + d$ after one
+unfolding of ToNat on $s$.
+\emph{Case $h + d < \mathrm{BASE}$.} AddLimb returns $[h + d]$ followed by $t$,
+and \texttt{ToNatCons} gives $h + d + \mathrm{BASE}\cdot\mathrm{ToNat}(t)$, the same
+expression; no IH needed.
+
+\textbf{Helper lemmas needed (this is the blueprint):} two lemmas of L2, \\
+\texttt{ToNatCons(d, t)}: $\mathrm{ToNat}([d] + t) = d + \mathrm{BASE}\cdot\mathrm{ToNat}(t)$, and \\
+\texttt{ValidTail(s)}: $\mathrm{Valid}(s) \impl \mathrm{Valid}(\mathrm{Tail}(s)) \wedge \mathrm{Head}(s) < \mathrm{BASE}$; \\
+plus one recursive call, at $(s[1..], 1)$, in the carry case. The empty case
+needs only the definition (or L2's \texttt{ToNatSingleton}, if the unfolding
+does not go through).
+
+\textbf{Gaps I know about:} none.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.13, lines 944--967 (the pinned range).
+
+\textbf{Task shape:} decide whether a small Dafny method's code, its
+\texttt{requires}/\texttt{ensures} and its docstring all describe the same
+behaviour (accept or reject); a second experiment synthesises code and
+annotations from a docstring and keeps what passes.
+
+\textbf{Oracle:} a conjunction of six checks: the verifier (code against
+annotations), reconstruction plus five I/O tests (from the annotations, and
+from the docstring), Dafny-proved equivalence of annotations regenerated from
+the docstring, and two yes/no answers from a fresh GPT-4 call.
+
+\textbf{What is trusted:} the verifier and its solver; GPT-4, both writing and
+judging; that five tests decide equivalence; that each artifact has a unique
+output per input; and that the three artifacts do not all share one mistake,
+since that case passes.
+
+\textbf{Cheat surface:} a spec so weak that it says nothing (\texttt{ensures
+true}) is caught, because it cannot regenerate the code; the remaining holes
+are the generous LLM judge of docstrings, the five-test equivalence, errors
+common to all three artifacts, and an adversarial set the authors mutated by
+hand.
+
+\textbf{Metric:} acceptance rates and counts: 87\% (52/60) of ground-truth
+programs at ten repetitions, 45/60 at one; 0 of 240 adversarial variants; 6
+wrong MBPP-DFY programs caught with 24/27 correct ones accepted; 32/36 on the
+Verus port; 39/60 accepted from docstring-only generation, none wrong.
+
+\textbf{Variance:} the only handle is $k$: with each check run once ($k = 1$),
+45 are accepted; with ten repetitions ($k = 10$), 52.
+There are no intervals or repeated-run statistics, and the method is tied to
+GPT-4: CodeLlama-34b manages 2/60.
+
+\textbf{Budget:} at most three generation tries per sample with compiler
+feedback, and each check run $k = 1$ or $10$ times (pass on any). Tokens,
+money and time are not given in the range.
+
+\textbf{Artifact:} the CloverBench set (60 single-method programs, four
+still-verifying adversarial variants each), plus an MBPP-based Dafny set and a
+41-task Verus port; later Dafny and Verus work reuses its tasks (AutoVerus's
+Verus-Bench).
+\end{answer}
+
+\end{document}

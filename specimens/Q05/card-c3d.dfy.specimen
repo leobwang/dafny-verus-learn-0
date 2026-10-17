@@ -1,0 +1,25 @@
+// Demo for card Q05.C3d (write:error-propagation), the failure half: `FirstIsZero`
+// promising a success it cannot always deliver, past a `:-` that may return early. Run
+// it with `scripts/vcheck specimens/Q05/card-c3d.dfy.specimen`; the EXPECT line at the
+// end pins the message the verifier gives (line and fragment).
+module Q05_CardC3d {
+  import opened Std.Wrappers
+
+  method FirstLimb(s: seq<nat>) returns (r: Result<nat, string>)
+    ensures r.Success? <==> |s| > 0
+    ensures r.Success? ==> r.value == s[0]
+  {
+    if |s| == 0 {
+      return Failure("no limb");
+    }
+    return Success(s[0]);
+  }
+
+  method FirstIsZero(s: seq<nat>) returns (r: Result<bool, string>)
+    ensures r.Success?
+  {
+    var x :- FirstLimb(s);
+    return Success(x == 0);
+  }
+}
+// EXPECT @21 "a postcondition could not be proved on this return path"

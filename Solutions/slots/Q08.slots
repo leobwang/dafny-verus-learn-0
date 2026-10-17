@@ -1,0 +1,10 @@
+# Solutions/slots/Q08.slots — the reference verdict answers (author-only). Each was
+# re-captured on the pinned tools by the Q08 module lane (Solutions/plans/Q08-code-notes.md
+# §2); expected/Q08.pins holds their hashes, written by
+# `scripts/pins.py --update --ref --module Q08`.
+P1dv = "D:ok err:resolve V:ok err:resolve"
+P2v = "V:err:resolve ok"
+P3d = "D:err:resolve"
+P4dv = "D:ok V:err:resolve"
+P5dv = "b"
+P6v = "V:ok fail"

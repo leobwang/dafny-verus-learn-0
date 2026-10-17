@@ -1,0 +1,38 @@
+# Q17 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or A answer of Q17 (Q17 has no P
+# item and no exit) and is verified against its own reference file (rule 1) and against every
+# learner-visible file (rule 2). H3d's pattern is cut from the statement the learner writes;
+# A1d's from the proof the metatheory run delivers in the agent twin. Q17 is hard practice
+# tier, so these patterns bind instructor sessions of Q16 onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q17_PracticeIIIB/std/Q17_PracticeIIIB.dfy
+# source:       Desc(a[..n]) && Model == multiset(a[..n])   (Q17.H1d)
+# verified: solutions=1 public=0
+Desc\(a\[\.\.n\]\)\s*&&\s*Model\s*==\s*multiset\(a\[\.\.n\]\)
+# source:         invariant forall j | i < j <= n :: a[j] == s[j - 1]   (Q17.H1d)
+# verified: solutions=1 public=0
+invariant\s+forall\s+j\s*\|\s*i\s*<\s*j\s*<=\s*n\s*::\s*a\[j\]\s*==\s*s\[j\s*-\s*1\]
+# source:       Spliced(a[..n + 1], s, i, x);   (Q17.H1d)
+# verified: solutions=1 public=0
+Spliced\(a\[\.\.n\s*\+\s*1\],\s*s,\s*i,\s*x\)
+
+# from Solutions/verus/q/q17_practice_iiib/src/perm.rs
+# source:         self.cells[idx].put(Tracked(p), x);   (Q17.H2v)
+# verified: solutions=1 public=0
+self\.cells\[idx\]\.put\(Tracked\(p\),\s*x\)
+# source:                     && perms[j].is_init() && perms[j].value() == v0[j],   (Q17.H2v)
+# verified: solutions=1 public=0
+perms\[j\]\.is_init\(\)\s*&&\s*perms\[j\]\.value\(\)\s*==\s*v0\[j\]
+
+# from Solutions/dafny/Q/Q17_PracticeIIIB/std/Q17_Vcgen.dfy
+# source:     requires forall p | p in Vcs(c, q) :: Valid(p)   (Q17.H3d)
+# verified: solutions=1 public=0
+requires\s+forall\s+p\s*\|\s*p\s+in\s+Vcs\(c,\s*q\)\s*::\s*Valid\(p\)
+
+# from Solutions/dafny/Q/Q17_PracticeIIIB/agent/Q17_AgentMetatheory.dfy
+# source:           VcSound(c, q, Exec(body, s, fuel - 1).s, fuel - 1);   (Q17.A1d)
+# verified: solutions=1 public=0
+VcSound\(c,\s*q,\s*Exec\(body,\s*s,\s*fuel\s*-\s*1\)\.s,\s*fuel\s*-\s*1\)
+# source:       SubstSound(q, x, e, s);   (Q17.A1d)
+# verified: solutions=1 public=0
+SubstSound\(q,\s*x,\s*e,\s*s\)

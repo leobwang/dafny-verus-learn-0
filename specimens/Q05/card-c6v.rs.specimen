@@ -1,0 +1,24 @@
+// Demo for card Q05.C6v (write:result), the failure half: `get_limb` whose body does not
+// return the variant its postcondition names. Run it with
+// `scripts/vcheck specimens/Q05/card-c6v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+use vstd::prelude::*;
+
+verus! {
+
+pub struct OutOfRange;
+
+pub fn get_limb(v: &Vec<u64>, i: usize) -> (r: Result<u64, OutOfRange>)
+    ensures
+        r is Ok <==> i < v.len(),
+        r is Ok ==> r->Ok_0 == v@[i as int],
+{
+    if i > 0 && i < v.len() {
+        Ok(v[i])
+    } else {
+        Err(OutOfRange)
+    }
+}
+
+} // verus!
+// EXPECT @13 "postcondition not satisfied"

@@ -1,0 +1,24 @@
+// Demo for card Q09.C1v (write:proof-split), the failure half. The success half is
+// `lemma_three_limb_product` in verus/q/q09_internals_iii/src/lib.rs; here the whole goal is
+// one `nonlinear_arith` step with no `requires`. Run it with
+// `scripts/vcheck specimens/Q09/card-c1v.rs.specimen`; the EXPECT line pins the message the
+// verifier gives (line and fragment).
+// after: Q09.P1d
+// EXPECT @21 "assertion failed"
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+pub proof fn lemma_three_limb_product(x: nat, y: nat, z: nat)
+    requires
+        x < BASE,
+        y < BASE,
+        z < BASE,
+    ensures
+        x * y * z < BASE * BASE * BASE,
+{
+    assert(x * y * z < BASE * BASE * BASE) by (nonlinear_arith);
+}
+
+} // verus!

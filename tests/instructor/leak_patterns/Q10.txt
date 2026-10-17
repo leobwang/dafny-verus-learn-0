@@ -1,0 +1,39 @@
+# Q10 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q10 (never a P
+# answer: the chapter reveals those after their boxes; never H3d's or H3v's, whose repair
+# the written problem B2's ninth line asks the learner to describe, so a grader quoting a
+# learner's answer would trip them) and is verified against its own reference file (rule 1)
+# and against every learner-visible file (rule 2). Q10 is intro practice tier, so these
+# patterns bind instructor sessions of Q10 onward (the README's tier rule).
+
+# from Solutions/dafny/Q/Q10_PracticeIA/std/Q10_PracticeIA.dfy
+# source:       PowPositive(|s| - 2);   (Q10.H1d)
+# verified: solutions=1 public=0
+PowPositive\(\|s\|\s*-\s*2\)
+# source:       invariant forall j | n <= j < i :: s[j] == 0   (Q10.H4d)
+# verified: solutions=1 public=0
+invariant\s+forall\s+j\s*\|\s*n\s*<=\s*j\s*<\s*i\s*::\s*s\[j\]\s*==\s*0
+# source:     LemmaModMod(x, Pow(n), BASE);   (Q10.H5d)
+# verified: solutions=1 public=0
+LemmaModMod\(x,\s*Pow\(n\),\s*BASE\)
+
+# from Solutions/verus/q/q10_practice_ia/src/lib.rs
+# source:             lemma_weight_mono(1, (n - 1) as nat);   (Q10.H1v)
+# verified: solutions=1 public=0
+lemma_weight_mono\(1,\s*\(n\s*-\s*1\)\s*as\s+nat\)
+# source:         r == 0 <==> a@.len() == 0,   (Q10.H2v)
+# verified: solutions=1 public=0
+r\s*==\s*0\s*<==>\s*a@\.len\(\)\s*==\s*0
+# source:         if self.head < self.buf.len() - i {   (Q10.H6v)
+# verified: solutions=1 public=0
+self\.head\s*<\s*self\.buf\.len\(\)\s*-\s*i\b
+
+# from Solutions/dafny/Q/Q10_PracticeIA/exit/Q10_Exit.dfy
+# source:       invariant 0 <= i <= |s| && t == Sum(s[i..])   (Q10.X1d)
+# verified: solutions=1 public=0
+t\s*==\s*Sum\(s\[i\.\.\]\)
+
+# from Solutions/verus/q/q10_practice_ia/src/exit.rs
+# source:     (lo / 2 + (hi % 2) * 0x8000_0000_0000_0000u64, hi / 2)   (Q10.X1v)
+# verified: solutions=1 public=0
+\(hi\s*%\s*2\)\s*\*\s*0x8000_0000_0000_0000u64

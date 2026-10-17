@@ -1,0 +1,16 @@
+// item: Q03.P10v S7 value
+// **P10.** Spec values. `limb_at(s, j)` (layer L2) reads limb `j` of `s`. What is
+// the value of the sum below? Answer form: numeral
+// Fill the `???` in the slot line, record the first try
+// (`scripts/firsttry.sh Q03 --check`), and only then enable it (the `// SLOT: `
+// prefix removed, so the assert is live).
+use vstd::prelude::*;
+use qg_bignat_l2::*;
+
+verus! {
+
+proof fn p10v() {
+    // SLOT: assert(limb_at(seq![7u64, 8u64], -1) + limb_at(seq![7u64, 8u64], 1) == ???) by (compute_only);
+}
+
+} // verus!

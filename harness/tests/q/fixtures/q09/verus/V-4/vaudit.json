@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V-4/verus/q/q01_probe"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V-4/verus/q/q01_probe/src/lib.rs",
+    "kind": "later-layer",
+    "line": 4,
+    "message": "names a given layer above this file's layer (Δ9, design §10.1)"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V-4/verus/q/q01_probe"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "cd0ed1a9707969e36354f5a346407701ec6c4a6715810533a5bad52355496f1f",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V-4/verus/q/q01_probe"
+}

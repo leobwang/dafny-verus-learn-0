@@ -1,0 +1,139 @@
+{
+  "func-details": {
+    "holes::labelled": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::function::axiom_fn_mut_call_ensures": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "holes::unlabelled": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "holes::really_fails": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "holes::exec_hole": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "vstd::function::axiom_fn_mut_call_requires": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    },
+    "holes::double": {
+      "obligation_proof_notes": [],
+      "failed_proof_notes": []
+    }
+  },
+  "verification-results": {
+    "encountered-error": true,
+    "encountered-vir-error": false,
+    "success": false,
+    "verified": 2,
+    "errors": 1,
+    "is-verifying-entire-crate": true
+  },
+  "times-ms": {
+    "verus-build": {
+      "profile": "release",
+      "version": "0.2026.09.27.3cf1832"
+    },
+    "num-threads": 1,
+    "total": 196,
+    "estimated-cpu-time": 196,
+    "rust": {
+      "total": 20,
+      "init-and-types": 5,
+      "trait-conflicts": 15,
+      "compile": 0
+    },
+    "verification": {
+      "total": 171,
+      "vir": {
+        "total": 154,
+        "hir": 1,
+        "import": 107,
+        "rust-to-vir": 17
+      }
+    },
+    "total-verify": 14,
+    "total-verify-module-times": [
+      {
+        "module": "",
+        "time": 14
+      }
+    ],
+    "air": {
+      "total": 10,
+      "module-times": [
+        {
+          "module": "",
+          "time": 10
+        }
+      ]
+    },
+    "smt": {
+      "total": 0,
+      "smt-init": 0,
+      "rlimit-init": 68,
+      "smt-init-module-times": [
+        {
+          "module": "",
+          "time": 0,
+          "time-micros": 58,
+          "rlimit": 68
+        }
+      ],
+      "smt-run": 0,
+      "rlimit-run": 785,
+      "smt-run-module-times": [
+        {
+          "module": "",
+          "time": 0,
+          "time-micros": 541,
+          "rlimit": 785,
+          "function-breakdown": [
+            {
+              "function": "holes::really_fails",
+              "mode:": "proof",
+              "time": 0,
+              "time-micros": 517,
+              "rlimit": 781,
+              "success": false
+            },
+            {
+              "function": "holes::labelled",
+              "mode:": "proof",
+              "time": 0,
+              "time-micros": 12,
+              "rlimit": 2,
+              "success": true
+            },
+            {
+              "function": "holes::unlabelled",
+              "mode:": "proof",
+              "time": 0,
+              "time-micros": 12,
+              "rlimit": 2,
+              "success": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.09.27.3cf1832",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.98.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "3cf18325f0fd0c3040fbdec8c0f2255c0504c91a"
+  }
+}

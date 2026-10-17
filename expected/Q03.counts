@@ -1,0 +1,61 @@
+# expected/Q03.counts — Δ11 count pins for Q03: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q03` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q03"
+
+[[unit]]
+path = "dafny/Q/Q03_FirstSyntaxII/core"
+lang = "dafny"
+reference_verified = 48
+min_verified = 14
+symbols = ["Q03_FirstSyntaxII.AddLimbToNat", "Q03_FirstSyntaxII.AllDigits", "Q03_FirstSyntaxII.CountZeroLimbs", "Q03_FirstSyntaxII.DigitPred", "Q03_FirstSyntaxII.ExistsCanonicalFive", "Q03_FirstSyntaxII.ExistsSquareFour", "Q03_FirstSyntaxII.FromNatCorrect", "Q03_FirstSyntaxII.MaxLimb", "Q03_FirstSyntaxII.SafeDiv", "Q03_FirstSyntaxII.Square", "Q03_FirstSyntaxII.TriggerRosetta", "Q03_FirstSyntaxII.TryLimb", "Q03_FirstSyntaxII.Twice", "Q03_FirstSyntaxII.ZeroCount"]
+
+[[unit]]
+path = "verus/q/q03_first_syntax_ii"
+lang = "verus"
+reference_verified = 21
+min_verified = 14
+symbols = ["add_limb", "count_zero_limbs", "from_u64", "half", "lemma_exists_canonical_five", "lemma_exists_square_four", "lemma_half_le", "lemma_succ_gt", "max_limb", "safe_div", "succ", "trigger_rosetta", "try_limb", "zero_count"]
+
+[[file]]
+path = "dafny/Q/Q03_FirstSyntaxII/core/Q03_FirstSyntaxII.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "verus/q/q03_first_syntax_ii/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "dafny/checks/Q03_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q03_FirstSyntaxII/exit/Q03_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q03_first_syntax_ii/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 3
+errors = 0

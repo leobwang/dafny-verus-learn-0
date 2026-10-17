@@ -1,0 +1,19 @@
+use vstd::prelude::*;
+
+verus! {
+
+proof fn product_order(a: int, b: int, c: int)
+    requires
+        0 < a < b,
+        1 < c,
+    ensures
+        a * a * c < b * b * c,
+{
+}
+
+} // verus!
+
+// Chapter specimen for docs/Q01_Hello.md, section 11: the scenario of Q01.P9dv. The
+// chapter quotes its output; scripts/vcheck runs it once these predictions are recorded.
+// after: Q01.P9dv
+// after: Q01.P8dv

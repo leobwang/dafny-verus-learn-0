@@ -1,0 +1,24 @@
+// Card Q02.C2v (loop invariants), the failure demo: card_invariant of the exercise crate
+// with an invariant that its starting state does not meet. Open it only after your Q02
+// predictions are committed.
+// EXPECT @16 "invariant not satisfied before loop"
+use vstd::prelude::*;
+
+verus! {
+
+pub fn card_invariant(v: &Vec<u64>) -> (n: usize)
+    ensures
+        n == v.len(),
+{
+    let mut i: usize = 0;
+    while i < v.len()
+        invariant
+            1 <= i <= v.len(),
+        decreases v.len() - i,
+    {
+        i = i + 1;
+    }
+    i
+}
+
+} // verus!

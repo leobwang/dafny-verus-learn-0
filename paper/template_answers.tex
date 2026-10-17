@@ -1,0 +1,177 @@
+% template_answers.tex — structure template for paper/<ID>_answers.tex, the file
+% the LEARNER fills in. The author ships each <ID>_answers.tex as a copy of this
+% skeleton, keeping one section per problem of <ID>_problems.tex. `make -C paper
+% paper` must compile it: that is the written track's green build. It compiles
+% standalone as is:
+%   latexmk -pdf template_answers.tex
+%
+% ---------------------------------------------------------------------------
+% THE % GRADER COMMENT CONVENTION
+% ---------------------------------------------------------------------------
+% /grade-paper delivers feedback as TeX margin comments in this grammar:
+%
+%   % GRADER[<problem>][<dimension>][<score>]: <one-line finding, with the
+%   %   concrete failing instance if score <= 2>
+%
+%   <problem>    B1, B2, ... (matches \label{prob:B<n>} in <ID>_problems.tex)
+%   <dimension>  informal proofs: statement-fidelity | induction-soundness |
+%                  case-exhaustiveness | blueprint-quality | gap-accounting
+%                hand calculations: recomputation
+%                concept answers: correctness
+%                paper cards: card-fidelity
+%                pre-registrations: hypothesis-precision | budget-parity |
+%                  variance | contamination | cheat-audit | disclosure
+%                lab reports: the same six, plus reproducibility
+%                any other label only where the module rubric declares it
+%   <score>      1-4 (the grading vocabulary in
+%                .claude/skills/instructor/CORE.md); a problem's grade is the
+%                MINIMUM across its dimensions.
+%
+% A score <= 2 must exhibit a failing instance: for a formal claim, an
+% executable counterexample or a verified refutation ("the verifier could not
+% prove it" is never one); for prose and method, the quoted text or the
+% recomputation that fails. Otherwise the finding is a gap, scored 3.
+%
+% Example of graded feedback, placed next to the answer text:
+%   % GRADER[B2][induction-soundness][2]: the IH is stated for xs but used at
+%   %   a different argument in the step; at the exhibited two-element input
+%   %   that step does not follow.
+%
+% The spoiler-guard hook keeps Claude from editing YOUR answers file, so the
+% grader writes these lines into instructor/feedback/<ID>_paper.md, keyed to
+% your \label{ans:B<n>} anchors; paste them in (or read them there). Lines
+% starting with "% GRADER" are comments and never affect compilation.
+%
+% THE PRE-REGISTRATION MARKERS. A lab's pre-registration sits between two marker
+% lines, PREREG-BEGIN and PREREG-END, each written as a comment at the start
+% of its line (see problem B5 below). /grade-paper hashes exactly the lines from
+% the first marker to the second, inclusive, and records the hash on the
+% gradebook row that unlocks the run; editing anything between them after
+% grading changes the hash. Keep exactly one pair per answers file.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{XNN --- Module Title \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+% One \section* + answer block per problem, in problem order.
+% Keep the \label{ans:B<n>} anchors: grader notes are keyed to them.
+% ---------------------------------------------------------------------------
+
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+% Show every step; name the rule you apply at each one.
+Step 1: $\WP{c}{Q} = \dots$ \quad by the rule for \dots \\
+Step 2: \dots \\
+Verification condition: $P \impl \dots$
+\end{answer}
+
+\section*{Problem B2 (informal-proof-first)}\label{ans:B2}
+\begin{answer}
+\textbf{Statement.} \dots
+
+\textbf{Induction on / loop invariant / decreases measure:} \dots
+
+\textbf{Base:} \dots
+
+\textbf{IH or invariant (stated as a formula):} \dots
+
+\textbf{Step:} \dots
+
+\textbf{Helper lemmas needed (this is the blueprint):} \dots
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): \dots
+\end{answer}
+
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+% 2-3 sentences. Expect the grader to try to counterexample this.
+\dots
+\end{answer}
+
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry \dots, lines \dots (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{Trust:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+% PREREG-BEGIN
+\section*{Problem B5 (pre-registration)}\label{ans:B5}
+\begin{answer}
+\textbf{Claim.} \dots
+
+\textbf{Outcome that would refute it.} \dots
+
+\textbf{Population and tasks} (source, size, selection): \dots
+
+\textbf{Arms, and what is held equal across them.} \dots
+
+\textbf{Primary metric and estimator.} \dots
+
+\textbf{Budget arithmetic} (calls = tasks $\times$ attempts $\times$ rounds
+$\times$ arms $\times$ repeats; tokens; GPU-hours; wall-clock; per-run caps;
+checkpoint-and-resume): \dots
+
+\textbf{Sample size and minimum detectable effect} (with the arithmetic): \dots
+
+\textbf{Variance} (repeats, and for a Claude arm "repeated runs", never
+"seeds"; the test; pairing; the multiple-comparison correction): \dots
+
+\textbf{Contamination controls.} \dots
+
+\textbf{Cheat surface and gate} (which gate re-judges each success; which
+classes are grader-only and reported UNKNOWN): \dots
+
+\textbf{Predicted intervals} (first try, before any run): \dots
+
+\textbf{Stopping rule.} \dots
+
+\textbf{Analysis plan} (the tables the report will regenerate): \dots
+
+\textbf{Disclosure} (models, CLI and tool versions, engines; Claude as both a
+subject and the grader): \dots
+\end{answer}
+% PREREG-END
+
+\section*{Problem B6 (lab report)}\label{ans:B6}
+\begin{answer}
+\textbf{Reproduce:} \verb+<one command over research/runs/ that regenerates every table below>+
+
+\textbf{Results} (tables, with intervals): \dots
+
+\textbf{Deviations from the pre-registration} (each one, and why): \dots
+
+\textbf{Cheat audit} (the gate's verdict on every claimed success; UNKNOWN
+classes): \dots
+
+\textbf{Variance and intervals.} \dots
+
+\textbf{Contamination.} \dots
+
+\textbf{Threats to validity.} \dots
+
+\textbf{Disclosure} (as pre-registered, plus which runs used an agent's own tool
+loop and which acted through the harness): \dots
+\end{answer}
+
+\end{document}

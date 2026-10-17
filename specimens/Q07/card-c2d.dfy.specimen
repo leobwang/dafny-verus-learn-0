@@ -1,0 +1,20 @@
+// Demo for card Q07.C2d (write:arithmetic-library), the failure half. The
+// success half is `LimbProductBelow` in
+// dafny/Q/Q07_InternalsI/std/Q07_InternalsI.dfy; here the same lemma, in a
+// module with nonlinear arithmetic off, makes no library call. Run it with
+// `scripts/vcheck specimens/Q07/card-c2d.dfy.specimen`; the EXPECT line pins
+// the message the verifier gives (line and fragment).
+// after: Q07.P5dv
+// EXPECT @18 "a postcondition could not be proved on this return path"
+module {:disableNonlinearArithmetic} Q07_CardC2d {
+  // Copied from the given spine, layer L1 (QG_L1_BigNat), verbatim.
+
+  // The limb base, 2^64, written as a literal.
+  const BASE: nat := 18446744073709551616
+
+  lemma LimbProductBelow(x: nat, y: nat)
+    requires x < BASE && y < BASE
+    ensures x * y < BASE * BASE
+  {
+  }
+}

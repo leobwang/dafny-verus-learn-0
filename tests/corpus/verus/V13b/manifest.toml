@@ -1,0 +1,52 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V13b"
+lang = "verus"
+half = "R"
+xclass = "X06"
+kind = "construct"
+title = "a frozen requires strengthened, narrowing what is proved"
+files = ["Cargo.toml", "frozen.rs", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "clean"
+kinds = []
+output_sha256 = "427818aa6f491c2b2dfaa87467196d536a937a53c3e84e392fd06cd51f876ea7"
+summary = "verdict verified, stage verify, verified 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V13b"]
+exit = 0
+
+[[expect]]
+tool = "vaudit"
+outcome = "clean"
+kinds = []
+output_sha256 = "42f8aa823ff761de212e67085ec49ac9e6a2fb8a7353aef6732b8a70da3e55e0"
+summary = "0 finding(s)"
+argv = ["scripts/vaudit", "tests/corpus/verus/V13b"]
+exit = 0
+
+[[expect]]
+tool = "specfreeze --check"
+outcome = "flagged"
+kinds = ["freeze-changed"]
+output_sha256 = "f8a6ad5f87659b70132d1237db1c80f0f6c4f8d870c325222d0ab5d430fac408"
+summary = "specfreeze --against frozen.rs (hash mode; the course form is --check <ID> against expected/<ID>.freeze): 1 finding(s): freeze-changed triple at src/lib.rs:6"
+argv = ["scripts/specfreeze", "--against", "tests/corpus/verus/V13b/frozen.rs", "tests/corpus/verus/V13b/src/lib.rs"]
+exit = 1

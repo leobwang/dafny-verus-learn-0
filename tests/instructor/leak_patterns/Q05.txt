@@ -1,0 +1,40 @@
+# Q05 leak patterns (spec §7.2; this directory's README holds the format and the verifier).
+# Read-denied in study mode. Each pattern is cut from an H or X answer of Q05 (never a P
+# answer: the chapter reveals those after their boxes; never H4d's or H4v's, whose informal
+# proof is the written problem B3, so a grader quoting a learner's blueprint would trip it;
+# no A answer: the agent files' repairs are an import line and a delimiter, public in
+# every other file) and is verified against its own reference file (rule 1) and against
+# every learner-visible file (rule 2). Q05 is moderate-tier (layer L3): no given layer lies
+# above it, so rule 2's exemption applies to none.
+
+# from Solutions/dafny/Q/Q05_Frames/std/Q05_Frames.dfy
+# source:           invariant b[..i] == a[..i]   (Q05.H1d)
+# verified: solutions=1 public=0
+invariant\s+b\[\.\.i\]\s*==\s*a\[\.\.i\]
+# source:       ensures Valid() && Repr == old(Repr)   (Q05.H2d)
+# verified: solutions=1 public=0
+Repr\s*==\s*old\(Repr\)
+# source:       invariant r == Cmp(Drop(a, i), Drop(b, i))   (Q05.H3d)
+# verified: solutions=1 public=0
+r\s*==\s*Cmp\(Drop\(a,\s*i\),\s*Drop\(b,\s*i\)\)
+# source:       assert s[..i + 1][..i] == s[..i];   (Q05.H5d)
+# verified: solutions=1 public=0
+assert\s+s\[\.\.i\s*\+\s*1\]\[\.\.i\]\s*==\s*s\[\.\.i\]
+
+# from Solutions/verus/q/q05_frames/src/lib.rs
+# source:         a.limbs.insert(0, 0);   (Q05.H1v)
+# verified: solutions=1 public=0
+limbs\.insert\(0,\s*0\)
+# source:         v = mul10_add(v, d)?;   (Q05.H5v)
+# verified: solutions=1 public=0
+mul10_add\(v,\s*d\)\?
+
+# from Solutions/dafny/Q/Q05_Frames/exit/Q05_Exit.dfy
+# source:       invariant c == CountFull(s[i..])   (Q05.X1d)
+# verified: solutions=1 public=0
+invariant\s+c\s*==\s*CountFull\(s\[i\.\.\]\)
+
+# from Solutions/verus/q/q05_frames/src/exit.rs
+# source:     if k <= from.bal && k <= to.cap - to.bal {   (Q05.X1v)
+# verified: solutions=1 public=0
+k\s*<=\s*to\.cap\s*-\s*to\.bal

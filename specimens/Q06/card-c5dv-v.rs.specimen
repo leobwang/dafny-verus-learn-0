@@ -1,0 +1,17 @@
+// Demo for card Q06.C5dv (divergence), the Verus column. Open it only after every
+// prediction of Q06 is recorded (scripts/firsttry.sh Q06 --check). Its pinned run is
+// `scripts/vcheck` (the sidecar's command); run it the same way, and then as P1 runs its
+// file.
+// after: Q06.P1dv
+// after: Q06.P2dv
+use vstd::prelude::*;
+
+verus! {
+
+proof fn wrong(x: nat)
+    ensures
+        x + 1 == x,
+{
+}
+
+} // verus!

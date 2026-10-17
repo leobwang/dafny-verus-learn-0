@@ -1,0 +1,314 @@
+# expected/Q03.freeze — statement-freeze pins for Q03 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q03` from the files as shipped; checked by
+# `scripts/specfreeze --check Q03`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q03"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q03_FirstSyntaxII/core/Q03_FirstSyntaxII.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_FirstSyntaxII.AddLimbToNat" = "c7530d5b2780de97dd2aef14c35baf8944f4522c57fd4e26a62a237de146317c"
+"Q03_FirstSyntaxII.AddLimbToNatCheck" = "57998f59e1425908e3bf5987ccb4f997a71a172bd77a54b218a108405ec393c9"
+"Q03_FirstSyntaxII.AllDigits" = "56f33dae80ef7bc34a36972103466271c446dfb4f980beb16952822d0b7e72ff"
+"Q03_FirstSyntaxII.CountZeroLimbs" = "9c757766c552df1b2db0fd68ea9401e5ed08e0454f631d8fce9c830d07f3da70"
+"Q03_FirstSyntaxII.DigitDemo" = "8cd50f5945057496b73bbd4fc294bdf805de3bb070275e1cd371a76a14b9141f"
+"Q03_FirstSyntaxII.DigitPred" = "1d502f906e5e2e12f0dfcf993c4dd6e2fcfb1118835bf44ad503219f1943f18b"
+"Q03_FirstSyntaxII.ExistsCanonicalFive" = "f88329acc58442f29b475ad1a4c349c0c06cae0aa98479c82d892e94f9d1033a"
+"Q03_FirstSyntaxII.ExistsSquareFour" = "8669e50d064a34a47069bbd9441a23e33124a6d19ebd4d90b6de8d5acc8b0bd2"
+"Q03_FirstSyntaxII.FromNatCorrect" = "022ffe2dd41d1ba3d6fe947dc46845da9339869b172adb64aadfc1841509d79a"
+"Q03_FirstSyntaxII.FromNatCorrectCheck" = "9f47f68cb2aea9556e6b3f09abdd440ccbb080e2f8c4fbbf2b5bef8d89b203c2"
+"Q03_FirstSyntaxII.Limb" = "6f7b7fc7e36dc78e0bf7792cb3a871c545384c2648bab2c5e812b7b484aa47c4"
+"Q03_FirstSyntaxII.MaxLimb" = "891eac7c7d5d2454c7a65090f457abd84e789049d903537109a8d112c29b0e06"
+"Q03_FirstSyntaxII.MaxLimbCheck" = "d6c30b1606d43a92fd3ee7ac7ffc31f95956f93f309179042f06f4208f4c396e"
+"Q03_FirstSyntaxII.NZDigit" = "abe631def36d23e781245404e86e2405a08865d81909c2fa54f2154e0acda3a1"
+"Q03_FirstSyntaxII.Opt" = "faccdc773392d86ede2f95b02f6694a52374107af7b718924b7288102cf223a2"
+"Q03_FirstSyntaxII.SafeDiv" = "caf61c53b8c73cd4e9029d651b9ef3b596b7ed7ca744806e8444d2422a0c22f9"
+"Q03_FirstSyntaxII.Small" = "49a273795a44d95db9147088111891592936cb2709b3d577cb32ec8686d18f3b"
+"Q03_FirstSyntaxII.Square" = "515ceeb79f55b2de8c1f473c1d401ffa10b5a7e2f84e5c2e0f306cb686a0f12f"
+"Q03_FirstSyntaxII.TriggerRosetta" = "ba2384f6cd6ba02239b25f1d5133772fd163f76cce399ab38ce4b6b41dea63ee"
+"Q03_FirstSyntaxII.TryLimb" = "76c72dd204a58a06a0a049065bf0e1c00d99c868c4d497690258127be011e5a5"
+"Q03_FirstSyntaxII.TryLimbCheck" = "62d13b42e0add6f28cb6aef64ff1c4f9b1bd0328777993d7add506d30bdd693f"
+"Q03_FirstSyntaxII.Twice" = "9393a161c629db6c50edc54f01331dbd489bb2a513f470be94d680ed8ac9b28b"
+"Q03_FirstSyntaxII.ZeroCount" = "7cc8371c146c5d1d0f7b0e2a17cabe6d6f50ccbf97ab0c5ca13da4f1c6d60a63"
+
+[[file]]
+path = "dafny/checks/Q03_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_Checks.P9d" = "9fa390c5468b801cc4bf5a6d9b0011da0c3bd295e1e4ff43f986279747901832"
+
+[[file]]
+path = "verus/q/q03_first_syntax_ii/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"add_limb" = "78ff252583f138ace33d15217e1f49da09deeba885c114b0e0aca653ca1bb8da"
+"add_limb_check" = "11c424943e2558f2df973436a90bc759cd0b71be5c694b9f2c20f345594cf9fa"
+"count_zero_limbs" = "8bf2fba6613fc2d83c068a7411f24a2d2246caf5ed1dfd5fe0f5389be1e6cc48"
+"from_u64" = "ca393aacb350de04f469562baaa2b1d3b76758903aec3585322664d49d17fc75"
+"from_u64_check" = "37af3609f6cbb171c13790a0738898931212ebfb96d965e140d833460961ec0d"
+"half" = "aae98d48e884ddbd11a2d1beefba9738815e456461299537874abc15fdc8d9c5"
+"half_spec" = "ac4736336bf6db84d6e3eedb1ccd13d182ede41d4d08aac664cb94ebd431555c"
+"lemma_exists_canonical_five" = "5452324c190ef62d6e379a9e658859a51b3741b2c80eb0aca14a3affebbd6bcb"
+"lemma_exists_square_four" = "39714b0a9898cc77ef5839cd91316986d4e8f01d16e1163bb3ee592f30bec7e9"
+"lemma_half_le" = "7be2a8327e654614fd189b15dadddaa7dd144493da714ad8a6fd972eb9445225"
+"lemma_succ_gt" = "fe82ab4b64c74665a904b68345913cde6b8bc01b2bf47de35ebde00aa87618d8"
+"max_limb" = "0cd91a65353e0d5eb80484c9480c8cd346dd8ab6456fdc9fe85600b0d806da0f"
+"max_limb_check" = "a98b0f9b56ec0702dc256bfa67a9e9571596f5a0b1a9b8c0fdc39babfc527767"
+"safe_div" = "f4d555409230d508020b2cfd83993be363fe50e71c3a0ebb2ab25d6263871706"
+"square" = "168118e91967bbf94a2dca9f0b0eae4979e5815810c1e390b0f99e51cffe82db"
+"succ" = "3545c567a208f1fb946f21ff566f516e42f9fa9af8b7b3cd8d3b9cc9880a8619"
+"succ_spec" = "be38e8b55edea32acc995bd64df98c5a611b15442e560b868f4209db13c41cd9"
+"trigger_rosetta" = "5480c807f7c81e728bcad4067548ca954679283f4aa8169c1d485eff1f9a930f"
+"try_limb" = "47a20bb5de6fd35c6dd7f033e37ae77d754442edcfa4926c5227e28a0c6b254c"
+"try_limb_check" = "4a0950d14f0d0c224d690f8c427a9d6c43372f6372dc6832e17fa80cd330390e"
+"zero_count" = "158cb8b9911eae9153f7e9c287e4a5e1c530e29dc777a9e0e78295ee04214bc3"
+
+[[file]]
+path = "specimens/Q03/P10v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"p10v" = "a6f72322e6a03e6c0cd8a247a8695bd490f1c280fa86472846d6ccd8e6ef155c"
+
+[[file]]
+path = "specimens/Q03/P11d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_P11.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q03_P11.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q03_P11.TwoLimbs" = "55fa1c3fcd086bb37d6314391617417fd956c35797ba6036c7a4e5ba53b51f24"
+"Q03_P11.TwoLimbsStep" = "ca188ab792ce09570f78d39b9bf683a6cdf8fe5cb22cc1eccbb4ff2b3021dc30"
+
+[[file]]
+path = "specimens/Q03/P12d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_P12.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q03_P12.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q03_P12.Valid" = "9c0ded0dae394d5a6a344d3c31b5f68242eb31bf7a4d015dd30ed78360614a48"
+"Q03_P12.ValidBounded" = "b8f6a553b12937d0b3563c9348d51e2c9697dd0b717e57f2396e0a97f7667680"
+
+[[file]]
+path = "specimens/Q03/P13v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_limb_at_bound" = "4e582a300469957b53fc39e5f10a5bafda98d5678603e5ddb82377cf1c77b984"
+"lemma_two_limbs_bound" = "56c3adf52105fec78bedaedc99b2aa7f9ef50e6a8ec1ab1ab5d615fbe485d419"
+
+[[file]]
+path = "specimens/Q03/P14v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_double_gt" = "3cbe36bc878e355db1b01b62c5b3c87423e50d06de83bc2d13211b4812d8ec0c"
+
+[[file]]
+path = "specimens/Q03/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_P3.AssignA" = "7f33352a75f3dfc2f6b60f51d193503a9b18c530c968becfb297534fc820c8d0"
+"Q03_P3.AssignB" = "a6c64c3bc96675d699dc144455bc57030dab71f585fd3e8913611f83e343ca47"
+"Q03_P3.AssignC" = "523db890ecb90256fe41abbdce1b33d656c1eee54737a08329a828c6d38a4664"
+"Q03_P3.AssignD" = "00a13125b4340dcab0617eb5b86ced08ac3a7982fedacb8b3506fb3df058bc77"
+"Q03_P3.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q03_P3.Limb" = "6f7b7fc7e36dc78e0bf7792cb3a871c545384c2648bab2c5e812b7b484aa47c4"
+
+[[file]]
+path = "specimens/Q03/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC1d.LimbCount" = "ae6c72f7849ca0b9fb924a3e5be18db554a427fcf9eccbca3b944a8b2e679e71"
+
+[[file]]
+path = "specimens/Q03/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"limb_count" = "d3cb7f3dad5ced44444acca5714d7e1e0290ab1c720bcd4376aaca4564b8979a"
+
+[[file]]
+path = "specimens/Q03/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC2d.Div" = "8021750ca531bf9b1008b0508e2740ac74cfe3b9ff533df012173ad210f6a694"
+
+[[file]]
+path = "specimens/Q03/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"div" = "a802db43ebf20c2b4ffdc9923f0112e4bb95953b6d81772bd99909260a85b5cb"
+
+[[file]]
+path = "specimens/Q03/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC3d.ExistsSquareFour" = "8669e50d064a34a47069bbd9441a23e33124a6d19ebd4d90b6de8d5acc8b0bd2"
+"Q03_CardC3d.Square" = "515ceeb79f55b2de8c1f473c1d401ffa10b5a7e2f84e5c2e0f306cb686a0f12f"
+
+[[file]]
+path = "specimens/Q03/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_exists_square_four" = "39714b0a9898cc77ef5839cd91316986d4e8f01d16e1163bb3ee592f30bec7e9"
+"square" = "168118e91967bbf94a2dca9f0b0eae4979e5815810c1e390b0f99e51cffe82db"
+
+[[file]]
+path = "specimens/Q03/card-c4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC4d.Pos" = "13fb187b6f98dfd71d7fcee9f443d8fa99b3b36f4ceb9f8863b139813559efc2"
+
+[[file]]
+path = "specimens/Q03/card-c5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"reset" = "de776a32e418dbbb1fb64df3485a82d5145dc927db63e0c05369985e25d07dfc"
+
+[[file]]
+path = "specimens/Q03/card-c6dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC6d.Seven" = "6bafc0a68498453b954ec04aae4eac3c7f6430626b955ea3eaf9b8cfc3cd56e0"
+"Q03_CardC6d.SevenTest" = "1b8918e4566423633044400cedbe28a1df3e7c492218012891766d4ad45cc58c"
+
+[[file]]
+path = "specimens/Q03/card-c6dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"seven" = "aaf9290cf4bc303dd7608df2d74dc195c1009a74da913bf613f729e0c17eb0d8"
+
+[[file]]
+path = "specimens/Q03/card-c7dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC7d.Contra" = "4b76a71a169e456d44c35ac83a02b8e6dcfa1af3639acc122a67dd3182c88f22"
+
+[[file]]
+path = "specimens/Q03/card-c7dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_contra" = "8f44e5e589dc40ea998ebd5ce179934e5b5377435d521c86c9ab7fc7af7b349c"
+
+[[file]]
+path = "specimens/Q03/card-c8dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_CardC8d.DoubleIsSum" = "708d3e2f7e2feef1641a042ab8cdf2c684931032d5c97841dbbef4e3dda02837"
+
+[[file]]
+path = "specimens/Q03/card-c8dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_double_is_sum" = "e95d8d4073d7b049d1eb7f891a843dea8c670348a3eff43cd73975e0788e0dc5"
+
+[[file]]
+path = "specimens/Q03/chapter-p2dv-witness-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_contra" = "8f44e5e589dc40ea998ebd5ce179934e5b5377435d521c86c9ab7fc7af7b349c"
+"witness" = "48b7996fb4c956a09e20811c3a1aaa37129d9d0b930f13f0baa8b32e4aa31da7"
+
+[[file]]
+path = "specimens/Q03/chapter-p4v-a.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"call_a" = "c7528b3f67f60c0cdfd579bfbbbfa3201ac9002525ba73c295731611dc2630a3"
+"lemma_pos" = "26ede400d8dc1eda2343304656f03db0eb6b22cdb999c0510268ed3b48018839"
+"triple" = "2c907bf2a564ffe762eea7279acb5a28d8b102fed92c333b47ea4c4b01c84e20"
+
+[[file]]
+path = "specimens/Q03/chapter-p4v-c.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"call_c" = "9b8011358053b085e5ee5e85a82128a03d1690f6a95aaf6c249985d67926cd58"
+"lemma_pos" = "26ede400d8dc1eda2343304656f03db0eb6b22cdb999c0510268ed3b48018839"
+"triple" = "2c907bf2a564ffe762eea7279acb5a28d8b102fed92c333b47ea4c4b01c84e20"
+
+[[file]]
+path = "specimens/Q03/chapter-p5dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_a" = "bccf60889875f99b63ec5e339fffe46d2e183c5933f407e61a3b56e0e4c23e2a"
+"lemma_b" = "a959c0a4133a619f1cb85ee4051adddea2dd4aefc0a40e0b2a7667397050f9f9"
+"lemma_c" = "f32f3db2742be6addc6d93d79927185831f5461b855b098ba9f2b4d3f3933857"
+
+[[file]]
+path = "specimens/Q03/chapter-p6dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_ChapterP6.M" = "3b255d702d7a534af730993c822a6d8fe686c016779221a4d425e5f5a4e92c12"
+
+[[file]]
+path = "specimens/Q03/chapter-p6dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"m" = "d55849bad43a2405357120f4f4fc9ebb6daf444f681e85e9aeecb0084524f4e6"
+
+[[file]]
+path = "specimens/Q03/chapter-p7dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_ChapterP7.Count" = "cbc93da424eeffa7e8aa3599a842c7e3a2444a9d43fd014ec3bcc0efe7b8abc9"
+"Q03_ChapterP7.CountIsN" = "783878ba597325982ec2f01a6ee87020805bcb0fede535a0007d4b3714979287"
+"Q03_ChapterP7.CountIsNPlusOne" = "c6cd89a326d262b28948565ab93c19d520141156b0286174403da8fcbdb511ea"
+
+[[file]]
+path = "specimens/Q03/chapter-p7dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"count" = "a603ec1da51e75fc11a8bd90e75cad62ab4789d8c41d2c1f18e92454fd3983de"
+"lemma_count_is_n" = "434cd9eeb6a687ab2f137c5c7a89cd32b0e3e251991019a72ae38f4f70a77c10"
+"lemma_count_is_n_plus_one" = "480ed122acddee586458530bab1d93dc4113c1debcfa1fea0792e8d5434ebe04"
+
+[[file]]
+path = "dafny/Q/Q03_FirstSyntaxII/exit/Q03_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q03_Exit.CheckedSub" = "dcc71f798c1df0a1b8998d1b55a09927e0fd247c5ebfe20f9eb68358c6200605"
+"Q03_Exit.FindAtLeast" = "e8cc2e5becf05f6fad60890f727b6c77c7c47a4d1062062851d1483625c53e0b"
+"Q03_Exit.Opt" = "faccdc773392d86ede2f95b02f6694a52374107af7b718924b7288102cf223a2"
+
+[[file]]
+path = "verus/q/q03_first_syntax_ii/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"checked_twice" = "8fbd62fb8ea242e11288831a26ae34271179252faf24df9269f53b6c4b84c279"
+"find_at_least" = "fb011c312d8ac201a92188fc2da06b15ce141adb2846346de65282f01cb819ea"
+"lemma_exists_wf_pair" = "61d044ae361aee46e7d610ed67d895948bd351c28c41058af1e3ff984e2a91ce"
+"twice_spec" = "4b0f4b3ecce3db4dbc4ea15a61c66ac2b9f3202a85ed56817d47b63dcdc2eed9"

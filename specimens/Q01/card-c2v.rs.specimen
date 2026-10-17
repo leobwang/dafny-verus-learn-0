@@ -1,0 +1,19 @@
+// Card demo Q01.C2v (`assert`), the failure half. The success half is `assert_step` in
+// verus/q/q01_hello/src/lib.rs; this assertion is false. Run it with
+// `scripts/vcheck specimens/Q01/card-c2v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+// after: Q01.P8dv
+use vstd::prelude::*;
+
+verus! {
+
+pub fn assert_step(x: u64)
+    requires
+        x < 100,
+{
+    let y = x + 2;
+    assert(y < x);
+}
+
+} // verus!
+// EXPECT @15 "assertion failed"

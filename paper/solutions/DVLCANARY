@@ -1,0 +1,5 @@
+DVLCANARY-08b4cda18ca3f02c0128ac5d1f1bb8e9
+This file marks the tree paper/solutions/ for the sandbox self-test (DV4-PLAN §5.4 item 2,
+§14 Q5). sandbox/canaries.sha256 lists the sha256 of the token on the first line.
+A staged sandbox file that carries the token's public prefix stops the run before
+any container starts, and the hash names this tree. Keep the file in place.

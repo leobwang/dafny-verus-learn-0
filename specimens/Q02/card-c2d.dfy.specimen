@@ -1,0 +1,17 @@
+// Card Q02.C2d (loop invariants), the failure demo: CardInvariant of the exercise file with
+// an invariant that its starting state does not meet. Open it only after your Q02
+// predictions are committed.
+// EXPECT @11 "this loop invariant could not be proved on entry"
+module Q02_CardC2d {
+  method CardInvariant(s: seq<nat>) returns (i: nat)
+    ensures i == |s|
+  {
+    i := 0;
+    while i < |s|
+      invariant 1 <= i <= |s|
+      decreases |s| - i
+    {
+      i := i + 1;
+    }
+  }
+}

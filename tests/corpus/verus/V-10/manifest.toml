@@ -1,0 +1,45 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+# Note: The include! invocation is itself an item outside verus!, so the lint
+#   also reports outside-verus for it.
+id = "V-10"
+lang = "verus"
+half = "Q"
+xclass = "X10"
+kind = "construct"
+title = "include! splices in items the lint never reads (Delta 99)"
+files = ["Cargo.toml", "src/extra_items.rs", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 3, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["include-macro", "outside-verus"]
+output_sha256 = "44aae91c0a5aa1e62f25b3a51631cee9cc3668f4a2bd7ad3a4d851a2b289a305"
+summary = "verdict failed, stage verify, verified 3; include-macro at src/lib.rs:4; outside-verus at src/lib.rs:4; gate conditions missed: 2 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V-10"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["include-macro", "outside-verus"]
+output_sha256 = "6dd03e5ee4fbc0cc26f3af0be135dd2cc70251c405f15098b2592eeceef104f7"
+summary = "2 finding(s): include-macro at src/lib.rs:4; outside-verus at src/lib.rs:4"
+argv = ["scripts/vaudit", "tests/corpus/verus/V-10"]
+exit = 1

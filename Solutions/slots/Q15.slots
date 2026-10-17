@@ -1,0 +1,14 @@
+# Solutions/slots/Q15.slots — the reference verdict answers (author-only). Each was captured on
+# the pinned tools (Solutions/plans/Q15-code-notes.md §2); expected/Q15.pins holds their salted
+# hashes, written by `scripts/pins.py --update --ref --module Q15`.
+P1d = "correct correct"
+P2d = "input gate"
+P3d = "test vaudit"
+P4v = "trust vcheck"
+P5v = "options gate"
+P6dv = "D:fail V:fail"
+P7dv = "D:ok V:ok"
+P8dv = "D:fail V:err:resolve"
+P9dv = "D:err V:err:resolve"
+P10dv = "D:fail V:ok"
+P11dv = "D:err V:ok"

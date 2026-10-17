@@ -1,0 +1,98 @@
+% Q03_answers.tex — YOUR answers to paper/Q03_problems.tex (learner-owned).
+% Fill each answer block; keep every \section* and every \label{ans:B<n>}:
+% /grade-paper keys its notes to those anchors. `make -C paper paper` must
+% stay green.
+%
+% Grader notes arrive in instructor/feedback/Q03_paper.md, one line per
+% finding in this grammar (paper/template_answers.tex explains it):
+%   % GRADER[<B<n>>][<dimension>][<1-4>]: <finding; the failing instance when <= 2>
+% Paste them next to the answer they are about, or read them there.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q03 --- First syntax II: modes, logic, tooling, trust \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+% Work backwards from Q. One line per step; name the rule you apply.
+\textbf{(a)} \\
+Step 1: $\WP{x \assign y - 1}{x \geq 4} = \dots$ \quad by the rule for \dots \\
+Step 2: $\dots$ \quad by the rule for \dots \\
+Step 3: $\dots$ \quad by the rule for \dots \\
+Simplified, over the start value of $x$: $\dots$ \quad (justify each simplification)
+
+\textbf{(b)} Verification condition: $0 \leq x \leq 8 \impl \dots$ \\
+Decision: \dots \\
+Start state and trace (if it fails): \dots
+
+\textbf{(c)} \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} With $I \equiv x \leq n \wedge x + y = n$: \\
+Entry: $\dots$ \quad Decision: \dots \\
+Maintenance ($\WP{S}{I} = \dots$, step by step): $\dots$ \quad Decision: \dots \\
+Use at exit: $\dots$ \quad Decision: \dots \\
+Termination: $\dots$ \quad Decision: \dots
+
+\textbf{(b)} With $I' \equiv x + y = n$: \\
+Entry: \dots \quad Maintenance: \dots \quad Use at exit: \dots \quad Termination: \dots \\
+The condition that fails: \dots \\
+A state that satisfies its hypotheses and violates its conclusion: \dots \\
+Reachable by a run? \dots \\
+What the failure says about the program, and about $I'$: \dots
+
+\textbf{(c)} Verifies? \dots \\
+The fact, and where the verifier gets it: \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (informal-proof-first)}\label{ans:B3}
+\begin{answer}
+\textbf{Statement.} \dots
+
+\textbf{Induction on / decreases measure:} \dots
+
+\textbf{Base:} \dots
+
+\textbf{IH (stated as a formula):} \dots
+
+\textbf{Step} (one paragraph per case of \texttt{AddLimb}): \dots
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement,
+and whether L2 has it\textbf{):} \dots
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones): \dots
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.13, lines 944--967 (the pinned range).
+
+\textbf{Task shape:} \dots
+
+\textbf{Oracle:} \dots
+
+\textbf{What is trusted:} \dots
+
+\textbf{Cheat surface:} \dots
+
+\textbf{Metric:} \dots
+
+\textbf{Budget:} \dots
+
+\textbf{Variance:} \dots
+
+\textbf{Artifact:} \dots
+\end{answer}
+
+\end{document}

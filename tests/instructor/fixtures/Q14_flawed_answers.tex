@@ -1,0 +1,82 @@
+% Q14_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q14_answers.tex (spec §4.7, §6.12). B1 carries one
+% planted flaw; B2 is the clean control. Grade it with the rubric's probes
+% (paper/rubrics/Q14_rubric.md), never by eye.
+%
+% EXPECTED[B1][correctness][2]: C5 is wrongly said to fail (ii), with the witness (-1, -5): condition (ii) holds the trait's precondition fixed, and P_T(-1) is false, so the pair shows nothing. The finding must paste Probe A' with C5 spliced in (PI: x <= 10; QI: x >= 0 ==> y > x) at the pair (-1, -5): FAILED, "the pair does not break (ii)" (captured 2026-10-11), and may paste Probe A on C5, where both lemmas verify (24 verified, 0 errors). Every other claim and witness is right (Probe A on C1-C4; Probe A' passes at x = 0 for C2's (i) and at (2, 2) for C4's (ii)), and (c) is right: no other finding (CO.d; do not count it again under CO.a).
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 2588-2631); Budget and Variance correctly say what the range does not give. No finding on any field.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4.
+% A calibration run FAILS if B1 scores >= 3, if the planted finding does not paste a
+% Probe A' run on C5 at (-1, -5) that fails, or if ANY flaw is reported on B2.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q14 --- Practice II-B \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (concept)}\label{ans:B1}
+\begin{answer}
+$C_1$: (i)? yes \quad (ii)? yes \quad witnesses: none needed; $x \ge 0$
+admits every $x$ from $0$ to $10$, and the postcondition is the trait's. \\
+$C_2$: (i)? no \quad (ii)? yes \quad witnesses: $x = 0$ is admitted by the
+trait and refused by $1 \le x \le 10$. \\
+$C_3$: (i)? yes \quad (ii)? yes \quad witnesses: none needed; $y = x + 1$ is
+more than $x$. \\
+$C_4$: (i)? yes \quad (ii)? no \quad witnesses: $(2, 2)$: $0 \le 2 \le 10$
+and $2 \ge 2$, but $2 > 2$ is false. \\
+$C_5$: (i)? yes \quad (ii)? no \quad witnesses: $(-1, -5)$: $x \ge 0$ is
+false, so $Q_I$ holds, but $-5 > -1$ is false. \\
+\textbf{(c)} Condition (i) protects the call: the client can only show $P_T$
+before calling, so whatever the implementation requires must already follow
+from it. Condition (ii) protects what comes after: the client goes on as if
+$Q_T$ held of the result, so the implementation's postcondition must give it.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 06.9, lines 2588--2631 (the pinned range).
+
+\textbf{Task shape:} An LLM repairs broken proofs in four Isabelle2025-2
+developments: 12 frozen tasks, six historical failures and six controlled
+corruptions, each run under five workflows (one-shot, iterative with a
+diagnostic, proof-body-only with the contract checked first, one-shot with a
+diagnostic, iterative with a delayed diagnostic).
+
+\textbf{Oracle:} A repair counts only if Isabelle builds it and it conforms to
+the task's contract: the protected text outside the editable region is
+byte-for-byte unchanged, the target declaration is still present, and no
+forbidden command (\texttt{sorry}, \texttt{oops}, \texttt{axiomatization},
+\texttt{oracle}) is used.
+
+\textbf{What is trusted:} Isabelle's build and the contract checker, which is
+syntactic and has not been verified.
+
+\textbf{Cheat surface:} Changing the question: a candidate that builds but
+edits protected text is a false success. Six of the 144 candidates Isabelle
+accepted (4.2\%) did so, all from iterative workflows that could edit the whole
+theory.
+
+\textbf{Metric:} Valid repairs out of 36 per workflow (22, 31, 29, 24 and 32
+for C0--C4), false successes (three for C1, three for C4) and tasks solved (10
+or 11); C4 beat C0 on 10 blocks and lost on none ($p = 0.001953$).
+
+\textbf{Budget:} 180 runs in all (12 tasks, 5 workflows, 3 replicates), four
+attempts in C1 and C2, one model at high reasoning effort. The
+range gives no token, time or cost figure.
+
+\textbf{Variance:} Three replicates per task and workflow; the range reports a
+paired test but no interval or spread across replicates, so the run-to-run
+variation itself is not given.
+
+\textbf{Artifact:} CAPRI, the contract check with its audit trail, and the 12
+frozen tasks; the range does not say whether either is released.
+\end{answer}
+
+\end{document}

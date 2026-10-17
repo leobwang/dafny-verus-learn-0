@@ -1,0 +1,75 @@
+# expected/Q05.counts — Δ11 count pins for Q05: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts Q05` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "Q05"
+
+[[unit]]
+path = "dafny/Q/Q05_Frames/std"
+lang = "dafny"
+reference_verified = 66
+min_verified = 21
+symbols = ["Q05_Frames.Ack", "Q05_Frames.AllDigits", "Q05_Frames.BitCount", "Q05_Frames.CmpFast", "Q05_Frames.CountOnes", "Q05_Frames.DecValue", "Q05_Frames.Digit", "Q05_Frames.FirstIsZero", "Q05_Frames.FirstLimb", "Q05_Frames.LimbStack.Pop", "Q05_Frames.LimbStack.Push", "Q05_Frames.LimbStack.Size", "Q05_Frames.LimbStack.Valid", "Q05_Frames.LimbStack._ctor", "Q05_Frames.Meter.Tick", "Q05_Frames.Meter.Valid", "Q05_Frames.Meter._ctor", "Q05_Frames.Ones", "Q05_Frames.ParseDecimal", "Q05_Frames.Triangle", "Q05_Frames.WalkPairs"]
+
+[[unit]]
+path = "verus/q/q05_frames"
+lang = "verus"
+reference_verified = 28
+min_verified = 18
+symbols = ["Counter::bump", "Counter::reset", "LimbStack::new", "LimbStack::try_push", "ack", "bit_count", "count_ones", "dec_value", "digit", "first_is_zero", "first_limb", "get_limb", "mul10_add", "ones", "parse_decimal", "shift_up", "swap_limbs", "walk_pairs"]
+
+[[file]]
+path = "dafny/Q/Q05_Frames/std/Q05_Frames.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 5
+errors = 0
+
+[[file]]
+path = "verus/q/q05_frames/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 4
+errors = 0
+
+[[file]]
+path = "dafny/checks/Q05_checks.dfy"
+role = "check"
+verdict = "verified"
+holes = 0
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q05_Frames/exit/Q05_Exit.dfy"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "verus/q/q05_frames/src/exit.rs"
+role = "exit"
+verdict = "verified"
+holes = 2
+errors = 0
+
+[[file]]
+path = "dafny/Q/Q05_Frames/agent/Q05_AgentInfra.dfy"
+role = "agent"
+verdict = "failed"
+holes = 0
+errors = 1
+
+[[file]]
+path = "verus/q/q05_frames/src/agent.rs"
+role = "agent"
+verdict = "failed"
+holes = 0
+errors = 1

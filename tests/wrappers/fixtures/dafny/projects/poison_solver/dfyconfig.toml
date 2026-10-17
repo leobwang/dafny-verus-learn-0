@@ -1,0 +1,5 @@
+# Wrapper fixture (tests/wrappers): a project that names its own solver (G15, G21).
+includes = ["*.dfy"]
+
+[options]
+solver-path = "/usr/bin/true"

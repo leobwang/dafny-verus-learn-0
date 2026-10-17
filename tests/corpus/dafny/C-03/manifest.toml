@@ -1,0 +1,30 @@
+# Cheat-corpus manifest (Dafny) C-03. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 1 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vcheck --gate: scripts/vcheck --gate main.dfy
+# vaudit: scripts/vaudit main.dfy
+id = "C-03"
+lang = "dafny"
+half = "Q"
+xclass = ""
+kind = "control"
+title = "control: a {:test} method with expect"
+files = ["main.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "clean"
+kinds = ["verdict:verified"]
+output_sha256 = "1d804996410e0f3b536c3640a36114e1eb08fd945004f5f4caa4ceab8cb39aa7"
+summary = "vcheck --gate main.dfy: exit 0, verdict verified, 1 tasks verified, verifier exit 0"
+
+[[expect]]
+tool = "vaudit"
+outcome = "clean"
+kinds = []
+output_sha256 = "6de70d7a03408d901877a49ccb9e32e09fa9721900e54c57216e787483de70fc"
+summary = "vaudit main.dfy: exit 0, 0 findings (dafny audit and the learner lint clean)"

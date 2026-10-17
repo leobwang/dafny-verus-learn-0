@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./Solutions/**)",
+      "Read(./paper/solutions/**)",
+      "Read(./tests/instructor/leak_patterns/**)",
+      "Read(~/.cache/dafny-verus-learn-0/**)",
+      "Read(~/.claude/projects/*/*.jsonl)",
+      "Read(~/.claude/file-history/**)",
+      "Read(~/.claude/history.jsonl)",
+      "Skill(skill:local-assistant)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^(Read|Grep|Glob|Bash|PowerShell|Monitor|Workflow|ScheduleWakeup|Edit|Write|MultiEdit|NotebookEdit|LSP|Skill|WebFetch|WebSearch|mcp__firecrawl__firecrawl_parse|mcp__vcheck__.*|mcp__(dafny|verus).*|mcp__plugin_.*(dafny|verus|vcheck).*__.*)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/spoiler-guard.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/review-due.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

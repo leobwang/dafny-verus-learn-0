@@ -1,0 +1,40 @@
+# expected/Q13.freeze — statement-freeze pins for Q13 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q13` from the files as shipped; checked by
+# `scripts/specfreeze --check Q13`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q13"
+unfrozen = ["dafny/Q/Q13_PracticeIIA/exit/Q13_Exit.dfy"]
+
+[[file]]
+path = "dafny/Q/Q13_PracticeIIA/std/Q13_PracticeIIA.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["module Q13_Library {:disableNonlinearArithmetic}"]
+[file.statements]
+"Q13_Library.RepeatValue" = "7910353c485d9016b10ce9a0e5858f00f82883b0fc6993c94c95eb53ab4d8a7f"
+"Q13_Library.ValueLoop" = "e847844b97aa052682ab378237d5cff1959362fe9700fb6cf553e31f20d33b75"
+"Q13_Library.ValueLoopCheck" = "888b7737675fafbe14b950a74ff5345d049ef9229ef768d27ba8501493b80e0d"
+"Q13_PracticeIIA.NormalizeConcat" = "89cac6cefb4ecdb7cc331f7f743da94b9e425ad15c00e4d1e84cac96fd0fb834"
+"Q13_PracticeIIA.NormalizeConcatCheck" = "fa69eddfe7f753289a1c7dea1d96d31e9291c38b4ae9beb1412bb39d7705849a"
+
+[[file]]
+path = "verus/q/q13_practice_iia/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_repeat_value" = "5c31ec5f9340bc73005263ca98cf93081bddd25d506f19de5f8ae7f1708ba147"
+"prose_use_site" = "f4a4436a15d0e756fa016a080cd44bea3a6b6e83ef1242625c63aca227d4b2e4"
+"prose_witness" = "e118de52c7530a864a32423b156e5b761721377c93c51103213250e865308a7a"
+"sub" = "c69e1776bdb84237f58e102747eca72aac51749010253cb5bbe4bf789f092512"
+"sub_check" = "9d363fd2bb61bc202af9f2f735b86939a7b292ff6ea01774daf9d08e13e208ac"
+
+[[file]]
+path = "verus/q/q13_practice_iia/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_value_below_top" = "7bfb35e205285271e52d3585d5ba9196c47fb8dd16c7db9b92fff0903b70326a"

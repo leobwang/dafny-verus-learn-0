@@ -1,0 +1,84 @@
+# expected/Q18.freeze — statement-freeze pins for Q18 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q18` from the files as shipped; checked by
+# `scripts/specfreeze --check Q18`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q18"
+unfrozen = ["dafny/Q/Q18_PracticeIIIC/agent/Q18_AgentCapstone.dfy", "verus/q/q18_practice_iiic/src/agent.rs"]
+
+[[file]]
+path = "dafny/Q/Q18_PracticeIIIC/std/Q18_PracticeIIIC.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q18_PracticeIIIC.CastOut" = "f13d1e40bffa1b4b9cb0d4b1513a308a8adf4febac12a709697ee1279c3997dd"
+"Q18_PracticeIIIC.DigitSum" = "548fd0e02313397c974e75b3b3ea0487b263e389aee58f65f47b429e05da9efe"
+
+[[file]]
+path = "verus/q/q18_practice_iiic/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"cast_out" = "82117d2f97882b08ac4d78b0300c847e3b945c467fa772df11122fca12f947f5"
+
+[[file]]
+path = "specimens/Q18/P1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q18_P1.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q18_P1.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q18_P1.ToNatOneLimb" = "50479dd65bd036060ffc5fccadb8bec56e94096d10ca1ed684656b51def723fe"
+"Q18_P1.ToNatTwoLimbs" = "72882866b5c1852a19f0afbbf007248f3f8728ad7505f18d1bdc7ec3a91beb95"
+
+[[file]]
+path = "specimens/Q18/P2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q18_P2Helpers.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q18_P2Helpers.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q18_P2Helpers.ToNatPushTop" = "48b3db818f4fb2052c5e0f455c696369a85b5ce72fb950dc628952cc4761dbbf"
+
+[[file]]
+path = "specimens/Q18/P3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"BASE" = "21f29ef75786729343bca528072ffb0dad68a9737345af3587a074c44c8ac7ef"
+"low_word" = "6f71f53ae3ac914674c73e2f58cdb4de0654c41e074bf67b6709a9ec97c501d2"
+"seq_to_nat" = "8d3b632591b944b3d636183c724cadf5b67a3218fa6c0407c6dd0094e65ce431"
+
+[[file]]
+path = "specimens/Q18/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"BASE" = "21f29ef75786729343bca528072ffb0dad68a9737345af3587a074c44c8ac7ef"
+"seq_to_nat" = "8d3b632591b944b3d636183c724cadf5b67a3218fa6c0407c6dd0094e65ce431"
+"top_word" = "9987b8f157952cb669ed1d28522b46b40c5745e93438e05a057a8dfc14ec33bd"
+
+[[file]]
+path = "harness/q/fvh_q/gate/gate_v2.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"CrateTarget" = "304c726fe89b41ded9844991d1b25b4159e2ce678a5a5f4423c74fbf9545b1bd"
+"FPReport" = "3049140baac296ea2876f6b28683150771638a6461bc35d3032d39ec70f02e22"
+"Finding" = "a8c78f446a7cc638c3187710aaa396f576af13ae700ae17df821c465eace8d64"
+"GateResult" = "5909d73cc9b8ab129a1d70259e8db9c1e081dcf495f40d4ebb5a907c7e0276b7"
+"GateVerdict" = "af007d98a01dee48281ff8de4ae8d02f4a2a3b6b7acc21bddd8aa0f6133bc618"
+"Label" = "5536d62ca804d4e4c18b3a0d9c4a75c1fabb79e89defe82f547e42bf4eaa2678"
+"Pins" = "4a20a55a2152faf518d34b2498d4e1d8633c337960685b3e19104404a771c9b9"
+"Spread" = "12c0def3b5f77ee75913453a894b4c98a3490083633e72f8205afaaac4d2edf1"
+"complete_and_counted" = "6e9d62b0ccbac528de2c3004490f647db50b14ac029549175efa338f882f9555"
+"fp_report" = "f473a71ddd450ce171f815964db51b48234f1f84d88921d3dd2ccb05aebab83d"
+"gate_crate" = "1a144f9911e526d68497917a4f40542eda4f94181f2e8f70523e3398dc4a65a4"
+"load_set" = "0d3cd47e9df3432eaa51df610fd0d0714c9eafa96dcad6f319a50fe8aaf8fab9"
+"main" = "6966159873995dcab0d79301472f2e9946e21597e514dfd6155ea02e67a62f7e"
+"option_findings" = "d7cdc228c247a35f15f686554c8f644cdc639cbbe4ffe1c23a9cd935baf1190b"
+"render" = "a6fdb8ed4d72e0095b5c9c1c202911c9e726567490ed2416e00d1d14484356de"
+"seed_spread" = "d037163ee762ceef0e72d02655127cd9e97acbc99fcc5b190dd7268ebcc97207"

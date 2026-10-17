@@ -1,0 +1,88 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/D-09/main.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/D-09/main.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D01",
+    "col": 15,
+    "file": "<root>/tests/corpus/dafny/D-09/main.dfy",
+    "line": 4,
+    "message": "This ensures clause is part of a bodyless method. Add the {:axiom} attribute to it or the enclosing method to suppress this warning",
+    "severity": "warning"
+   },
+   {
+    "code": "W-D01",
+    "col": 15,
+    "file": "<root>/tests/corpus/dafny/D-09/main.dfy",
+    "line": 5,
+    "message": "This ensures clause is part of a bodyless method. Add the {:axiom} attribute to it or the enclosing method to suppress this warning",
+    "severity": "warning"
+   }
+  ],
+  "exit_code": 2,
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/D-09/main.dfy",
+    "kind": "warnings-fail-gate",
+    "line": 0,
+    "message": "warnings fail the gate (W-D04): holes and every other warning must be gone"
+   }
+  ],
+  "holes": [
+   {
+    "col": 15,
+    "file": "<root>/tests/corpus/dafny/D-09/main.dfy",
+    "kind": "bodyless-method",
+    "label": "CorpusD09.Bounds",
+    "line": 4
+   },
+   {
+    "col": 15,
+    "file": "<root>/tests/corpus/dafny/D-09/main.dfy",
+    "kind": "bodyless-method",
+    "label": "CorpusD09.Bounds",
+    "line": 5
+   }
+  ],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusD09.Positive": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/D-09/main.dfy",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "3fe5efed728cf93cbbb769633f3966cb46c2105667ebbfd0f5f45aa63d9693c0",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-09/main.dfy"
+}

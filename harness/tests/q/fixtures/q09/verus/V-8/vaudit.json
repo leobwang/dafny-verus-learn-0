@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/verus/V-8"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V-8/src/lib.rs",
+    "kind": "hole-external-trait-specification",
+    "line": 12,
+    "message": "an external_trait_specification hole (in ExFromStr::from_str) not on the trust allowlist"
+   }
+  ],
+  "lang": "verus",
+  "target": "<root>/tests/corpus/verus/V-8"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "85be3120f67adc088e753281f65a7be14d80d5c147a237b0e103c86f889e6182",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V-8"
+}

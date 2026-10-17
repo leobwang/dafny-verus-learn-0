@@ -1,0 +1,61 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "harness/tests/q/fixtures/q12/battery/verus/V4/c3.rs"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/harness/tests/q/fixtures/q12/battery/verus/V4/c3.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "c3",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "E0425",
+    "col": 5,
+    "file": "<root>/harness/tests/q/fixtures/q12/battery/verus/V4/c3.rs",
+    "line": 25,
+    "message": "cannot find function `lemma_count_zeros_cons` in this scope",
+    "severity": "error"
+   },
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, Δ11); exit 1",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 1,
+  "findings": [],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {},
+  "raw_dir": "<scratch>",
+  "stage": "resolve",
+  "target": "<root>/harness/tests/q/fixtures/q12/battery/verus/V4/c3.rs",
+  "verdict": "failed",
+  "verified_count": 0
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "e5fea05573de7832bae78b007ab753005d0cb5d51ac96d329672822f465c38c0",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q12/battery/verus/V4/c3.rs"
+}

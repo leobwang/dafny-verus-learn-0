@@ -1,0 +1,100 @@
+// item: Q05.P5v S6 obligation
+// **P5v.** What a caller learns through `&mut self` (Reference Solution: [b] fails.
+// On `Err` the contract keeps only the invariant and the limit, so the verifier knows
+// nothing about `s@` after the call; a caller learns about `*self` exactly what the
+// postcondition says. [a] holds: `t` is not passed to the call. [c] holds by the limit
+// clause, [d] by the invariant and the limit clause.) `Bounded` below is a container the
+// module owns; its `maybe_push` is declared by its contract only (`external_body`, so
+// `scripts/vcheck` lists it as a hole; at a call the verifier uses the contract only),
+// and the contract promises the push only on `Ok`. Each client fn calls `maybe_push` and
+// then asserts one fact, on the line labelled `// [x]`: [a] another container is
+// unchanged; [b] the same container is unchanged after an `Err`; [c] its limit is
+// unchanged; [d] its length is within the limit.
+// Which labelled assertions does the verifier fail to prove? Answer form: `FAILS`
+// followed by the failing labels in label order, separated by single spaces, or
+// `FAILS none`.
+// FAILS b
+#![allow(unused_imports)]
+use vstd::prelude::*;
+
+verus! {
+
+pub struct Rejected;
+
+pub struct Bounded {
+    pub items: Vec<u64>,
+    pub limit: usize,
+}
+
+impl View for Bounded {
+    type V = Seq<u64>;
+
+    open spec fn view(&self) -> Seq<u64> {
+        self.items@
+    }
+}
+
+impl Bounded {
+    pub open spec fn inv(&self) -> bool {
+        self.items@.len() <= self.limit
+    }
+
+    pub fn new(limit: usize) -> (r: Self)
+        ensures
+            r.inv(),
+            r@ == Seq::<u64>::empty(),
+            r.limit == limit,
+    {
+        Bounded { items: Vec::new(), limit }
+    }
+
+    // reference body (the learner's specimen declares the contract only; a caller sees the
+    // contract either way, so the labels fail alike)
+    pub fn maybe_push(&mut self, x: u64) -> (r: Result<(), Rejected>)
+        requires
+            old(self).inv(),
+        ensures
+            final(self).inv(),
+            final(self).limit == old(self).limit,
+            r is Ok ==> final(self)@ == old(self)@.push(x),
+    {
+        if self.items.len() < self.limit {
+            self.items.push(x);
+            Ok(())
+        } else {
+            Err(Rejected)
+        }
+    }
+}
+
+pub fn other_unchanged() {
+    let mut s = Bounded::new(0);
+    let t = Bounded::new(4);
+    let _ = s.maybe_push(1);
+    assert(t@ == Seq::<u64>::empty());  // [a]
+}
+
+pub fn same_unchanged_on_err() {
+    let mut s = Bounded::new(4);
+    let r = s.maybe_push(1);
+    match r {
+        Err(_) => {
+            assert(s@ == Seq::<u64>::empty());  // [b]
+        },
+        Ok(_) => {},
+    }
+}
+
+pub fn limit_unchanged() {
+    let mut s = Bounded::new(2);
+    let _ = s.maybe_push(1);
+    assert(s.limit == 2);  // [c]
+}
+
+pub fn length_bounded() {
+    let mut s = Bounded::new(2);
+    let _ = s.maybe_push(1);
+    assert(s@.len() <= 2);  // [d]
+}
+
+} // verus!

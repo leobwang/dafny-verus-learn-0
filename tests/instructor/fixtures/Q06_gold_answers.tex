@@ -1,0 +1,158 @@
+% Q06_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q06_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the wording, the precision, the order of the arguments and the card's
+% field order are deliberately far from the reference, so the grader must recognise
+% correctness by substance (the rubric's probes), not by matching text. B1 carries four
+% decimals and cross-checks with the count form of the Wilson interval; B2 counts the
+% all-failing pairs in words; B4 sums the other tail; B5 orders its fields differently.
+%
+% EXPECTED[B1][recomputation][4]: correct; every row of Probe A, filled with these numbers, reads ok, and the (c) line shows a width ratio of 0.507 at factor 4. No finding.
+% EXPECTED[B2][recomputation][4]: correct; every row of Probe B reads ok. No finding.
+% EXPECTED[B3][correctness][4]: correct; Probe C's rows read ok, and (b) names the unit, the dependence of retries and the effect on n. No finding.
+% EXPECTED[B4][recomputation][4]: correct; every row of Probe D reads ok (the upper-tail sum equals the lower-tail sum by symmetry). No finding.
+% EXPECTED[B5][card-fidelity][4]: every field agrees with the pinned range (lines 672–699); Oracle correctly says the range does not spell out the success predicate beyond "proves"; Variance computes no interval it attributes to the card. No finding on any field.
+% Expected per-problem grades: B1 = 4, B2 = 4, B3 = 4, B4 = 4, B5 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any problem scores <= 2 or if any finding claims a wrong step,
+% a wrong count or a contradiction with the range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q06 --- The machine and the verifier loop \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (hand-calculation)}\label{ans:B1}
+\begin{answer}
+\textbf{(a)} With $z^2 = 1.96^2 = 3.8416$: \\
+$\hat p = 17/20 = 0.85$. \\
+$z^2/n = 0.19208$, so the denominator is $1.19208$. \\
+centre: $(0.85 + 3.8416/40)/1.19208 = 0.94604/1.19208 = 0.7936$. \\
+under the root: $0.85 \cdot 0.15/20 + 3.8416/(4 \cdot 400) = 0.006375 + 0.0024010
+= 0.008776$; $\sqrt{0.008776} = 0.093680$. \\
+half-width: $1.96 \cdot 0.093680/1.19208 = 0.18361/1.19208 = 0.1540$. \\
+interval: $(0.6396,\ 0.9476)$ \quad width: $0.3080$. \\
+Cross-check in counts: centre $= (17 + z^2/2)/(20 + z^2) = 18.9208/23.8416 = 0.7936$,
+the same.
+
+\textbf{(b)} Wald: $0.85 \pm 1.96 \cdot 0.079844 = 0.85 \pm 0.1565 = (0.6935,\ 1.0065)$. \\
+The property it breaks: an interval for a proportion has to stay inside
+$[0, 1]$, and this one ends at $1.0065$. \\
+How its shape differs from Wilson's: Wald is centred on $\hat p$ itself; the
+Wilson interval is lopsided around $\hat p$ (it reaches $0.21$ below and only
+$0.10$ above), its centre moved toward one half.
+
+\textbf{(c)} Factor: four, i.e.\ about 80 goals at the same rate \quad because the
+width is essentially $2z\sqrt{\hat p(1-\hat p)/n}$, which scales with
+$1/\sqrt{n}$; the correction terms in $z^2/n$ only shrink as $n$ grows.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (hand-calculation)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} There are $\binom{5}{2} = 10$ ways to pick two of the five samples;
+pass@2 is one minus the share of those pairs in which both samples fail. \\
+t3 ($c = 4$): only one sample fails, so no pair fails: $\binom{1}{2} = 0$ and
+pass@2 $= 1 - 0/10 = 1$. \\
+t2 ($c = 2$): three samples fail, $\binom{3}{2} = 3$ failing pairs:
+pass@2 $= 1 - 3/10 = 0.7$. \\
+t1 ($c = 0$): every pair fails, $\binom{5}{2} = 10$: pass@2 $= 1 - 10/10 = 0$.
+
+\textbf{(b)} pass@2 $= (1 + 0.7 + 0)/3 = 1.7/3 = 0.5667$ \quad pass@1 is each task's
+share of successful samples, averaged: $(0.8 + 0.4 + 0)/3 = 0.4$
+
+\textbf{(c)} Plug-in for t2: $1 - 0.6^2 = 0.64$ \quad above or below: below
+($0.64 < 0.7$). \\
+What the plug-in assumes: it treats $0.4$ as the true success rate and the two
+attempts as fresh independent draws (so the same failing sample could be drawn
+twice); the estimator only picks two different samples out of the five that
+were actually run.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (concept)}\label{ans:B3}
+\begin{answer}
+\textbf{(a)} Pass rate: one success among four first attempts, $0.25$ \quad
+successes among all records: $3$ of $9$, $0.333$ \quad tasks solved at some
+attempt: $3$ of $4$, $0.75$.
+
+\textbf{(b)} What we want to estimate is a property of the prover on a
+population of tasks, so the sample is the four tasks, not the nine rows. Rows
+of one task are correlated (same task), and the policy creates them: a task
+gets a second and third row only by failing, so the number of rows per task
+depends on the outcome, and the 3/9 figure would change with the retry cap
+alone. The 3/4 figure is solving within a budget of three tries, which is
+another metric. Using all nine rows as $n$ pretends to have more independent
+evidence than four tasks give, and the interval comes out too narrow.
+
+\textbf{(c)} It must say how many attempts were allowed (3), whether a retry
+used the earlier failure's feedback or was a fresh sample, how many tasks were
+run, and what counted as solved; otherwise it matches neither a first-attempt
+pass rate nor pass@3.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (hand-calculation)}\label{ans:B4}
+\begin{answer}
+\textbf{(a)} Pass rates: A solves $14 + 1 = 15$, so $0.5$; B solves $14 + 10 = 24$,
+so $0.8$ \\
+The informative tasks: the 11 where exactly one prover succeeded; the
+concordant 19 cannot favour either. \quad $b = 1$, $c = 10$
+
+\textbf{(b)} With $X \sim \mathrm{Binomial}(11, 1/2)$, by symmetry I sum the
+upper tail: $P(X \geq 10) = \bigl(\binom{11}{10} + \binom{11}{11}\bigr)/2^{11}
+= (11 + 1)/2048 = 12/2048$, which equals $P(X \leq 1)$. Two-sided:
+$p = 2 \cdot 12/2048 = 24/2048 = 0.0117$. \\
+Decision at $\alpha = 0.05$: $0.0117 < 0.05$; the data reject equal
+performance, in B's favour.
+
+\textbf{(c)} In (a): the totals become 156 tasks, A $141/156 = 0.904$ and B
+$150/156 = 0.962$, a gap of under six points. \quad In (b): unchanged,
+$p = 0.0117$; the test sees only $b$ and $c$.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.4, lines 672--699 (the pinned range).
+
+\textbf{Artifact:} the benchmark VeruSAGE-Bench (849 Verus proof tasks taken
+from 8 verified Rust systems) and the engineered VeruSAGE agent; of the eight
+systems only Atmosphere is safely held out.
+
+\textbf{Task shape:} prove one function: the task file holds the function with
+its spec unchanged, the types, spec functions and the signatures it depends on,
+and no proof bodies, which the agent writes. Files are long (947 lines on
+average, 496 of spec) with 2.4 helper lemmas and almost no loops.
+
+\textbf{Metric:} percentage of the 849 tasks proved. Hands-off vs hands-on:
+o4-mini 17 vs 41, GPT-5 50 vs 55, Sonnet 4 64 vs 58, Sonnet 4.5 81 vs 67;
+AutoVerus 20. Side results: 83\,\% of Atmosphere, 16 of 17 tasks when starting
+from partial human proofs (6 of 17 from scratch), and LLM proofs about 24 lines
+at the median against 9 for people.
+
+\textbf{Oracle:} Verus accepting the proof with the spec unchanged, plus a
+cheat check by \texttt{verus-checker}; the range does not say more about the
+success criterion than that a task is ``proved''.
+
+\textbf{Cheat surface:} touching the spec, or proving nothing in a way the
+verifier accepts; without the checker up to 14\,\% of results cheated, with it
+under 1.5\,\%. The specs themselves are given and taken as correct.
+
+\textbf{What is trusted:} the Verus toolchain and solver with \texttt{vstd};
+the given specs and signatures (5 spec bugs turned up on Atmosphere, so this
+trust is not free); the \texttt{verus log-all} extraction; the cheat checker.
+
+\textbf{Budget:} hands-on: until verified, 20 minutes or 20 steps. Hands-off:
+the range gives only Sonnet 4.5's cost, 7.2 minutes and USD 5.61 per task, and
+no cap. The two settings differ in both harness and budget.
+
+\textbf{Variance:} nothing: they seem to be single runs, so there is no
+repeat-to-repeat spread, no seeds and no interval; and the hands-off/hands-on
+gap mixes two changes at once.
+\end{answer}
+
+\end{document}

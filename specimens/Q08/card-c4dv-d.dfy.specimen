@@ -1,0 +1,41 @@
+// Demo for card Q08.C4dv (divergence), the Dafny column. Open it only after every
+// prediction of Q08 is recorded (scripts/firsttry.sh Q08 --check). A Dafny specimen is
+// verified alone, with no layer, so the refinement here is of a small module of its own,
+// whose lemmas have no bodies (each is counted as a hole in the output).
+// after: Q08.P1dv
+// after: Q08.P3d
+module Q08_CardC4Base {
+  lemma Below(x: nat)
+    requires x < 10
+    ensures x < 20
+
+  lemma Narrow(x: nat)
+    requires x < 10
+    ensures x < 20
+
+  lemma Twice(x: nat)
+    ensures x + x == 2 * x
+}
+
+module Q08_CardC4d refines Q08_CardC4Base {
+  // [1] the refining lemma adds a postcondition
+  lemma Below(x: nat)
+    ensures x < 15
+  {
+  }
+
+  // [2] the refining lemma adds a precondition
+  lemma Narrow(x: nat)
+    requires x < 5
+  {
+  }
+
+  // [3] the refining lemma gives itself a termination measure and recurses
+  lemma Twice(x: nat)
+    decreases x
+  {
+    if x > 0 {
+      Twice(x - 1);
+    }
+  }
+}

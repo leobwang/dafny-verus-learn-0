@@ -1,0 +1,71 @@
+% Q13_problems.tex — the written problems of Q13 (Practice II-A). Built by
+% `make -C paper paper` with Q13_answers.tex. B1 (a specification's soundness
+% and completeness, a concept question) and B2 (the paper card) are the
+% module's written pair: 15 minutes, after the chapter's §2 and before H3v.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q13 --- Practice II-A \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q13\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: after the chapter, before H3v, the prose item (15 minutes in all).
+Answer B1 without running anything: the grader runs the checks. Then run
+\texttt{/grade-paper Q13} in a fresh session. Compare with
+\texttt{paper/solutions/} only as the module's last step.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B1}
+\textbf{Sound, complete, both or neither} (5 minutes). The function
+\dfy{Ramp(x: int): int} returns $0$ for a negative \dfy{x} and \dfy{x}
+otherwise; its reference postcondition is
+\[ Q(x, y) \;\equiv\; y = (\textbf{if } x < 0 \textbf{ then } 0 \textbf{ else } x). \]
+Card 05.5 calls a candidate postcondition $\hat Q$ \emph{sound} when
+$\hat Q(x, y) \Rightarrow Q(x, y)$ for all $x, y$ (every output it allows is
+the reference's), and \emph{complete} when $Q(x, y) \Rightarrow \hat Q(x, y)$
+for all $x, y$ (it allows every reference output); the precondition is
+\textsf{true}. Five candidates:
+\begin{enumerate}
+\item[$Q_1$] $y \ge 0$
+\item[$Q_2$] $y \ge 0 \wedge y \ge x$
+\item[$Q_3$] $y = x \vee y = 0$
+\item[$Q_4$] $(x < 0 \Rightarrow y = 0) \wedge (x \ge 0 \Rightarrow y = x)$
+\item[$Q_5$] $y = x$
+\end{enumerate}
+For each: \textbf{(a)} sound? complete? \textbf{(b)} for every property it
+lacks, a concrete pair $(x, y)$ that shows it. \textbf{(c)} In one line: which
+of the five would a client of \dfy{Ramp} prefer, and which would its
+implementer find easiest to prove, and why are those different?
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B2}
+\textbf{Paper card 05.5, VERINA: Benchmarking Verifiable Code Generation}
+(10 minutes). Fill the card on its eight fields: task shape, oracle, what is
+trusted, cheat surface, metric, budget, variance, artifact. Each field is
+graded against the pinned range of your own \texttt{cheatsheets.md}: lines
+2005--2031, the entry from its heading to its \emph{Why it matters}
+paragraph, in the copy the command below names. The pin is the sha256 of
+exactly those lines, computed with the first line below; it must print the
+second.
+{\small
+\begin{verbatim}
+sed -n '2005,2031p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+6c9b00d83e072910f2c5c6a2a298646045a89ffae04a90bdc0821436413f67f0  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

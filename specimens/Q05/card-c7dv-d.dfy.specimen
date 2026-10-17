@@ -1,0 +1,21 @@
+// Demo for card Q05.C7dv (divergence), the Dafny column. Open it only after every
+// prediction of Q05 is recorded (scripts/firsttry.sh Q05 --check).
+// after: Q05.P3dv
+module Q05_CardC7d {
+  class Tagged {
+    var x: nat
+    ghost var Shadow: seq<nat>
+
+    constructor ()
+      ensures x == 0 && Shadow == []
+    {
+      x := 0;
+      Shadow := [];
+    }
+  }
+
+  method ShadowLength(t: Tagged) returns (n: nat)
+  {
+    n := |t.Shadow|;
+  }
+}

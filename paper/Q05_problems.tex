@@ -1,0 +1,275 @@
+% Q05_problems.tex — the written problems of Q05 (Frames, ownership, modes,
+% wp→VC). Built by `make -C paper paper` with Q05_answers.tex.
+% B1 and B2 are the wp→VC lab (the verification conditions of calls and of a
+% loop whose body makes the call, by hand, 20 minutes); B3 (a blueprint) and
+% B4 (the paper card) are the module's written pair (15 minutes).
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q05 --- Frames, ownership, modes, wp$\to$VC \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q05\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B1 and B2 after chapter section~3 (the wp$\to$VC lab, 20 minutes);
+B3 and B4 before you start the holes (15 minutes). Write B3 \emph{before} you
+open the hints under H4d and H4v in the exercise files. Then run
+\texttt{/grade-paper Q05} in a fresh session. Once H4d verifies,
+\verb+/grade-paper Q05 --post+ re-scores B3's blueprint against your own
+proof.
+
+Hand calculations are graded step by step: write every step, and name the rule
+it uses. Derive first; check with the verifier afterwards, as chapter
+section~3 does. Compare with \texttt{paper/solutions/} only as the module's
+last step.
+
+Notation, as in chapter section~3: $\WP{c}{Q}$ is the weakest precondition of
+program $c$ for postcondition $Q$, and $\subst{Q}{x}{e}$ is $Q$ with $e$
+substituted for $x$. For an array \dfy{a} of length $L$, write $s$ for its
+contents when the method starts (what \dfy{old(a[k])} reads is $s[k]$) and
+$c, c', \ldots$ for its contents at later points. \textbf{The call rule.} For a
+callee with precondition $P$, frame $W$ and postcondition $Q$, and a call
+\dfy{x := M(e)} made when the frame's contents are $c$:
+\[
+  \WP{x \assign M(e)}{R} \;=\; P(e, c) \;\wedge\;
+  \forall c', x' .\; Q(e, c, c', x') \impl \subst{R}{x, c}{x', c'}
+\]
+where $c'$ ranges over the contents the callee may leave in $W$ (everything
+outside $W$ is unchanged, so it stays as it was in $R$) and $x'$ over its
+results. The callee's body is never consulted.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+\textbf{The verification condition of two calls} (10 minutes). The callee
+takes one limb out of an array and leaves a zero in its place; the caller
+takes out both limbs of a two-limb array and adds them up:
+\begin{dafnycode}
+method Drain(a: array<nat>, i: nat) returns (x: nat)
+  requires i < a.Length
+  modifies a
+  ensures x == old(a[i]) && a[i] == 0
+  ensures forall j | 0 <= j < a.Length && j != i :: a[j] == old(a[j])
+{
+  x := a[i];
+  a[i] := 0;
+}
+
+method Collect(a: array<nat>) returns (t: nat)
+  requires a.Length == 2
+  modifies a
+  ensures t == old(a[0]) + old(a[1]) && a[0] == 0 && a[1] == 0
+{
+  var x := Drain(a, 0);
+  var y := Drain(a, 1);
+  t := x + y;
+}
+\end{dafnycode}
+\begin{veruscode}
+fn drain(v: &mut Vec<u64>, i: usize) -> (x: u64)
+    requires
+        i < old(v).len(),
+    ensures
+        x == old(v)@[i as int],
+        final(v)@[i as int] == 0,
+        final(v)@.len() == old(v)@.len(),
+        forall|j: int|
+            0 <= j < old(v)@.len() && j != i ==> final(v)@[j] == old(v)@[j],
+{
+    let x = v[i];
+    v.set(i, 0);
+    x
+}
+
+fn collect(v: &mut Vec<u64>) -> (t: u64)
+    requires
+        old(v)@.len() == 2,
+        old(v)@[0] < 1000,
+        old(v)@[1] < 1000,
+    ensures
+        t == old(v)@[0] + old(v)@[1],
+        final(v)@[0] == 0,
+        final(v)@[1] == 0,
+{
+    let x = drain(v, 0);
+    let y = drain(v, 1);
+    x + y
+}
+\end{veruscode}
+Work with the Dafny version in (a) and (b): $L$ is \dfy{a.Length}, $s$ the
+contents at the start of \dfy{Collect}, and $R \equiv t = s[0] + s[1] \wedge
+c[0] = 0 \wedge c[1] = 0$ the postcondition over the final contents $c$.
+\begin{enumerate}
+\item[(a)] Compute $\WP{\mathit{body}}{R}$ backwards, one statement at a time,
+  naming the rule at each step (assignment, call, sequence). After each call
+  step, simplify: say which hypothesis of the call rule fixes which value, and
+  justify each simplification. Give the result as a formula over $L$ and $s$.
+\item[(b)] State the verification condition (the precondition implies your
+  wp) and decide it. Then delete \dfy{Drain}'s second \dfy{ensures}, the frame
+  postcondition, and redo the last step that changes. Which conjuncts of $R$
+  can no longer be proved? For each, exhibit start contents $s$ and the
+  contents and results after each call that the weakened contract allows, on
+  which it fails. Can a run of the program end that way? What does the
+  failure say, and about what?
+\item[(c)] In the Verus version: what plays the role of \dfy{modifies a}? The
+  Verus caller's verification condition has one obligation that the Dafny
+  caller's has not: which, and which parts of the two contracts discharge it?
+  With \vrs{drain}'s \vrs{forall} clause deleted, which obligations of
+  \vrs{collect} fail?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B2}
+\textbf{Verification conditions of a loop whose body makes the call} (10
+minutes). With \dfy{Drain} as in B1, a loop drains every limb:
+\begin{dafnycode}
+method DrainAll(a: array<nat>)
+  modifies a
+  ensures forall j | 0 <= j < a.Length :: a[j] == 0
+{
+  var i := 0;
+  while i < a.Length
+    invariant 0 <= i <= a.Length
+    invariant forall j | 0 <= j < i :: a[j] == 0
+    decreases a.Length - i
+  {
+    var x := Drain(a, i);
+    i := i + 1;
+  }
+}
+\end{dafnycode}
+\begin{veruscode}
+fn drain_all(v: &mut Vec<u64>)
+    ensures
+        forall|j: int| 0 <= j < final(v)@.len() ==> final(v)@[j] == 0,
+{
+    let mut i: usize = 0;
+    while i < v.len()
+        invariant
+            i <= v.len(),
+            forall|j: int| 0 <= j < i ==> v@[j] == 0,
+        decreases v.len() - i,
+    {
+        let x = drain(v, i);
+        i = i + 1;
+    }
+}
+\end{veruscode}
+Work with the Dafny version in (a) and (b). Write $I$ for the invariant,
+$b$ for the guard $i < L$, $S$ for the body and $c$ for the contents of
+\dfy{a} at the start of an iteration.
+\begin{enumerate}
+\item[(a)] Write the four verification conditions of the loop as formulas:
+  \emph{entry}, \emph{maintenance} ($I \wedge b \impl \WP{S}{I}$, with
+  $\WP{S}{I}$ computed by the assignment rule and then the call rule of B1),
+  \emph{use at exit} and \emph{termination} (the measure is bounded below while
+  the loop runs, and $S$ decreases it). Decide each with a one-line argument.
+\item[(b)] Delete \dfy{Drain}'s frame postcondition again and redo the four
+  conditions. Which one fails? Exhibit a state and a call outcome that satisfy
+  its hypotheses and violate its conclusion. Can a run reach it? Could a
+  stronger invariant repair the loop? Say what the failure is about, and
+  contrast it with Q03's B2, where a weakened invariant failed.
+\item[(c)] In the Verus version, delete \vrs{drain}'s line
+  \vrs{final(v)@.len() == old(v)@.len()} (keep its \vrs{forall} clause). Which
+  conditions of \vrs{drain_all}'s loop fail now? Why does the Dafny \dfy{Drain}
+  need no such line?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[informal-proof-first]\label{prob:B3}
+\textbf{A blueprint for H4d and H4v} (7 minutes). Write the informal proof
+that the loop below meets its postcondition \emph{before} you formalize it,
+and before you read the hints under H4d and H4v in the exercise files. The
+definitions and the code are those of the Dafny exercise file:
+\begin{dafnycode}
+function BitCount(x: nat): nat
+  decreases x
+{
+  if x == 0 then 0 else x % 2 + BitCount(x / 2)
+}
+
+function Ones(s: seq<nat>): nat
+  decreases |s|
+{
+  if |s| == 0 then 0 else BitCount(s[0]) + Ones(s[1..])
+}
+
+method CountOnes(s: seq<nat>) returns (c: nat)
+  ensures c == Ones(s)
+{
+  var i := 0;
+  var x := 0;
+  c := 0;
+  while x > 0 || i < |s|
+    // the loop invariants and the decreases go here
+  {
+    if x > 0 {
+      c := c + x % 2;
+      x := x / 2;
+    } else {
+      assert s[i..][1..] == s[i + 1..];
+      x := s[i];
+      i := i + 1;
+    }
+  }
+}
+\end{dafnycode}
+State the loop invariant as a formula and the measure, then argue the four
+conditions of B2: entry; maintenance, one case per branch of the body; use at
+exit; termination, one case per branch, with the bound below. Name every
+helper fact by its statement: an unfolding of a definition, the assertion the
+code gives, or a new lemma you would have to prove.
+
+\emph{What will be formalized:} Q05.H4d, the invariants and the
+\dfy{decreases} of this loop in
+\begin{quote}
+\texttt{dafny/Q/Q05\_Frames/std/Q05\_Frames.dfy},
+\end{quote}
+\noindent and Q05.H4v, the whole loop in Verus, over the given
+\vrs{bit_count} and \vrs{ones}, in
+\begin{quote}
+\texttt{verus/q/q05\_frames/src/lib.rs}:
+\end{quote}
+\begin{veruscode}
+pub fn count_ones(v: &Vec<u64>) -> (c: u64)
+    requires
+        ones(v@) <= u64::MAX,
+    ensures
+        c == ones(v@),
+\end{veruscode}
+For H4v, add one paragraph: why \texttt{c + x \% 2} cannot overflow there. Your
+proof is the blueprint: someone else should be able to formalize it in both
+languages without inventing any statement.
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B4}
+\textbf{Paper card 03.12, Lemur: Integrating Large Language Models in
+Automated Program Verification} (8 minutes). Fill the card on its eight
+fields: task shape, oracle, what is trusted, cheat surface, metric, budget,
+variance, artifact. Each field is graded against the pinned range of your own
+\texttt{cheatsheets.md}: lines 1366--1386, the entry from its heading to its
+\emph{Why it matters} paragraph, in the copy the command below names. The pin
+is the sha256 of exactly those lines, computed with the first line below; it
+must print the second.
+{\small
+\begin{verbatim}
+sed -n '1366,1386p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+a821f639a8a72dc663372dad601c93a6ea0fbc8cee85faf9421669c8ac521414  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. A hash
+that no longer matches means the card file changed: the grader refuses the
+card until the pin is renewed.
+\end{problem}
+
+\end{document}

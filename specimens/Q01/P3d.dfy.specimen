@@ -1,0 +1,40 @@
+// item: Q01.P3d S3 obligation
+// **P3d.** Four lemmas, each holding one labelled assertion about the value of a literal
+// limb list (least significant limb first): [a] one limb, [b] two, [c] three, [d] five.
+// Which labelled assertions does the verifier fail to prove? Each sits in its own lemma,
+// so no failure hides another.
+// Answer form: `FAILS` followed by the failing labels in label order, separated by
+// single spaces, or `FAILS none`. Fill the SLOT line below, keep it a comment, then run
+// `scripts/firsttry.sh Q01 --check` (scripts/vcheck refuses this file until then).
+// SLOT: FAILS ???
+module Q01_P3d {
+  // A copy of layer L1's definitions (dafny/given/Q/QG_L1_BigNat.dfy): a Dafny
+  // specimen is verified alone, so it cannot import the layer.
+  const BASE: nat := 18446744073709551616
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  lemma OneLimb()
+  {
+    assert ToNat([7]) == 7;  // [a]
+  }
+
+  lemma TwoLimbs()
+  {
+    assert ToNat([7, 2]) == 7 + 2 * BASE;  // [b]
+  }
+
+  lemma ThreeLimbs()
+  {
+    assert ToNat([1, 0, 1]) == 1 + BASE * BASE;  // [c]
+  }
+
+  lemma FiveLimbs()
+  {
+    assert ToNat([0, 0, 0, 0, 1]) == BASE * BASE * BASE * BASE;  // [d]
+  }
+}

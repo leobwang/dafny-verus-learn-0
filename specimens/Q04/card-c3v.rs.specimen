@@ -1,0 +1,23 @@
+// Card demo Q04.C3v (a proof fn that calls itself), the failure half. The success half
+// is `lemma_weight_above` in verus/q/q04_proof_craft/src/lib.rs; this copy leaves out
+// its recursive call. Run it with `scripts/vcheck specimens/Q04/card-c3v.rs.specimen`;
+// the EXPECT line at the end pins the message the verifier gives (line and fragment).
+use vstd::prelude::*;
+use qg_bignat_l3::*;
+
+verus! {
+
+pub proof fn lemma_weight_above(n: nat)
+    ensures
+        n < weight(n),
+    decreases n,
+{
+    if n == 0 {
+        lemma_weight_zero();
+    } else {
+        lemma_weight_succ((n - 1) as nat);
+    }
+}
+
+} // verus!
+// EXPECT @12 "postcondition not satisfied"

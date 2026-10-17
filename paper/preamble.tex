@@ -1,0 +1,170 @@
+% preamble.tex — shared preamble for the dafny-verus-learn-0 written track.
+%
+% Usage (every <ID>_problems.tex, <ID>_answers.tex and solutions/<ID>_solutions.tex):
+%
+%   \documentclass[11pt]{article}
+%   \input{preamble}          % the Makefile always runs latexmk from paper/
+%   \begin{document}
+%   ...
+%   \end{document}
+%
+% Engine: pdflatex. Dafny and Verus sources are mostly ASCII; the `literate`
+% tables below map the common Unicode symbols to math glyphs inside listings.
+% For other Unicode, extend a table, or build that file with lualatex
+% (`latexmk -lualatex <file>`) after replacing the inputenc/fontenc lines with
+% \usepackage{fontspec} and a monospace font with good coverage.
+%
+% Contents: program-logic macros (Hoare triples, wp, VCs, substitution,
+% semantics brackets, typing judgments), inference rules (mathpartir),
+% theorem and problem environments, the answer environment, the grader
+% margin-note macro, and listings languages `dafny` and `verus` (Python uses
+% listings' built-in `Python`), with inline forms \dfy{...}, \vrs{...}, \py{...}.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}         % \llbracket \rrbracket for semantics brackets
+\usepackage{mathpartir}       % inference rules: \inferrule, the mathpar environment
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[margin=1.1in]{geometry}
+
+% ---------------------------------------------------------------------------
+% Program logic.
+%   \hoare{P}{c}{Q}       {P} c {Q}           (partial correctness)
+%   \thoare{P}{c}{Q}      [P] c [Q]           (total correctness)
+%   \provable{P}{c}{Q}    |- {P} c {Q}        (derivable in the proof system)
+%   \WP{c}{Q}             wp(c, Q)            (\wp is LaTeX's Weierstrass p, so
+%   \WLP{c}{Q}            wlp(c, Q)            the macro names are upper case)
+%   \VC{c}{Q}             VC(c, Q)
+%   \subst{Q}{x}{e}       Q[e/x]              (e replaces x in Q)
+%   \sem{e}               [[e]]               (denotation)
+%   \assign, \seqc        :=  and the sequencing semicolon
+%   \impl                 ==> as a math arrow (LaTeX's own \iff gives <==>)
+% ---------------------------------------------------------------------------
+\newcommand{\hoare}[3]{\{\,#1\,\}\;#2\;\{\,#3\,\}}
+\newcommand{\thoare}[3]{[\,#1\,]\;#2\;[\,#3\,]}
+\newcommand{\provable}[3]{\vdash \hoare{#1}{#2}{#3}}
+\newcommand{\WP}[2]{\mathrm{wp}(#1,\,#2)}
+\newcommand{\WLP}[2]{\mathrm{wlp}(#1,\,#2)}
+\newcommand{\VC}[2]{\mathrm{VC}(#1,\,#2)}
+\newcommand{\subst}[3]{#1[#3/#2]}
+\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+\newcommand{\assign}{\mathrel{:=}}
+\newcommand{\seqc}{\mathbin{;}\,}
+\newcommand{\impl}{\Longrightarrow}
+
+% ---------------------------------------------------------------------------
+% Judgments.  \judgment{\Gamma}{e}{\tau}  ==>  Gamma |- e : tau
+% ---------------------------------------------------------------------------
+\newcommand{\judgment}[3]{#1 \vdash #2 : #3}
+\newcommand{\judg}[3]{\judgment{#1}{#2}{#3}}          % short alias
+\newcommand{\emptyjudgment}[2]{\cdot \vdash #1 : #2}  % empty context
+\newcommand{\ctx}{\Gamma}
+\newcommand{\turnstile}{\vdash}
+
+% ---------------------------------------------------------------------------
+% Theorem environments.
+% ---------------------------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+% Written-track problems are numbered B1, B2, ... on both tracks (P<n> is a
+% predict item). Label each one \label{prob:B<n>} and its answer \label{ans:B<n>}.
+\newtheorem{problem}{Problem}
+\renewcommand{\theproblem}{B\arabic{problem}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newenvironment{answer}
+  {\par\medskip\noindent\textbf{Answer.}\begin{quotation}\noindent}
+  {\end{quotation}\medskip}
+
+% ---------------------------------------------------------------------------
+% Grader margin notes. Rendered form of the `% GRADER[...][...][...]:` comment
+% convention (see template_answers.tex). Use inline where a visible note helps:
+%   \gradernote{B2/induction-soundness/2: the invariant is not preserved by the last assignment}
+% ---------------------------------------------------------------------------
+\definecolor{gradercolor}{RGB}{160, 30, 30}
+\newcommand{\gradernote}[1]{\textcolor{gradercolor}{\small\sffamily [GRADER: #1]}}
+
+% ---------------------------------------------------------------------------
+% Code listings: Dafny, Verus (Rust inside verus!{...}), Python.
+% ---------------------------------------------------------------------------
+\definecolor{codekeyword}{RGB}{0, 60, 130}
+\definecolor{codecomment}{RGB}{90, 110, 90}
+\definecolor{codestring}{RGB}{130, 60, 10}
+\definecolor{codehole}{RGB}{180, 0, 0}
+
+\lstdefinelanguage{dafny}{
+  sensitive=true,
+  morekeywords={
+    abstract, allocated, as, assert, assume, bool, break, by, calc, case, char,
+    class, codatatype, const, constructor, continue, datatype, decreases, else,
+    ensures, exists, expect, export, extends, false, forall, fresh, function,
+    ghost, if, import, in, include, int, invariant, is, iterator, label, lemma,
+    map, match, method, modifies, modify, module, multiset, nat, new, newtype,
+    null, old, opaque, opened, predicate, print, provides, reads, real, refines,
+    requires, return, returns, reveal, reveals, seq, set, static, string, then,
+    this, trait, true, twostate, type, unchanged, var, while, witness},
+  emph={assume},
+  emphstyle=\color{codehole}\bfseries,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+}
+
+\lstdefinelanguage{verus}{
+  sensitive=true,
+  morekeywords={
+    as, break, const, continue, crate, dyn, else, enum, false, fn, for, if,
+    impl, in, let, loop, match, mod, move, mut, pub, ref, return, self, Self,
+    static, struct, super, trait, true, type, unsafe, use, where, while,
+    spec, proof, exec, open, closed, tracked, ghost, requires, ensures,
+    recommends, invariant, decreases, assert, forall, exists, choose, by,
+    broadcast, uninterp, axiom, returns, int, nat, Seq, Set, Map, Ghost, Tracked},
+  emph={assume, admit},
+  emphstyle=\color{codehole}\bfseries,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codekeyword}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  frame=leftline,
+  framerule=0.6pt,
+  xleftmargin=1em,
+  aboveskip=0.8em,
+  belowskip=0.8em,
+  literate=
+    {→}{{$\to$}}1        {←}{{$\leftarrow$}}1  {⇒}{{$\Rightarrow$}}1
+    {⇔}{{$\Leftrightarrow$}}1                  {↦}{{$\mapsto$}}1
+    {∀}{{$\forall$}}1    {∃}{{$\exists$}}1     {λ}{{$\lambda$}}1
+    {∧}{{$\wedge$}}1     {∨}{{$\vee$}}1        {¬}{{$\neg$}}1
+    {≠}{{$\neq$}}1       {≤}{{$\leq$}}1        {≥}{{$\geq$}}1
+    {∈}{{$\in$}}1        {∉}{{$\notin$}}1      {⊆}{{$\subseteq$}}1
+    {×}{{$\times$}}1     {·}{{$\cdot$}}1       {∅}{{$\varnothing$}}1
+    {ℕ}{{$\mathbb{N}$}}1 {ℤ}{{$\mathbb{Z}$}}1
+    {⊢}{{$\vdash$}}1     {⟦}{{$\llbracket$}}1  {⟧}{{$\rrbracket$}}1,
+}
+
+% Code environments and inline code.
+\lstnewenvironment{dafnycode}{\lstset{language=dafny}}{}
+\lstnewenvironment{veruscode}{\lstset{language=verus}}{}
+\lstnewenvironment{pycode}{\lstset{language=Python}}{}
+\newcommand{\dfy}[1]{\lstinline[language=dafny]{#1}}
+\newcommand{\vrs}[1]{\lstinline[language=verus]{#1}}
+\newcommand{\py}[1]{\lstinline[language=Python]{#1}}

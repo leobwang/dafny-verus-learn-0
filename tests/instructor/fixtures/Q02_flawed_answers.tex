@@ -1,0 +1,138 @@
+% Q02_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q02_answers.tex (spec §4.7, §6.12). B1 and B3 carry one
+% planted flaw each; B2 is the clean control. Grade it with the rubric's probes
+% (paper/rubrics/Q02_rubric.md), never by eye. It holds worked answers to Q02's written
+% problems: open it only after Q02 is done.
+%
+% EXPECTED[B1][induction-soundness][2]: in (a)'s zero-top case the answer proves ToNat(p) = ToNat(s) by unfolding both at the LOW limb and claiming p[1..] = s[1..] for p = s[..|s| - 1]; that sequence equation is false. The finding must locate that step and exhibit s = [5, 0]: p = [5], p[1..] = [] while s[1..] = [0] (Probe A'': an @Test expecting s[..|s| - 1][1..] == s[1..] at [5, 0] prints FAILED; captured on the pins). The conclusion ToNat(p) = ToNat(s) is true; the justification is what fails. Statement-fidelity, case-exhaustiveness and gap-accounting are correct and must not score <= 2; blueprint-quality may score 2 only by exhibiting the same instance; (b) is correct and must draw no flaw.
+% EXPECTED[B2][correctness][4]: correct, no finding (Probe B on its state: 1 passed, 0 failed; Probe B' on its loop with the companion clauses: verified; both captured on the pins). A grader that reports a flaw on B2 is hallucinating.
+% EXPECTED[B3][card-fidelity][2]: Budget — the field says the loop retries without a fixed limit until Dafny accepts or a 30-minute wall clock runs out; pinned line 772 gives a budget of N = 10 attempts, and line 787 N = 5 for the held-out runs. The finding must quote line 772.
+% EXPECTED[B3][card-fidelity][4]: Task shape, Oracle, What is trusted, Cheat surface, Metric, Variance and Artifact — correct, no finding (lines 770, 772, 775, 778, 780-787, 789). A grader that reports a flaw on any of them is hallucinating.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4, B3 = 2.
+% A calibration run FAILS if B1 or B3 scores >= 3, if a planted finding does not locate
+% its step or field (with the instance or the quoted line named above), or if ANY flaw
+% is reported on B2 or on a B3 field other than Budget.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q02 --- First syntax I \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (informal-proof-first)}\label{ans:B1}
+\begin{answer}
+\textbf{(a) Statement.} For every limb sequence $s$,
+$\mathit{ToNat}(\mathit{Normalize}(s)) = \mathit{ToNat}(s)$. No hypothesis on
+$s$.
+
+\textbf{Induction on / decreases measure:} the length $|s|$, strong induction;
+the lemma's \texttt{decreases |s|}.
+
+\textbf{Base:} $|s| = 0$. Then $\mathit{Normalize}(s) = [\,]$, which is $s$,
+so the two sides are the same number (0).
+
+\textbf{IH (stated as a formula):} for every limb sequence $t$ with
+$|t| < |s|$, $\mathit{ToNat}(\mathit{Normalize}(t)) = \mathit{ToNat}(t)$.
+
+\textbf{Step} (one paragraph per case of \texttt{Normalize}):
+
+\emph{Top limb non-zero} ($|s| > 0$, $s[|s|-1] \neq 0$):
+$\mathit{Normalize}(s) = s$ by the second branch, so there is nothing to prove.
+
+\emph{Top limb zero} ($|s| > 0$, $s[|s|-1] = 0$): let $p = s[..|s|-1]$, so
+$|p| = |s| - 1$. The third branch gives $\mathit{Normalize}(s) =
+\mathit{Normalize}(p)$, and the IH at $p$ gives
+$\mathit{ToNat}(\mathit{Normalize}(p)) = \mathit{ToNat}(p)$. It remains to show
+$\mathit{ToNat}(p) = \mathit{ToNat}(s)$. Unfold \texttt{ToNat} once on each
+side: $\mathit{ToNat}(s) = s[0] + \mathit{BASE} \cdot \mathit{ToNat}(s[1..])$
+and $\mathit{ToNat}(p) = p[0] + \mathit{BASE} \cdot \mathit{ToNat}(p[1..])$.
+Here $p[0] = s[0]$, and $p[1..] = s[1..]$ because $p$ and $s$ agree on every
+index below $|s| - 1$; so the two unfoldings are equal, and
+$\mathit{ToNat}(\mathit{Normalize}(s)) = \mathit{ToNat}(p) = \mathit{ToNat}(s)$.
+
+\textbf{Helper lemmas needed (this is the blueprint;} each by its statement,
+and where it comes from\textbf{):} none beyond one unfolding of \texttt{ToNat}
+on each side and the recursive call at $p$.
+
+\textbf{Gaps I know about} (declared gaps score better than silent ones):
+none.
+
+\textbf{(b) Loop invariant (stated as a formula over \texttt{a} and
+\texttt{old(a)}):} the number the limbs of \texttt{a} denote never changes:
+$\mathit{seq\_to\_nat}(a@) = \mathit{seq\_to\_nat}(\mathit{old}(a)@)$ at the
+head of every pass.
+
+\textbf{What keeps it across one pass:} the guard says the vector is non-empty
+and its top limb is zero; the given call states that dropping that limb keeps
+\texttt{seq\_to\_nat}, and \texttt{pop} drops exactly that limb, so the value
+after the pass is the value before it, hence still the value at the call.
+
+\textbf{What gives each \texttt{ensures} clause at the exit:} the guard is
+false, so the vector is empty or ends in a non-zero limb, which is
+\texttt{wf()}; the invariant is the value clause. The loop stops because each
+pass removes one limb (the measure \texttt{a.limbs.len()}).
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (concept)}\label{ans:B2}
+\begin{answer}
+\textbf{(a)} Inductiveness is decided by the first two obligations: the clause
+must hold before the loop starts, and every pass that begins with it (and the
+guard) true must end with it true. The third obligation, what the invariant
+gives after the loop, says whether the invariant is strong enough for the
+postcondition; a clause can be inductive and still too weak there.
+
+\textbf{(b)} The loop: \texttt{k, t := 0, 0; while k < m \{ k, t := k + 1, t + 2; \}}
+with \texttt{m: nat}. \\
+The clause: $t \leq 2m$. \\
+Why it holds in every reachable state: every reachable state has $t = 2k$ and
+$k \leq m$, so $t \leq 2m$. \\
+The state before one pass, and the clause after it: $k = 0$, $t = 2$, $m = 1$.
+The clause holds ($2 \leq 2$) and so does the guard ($0 < 1$); after the pass
+$t = 4 > 2 = 2m$.
+
+\textbf{(c)} With $t \leq 2m$ as the only clause, pruning finds it is not
+preserved and drops it, true or not. Next to $k \leq m$ and $t = 2k$ it is
+preserved, so pruning keeps it along with the other two.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.7, lines 766--791 (the pinned range).
+
+\textbf{Task shape:} a Dafny program arrives with its pre- and postconditions
+but no proof annotations; the model must add invariants, assertions and
+termination measures, leaving the code as it is, until Dafny accepts it.
+
+\textbf{Oracle:} the Dafny verifier accepting the program, plus a syntactic
+check that removing every annotation from the attempt gives back the original
+program.
+
+\textbf{What is trusted:} Dafny and its SMT solver, the parser used to strip
+annotations, and the benchmark specifications themselves; the card does not
+say whether edited specifications or assumptions are rejected.
+
+\textbf{Cheat surface:} rewriting the code is caught by the strip-and-compare
+check; changing the specification or adding an assumption is not known to be
+caught, and the hints may carry benchmark knowledge.
+
+\textbf{Metric:} percentage of programs verified on Clover, MBPP, HumanEval and
+DafnyBench, with 86.18\% on DafnyBench for Claude 3.5 as the headline, plus
+ablations and a small-model result on held-out programs.
+
+\textbf{Budget:} the loop retries without a fixed limit until Dafny accepts or a
+30-minute wall clock runs out; no cost figures are reported.
+
+\textbf{Variance:} a single run per configuration with two closed models, no
+intervals; some numbers disagree between the text and the figures.
+
+\textbf{Artifact:} no code is released; the distilled training set is
+described but not stated to be released.
+\end{answer}
+
+\end{document}

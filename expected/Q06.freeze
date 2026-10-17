@@ -1,0 +1,218 @@
+# expected/Q06.freeze — statement-freeze pins for Q06 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q06` from the files as shipped; checked by
+# `scripts/specfreeze --check Q06`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q06"
+unfrozen = []
+
+[[file]]
+path = "dafny/Q/Q06_Machine/std/Q06_Machine.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_Machine.AddCarryA" = "971714b3f22f998b87b031d3cc241dafdf7d50252116195ca619154276b11303"
+"Q06_Machine.AddCarryB" = "dcf02a6925269066f680755492b04b8c029c2d836a0e806e17545dd79cadb55e"
+"Q06_Machine.AllBelow" = "cec90cdac62ad4a8bbea74ba25c86af0c6145c1b4af0a9b2814a714917319519"
+"Q06_Machine.Boundary" = "1f4cc619398403c43970fba0e9821f89d982b44dfb7e8e703bfe8d04fdaae48a"
+"Q06_Machine.CheckSplit" = "8b9055e2087db5f55bb4265765f3992fdf39e9f6f77cbbac916a54e72bb2371e"
+"Q06_Machine.Clip" = "8fcd39cc68690102a667c9fa802f28c8b772be9d50dd9d7774b37678adcd7299"
+"Q06_Machine.ClipPasses" = "0075609d21fa0f94707cb3d9928f19d95b1054cad4182cb6203093ed0714c661"
+"Q06_Machine.ClipPlanted" = "57ff17833105dfbef33155bc50580f03638395282a48b6ee9dae770a149aa9a0"
+"Q06_Machine.ClipPlantedRejected" = "17d468c130713a2c368b5c1718b6d211c44324d6af535a1a78b8d40748873c76"
+"Q06_Machine.FirstPrefix" = "0ab145ddca05deede5eb5d01c6f66f05a6c0b5d35ddd98ea571ed8116b5f111f"
+"Q06_Machine.FourthPowerMono" = "c3ddb6acc55535f09d7ebccc61373f1453f71efeab8b4383593bd3937e79c0d7"
+"Q06_Machine.Mid" = "6e1e39a2e2a37dd1e9155f8010ef747253d99b4d322482ff606d0442d205f5d5"
+"Q06_Machine.MidBetween" = "5f336f4cce16e311a18004fdb011bd1ed950cd8dcb2a29acf50d7ad570a17f0d"
+"Q06_Machine.Odd" = "249b7cbfeb6792c4ab1331b06030bb3d60089f4e824de9e9743783e905d78b6f"
+"Q06_Machine.OddBound" = "580207f1b2b3ab9f4190ff023385c1df50fe40439848032ead9c605083fac10e"
+"Q06_Machine.Pack" = "9942d27424f036aaeef9c7d49e10050f35515bfb4587d3e5d9ff98113fe588de"
+"Q06_Machine.PackToNat" = "83a967efeceabdad61a7d02095e860e072919a116e21d9e3122c0e1884081fc0"
+"Q06_Machine.RefSplit" = "97d81afdd65e1ef8dfade19deb4d97659daec3880b08afc3130c840649b23ecd"
+"Q06_Machine.SecondLimb" = "7bb47b023d02e135cfa206029f93ffb5be55c9182cdea0fbaed3777da8c66177"
+"Q06_Machine.Twice" = "a4092cc5b9e79468f78691c356e27d4e5235db3cb72654eca837a0fdd414700e"
+"Q06_Machine.TwiceEven" = "a4aa4bd2944cae70c12a8a585462482f108715f73b70e9e7fcc693c9a5590c80"
+"Q06_Machine.TwoShifts" = "186e44bce89037d05691ae89725fdcfd833a9bb0e6a45c23efe731f141cc29e0"
+
+[[file]]
+path = "verus/q/q06_machine/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"add_carry_a" = "bb1462f456555745e1ed928fee7a00a44ecd29b70d6d1c92754f7148cfcdce56"
+"add_carry_b" = "a00ac790211a1afb50038bf418871e4f762a173e2426c5a177bd12e62441303e"
+"all_below" = "c3e9c4a14f429d408a542fec7d334b73c65eb6edae6624d1be7833978d0689af"
+"check_split_results" = "7a6614b19b51fc769adc17cbc2e13eff78f77bfdb67929a2e90433e20ae44a8e"
+"clip" = "b70faea2e9e14479f384fd5c4fb27a003df2a511409550962ef2c82c2d61d05a"
+"clip_planted" = "31a60820b788375437e4cc51525a93845e31f8e7ad2dae905a1b9f2aa1e0eb15"
+"lemma_first_prefix" = "496062af6abe95ad2f0202774766149ce69c85bd4577cbd1ef4eb2826668b516"
+"lemma_mid_between" = "ea595571aaf3f3195e9a34fc0f107ad2a44d0142daa936c0a0bd588753bd90a6"
+"lemma_odd_bound" = "03c4b3cfa6ec9c307f125910749f26ed5e59c6618163c282115faa9b628b63d4"
+"lemma_pack_to_nat" = "2f599cc9068a472461bc9ddeacd0a2b44acf92208a752d1fe4033a09d55fd444"
+"lemma_second_limb" = "c39e7a66c6c29259a6e31dd02f7d297baf0d268dd1fdde62854b5f072499b061"
+"lemma_seq_to_nat_append" = "cf8c33a9013ab58e8a0ae5fc7f2d2bbf968a591daaf6c0d00b7fa074b04bbfe2"
+"lemma_tri_sixty" = "f9d928972f175a4aa968228a7b3598a09acdd82d8b1dec344305c2bc814523b1"
+"lemma_twice_even" = "082d7ae724e99b064085bcabcd0705db58986ed10f53adbd9e751fcbeb47ce74"
+"mid" = "831c006b5ba457ecdec2421c9e1af535cc8771cb5ba4fc920adec0d5d75f4b36"
+"odd" = "8b4194b431a170e9a7f5b62ad6c58d8a7ba4681b3a4ba63d79910171bb09f601"
+"pack" = "51492f5bb6defe4079de07a9c0b663237919f0e71342c2e615620230f333790e"
+"split_matches" = "f22d8ac236c53a5bebd587d5439428de1c018ad2e4e8f54cc5bd51fb0388118c"
+"tri" = "a5c2e7974c93a2cde7eadacb4ca23b27f5561e21905f807da122c4f071611e3c"
+"twice" = "eea86a108fbca939f6a3b9dfe8422c6391af0780f28c59ae3791a3275a675d94"
+
+[[file]]
+path = "specimens/Q06/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_P3.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q06_P3.BoundAtK" = "648e8ed7e37d56d40eccdb252d7afd899408533e0262b2f3adfd264e5a2f592e"
+"Q06_P3.Pow" = "8f92835a4d3a9a08348fbf9d7efeb7ee7a2ae326d9e40978412f455a797633d4"
+"Q06_P3.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q06_P3.TwoLimbsPow" = "d35226333fa08a059bacef92f850cef7c38b188fb94ac70a628a814ccaba7aa7"
+"Q06_P3.TwoLimbsProduct" = "ae77fddc178bf2706e28f6c5653b57f3c0cc90d7cfbd17f824f843e618473ff4"
+"Q06_P3.TwoLimbsProductPrefixTrigger" = "dbae460243f63f92cc1354f84baae976d575b976e865d66ac93cc5fab0b52b09"
+
+[[file]]
+path = "specimens/Q06/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"bound_at_k" = "e54b00a8b250e945d67c893a9c35b26f4bd58fd011838160c8ec5d4072da97c2"
+"two_limbs_product" = "54a7c32557edd5882138c346ebf1b0cbda221c446990f6d81b5baddcbfc21ed9"
+"two_limbs_product_prefix_trigger" = "c765fafee97c81bed4332f9d91aa9876f20c7186f205bb1245e36a653ca75b2a"
+"two_limbs_weight" = "33b448a3cc8c951113af5bfaf52f723d2aff98aa210269cf19e96d08c7cf558a"
+
+[[file]]
+path = "specimens/Q06/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_CardC1d.Odd" = "249b7cbfeb6792c4ab1331b06030bb3d60089f4e824de9e9743783e905d78b6f"
+"Q06_CardC1d.OddBound" = "580207f1b2b3ab9f4190ff023385c1df50fe40439848032ead9c605083fac10e"
+
+[[file]]
+path = "specimens/Q06/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_odd_bound" = "03c4b3cfa6ec9c307f125910749f26ed5e59c6618163c282115faa9b628b63d4"
+"odd" = "8b4194b431a170e9a7f5b62ad6c58d8a7ba4681b3a4ba63d79910171bb09f601"
+
+[[file]]
+path = "specimens/Q06/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_CardC2d.Mid" = "6e1e39a2e2a37dd1e9155f8010ef747253d99b4d322482ff606d0442d205f5d5"
+"Q06_CardC2d.MidBetween" = "5f336f4cce16e311a18004fdb011bd1ed950cd8dcb2a29acf50d7ad570a17f0d"
+
+[[file]]
+path = "specimens/Q06/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_mid_between" = "ea595571aaf3f3195e9a34fc0f107ad2a44d0142daa936c0a0bd588753bd90a6"
+"mid" = "831c006b5ba457ecdec2421c9e1af535cc8771cb5ba4fc920adec0d5d75f4b36"
+
+[[file]]
+path = "specimens/Q06/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_CardC3d.FourthPowerMono" = "c3ddb6acc55535f09d7ebccc61373f1453f71efeab8b4383593bd3937e79c0d7"
+
+[[file]]
+path = "specimens/Q06/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_tri_sixty" = "f9d928972f175a4aa968228a7b3598a09acdd82d8b1dec344305c2bc814523b1"
+"tri" = "a5c2e7974c93a2cde7eadacb4ca23b27f5561e21905f807da122c4f071611e3c"
+
+[[file]]
+path = "specimens/Q06/card-c4d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_CardC4d.AllBelow" = "98326670d5b27271b55f2fd6b5b708dd4e6cbdc4a79d136b62710c2d63e4fb4f"
+"Q06_CardC4d.Clip" = "8fcd39cc68690102a667c9fa802f28c8b772be9d50dd9d7774b37678adcd7299"
+"Q06_CardC4d.ClipChecked" = "b8a93dc993c31520922644ea9f957137ed844d33f8b85ae5d2fe61abafd83400"
+
+[[file]]
+path = "specimens/Q06/card-c4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"all_below" = "9f517aca4ea7ac09edbf97d87972e9720cb970501fd25b63e194f9cf09123a05"
+"clip_checked" = "04881c284e343e4e8c587843830908ec29656e81d9a73fcd7b8c31b5368b1813"
+
+[[file]]
+path = "specimens/Q06/card-c5dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_CardC5d.Passes" = "79071ec5ef0bfdc042d9e32a27ba5285096f3df360467d6b0085601e10c64f69"
+"Q06_CardC5d.Wrong" = "9015e7fe453b9a33095de9a6331a52356d85df4bd405195fb3aa64f3c7b5df83"
+
+[[file]]
+path = "specimens/Q06/card-c5dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"wrong" = "1f09dd757034ff52ded8c4ec2c29ef1a84979c0d1aca2fba5a3703a74b1f8877"
+
+[[file]]
+path = "specimens/Q06/card-c6dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_CardC6d.Commute" = "d9fc810aa9a135b8e81b2e3021f479fc17757c3a29952d7a4380ff67eed3299f"
+
+[[file]]
+path = "specimens/Q06/card-c6dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_commute" = "18ccbe9744e77f6690ea9e5aedcefcdd95ff5cf6fe25fceed370c07b9884e972"
+"lemma_small" = "bcd94b0f8264dacf6b20a235453f55a3a06c17784a60260f2279567269237d94"
+
+[[file]]
+path = "dafny/Q/Q06_Machine/exit/Q06_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_Exit.FirstDisagreement" = "2f55794c15c381c299e4e23e02290ef71c8ca415e699a3e4b485dd667610d415"
+"Q06_Exit.Half" = "93bd649b941e4db7a8d7dd5d2d63016d4bf8da6262dec77af0f5b453a065575c"
+"Q06_Exit.HalfA" = "9c900f5de4d7a8e84718b4e92c90d5bc1aa51c57ed61a2989d7b660cce353a39"
+"Q06_Exit.HalfB" = "aba592e10b74ab953a086af8d29a53efc82ab698bb431a3da44358df0db8f8cd"
+"Q06_Exit.Low" = "e57ceefe8ca8c9ad32277c50e5563f68b07efbd23c13d5e49e7ba9028762b358"
+"Q06_Exit.LowOfShift" = "547e5eb6e4f73e8e71f2e0b0dcfbaf35eb055323f8f091ba71c14d3cd2e26dc7"
+
+[[file]]
+path = "verus/q/q06_machine/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"first_disagreement" = "10e6a2666a834ce5246fbf20c2ebb8f6e40d64d374948fec2d09d9e292fff163"
+"lemma_low_of_shift" = "aca63324c5d18e39b34efa696d5c77ab94e94a5cbec2fcbc75ff4d44315c1c91"
+"low" = "4e86cba7bfe2cb7f928847aec6c7f7f1f54e2a7b0bab8419fc9f395296681baa"
+
+[[file]]
+path = "dafny/Q/Q06_Machine/agent/Q06_AgentProver.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q06_AgentProver.CanonicalUnique" = "ff2c8be0187e9077cbedb00e60ce13b020110364e33df8eaaa93d85595ebe773"
+
+[[file]]
+path = "harness/q/fvh_q/q06_stats.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"pass_at_k_by_task" = "222bc616f972f67b27e08745d60cded358bcd6676e7a8c9f66a60e536ce67475"
+"pass_rate_ci" = "079365a496213df6bd8c3cd3799cbd3d89164d9726f653cabdf6a100533a4cc5"
+"record_from_vcheck" = "738f716eccd593d5e2a6724fc592663cf447e4b56f9f45d9ed88067a6d3c81a7"

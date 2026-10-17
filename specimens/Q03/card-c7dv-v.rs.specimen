@@ -1,0 +1,17 @@
+// Demo for card Q03.C7dv (divergence), the Verus column. Open it only after
+// every prediction of Q03 is recorded (scripts/firsttry.sh Q03 --check).
+// after: Q03.P2dv
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn lemma_contra(x: nat)
+    requires
+        x > 5,
+        x < 3,
+    ensures
+        false,
+{
+}
+
+} // verus!

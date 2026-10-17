@@ -1,0 +1,33 @@
+// Demo for card Q08.C5dv (divergence), the Verus column. Open it only after every
+// prediction of Q08 is recorded (scripts/firsttry.sh Q08 --check).
+// after: Q08.P4dv
+use vstd::prelude::*;
+
+verus! {
+
+pub enum Shape {
+    Dot,
+    Pair(Box<Shape>, Box<Shape>),
+}
+
+pub open spec fn depth(s: Shape) -> nat {
+    match s {
+        Shape::Dot => 0,
+        Shape::Pair(l, r) => 1 + if depth(*l) < depth(*r) {
+            depth(*r)
+        } else {
+            depth(*l)
+        },
+    }
+}
+
+pub open spec fn dots(s: Shape) -> nat
+    decreases s,
+{
+    match s {
+        Shape::Dot => 1,
+        Shape::Pair(l, r) => dots(*l) + dots(*r),
+    }
+}
+
+} // verus!

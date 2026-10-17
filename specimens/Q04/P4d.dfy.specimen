@@ -1,0 +1,47 @@
+// item: Q04.P4d S3 obligation
+// **P4.** A `calc` chain over `ToNat`, with no hint on any step. Its four steps are
+// labelled on the line each one ends at: [a] dropping an appended zero limb, [b] the
+// head-and-tail split, [c] the same split written with indices, [d] a final `<=` step.
+// Which labelled steps does the verifier fail to prove?
+// Answer form: `FAILS` followed by the failing labels in label order, separated by
+// single spaces (for example `FAILS x y`), or `FAILS none`. Fill the SLOT line below,
+// keep it a comment, then run `scripts/firsttry.sh Q04 --check` (scripts/vcheck refuses
+// this file until then).
+// SLOT: FAILS ???
+module Q04_P4d {
+  // A copy of layer L1's definitions (dafny/given/Q/QG_L1_BigNat.dfy): a Dafny
+  // specimen is verified alone, so it cannot import the layer.
+  const BASE: nat := 18446744073709551616
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  function Head(s: seq<nat>): nat
+  {
+    if |s| == 0 then 0 else s[0]
+  }
+
+  function Tail(s: seq<nat>): seq<nat>
+  {
+    if |s| == 0 then [] else s[1..]
+  }
+
+  lemma CalcSteps(s: seq<nat>)
+    requires |s| > 0
+  {
+    calc {
+      ToNat(s + [0]);
+    ==
+      ToNat(s);                               // [a]
+    ==
+      Head(s) + BASE * ToNat(Tail(s));        // [b]
+    ==
+      s[0] * BASE + ToNat(s[1..]);            // [c]
+    <=
+      s[0] * BASE + ToNat(s[1..]) + BASE;     // [d]
+    }
+  }
+}

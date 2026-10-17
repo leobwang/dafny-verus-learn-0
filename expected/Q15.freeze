@@ -1,0 +1,183 @@
+# expected/Q15.freeze — statement-freeze pins for Q15 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin Q15` from the files as shipped; checked by
+# `scripts/specfreeze --check Q15`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "Q15"
+unfrozen = ["tools/Q15/toolsmith.py"]
+
+[[file]]
+path = "dafny/Q/Q15_PracticeIIC/std/Q15_PracticeIIC.dfy"
+lang = "d"
+open_bodies = []
+open_specs = ["Q15_PracticeIIC.CmpTop"]
+[file.statements]
+"Q15_PracticeIIC.CmpTop" = "f3bbc17817c78c5480334673cfa60f0c2cf400938a63ecbee0f07ab5c3180527"
+"Q15_PracticeIIC.CmpTopCheck" = "afcc8b8e5e25ca68d6098a43a7e1442ff063c2deba20986619d800c0e2037b22"
+"Q15_PracticeIIC.PowThreeUp" = "4e648acdcc99b1f13a7a0d22af44f06aa91e7cc83a49145d4598a2f212051307"
+[file.spec_clauses]
+"Q15_PracticeIIC.CmpTop" = { requires = ["9304dd6f0c45da026984dca9bdd1247ad8c8dc57be482bfe11c07e95c1a7a537"], ensures = ["efcc1220e3a8a33b1501cf4f4705f9db2029806466c860fd06ced8f25071b207"] }
+
+[[file]]
+path = "dafny/Q/Q15_PracticeIIC/std/Q15_Lab2Specs.dfy"
+lang = "d"
+open_bodies = []
+open_specs = ["Q15_Lab2Specs.EvenLimbs", "Q15_Lab2Specs.SatSub", "Q15_Lab2Specs.TopDiff"]
+[file.statements]
+"Q15_Lab2Specs.EvenLimbs" = "4f8bd9d15955aaa2ab26b983f1e41252142c8e48609d87458613e5c6d97b38c5"
+"Q15_Lab2Specs.EvenLimbsUse" = "f4921e844c4cfe596d1fa8b69c9aba1b30672fda80395c0c40892b830f49ba16"
+"Q15_Lab2Specs.EvenLimbsWitness" = "93facccb7c727ebd11f233d616b2935b10bda5613e257e36eddab6dcc052a1b5"
+"Q15_Lab2Specs.SatSub" = "fcad86c616811b4b228d7c3b5f54e7798085518bdf685cc0cc0cb61c20a9aec9"
+"Q15_Lab2Specs.SatSubUse" = "21fb8c852f1f33fee6c2f8334d6f6b1d70d58b5f819b7b81849fd5e3f210af62"
+"Q15_Lab2Specs.SatSubWitness" = "8ac63f55b4ecd6f4d35d04166f0809c1c820f2b51311ad587842d90548b26c58"
+"Q15_Lab2Specs.TopDiff" = "3c4fc619f59c4eaaf0e2e034fe6375b704df1e81b59c8f2acb4ad16439abf676"
+"Q15_Lab2Specs.TopDiffUse" = "9e059e2e93f2657df14956efa6a5120b6db920b3d20a8c4d40d4d11d8e52f89e"
+"Q15_Lab2Specs.TopDiffWitness" = "912c7b9feda672bd235608782db355ab73904050456d8cc9ec816727c6bd38da"
+[file.spec_clauses]
+"Q15_Lab2Specs.EvenLimbs" = { requires = [], ensures = [] }
+"Q15_Lab2Specs.SatSub" = { requires = [], ensures = [] }
+"Q15_Lab2Specs.TopDiff" = { requires = [], ensures = [] }
+
+[[file]]
+path = "verus/q/q15_practice_iic/src/lib.rs"
+lang = "v"
+open_bodies = []
+open_specs = ["lemma_push_lt"]
+[file.statements]
+"lemma_push_lt" = "227ba43ad0033518559ac1b37d17e1a31f433c843308cd88f634938d9f524c08"
+"lemma_weight_three_up" = "f946ae64623a5da362422ab5ed73ddb90eea60b4dad11aec90ace72cc3763c46"
+"push_check" = "698cd7da5eec989c3b73650d7dc4b9b13ac99badcd31765edabf615fa4f0587c"
+[file.spec_clauses]
+"lemma_push_lt" = { requires = ["0889dd124f062ec0f961b9215980c54657d2233078c45957771dd7968293b448"], ensures = ["5ab03de6532e3b055d3a71bc37a1ee5745da74f5149f6c11481a20bb7921ae21"] }
+
+[[file]]
+path = "verus/q/q15_practice_iic/src/lab2_specs.rs"
+lang = "v"
+open_bodies = []
+open_specs = ["count_nonzero", "max_big", "split_at_limb"]
+[file.statements]
+"count_nonzero" = "a9a0749fbee0168c27728b867e3671de58120f1a89faafd550a593c4445e80c6"
+"count_use" = "bb4084132e21fce908d845e3abc243138c51bb54600d91556249a2e7fc0ef3cd"
+"count_witness" = "c33ea43f67aeed49a70aafdcdf61cc79d7416a6eb79d8e575481adeff0a665a8"
+"max_big" = "7cc8ace064c6957667e53e39cc61bed81af0a9150690496bb86b39db8e94d5a4"
+"max_use" = "4bb7e989c647a441f626d076311e9ca358570d2f4f7491df8cc8fc110ca210ea"
+"max_witness" = "1728c1564deef1de268064a4aa45a3f5428c3a24faeff9d47e6c483301443000"
+"split_at_limb" = "6d63730b083d288e341bf84de5ad7f979819c20f800a11bc2468dbeea2ce45da"
+"split_use" = "f689fa3514afe75902e414378250b02143f2b7941ae56c34fdd9ff01b6453143"
+"split_witness" = "05f7b61dfb362d5a211193bc0384c23f23ff93364ce9ee375eab40c0bde41882"
+[file.spec_clauses]
+"count_nonzero" = { requires = [], ensures = [] }
+"max_big" = { requires = ["89e2d4fe3b85880c992e84a2aea63ab3aa5599c270301b557eaeff2e743a7ef6", "0c731a7a4b45f3ff1c6cfdaf9453250c24941ea3cd559ab059906571664fd015"], ensures = [] }
+"split_at_limb" = { requires = [], ensures = [] }
+
+[[file]]
+path = "specimens/Q15/P2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q15_P2.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q15_P2.ToNat" = "fe8d854e443a5f8e187f801a2347bd21f07955108788d2e7233a61eb32be4f51"
+"Q15_P2.ToNatEmpty" = "2190e7cf188f2e53ff63a9ea49b74baf68b86c6998a55546ad1d89977e301125"
+"Q15_P2.ToNatZeroTop" = "e23dc8b83cd4f821e0bcd11146704f0501f4a7065b7079ef13980f9d908ddbc0"
+
+[[file]]
+path = "specimens/Q15/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q15_P3.BASE" = "775f7bfaf5fa71336bfb86477439ec5f19a33f71cbf21c11b0266015eef2bd7d"
+"Q15_P3.LowLimb" = "08250f443a6926272b79042d68335274375df38ab232c52269c771ccb4d292ea"
+"Q15_P3.TestLowLimb" = "8fca4daf7be153de6d46e58230595eea587c7b5264f68942436dafb486f1b0a0"
+
+[[file]]
+path = "specimens/Q15/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"BASE" = "21f29ef75786729343bca528072ffb0dad68a9737345af3587a074c44c8ac7ef"
+"low_limb" = "d5c361258d8c83ee2a014cf11d49cfc608a1c3a02da465a4d46f8c853832f687"
+"low_limb_checked" = "3645f7a7a260abd3250fc1f1c124ffded1f531753f562e2180a7052995a338c2"
+"seq_to_nat" = "8d3b632591b944b3d636183c724cadf5b67a3218fa6c0407c6dd0094e65ce431"
+
+[[file]]
+path = "specimens/Q15/P5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lowest_nonzero" = "d6e2663927ced088342dfec629961b625ef52f50b45d4f474067deeee1ab87e8"
+
+[[file]]
+path = "dafny/Q/Q15_PracticeIIC/exit/Q15_Exit.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q15_Exit.NoCarryValid" = "be05e9b7a25f72fea1f78d190df01d1ae5868eac28403ace58e355aa0ecb9da9"
+
+[[file]]
+path = "verus/q/q15_practice_iic/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"no_q15_verus_exit_item" = "d331a9daea85e21e682e24e71844d1d2676c85aaf093ee7bddeda4b344b10131"
+
+[[file]]
+path = "dafny/Q/Q15_PracticeIIC/agent/Q15_AgentForensic.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"Q15_AgentForensic.AddEmptyValue" = "bb2dc68af7163967be5a8ab963ee575946428d5ef5eff07072298460fc66db6e"
+"Q15_AgentForensic.FromNatOneLimb" = "3016e9b9d2cc6fae07b4db6f1c37eb86617f941770e92fdc665713a1396425c7"
+"Q15_AgentForensic.TestTwoLimbValue" = "6fe1950e812762a3fda1ca2595a1b72cbaa5e826c1c1a97ba92a0551bb831c79"
+"Q15_AgentForensic.ToNatPair" = "0bdeb5bb882c82430e989aebe3f5948534e16dcd6da29cb1cfe82ade64f97340"
+"Q15_AgentForensic.TwoLimbValue" = "79faabde30f868fda57b531ce41c6e0f2352aacf7c44cb958c8fb72ad03ab7c0"
+
+[[file]]
+path = "verus/q/q15_practice_iic/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_pair_value" = "f0023cebeabae39f3fda140fbc411dc0e0b94529e5cc8940537f15175411542e"
+"lemma_push_value" = "a612a1a32fdd7e57e0d23b44d3638b081fd2d7205740e38e202f136aaa07dea5"
+"lemma_weight_at_least_one" = "442fb289c0748b379c0c19ef03d3d83a71660c88cf389e9666e2df57e986c939"
+"low_of_two" = "210ffdbd7147c14cffeedbd72a127f03c6aef5014b3ce5b5438ac602ecd65b72"
+
+[[file]]
+path = "harness/q/fvh_q/lsp_client.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"Diagnostic" = "dd4655de46596e78fd2ca64c6e9211b0f8007ec4f742e73079db905d431c30ea"
+"ProtocolError" = "f7cc82993e5ad6c392b1b9f30a8de67fd233133dfc0a442cd8e922e10c10ca07"
+"ServerReport" = "e7daa018d2e30f9969afacacaf3266a70e5027bd0d94edf1f1d1e97747ff2315"
+"SymbolStatus" = "590b7cbe3b3aa560b85b854d04adb41fe819303b72bdb83ad4c32a1d41f053b5"
+"frame" = "a3c796312b65f7cf0a8212dcfee9cff7b3c58b7eb3b341d262eb399925ebec17"
+"main" = "6966159873995dcab0d79301472f2e9946e21597e514dfd6155ea02e67a62f7e"
+"read_message" = "5971e92107d9955104a6818ac295f69091c27321ee237d0c33f8fd09d36b7a96"
+"status_name" = "ae3f7a59e2933cf4f26b53ac52cc11bb76c3c06807441f9785f55422744df23e"
+"uri_of" = "9a7a3abfac8b0d59eaabfe7c51a393e94531703f6f4937bf0131b97b729297ef"
+"verify_with_server" = "6136fafad860c643db92a9fcdf7a4892df9016bd7dc51ee36abcbc01bab420df"
+
+[[file]]
+path = "harness/q/fvh_q/oracles.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"Implication" = "70e7ff4ed98bf8d2e5b8a9b739842419a600b5969ef712b3ed902cc50fd6e4fc"
+"KillReport" = "c6edf5bcab801a7726a66ea31d5f7f1c3b09abca15e47159e378735c33234bef"
+"Mutant" = "73a063141cb2406df4001cc7bb33a1d54413c96d3dc1635be51fae635581b113"
+"Spec" = "fc49ab2a933f39b76a3108066b734861ccf91f0c9d220192de4968cac064e0b2"
+"Task" = "f0ea883f162cfa77e70c4157756267b51de6ae0173dc6b31f2ee1e6c9592eb81"
+"Verdict" = "83e9605016e8a3a448a0ac8af15e35416ab1f113ddab55a555546dcf253e3cff"
+"_sig" = "71b8480e171ca58ee45d23996cebaa170b6d615eb8c67e4ac4b1c6b4c5bd5fc3"
+"classify" = "a1d69edefe50604ba76cfec66b7de017197826593e8ee152f073ca9d859f08b4"
+"implication" = "f45bd0a7f95611650bb2af7a97bcec066751fb28fe0bc6f75030b099de979290"
+"kill_rate" = "104f013026862d29227f587514b7820d3cdbeada41a095c3036de12a15bb0623"
+"mutants" = "2d17223396452d065b81328964ad5985161e7aa4f44440e7e6a54551b50b4e86"
+"outcome" = "dfa80c66a890bcd4dce2355d9d9b2162c80d4529a450c9b861b4878404cf37fd"
+"render_lemma" = "2e9314448cb0eaf84be0467d44e59521e886191e5d719720ba4b97dc581e19c7"
+"render_program" = "60d607c0b849de04fe566bc7995a314c2dd8eaf344054e46e5426ab1e952b383"
+"vacuity" = "a4a68c74b9cc785f2347f6908d378c36e8ec773c3cb87cf30c6b576b6b608076"
+"write_target" = "0c783dae97842e1cedf24ca711e730c5f17c4702900a77fd31bc9bbcda6e632b"

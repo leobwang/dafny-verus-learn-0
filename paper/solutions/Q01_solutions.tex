@@ -1,0 +1,86 @@
+% Q01_solutions.tex — REFERENCE SOLUTIONS to paper/Q01_problems.tex.
+% Author-only and read-denied in study mode (Read(./paper/solutions/**)).
+% Built only by `make -C paper paper-solutions` (scripts/ci.sh, or the
+% author's linked worktree); `make paper` never touches this directory.
+%
+% B1 is a paper card. Its fields are graded against the learner's own
+% cheatsheets.md (~/code/research/agentic-formal-veri/cheatsheets.md, outside
+% the repo); this file records which lines of the pinned range each field draws
+% on, paraphrases the reference content, and never copies the card. Pin
+% computed by the DV2b kit lane for Q01 on 2026-10-05.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q01 --- Hello, Dafny and Verus: the whole map \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{How this is graded}
+B1 is a paper card, dimension \texttt{card-fidelity}, scored per field; the
+card's grade is the minimum over its eight fields. A field is correct when it
+agrees with the lines named below; wording is free, and a learner's field may
+be shorter than the reference as long as it states nothing the range
+contradicts. A score of 2 or less quotes the pinned line the field contradicts,
+or names the field and the quoted absence of what it claims.
+
+% ---------------------------------------------------------------------------
+\section*{B1 (paper card 02.3): reference fields and their lines}
+
+Pinned range: \texttt{cheatsheets.md} lines 642--668 (computed 2026-10-05),
+\[ \texttt{sha256 0cb3f94d3982d6d1826d4ef44b71a1a7b634d27d249086bc2281ef61febe5a38}. \]
+Each entry: the reference content (paraphrased), then the lines it draws on.
+
+\begin{description}
+\item[Task shape.] Input: a formal specification file in Dafny, Verus or
+  Lean whose code and proof parts are holes (the languages' own hole forms).
+  Output: blocks that fill the holes, giving code plus a proof the language's
+  checker accepts (``vericoding'': spec in, verified code out). Tasks are
+  small, under 100 lines, drawn from verification benchmarks, coding
+  benchmarks and NumPy/BigNum documentation, many translated between languages
+  by an LLM. \emph{Lines 644, 646, 649, 666.}
+\item[Oracle.] A run succeeds if and only if both checks hold: no bypass
+  pattern is found in the filled file ($v_0$), and the language's checker
+  accepts it ($v_1$). On failure, the errors of both checks go back to the
+  model for the next turn. \emph{Line 649.}
+\item[Trust.] The specification is taken as the statement of intent, though
+  5,735 of the 10,868 tasks used are fresh LLM translations or
+  autoformalizations (the translation loop retried only on checker errors, so
+  it ensured well-formedness, not fidelity); the checkers of the three
+  languages; and the bypass-pattern scan, as the only guard against escape
+  hatches. \emph{Lines 646, 649, 666.}
+\item[Cheat surface.] Whatever escape hatch the bypass scan does not
+  recognise; and specifications too weak or mistranslated for a check to
+  matter: in the authors' manual check of solved tasks, about 9\% of specs
+  were too weak and 15\% poorly translated (an empty-list result satisfied a
+  spec meant for sort-and-deduplicate). The card's conclusion: trusting a
+  success rate needs both bypass validators and spec audits.
+  \emph{Lines 649, 666, 668.}
+\item[Metric.] The fraction of tasks solved per language or benchmark,
+  reported two ways: the best single model's rate and the union over the nine
+  models (a task counts if at least one model solved it), e.g.\ Dafny 67.5\%
+  best model against 82.2\% union. \emph{Lines 644, 652--661.}
+\item[Budget.] Nine off-the-shelf LLMs, each with 5 turns per task (10 on
+  BigNum); between turns the model sees only checker errors. No token, dollar
+  or wall-clock figure in the range. \emph{Lines 646, 666.}
+\item[Variance.] Silent: no repeated runs, seeds or intervals are reported.
+  The union over nine models is an ensemble figure, not a measure of spread,
+  and task pools differ across languages, so a cross-language gap mixes model
+  difficulty with task mix. Needed: repeated runs per model and task, with
+  intervals. \emph{Lines 646, 652, 666 (and the absence in 642--668).}
+\item[Artifact.] The benchmark: 12,504 specifications (10,868 after quality
+  checks) in Dafny, Verus and Lean, with a quality score built from weighted
+  issue counts and near-duplicate detection. The range names no repository,
+  licence or released transcripts. \emph{Lines 644, 650.}
+\end{description}
+
+A field that says the range is silent where it is silent (budget in tokens or
+money; variance; the artifact's location) is correct. A field that contradicts
+a line scores 2 and the finding quotes that line: for example ``the checker
+alone decides'' against line 649, 82\% as the best single model's Dafny rate
+against the table's line 656, or repeated runs with intervals that the range
+never reports.
+
+\end{document}

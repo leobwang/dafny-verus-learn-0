@@ -1,0 +1,62 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/verus/V10"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+   "<root>/tests/corpus/verus/V10/src/lib.rs",
+   "--crate-type=lib",
+   "--crate-name",
+   "corpus_v10",
+   "--rlimit",
+   "2",
+   "--num-threads",
+   "1",
+   "--no-cheating",
+   "--output-json",
+   "--error-format=json",
+   "--time"
+  ],
+  "count_unit": "verified",
+  "diagnostics": [
+   {
+    "code": "gate",
+    "col": 0,
+    "file": "",
+    "line": 0,
+    "message": "gate: 1 lint finding(s)",
+    "severity": "error"
+   }
+  ],
+  "exit_code": 0,
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/verus/V10/src/lib.rs",
+    "kind": "external",
+    "line": 13,
+    "message": "#[verifier::external] hides an item from the verifier (V10, Δ9)"
+   }
+  ],
+  "holes": [],
+  "lang": "verus",
+  "per_symbol": {
+   "double": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/verus/V10",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "e744636e42f9a17813b23cd4d837115c200cfd73145500af52019060744ba535",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/verus/V10"
+}

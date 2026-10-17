@@ -1,0 +1,32 @@
+// Demo for card Q05.C3v (write:error-propagation), the failure half: `first_is_zero`
+// promising an `Ok` it cannot always deliver, past a `?` that may return early. Run it
+// with `scripts/vcheck specimens/Q05/card-c3v.rs.specimen`; the EXPECT line at the end
+// pins the message the verifier gives (line and fragment).
+use vstd::prelude::*;
+
+verus! {
+
+pub struct NoLimb;
+
+pub fn first_limb(v: &Vec<u64>) -> (r: Result<u64, NoLimb>)
+    ensures
+        r is Ok <==> v.len() > 0,
+        r is Ok ==> r->Ok_0 == v@[0],
+{
+    if v.len() > 0 {
+        Ok(v[0])
+    } else {
+        Err(NoLimb)
+    }
+}
+
+pub fn first_is_zero(v: &Vec<u64>) -> (r: Result<bool, NoLimb>)
+    ensures
+        r is Ok,
+{
+    let x = first_limb(v)?;
+    Ok(x == 0)
+}
+
+} // verus!
+// EXPECT @25 "postcondition not satisfied"

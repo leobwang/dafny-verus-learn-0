@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/D-04/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/D-04/main.dfy",
+    "kind": "uninitialized-const",
+    "line": 3,
+    "message": "a module-level const with no value is an uninterpreted oracle (G4)"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/D-04/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "bf03932bf462c88e4bc8fca699e80cb4191527a550a3a64d7e1f6d6513e499c3",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-04/main.dfy"
+}

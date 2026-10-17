@@ -1,0 +1,7 @@
+# DV0 spike: BigNat layers L1-L4 as one crate per layer (design 10.1, 14.2), plus qg_bignat_x
+# (extras beyond L1-L4: Q10 round trip, Q13 sub, Q04/Q07 nonlinear and bit-vector sites, Q16 cmp_any).
+# Each crate depends only on the crate below it. Verify with ./verify.sh (pinned --rlimit 2).
+# Its own workspace root, so it is never a member of a learner workspace.
+[workspace]
+members = ["qg_bignat_l1", "qg_bignat_l2", "qg_bignat_l3", "qg_bignat_l4", "qg_bignat_x"]
+resolver = "2"

@@ -1,0 +1,24 @@
+# Cheat-corpus manifest (Dafny) D-14. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify frozen.dfy main.dfy -> exit 2; resolution/parse error; 0 warning position(s), 1 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# specfreeze --check: scripts/specfreeze --against frozen.dfy main.dfy (the corpus has no registry module, so the freeze is checked against frozen.dfy)
+# main.dfy refines a module of frozen.dfy and resolves only together with it, so vcheck --gate and
+# vaudit do not take it alone; the plain run of both files stops at W-D19 (exit 2).
+id = "D-14"
+lang = "dafny"
+half = "R"
+xclass = "X06"
+kind = "construct"
+title = "refinement adds a requires to a frozen lemma (Δ44, W-D19)"
+files = ["main.dfy", "frozen.dfy"]
+plain_exit = 2
+
+[[expect]]
+tool = "specfreeze --check"
+outcome = "flagged"
+kinds = ["freeze-refinement"]
+output_sha256 = "8d08d20d571844156b921cf92642ef20f1463c4c517db7454b80744246b043ad"
+summary = "specfreeze --against frozen.dfy main.dfy: exit 1, 1 finding(s); freeze-refinement at main.dfy:4"

@@ -1,0 +1,15 @@
+// item: Q03.P10v S7 value
+// **P10.** Spec values. `limb_at(s, j)` (layer L2) reads limb `j` of `s`. What is
+// the value of the sum below? Answer form: numeral
+// Reference Solution: index -1 is outside the sequence, so `limb_at` reads 0 there;
+// index 1 is the limb 8. The sum is 8.
+use vstd::prelude::*;
+use qg_bignat_l2::*;
+
+verus! {
+
+proof fn p10v() {
+    assert(limb_at(seq![7u64, 8u64], -1) + limb_at(seq![7u64, 8u64], 1) == 8) by (compute_only);
+}
+
+} // verus!

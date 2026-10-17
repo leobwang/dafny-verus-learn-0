@@ -1,0 +1,977 @@
+{
+ "items": {
+  "A1b.CatAssoc": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 22,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A1b_Facts.CatAssoc",
+   "trivial_manualind": null
+  },
+  "A1b.CatEpsLeft": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 3,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A1b_Facts.CatEpsLeft",
+   "trivial_manualind": null
+  },
+  "A1b.CatEpsRight": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 8,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A1b_Facts.CatEpsRight",
+   "trivial_manualind": null
+  },
+  "A1b.NullableCorrect": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 13,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A1b_Facts.NullableCorrect",
+   "trivial_manualind": null
+  },
+  "A1b.StarConcat": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 8,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A1b_Facts.StarConcat",
+   "trivial_manualind": null
+  },
+  "A1b.StarOne": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 3,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A1b_Facts.StarOne",
+   "trivial_manualind": null
+  },
+  "A2.ClassInsert": {
+   "calls_items": [],
+   "code_lines": 16,
+   "empty_indfalse": null,
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 31,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A2_Deriv.ClassInsert",
+   "trivial_manualind": "fails"
+  },
+  "A2.ClassMember": {
+   "calls_items": [],
+   "code_lines": 4,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A2_Deriv.ClassMember",
+   "trivial_manualind": "fails"
+  },
+  "A2.ClassUnion": {
+   "calls_items": [],
+   "code_lines": 5,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A2_Deriv.ClassUnion",
+   "trivial_manualind": "fails"
+  },
+  "A2.DerivCorrect": {
+   "calls_items": [
+    "A1b.NullableCorrect"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 50,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A2_Deriv.DerivCorrect",
+   "trivial_manualind": null
+  },
+  "A2.DerivMatch": {
+   "calls_items": [
+    "A1b.NullableCorrect",
+    "A2.DerivCorrect"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": null,
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "annot",
+   "proof_lines": 6,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A2_Deriv.DerivMatch",
+   "trivial_manualind": null
+  },
+  "A4.CheckComplete": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 2,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.CheckComplete",
+   "trivial_manualind": null
+  },
+  "A4.CheckCompleteDirect": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 27,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.CheckCompleteDirect",
+   "trivial_manualind": null
+  },
+  "A4.CheckSound": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 14,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.CheckSound",
+   "trivial_manualind": null
+  },
+  "A4.FindCat": {
+   "calls_items": [],
+   "code_lines": 6,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.FindCat",
+   "trivial_manualind": "fails"
+  },
+  "A4.FindDeriv": {
+   "calls_items": [],
+   "code_lines": 12,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.FindDeriv",
+   "trivial_manualind": "fails"
+  },
+  "A4.FindStar": {
+   "calls_items": [],
+   "code_lines": 6,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.FindStar",
+   "trivial_manualind": "fails"
+  },
+  "A4.MkCatCorrect": {
+   "calls_items": [
+    "A1b.CatEpsLeft",
+    "A1b.CatEpsRight"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 6,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.MkCatCorrect",
+   "trivial_manualind": null
+  },
+  "A4.MkStarCorrect": {
+   "calls_items": [
+    "A4.StarStar"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 5,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.MkStarCorrect",
+   "trivial_manualind": null
+  },
+  "A4.NDerivCorrect": {
+   "calls_items": [
+    "A4.MkCatCorrect"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 20,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.NDerivCorrect",
+   "trivial_manualind": null
+  },
+  "A4.NormCorrect": {
+   "calls_items": [
+    "A4.MkCatCorrect",
+    "A4.MkStarCorrect",
+    "A4.StarCong"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 17,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.NormCorrect",
+   "trivial_manualind": null
+  },
+  "A4.StarCong": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 12,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.StarCong",
+   "trivial_manualind": null
+  },
+  "A4.StarStar": {
+   "calls_items": [
+    "A1b.StarConcat",
+    "A1b.StarOne"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 9,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A4_Norm.StarStar",
+   "trivial_manualind": null
+  },
+  "A5.CompleteAlt": {
+   "calls_items": [
+    "A5.EmitComplete",
+    "A5.LayoutAlt"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 11,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.CompleteAlt",
+   "trivial_manualind": null
+  },
+  "A5.CompleteCat": {
+   "calls_items": [
+    "A5.EmitComplete",
+    "A5.LayoutCat"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 6,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.CompleteCat",
+   "trivial_manualind": null
+  },
+  "A5.CompleteStar": {
+   "calls_items": [
+    "A5.EmitComplete",
+    "A5.LayoutStar"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 14,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.CompleteStar",
+   "trivial_manualind": null
+  },
+  "A5.EmitComplete": {
+   "calls_items": [
+    "A5.CompleteAlt",
+    "A5.CompleteCat",
+    "A5.CompleteStar"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 15,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.EmitComplete",
+   "trivial_manualind": null
+  },
+  "A5.EmitCorrect": {
+   "calls_items": [
+    "A5.EmitComplete",
+    "A5.EmitSound"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 18,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.EmitCorrect",
+   "trivial_manualind": null
+  },
+  "A5.EmitSound": {
+   "calls_items": [
+    "A5.SoundAlt",
+    "A5.SoundCat",
+    "A5.SoundStar"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 19,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.EmitSound",
+   "trivial_manualind": null
+  },
+  "A5.LayoutAlt": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 11,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.LayoutAlt",
+   "trivial_manualind": null
+  },
+  "A5.LayoutCat": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 9,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.LayoutCat",
+   "trivial_manualind": null
+  },
+  "A5.LayoutStar": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 7,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.LayoutStar",
+   "trivial_manualind": null
+  },
+  "A5.SoundAlt": {
+   "calls_items": [
+    "A5.EmitSound",
+    "A5.LayoutAlt"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 10,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.SoundAlt",
+   "trivial_manualind": null
+  },
+  "A5.SoundCat": {
+   "calls_items": [
+    "A5.EmitSound",
+    "A5.LayoutCat"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 10,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.SoundCat",
+   "trivial_manualind": null
+  },
+  "A5.SoundStar": {
+   "calls_items": [
+    "A5.EmitSound",
+    "A5.LayoutStar"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 16,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RG_A5_VM.SoundStar",
+   "trivial_manualind": null
+  },
+  "R02.NodeCountBackwards": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 12,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R02.NodeCountBackwards",
+   "trivial_manualind": null
+  },
+  "R02.NullableBackwards": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 12,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R02.NullableBackwards",
+   "trivial_manualind": null
+  },
+  "R06.BackwardsCorrect": {
+   "calls_items": [
+    "R06.BackwardsInvolution",
+    "R06.BackwardsSound",
+    "R06.BackwardsStrInvolution"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 8,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R06_Decomp.BackwardsCorrect",
+   "trivial_manualind": null
+  },
+  "R06.BackwardsInvolution": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 12,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R06_Decomp.BackwardsInvolution",
+   "trivial_manualind": null
+  },
+  "R06.BackwardsSound": {
+   "calls_items": [
+    "A1b.StarConcat",
+    "A1b.StarOne",
+    "R06.BackwardsStrAppend"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 30,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R06_Decomp.BackwardsSound",
+   "trivial_manualind": null
+  },
+  "R06.BackwardsStrAppend": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 7,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R06_Decomp.BackwardsStrAppend",
+   "trivial_manualind": null
+  },
+  "R06.BackwardsStrInvolution": {
+   "calls_items": [
+    "R06.BackwardsStrAppend"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 8,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R06_Decomp.BackwardsStrInvolution",
+   "trivial_manualind": null
+  },
+  "R06.BackwardsStrLength": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 3,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R06_Decomp.BackwardsStrLength",
+   "trivial_manualind": null
+  },
+  "R09.AltRest": {
+   "calls_items": [],
+   "code_lines": 4,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.AltRest",
+   "trivial_manualind": "fails"
+  },
+  "R09.CatChrStep": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 2,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.CatChrStep",
+   "trivial_manualind": null
+  },
+  "R09.CatRest": {
+   "calls_items": [],
+   "code_lines": 4,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.CatRest",
+   "trivial_manualind": "fails"
+  },
+  "R09.CatRestLiteral": {
+   "calls_items": [
+    "R09.CatChrStep"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 13,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.CatRestLiteral",
+   "trivial_manualind": null
+  },
+  "R09.ClassItems": {
+   "calls_items": [],
+   "code_lines": 16,
+   "empty_indfalse": null,
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 17,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.ClassItems",
+   "trivial_manualind": "fails"
+  },
+  "R09.ClassToReCorrect": {
+   "calls_items": [
+    "R09.RangeReCorrect"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 18,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.ClassToReCorrect",
+   "trivial_manualind": null
+  },
+  "R09.CopiesSplit": {
+   "calls_items": [
+    "A1b.CatAssoc",
+    "A1b.CatEpsLeft"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 12,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.CopiesSplit",
+   "trivial_manualind": null
+  },
+  "R09.CopiesUpToCorrect": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 38,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.CopiesUpToCorrect",
+   "trivial_manualind": null
+  },
+  "R09.Counted": {
+   "calls_items": [],
+   "code_lines": 14,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.Counted",
+   "trivial_manualind": "fails"
+  },
+  "R09.LiteralFidelity": {
+   "calls_items": [
+    "R09.CatRestLiteral"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 16,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.LiteralFidelity",
+   "trivial_manualind": null
+  },
+  "R09.Parse": {
+   "calls_items": [],
+   "code_lines": 2,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.Parse",
+   "trivial_manualind": "fails"
+  },
+  "R09.ParseAlt": {
+   "calls_items": [],
+   "code_lines": 2,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.ParseAlt",
+   "trivial_manualind": "fails"
+  },
+  "R09.ParseAtom": {
+   "calls_items": [],
+   "code_lines": 13,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.ParseAtom",
+   "trivial_manualind": "fails"
+  },
+  "R09.ParseCat": {
+   "calls_items": [],
+   "code_lines": 4,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.ParseCat",
+   "trivial_manualind": "fails"
+  },
+  "R09.ParsePost": {
+   "calls_items": [],
+   "code_lines": 2,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.ParsePost",
+   "trivial_manualind": "fails"
+  },
+  "R09.PostRest": {
+   "calls_items": [],
+   "code_lines": 8,
+   "empty_indfalse": null,
+   "empty_manualind": null,
+   "empty_maxauto": null,
+   "empty_opaqueMatches": null,
+   "kind": "impl",
+   "proof_lines": 0,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.PostRest",
+   "trivial_manualind": "fails"
+  },
+  "R09.RangeReCorrect": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "VERIFIES(1,2,3,default)",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 14,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.RangeReCorrect",
+   "trivial_manualind": null
+  },
+  "R09.RepRangeCorrect": {
+   "calls_items": [
+    "R09.CopiesSplit",
+    "R09.CopiesUpToCorrect"
+   ],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 14,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_R09_Syntax.RepRangeCorrect",
+   "trivial_manualind": null
+  },
+  "X.Match": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": null,
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "annot",
+   "proof_lines": 1,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_DerivMatcher.Match",
+   "trivial_manualind": null
+  },
+  "X.WitnessAbb": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 7,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_Witness.WitnessAbb",
+   "trivial_manualind": null
+  },
+  "X.WitnessAnchored": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 5,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_Witness.WitnessAnchored",
+   "trivial_manualind": null
+  },
+  "X.WitnessNotBa": {
+   "calls_items": [],
+   "code_lines": 0,
+   "empty_indfalse": "fails",
+   "empty_manualind": "fails",
+   "empty_maxauto": "fails",
+   "empty_opaqueMatches": null,
+   "kind": "lemma",
+   "proof_lines": 6,
+   "ref_reveal_opaqueMatches": null,
+   "symbol": "RX_Witness.WitnessNotBa",
+   "trivial_manualind": null
+  }
+ },
+ "ref": {
+  "auto:1": {
+   "max_rc": 1159969,
+   "probe": "ref/auto-1",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "auto:2": {
+   "max_rc": 1472386,
+   "probe": "ref/auto-2",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "auto:3": {
+   "max_rc": 1241733,
+   "probe": "ref/auto-3",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "auto:default": {
+   "max_rc": 1410115,
+   "probe": "ref/auto-default",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "manualind:1": {
+   "max_rc": 1226809,
+   "probe": "ref/manualind-1",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "manualind:2": {
+   "max_rc": 1376152,
+   "probe": "ref/manualind-2",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "manualind:3": {
+   "max_rc": 1083616,
+   "probe": "ref/manualind-3",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  },
+  "manualind:default": {
+   "max_rc": 1410115,
+   "probe": "ref/manualind-default",
+   "status": "verified",
+   "verdict": "verified",
+   "verified_count": 577
+  }
+ }
+}

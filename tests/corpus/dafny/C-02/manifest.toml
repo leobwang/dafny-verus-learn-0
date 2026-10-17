@@ -1,0 +1,46 @@
+# Cheat-corpus manifest (Dafny) C-02. Outcomes captured on the pinned toolchain (dafny 4.11.0, Z3 4.12.1) on 2026-10-04,
+# one solver job at a time through the wrappers (8G cap).
+# plain_exit: dafny verify main.dfy -> exit 0; 2 verified, 0 errors; 0 warning position(s), 0 error line(s)
+#   (dafny verify with only the resource pins: --resource-limit, --cores, --solver-path; Dafny defaults otherwise;
+#    a refinement candidate runs together with frozen.dfy).
+# output_sha256: sha256 of the tool's stdout then stderr, run from the course root, after: the root path -> <root>; the scratch root -> <scratch>; 'raw output: <path>' -> 'raw output: <raw>'; the brittleness resource-spread clause -> '<spread>'; every whitespace run -> one space; ends trimmed.
+# vcheck --gate: scripts/vcheck --gate main.dfy
+# vaudit: scripts/vaudit main.dfy
+# swap-to-false: scripts/vcheck --gate swap.dfy (main.dfy with the conclusion replaced by false): flagged when it still verifies
+# seed-rerun: scripts/vcheck --brittleness main.dfy (every pinned seed)
+id = "C-02"
+lang = "dafny"
+half = "R"
+xclass = ""
+kind = "control"
+title = "control: a lemma with a real inductive proof"
+files = ["main.dfy", "swap.dfy"]
+plain_exit = 0
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "clean"
+kinds = ["verdict:verified"]
+output_sha256 = "905126658ac3c748df9ec8dd14ebea86735657a161b28caadaf62d8344ade072"
+summary = "vcheck --gate main.dfy: exit 0, verdict verified, 2 tasks verified, verifier exit 0"
+
+[[expect]]
+tool = "vaudit"
+outcome = "clean"
+kinds = []
+output_sha256 = "04ff4fe53369d7893bde765cb2fcc11a41fabf5f77f89d16282dc2e34ab276a2"
+summary = "vaudit main.dfy: exit 0, 0 findings (dafny audit and the learner lint clean)"
+
+[[expect]]
+tool = "swap-to-false"
+outcome = "clean"
+kinds = ["W-D10", "verdict:failed"]
+output_sha256 = "d3c7fad301891198b96aca3d9dd796d70cc38bd26327966533d7387b5c4291bc"
+summary = "conclusion swapped for false fails: context not vacuous; vcheck --gate swap.dfy: exit 1, verdict failed, 1 tasks verified, verifier exit 4; W-D10 at swap.dfy:8"
+
+[[expect]]
+tool = "seed-rerun"
+outcome = "clean"
+kinds = ["stable", "verdict:verified"]
+output_sha256 = "d0a44b6341b0b78287e32359fffdf982785731f7705ec241fb010453a174b6c2"
+summary = "vcheck --brittleness main.dfy: exit 0; seed 1: verified, seed 2: verified, seed 3: verified; stable"

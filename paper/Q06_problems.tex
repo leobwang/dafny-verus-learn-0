@@ -1,0 +1,157 @@
+% Q06_problems.tex — the written problems of Q06 (The machine and the verifier
+% loop). Built by `make -C paper paper` with Q06_answers.tex.
+% B1–B4 are the statistics by hand (QPLAN §11.3: a Wilson interval and its
+% width at n = 20, pass@k from its definition on a small table, why only first
+% attempts enter a pass rate, a paired comparison read from its discordant
+% pairs; 12 minutes); B5 is the paper card 02.4 (15 minutes). The numbers are
+% the problems' own: neither P7py's nor P9py's inputs, nor the chapter's
+% worked examples.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q06 --- The machine and the verifier loop \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+Answer in \texttt{Q06\_answers.tex}, one section per problem; keep its
+\verb+\label{ans:B<n>}+ anchors. \texttt{make -C paper paper} must stay green:
+a non-compiling answer set is the written track's red build.
+
+Order: B1--B4 after chapter section~5 (the statistics by hand, 12 minutes),
+\emph{before} you write H6py and H7py; B5 with the chapter (15 minutes). Then
+run \texttt{/grade-paper Q06} in a fresh session, still before H6py and H7py.
+
+The computations are graded step by step: write every step, and name the
+formula it uses. A calculator for the arithmetic is fine. Check a final number
+with \texttt{fvh.stats} (chapter section~5 shows the command) only after you
+have written its steps. Give decimals to three places unless a part asks
+otherwise. Compare with \texttt{paper/solutions/} only as the module's last
+step.
+
+Notation: $n$ is a number of tasks (or, in B2, of samples of one task),
+$\hat p$ an observed success rate, $k$ (in B2) the number of attempts that
+pass@$k$ draws, and $z = 1.96$ for 95\,\%. $\binom{a}{b}$ is a binomial
+coefficient, with $\binom{a}{b} = 0$ when $b > a$.
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B1}
+\textbf{A pass rate and its interval} (4 minutes). A prover closes 17 of 20
+goals, one first attempt per goal.
+\begin{enumerate}
+\item[(a)] Compute the 95\,\% Wilson score interval step by step: $\hat p$;
+  $z^2/n$; the denominator $1 + z^2/n$; the centre
+  $\bigl(\hat p + z^2/(2n)\bigr) / (1 + z^2/n)$; the term under the root,
+  $\hat p(1 - \hat p)/n + z^2/(4n^2)$; and the half-width
+  $z \sqrt{\hat p(1 - \hat p)/n + z^2/(4n^2)} \,/\, (1 + z^2/n)$. Give the
+  interval and its width.
+\item[(b)] Compute the Wald interval $\hat p \pm z\sqrt{\hat p(1 - \hat p)/n}$
+  for the same counts. Which property that every interval for a proportion
+  should have does it break here? Name one way in which its shape differs from
+  the Wilson interval's.
+\item[(c)] At the same rate, by roughly what factor must the number of goals
+  grow to halve the width of the Wilson interval? Justify it from the formula
+  in one sentence.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B2}
+\textbf{pass@k from its definition} (3 minutes). Three tasks were each sampled
+$n = 5$ times, with these numbers $c$ of successful samples:
+\begin{center}
+\begin{tabular}{lccc}
+task & t1 & t2 & t3 \\ \hline
+$c$ (of $n = 5$) & 0 & 2 & 4
+\end{tabular}
+\end{center}
+The unbiased estimator of pass@$k$ for one task is
+$1 - \binom{n - c}{k} \big/ \binom{n}{k}$, and $1$ when $n - c < k$.
+\begin{enumerate}
+\item[(a)] Compute pass@2 of each task, writing each binomial coefficient.
+\item[(b)] Compute the benchmark's pass@2 and pass@1, each the mean over the
+  three tasks.
+\item[(c)] For t2, compute the plug-in estimate $1 - (1 - c/n)^k$ at $k = 2$.
+  Is it above or below the unbiased value? In one sentence, say what the
+  plug-in assumes that the definition does not.
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[concept]\label{prob:B3}
+\textbf{Why a pass rate counts first attempts} (2 minutes). One arm's run
+records on four tasks. A task is retried after a failure, at most three
+attempts in all:
+\begin{center}
+\begin{tabular}{lccc}
+task & attempt 1 & attempt 2 & attempt 3 \\ \hline
+t1 & fail & fail & success \\
+t2 & success & --- & --- \\
+t3 & fail & success & --- \\
+t4 & fail & fail & fail
+\end{tabular}
+\end{center}
+\begin{enumerate}
+\item[(a)] Compute three numbers: the pass rate (each task's first attempt,
+  once), the share of all records that are successes, and the share of tasks
+  solved at some attempt.
+\item[(b)] Explain why the pass rate takes each task's first attempt once
+  rather than every record: say what each of the other two numbers measures
+  instead, and what counting every record would do to $n$ and to the
+  interval.
+\item[(c)] A report states only ``solved within 3 attempts''. What must it
+  also state before a reader can compare that figure with another system's?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[hand-calculation]\label{prob:B4}
+\textbf{A paired comparison} (3 minutes). Two provers, A and B, ran on the same
+30 tasks, one first attempt each:
+\begin{center}
+\begin{tabular}{lcc}
+ & B solved & B missed \\ \hline
+A solved & 14 & 1 \\
+A missed & 10 & 5
+\end{tabular}
+\end{center}
+\begin{enumerate}
+\item[(a)] Give each prover's pass rate. Which tasks carry information about
+  which prover is better, and how many are there? Name the two discordant
+  counts $b$ (A only) and $c$ (B only).
+\item[(b)] Compute McNemar's exact two-sided p-value,
+  $p = \min\bigl(1,\; 2\,P(X \leq \min(b, c))\bigr)$ for
+  $X \sim \mathrm{Binomial}(b + c, 1/2)$, writing each binomial term. Decide at
+  $\alpha = 0.05$.
+\item[(c)] Suppose the 14 tasks that both solve had been 140. What changes in
+  (a), and what in (b)?
+\end{enumerate}
+\end{problem}
+
+% ---------------------------------------------------------------------------
+\begin{problem}[paper-card]\label{prob:B5}
+\textbf{Paper card 02.4, VeruSAGE: A Study of Agent-Based Verification for Rust
+Systems} (15 minutes). Fill the card on its eight fields: task shape, oracle,
+what is trusted, cheat surface, metric, budget, variance, artifact. Each field
+is graded against the pinned range of your own \texttt{cheatsheets.md}: lines
+672--699, the entry from its heading to its \emph{Why it matters} paragraph, in
+the copy the command below names. The pin is the sha256 of exactly those lines,
+computed with the first line below; it must print the second.
+{\small
+\begin{verbatim}
+sed -n '672,699p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+00089348ef0724910a25cedc92d64202de038a05f23120034041cf48ed7e4ffa  -
+\end{verbatim}
+}
+Write each field in your own words, a sentence or two. Where the range says
+nothing about a field, write that, and what you would need to know. Read the
+reported figures as chapter section~5 reads a figure: a rate over how many
+tasks, from how many runs, and compared with what. A hash that no longer
+matches means the card file changed: the grader refuses the card until the pin
+is renewed.
+\end{problem}
+
+\end{document}

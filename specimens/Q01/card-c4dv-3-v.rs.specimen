@@ -1,0 +1,15 @@
+// Card demo Q01.C4dv (false friends), row 3 (`forall`), Verus side. Open it only after Q01's
+// predictions are recorded. Run `scripts/vcheck specimens/Q01/card-c4dv-3-v.rs.specimen` and compare with
+// the Dafny side, `specimens/Q01/card-c4dv-3-d.dfy.specimen`.
+// after: Q01.P8dv
+use vstd::prelude::*;
+
+verus! {
+
+proof fn successor()
+    ensures
+        forall|x: int| x + 1 > x,
+{
+}
+
+} // verus!

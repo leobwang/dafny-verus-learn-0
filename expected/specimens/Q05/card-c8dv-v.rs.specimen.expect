@@ -1,0 +1,512 @@
+# pins.py golden for specimens/Q05/card-c8dv-v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/Q05/card-c8dv-v.rs.specimen`; never edit.
+command: verify
+exit: 0
+verdict: verified
+stage: verify
+verified: 3
+holes: 0
+{
+ "diagnostics": [],
+ "json": {
+  "func-details": {
+   "card_c8dv_v::ParseFail::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "card_c8dv_v::half": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "card_c8dv_v::quarter": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::From::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%60::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%61::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%62::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%63::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%64::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%65::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%66::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%67::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%68::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%69::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%70::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%71::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%72::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%73::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%74::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%75::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%76::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%77::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%78::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%79::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%80::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%81::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%92::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::convert::num::impl&%94::from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::result::impl&%27::branch": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "core::result::impl&%28::from_residual": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::control_flow::spec_from": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::control_flow::spec_from_blanket_identity": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::FromSpec::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::FromSpec::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%10::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%10::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%11::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%11::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%12::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%12::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%13::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%13::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%14::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%14::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%15::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%15::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%16::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%16::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%17::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%17::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%18::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%18::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%19::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%19::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%20::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%20::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%21::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%21::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%22::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%22::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%23::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%23::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%24::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%24::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%25::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%25::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%26::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%26::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%27::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%27::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%28::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%28::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%29::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%29::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%6::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%6::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%7::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%7::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%8::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%8::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%9::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::convert::impl&%9::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::ZeroablePrimitiveSpec::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::axiom_nonzero_is_not_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%10::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%11::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%16::from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%16::obeys_from_spec": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%1::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%2::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%3::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%4::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%5::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%6::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%7::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%8::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::impl&%9::is_zero": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::nonzero::nonzero_spec_get": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::result::ResultAdditionalSpecFns::arrow_Ok_0": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::std_specs::result::impl&%0::arrow_Ok_0": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::View::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%0::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%16::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%18::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%20::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%22::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%24::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%26::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%28::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%2::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%30::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%32::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%34::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%36::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%38::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%40::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%42::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%48::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%4::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::view::impl&%6::view": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": false,
+   "encountered-vir-error": false,
+   "errors": 0,
+   "is-verifying-entire-crate": true,
+   "success": true,
+   "verified": 3
+  }
+ },
+ "other": []
+}

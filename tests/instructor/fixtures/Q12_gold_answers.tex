@@ -1,0 +1,199 @@
+% Q12_gold_answers.tex — GRADER CALIBRATION FIXTURE (correct, paraphrased).
+% A drop-in replacement for paper/Q12_answers.tex (spec §4.7, §6.12): every answer is
+% correct, but the wording, the seeds and the baseline are deliberately far from the
+% reference, so the grader must recognise correctness by substance (the rubric's
+% probes), not by matching text. B1 uses a baseline of 0.4 and its own seeds; the cards
+% word every field their own way. B2 is not graded in this mode.
+%
+% EXPECTED[B1][hypothesis-precision][4] [budget-parity][4] [variance][4] [contamination][4] [cheat-audit][4] [disclosure][4]: correct. Probe B recomputes every product (4320, 80, 160) and the totals against the registry (4,400 / 620 and 180 / 20); Probe M at the stated inputs prints 0.2854; Probe S finds every seed list disjoint; the markers appear once. The report's first line is PREREG Q12: UNLOCKED — every method dimension >= 3. No finding.
+% EXPECTED[B3][card-fidelity][4] [B4][card-fidelity][4] [B5][card-fidelity][4]: every field agrees with its pinned range; Variance and Artifact fields correctly say what each range does not give. No finding.
+% Expected per-problem grades: B1 = 4, B3 = 4, B4 = 4, B5 = 4 (3 is tolerated only with a declared-gap note and no flaw).
+% A calibration run FAILS if any graded problem scores <= 2, if B1 is HELD, or if any
+% finding claims a false product, a wrong MDE, an overlap of seeds or a contradiction
+% with a range.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q12 --- Practice I-C + Lab 1 \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% PREREG-BEGIN
+\section*{Problem B1 (pre-registration)}\label{ans:B1}
+\begin{answer}
+\textbf{Claim} Three two-sided hypotheses, each refuted by a paired-difference interval
+that contains zero at its Holm level: (H1) repairs from feedback (A2) change the rate
+against independent samples (A1); (H2) best-first search (A3) changes it against A1;
+(H3) the A2 $-$ A1 effect is different in the two languages.
+
+\textbf{Metric and estimator} A task in a repeat is solved when some candidate within
+its 8 calls passes the gate; per arm, the mean over tasks of the fraction of repeats
+solved; per comparison, the mean paired difference, with a percentile bootstrap over
+tasks (repeats kept within their task) and McNemar on each repeat as a check.
+
+\textbf{Arms and policies} A1 \texttt{IndependentSampler}, A2 \texttt{SequentialRepair},
+A3 \texttt{BestFirst}, all from \texttt{harness/q/fvh\_q/policies.py}; prompt hashes
+recorded once the file is final. The Claude arm runs A2 on 20 tasks, 10 per language
+and 5 per stratum within each language, drawn with seed 7711.
+
+\textbf{Tasks and strata} Local 10 Dafny + 10 Verus from
+\texttt{bench/local/q/lab1/STRATUM.toml} (the levers-refused case; the maxauto case is
+not drawable without six more Dafny tasks); public 20 DafnyBench hint-free and 20
+HumanEval-Verus task forms, with the sets' commits and validation sha256 copied from
+\texttt{bench/manifest.toml}; draw seeds 6201 (local), 6202 (DafnyBench), 6203 (HumanEval-Verus); pilot: one sample on each of 80 public
+candidates (seeds 90001--90080), a public stratum outside 0.1--0.9 is redrawn once with
+the next seed.
+
+\textbf{Generation settings} As the Ollama gate pins them, the same for all arms;
+seeds A1 10001--10480, A2 20001--20480, A3 30001--30480, pilot 90001--90080; Claude's
+pinned argv.
+
+\textbf{Cost per arm} Tokens in and out, GPU-seconds and wall clock per arm, measured
+and reported against the ceiling; the truncation rate per arm as a sensitivity line.
+
+\textbf{Seeds and repeats} Qwen: the seed lists above; Claude: three repeated runs.
+
+\textbf{Cheat surface and gate} My Q09 gate core in the verification container on every
+claimed success, the lab gate's lever check, the task forms' spec freeze; grader-only
+classes reported \texttt{UNKNOWN}.
+
+\textbf{Exclusions} \texttt{infra-failed}: re-issued with the same id, prompt hash and
+seed, at most 3 times, then excluded and counted; \texttt{truncated:<cause>}: a failure
+in the primary analysis, excluded in a sensitivity line.
+
+\textbf{Stopping rule} A cap or a window between attempts defers the batch; no outcome
+is looked at before the plan's last id is scored; no arm stops on its results.
+
+\textbf{Prediction intervals} (80\%) A1 0.20--0.40, A2 0.25--0.50, A3 0.20--0.45;
+A2 $-$ A1 $-$0.05--0.20; A3 $-$ A1 $-$0.10--0.15.
+
+\textbf{Contamination} Local tasks authored 2026-10-07, after both models' release;
+the public sets flagged as possibly seen.
+
+\textbf{Disclosure} A small-scale replication with model substitution; Claude is both a
+subject and the grader of this plan; one machine, one solver pin; model ids, digests,
+argv, prompt hashes and the sandbox manifest recorded per run.
+
+\textbf{Budget arithmetic} Qwen: $60 \text{ tasks} \times 8 \text{ calls} \times 3
+\text{ arms} \times 3 \text{ repeats} = 4{,}320$, plus the pilot's $80$, so $4{,}400$
+calls in $540 + 80 = 620$ runs; Claude: $20 \times 8 = 160$ calls plus at most 20
+sentinels, $\le 180$ calls in 20 runs; equal to the registry's budget. GPU: DV0's single
+sample, about 7.3 s per independent call, gives about 9 GPU-hours, a lower bound for A2
+and A3; redone per arm from DV4's throughput probe before the runs, with two repeats as
+the pre-registered fallback above 10 GPU-hours.
+
+\textbf{MDE} Baseline 0.4 this time (the pilot band's middle), 60 paired tasks, power
+0.8, Holm worst case 0.025:
+\texttt{stats.mde\_two\_proportions(60, 0.4, alpha=0.025, paired=True)} $= 0.2854$, so
+about 29 points; the paired formula is the conservative one (correlated arms discord
+less).
+\textbf{Batch plan} Prospective file \texttt{research/q12-main.toml}.
+This method fixture does not open a batch. Once the policies are final,
+record the exact file digest on its own \texttt{plan-sha256:} line and
+re-grade the changed pre-registration before executing it. Separately
+executed pilot or subset plans each need their own binding and gradebook
+row; the registered method stays fixed.
+\end{answer}
+% PREREG-END
+
+\section*{Problem B2 (lab report)}\label{ans:B2}
+\begin{answer}
+\textbf{Reproduce:} \verb+<not yet: the runs need DV4 steps 2--4>+
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B3 (paper card)}\label{ans:B3}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 05.10, lines 2148--2171 (the pinned range).
+
+\textbf{Task shape:} 782 verified Dafny programs with their loop invariants and
+assertions removed; the model restores hints until Dafny verifies.
+
+\textbf{Oracle:} Dafny verifies with the specification unchanged and no \texttt{assume
+false} or \texttt{\{:verify false\}}.
+
+\textbf{What is trusted:} Dafny, the fixed specifications (some weak) and a
+two-pattern cheat check.
+
+\textbf{Cheat surface:} Only two cheat patterns are checked; weak specifications; 208
+programs verify with no hints at all.
+
+\textbf{Metric:} SR$_{10}$, the share solved within ten attempts with the error fed
+back: 67.8\% for Claude 3 Opus at best, 26.9\% when no model is used; first attempts
+reach about 54\% and the curve flattens near 65\% by five.
+
+\textbf{Budget:} At most 10 attempts per program, temperature 0.3, 4,096 max tokens.
+
+\textbf{Variance:} The table's $\pm$ values; no repeated runs are reported.
+
+\textbf{Artifact:} The 782-program benchmark, with no training split.
+
+\textbf{Closest arm, and what its budget counts:} A2, attempts per program.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B4 (paper card)}\label{ans:B4}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 06.1, lines 2312--2338 (the pinned range).
+
+\textbf{Task shape:} Write a whole Isabelle/HOL proof from the theorem statement, or
+repair a failed one from Isabelle's error, with a fine-tuned Minerva.
+
+\textbf{Oracle:} Isabelle accepts the proof; \texttt{sorry} and \texttt{oops} are
+rejected; 10 s per step.
+
+\textbf{What is trusted:} Isabelle and the theorem-wise PISA split, which favours
+copying from nearby proofs.
+
+\textbf{Cheat surface:} \texttt{sorry}/\texttt{oops} are refused; leakage from
+pretraining is possible; the best figure is a union with Thor.
+
+\textbf{Metric:} Proof rate, any of $k$ samples accepted: 34.8\% and 40.7\% for 8b at
+16 and 64 samples, 47.9\% for 62b with context at 64, 65.7\% for the union with Thor.
+
+\textbf{Budget:} 16 or 64 samples; about 35 TPU-seconds for 64, against 216 s per
+proof for step-wise search.
+
+\textbf{Variance:} Not reported, beyond a temperature sweep.
+
+\textbf{Artifact:} None named; the models are closed.
+
+\textbf{Closest arm, and what its budget counts:} A1 for generation, A2 for repair;
+samples.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B5 (paper card)}\label{ans:B5}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 04.8, lines 1681--1706 (the pinned range).
+
+\textbf{Task shape:} Tree search over partial Dafny and Coq programs, one line per
+action, with the verifier pruning rejected prefixes; no training.
+
+\textbf{Oracle:} The verifier on complete programs, plus a hidden check lemma that
+restates the target property.
+
+\textbf{What is trusted:} Dafny and Coq, and check lemmas written over model-defined
+predicates.
+
+\textbf{Cheat surface:} Coarse whole-function checks; Coq prompts carry hints that
+nearly give proofs away; the check lemmas rest on the model's own predicates.
+
+\textbf{Metric:} pass@$T$ in sampled tokens; at 5000, about 0.51 Dafny and 0.29 Coq for
+VerMCTS against about 0.14 and 0 for whole sampling.
+
+\textbf{Budget:} 5000 sampled tokens per problem; hyperparameters tuned on one of its
+own problems.
+
+\textbf{Variance:} Averages read from a figure; no repeats stated.
+
+\textbf{Artifact:} A 15-problem suite, 9 Dafny and 6 Coq.
+
+\textbf{Closest arm, and what its budget counts:} A3; tokens, not calls.
+\end{answer}
+
+\end{document}

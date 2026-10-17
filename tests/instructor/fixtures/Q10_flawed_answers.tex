@@ -1,0 +1,82 @@
+% Q10_flawed_answers.tex — GRADER CALIBRATION FIXTURE (deliberately flawed).
+% A drop-in replacement for paper/Q10_answers.tex (spec §4.7, §6.12). B1 carries one
+% planted flaw; B2 is the clean control. Grade it with the rubric's probes
+% (paper/rubrics/Q10_rubric.md), never by eye.
+%
+% EXPECTED[B1][correctness][2]: loop C — the answer says C verifies, because the invariant i <= n keeps the guessed distance measure bounded and decreasing. Probe A on c.dfy: failed, "cannot prove termination; try supplying a decreases clause for the loop" (captured, 2026-10-07). The finding must paste that line (CO.a) and should name an odd n (e.g. n = 1: i runs 0, 2, 4, ... and never equals n) as the input on which the guard never becomes false (Probe A'). A, B and D are correct (Probe A: A fails its postcondition, B verifies, D stops at resolve with "loop must have a decreases clause"; all captured), and the measure line is correct: a finding on any of them is wrong.
+% EXPECTED[B2][card-fidelity][4]: every field agrees with the pinned range (lines 888-913); Cheat surface, Variance and Artifact correctly say what the range does not give. No finding on any field.
+% EXPECTED[B2][correctness][4]: the ninth line is correct (where from the error message, what from the learner). No finding.
+% Expected per-problem grades (min across dimensions or fields): B1 = 2, B2 = 4.
+% A calibration run FAILS if B1 scores >= 3, if the planted finding does not locate loop C
+% with Probe A's pasted termination line, or if ANY flaw is reported on B2 or on A, B, D
+% or the measure line of B1.
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Q10 --- Practice I-A \\ \large Written answers}
+\author{learner}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+
+% ---------------------------------------------------------------------------
+\section*{Problem B1 (concept)}\label{ans:B1}
+\begin{answer}
+\textbf{A.} (a) No: it stops at verification, on the postcondition
+\dfy{i == |s|}. \quad (b) Nothing says \dfy{i} stays at or below \dfy{|s|},
+so after the loop only \dfy{i >= |s|} is known; termination is fine. \\
+\textbf{B.} (a) Yes. \quad (b) The measure is \dfy{j}, a natural that drops
+by one per step; when the loop stops, \dfy{j} is not positive, so it is 0. \\
+\textbf{C.} (a) Yes. \quad (b) The invariant \dfy{i <= n} keeps the guessed
+measure, the distance between \dfy{i} and \dfy{n}, bounded below and
+decreasing, and at the exit \dfy{i == n} is the negated guard. \\
+\textbf{D.} (a) No: it stops at \texttt{resolve}, ``loop must have a
+decreases clause''. \quad (b) Verus guesses no measure for an exec loop. \\
+\textbf{The measure Dafny uses when none is written:} a difference read off
+the guard: for \dfy{a < b}, \dfy{b - a}; for \dfy{a > b}, \dfy{a - b}; for
+\dfy{a != b}, the distance between the two. For A it is not the problem (the
+missing invariant is); for B it works.
+\end{answer}
+
+% ---------------------------------------------------------------------------
+\section*{Problem B2 (paper card)}\label{ans:B2}
+\begin{answer}
+\textbf{Source:} cheatsheet entry 02.11, lines 888--913 (the pinned range).
+
+\textbf{Task shape:} Each task is a real Dafny lemma from one of three
+Amazon-maintained codebases with one necessary assertion deleted; the model
+has to put an assertion back so the lemma verifies. 145 such tasks form
+DafnyGym.
+
+\textbf{Oracle:} Dafny 4.3.0 accepts the repaired lemma.
+
+\textbf{What is trusted:} Dafny itself, the unchanged statement and the rest
+of the proof, and the claim that the deleted assertion was needed; the card
+notes that keeping the scaffold and the other assertions makes the setting
+optimistic.
+
+\textbf{Cheat surface:} The range does not say whether an \dfy{assume}, an
+edited statement or an edited scaffold would be refused; I would need the
+harness's checks on the edit.
+
+\textbf{Metric:} A task counts as solved if any of the first ten samples
+verifies; the best prompt (proof similarity plus the placeholder) solves
+56.6\% (82 of 145), against 6.2\% for code only and 34.4\% for the
+placeholder alone.
+
+\textbf{Budget:} Up to 10 samples per task from GPT-4o at temperature 1.0,
+with six retrieved contexts as few-shot examples.
+
+\textbf{Variance:} None reported: a single run with one model.
+
+\textbf{Artifact:} The benchmark is DafnyGym; the range does not say whether
+it is released.
+
+\textbf{Ninth line (H3: where and what):} The error message gave me the
+\emph{where}: the line that fails. The \emph{what}, the fact to assert, I had
+to find myself.
+\end{answer}
+
+\end{document}

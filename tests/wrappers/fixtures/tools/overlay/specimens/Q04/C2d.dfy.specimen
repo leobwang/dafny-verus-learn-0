@@ -1,0 +1,9 @@
+// item: Q04.C2d S3 write:calc
+// Synthetic tools fixture: a card's pinned failure (an author pin, not a slot).
+// EXPECT @7 "assertion might not hold"
+module Q04_C2 {
+  method Fails(x: nat)
+  {
+    assert x > 0;
+  }
+}

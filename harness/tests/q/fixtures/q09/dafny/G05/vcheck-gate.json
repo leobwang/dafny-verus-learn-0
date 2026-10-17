@@ -1,0 +1,65 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--gate",
+  "tests/corpus/dafny/G05/main.dfy"
+ ],
+ "document": {
+  "cmd": [
+   "<root>/.toolchain/dafny-4.11.0/dafny/dafny",
+   "verify",
+   "<root>/tests/corpus/dafny/G05/main.dfy",
+   "--json-output",
+   "--resource-limit",
+   "5000000",
+   "--cores",
+   "2",
+   "--solver-path",
+   "<root>/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+   "--allow-axioms",
+   "false",
+   "--allow-warnings",
+   "false",
+   "--log-format",
+   "csv;LogFileName=<scratch>"
+  ],
+  "count_unit": "tasks",
+  "diagnostics": [
+   {
+    "code": "W-D15",
+    "col": 25,
+    "file": "<root>/tests/corpus/dafny/G05/main.dfy",
+    "line": 3,
+    "message": "The {:verify false} attribute should only be used during development. Consider using a bodyless lemma together with the {:axiom} attribute instead",
+    "severity": "warning"
+   }
+  ],
+  "exit_code": 2,
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/G05/main.dfy",
+    "kind": "warnings-fail-gate",
+    "line": 0,
+    "message": "warnings fail the gate (W-D04): holes and every other warning must be gone"
+   }
+  ],
+  "holes": [],
+  "lang": "dafny",
+  "per_symbol": {
+   "CorpusG05.Fine": "verified"
+  },
+  "raw_dir": "<scratch>",
+  "stage": "verify",
+  "target": "<root>/tests/corpus/dafny/G05/main.dfy",
+  "verdict": "failed",
+  "verified_count": 1
+ },
+ "exit_code": 1,
+ "instrument": "vcheck --gate",
+ "killed": null,
+ "output_sha256": "f906ebccaee5c5e34841c5654d2efc50349586d2b0ade6824bf21dc8b97bd12f",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/G05/main.dfy"
+}

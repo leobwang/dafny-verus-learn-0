@@ -1,0 +1,21 @@
+{
+ "argv": [
+  "scripts/specfreeze",
+  "--against",
+  "harness/tests/q/fixtures/q18/C4/frozen.dfy",
+  "harness/tests/q/fixtures/q18/C4/main.dfy"
+ ],
+ "document": {
+  "exit_code": 0,
+  "lines": [
+   "specfreeze: harness/tests/q/fixtures/q18/C4/main.dfy: 0 finding(s)"
+  ]
+ },
+ "exit_code": 0,
+ "instrument": "specfreeze --check",
+ "killed": null,
+ "output_sha256": "63a8816bd50396ef623030f1c74211f6fb00db5d0ce745dd2d0595573e67fbe0",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/q/fixtures/q18/C4/main.dfy"
+}

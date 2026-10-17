@@ -1,0 +1,87 @@
+% paper/fixtures/Q12_flawed_prereg.tex — Q12's grade-the-grader fixture (QPLAN §22.3).
+% A course-written pre-registration of a small lab, graded by /grade-paper's fixture mode
+% against Q12's rubric (QPLAN §30 Q54). It is a fixture: it unlocks no run, and it is
+% deliberately imperfect. Record your reading and the three passes in
+% research/q12_grade_the_grader.md. It compiles standalone from paper/:
+%   latexmk -pdf fixtures/Q12_flawed_prereg.tex
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{Fixture --- a pre-registration to grade \\ \large (not Lab 1)}
+\author{course fixture}
+\date{}
+
+\begin{document}
+\maketitle
+
+% PREREG-BEGIN
+\section*{Problem B1 (pre-registration)}\label{ans:B1}
+\begin{answer}
+\textbf{Claim.} Showing the model the verifier's error lines in a repair prompt
+raises the solve rate over a repair prompt that only says ``the last attempt
+failed''. H1 (one-sided): the rate with error lines (arm E) exceeds the rate
+without them (arm N). H2 (two-sided): the difference E $-$ N is not the same
+in Dafny as in Verus.
+
+\textbf{Metric and estimator.} Per task and repeat: solved within $B = 6$ model
+calls (one sample, then up to five repairs; a task counts as solved when any
+candidate passes the gate). The arm's rate over its tasks; the paired difference
+E $-$ N per task and repeat, with a 95\% percentile bootstrap interval
+(\texttt{fvh.stats.bootstrap\_ci}, seed 20261007).
+
+\textbf{Arms and policies.} Two Qwen arms, E and N, each a sequential-repair
+policy that differs only in the repair prompt; their prompt hashes are written
+here once the policy file is final. A Claude arm runs arm E only, on 12 of the
+40 tasks (6 per language), drawn with seed 4401.
+
+\textbf{Tasks and strata.} 40 tasks, 20 per language: 10 local tasks per language
+from the course's local cards (authored after the models' release) and 10
+public tasks per language from the pinned sets, drawn with seed 9127 from each
+set's validated pool. No pilot: the public tasks are drawn once.
+
+\textbf{Budget arithmetic.} Qwen: 40 tasks $\times$ 6 calls $\times$ 2 arms
+$= 480$ calls, run as 3 repeats. Claude: 12 tasks $\times$ 6 calls $= 72$
+calls, plus at most 10 sentinel calls. Throughput: about 7 seconds per Qwen
+call (the course's single throughput sample), so about 1 GPU-hour.
+
+\textbf{Generation settings.} Thinking off, \texttt{num\_predict} 768,
+\texttt{num\_ctx} 8192, temperature 0.7, all pinned by the Ollama gate; seeds
+1001--1240 for arm E and 2001--2240 for arm N. Claude: the pinned argv of the
+course's harness.
+
+\textbf{Cost per arm.} Arm N's prompts are shorter than arm E's, so arm E is
+expected to cost more prefill per call; both are measured and reported.
+
+\textbf{Seeds and repeats.} Three repeats for each Qwen arm. The Claude arm uses
+three seeds (11, 12, 13), one per repeat.
+
+\textbf{Cheat surface and gate.} Every claimed success is re-judged by the
+learner's gate core in the verification container; the grader-only classes
+(X07, X08, X14) are reported as \texttt{UNKNOWN}, never as passes.
+
+\textbf{Exclusions.} An \texttt{infra-failed} attempt (no model output) is
+re-issued under the same id, prompt hash and seed, at most three times; it is
+then excluded and counted per arm.
+
+\textbf{Stopping rule.} Batches run in the pre-registered order. After each
+repeat the two arms' running rates are compared; once one arm leads the other
+by 20 percentage points, its remaining repeats are skipped to save budget.
+
+\textbf{Prediction intervals} (80\%, written before any run): arm N 0.25--0.45;
+arm E 0.35--0.55; E $-$ N 0.00--0.20.
+
+\textbf{Contamination.} The local tasks' authorship dates are listed in their
+cards; the public sets are flagged as possibly seen by both models.
+
+\textbf{Disclosure.} A small-scale replication with model substitution; Claude
+is both a subject and the grader of this document; one machine, one solver pin.
+\textbf{Batch plan} Prospective file \texttt{research/q12-main.toml}.
+This method fixture does not open a batch. Once the policies are final,
+record the exact file digest on its own \texttt{plan-sha256:} line and
+re-grade the changed pre-registration before executing it. Separately
+executed pilot or subset plans each need their own binding and gradebook
+row; the registered method stays fixed.
+\end{answer}
+% PREREG-END
+
+\end{document}

@@ -1,0 +1,43 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V08"
+lang = "verus"
+half = "R"
+xclass = "X12"
+kind = "construct"
+title = "exec_allows_no_decreases_clause lets a diverging loop prove a contradiction"
+files = ["Cargo.toml", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 2, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["exec-allows-no-decreases"]
+output_sha256 = "b2d07bf2c0781e6e918a16f6ba37feb43468cc71810d06d9f4f62c35613eb20f"
+summary = "verdict failed, stage verify, verified 2; exec-allows-no-decreases at src/lib.rs:6; gate conditions missed: 1 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V08"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["exec-allows-no-decreases"]
+output_sha256 = "c3630915d61d3f3cc2fc89f65e721c9fffc6941c45022d4f7351f9e359a7cb07"
+summary = "1 finding(s): exec-allows-no-decreases at src/lib.rs:6"
+argv = ["scripts/vaudit", "tests/corpus/verus/V08"]
+exit = 1

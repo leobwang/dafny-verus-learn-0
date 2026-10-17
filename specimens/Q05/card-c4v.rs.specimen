@@ -1,0 +1,23 @@
+// Demo for card Q05.C4v (write:lexicographic-decreases), the failure half: a recursion on
+// two arguments whose `decreases` names one of them. Run it with
+// `scripts/vcheck specimens/Q05/card-c4v.rs.specimen`; the EXPECT line at the end pins
+// the message the verifier gives (line and fragment).
+// after: Q05.P2dv
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn steps(a: nat, b: nat) -> nat
+    decreases b,
+{
+    if b == 0 {
+        a
+    } else if a == 0 {
+        steps(3, (b - 1) as nat)
+    } else {
+        steps((a - 1) as nat, b)
+    }
+}
+
+} // verus!
+// EXPECT @18 "could not prove termination"

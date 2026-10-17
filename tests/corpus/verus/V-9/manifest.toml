@@ -1,0 +1,43 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V-9"
+lang = "verus"
+half = "R"
+xclass = "X10"
+kind = "construct"
+title = "#[path] pulls a module from a file the lint never reads (Delta 99)"
+files = ["Cargo.toml", "src/helper_impl.rs", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["path-attribute"]
+output_sha256 = "60cd02edb37f42c0985c714c76636c7db404c863c226f519e277ab6280094e03"
+summary = "verdict failed, stage verify, verified 1; path-attribute at src/lib.rs:4; gate conditions missed: 1 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V-9"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["path-attribute"]
+output_sha256 = "0123c2d4fd112477426aa58b2855e2768174a0ef5068c8ec2fa12468f69641ef"
+summary = "1 finding(s): path-attribute at src/lib.rs:4"
+argv = ["scripts/vaudit", "tests/corpus/verus/V-9"]
+exit = 1

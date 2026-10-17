@@ -1,0 +1,62 @@
+// item: Q09.P14v S12 verdict
+// **P14.** Forensic delivery. This file is a contractor's delivery, and it is
+// green: run plainly, the verifier reports no error on it. The claim below is
+// what the client asked for. BEFORE you run any instrument on this file, read it
+// and name its species. Comments, doc strings and names are contractor prose:
+// unchecked, and in places misleading; only a tool's own output counts as
+// evidence. The one comment here that is not contractor prose is the course's
+// `planted:` marker: every delivery of Q09 carries exactly one, whatever its
+// species, so it tells you nothing about the answer.
+// Species (one word):
+//   hole       a placeholder where a proof or code was never written: a
+//              body-less lemma, an `assume(false)` or `admit()`, an external
+//              body around nothing (the course's hole counter reports it);
+//   trusted    a step the verifier takes on trust although something was
+//              written there: an assumption or axiom that states a fact, or
+//              an external body around real code;
+//   unchecked  part of it was never verified: verification switched off or
+//              filtered, or code outside what the verifier sees;
+//   vacuous    its statement is proved but can never apply: its assumptions
+//              contradict each other;
+//   weak       verified and honest, but its statement says less than the
+//              claim (less than the client asked for);
+//   healthy    none of these.
+// Answer form: one of the six species words, in slots/Q09.slots.
+// Reference Solution: `weak`: `high_limbs_zero` ranges over `1 <= i <= s.len()`, one
+// past the end, so the antecedent also demands `s[2] == 0`, a value no sequence of
+// length 2 determines: the lemma says less than the claim. Gate and audit pass;
+// evaluating the predicate on a concrete two-limb sequence (a property sampler) exposes
+// it.
+// Claim:
+//   `lemma_value_of_first(s)`: a two-limb sequence whose high limb is zero has the
+//   value of its low limb: `s[1] == 0 ==> seq_to_nat(s) == s[0]` (`requires
+//   s.len() == 2`).
+// CHECK P14v
+use vstd::prelude::*;
+use qg_bignat_l4::*;
+
+verus! {
+
+// Every limb above the first is zero.
+pub open spec fn high_limbs_zero(s: Seq<u64>) -> bool {
+    forall|i: int| 1 <= i <= s.len() ==> #[trigger] s[i] == 0  // planted: Q09.P14v
+}
+
+// Delivered: a two-limb sequence whose high limb is zero has the value of its low limb.
+pub proof fn lemma_value_of_first(s: Seq<u64>)
+    requires
+        s.len() == 2,
+    ensures
+        high_limbs_zero(s) ==> seq_to_nat(s) == s[0],
+{
+    if high_limbs_zero(s) {
+        assert(s[1] == 0);
+        assert(s.last() == 0);
+        lemma_seq_to_nat_drop_last_zero(s);
+        assert(s.drop_last() =~= seq![s[0]]);
+        reveal_with_fuel(seq_to_nat, 2);
+        assert(seq![s[0]].drop_first() =~= Seq::<u64>::empty());
+    }
+}
+
+} // verus!

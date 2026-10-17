@@ -1,0 +1,26 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "tests/corpus/dafny/D-11/main.dfy"
+ ],
+ "document": {
+  "findings": [
+   {
+    "file": "<root>/tests/corpus/dafny/D-11/main.dfy",
+    "kind": "bodyless-silent",
+    "line": 3,
+    "message": "a bodyless declaration with no `ensures` is silent in verify: an uncounted hole (Δ3, G4)"
+   }
+  ],
+  "lang": "dafny",
+  "target": "<root>/tests/corpus/dafny/D-11/main.dfy"
+ },
+ "exit_code": 1,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "2cb030340c2fa78b1a4bc2dd9a126daf8addccf1e7d7ce3b185aead0a9f9e216",
+ "provenance": "course",
+ "schema": 1,
+ "target": "tests/corpus/dafny/D-11/main.dfy"
+}

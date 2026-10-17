@@ -1,0 +1,29 @@
+// Card demo Q04.C1d (`calc`), the failure half. The success half is `ToNatTwoSteps` in
+// dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy; this copy makes its last step false.
+// Run it with `scripts/vcheck specimens/Q04/card-c1d.dfy.specimen`; the EXPECT line at
+// the end pins the message the verifier gives (line and fragment).
+// after: Q04.P3dv
+module Q04_CardC1d {
+  // A copy of layer L1's definitions it uses (dafny/given/Q/QG_L1_BigNat.dfy): a Dafny
+  // specimen is verified alone, so it cannot import the layer.
+  const BASE: nat := 18446744073709551616
+
+  function ToNat(s: seq<nat>): nat
+    decreases |s|
+  {
+    if |s| == 0 then 0 else s[0] + BASE * ToNat(s[1..])
+  }
+
+  lemma ToNatTwoSteps(s: seq<nat>)
+    requires |s| >= 2
+  {
+    calc {
+      ToNat(s);
+    ==
+      s[0] + BASE * ToNat(s[1..]);
+    ==  { assert s[1..][1..] == s[2..]; }
+      s[0] + s[1] + BASE * ToNat(s[2..]);
+    }
+  }
+}
+// EXPECT @25 "the calculation step between the previous line and this line could not be proved"

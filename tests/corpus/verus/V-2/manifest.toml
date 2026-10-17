@@ -1,0 +1,43 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V-2"
+lang = "verus"
+half = "R"
+xclass = "X03"
+kind = "construct"
+title = "a path dependency's external_body fn called by the target crate (Delta 95)"
+files = ["lower/Cargo.toml", "lower/src/lib.rs", "upper/Cargo.toml", "upper/src/lib.rs"]
+target = "upper"
+plain_exit = 0
+# plain run: verified 1, errors 0, success true, is-verifying-entire-crate true; path dependencies built first: corpus_vd2_lower
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["dependency-hole"]
+output_sha256 = "c39201deeb2db821595ceaefc720ca9d25af541c2014f16e1053ddcf91b48359"
+summary = "verdict failed, stage verify, verified -; dependency-hole at lower/src/lib.rs:7; gate conditions missed: 'success' is false, not true, --output-json lacks 'is-verifying-entire-crate', 'encountered-vir-error' is true, not false, --output-json lacks 'verified', 1 untrusted dependency hole(s), exit 1"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V-2/upper"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["hole-external-body"]
+output_sha256 = "8699e1e2e75a6a4df19254becbdcfd129b1685ac3bb92938ed041d844287e16d"
+summary = "1 finding(s): hole-external-body at lower/src/lib.rs:7"
+argv = ["scripts/vaudit", "tests/corpus/verus/V-2/upper"]
+exit = 1

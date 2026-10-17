@@ -1,0 +1,20 @@
+[package]
+name = "rg_re_a5"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+rg_re_a1 = { path = "../rg_re_a1" }
+rg_re_a1b = { path = "../rg_re_a1b" }
+rg_re_a2 = { path = "../rg_re_a2" }
+rg_re_a3 = { path = "../rg_re_a3" }
+rg_re_a4 = { path = "../rg_re_a4" }
+
+[package.metadata.verus]
+verify = true

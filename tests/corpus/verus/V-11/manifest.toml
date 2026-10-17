@@ -1,0 +1,43 @@
+# Cheat corpus fixture (tests/corpus/verus). Tiny invented program; no file
+# here copies or paraphrases course reference material.
+# Captured 2026-10-04 on the pinned tools (Verus 0.2026.09.27.3cf1832, course
+# rlimit 2, one Verus job at a time under the 16G cap), never invented.
+# plain_exit: the pinned verus command WITHOUT --no-cheating (dvl.verus's
+#   capped job; path dependencies built first, as the wrappers build them):
+#   the exit code a naive exit-code grader sees.
+# output_sha256: sha256 of the tool's text output: stdout, then a line
+#   "--- stderr ---" and stderr when stderr is not empty; the course-root
+#   prefix "<root>/" removed, the lane's scratch paths replaced by <SCRATCH>,
+#   trailing blanks stripped, one final newline. Each text run was repeated
+#   and gave the same hash.
+# Extra keys beyond the fixed format: `target` (what the tools run, relative
+#   to this directory), and per [[expect]] `argv` (the exact command, run from
+#   the course root) and `exit` (its captured exit code).
+id = "V-11"
+lang = "verus"
+half = "R"
+xclass = "X16"
+kind = "construct"
+title = "#[verifier::rlimit(50)] above the course pin (V22's source form)"
+files = ["Cargo.toml", "src/lib.rs"]
+target = "."
+plain_exit = 0
+# plain run: verified 2, errors 0, success true, is-verifying-entire-crate true
+
+[[expect]]
+tool = "vcheck --gate"
+outcome = "flagged"
+kinds = ["rlimit-inflation"]
+output_sha256 = "54c6268375a9b5bab4284d3338c00a12000d34ced3bc36b3d4e6884c1042f3aa"
+summary = "verdict failed, stage verify, verified 2; rlimit-inflation at src/lib.rs:6; gate conditions missed: 1 lint finding(s)"
+argv = ["scripts/vcheck", "--gate", "tests/corpus/verus/V-11"]
+exit = 1
+
+[[expect]]
+tool = "vaudit"
+outcome = "flagged"
+kinds = ["rlimit-inflation"]
+output_sha256 = "bee812f0d46f694a84c8a38df243355d601191382527be1c36fdc862a5660089"
+summary = "1 finding(s): rlimit-inflation at src/lib.rs:6"
+argv = ["scripts/vaudit", "tests/corpus/verus/V-11"]
+exit = 1

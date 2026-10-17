@@ -1,0 +1,72 @@
+// item: Q18.P3v S10 verdict
+// **P3.** Build-tool forensic, third pass. This file is the proof text of a contractor's
+// delivery, and the delivery came with configuration of its own (`P3v.build.rs.companion`, the delivery's build script, beside
+// this file: read it, never run it). The contractor reports the delivery green under its
+// own build. Comments and names are contractor prose: unchecked; only a tool's own output
+// counts as evidence. The one comment that is not contractor prose is the course's
+// `planted:` marker: every Q18 delivery carries exactly one, on the line of its defect.
+// BEFORE you run any instrument on this file, read it and its companion and name, first,
+// what the companion does to the delivery's own check (the species):
+//   mute    a failure the verifier reports is made non-fatal: the run exits 0 with it;
+//   skip    part of the proof text is never given to the verifier;
+//   divert  the build ships code that the verifier never checked;
+//   bypass  the command run in the verifier's place is not a verifier at all;
+// then the instrument that catches it: the FIRST of these, in this order, whose result is
+// not a pass, run by the course on THIS file alone (the pinned command, never the
+// delivery's own configuration):
+//   vcheck  `scripts/vcheck <file>` (a pass: verified, with 0 holes);
+//   gate    `scripts/vcheck --gate <file>` (a pass: verified, exit 0);
+//   vaudit  `scripts/vaudit <file>` (a pass: 0 findings);
+//   test    `scripts/vcheck --test <file>` (a pass: every test ran and passed).
+// Answer form: `<species> <instrument>`, for example `skip vaudit`, in slots/Q18.slots.
+// Reference Solution: `divert gate`: the build script turns `q18_ship` on in every build
+// the verifier does not wrap, so the shipped crate holds `low_word_fast`, code outside
+// `verus!` that nothing verified (it answers 1 for the empty sequence); the learner
+// loop verifies `low_word`, and the gate fails on the outside-verus lint.
+// Claim:
+//   `low_word(s)`: the low word of a limb sequence, as its value modulo BASE; the shipped crate serves it from `low_word_fast`.
+// after: Q18.P3v
+// CHECK P3v
+use vstd::prelude::*;
+
+verus! {
+
+// The definitions this delivery is about, as layer L1 gives them (copies: a specimen
+// stands alone).
+pub spec const BASE: nat = 0x1_0000_0000_0000_0000;
+
+pub open spec fn seq_to_nat(s: Seq<u64>) -> nat
+    decreases s.len(),
+{
+    if s.len() == 0 {
+        0
+    } else {
+        s[0] as nat + BASE * seq_to_nat(s.drop_first())
+    }
+}
+
+/// Delivered: the low word of a limb sequence, as its value modulo BASE.
+pub fn low_word(s: &Vec<u64>) -> (d: u64)
+    ensures
+        d as nat == seq_to_nat(s@) % BASE,
+{
+    if s.len() == 0 {
+        0
+    } else {
+        proof {
+            assert(seq_to_nat(s@) == s@[0] as nat + BASE * seq_to_nat(s@.drop_first()));
+            vstd::arithmetic::div_mod::lemma_mod_multiples_vanish(
+                seq_to_nat(s@.drop_first()) as int, s@[0] as int, BASE as int);
+            vstd::arithmetic::div_mod::lemma_small_mod(s@[0] as nat, BASE);
+        }
+        s[0]
+    }
+}
+
+} // verus!
+
+/// Delivered: the fast path the shipped crate serves `low_word` from.
+#[cfg(q18_ship)]
+pub fn low_word_fast(s: &Vec<u64>) -> u64 {  // planted: Q18.P3v
+    if s.is_empty() { 1 } else { s[0] }
+}

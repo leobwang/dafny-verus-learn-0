@@ -1,0 +1,17 @@
+// item: Q01.P6v S1 value
+// **P6v.** What value does `seq_to_nat` give for the two-limb sequence `[1, 3]` (least
+// significant limb first)? Verus evaluates the assertion in its interpreter
+// (`by (compute_only)`) instead of proving it with the solver.
+// Answer form: numeral
+// Replace `???` in the SLOT line below, keep the line a comment, then run
+// `scripts/firsttry.sh Q01 --check` (scripts/vcheck refuses this file until then).
+use vstd::prelude::*;
+use qg_bignat_l1::*;
+
+verus! {
+
+proof fn p6v() {
+    // SLOT: assert(seq_to_nat(seq![1u64, 3u64]) == ???) by (compute_only);
+}
+
+} // verus!
