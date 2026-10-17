@@ -4243,3 +4243,14 @@ reference targets pass three pinned seeds. The private workflow driver had a
 five-only receipt expectation; validating the retained seven successful rows
 corrects the harness expectation, not a course result. Live validation stays
 deferred D45 debt, and R03 remains parked. No new Basic release is implied.
+
+
+R09 Δ263 local follow-up: corrected static1/1 passes onfd620f7 in611s. The
+original five other jobs plus this correction meet the six local construction
+bars across two runs. Final pins40/40, admission12/12, four reference targets
+under three seeds and the17-command STUDY workflow pass; the workflow records
+five predictions plus two test-outs and executes both compiled tools on the
+final learner paths. Frozen scan26modules/2024public/OK. Exact source hashes
+and private CI/runtime provenance are archived in the protected R09 notes.
+This completes local R09 construction, not a new Basic release; live D45
+validation, parked R03 and full release validation remain separately recorded.

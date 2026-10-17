@@ -232,3 +232,24 @@ rows validated in workflow-validation.json; no successful native commands
 were needlessly replayed. Final4reference targets each pass3pinned seeds,
 with advisory resource variation reported separately. Corrected static still
 required; no live actor result or new Basic shipment.
+
+## R09 local completion
+
+Corrected static CI20261017T124301Z-57898 on cleanfd620f7 passes1/1 in611s.
+Together with the original5other passing bars this completes all6local bars
+across two runs; it is not a one-run6/6. Fresh final pins40/40,0problems.
+Final native countsD324/V56, floors42/39;12/12admission with mirror helpers;
+4complete reference targets×3seeds pass. Chapter4274words/5boxes/3diagrams/
+17captures and12non-slot sidecars;5TeX builds;17/17STUDY workflow commands
+with5P+2T genuine receipts, original snapshots and both actual-source runtime
+tools pass. Frozen source scan26modules/2024public/OK.
+
+Evidence archived at ~/.cache/dafny-verus-learn-0/author-probes/dvr2/
+r09-final-20261017/: full scratch, both public/private CI trees, tracked-source
+SHA256 table and PROVENANCE. The initial obsolete R04 full author run ends
+13pass/1fail because two wrapper fixtures assumed the course remained
+unbuilt; no study run followed that failed author. Those fixture fixes land
+on canonical Basic authoring04db88b first, then forward; independent full
+wrapper CI8cb6f87 is running. It does not alter R09's six local bars or
+constitute a full release validation. R10 starts from the source and inherits
+metadata. R03 and D45 stay deferred/skipped, never passes. No Basic shipment.
