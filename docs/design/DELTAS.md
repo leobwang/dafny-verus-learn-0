@@ -4348,3 +4348,20 @@ card,2calibration fixtures and the tenth course-derived bench prompt. All5TeX
 documents compile; reference lint, chapter lint and the frozen28-module leak scan
 pass. Focused CI and a scripted STUDY workflow still await their source checkpoint;
 R11 remains authoring and this is not a Basic shipment or live validation pass.
+
+
+### Δ268 — R11 local validation complete (DVR2)
+
+Clean STUDY source d9ae1b1 passes focused author CI6/6in1350s in one run
+(20261017T151421Z-724805). Canonical22/22admission, six complete references
+under three seeds,32guarded pins and six clean audits pass. The25-command
+scripted STUDY workflow retains5prediction,2test-out and4exit receipts; its
+checkpoint fixture is4/4under the3/4and per-language threshold. Both default
+actual-source tools pass after the original model snapshots and delivery.
+A driver expected26commands despite25passing; its count was corrected against
+retained results and11receipts without rerunning successful native commands.
+
+R11 is locally complete, remains authoring, and is not a new Basic shipment.
+Exact source/archive evidence is in protected R11 notes. Live D45 sessions,
+parked R03 and the PointsTo lane remain recorded skips. R12–R16 and full
+release assembly/CI remain unfinished. No live learner/actor grade is inferred.

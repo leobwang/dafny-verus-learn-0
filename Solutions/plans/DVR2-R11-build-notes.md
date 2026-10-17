@@ -116,3 +116,45 @@ outcomes. All5written documents compile. Initial frozen leak scan:28modules,
 2109public files, OK; repeat after the source checkpoint's final edits. Six native
 reference audits and final pins are still running; focused CI/STUDY workflow
 await a clean STUDY source checkpoint. Nothing here is a live actor result.
+
+
+## Final local construction result
+
+R11 is locally complete, remains authoring/not shipped. Focused author CI run
+20261017T151421Z-724805 on clean STUDY source d9ae1b1 passes6/6in1350s:
+static677, R-D311, R-V249, paper40, rubric0, harness73seconds. CI used its
+single default pool lane with no DVL_VERUS_JOBS override. Full release CI and
+Basic shipment remain later work; R12–R16 are unfinished, R03 remains parked.
+
+Final pins:32/32overR11,0problems. Six complete core/exit/agent reference audits
+are clean. Initial audit invocation passed learner paths with --ref and was
+correctly rejected; corrected reference paths pass. No tool bypass occurred.
+Four core/exit references and two agent references pass their three seeds.
+Canonical22/22admission includes the independently gated Vec fallback and four
+checkpoint items; source counts D8/V10core,0check,2/2exit,1/1agent are pinned.
+D/V full compiled references pass149/151tests; default learner holes stop before
+compilation. Actual default rule bindings pass and deliberate wrong bindings
+fail with the public independent consumer in both languages.
+
+The clean-source scripted STUDY workflow passes all25commands,5prediction plus
+2test-out receipts and4exit receipts. The checkpoint records4/4with required
+threshold3/4and≥1perlanguage. Original snapshots precede agent proof delivery;
+both default actual-source tools and all delivered gates/audits pass. The initial
+driver wrongly expected26commands after25had passed and all11receipts had been
+validated. Correct the orchestration count from retained evidence, without
+rerunning successful native commands; retain the original assertion failure.
+The successful stand-in clone was cleaned after saving receipts, snapshots and
+final file hashes. These are author workflow checks, not actual closed-book
+learner, calibrated grading or live contractor sessions.
+
+Frozen STUDY source leak scan:28modules,2113public files,OK. Eight R11patterns
+match their own reference sources and no public file; no new R answer enters a
+provided layer. D45 live sessions and the S2 PointsTo arena remain recorded skips;
+the Vec fallback proves only its stated index/frame properties. No quotas,
+reserve releases, grades or provider retry is fabricated.
+
+Final immutable evidence archive:
+~/.cache/dafny-verus-learn-0/author-probes/dvr2/r11-final-20261017/
+It retains construction scratch, public/private CI logs, available referenced
+native raw trees, source hashes and PROVENANCE.json. Archive provenance records
+the final metadata commit and any unavailable external raw paths explicitly.
