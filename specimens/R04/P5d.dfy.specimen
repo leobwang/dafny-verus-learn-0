@@ -1,0 +1,9 @@
+// item: R04.P5d verdict
+// Pos's gate exit and vaudit finding count: D:<exit> <n>.
+// Commit before running this delivery or opening the audit drill.
+// SLOT: CHECK P5d
+module R04_Pos {
+  method Pos(x: int) returns (y: int)
+    ensures y > 0
+  { expect x > 0; y := x; } // planted: R04.P5d
+}

@@ -265,6 +265,9 @@ def sr_salted_answer_hash(mid, local, s):
 # line when it trails code, else the next non-blank line. It is valid only in
 # a specimen and only when it names a P verdict item of strand S12 (or S10,
 # PLANTED_STRANDS) that the same file holds; any other use is itself a problem.
+# R04.P5d is the R-owned runtime-check delivery (PLAN §6.4), without Q's
+# strand labels. R04.A1d/v instead mark an intentionally false statement:
+# they are placement metadata only and NEVER suppress a shipping lint.
 SR_PLANTED = _sr_re.compile(r"//\s*planted:\s*(\S+)\s*$")
 PLANTED_STRANDS = ("S10", "S12")
 
@@ -280,11 +283,34 @@ def sr_planted(raw_lines, rel, items):
             continue
         iid = m.group(1)
         it = mine.get(iid)
+        # R04's agent plant marks a false mathematical claim, not a trust
+        # exemption. Validate its exact home and item scope, then leave the
+        # covered map empty: every ordinary shipping lint still applies.
+        home = rel.removeprefix("Solutions/")
+        r04_agents = {"R04.A1d": "dafny/R/R04_Specs/agent/R04_AgentProver.dfy",
+                      "R04.A1v": "verus/r/r04_specs/src/agent.rs"}
+        if iid in r04_agents and home == r04_agents[iid] and it is not None \
+                and it["kind"] == "A" and it["line_start"] <= ln <= it["line_end"]:
+            continue
         if not rel.endswith(".specimen"):
             problems.append((ln, "a `planted:` marker lives only in an S12 delivery specimen"))
             continue
-        if it is None or it["kind"] != "P" or it["format"] != "verdict" or \
-                it["strand"] not in PLANTED_STRANDS:
+        r04_delivery = iid == "R04.P5d" and home == "specimens/R04/P5d.dfy.specimen"
+        # Copies of the runtime-check and assumption deliveries are guarded demos,
+        # not new prediction items. Both earlier predictions must be recorded.
+        r04_demos = {"specimens/R04/chapter-p1-d.dfy.specimen",
+                     "specimens/R04/card-c3d.dfy.specimen",
+                     "specimens/R04/card-c5dv-d.dfy.specimen",
+                     "specimens/R04/audit-expect-d.dfy.specimen",
+                     "specimens/R04/audit-assume-v.rs.specimen",
+                     "specimens/R04/card-c5dv-v.rs.specimen"}
+        guard_pattern = _sr_re.compile(r"\s*//\s*after:\s*(\S+)\s*")
+        afters = {match.group(1) for match in map(guard_pattern.fullmatch, raw_lines) if match}
+        r04_demo = iid == "R04.P5d" and home in r04_demos and \
+            {"R04.P1d", "R04.P5d"} <= afters
+        own_delivery = it is not None and it["kind"] == "P" and it["format"] == "verdict" \
+            and (it["strand"] in PLANTED_STRANDS or r04_delivery)
+        if not own_delivery and not r04_demo:
             problems.append((ln, f"the `planted:` marker names {iid}, which is no S10 or S12 "
                                  "verdict P item of this file"))
             continue

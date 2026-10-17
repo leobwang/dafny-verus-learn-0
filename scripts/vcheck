@@ -771,7 +771,19 @@ BODY_VISIBILITY = ("uninterp", "open", "closed")
 def _body_free_statement(vs, src, it):
     """The statement of a spec fn without its body and without the
     body-visibility qualifiers before `fn` (BODY_VISIBILITY)."""
-    text = vs.statement_text(src, dataclasses.replace(it, body=None))
+    if it.body and not it.clauses:
+        # Serialize a real bodyless header. Clearing body alone leaves end
+        # past the old body, so a clause-free definition includes its body
+        # in the signature hash. Replacing it by ';' also preserves the
+        # existing bodyless serializer's spelling and all older frozen pins.
+        a, b = src.toks[it.body[0]].start, src.toks[it.body[1]].end
+        header_src = vs.parse(src.text[:a] + ";" + src.text[b:])
+        sym = vs.item_symbol(it)
+        header_it = next(x for x in header_src.walk()
+                         if x.kind == "fn" and vs.item_symbol(x) == sym)
+        text = vs.statement_text(header_src, header_it)
+    else:
+        text = vs.statement_text(src, dataclasses.replace(it, body=None))
     parts = text.split("\n")
     for k, part in enumerate(parts):
         if part.startswith("#["):

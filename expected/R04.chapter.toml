@@ -1,0 +1,221 @@
+# expected/R04.chapter.toml — the chapter pins of R04's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R04 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "obligation-d"
+cmd = ["scripts/vcheck", "specimens/R04/P3d.dfy.specimen"]
+answers = ["R04.P3d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a5a8de678a9323e573467b0ae915a2f51e36a4262f0b15961ee0424640094d92"
+[entry.pinned.inputs]
+"specimens/R04/P3d.dfy.specimen" = "f9a3c3f523e8b5eaf1ebc9a1e778fc3ed377e84e9808fc28aabf587f1b641396"
+
+[[entry]]
+id = "obligation-v"
+cmd = ["scripts/vcheck", "specimens/R04/P4v.rs.specimen"]
+answers = ["R04.P4v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "86aa66f3bd107f771f02abfa42bb171e4e7daf2b1405f85298ce94025a337a22"
+[entry.pinned.inputs]
+"specimens/R04/P4v.rs.specimen" = "de84ecd4c89ef7fa3fc71f30ed59d8aa7e10478f01865a95e1ecbff446c5050c"
+
+[[entry]]
+id = "p6-d"
+cmd = ["scripts/vcheck", "specimens/R04/chapter-p6-d.dfy.specimen"]
+answers = ["R04.P6dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "de53e51c7aa58ca0ad761291150a1f7e2d1fc67e7097850eb097d259d8257636"
+[entry.pinned.inputs]
+"specimens/R04/chapter-p6-d.dfy.specimen" = "bbd9467d72984a0f565d28e8f00d1e8bd8099e96e3cdf39d74a6576cda9d73d7"
+
+[[entry]]
+id = "p6-v"
+cmd = ["scripts/vcheck", "specimens/R04/chapter-p6-v.rs.specimen"]
+answers = ["R04.P6dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "aa7b836f6dad90f18c69a5067152c519a53c1923e9118ceb6eaa65a57dd751b4"
+[entry.pinned.inputs]
+"specimens/R04/chapter-p6-v.rs.specimen" = "99d82e2163571299d106515f0e5ab82faa2e5bef0c12a3dd52c922106cfe1390"
+
+[[entry]]
+id = "forall-d"
+cmd = ["scripts/vcheck", "specimens/R04/card-c1d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4a7e403722e4a09d7940bc6d4956f52ffb1be6b15822627e87793401e78f92cd"
+[entry.pinned.inputs]
+"specimens/R04/card-c1d.dfy.specimen" = "a290e54e3ae0587ba5558644858ae04d970984c24ebd78902b08ac63a974eb99"
+
+[[entry]]
+id = "forall-v"
+cmd = ["scripts/vcheck", "specimens/R04/card-c1v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "933d40f23f6aa04e7126346c47d96909e7933d124ef1102b4986cb11c607fd91"
+[entry.pinned.inputs]
+"specimens/R04/card-c1v.rs.specimen" = "2b78278230a4b20f0cc555f9fd64366801d52777d22ed17b2fd6fc182a12e792"
+
+[[entry]]
+id = "choose-d"
+cmd = ["scripts/vcheck", "specimens/R04/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "10899dd964ad0231efdab45017795b83199a4168826b7ac7968b1c8d95f7e57b"
+[entry.pinned.inputs]
+"specimens/R04/card-c2d.dfy.specimen" = "7929089302b9b564ef9735f277378bd39e3870323403533a1f65d6dd2b258682"
+
+[[entry]]
+id = "choose-v"
+cmd = ["scripts/vcheck", "specimens/R04/card-c2v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3db9e83ad04425ac6096580de504f3520bea34b36f4d864965e13cf4bfc5f866"
+[entry.pinned.inputs]
+"specimens/R04/card-c2v.rs.specimen" = "19f8f6efc13c348f2668ae950cc4cc27d48e370318700e333296c7ebf0732d3d"
+
+[[entry]]
+id = "p1-d"
+cmd = ["scripts/vcheck", "specimens/R04/chapter-p1-d.dfy.specimen"]
+answers = ["R04.P1d", "R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "21e7d655c21be3108391a811017c0a0bf19fbef1395ca17197953ebdff217988"
+[entry.pinned.inputs]
+"specimens/R04/chapter-p1-d.dfy.specimen" = "622873a0dd5803d6af6aff4250994124dacb4bfe6cd6d36d39a3d025ca1bb175"
+
+[[entry]]
+id = "p5-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/R04/P5d.dfy.specimen"]
+answers = ["R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "7b366160b90225c0f7a19f271db9b899f001848d8546706bfcd1bd3c181a1b96"
+[entry.pinned.inputs]
+"specimens/R04/P5d.dfy.specimen" = "b3a350e9e9a2fd45617f90190aca4be698d4fb1a4ca633e3f61f6426222ebf47"
+
+[[entry]]
+id = "p5-audit"
+cmd = ["scripts/vaudit", "specimens/R04/P5d.dfy.specimen"]
+answers = ["R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "df24bfdaceef154830f940d448b166a548c232d41731e8bdec6298365d50a7ae"
+[entry.pinned.inputs]
+"specimens/R04/P5d.dfy.specimen" = "b3a350e9e9a2fd45617f90190aca4be698d4fb1a4ca633e3f61f6426222ebf47"
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R04_Specs/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e9b3fec8c44ef003193d1745922993ff51ca81b5a63edcc2bad818979b2c04f1"
+[entry.pinned.inputs]
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "8114d3478db007449fc49ba04ba56af1e8056c8290d75121b2c497a44a1e3a41"
+"dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r04_specs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1b3d0059ff2612c52750fb186641138c934bf5fc5514524dc56b2b6945f0dcdb"
+[entry.pinned.inputs]
+"verus/r/r04_specs/Cargo.toml" = "4059a5ceabdcc13cc1ac0a9f9bad1758c7a28699bd1391cfb6e0474eec202d97"
+"verus/r/r04_specs/src/agent.rs" = "240b5646a849014760a5f5db507d8706537b57eaf8251b6e3cf2ff1ce05c2846"
+"verus/r/r04_specs/src/lib.rs" = "eb0b0ff602042a965a9bd802d3295ef711e315e1eb26d654df2edd68b1a51e30"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R04_Specs/agent/R04_AgentProver.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6a415b591546e68be2a0c3feb28c078576b0db0b14b9189cbebd8dd08d295408"
+[entry.pinned.inputs]
+"dafny/R/R04_Specs/agent/R04_AgentProver.dfy" = "9d8b6050fabc9435239d278a56b44f8c0ed7b82c0477b3cc489784f7232a77e5"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r04_specs/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e84d137499c67af24f95a8bd394eb56a57356f8defaf7d2c43a2988a54c41934"
+[entry.pinned.inputs]
+"verus/r/r04_specs/src/agent.rs" = "240b5646a849014760a5f5db507d8706537b57eaf8251b6e3cf2ff1ce05c2846"
+
+[[entry]]
+id = "audit-clean"
+cmd = ["scripts/vaudit", "specimens/R04/audit-clean-d.dfy.specimen"]
+answers = ["R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "fd47a73e84da0bea0439fb1c513bc757e800e2ce0d1cca88cf9736da0a1e93fa"
+[entry.pinned.inputs]
+"specimens/R04/audit-clean-d.dfy.specimen" = "75a4efa862cd9883992976d4fa3ce232eab01cb50ce472be5ad9f4d5eb458127"
+
+[[entry]]
+id = "audit-assume-gate"
+cmd = ["scripts/vcheck", "--gate", "specimens/R04/audit-assume-v.rs.specimen"]
+answers = ["R04.P1d", "R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a0952f9b9646a6043bfefb7127119ac9055b715ec55b668f45ba252e955e83de"
+[entry.pinned.inputs]
+"specimens/R04/audit-assume-v.rs.specimen" = "4985db0ad5007ec1f45d52d956aa5a4aedbda8e31b6fe34b6c0e4ebc0248db73"
+
+[[entry]]
+id = "audit-assume-audit"
+cmd = ["scripts/vaudit", "specimens/R04/audit-assume-v.rs.specimen"]
+answers = ["R04.P1d", "R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d7f5cd52b53304f55637f0d2810cd3c2b43ad19d5d015c2ad8ab38bab9e536c6"
+[entry.pinned.inputs]
+"specimens/R04/audit-assume-v.rs.specimen" = "4985db0ad5007ec1f45d52d956aa5a4aedbda8e31b6fe34b6c0e4ebc0248db73"
+
+[[entry]]
+id = "divergence-d"
+cmd = ["scripts/vcheck", "--gate", "specimens/R04/card-c5dv-d.dfy.specimen"]
+answers = ["R04.P1d", "R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6ca3c8e0c86f881bdc83c7f6894e8e966af11baa027ec0e352e64a8584ae9e7c"
+[entry.pinned.inputs]
+"specimens/R04/card-c5dv-d.dfy.specimen" = "622873a0dd5803d6af6aff4250994124dacb4bfe6cd6d36d39a3d025ca1bb175"
+
+[[entry]]
+id = "divergence-v"
+cmd = ["scripts/vcheck", "--gate", "specimens/R04/card-c5dv-v.rs.specimen"]
+answers = ["R04.P1d", "R04.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9d9c6506843b3aac1e322051268140d2c4915ca83198999b8dcd66a8a87a790e"
+[entry.pinned.inputs]
+"specimens/R04/card-c5dv-v.rs.specimen" = "4985db0ad5007ec1f45d52d956aa5a4aedbda8e31b6fe34b6c0e4ebc0248db73"

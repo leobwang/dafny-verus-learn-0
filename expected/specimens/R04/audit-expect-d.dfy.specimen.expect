@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R04/audit-expect-d.dfy.specimen: SEALED. This demo waits for R04.P1d, R04.P5d,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R04/audit-expect-d.dfy.specimen`; never edit.
+command: verify
+after: R04.P1d,R04.P5d
+outcome: salted-sha256 dee389fdf7532c5c56c904ed7c065868e95939f1034aa77db25f0c84d0337c2e

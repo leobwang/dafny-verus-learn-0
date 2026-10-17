@@ -1,0 +1,54 @@
+# expected/R04.counts — Δ11 count pins for R04: per verification unit, the
+# reference twin's gate count and the learner-declared declarations with a contract
+# that must run in the learner's gate (min_verified is one per pinned symbol); per
+# file (schema 2), its shipped state in the learner loop: verdict, tool-counted
+# holes and errors (the counts its header and the chapter state).
+# Written by `scripts/vcheck --ref --pin-counts R04` (author-only) from the twins
+# and the learner files as shipped; checked by `vcheck --gate` (a pinned symbol that
+# ran no task, or a count below min_verified, fails the gate), `vcheck --ref` (a
+# stale pin), `vcheck --shipped` (a file no longer in its shipped state) and
+# `pins.py --ci` (a missing, stale or malformed pin). Never edit by hand.
+schema = 2
+module = "R04"
+
+[[unit]]
+path = "dafny/R/R04_Specs/core"
+lang = "dafny"
+reference_verified = 17
+min_verified = 9
+symbols = ["R04_Specs.CatChrNonEmpty", "R04_Specs.EpsOnlyEmpty", "R04_Specs.MutantKilled", "R04_Specs.Occurs", "R04_Specs.PrefixMatch", "R04_Specs.SomeWordMatches", "R04_Specs.WitnessAbb", "R04_Specs.WitnessAnchored", "R04_Specs.WitnessNotBa"]
+
+[[unit]]
+path = "verus/r/r04_specs"
+lang = "verus"
+reference_verified = 10
+min_verified = 7
+symbols = ["lemma_cat_chr_nonempty", "lemma_eps_only_empty", "lemma_mutant_killed", "lemma_some_word_matches", "lemma_witness_abb", "lemma_witness_anchored", "lemma_witness_not_ba"]
+
+[[file]]
+path = "dafny/R/R04_Specs/core/R04_Specs.dfy"
+role = "exercise"
+verdict = "verified"
+holes = 6
+errors = 0
+
+[[file]]
+path = "verus/r/r04_specs/src/lib.rs"
+role = "exercise"
+verdict = "verified"
+holes = 6
+errors = 0
+
+[[file]]
+path = "dafny/R/R04_Specs/agent/R04_AgentProver.dfy"
+role = "agent"
+verdict = "verified"
+holes = 3
+errors = 0
+
+[[file]]
+path = "verus/r/r04_specs/src/agent.rs"
+role = "agent"
+verdict = "verified"
+holes = 3
+errors = 0

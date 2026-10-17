@@ -1895,6 +1895,82 @@ class PlantedMarker(RootCase):
                 self.assertIn("which is no S10 or S12 verdict P item of this file", out)
 
 
+class R04PlantedMarker(unittest.TestCase):
+    def test_agent_marker_validates_placement_without_exempting_a_line(self):
+        for iid, home in (("R04.A1d", "dafny/R/R04_Specs/agent/R04_AgentProver.dfy"),
+                          ("R04.A1v", "verus/r/r04_specs/src/agent.rs")):
+            for rel in (home, "Solutions/" + home):
+                lines = ["// item: " + iid, "// planted: " + iid, "assume false;"]
+                item = {"id": iid, "file": rel, "kind": "A", "line_start": 1, "line_end": 3}
+                self.assertEqual(firsttry.sr_planted(lines, rel, [item]), ({}, []))
+                # Moving it outside its A block never grants an exemption.
+                item["line_end"] = 1
+                covered, problems = firsttry.sr_planted(lines, rel, [item])
+                self.assertEqual(covered, {})
+                self.assertTrue(problems)
+
+    def test_agent_marker_cannot_move_to_another_file_or_item(self):
+        rel = "dafny/R/R04_Specs/core/R04_Specs.dfy"
+        item = {"id": "R04.A1d", "file": rel, "kind": "A", "line_start": 1, "line_end": 3}
+        self.assertTrue(firsttry.sr_planted(["// planted: R04.A1d"], rel, [item])[1])
+        rel = "dafny/R/R04_Specs/agent/R04_AgentProver.dfy"
+        item.update(file=rel, kind="H")
+        self.assertTrue(firsttry.sr_planted(["// planted: R04.A1d"], rel, [item])[1])
+
+    def test_guarded_runtime_demos_need_both_predictions_and_an_exact_home(self):
+        lines = ["// after: R04.P1d", "// after: R04.P5d",
+                 "expect x > 0; // planted: R04.P5d"]
+        for name in ("chapter-p1-d.dfy.specimen", "card-c3d.dfy.specimen",
+                     "card-c5dv-d.dfy.specimen", "audit-expect-d.dfy.specimen",
+                     "card-c5dv-v.rs.specimen", "audit-assume-v.rs.specimen"):
+            rel = "specimens/R04/" + name
+            self.assertEqual(firsttry.sr_planted(lines, rel, []), ({3: "R04.P5d"}, []))
+            for removed in (0, 1):
+                self.assertTrue(firsttry.sr_planted([x for i,x in enumerate(lines) if i != removed], rel, [])[1])
+        self.assertTrue(firsttry.sr_planted(lines, "specimens/R04/unlisted.dfy.specimen", [])[1])
+
+    def test_runtime_delivery_exception_is_exact(self):
+        rel = "specimens/R04/P5d.dfy.specimen"
+        item = {"id": "R04.P5d", "file": rel, "kind": "P", "format": "verdict", "strand": None}
+        lines = ["expect x > 0; // planted: R04.P5d"]
+        self.assertEqual(firsttry.sr_planted(lines, rel, [item]), ({1: "R04.P5d"}, []))
+        item.update(id="R04.P1d")
+        self.assertTrue(firsttry.sr_planted(["// planted: R04.P1d"], rel, [item])[1])
+
+
+class ClauseFreeDefinition(unittest.TestCase):
+    SHIPPED = "verus! { pub mod api { pub uninterp spec fn property(x: int) -> bool; } }"
+
+    def compare(self, body):
+        path = "probe.rs"
+        original, _, opened = core.statement_table(path, "v", text=self.SHIPPED)
+        self.assertEqual(opened, ["api::property"])
+        old = core.statement_table(path, "v", opened, text=self.SHIPPED)[0]
+        new = core.statement_table(path, "v", opened, text=body)[0]
+        return old, new
+
+    def test_definition_completion_changes_only_its_open_body(self):
+        for expression in ("x >= 0", "false"):
+            text = "verus! { pub mod api { pub open spec fn property(x: int) -> bool { " + expression + " } } }"
+            old, new = self.compare(text)
+            self.assertEqual(old, new)
+
+    def test_signature_and_preconditions_remain_frozen(self):
+        for signature in ("property(x: nat) -> bool { true }",
+                          "property(x: int) -> int { x }",
+                          "property(x: int) -> bool recommends x >= 0, { true }"):
+            text = "verus! { pub mod api { pub open spec fn " + signature + " } }"
+            old, new = self.compare(text)
+            self.assertNotEqual(old, new)
+
+    def test_unopened_definition_remains_part_of_its_statement(self):
+        path = "probe.rs"
+        a = "verus! { spec fn closed_value() -> int { 1 } }"
+        b = "verus! { spec fn closed_value() -> int { 2 } }"
+        self.assertNotEqual(core.statement_table(path, "v", text=a)[0],
+                            core.statement_table(path, "v", text=b)[0])
+
+
 DEMO = ("// Card demo Q04.C9d. Open it only after Q04's predictions are recorded.\n"
         "{after}"
         "module Q04_C9 {\n"

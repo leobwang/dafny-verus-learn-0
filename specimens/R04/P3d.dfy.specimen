@@ -1,0 +1,80 @@
+// item: R04.P3d obligation
+// Four claims about the supplied unanchored semantics. Which labels fail?
+// SLOT: FAILS ???
+/*!
+# RG_A1 — regex spine, layer A1 (PROVIDED, complete)
+
+Frozen infrastructure, not an exercise. Imported by R02–R16: definitions only; no module lemma is supplied.
+Use only the layer chain declared by your module. No earlier learner file is imported.
+PLAN.md §2.2 and §2.4 define this layer boundary.
+*/
+module RG_A1_Re {
+  datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)
+
+  // Whole-string semantics by splits. A Star iteration consumes a non-empty chunk.
+  // Ghost, so no exec item can answer itself by calling it.
+  ghost predicate Matches(r: Re, s: seq<char>)
+    decreases r, |s|
+  {
+    match r
+    case Empty => false
+    case Eps => s == []
+    case Chr(c) => s == [c]
+    case Alt(a, b) => Matches(a, s) || Matches(b, s)
+    case Cat(a, b) => exists i | 0 <= i <= |s| :: Matches(a, s[..i]) && Matches(b, s[i..])
+    case Star(a) => s == [] || exists i | 0 < i <= |s| :: Matches(a, s[..i]) && Matches(Star(a), s[i..])
+  }
+
+  predicate Nullable(r: Re)
+    decreases r
+  {
+    match r
+    case Empty => false
+    case Eps => true
+    case Chr(_) => false
+    case Alt(a, b) => Nullable(a) || Nullable(b)
+    case Cat(a, b) => Nullable(a) && Nullable(b)
+    case Star(_) => true
+  }
+
+  function NodeCount(r: Re): nat
+    decreases r
+  {
+    match r
+    case Empty => 1
+    case Eps => 1
+    case Chr(_) => 1
+    case Alt(a, b) => 1 + NodeCount(a) + NodeCount(b)
+    case Cat(a, b) => 1 + NodeCount(a) + NodeCount(b)
+    case Star(a) => 1 + NodeCount(a)
+  }
+
+  // The regex read backwards.
+  function Backwards(r: Re): Re
+    decreases r
+  {
+    match r
+    case Empty => Empty
+    case Eps => Eps
+    case Chr(c) => Chr(c)
+    case Alt(a, b) => Alt(Backwards(a), Backwards(b))
+    case Cat(a, b) => Cat(Backwards(b), Backwards(a))
+    case Star(a) => Star(Backwards(a))
+  }
+
+  // The string read backwards.
+  function BackwardsStr(s: seq<char>): seq<char>
+    decreases |s|
+  {
+    if s == [] then [] else BackwardsStr(s[1..]) + [s[0]]
+  }
+}
+
+module R04_P3 {
+  import opened RG_A1_Re
+  ghost predicate Occurs(r: Re,s: seq<char>) { exists i,j :: 0 <= i <= j <= |s| && Matches(r,s[i..j]) }
+  lemma A() ensures Occurs(Star(Chr('a')),"b") { } // [a]
+  lemma B(s: seq<char>) ensures Occurs(Eps,s) { } // [b]
+  lemma C() ensures !Occurs(Chr('a'),"b") { } // [c]
+  lemma D() ensures Occurs(Chr('b'),"ab") { } // [d]
+}

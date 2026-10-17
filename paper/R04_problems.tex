@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R04 --- Specs as logic \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Record all six predictions first. Allow 15 minutes per problem. Preserve the
+answer labels. An observed compile or verification result has its own scope;
+state the formal claim and intended behaviour separately.
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card 12.5: Do LLMs Game Formalization? Evaluating Faithfulness in
+Logical Reasoning.} Fill Task shape; Oracle; Trust; Cheat surface; Metric;
+Budget; Variance; Artifact in your own words. Cite the pinned section for
+numbers, distinguish proof validity from translation faithfulness, and retain
+the pipeline/stage to which each result belongs. State missing evidence rather
+than inventing it. The card grade is the minimum of its eight field grades.
+\begin{verbatim}
+sed -n '5297,5333p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+fbc5a39896ab6067dd875d2f7b48b1fc8c30286380401102138e0c22854350e9  -
+\end{verbatim}
+A mismatch requires an author source re-pin, not a learner finding.
+\end{problem}
+\begin{problem}[proof]\label{prob:B2}
+The intended operation returns whether a regex occurs in any substring,
+including an empty one. Compare these postconditions for a returned Boolean $b$:
+\begin{enumerate}
+\item $b\Leftrightarrow\mathsf{Occurs}(r,s)$;
+\item $b\Leftrightarrow\mathsf{Matches}(r,s)$;
+\item $b\Rightarrow\mathsf{Occurs}(r,s)$;
+\item $b\Leftrightarrow\exists i:0\leq i\leq |s|.\ \mathsf{Matches}(r,s[i..])$.
+\end{enumerate}
+Use $r=\mathsf{Chr}('m')$ and $s=\texttt{mn}$, a different pair from the
+predictions. For each contract give every permitted Boolean and the substring
+or slice facts that establish it. Then classify its general relationship to
+the intended operation: faithful, too weak or a different semantic question.
+A single input's agreement is not a universal equivalence argument.
+\end{problem}
+\begin{problem}[proof]\label{prob:B3}
+Work over mathematical integers. Derive the weakest precondition for the
+postcondition $y>0$, working backwards through the final assignment, both
+branches and the initial assignment. State the two branch verification
+conditions and the intermediate assertion at their join.
+\begin{verbatim}
+y := x + 1;
+if y < 0 { y := -y; }
+y := 2*y + 1;
+\end{verbatim}
+An omitted else leaves $y$ unchanged. Explain precisely why your result would
+need additional obligations if these were bounded machine integers.
+\end{problem}
+
+\end{document}

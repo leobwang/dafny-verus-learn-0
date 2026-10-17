@@ -1,0 +1,53 @@
+% EXPECTED[B1][card-fidelity][4]: all eight fields are faithful.
+% EXPECTED[B2][spec-classification][4]: all permitted values and global scopes are correct.
+% EXPECTED[B3][wp-rigour][4]: substitutions, branches and integer scope are explicit.
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R04 --- Specs as logic \\ \large Written answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} Two models, GPT-5 and DeepSeek-R1, address 303 first-order logic problems from FOLIO (203) and Multi-LogiEval (100). The comparison includes unified prompting and a split translation/proving pipeline; it is not a Dafny implementation benchmark.
+
+\textbf{Oracle:} Lean checks derivability from the supplied formal assumptions. Task labels, translation inspection and an LLM judge assess other claims about definite answers or faithfulness. The judge is imperfect; the summary reports missed subtle errors in a manual check.
+
+\textbf{Trust:} A valid derivation establishes a theorem from its chosen axioms. That does not certify that the axioms and conclusion express the original premises and question. Human or judged assessment of the translation remains a separate source of evidence.
+
+\textbf{Cheat surface:} A system may add assumptions that make the goal trivial, omit a premise, mistranslate a relation or introduce contradiction. Freezing the first-stage axioms targets later fabrication but cannot repair a mistranslation that already entered at that stage.
+
+\textbf{Metric:} The summary separates compilation, precision of definite answers, uncertain outputs and two-stage accuracy. Its two-stage accuracy range is 59--76 percent, while high unified compilation is a different measure. Directional divergence and axiom diffs supply additional signals; none alone proves faithful translation.
+
+\textbf{Budget:} Each problem is run three times with at most three compile-feedback retries. This excerpt does not specify a common dollar, token or wall-time allocation, so those budgets cannot be reconstructed from the retry count alone.
+
+\textbf{Variance:} There are three runs, but the pinned summary supplies no general confidence interval for every comparison. Some analyses use only four or 29 cases. Keep those small denominators when interpreting their proportions.
+
+\textbf{Artifact:} The summary identifies arXiv 2604.19459, the two FOL datasets and LeanInteract. It gives no immutable code revision, dataset checksum or full environment manifest for an exact reproduction.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+An occurrence uses $i=0,j=1$, since \texttt{mn}[0..1] is
+\texttt{m}. The entire two-character input is not a Chr match. Its suffixes
+are \texttt{mn}, \texttt{n} and the empty string, none equal to \texttt{m}.
+Thus (a) permits only true, (b) only false, (c) either Boolean and (d) only
+false. Contract(a) is the stated operation. Contract(c) prevents a claimed
+positive without an occurrence but permits missed positives, so it is weaker.
+Contract(b) answers a whole-string question, and(d) a suffix question; each
+can miss an occurrence that finishes before the end. Agreement on some other
+input would not repair this mismatch of quantified slices.
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+Substituting the final assignment gives $2y+1>0$, equivalent over integers
+to $y\geq0$. Use that nonnegativity condition at the branch join. The conditional's precondition is
+$(y<0\Rightarrow -y\geq0)\land(y\geq0\Rightarrow y\geq0)$, which is true.
+These are the two branch conditions. The initial substitution $y=x+1$
+therefore leaves true as the weakest precondition. Negation, addition and
+multiplication were total mathematical operations here. Bounded integers
+require range checks, including negating the minimum value and both additions
+and multiplication; the unrestricted integer proof does not discharge them.
+\end{answer}
+
+\end{document}

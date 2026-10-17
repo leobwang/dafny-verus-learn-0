@@ -3878,3 +3878,41 @@ basic to this validated descendant, without merging old authoring ancestry
 or changing main. No external push. R03 remains planned/parked with its
 recorded OD8 blocker, R04 building; the complete R core remains unfinished.
 D45 live-validation debt is still unpassed and deferred.
+
+### Δ254 · Build R04 logic and faithful-refusal author controls — adopted in authoring (2026-10-17 UTC)
+
+R04's A1-only paired hand kit is authored: six holes per language including
+two closed-book test-outs, six predictions, sixteen specimens/audit deliveries,
+twenty native chapter captures, a360-minute chapter (about6,300 lint words,
+three diagrams), paper12.5 plus contract-classification and wp problems,
+rubric/fixtures, twelve bank questions in two disjoint draws and two bilingual
+parallel problems. The hand reference units gate with17 Dafny tasks and10
+Verus functions; source units have six counted holes and no errors each.
+Prototype lemma admission10/10, four false/true definition controls, reference
+predictions6/6 and all four completed parallel gate/audits pass. Canonical
+admission, reference study workflow, stability and focused CI follow; none is
+inferred from prototype checks. All five TeX documents compile.
+
+The agent's third original claim is false. Source statements remain unchanged
+with three holes per language. Protected author analyses prove two true claims
+and a counterexample theorem, with zero-hole gates and clean audits. These
+analyses are explicitly not accepted replacement deliveries: comparison with
+the original frozen task rejects them. A faithful contractor refusal records
+the unchanged claim and counterexample without asserting a full-file success.
+No symbol-filtered gate or weakened statement is introduced. Live refusal
+transcripts, coaching and grader calibration remain deferred under D45.
+
+Shipping-lint metadata now recognises exactly R04's runtime-check prediction
+and its guarded runtime/assumption copies. Those copies require both earlier
+prediction guards. The agent's planted-claim marker is placement metadata
+only and grants no lint exemption. Native gates and audits never honour it.
+New regressions cover exact paths, required guards and invalid marker moves.
+
+R04 also exposed a body-free hash bug for a clause-free uninterpreted Verus
+definition: clearing its body field left the signature range extending through
+the old body. Serialize an actual bodyless header for this case, preserving
+the existing bodyless hash spelling and older pins. Parameter/return/contract
+changes still fail comparison; ordinary unopened bodies stay frozen. Three
+regressions cover completion and those boundaries. All415 static tests pass
+with one skip; reference lint is clean. No library tier or source acceptance
+rule is relaxed. R03 stays parked with its recorded OD8 blocker.

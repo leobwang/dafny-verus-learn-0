@@ -1,0 +1,6 @@
+module R04_ChooseDemo {
+  lemma ChooseWithoutWitness(xs: seq<int>,m: int) {
+    var i: int :| 0 <= i < |xs| && xs[i] == m;
+    assert 0 <= i < |xs| && xs[i] == m;
+  }
+}

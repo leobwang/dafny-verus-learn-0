@@ -21,3 +21,11 @@ Choose different work from a course hole; do not copy a reference or turn a
 renamed exercise into an independent benchmark claim. The course author does
 not fill these learner artifacts. Later R lab admission has its own review,
 format and pre-registration requirements.
+
+For R04's third card, allow twenty-five minutes. Choose a fresh small logical
+or specification task under A1. State quantifier bounds, slice conventions and
+both directions of any intended Boolean relationship. Preserve the same
+statement in stripped and completed forms, give a nonvacuous positive witness,
+and show what plausible wrong claim or implementation each negative check
+rejects. Retain the original version when revising it. A parse error is not
+a semantic refutation, and this draft is not automatic admission to a later lab.

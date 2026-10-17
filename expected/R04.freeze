@@ -1,0 +1,216 @@
+# expected/R04.freeze — statement-freeze pins for R04 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R04` from the files as shipped; checked by
+# `scripts/specfreeze --check R04`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R04"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R04_Specs/core/R04_Specs.dfy"
+lang = "d"
+open_bodies = ["R04_Specs.PrefixMatch"]
+[file.statements]
+"R04_Specs.CatChrNonEmpty" = "63fc5e5fc323755a5bad334dc851c61ea190ea0e088c31f6a440dcc755275d96"
+"R04_Specs.EpsOnlyEmpty" = "8e918d38f4b93edd66a083e198a7c2b7f5a3acd85756ef6fb605651d51e0dd57"
+"R04_Specs.MutantKilled" = "0ccb5667d2fe2c97fe6507deb8673cc3f44bcf5a7f669aeabe470b64052e846a"
+"R04_Specs.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
+"R04_Specs.PrefixMatch" = "6229a55050f910cb92d430c9a23ea57f59fc000521c3b073b5776dbdd39e24e4"
+"R04_Specs.SomeWordMatches" = "5ddb5100670d0e4f56f64d3d176d1a415b655295b8b38bc0cf88eecf6b66b8d5"
+"R04_Specs.WitnessAbb" = "62b630f99a3935603fa01591b3846c00750b09e40ea80058341a9bb0cce69371"
+"R04_Specs.WitnessAnchored" = "102a6be29b35a65a628376850746b0bac141108fa71a39b21849587fae121d41"
+"R04_Specs.WitnessNotBa" = "66cf1a0edaa0abdd9a745c5db8273509761a732739eda6603bd49a4749de1c56"
+
+[[file]]
+path = "verus/r/r04_specs/src/lib.rs"
+lang = "v"
+open_bodies = ["prefix_match"]
+[file.statements]
+"lemma_cat_chr_nonempty" = "4b7127629c7e2f41a8b032acf63e04dd2b2e40736e961c24315e033160007e7c"
+"lemma_eps_only_empty" = "10929d57ba5d95b5266467d3a08337c5c18ffcdc24cd3ddb0279f6f7e93e1154"
+"lemma_mutant_killed" = "600b648ad58122f14406d9c656fd563efbdb0edc5f9f1657b3e3ea258684f06b"
+"lemma_some_word_matches" = "142c5a2a66e427185d018745c0eb3e98b73705362c2ddfe6e6c866216c471b6e"
+"lemma_witness_abb" = "10c53329d9e22f84d4daec4c6b41e658c83f443b459bfa6f2b4c1e2e08a3d9aa"
+"lemma_witness_anchored" = "cba1650cb41b8968c8dd6484c279cf42caff37918144266cd213c094a035a061"
+"lemma_witness_not_ba" = "7a17e3d697e939633ae52690c1981965a644a21febf126ce73d44a707996362c"
+"occurs" = "25f5fc372fabb37ce7c690a9e57130349f4958d8e75be32b516bb2d13bc3b65c"
+"prefix_match" = "6b3ce182a2f1d1199b4259fd0b7974005e2179b36f4f6bd87493a8d0fbe7a10a"
+
+[[file]]
+path = "specimens/R04/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_P3.A" = "0f06d9101804ee49568ea0337e452b85212cef07d8e339ad0fe09fbcc04aa27c"
+"R04_P3.B" = "d6f4e23b23160ecd399df56208ed8d80322521c2482509d349a415346c381f81"
+"R04_P3.C" = "4b1c6236563b910743c2955925bfe5a4e06b26c7ea2f6ed24f709e9ee5f8967b"
+"R04_P3.D" = "a9a1edc2c92ebd16e96268e4e00fda7a57a4f16a538e188e5b26328a90158382"
+"R04_P3.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R04/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"case_a" = "52146c253094aea40f30f6e5f8a7cf42bd112a80a8609693b62d699e458fafb0"
+"case_b" = "501e875a0b179a81d4187e45731303dca0ac4268c25dea3ed80b72b921075db1"
+"case_c" = "e301e8368cf26e5c845a7d5677a2ed29df8cf1196197c75694313d90fc937cef"
+"case_d" = "96baacf90d116c0aeb0c31ef010d269b9190045c852f4e9f0a3187e53c05530e"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+"occurs" = "25f5fc372fabb37ce7c690a9e57130349f4958d8e75be32b516bb2d13bc3b65c"
+
+[[file]]
+path = "specimens/R04/P5d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_Pos.Pos" = "3aaaa9c5ac73d3575805ffe605944bedac11505d81a8ee0f26254029eee7a2d6"
+
+[[file]]
+path = "specimens/R04/audit-assume-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"claimed_positive" = "c1d69ffb2606d6e13689a034b394067e8c85b2611683bb57b0d09fe78e407f2a"
+
+[[file]]
+path = "specimens/R04/audit-clean-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_AuditClean.Positive" = "253213eff086c5c017e96c4524da7182d477a2b09a3498e37e320820ef8c00b0"
+
+[[file]]
+path = "specimens/R04/audit-expect-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_Pos.Pos" = "3aaaa9c5ac73d3575805ffe605944bedac11505d81a8ee0f26254029eee7a2d6"
+
+[[file]]
+path = "specimens/R04/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_ForallDemo.Claim" = "2340960adb9ea68d7d97d12f653460516db0fb3862cb88a4e03af2c11b92ee16"
+
+[[file]]
+path = "specimens/R04/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"arbitrary_entries" = "e18aad1036b9097ac0f81c49f3c9f6828b1d9df606bf92e954106b9a44d56777"
+
+[[file]]
+path = "specimens/R04/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_ChooseDemo.ChooseWithoutWitness" = "cddfdb73878c0728b4b995a36302c3675445f978155e86aa65b0ab273fbce9a0"
+
+[[file]]
+path = "specimens/R04/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"choose_without_witness" = "7d7d420e0b770de6edc5d127ab6c095ddd6b9595d2e3a86ea802490f90dd13c4"
+
+[[file]]
+path = "specimens/R04/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_Pos.Pos" = "3aaaa9c5ac73d3575805ffe605944bedac11505d81a8ee0f26254029eee7a2d6"
+
+[[file]]
+path = "specimens/R04/card-c5dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_Pos.Pos" = "3aaaa9c5ac73d3575805ffe605944bedac11505d81a8ee0f26254029eee7a2d6"
+
+[[file]]
+path = "specimens/R04/card-c5dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"claimed_positive" = "c1d69ffb2606d6e13689a034b394067e8c85b2611683bb57b0d09fe78e407f2a"
+
+[[file]]
+path = "specimens/R04/chapter-p1-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_Pos.Pos" = "3aaaa9c5ac73d3575805ffe605944bedac11505d81a8ee0f26254029eee7a2d6"
+
+[[file]]
+path = "specimens/R04/chapter-p6-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_P6.FindNonea" = "1851bcd9aeb43f9383915742a1ed50868be7b97bb80bc8d0f10ca0285a42c18b"
+"R04_P6.FindNoneb" = "a1a542b19b1519b0508c202fbf71c4a5a8583b3dd9bd0653e59ebbd253a06ad1"
+"R04_P6.FindNonec" = "fcdc8dcc239240eadaab346c3b4f5829e394656ec2329faf8516af65e0a072ea"
+"R04_P6.FindNoned" = "a4756a387c0c2132d58b74dd0afdaaef5dcfce79a8c244c2aef8074193de5214"
+"R04_P6.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R04/chapter-p6-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"find_none_a" = "6a31cadfae7e1a1b723ed3c00e36bac6f55b4a61b759ea7bf74e4f9e2d35269d"
+"find_none_b" = "d9d22ed3570c4db836b7bb1a63639d1a2719748e666dcd0e7ac405569b7fe70e"
+"find_none_c" = "6a38989f9a3adfb4a2bb1fd5c91c50adf856366cfc8f23d436e0ffb1cf11145c"
+"find_none_d" = "39d03e5f7d704ecf76f5d54deb25b2d967e65de60d9c07761c36b87a1dc43c92"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+"occurs" = "25f5fc372fabb37ce7c690a9e57130349f4958d8e75be32b516bb2d13bc3b65c"
+
+[[file]]
+path = "dafny/R/R04_Specs/agent/R04_AgentProver.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_AgentProver.MatchIsOccurrence" = "f0ed18a54ef02e4048197525ed53ece3976a2de53e0236d02c24a8356c3711f0"
+"R04_AgentProver.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
+"R04_AgentProver.OccursAppend" = "a3abfe77097bc1f7d94dc1f18d01044ab0eb2b637dc3657567e20f3e0a171d56"
+"R04_AgentProver.OccursCatSwap" = "ff4ac3b368aa9e328fe63bc9bb17f96b4ced986de22cbd2241775d2ab5d3074a"
+
+[[file]]
+path = "verus/r/r04_specs/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_match_is_occurrence" = "29590948e949fc60cbb09d1b1fc979798eb0dab8f61bb33d180ae77f4ca5cf55"
+"lemma_occurs_append" = "6367ae9ab2fe95f251b5e062a61028da8e475d2956cba93e8745fcd1589046b1"
+"lemma_occurs_cat_swap" = "cc95b00b9cd4e1a6237e367b6fdc5328247137be12134aec5d1edca6c0d989e5"
+"occurs" = "25f5fc372fabb37ce7c690a9e57130349f4958d8e75be32b516bb2d13bc3b65c"

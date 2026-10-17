@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R04/audit-assume-v.rs.specimen: SEALED. This demo waits for R04.P1d, R04.P5d,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R04/audit-assume-v.rs.specimen`; never edit.
+command: verify
+after: R04.P1d,R04.P5d
+outcome: salted-sha256 5f9c407ea8bab84e44232611ff191d5cb22d00a9d7d27589efc07ce7cd2507a5
