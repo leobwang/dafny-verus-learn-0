@@ -184,6 +184,13 @@ class Runs(unittest.TestCase):
         self.assertIn(C.job_line(out, "paper"), summary)
         self.assertIn("tool scratch kept for inspection", summary)
 
+    def test_a_pass_whose_logs_name_no_scratch_removes_it_all(self):
+        rc, out, err = C.run_ci("--job", "coexist", root=self.root, logs=self.logs)
+        self.assertEqual((rc, C.status_of(out, "coexist")), (0, "PASS"), (out, err))
+        work = self.root.resolve().parent / "ci-work"
+        self.assertEqual(list(work.iterdir()) if work.exists() else [], [])
+        self.assertNotIn("scratch the logs name kept", out)
+
     def test_harness_passes_loudly_without_a_project_and_fails_on_a_broken_one(self):
         rc, out, _ = C.run_ci("--job", "harness", root=self.root, logs=self.logs)
         self.assertEqual(rc, 0)

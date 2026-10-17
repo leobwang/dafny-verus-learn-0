@@ -148,7 +148,10 @@
 # canonical deny rule) and only that location reaches the job log. Tool
 # scratch (DVL_SCRATCH) lives in /tmp/dvl0-ci-<uid>/<run>/ (DVL_CI_WORK moves
 # the /tmp/dvl0-ci-<uid> part; the [A] steps' scratch lies under the cache
-# directory) and is deleted after a run that passed. The console shows one
+# directory). After a run that passed, only the scratch paths that a retained
+# report names are kept (a JSON document's raw_dir, a logged environment
+# path; the summary says how many) and the rest is deleted; after a failed
+# run all of it is kept. The console shows one
 # PASS/FAIL/SKIP/ABSENT line per job and a summary. No job reports ABSENT
 # today: the corpus job, its only user, fails instead since Δ109; the status
 # and the summary's "absent" count stay for a job a later phase lists before
@@ -620,8 +623,53 @@ def coexist_verus(units):
     return 1 if dups else 0
 
 
+def prune(scratch, *reports):
+    """After a passing run: remove the run's tool scratch except every path that a
+    retained report (a log, a JSON document, the summary) names, with what lies under it.
+    Prints each kept path, relative to the scratch root; a report that names the root
+    itself keeps it whole."""
+    import shutil
+    base = Path(scratch)
+    if not base.is_dir():
+        return 0
+    pat = re.compile(re.escape(str(base)) + r"(/[^\s\"'`,;:=()\[\]{}<>|\\]*)?")
+    keep = set()
+    for r in reports:
+        for f in ([Path(r)] if Path(r).is_file() else sorted(Path(r).rglob("*"))):
+            if not f.is_file():
+                continue
+            try:
+                text = f.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            for m in pat.finditer(text):
+                q = base / (m.group(1) or "").strip("/").rstrip(".")
+                while q != base and not (q.exists() or q.is_symlink()):
+                    q = q.parent
+                keep.add(q)
+    if base in keep:
+        print(".")
+        return 0
+
+    def sweep(d):
+        for e in sorted(d.iterdir()):
+            if e in keep:
+                continue
+            if e.is_dir() and not e.is_symlink() and any(k.is_relative_to(e) for k in keep):
+                sweep(e)
+            elif e.is_dir() and not e.is_symlink():
+                shutil.rmtree(e, ignore_errors=True)
+            else:
+                e.unlink(missing_ok=True)
+    sweep(base)
+    for k in sorted(keep):
+        print(k.relative_to(base))
+    return 0
+
+
 cmd, args = sys.argv[1], sys.argv[2:]
 sys.exit({"modules": lambda: modules(),
+          "prune": lambda: prune(*args),
           "files": lambda: files(*args),
           "holes": lambda: holes(*args),
           "shipped": lambda: shipped(),
@@ -1311,8 +1359,24 @@ VERDICT=PASS
 } | tee -a "$RUNDIR/summary.txt"
 
 if [ "$VERDICT" = PASS ]; then
-  rm -rf "$WORK"
-  if [ "$AUTHOR" = 1 ]; then rm -rf "$REFDIR/scratch"; rmdir "$REFDIR" 2>/dev/null || true; fi
+  # A passing run keeps exactly the scratch its retained reports name (vcheck's raw_dir
+  # of each JSON document, the harness's environment paths) and removes the rest.
+  REPORTS=("$RUNDIR")
+  [ "$AUTHOR" = 0 ] || REPORTS+=("$REFDIR")
+  if KEPT="$(py prune "$WORK" "${REPORTS[@]}")" && [ -n "$KEPT" ]; then
+    echo "ci.sh: tool scratch the logs name kept: $(lines "$KEPT") path(s) under $WORK (the rest removed)" \
+      | tee -a "$RUNDIR/summary.txt"
+  else
+    rm -rf "$WORK"
+  fi
+  if [ "$AUTHOR" = 1 ]; then
+    if KEPT="$(py prune "$REFDIR/scratch" "${REPORTS[@]}")" && [ -n "$KEPT" ]; then
+      echo "ci.sh: reference scratch the logs name kept: $(lines "$KEPT") path(s) under $(show "$REFDIR/scratch")" \
+        | tee -a "$RUNDIR/summary.txt"
+    else
+      rm -rf "$REFDIR/scratch"; rmdir "$REFDIR" 2>/dev/null || true
+    fi
+  fi
   exit 0
 fi
 echo "ci.sh: tool scratch kept for inspection: $WORK" >> "$RUNDIR/summary.txt"
