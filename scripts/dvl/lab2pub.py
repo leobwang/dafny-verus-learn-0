@@ -7,15 +7,25 @@ from the validated pools of bench/public/POOLS.toml by a pre-registered seeded r
         the stratum's pool members in the seeded draw order (one per line)
     python3 scripts/dvl/lab2pub.py check verus|dafny TASK...
         the static eligibility checks (C0-C3 below) of each named pool member
-    python3 scripts/dvl/lab2pub.py build [--check]
+    python3 scripts/dvl/lab2pub.py build [--check] [--author]
         write (or, with --check, compare) every card's task form of
         bench/local/q/lab2pub/STRATUM.toml from the installed sets, and the NOTICE
         (the sets' pins and licences, the change statement; D29); a form whose
-        source or result differs from the sha256 the stratum records is refused
+        source or result differs from the sha256 the stratum records is refused, and
+        so is one whose kept definitions (D37) differ from the card's
+        kept_definitions_sha256; --author (the author's context only) also compares
+        them by name with the author-side list, Solutions/bench/local/q/lab2pub/KEPT.toml
     python3 scripts/dvl/lab2pub.py record DRAW.json
         author-only (Δ103's three-condition test): write the finished draw's
-        [[draw]] records into bench/public/POOLS.toml, the stratum file and the
-        cards' task forms
+        [[draw]] records into bench/public/POOLS.toml, the stratum file, the
+        cards' task forms and the author-side list of their kept definitions
+
+The kept definitions (the user's decision D37): a form keeps a non-recursive definition
+that only the specification uses when the reference applies it under a quantifier. The form
+names no such definition as kept (a marker would hint the hidden specification): the card
+records the sha256 of their sorted names, one per line (kept_definitions_sha256; absent when
+there are none), which dvl.benchstrip.definition_residue's check over a shipped form compares,
+and the names themselves are author-side (KEPT.toml under Solutions/, the reference set).
 
 The draw (pre-registered before it ran; the record names the rule's text and its sha256): a
 stratum's members are its pool's tasks (Dafny: those of vericoding's `dafny/humaneval`
@@ -319,15 +329,61 @@ def load_stratum(root):
     return tomllib.loads(p.read_text(encoding="utf-8"))
 
 
+KEPT_FILE = ("Solutions", "bench", "local", "q", "lab2pub", "KEPT.toml")
+
+
+def kept_digest(names):
+    """The sha256 a card records for its kept definitions (D37), or None for none."""
+    names = sorted(set(names))
+    return sha("".join(n + "\n" for n in names)) if names else None
+
+
+def kept_path(root):
+    return Path(root).joinpath(*KEPT_FILE)
+
+
+def load_kept(root):
+    """{card id: [kept definition names]} from the author-side list (author context only)."""
+    why = bench.author_gate(root)
+    if why:
+        raise bench.Refused(f"the kept-definition list is author-side and is not read here ({why})")
+    p = kept_path(root)
+    if not p.is_file():
+        return {}
+    data = tomllib.loads(p.read_text(encoding="utf-8"))
+    return {k: sorted(v.get("quantified_definitions", [])) for k, v in data.get("card", {}).items()}
+
+
+KEPT_HEAD = """\
+# Solutions/bench/local/q/lab2pub/KEPT.toml — author-only (the reference set). The definitions
+# each Lab 2 public form keeps although only its reference specification uses them, because
+# the reference applies them under a quantifier (the user's decision D37). Written by
+# `scripts/dvl/lab2pub.py record`; checked by `scripts/dvl/lab2pub.py build --check --author`.
+# The form itself names none of them (a marker would hint the hidden specification); its card
+# in bench/local/q/lab2pub/STRATUM.toml records only the sha256 of the sorted names, one per
+# line (kept_definitions_sha256).
+"""
+
+
+def kept_text(kept):
+    out = [KEPT_HEAD, "schema = 1"]
+    for cid in sorted(kept):
+        if kept[cid]:
+            out += ["", f'[card."{cid}"]', f"quantified_definitions = {_q(sorted(kept[cid]))}"]
+    return "\n".join(out) + "\n"
+
+
 def form_path(root, card, lang):
     ext = ".rs" if lang == "verus" else ".dfy"
     return stratum_dir(root) / card / "tasks" / f"{card}{ext}"
 
 
-def build(root, check=False):
-    """Write (or compare) every card's form from the installed sets. Returns problems."""
+def build(root, check=False, author=False):
+    """Write (or compare) every card's form from the installed sets. Returns problems.
+    author: also compare each card's kept definitions with the author-side list."""
     data = load_stratum(root)
     out = []
+    kept = load_kept(root) if author else None
     keys = {v["set"]: k for k, v in STRATA.items()}
     rows = None
     for c in data.get("card", []):
@@ -344,9 +400,17 @@ def build(root, check=False):
             continue
         if key == "dafny" and rows is None:
             rows = _vericoding_rows(root)
-        text, _, _ = make_form(root, key, c["task"], c["id"], rows)
+        text, f, _ = make_form(root, key, c["task"], c["id"], rows)
         if sha(text) != c.get("form_sha256"):
             out.append(f"{c['id']}: the transform no longer gives the recorded form")
+            continue
+        if kept_digest(f.quantified or []) != c.get("kept_definitions_sha256"):
+            out.append(f"{c['id']}: the transform's kept definitions (D37) are not the ones "
+                       "the card records")
+            continue
+        if kept is not None and kept.get(c["id"], []) != sorted(f.quantified or []):
+            out.append(f"{c['id']}: the author-side list of kept definitions differs from the "
+                       "transform's")
             continue
         p = form_path(root, c["id"], c["lang"])
         if check:
@@ -461,6 +525,10 @@ STRATUM_HEAD = """\
 # scripts/get_bench.sh installs under bench/public/ (fetched on the pins) hold them either way,
 # which is why this stratum is no contamination control: the local stratum is (lab2/).
 #
+# A card whose form keeps a definition that no line of its code uses records the sha256 of
+# those definitions' sorted names, one per line (kept_definitions_sha256), which the shipped-
+# form check compares; the list itself is author-side.
+#
 # `python3 scripts/dvl/lab2pub.py build --check` re-derives every form from the installed sets
 # and compares it with form_sha256; the licences and the change statement are in NOTICE.
 """
@@ -478,8 +546,9 @@ def stratum_text(cards, date, forms_date=None):
     for c in cards:
         out += ["", "[[card]]"]
         for k in ("id", "lang", "name", "set", "task", "humaneval", "answer_sha256",
-                  "form_sha256"):
-            out.append(f"{k} = {_q(c[k])}")
+                  "form_sha256", "kept_definitions_sha256"):
+            if k in c:
+                out.append(f"{k} = {_q(c[k])}")
     return "\n".join(out) + "\n"
 
 
@@ -492,7 +561,7 @@ def record(root, draw):
     why = bench.author_gate(root)
     if why:
         raise bench.Refused(f"record is author-only and refuses to run here ({why})")
-    cards, draws = [], []
+    cards, draws, kept = [], [], {}
     rows = _vericoding_rows(root)
     for s in draw["strata"]:
         key = s["key"]
@@ -507,7 +576,10 @@ def record(root, draw):
             cards.append({"id": d["card"], "lang": st["lang"], "name": f.name, "set": st["set"],
                           "task": d["task"], "humaneval": number,
                           "answer_sha256": sha(answer_path(root, key, d["task"]).read_bytes()),
-                          "form_sha256": sha(text)})
+                          "form_sha256": sha(text),
+                          **({"kept_definitions_sha256": kept_digest(f.quantified)}
+                             if f.quantified else {})})
+            kept[d["card"]] = sorted(f.quantified or [])
             p = form_path(root, d["card"], st["lang"])
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(text, encoding="utf-8")
@@ -524,6 +596,8 @@ def record(root, draw):
                       "skipped": dict(sorted(s["skipped"].items()))})
     (stratum_dir(root) / "STRATUM.toml").write_text(
         stratum_text(cards, draw["date"], draw.get("forms_date")), encoding="utf-8")
+    kept_path(root).parent.mkdir(parents=True, exist_ok=True)
+    kept_path(root).write_text(kept_text(kept), encoding="utf-8")
     bench.write_draws(root, draws)
     return cards
 
@@ -559,6 +633,7 @@ def main(argv=None):
     c.add_argument("tasks", nargs="+")
     b = sub.add_parser("build")
     b.add_argument("--check", action="store_true")
+    b.add_argument("--author", action="store_true")
     r = sub.add_parser("record")
     r.add_argument("draw")
     ap.add_argument("--root", help=argparse.SUPPRESS)
@@ -584,7 +659,7 @@ def main(argv=None):
                     bad += 1
             return 1 if bad else 0
         if a.cmd == "build":
-            probs = build(root, check=a.check)
+            probs = build(root, check=a.check, author=a.author)
             for p in probs:
                 print(f"lab2pub: {p}", file=sys.stderr)
             if not probs:
