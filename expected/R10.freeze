@@ -1,0 +1,210 @@
+# expected/R10.freeze — statement-freeze pins for R10 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R10` from the files as shipped; checked by
+# `scripts/specfreeze --check R10`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R10"
+unfrozen = []
+
+[[file]]
+path = "dafny/checks/R10_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_PredictNormal.SmartCountR10" = "ac6efaa86f87f277047897fd469e7d14dadf0d8e1b7bd08f2fbb0376e1250ff3"
+
+[[file]]
+path = "dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R10_TypeInvariants.NormIdempotentR10 {:induction false}", "R10_TypeInvariants.NormalFixedR10 {:induction false}"]
+[file.statements]
+"R10_TypeInvariants.CatPacketR10" = "c3a9f01f33dc1bc0e3d7abdbd018b5346e96fb1a1f00675ef1e8f2197c584d9b"
+"R10_TypeInvariants.CountPacketR10" = "5fdee6b7137fb0f7f3239ae59411195a656d7a437c7b25ad48eb5f2220965240"
+"R10_TypeInvariants.NormIdempotentR10" = "78b05c7621b18a616b0926500a9e442fe62b23bf14240300413280f9e9295cc9"
+"R10_TypeInvariants.NormalFixedR10" = "1aa8d96ee359ec9501f6c019ec97ccc552cdd0f0deaeeef4d4b671af904aa1ab"
+"R10_TypeInvariants.NormalizePacketR10" = "d0400f0a2367f3b870d3ac193c4bb8e5de80caedc4b954a018980987cd1e4825"
+"R10_TypeInvariants.PacketChoiceR10" = "1cf921678292d7fa2455323baa41e1beee7855c447935d4af4290386b5d7bc41"
+"R10_TypeInvariants.ReplaceRightR10" = "e4809f69943c3a170fc4b12a56e05bfb4afe70964aacb6630dc6f58079e547c5"
+"R10_TypeInvariants.RuntimeShapeR10" = "c3cd7dc46ff2f294aa83b8bf5fc07ba8c64eabae921ab2794894067901e95e85"
+"R10_TypeInvariants.TryPacketR10" = "4c3f9357fb02591abc930b8ea09044d7dd38933ba673eb16d38202a54953721f"
+"R10_TypeInvariants.TypedPacketR10" = "118d6325b63c0cecf3ea0247984a0f60f70c652bcd037862b17e44fc18fd830a"
+
+[[file]]
+path = "verus/r/r10_type_invariants/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"NormPacketR10" = "3194cd266e27806005106bb0df6e64236cd819c3b987b6f5b1146925c4be0780"
+"NormPacketR10::coherent" = "cdcec66218586228ebddec0cff0dad4cc122198e8d93d37a99b9a6177242a647"
+"NormPacketR10::into_pattern_r10" = "7ba0edf284f84dbefa1460a57e78f55db342ae7e97ffec94ebc02139a7332bc4"
+"NormPacketR10::pattern_ref_r10" = "090f68ec1ba095f6ea743b9a685cb9c2aec2f9673d4e7e0b969c16809a98dd78"
+"NormPacketR10::re" = "db18341c9e47d7bdc128037e36954cf49b581b506285a2dd3eea349d725e34fe"
+"NormalEvidenceR10" = "ab6c4d6c319040ece6ddcae7c853cca72670efbe68504a8584ab4a898ccef02b"
+"cat_packet_r10" = "ae2952662953e3496af6947d327ab0ba3bbbb56ccd54ddfeef2e7df7b84ff6cd"
+"norm_idempotent_r10" = "fdf99e7f14ced460a91f6f87fe40a5678929b88813af93d0193ed9d9b663ca28"
+"normal_fixed_r10" = "854439e939d5703e150fbf3196451542f3c20c5e8acfef95666b25607f8905ac"
+"normalize_packet_r10" = "cf2fabc53dc06f44c11c6e457f5ea40cd6d9cecfd912e71d3f28ac1143360a1a"
+"replace_right_r10" = "d5ab320ee3086d597c40ba952495b5746b08f4270d060f9b52e1999900e0593f"
+"runtime_shape_r10" = "45b608c7ee2fe845f9ff600b15f291baa5c48b3749d7650f5b76e208df3b28c3"
+"try_packet_r10" = "831edfcb1ee9973262b769e5508e7eec31d99167ded0fd94fb5f97cbb0494693"
+
+[[file]]
+path = "specimens/R10/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"nested_normal_value_r10" = "093e75659cb428d5161e2b6a7181b366e9ec8d61a79bc4fd35e7f3940d1f52f6"
+
+[[file]]
+path = "specimens/R10/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"NormPacketR10" = "3194cd266e27806005106bb0df6e64236cd819c3b987b6f5b1146925c4be0780"
+"NormPacketR10::coherent" = "cdcec66218586228ebddec0cff0dad4cc122198e8d93d37a99b9a6177242a647"
+"NormPacketR10::into_pattern_r10" = "7ba0edf284f84dbefa1460a57e78f55db342ae7e97ffec94ebc02139a7332bc4"
+"NormPacketR10::pattern_ref_r10" = "090f68ec1ba095f6ea743b9a685cb9c2aec2f9673d4e7e0b969c16809a98dd78"
+"NormPacketR10::re" = "db18341c9e47d7bdc128037e36954cf49b581b506285a2dd3eea349d725e34fe"
+"NormalEvidenceR10" = "ab6c4d6c319040ece6ddcae7c853cca72670efbe68504a8584ab4a898ccef02b"
+"packet_claims_r10" = "e62a126fff44070e62899a4b04163ee5ba0317cf87c8764545bd54a4c167e1fd"
+
+[[file]]
+path = "specimens/R10/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_SubsetCard.LeafBoundaryR10" = "568c439adfc56362271585148c83c7ede3199e4d14b3495ec0cd9a76fa420fad"
+
+[[file]]
+path = "specimens/R10/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"MarkedLeafR10" = "2cccf8baf75327bbda483c39d3138f1edc813cd7f469515bdc527060023a577d"
+"MarkedLeafR10::coherent" = "e3bfbb2dfc3145def36688e712d8ca6860ab9b495ff0473222f43b789ac8a454"
+"leaf_boundary_r10" = "e7d61f01807f004471593562bcc5f44f0f105222b9fad2bc7d8469f9edc3867a"
+
+[[file]]
+path = "specimens/R10/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_ByMethodCard.LeafModelR10" = "3be87badd7fbbad9fa4f2d7eb512495955723e3a0e1c1fdb89f8c2d4455bb985"
+"R10_ByMethodCard.LeafR10" = "893b8c28cc036288be48bc56bc21762af3af94c4da5b40f62f629b986f738d7e"
+
+[[file]]
+path = "specimens/R10/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"leaf_echo_r10" = "eda328bdd15d9cfb8b09e7a344c41759f73d7d2f530b1ba5380c2c0045fd770f"
+
+[[file]]
+path = "specimens/R10/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_GhostCard.LeafWitnessR10" = "22620994d7a0f20a347e2ca0ef894fe909d315bb22a26635082bf504a86746e8"
+"R10_GhostCard.UnitLeafR10" = "32499f516e7ab755f65b32386993f9c149963d6e1fe13a53f174244c20c5cc7d"
+"R10_GhostCard.WitnessLeafR10" = "24f7e035dde5efacbbc0e47026975b82160fa72185edd7984b8f7810fafd17e5"
+
+[[file]]
+path = "specimens/R10/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"LeafPermitR10" = "dd8007411aaedd35fd0a3409933642c3facb916d3c9aab148f54a5f6c8cbbd28"
+"consume_leaf_r10" = "db63031ba94f788352890e5fb2e65a9eb2ad4d92cdcfeb8c91458e7a4c401a00"
+"leaf_permit_r10" = "3219da1fcc28f92d685d83c93b2dee1264d9ae97b6291e6b61e642b56b947e4c"
+
+[[file]]
+path = "specimens/R10/language-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_SpectrumProbe.ProduceR10" = "662cf21280843474be5fdbcacde839d7aea8ff5ddf3eee38f9f22fb7a1f6fca9"
+
+[[file]]
+path = "specimens/R10/language-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"produce_r10" = "ceb4a826d5cd56d94f4263b81bf2415bff27dcda4160668a96885287c0ea3949"
+
+[[file]]
+path = "specimens/R10/option-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_SpectrumProbe.ObserveR10" = "0dd97f7accac423b151f0ec18762cf0ef867c96d0902593505bdbd1ab962caac"
+"R10_SpectrumProbe.ShapeChoiceR10" = "d669ed100e812a9b38ab732fe8d0b39980964c9d5ea64dd4666a38f4d485bc8f"
+"R10_SpectrumProbe.TryShapeR10" = "358227f13b663a9c19de139b598cc9eea07867a3c8face0368083b5b8c87279f"
+
+[[file]]
+path = "specimens/R10/option-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"observe_r10" = "43c1a75f37755c79bd12142ab0a637d4ae03920960b22b8e6f5bd4a89f033d8f"
+"try_shape_r10" = "84a546088d4c072bde79033c00f08361f5781e47b35f408fdb485254bb2040ec"
+
+[[file]]
+path = "specimens/R10/precondition-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_SpectrumProbe.ObserveR10" = "0dd97f7accac423b151f0ec18762cf0ef867c96d0902593505bdbd1ab962caac"
+"R10_SpectrumProbe.RequireShapeR10" = "9854cb6b67079a5305baa2bd21e5b5df8004ab35f09944ebbcaf67080dd1d2e8"
+
+[[file]]
+path = "specimens/R10/precondition-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"observe_r10" = "43c1a75f37755c79bd12142ab0a637d4ae03920960b22b8e6f5bd4a89f033d8f"
+
+[[file]]
+path = "specimens/R10/shape-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_SpectrumProbe.ProduceR10" = "768931441fb6eaaf285d2c70c21f0a7dca661e622eae20bb54ac62209616e321"
+
+[[file]]
+path = "specimens/R10/shape-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"produce_r10" = "664b97b469203c375378e1e5db9f0aba84664366363e8ea9e70457adfd4cca32"
+
+[[file]]
+path = "dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy"
+lang = "d"
+open_bodies = []
+open_specs = ["R10_AgentFlagship.BuildAltR10", "R10_AgentFlagship.BuildCatR10", "R10_AgentFlagship.BuildStarR10"]
+[file.statements]
+"R10_AgentFlagship.BuildAltR10" = "3edb65a726d3d32570935081af71fc61c7bde068bc7dc0a797e422f50cb51f29"
+"R10_AgentFlagship.BuildCatR10" = "e4ecda9191fdde058f83fb2b11aa3bd8468f6a3571c82d06cfe3b540e79eeaf7"
+"R10_AgentFlagship.BuildStarR10" = "1da62a65c9647751369b3c9b156cc296ef1861e1cf79a9f32b74de39c9dbf737"
+[file.spec_clauses]
+"R10_AgentFlagship.BuildAltR10" = { requires = [], ensures = [] }
+"R10_AgentFlagship.BuildCatR10" = { requires = [], ensures = [] }
+"R10_AgentFlagship.BuildStarR10" = { requires = [], ensures = [] }
+
+[[file]]
+path = "verus/r/r10_type_invariants/src/agent.rs"
+lang = "v"
+open_bodies = []
+open_specs = ["build_alt_r10", "build_cat_r10", "build_star_r10"]
+[file.statements]
+"build_alt_r10" = "5c40969c1b8a548e3b0fc1dcbba0d1df691a6789f437ee091b9e810701a1dc5a"
+"build_cat_r10" = "8c7e9ced6fabf7dfd9b5b866040227524c01aa12718d2ae36f34df1e7a865ff8"
+"build_star_r10" = "c38cd439e0b40d596ae61aca2ce2acdc066dd3269f7ce8214b15578436739d15"
+[file.spec_clauses]
+"build_alt_r10" = { requires = [], ensures = [] }
+"build_cat_r10" = { requires = [], ensures = [] }
+"build_star_r10" = { requires = [], ensures = [] }

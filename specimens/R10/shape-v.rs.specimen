@@ -1,0 +1,8 @@
+// after: R10.P5dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a4::*;
+verus! {
+fn produce_r10()->(out:NormRe)
+{NormRe::from_normal_r10(Re::Empty)}
+}

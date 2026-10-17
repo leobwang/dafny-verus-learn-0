@@ -61,3 +61,91 @@ D45 live validation and parked R03 stay explicitly skipped, never passed.
 
 Final frozen STUDY leak scan:26modules/2027publicfiles/OK. Course map and
 avoid both-track checks pass. This is a provided-boundary checkpoint only.
+
+
+## Core and flagship construction checkpoint
+
+Actual final canonical firsttry empty-body admission passes8/8. H3d succeeds
+under maxauto but fails all3shipped seeds with inductionfalse, explicitly
+recorded in PLAN/chapter/rubric as a hole+lever. All6exec trivial bodies
+(NoPacket/None, returnleft, constant-empty normalizer) fail at verify. Four
+H items per language carry55+55=110minutes after native admission. Initial
+complete prototypes pass3seeds; final context references are being refreshed.
+Proof-line counter: D H1/H2/H3/H4=1/1/5/2; V=2/5/6/5, excluding exec code.
+
+Flagship original signatures have3body holes per language and no prefilled
+semantic contract. Human adds clauses, nonvacuous cases and fixed snapshots
+before actor body edits. Protected references have3semantic constructors and
+private helper proofs, D7/V7verified. No live contractor ran. The public
+statement tool checks arbitrary normal inputs/fresh result without any body;
+strong clauses pass, shape-only and false-domain clauses fail natively both.
+Contradictory postconditions pass the logical implication but fail actual
+implementation verification both. A fully implemented shape-only wrong result
+passes its native weak contract0holes but fails actual compiled semantic cases
+both; original snapshots reject changed preconditions both.
+
+A negative control exposed an initial D driver mistake: included implementations
+were not verified as roots. Both public compiled tools now embed the specified
+actual source into the root file, preserving hashes and native bodies. The
+corrected strong runs pass; corrected weak/inconsistent controls exercise the
+implementation. Retain first failed driver assertions and sources. A V negative
+mutant initially repeated ensures and failed parsing; the corrected single
+ensures group fails at verify as required. No parse failure counted as semantics.
+
+Public actual-source normalizer tool:120fixed cases each,11word observations
+per case (1320each), exact AST/node count/normality and ground model equations;
+concrete V layout check. The generated D packet has only expr at runtime;
+TryPacket/CatPacket/NormalizePacket builders contain no NodeCount calls or
+erased measured/cached locals. The observer's traversal is deliberately
+separate. Retained generated Python and inspection hashes are private.
+Constructor tool:27normal-input cases each×11words=297finite comparisons each.
+No finite result is a universal language theorem or live actor outcome.
+
+Five predictions and six concrete WRITE cards have actual native controls;
+P1 now resides in a given-only std check file, after hollow lint correctly
+rejected its initial placement beside hand holes. Reference CHECK switches
+are active (initial audit caught disabled reference switches; no bodies changed).
+The twelve-question bank has two disjoint six-question draws and two fresh
+native failed predictions; both paired parallel-problem references pass.
+Five TeX documents compile privately. Chapter has5predict boxes/3diagrams,
+roughly5050words and19planned native captures; no captured output is invented.
+Exact final pins/captures/workflow/CI are recorded after their actual checks.
+
+The unrelated wrapper fixture regression now passes its complete focused
+wrappers job on immutable8cb6f87:1pass/0fail,2388s. Public CI/orchestration
+logs are archived under author-probes/dvr2/wrapper-fixture-fix-20261017;
+no private reference-log tree remains after that job's cleanup. This resolves
+the R04 wrappers-fixture regression only, not a new full release CI result.
+
+Final complete canonical references each pass3pinned seeds: coreD/V and
+agentD/V, allstable. Dcore reports advisory spread on3dependency symbols
+(20–26percent); advisory only, no source/resource change. Actual reference
+counts areD56/V9, gatefloors6/9; core4holes each, agent3holes each, given-only
+check0holes. All4final reference audits pass after activating the two
+reference CHECK switches. Predictions5/5 and canonical admission8/8 pass.
+
+
+Capture inspection found that bare Dspecimens importing given layers only
+resolved in private contextual probes, not in the wrapper's standalone specimen
+mode. Do not treat those captured import errors as intended semantic failures.
+All7R10Dcard/spectrum captures now copy the original source to a real .dfy
+extension (no new program text) in fresh scratch and run with
+explicit --module R10 context. All7reach the intended verification outcomes.
+The manifest binds the source, unit options and provided-chain files. Remove
+those7misleading standalone Dsidecars; retain7Vsidecars and19chapter captures.
+P2/P4never have sidecars. The same dependency-context issue affects the first
+Dafny cards of R08/R09; forward corrections keep their source/models/statements
+unchanged, use native contextual chapter captures and remove their bad sidecars.
+This is presentation/validation repair, not a change to earlier native proofs.
+
+All19chapter captures and7Vsidecars are now current. Four Vscenario sidecars
+are SEALED under explicit after:P3/P5 guards on all8D/Vscenario sources;
+the copied Dcontextual probes retain those same guards. R08/R09 changed
+context captures replay successfully; their removed standalone sidecars had
+only unresolved-import errors. R10 pins CI37/37passed before the added
+guards; a final guarded-source pins replay is required and running. The
+base snapshot recognizes all3open statement symbols in each agent language,
+while retaining all fixed signatures/models and H3induction levers.
+
+Frozen source STUDY scan: leak verifier: 27 module(s), 2072 public files scanned, OK. Source checkpoint precedes the
+scripted STUDY workflow and focused six-job CI; neither is inferred yet.

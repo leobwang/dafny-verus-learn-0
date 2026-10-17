@@ -1,0 +1,10 @@
+# from Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy
+ghost\s+var\s+measured\s*:=\s*NodeCount\(r\);
+ghost\s+var\s+cached\s*:=\s*if\s+a\.expr==Empty\s*\|\|\s*b\.expr==Empty\s+then\s+1
+case\s+Alt\(a,b\)\s*=>\s*NormalFixedR10\(a\);\s*NormalFixedR10\(b\);
+case\s+Cat\(a,b\)\s*=>\s*var\s+left:=NormalizePacketR10\(a\);
+# from Solutions/verus/r/r10_type_invariants/src/lib.rs
+let\s+tracked\s+evidence=NormalEvidenceR10\s*\{pattern:r\};
+assert\(cached==node_count\(mk_cat\(left,right\)\)\);
+Re::Star\(a\)=>\{normal_fixed_r10\(\*a\);\},
+let\s+child=normalize_packet_r10\(a\);let\s+child_raw=child\.into_pattern_r10\(\);

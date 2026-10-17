@@ -1532,9 +1532,11 @@ it. Its initial actor files have fixed signatures and shape-typed results,
 with open statement clauses and counted body holes. Human-written clauses
 are snapshotted before any actor edit and remain frozen thereafter.
 
-The statement readiness check uses the proposed contract as an abstract
-provider, tests calls on the original domain, and requires its returned value
-to preserve the original constructor language. A shape-only result must not
+The statement readiness check uses the proposed contract on arbitrary normal
+inputs and an arbitrary fresh normal result. It proves the proposed
+preconditions over the original domain, then proves that those preconditions
+and the proposed postconditions imply the original constructor language.
+This is the logical consumer of an abstract provider, with no assumed body. A shape-only result must not
 pass merely because the actual given constructor definitions preserve the
 language: the abstract result is arbitrary. Native proof failure establishes
 that readiness was not proved, not a universal semantic counterexample.

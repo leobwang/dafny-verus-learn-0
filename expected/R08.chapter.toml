@@ -60,12 +60,23 @@ body = "b290f7ac7c5245d4e817424ff07d88bfb1e5174f95f8e9c6633fcbc596060d46"
 
 [[entry]]
 id = "refinement-d"
-cmd = ["scripts/vcheck", "specimens/R08/card-c1d.dfy.specimen"]
+cmd = ["scripts/vcheck", "--module", "R08", "card-c1d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy"]
+note = "Real-extension source copy in original provided-layer context; avoids an unresolved-import capture."
 [entry.normalize]
 drop = ["^raw output: "]
+[entry.scratch."card-c1d.dfy"]
+copy = "specimens/R08/card-c1d.dfy.specimen"
 [entry.pinned]
-body = "e9762d1a4151c0f53e83d1c57a660e684a934ef4f69420da80c81fed811aac3c"
+body = "9f73af03314710d05032f9e7f53ee3d14e5e31508ce57c1da7e30ff33d113c42"
 [entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "99711e4da5db7190023206a1463aa877840c168226c4c923e9ed281381d8081a"
+"dafny/given/R/RG_A2_Deriv.dfy" = "5b65aab71bc6f25898bd398dc70c097891243b3799207031550e25d185b18657"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "ca14d626aa09490fb9d4d6565567d7b1156ce597b18ab90b4291652a02b81cb3"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:card-c1d.dfy" = "dad373ed167da4b0b31dc84276589ec9fae2334d1fa877a436b045b571a579b1"
 "specimens/R08/card-c1d.dfy.specimen" = "dad373ed167da4b0b31dc84276589ec9fae2334d1fa877a436b045b571a579b1"
 
 [[entry]]

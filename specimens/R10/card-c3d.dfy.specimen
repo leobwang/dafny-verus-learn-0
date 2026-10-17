@@ -1,0 +1,9 @@
+module R10_GhostCard {
+ import opened RG_A1_Re
+ datatype LeafWitnessR10=LeafWitnessR10(c:char,ghost count:nat)
+ type UnitLeafR10=p:LeafWitnessR10 | p.count==1 witness LeafWitnessR10('x',1)
+ // item: R10.C3d write:ghost
+ // WRITE: the erased witness must still satisfy the subset at construction.
+ method WitnessLeafR10(c:char) returns (out:UnitLeafR10)
+ {ghost var cached:=0;out:=LeafWitnessR10(c,cached);}
+}

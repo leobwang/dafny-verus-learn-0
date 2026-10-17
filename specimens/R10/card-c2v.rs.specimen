@@ -1,0 +1,8 @@
+use vstd::prelude::*;
+verus! {
+// item: R10.C2v write:ghost
+// WRITE: Ghost values retain a proof fact while the executable result uses c.
+fn leaf_echo_r10(c:char)->(out:char)
+ ensures out==c,
+ {let ghost remembered=c;assert(remembered==c);'z'}
+}

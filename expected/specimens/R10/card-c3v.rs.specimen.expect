@@ -1,0 +1,52 @@
+# pins.py golden for specimens/R10/card-c3v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R10/card-c3v.rs.specimen`; never edit.
+command: verify
+exit: 1
+verdict: failed
+stage: verify
+verified: 1
+holes: 0
+{
+ "diagnostics": [
+  {
+   "col": 9,
+   "file": "card-c3v.rs",
+   "labels": [
+    "",
+    "failed precondition"
+   ],
+   "level": "error",
+   "line": 11,
+   "message": "precondition not satisfied"
+  }
+ ],
+ "json": {
+  "func-details": {
+   "card_c3v::consume_leaf_r10": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "card_c3v::leaf_permit_r10": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_ensures": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   },
+   "vstd::function::axiom_fn_mut_call_requires": {
+    "failed_proof_notes": [],
+    "obligation_proof_notes": []
+   }
+  },
+  "verification-results": {
+   "encountered-error": true,
+   "encountered-vir-error": false,
+   "errors": 1,
+   "is-verifying-entire-crate": true,
+   "success": false,
+   "verified": 1
+  }
+ },
+ "other": []
+}

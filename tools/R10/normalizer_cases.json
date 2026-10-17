@@ -1,0 +1,4898 @@
+[
+  {
+    "input": [
+      "Z"
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": true,
+    "expected_nodes": 1,
+    "record": "Z|N1|Btrue"
+  },
+  {
+    "input": [
+      "E"
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": true,
+    "expected_nodes": 1,
+    "record": "E|N1|Btrue"
+  },
+  {
+    "input": [
+      "C",
+      "a"
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": true,
+    "expected_nodes": 1,
+    "record": "C97|N1|Btrue"
+  },
+  {
+    "input": [
+      "C",
+      "b"
+    ],
+    "expected": [
+      "C",
+      "b"
+    ],
+    "normal": true,
+    "expected_nodes": 1,
+    "record": "C98|N1|Btrue"
+  },
+  {
+    "input": [
+      "C",
+      "δ"
+    ],
+    "expected": [
+      "C",
+      "δ"
+    ],
+    "normal": true,
+    "expected_nodes": 1,
+    "record": "C948|N1|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "Z"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "E"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "Z"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C97)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "A(E,S(C97))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C98)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "Z"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "S(A(C97,E))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "K",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(S(C948),K(C98,C98))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 3,
+    "record": "A(C98,C97)|N3|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ],
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "C",
+      "b"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C98|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C98)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "Z"
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 7,
+    "record": "K(C98,K(A(E,C948),C948))|N7|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "A(E,S(C97))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 7,
+    "record": "S(A(K(C98,C97),S(C98)))|N7|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "Z"
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 2,
+    "record": "S(C98)|N2|Btrue"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "S(A(C98,E))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ],
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "expected": [
+      "C",
+      "δ"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C948|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "E"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "A(S(C98),C98)|N4|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "E"
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 2,
+    "record": "S(C97)|N2|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 8,
+    "record": "A(S(C948),K(A(C948,E),C97))|N8|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "A",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 8,
+    "record": "K(A(C97,E),S(K(C97,C948)))|N8|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "S",
+        [
+          "E"
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C948)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "A(S(C948),S(C98))|N5|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "Z"
+        ],
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "Z"
+      ],
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "E"
+        ]
+      ],
+      [
+        "S",
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "A(E,S(C97))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "Z"
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "K(C948,A(E,C97))|N5|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "K",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 6,
+    "record": "K(K(C948,S(C98)),C98)|N6|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "C",
+      "δ"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C948|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 8,
+    "record": "A(S(K(C948,C948)),K(C97,C98))|N8|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "K",
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "K",
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "A(S(C98),C948)|N4|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "K",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(K(C98,C948),S(C97))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(A(C98,C97),S(C97))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "Z"
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 10,
+    "record": "K(A(K(C97,C98),A(C98,E)),S(C98))|N10|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(A(C98,E),S(C97))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "K",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "A(E,K(C97,C97))|N5|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 6,
+    "record": "S(A(C98,A(C948,C98)))|N6|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 7,
+    "record": "K(C948,A(E,A(C948,C97)))|N7|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ],
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "K",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 9,
+    "record": "K(K(S(C948),C98),S(A(C948,C97)))|N9|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 4,
+    "record": "A(C98,S(C948))|N4|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "E"
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "Z"
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 3,
+    "record": "K(C98,C98)|N3|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "expected": [
+      "C",
+      "δ"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C948|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 4,
+    "record": "K(C948,S(C948))|N4|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 9,
+    "record": "A(A(S(C98),E),A(S(C948),C948))|N9|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "E"
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "A",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "E"
+        ]
+      ],
+      [
+        "A",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 7,
+    "record": "K(A(C948,E),A(C948,E))|N7|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "b"
+      ],
+      [
+        "E"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 3,
+    "record": "A(C98,E)|N3|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "K(S(C97),S(C98))|N5|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C948)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "A",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ],
+        [
+          "S",
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 3,
+    "record": "K(C97,C97)|N3|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 3,
+    "record": "K(C948,C948)|N3|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(E,S(A(C948,C97)))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 6,
+    "record": "A(S(K(C98,C98)),C97)|N6|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "S",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 9,
+    "record": "K(S(A(E,C948)),S(A(E,C948)))|N9|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "K",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "K",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 5,
+    "record": "K(C97,K(C97,C97))|N5|Btrue"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "S",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "K",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "S(K(C948,C948))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 7,
+    "record": "A(C948,A(E,K(C98,C97)))|N7|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 11,
+    "record": "A(A(C98,C948),K(A(E,C97),A(E,C97)))|N11|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "Z"
+        ],
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C98)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "Z"
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "Z"
+        ]
+      ],
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "Z"
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "K(C948,A(E,C948))|N5|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "K",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "a"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 10,
+    "record": "K(K(K(C98,C98),A(C98,C97)),S(C97))|N10|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "Z"
+        ],
+        [
+          "Z"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "K",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "A(K(C98,C98),C98)|N5|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "Z"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 3,
+    "record": "A(E,C948)|N3|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "S(A(A(C98,E),C98))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 2,
+    "record": "S(C948)|N2|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "K(S(C98),C948)|N4|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 15,
+    "record": "K(K(A(C948,E),A(C948,E)),K(A(C948,E),A(C948,E)))|N15|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "E"
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "E"
+      ],
+      [
+        "S",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "S(A(C948,E))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "S(A(C97,C948))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "K",
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "Z"
+          ]
+        ],
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "S(A(C98,K(C98,C948)))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "K",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "K",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "K",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 7,
+    "record": "K(K(C98,C98),K(C948,C948))|N7|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "K",
+        [
+          "E"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C97)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "K",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "K",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "A",
+        [
+          "C",
+          "b"
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 7,
+    "record": "A(K(C948,C948),A(C98,E))|N7|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "K",
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "C",
+          "a"
+        ]
+      ],
+      [
+        "C",
+        "b"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(K(S(C97),C97),C98)|N6|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "K",
+        [
+          "E"
+        ],
+        [
+          "Z"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "Z"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 2,
+    "record": "S(C948)|N2|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 3,
+    "record": "A(C948,C97)|N3|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "Z"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "Z|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "E"
+        ]
+      ],
+      [
+        "K",
+        [
+          "K",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "K",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "K(K(C97,C98),S(C98))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "A",
+          [
+            "C",
+            "a"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "A",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "E"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "A(A(C97,C948),E)|N5|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "K",
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ],
+        [
+          "K",
+          [
+            "E"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "E"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "E|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 5,
+    "record": "K(S(C98),S(C98))|N5|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "A",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "Z"
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "K",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "δ"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(K(C948,S(C98)),C948)|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "A",
+        [
+          "Z"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "A(C97,S(C98))|N4|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "S",
+          [
+            "Z"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "E"
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ],
+        [
+          "E"
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 6,
+    "record": "A(E,A(S(C98),E))|N6|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "C",
+        "δ"
+      ],
+      [
+        "E"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 3,
+    "record": "A(C948,E)|N3|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "A",
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ],
+        [
+          "K",
+          [
+            "C",
+            "b"
+          ],
+          [
+            "Z"
+          ]
+        ]
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "C",
+      "a"
+    ],
+    "normal": false,
+    "expected_nodes": 1,
+    "record": "C97|N1|Bfalse"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "C",
+          "a"
+        ],
+        [
+          "K",
+          [
+            "Z"
+          ],
+          [
+            "E"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "S",
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 4,
+    "record": "K(S(C948),C97)|N4|Bfalse"
+  },
+  {
+    "input": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "S",
+      [
+        "A",
+        [
+          "C",
+          "δ"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 5,
+    "record": "S(A(C948,S(C98)))|N5|Btrue"
+  },
+  {
+    "input": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "expected": [
+      "K",
+      [
+        "C",
+        "a"
+      ],
+      [
+        "C",
+        "a"
+      ]
+    ],
+    "normal": true,
+    "expected_nodes": 3,
+    "record": "K(C97,C97)|N3|Btrue"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "S",
+        [
+          "S",
+          [
+            "C",
+            "b"
+          ]
+        ]
+      ],
+      [
+        "A",
+        [
+          "S",
+          [
+            "E"
+          ]
+        ],
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "S",
+        [
+          "C",
+          "b"
+        ]
+      ],
+      [
+        "A",
+        [
+          "E"
+        ],
+        [
+          "S",
+          [
+            "C",
+            "a"
+          ]
+        ]
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 7,
+    "record": "A(S(C98),A(E,S(C97)))|N7|Bfalse"
+  },
+  {
+    "input": [
+      "A",
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "A",
+          [
+            "C",
+            "δ"
+          ],
+          [
+            "C",
+            "δ"
+          ]
+        ]
+      ],
+      [
+        "E"
+      ]
+    ],
+    "expected": [
+      "A",
+      [
+        "K",
+        [
+          "A",
+          [
+            "E"
+          ],
+          [
+            "C",
+            "a"
+          ]
+        ],
+        [
+          "C",
+          "δ"
+        ]
+      ],
+      [
+        "E"
+      ]
+    ],
+    "normal": false,
+    "expected_nodes": 7,
+    "record": "A(K(A(E,C97),C948),E)|N7|Bfalse"
+  }
+]

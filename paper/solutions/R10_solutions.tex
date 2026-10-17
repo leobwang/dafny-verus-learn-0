@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R10 --- Invariants in types \\ \large Reference Solution}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} Java program to JML contracts, loop invariants and termination variants; the target is actual program behavior. Conversation repairs candidates with OpenJML messages, then weighted operator mutations search nearby specifications.
+
+\textbf{Oracle:} OpenJML verifies the generated annotations against the program using SMT. Native acceptance is conditional on that formal program, annotation and verification configuration; it does not establish that the annotations express an independently intended requirement.
+
+\textbf{Trust:} The Java model, OpenJML front end and verifier/solver stack remain trusted. These are not kernel-checked proof terms or a correctness proof for the synthesis pipeline. The one-LLM result cannot establish model-independent performance.
+
+\textbf{Cheat surface:} Weak or dropped clauses still count as verifiable. Specifications for buggy code can confirm the bug. Preserve the original domain and ask what a consumer can derive; an impossible precondition removes valid calls. Tiny programs and possible training overlap limit a generalization claim.
+
+\textbf{Metric:} 179/265 SV-COMP plus100/120 SpecGenBench gives279/385 verifiable programs. The reported59.97percent success-probability estimator is a separate table column, not279/385. Baselines total72 Daikon,98 Houdini,164 four-shot,218 conversation and247 AutoSpec on385. Removing comparative or logical mutations gives223 or235; Defects4J reports38/50. These are distinct tasks and denominators, not specification-strength measurements.
+
+\textbf{Budget:} GPT-3.5-turbo-1106 at temperature0.4, four examples and at most10conversation rounds. Comparative weight is-1, logical-2, arithmetic and predicative-4; fewer/cheaper edits are preferred. Reported verifier-call savings5.30percent and21.23percent concern heuristic ordering on the two respective corpora, not wall-clock speedups or common dollar/token budgets.
+
+\textbf{Variance:} Only one LLM is evaluated. The excerpt supplies no repeated-run distribution, confidence interval or matched universal token/dollar budget. Programs average about21lines; data contamination is possible. OpenJML incompleteness can reject valid candidates. Ratings4.54 versus oracle4.83 do not establish general semantic equivalence.
+
+\textbf{Artifact:} Ma et al., ICSE2025, arXiv2401.08807. Retain the exact local range/hash. The excerpt is a secondary research note rather than an immutable executable replication manifest; do not invent a repository commit, environment lock or run transcript.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+Dafny's packet keeps its expression at runtime; its ghost count is erased and
+the subset constraint must hold when a packet is built or returned. Verus
+keeps the NormRe representation; Ghost and Tracked wrappers carry proof data
+that must satisfy the type invariant. The tracked value is consumed in proof
+mode; it is not runtime authority or a runtime counter. The concrete Rust
+layout observation compares packet and NormRe sizes, without establishing a
+general memory or timing bound. Inspect retained generated Dafny builder
+bodies to distinguish an erased count from the observer's explicit runtime
+node-count traversal.
+Concatenation's empty-operand cases produce one node. An epsilon operand
+selects the other packet's count. The unreduced case adds the parent node and
+both original counts. The hypotheses connecting the original caches to their
+trees justify these equalities. No ghost count controls which runtime branch
+is taken: the executable regex constructors determine it. By-method proof
+establishes the returned expression and erased witness match the fixed function
+model; runtime erasure does not waive that proof obligation.
+Runtime validation can inspect raw input. An optional constructor has a None
+case for nonnormal input and a Some case carrying the validated original tree;
+a success-completeness promise excludes always-None. A precondition-only
+constructor instead requires the caller to prove the domain before calling.
+For each smart operation, require all original normal inputs and a normal
+result whose language equals the corresponding raw regex operation's language.
+Quantify the consumer over an arbitrary normal result rather than using the
+actual smart-operation body. Shape alone permits a normal result with the
+wrong language. A false precondition fails the original-domain obligation.
+An inconsistent postcondition can make a logical implication vacuous; the
+full implementation gate and nonvacuous witnesses remain independent checks.
+Freeze the human's statements and model bindings before contractor body edits.
+Run original-source snapshots, full zero-hole gates and audits afterward.
+Compiled finite cases can falsify particular mismatches but do not establish
+universal equivalence. None of these author controls is a live actor outcome.
+\end{answer}
+\end{document}

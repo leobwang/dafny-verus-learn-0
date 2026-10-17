@@ -540,11 +540,17 @@ vcheck: verus/r/r09_effects/src/agent.rs [verus, learner loop]: verified — - v
 verus/r/r09_effects/src/agent.rs:32:1: hole external_body R09.A1v
 ```
 
+This Dafny card imports the provided layer. Copy it to a real `.dfy`
+file, then run `scripts/vcheck --module R09 <copy.dfy>` from the repository.
+The following capture uses that source in a fresh scratch copy with the same
+module context; the manifest pins the card and its provided dependencies.
+
 <!-- pin: card-c1d -->
 ```
-$ scripts/vcheck specimens/R09/card-c1d.dfy.specimen
-vcheck: specimens/R09/card-c1d.dfy.specimen [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
-specimens/R09/card-c1d.dfy.specimen:2:16: error: module RG_A3_Syntax does not exist
+$ scripts/vcheck --module R09 card-c1d.dfy
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 35 verified, 0 holes, 1 error
+card-c1d.dfy:7:2: error: a postcondition could not be proved on this return path
+card-c1d.dfy:6:14: related: this is the postcondition that could not be proved
 ```
 
 <!-- pin: card-c1v -->

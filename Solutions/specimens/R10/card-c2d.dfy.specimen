@@ -1,0 +1,9 @@
+// Reference Solution.
+module R10_ByMethodCard {
+ import opened RG_A1_Re
+ ghost function LeafModelR10(c:char):Re {Chr(c)}
+ // item: R10.C2d write:by-method
+ // WRITE: the compiled method must implement the fixed ghost function model.
+ function LeafR10(c:char):Re {LeafModelR10(c)}
+ by method {return Chr(c);}
+}

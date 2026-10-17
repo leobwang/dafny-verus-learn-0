@@ -1,0 +1,9 @@
+// Reference Solution.
+module R10_SubsetCard {
+ import opened RG_A1_Re
+ import opened RG_A4_Norm
+ // item: R10.C1d write:subset-type
+ // WRITE: a subset result requires its predicate at every return.
+ method LeafBoundaryR10(c:char) returns (out:NormRe)
+ {out:=Chr(c);}
+}

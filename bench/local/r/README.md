@@ -62,3 +62,9 @@ gate/audit commands, positive witness and negative semantic controls. Label
 both course-derived and previously exposed; do not report an independent
 unseen evaluation or automatic later pool admission. The learner creates
 these artifacts; the author does not fill a learner's work or result.
+
+R10's ninth card strips an own completed invariant/normalization goal. Preserve
+the original normal-form and count models, statement/domain, complete/stripped
+pair, witness, negative controls and native gate/audit provenance. Mark it
+course-derived and previously exposed; do not report an independent unseen
+result or automatic later pool admission. The learner supplies their own card.

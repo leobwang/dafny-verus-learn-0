@@ -113,11 +113,18 @@ For each worked example, mark one line that fixes meaning and one line that esta
 
 Complete C1d and C1v on a separate double-character language. Their compact programs isolate implementing a fixed model under a printed contract. Keep the binding and method promise intact. Read the native failure when the body is omitted; it can include definite assignment or result-type obligations in addition to the semantic promise. An omitted return expression is not evidence that a proposed mathematical theorem is false.
 
+This Dafny card imports the provided layer. Copy it to a real `.dfy`
+file, then run `scripts/vcheck --module R08 <copy.dfy>` from the repository.
+The following capture uses that source in a fresh scratch copy with the same
+module context; the manifest pins the card and its provided dependencies.
+
 <!-- pin: refinement-d -->
 ```
-$ scripts/vcheck specimens/R08/card-c1d.dfy.specimen
-vcheck: specimens/R08/card-c1d.dfy.specimen [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
-specimens/R08/card-c1d.dfy.specimen:1:35: error: module RG_A2_MatcherSpec named as refinement base does not exist
+$ scripts/vcheck --module R08 card-c1d.dfy
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 19 verified, 0 holes, 2 errors
+card-c1d.dfy:8:2: error: a postcondition could not be proved on this return path
+dafny/given/R/RG_A2_MatcherStatement.dfy:9:13: related: this is the postcondition that could not be proved
+card-c1d.dfy:8:3: error: out-parameter 'b', which is subject to definite-assignment rules, might be uninitialized at this return point
 ```
 
 <!-- pin: trait-v -->

@@ -4268,3 +4268,33 @@ Protected notes retain exact source, failures and finite evidence limits.
 R10 remains planned with no admitted minutes or shipped exercises. R09's
 original snapshot remains intact; no tier waiver or trust addition is used.
 D45 live validation and the parked R03 primitive blocker remain recorded skips.
+
+
+## Δ265 — R10 invariant kit and original-statement consumer (2026-10-17)
+
+Build four paired native exercises: exact optional validation, packet
+concatenation, normal fixed points and compiled normalization. Canonical
+admission8/8 passes; H3d's disclosed disabled-induction lever is retained.
+Three pinned seeds pass all four complete core/agent references. The flagship
+ships fixed signatures and body holes; the human adds semantic clauses and
+witnesses before snapshotting, then a contractor supplies bodies. The visible
+arbitrary-result consumer checks original-domain contract sufficiency without
+using implementation bodies. Full gates, nonvacuous compiled observations,
+audits and original snapshots remain separate requirements.
+
+Actual-source tools retain hashes/native drivers and test120normalizer cases
+and27constructor cases per language, with11words each. Erasure observations
+inspect generated Dafny builder bodies and a concrete Verus packet layout.
+Negative controls distinguish weak, false-domain and inconsistent contracts.
+An initial Dafny driver included rather than root-verified the implementation;
+the inconsistent-contract control exposed this, and both tools now verify the
+actual source in the root. Initial failing driver assertions are retained.
+
+Add five predictions, six WRITE cards, SpecGen03.5/source pin, written erasure
+argument, twelve-question bank/disjoint draws and two paired parallel problems.
+Contextual native captures replace unresolved-import output for R10's seven
+Dafny card/probes and the first Dafny cards of R08/R09. These use real-extension
+copies with explicit provided-layer context; misleading standalone sidecars
+are removed, without changing the earlier source or model. Exact final pins,
+workflow and CI results follow in protected notes. No Basic shipment or live
+D45 actor/calibration result is inferred; R03 stays parked as requested.

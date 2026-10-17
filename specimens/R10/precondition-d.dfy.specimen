@@ -1,0 +1,7 @@
+// after: R10.P3dv
+module R10_SpectrumProbe {
+ import opened RG_A1_Re
+ import opened RG_A4_Norm
+ method RequireShapeR10(r:NormRe) {}
+ method ObserveR10() {RequireShapeR10(Alt(Empty,Chr('q')));}
+}

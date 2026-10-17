@@ -1,0 +1,42 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R10 --- Invariants in types \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Commit five predictions first. Allow30minutes:15for B1 and15for B2.
+Retain the exact source range and separate verifiability from strength.
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card03.5: SpecGen.} Fill Task shape, Oracle, Trust, Cheat surface,
+Metric, Budget, Variance and Artifact from the pinned local excerpt. Explain
+what it means for a specification to verify against code, and what independent
+question a consumer of the specified program still needs to ask.
+The card score is the minimum of the eight field scores.
+\begin{verbatim}
+sed -n '1169,1198p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+f4dcd46d06322a2d8bd4de86faa7e3e79ef5d2030d187f856fb44ee9687f9d4a  -
+\end{verbatim}
+State benchmark and ablation denominators, the stopping budget and mutation
+weights. Do not identify a reported success-probability estimator with the
+fraction of programs whose specifications verify. Mark unavailable replication
+metadata and run variance as unavailable.
+\end{problem}
+\begin{problem}[proof]\label{prob:B2}
+The R10 packet contains a normal regex and erased evidence that its cached
+count equals the regex's mathematical node count. Identify the compiled and
+erased data in each language and state the invariant without treating erased
+evidence as an executable cache. Explain the obligations of a constructor and
+a client, and why a ghost value cannot select an executable branch.
+Give a branch argument for concatenating two packets, including annihilating,
+identity and unreduced cases. Explain why Dafny's by-method implementation must
+agree with its function model even after ghost fields disappear.
+Compare runtime validation, an optional validated result and a precondition-only
+constructor for an arbitrary raw regex. For a language-preserving smart
+constructor, state the original domain and desired consumer relationship in
+mathematical words, then explain why shape alone and a false precondition fail
+that consumer's requirement. Separate logical sufficiency, implementability,
+nonvacuous compiled witnesses, source snapshots and finite runtime checks.
+\end{problem}
+\end{document}
