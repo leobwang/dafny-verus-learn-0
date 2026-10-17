@@ -76,14 +76,15 @@ pub tracked struct CertificateEvidenceR11 {
 proof fn consume_sound_r11(tracked evidence:CertificateEvidenceR11)
  requires valid_word_r10(evidence.tree,evidence.pattern,evidence.word),
  ensures matches(evidence.pattern,evidence.word),
- {sound_word_r11(evidence.tree,evidence.pattern,evidence.word);}
-proof fn direct_evidence_r11(r:Re,s:Seq<char>)->(tracked out:CertificateEvidenceR11)
+ {let tracked owned=evidence;sound_word_r11(owned.tree,owned.pattern,owned.word);}
+proof fn direct_evidence_r11(r:Re,s:Seq<char>,tracked out:&mut CertificateEvidenceR11)
  requires s.len()<=usize::MAX,matches(r,s),
- ensures out.pattern==r,out.word==s,valid_word_r10(out.tree,r,s),
+ ensures final(out).pattern==r,final(out).word==s,valid_word_r10(final(out).tree,r,s),
 {
  complete_word_r11(r,s);
  let ghost tree=choose|d:Derivation| #[trigger] valid_word_r10(d,r,s);
- CertificateEvidenceR11 {tree,pattern:r,word:s}
+ let tracked result=CertificateEvidenceR11 {tree,pattern:r,word:s};
+ *out=result;
 }
 proof fn slice_split_r11(s:Seq<char>,lo:int,hi:int,k:int)
  requires 0<=lo<=hi<=s.len(),0<=k<=hi-lo,

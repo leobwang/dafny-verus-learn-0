@@ -1,0 +1,10 @@
+// after: R11.P5dv
+module R11_ProducerObservation {
+ import opened RG_A1_Re
+ import opened RG_A4_Norm
+ datatype ChoiceR11=NoR11|SomeR11(d:Derivation)
+ method ProduceR11(r:Re,s:seq<char>) returns(out:ChoiceR11)
+  ensures out.SomeR11? ==> CheckDeriv(r,s,out.d)
+  ensures out.NoR11? ==> !Matches(r,s)
+ {out:=NoR11;}
+}

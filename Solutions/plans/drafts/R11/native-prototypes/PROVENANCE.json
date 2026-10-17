@@ -1,12 +1,12 @@
 {
-  "scope": "private native prototypes only; R11 planned/admission0",
+  "scope": "private native prototypes; public R11 authoring, actual 22/22 canonical gates passed; admission not yet installed",
   "files": {
     "search.rs": "9165f5ba1c6a6ef03ccefe5fa08b674113b2623b561ab1bb05adcfc271acb270",
     "exit.dfy": "d0b428b82a9782f273a051e0379cb4afdd74fe4537a8bec5e12bbe7f1213894f",
     "prefix.dfy": "836836389d1a3106540782d8faa99f1614e97040be6d81274ac8aaa46d14e7a4",
     "kernel.dfy": "a62a2021e8e0de5d266d1b85f7fd6e16cdbc7a8ba8404389787d9fde410f4bfe",
     "prefix.rs": "271ff12f2b2ff919289cdaf175570bf96cedeb9f28741a8bc5573fb85b1e6399",
-    "kernel.rs": "6b13bbabd020dd8ec96c43df8cb4cf6c1b3c5cd9e37034eb0450b9bc150de4f4",
+    "kernel.rs": "a2e228b12c8cfb309e873ebbf6b4ae9d64faaa1faa90686beca6b0e2ecc8e325",
     "exit.rs": "d4600f113c37e31959f845c04a84b44a8cf817c085ca70e197ec1ec15dbccea8",
     "search.dfy": "aa09f1a4a782099ef2dec686d91f63937fdd0bd0bcbce529ed995f9a3408a7ee",
     "arena.rs": "568914a7ff008c924b56dd6540cd8bcd0dc17aefc6d984a74afe3115236cd01d"
@@ -18,5 +18,6 @@
     "arena": "V4 verified",
     "exit": "D6/V5 verified"
   },
-  "limits": "one16GiB lane per native invocation; pins unchanged; aggregate<=48GiB"
+  "limits": "one16GiB lane per native invocation; pins unchanged; aggregate<=48GiB",
+  "interface_correction": "H3v populates a tracked mutable evidence slot; a tracked returned object made canonical empty bodies fail typechecking. Void proof slot now admits without a tool exception. H2 explicitly moves evidence."
 }

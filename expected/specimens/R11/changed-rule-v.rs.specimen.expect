@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R11/changed-rule-v.rs.specimen: SEALED. This demo waits for R11.P3dv,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R11/changed-rule-v.rs.specimen`; never edit.
+command: verify
+after: R11.P3dv
+outcome: salted-sha256 0dfe6cef915bda66fcfa1c0472dd57a1eda5e5654501e85bda7333513a91ca4c

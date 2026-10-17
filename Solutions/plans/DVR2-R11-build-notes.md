@@ -56,3 +56,63 @@ in range. It proves vector/index invariants, not PointsTo permissions. Arena45
 minutes still await empty/default/three-seed gates. X1 counts consumed character
 leaves, distinct from hand soundness; X2 builds fixed-character Star witnesses
 with a fresh loop and ghost word model, not the general search algorithm.
+
+## Canonical admission and metatheory controls
+
+Actual public configuration: 22/22 canonical empty/default/max-auto/three-seed
+hole admissions pass, including the four independent exit items. Complete
+core and exit references pass three seeds. Meaningful exec TRIV bodies fail.
+D H2 and X1 need the printed `{:induction false}` lever: max-auto succeeds,
+all three shipped induction-disabled empty bodies fail. This is an explicit
+induction exercise, not evidence that automation cannot solve the theorem.
+Reference counts D62/V19; learner core8/10 holes, check0, exit2/2, agent1/1.
+Counts are pinned but the registry admission/minutes await complete local kit.
+
+H3v initially returned a tracked record. A full proof verified, but canonical
+empty bodies failed typechecking, which is not valid admission evidence.
+Before activation it was changed to a tracked mutable output slot with the
+same validity/result-domain guarantee. The canonical proof-note hole and its
+empty variants now typecheck and fail at verification. No gate tool exception
+or resource change was made. H2v explicitly moves the tracked input.
+
+A1 is forward character replacement, including noninjective replacements,
+not inverse reflection or preservation of normal form. Private deliberate
+wrong-rule controls drop the Star tail validity check: transport still native
+verifies D/V with0holes. The independent model-only rule consumer verifies
+original bindings and rejects changed bindings at verify stage in both
+languages. It assumes no transport theorem. Default public tool also proves
+the learner's original rule binding. These are author controls, not live actor
+sessions, and do not discharge the recorded D45 skip.
+
+## Source kit and reproducible materials
+
+Actual default rule bindings prove D/V; deliberate changed bindings fail both
+with the public tool. Original-source snapshot comparisons accept complete body
+proofs and reject model edits. Initial comparison naming Solutions directly was
+correctly refused as reference material; private delivery copies then exercised
+the supported original-source comparison. No reference-access guard was changed.
+
+Compiled actual reference roots pass D149/V151 tests:120patterns×11words,
+29explicit certificate cases, plus V invalid-slice and arena frame checks.
+Runtime derivations remain ordinary data. Default learner holes stop the runtime
+tool at the gate before compilation. No included Dafny implementation is assumed:
+actual implementation text is embedded in the verified root. Exact evidence is
+under /tmp/dvl0-dvr2-r11/{runtime-reference,agent-delivery-remaining}.
+
+P2's full Seq-based compute-only value exceeded native computation recursion
+depth. Ordinary SMT proved it after slice identities, but that is not the course's
+value-slot grammar. Before publication P2 was narrowed explicitly to a ghost
+root-split bound/progress model, not full certificate validity; its native
+compute-only literal passes. Full validity still has arbitrary-subject native
+proofs and actual compiled tests. Initial outcomes are retained in predictions/
+and prediction-value-final/; final correction in value-final-second.log.
+
+The5341-prose-word chapter has5boxes,3diagrams and14actual captures. Five V
+nonprediction sidecars include4scenario seals; D scenarios are contextual real
+extension copies only. All reference prediction slots pass, final chapter and
+reference lint pass, the course map/generated units/hook fixtures are current.
+BankK2/K8 live controls and all four PP reference completions give intended native
+outcomes. All5written documents compile. Initial frozen leak scan:28modules,
+2109public files, OK; repeat after the source checkpoint's final edits. Six native
+reference audits and final pins are still running; focused CI/STUDY workflow
+await a clean STUDY source checkpoint. Nothing here is a live actor result.

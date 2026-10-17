@@ -4321,3 +4321,30 @@ tools are retained. V proof tokens and reference slot answers are unchanged
 by the format correction. Exact archive/frozen-source evidence is in protected
 notes. This completes local R10 construction, not a Basic shipment or live
 D45 validation. R11–R16 and the parked R03 remain separately recorded.
+
+
+### Δ267 — R11 fixed-rule theory kit and admitted Vec fallback (DVR2)
+
+The user-directed recorded skips remain R03's primitive boundary, D45 live work
+and the S2 PointsTo arena without complete exec gates. Continue with the original
+Vec-index fallback. Actual canonical22/22empty/default/max-auto/three-seed gates
+pass; all22planned-minute rows include the fallback and independent checkpoint.
+Core/exit references pass all three seeds; agent forward replacement proofs do
+too. D H2/X1 explicitly need induction-disabled levers. H3v returns evidence through
+a tracked mutable slot so canonical empty proof bodies typecheck. No gate tool,
+resource cap, model boundary or intended domain is relaxed.
+
+Actual-source compiled checks cover120patterns×11words each language,29explicit
+certificates, full prefix ledgers, V shifted/bad slice bounds and Vec frames.
+A native-green transport theorem about a deliberately wrong rule is rejected
+by an independent pure-model canonical-rule consumer and original snapshots.
+These are author controls, not live contractor outcomes. P2's full Seq compute
+form hit a computation-depth limit; the published prediction is explicitly only
+a root split/progress model. Full validity remains the hand/proof/runtime target.
+
+The5341-word chapter has5prediction boxes,3diagrams and14native captures. There
+are12bank questions with disjoint6draws,2paired PP, the exact local12.10paper
+card,2calibration fixtures and the tenth course-derived bench prompt. All5TeX
+documents compile; reference lint, chapter lint and the frozen28-module leak scan
+pass. Focused CI and a scripted STUDY workflow still await their source checkpoint;
+R11 remains authoring and this is not a Basic shipment or live validation pass.

@@ -1,0 +1,20 @@
+// after: R11.P3dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a4::*;
+verus! {
+pub open spec fn left_only_r11(d:Derivation,r:Re,s:Seq<char>)->bool {
+ match d {
+  Derivation::DStarCons(k,a,_)=>r is Star && 0<k<=s.len() && valid_word_r10(*a,*r->Star_0,s.take(k as int)),
+  _=>false,
+ }
+}
+proof fn observe_changed_rule_r11() {
+ let r=Re::Star(Box::new(Re::Chr('a')));
+ let d=Derivation::DStarCons(1,Box::new(Derivation::DChr),Box::new(Derivation::DStarNil));
+ assert(seq!['a','b'].take(1)=~=seq!['a']);
+ assert(seq!['a','b'].skip(1)=~=seq!['b']);
+ reveal_with_fuel(valid_word_r10,3);
+ assert(left_only_r11(d,r,seq!['a','b']));
+}
+}

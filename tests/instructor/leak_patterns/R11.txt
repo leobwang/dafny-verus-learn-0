@@ -1,0 +1,33 @@
+# R11 frozen answer tripwires; protected author controls.
+# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
+# source: var b:=false;if a {b:=CheckCertificateR11(r.b,s[k..],right);} (R11.H1d)
+# verified: solutions=1 public=0
+var\s+b:=false;if\s+a\s+\{b:=CheckCertificateR11\(r\.b,s\[k\.\.\],right\);\}
+# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
+# source: CheckSoundR11(r.a, s[..k], d1); (R11.H2d)
+# verified: solutions=1 public=0
+CheckSoundR11\(r\.a,\s+s\[\.\.k\],\s+d1\);
+# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
+# source: var k :| 0 < k <= |s| && Matches(a, s[..k]) && Matches(Star(a), s[k..]); (R11.H3d)
+# verified: solutions=1 public=0
+var\s+k\s+:\|\s+0\s+<\s+k\s+<=\s+\|s\|\s+\&\&\s+Matches\(a,\s+s\[\.\.k\]\)\s+\&\&\s+Matches\(Star\(a\),\s+s\[k\.\.\]\);
+# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
+# source: invariant forall j |0<=j<i :: trace[j]==Matches(r,s[..j+1]) (R11.H4d)
+# verified: solutions=1 public=0
+invariant\s+forall\s+j\s+\|0<=j<i\s+::\s+trace\[j\]==Matches\(r,s\[\.\.j\+1\]\)
+# from Solutions/verus/r/r11_theory/src/lib.rs
+# source: check_certificate_r11(left,a,s,lo,mid) && check_certificate_r11(right,b,s,mid,hi) (R11.H1v)
+# verified: solutions=1 public=0
+check_certificate_r11\(left,a,s,lo,mid\)\s+\&\&\s+check_certificate_r11\(right,b,s,mid,hi\)
+# from Solutions/verus/r/r11_theory/src/lib.rs
+# source: let tracked owned=evidence;sound_word_r11(owned.tree,owned.pattern,owned.word);} (R11.H2v)
+# verified: solutions=1 public=0
+let\s+tracked\s+owned=evidence;sound_word_r11\(owned\.tree,owned\.pattern,owned\.word\);\}
+# from Solutions/verus/r/r11_theory/src/lib.rs
+# source: let ghost tree=choose|d:Derivation| #[trigger] valid_word_r10(d,r,s); (R11.H3v)
+# verified: solutions=1 public=0
+let\s+ghost\s+tree=choose\|d:Derivation\|\s+\#\[trigger\]\s+valid_word_r10\(d,r,s\);
+# from Solutions/verus/r/r11_theory/src/lib.rs
+# source: assert forall|i:int| 0<=i<arena.nodes@.len() implies targets_valid_r11(#[trigger] arena.nodes@[i],arena.nodes@.len() as int) by { (R11.H8v)
+# verified: solutions=1 public=0
+assert\s+forall\|i:int\|\s+0<=i<arena\.nodes@\.len\(\)\s+implies\s+targets_valid_r11\(\#\[trigger\]\s+arena\.nodes@\[i\],arena\.nodes@\.len\(\)\s+as\s+int\)\s+by\s+\{

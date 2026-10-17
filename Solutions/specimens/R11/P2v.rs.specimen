@@ -1,0 +1,18 @@
+// Reference Solution.
+use vstd::prelude::*;
+use rg_re_a4::*;
+verus! {
+// A root bound/progress model only, not full pattern/word certificate validity.
+pub open spec fn root_split_ok_r11(d:Derivation,n:nat)->bool {
+ match d {
+  Derivation::DCat(k,_,_)=>k<=n,
+  Derivation::DStarCons(k,_,_)=>0<k<=n,
+  _=>true,
+ }
+}
+// item: R11.P2v value
+// Answer form: bool literal.
+proof fn root_split_value_r11() {
+ assert(root_split_ok_r11(Derivation::DStarCons(0,Box::new(Derivation::DEps),Box::new(Derivation::DStarNil)),2)==false) by (compute_only);
+}
+}

@@ -1,0 +1,211 @@
+# expected/R11.freeze — statement-freeze pins for R11 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R11` from the files as shipped; checked by
+# `scripts/specfreeze --check R11`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R11"
+unfrozen = []
+
+[[file]]
+path = "dafny/checks/R11_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R11_PredictSplit.AbsoluteMiddleR11" = "b9516a01106b02fa446062bdc8bdf43d73d0b132f343972a9bf8574ac1a083e0"
+"R11_PredictSplit.RelativeMiddleR11" = "0304787446bda6bff65ad582a6b3a746f42b9261e9009024ee6c8f419ac17436"
+
+[[file]]
+path = "dafny/R/R11_Theory/std/R11_Theory.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R11_Kernel.CheckSoundR11 {:induction false}", "R11_Kernel.DirectCompleteR11 {:induction false}"]
+[file.statements]
+"R11_Kernel.CheckCertificateR11" = "7d6675fc43b55cab7dad3a3957b28bfd9e281ace1789033c172378efd72b30a6"
+"R11_Kernel.CheckSoundR11" = "29bf963e8c0d8ebc9ed6ca66f518338c0a1a477938d37d51fd8097b59493d562"
+"R11_Kernel.DirectCompleteR11" = "119144df84b508ebaaca14d234a4170904e2489e203e26956e35931e3067b54c"
+"R11_Kernel.EvidenceR11" = "7f68e1555f2e64c6b77ed0c0282422927d4a47e29e98e5a2eccf3effc3988c02"
+"R11_Kernel.PackEvidenceR11" = "1579d5d91556a5ea8f28efd1ea3ffb7eda25d2008f0fe88ff47aee2f4ae80ab1"
+"R11_Search.CertChoiceR11" = "2945b5371d2fec53da8f60424d4129dfd2a77ba13379996a764b6244ed39d253"
+"R11_Search.SearchCatR11" = "0964a7d208e3944f4c408497bd4645585d9397c0c8ac8cb3d7064d12762f6673"
+"R11_Search.SearchR11" = "7bf6723e07a8ecd5cef39d7b1c82a36c3848bf01024d272d7ba7b84dab75a3b5"
+"R11_Search.SearchStarR11" = "08cedf2cc8d1e4ae58c242dfc62f0702c87704f17fddf0e50305a07458274113"
+"R11_Streaming.PrefixMatchesR11" = "5efed3a76ad831b2a6a2a6fb6b2b48f8de06b320616774d3347df8fc02bfa7f3"
+"R11_Streaming.ResidualObserveR11" = "27db25a44639ab0b8a8c69d9aedc0ab6256288b33488443cd2fb723fe97fef0f"
+"R11_Streaming.ResidualR11" = "3c6d427e43d5eb85d5db912f4f8361bf99bfd7b4ff5b34dcbdef7a49b8a1bb1e"
+"R11_Streaming.ResidualStartR11" = "74c16f24e413d5ecd425e2f6420f6a20263f8e68646347b6c6f375390cec2eb7"
+"R11_Streaming.ResidualStepR11" = "92c27cbc7df3703ff39788ba61757637d37284a2e46e785dfd5034c58b53a2eb"
+"R11_WpReview.WpIndexStepR11" = "0e6d46c23fa338468973dcfbda50f92a8f46764d711aba3897ce4d8ad6260120"
+[file.frozen_imports]
+"R11_Kernel" = ["aa0835d0ba60aeddc705121e4587ad1d9968a9c5f2b5fa87ddf6835eef5e1081", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+"R11_Search" = ["aa0835d0ba60aeddc705121e4587ad1d9968a9c5f2b5fa87ddf6835eef5e1081", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+"R11_Streaming" = ["50701aefb8395eb6c14830e36166b46e3e1ae4f2a4ea16d148eac1ded57f8759", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26", "fc28f9ddc45485657f243e4a497f9c23d58da990e7eb21f420e0faf05def2701"]
+"R11_WpReview" = []
+
+[[file]]
+path = "verus/r/r11_theory/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"ArenaNodeR11" = "736229cceb5f9d15b5a4ac124d016a3a43ad1d84878fc102822798c6c77a7ddc"
+"ArenaR11" = "17fc84dbfe48423f58b7f07a755d48ccbbf99b2d44ab3443df7ad3ccc691b98b"
+"CertificateEvidenceR11" = "7bc60e3dd421ce70091b806affc29bd34a9cd4cdeb50d4acedf190abcafa8f65"
+"PrefixReportR11" = "f5b24a175ab4014b2285650101cdcf7ef5bfb6b9f9fb87ef47a6bf2de987a87f"
+"append_node_r11" = "9b5cf411e830709a30025d810990a935f377de468d1bbfb87006ed1d1739de84"
+"arena_valid_r11" = "18ad181eddaa3f7a15216090ff997fed66597bff521ccdde2c72adf5fbdc0de6"
+"check_certificate_r11" = "e5ac4ac7605207ccf6eda5f142a9fc5b7784a0f6f6eed66856fb9a0a3d40d450"
+"consume_sound_r11" = "e2ac3758f7185a088bcfa1a8a8231d9fabdeab97377b7d5aa43a8257accdbc04"
+"direct_evidence_r11" = "be5f2ad667313a9df5b6eab4197a200b8e348473cfbe26528b0fd08ef076d7b5"
+"empty_arena_r11" = "b17cc96b27487bf2b7b9be3140a1327dbcfdfbd836b3400c51ab3329402495ca"
+"link_first_r11" = "cb1825f4ad03de27be99b249cb6eb264914ef007f334e0e26cd360e04a78d0da"
+"prefix_matches_r11" = "46a0bae90f548580f011725256f55069d7333d6c45d393bc81a48aabcf0fde2b"
+"residual_observe_r11" = "1faa1bf9b8f8918d363f714760e7193974d054f551db4cf26f574c03745480fe"
+"residual_r11" = "39bc8a79ffa400344dbdc87e8f57c85a7eeefe6e1a7475e4ab092f8bbb838033"
+"residual_start_r11" = "fd058d19cb3f244f5bfc18fb43633f970d160ad2f940d60f028007a7883e19f9"
+"residual_step_r11" = "af4cc359845b4eedaf45cb00ec03a0a208101e678836ebab71011a2487fcc732"
+"search_cat_r11" = "fbf59b531dd3be885b602c4c644bf4d2ecff3bdc46cf60656957e0b1c9f78165"
+"search_r11" = "7dd9da9f43f944029591caa8e1e3012a2b5ad2d871112af2945c5be4daeae67f"
+"search_star_r11" = "95c1ce4c83d6212fb4091a1997d671d7647253bc15a439029e0c48ab95f34da5"
+"slice_split_r11" = "50b6b9b50240222a11aa2e526e5ad0918e19534e336f2e508314a703d9b21d82"
+"targets_monotone_r11" = "bbd6b14c55b87886922ad8f905766b0abb2a53fb04dc9503299c17ff937523db"
+"targets_valid_r11" = "f7fa90289c67008ef37a65a9ab82c22291410ac707461731ea02e8a5bdb22436"
+"wp_index_step_r11" = "8c7d0ef9384682c73d118a5203f9be8db36584e353529fcd71c7ce96af194594"
+
+[[file]]
+path = "specimens/R11/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"root_split_ok_r11" = "6178313b9467b8adb80e092091d8ae2bbd2724e519e49cc6df6b12561bc4215c"
+"root_split_value_r11" = "74c210110c6974df922c9dafcb4d7f0a7ec6f42e1adcc4cb73067f0b3be95020"
+
+[[file]]
+path = "specimens/R11/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"labelled_step_r11" = "8a9b9e26efb878d79cf23ace1adcce42a2a37afed0763bf3bdb3fac0f5d7542d"
+
+[[file]]
+path = "specimens/R11/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"TicketR11" = "2710035b73fc44c5a4940e3b7a8194c1181f6d7e044e1c882732f1218428c3d2"
+"handoff_r11" = "ff679b7ed95225ddb69628ad6bacdff9121ce552147a5a5f566add92b40e01d6"
+
+[[file]]
+path = "specimens/R11/changed-rule-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R11_RuleObservation.LeftOnlyR11" = "94a88e2917c04b9db5dcf28443ae1a46f93b49bbb12b6e47c50c2155dfdae205"
+"R11_RuleObservation.ObserveChangedRuleR11" = "fd8e2205b12f3a30c63002dab95bdab170b56f7abe8a5d263ab413c2a79d540f"
+
+[[file]]
+path = "specimens/R11/changed-rule-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"left_only_r11" = "f605605e168282e76fb733decf377abf1821e308da24f921d005b40d4aab427b"
+"observe_changed_rule_r11" = "9d4eccbfdbea77f71e0ac53ff5cd81ad70d8d50a1586b557966079f557b1939a"
+
+[[file]]
+path = "specimens/R11/complete-producer-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R11_ProducerObservation.ChoiceR11" = "d783fa85db8e69517f2531d087e5a9d774e0a3f4c8bd4db1bc70d3db0b27ef84"
+"R11_ProducerObservation.ProduceR11" = "db01ce6eacadf41e3f2ec13ab0748ec2b2a7f450d2fbdc25e13b8c06ed3a8e4c"
+
+[[file]]
+path = "specimens/R11/complete-producer-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"produce_r11" = "9c85233cd6b9ed9d08f05e3294c772b2aedcdd40f92476929d9f05e25602a235"
+
+[[file]]
+path = "specimens/R11/original-rule-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R11_RuleObservation.LeftOnlyR11" = "94a88e2917c04b9db5dcf28443ae1a46f93b49bbb12b6e47c50c2155dfdae205"
+"R11_RuleObservation.ObserveChangedRuleR11" = "fd8e2205b12f3a30c63002dab95bdab170b56f7abe8a5d263ab413c2a79d540f"
+
+[[file]]
+path = "specimens/R11/original-rule-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"left_only_r11" = "f605605e168282e76fb733decf377abf1821e308da24f921d005b40d4aab427b"
+"observe_changed_rule_r11" = "9d4eccbfdbea77f71e0ac53ff5cd81ad70d8d50a1586b557966079f557b1939a"
+
+[[file]]
+path = "specimens/R11/weak-producer-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R11_ProducerObservation.ChoiceR11" = "d783fa85db8e69517f2531d087e5a9d774e0a3f4c8bd4db1bc70d3db0b27ef84"
+"R11_ProducerObservation.ProduceR11" = "4a23ec024a9299295f2ed3637369f24c4e4f1c18b32850dfd71b7fbb51540e3f"
+
+[[file]]
+path = "specimens/R11/weak-producer-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"produce_r11" = "f890b4c8971a904bda9ab930541e17fb57764efa980277045a6a4264b639910f"
+
+[[file]]
+path = "dafny/R/R11_Theory/exit/R11_Checkpoint.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R11_Checkpoint.CertificateLengthR11 {:induction false}"]
+[file.statements]
+"R11_Checkpoint.CertificateLengthR11" = "a43f71f35c4aa69f2dcc602849e31e8776e533fd70777a90380da1c809983f26"
+"R11_Checkpoint.CharacterLeavesR11" = "46211814e046f48a4c7ca7ceb5aacc6ba2fd87519c51312987c30e66e8f15723"
+"R11_Checkpoint.RepeatCertificateR11" = "23985266d00cbc032cd0818bc5ba237b9545d30b6b13962e1cb3d9a6e7997713"
+"R11_Checkpoint.UniformStepR11" = "b980da3615c2d3f83e137b01b1df1142744e764fac7e97850952899ac4fad383"
+"R11_Checkpoint.UniformWordR11" = "10029c1ed008fc50ff42e5b0689c4430633ff0ec9260fb77a4bd8b27c62406b6"
+[file.frozen_imports]
+"R11_Checkpoint" = ["aa0835d0ba60aeddc705121e4587ad1d9968a9c5f2b5fa87ddf6835eef5e1081", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+
+[[file]]
+path = "verus/r/r11_theory/src/exit.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"certificate_length_r11" = "6e4625cd993811344fec861c895a89c94e9efad3681772a3e0f5a8aa0ba2559a"
+"character_leaves_r11" = "b5e75019cedc686d58e15678d7ecbfa9c129b222c47a0f665e2edcabf4d80645"
+"repeat_certificate_r11" = "f192b0c6da2f768d90fdea7af41546d609410724137fe4d3aa94ca6bec451b0f"
+"uniform_step_r11" = "0dd8a78bff5637ad09eea08472009df856bb7c6588ef1767c884dff876ba7375"
+"uniform_word_r11" = "85dbfb70c02f13b3f1a05f979f79a07fb1c77cbb23bccde2ffea841963dc2816"
+
+[[file]]
+path = "dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R11_AgentMetatheory.RenameTransportR11 {:induction false}"]
+[file.statements]
+"R11_AgentMetatheory.RenameCharR11" = "ed1a078773772012cf50bc86ff1bb9fc0ce2efb6627e90ae19d26c9f387f341e"
+"R11_AgentMetatheory.RenamePatternR11" = "081e885f05409a4fb4c78f0fbf6a51d9982ab9bf58c2db5d6776cb2d57989a9f"
+"R11_AgentMetatheory.RenameSplitR11" = "bd50473afe4886d0132f3dc349b0cee1d6c5dd29eab4a760d5c59b8bfa96e527"
+"R11_AgentMetatheory.RenameTransportR11" = "b61e78a19d52d9434b70d30b1ce1d4088dd94b769a23a905f4f86d5954ed8696"
+"R11_AgentMetatheory.RenameWordR11" = "e4ecb531699b244e7405b858c22a6c67cbde38634ca963afdb3faf7c84ca17ce"
+"R11_AgentMetatheory.RulesR11" = "3e29f6cf7fbbd5ad734115ff5cc5304ab6dd4ac428d4aea3ec875a6f1b003f70"
+[file.frozen_imports]
+"R11_AgentMetatheory" = ["aa0835d0ba60aeddc705121e4587ad1d9968a9c5f2b5fa87ddf6835eef5e1081", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+
+[[file]]
+path = "verus/r/r11_theory/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"rename_char_r11" = "49dac917d19e5b95db22ea6ba4f046de96ade7626ce2d1d20192e534056bd99c"
+"rename_pattern_r11" = "93617222b81bed114e924bc6fe756bb6d31f3c52f5928760c5f474d56cce438c"
+"rename_split_r11" = "5b847cff34574ef3a00a5b4415a4e809c9feaedd75fac64cf45c5dcb2b7e241d"
+"rename_transport_r11" = "0b8f58478ad35bbca1786f78c418ba69c6c6ab8ebbcb995c3649a90377c762f0"
+"rename_word_r11" = "3447e17ace4b7d39689af51752a90e32ede63fb0823acd121b06c53138258f4f"
+"rules_r11" = "17d2962156da17d05b38923c045dc4d586a4c43e91996d803c03fba29b0ab4fb"

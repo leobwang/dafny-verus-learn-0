@@ -1,0 +1,13 @@
+// after: R11.P3dv
+module R11_RuleObservation {
+ import opened RG_A1_Re
+ import opened RG_A4_Norm
+ ghost predicate LeftOnlyR11(r:Re,s:seq<char>,d:Derivation) {
+  d.DStarCons? && r.Star? && 0<d.k<=|s| && CheckDeriv(r.r,s[..d.k],d.d1)
+ }
+ lemma ObserveChangedRuleR11() {
+  var r:=Star(Chr('a'));
+  var d:=DStarCons(1,DChr,DStarNil);
+  assert CheckDeriv(r,"ab",d);
+ }
+}

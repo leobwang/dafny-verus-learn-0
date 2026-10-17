@@ -1562,7 +1562,7 @@ Claude call or earlier-tier waiver follows from local author controls.
 
 ## 13. Band 2 item plan — R11 theory (2026-10-17)
 
-This plan precedes activation; R11 remains planned/admission0. Parent98b7dad
+This plan preceded activation with R11 planned/admission0. Parent98b7dad
 is the R10 source checkpoint. R10 focused CI and scripted STUDY workflow run
 on an untouched worktree; inherit final formatting/results after they end.
 Keep D45 live work and R03's primitive boundary parked under the user request.
@@ -1615,7 +1615,7 @@ certifying matcher. The small checker's positive acceptance guarantee remains
 separate from producer completeness and from trust in the formal rules.
 
 Predict5: P1d reads a relative split value (given-only check); P2v evaluates a
-fixed ghost certificate model; P3dv compares original-rule and changed-rule
+fixed ghost root-split bound/progress model (not full certificate validity); P3dv compares original-rule and changed-rule
 native consumers; P4v selects failing labelled VCs; P5dv compares fixed-domain
 checker/producer rejection promises. Two dv predictions, no Q-owned surprise.
 Use guarded scenarios, sealed native sidecars, and real-extension contextual
@@ -1631,3 +1631,12 @@ excerpt, separating an executable kernel, claimed independence and partial
 metatheory. Add12bank questions/disjoint6draws, two paired PP,5predictions,
 three diagrams, source-bound native captures and the tenth course-derived
 bench prompt. No fabricated learner artifact or live model result is supplied.
+
+
+R11 construction update (Δ267): actual canonical22/22 admission passes, including
+the Vec fallback and independent checkpoint; the22 rows are now admitted with
+planned minutes. This does not measure learner time. H3v uses a tracked mutable
+output slot so empty variants typecheck; H2v moves its evidence. D H2/X1 require
+the disclosed induction-disabled lever. P2 is a root-split/progress ghost value
+check after full Seq computation hit a native computation-depth limit; arbitrary
+full validity remains the checker/proof target. R11 is authoring, not shipped.

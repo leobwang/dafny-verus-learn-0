@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R11 --- Theory \\ \large Reference Solution}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} An independent Lean4 kernel written in Lean replays compiled declarations through addDecl, compared with lean4checker. The specification connects abstract de Bruijn terms, a typing/definitional-equality judgment, a translation relation and a one-sided monadic Hoare logic.
+
+\textbf{Oracle:} Executable replay checks declarations. Formal metatheory is partial: weakening, substitution and regularity are proved; unique typing, definitional inversion and strengthening remain open. Replay success is distinct from correctness of the executable kernel relative to the intended type theory.
+
+\textbf{Trust:} The implementation mirrors the C++ algorithm and shares Expr and the compiler, leaving correlated errors possible. Inductive metatheory is mostly missing; the proofs depend on open conjectures and the unsound looseBVarRange\_eq axiom. There is no complete consistency proof for the new Lean4 features.
+
+\textbf{Cheat surface:} An agent may receive reward for a weak or unfaithful statement or bypass the kernel with a metaprogram. Independent replay can expose some implementation discrepancies without determining faithfulness. A proof about altered rules can still be true. Partial-correctness evidence is not a termination or total-correctness guarantee.
+
+\textbf{Metric:} Single-threaded i7-1255U: Lean37.01s C++ versus44.61s Lean4Lean, ratio1.21; Batteries32.49s versus45.74s,1.40; Mathlib plus dependencies44.54min versus58.79min,1.32. These compare replay times on particular packages, not an agent success rate or universal speed bound.
+
+\textbf{Budget:} Four recursion entry points break mutual recursion with fuel1000 nested calls. Nontermination of the underlying type theory makes a termination argument unavailable in general. The excerpt supplies no common token, dollar, sampling or actor-turn budget.
+
+\textbf{Variance:} The excerpt reports one hardware setup and single-threaded package timings, without a repeated-run distribution or confidence interval. Three packages are not three independent repeated trials of one experiment. Unsupported reduceBool and missing metatheory restrict generalization.
+
+\textbf{Artifact:} Carneiro, arXiv2403.14064; the note describes v3 submitted to CPP2026. Retain local lines5446--5478 and their hash. The failed inferLambda proof exposed a20-bit looseBVarRange overflow whose panic returned0; the note reports an upstream fix. It does not pin a replication commit or establish that all soundness bugs have been removed.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+Checker agreement relates its returned Boolean exactly to fixed A4 validity.
+Soundness derives matching from validity. Direct completeness constructs a valid
+derivation from matching; Verus states the representable word-length domain.
+Producer rejection completeness rules out None on a matching word. Always-None
+satisfies a conditional Some-valid promise and violates the rejection promise.
+A changed Star rule may accept a valid first chunk and ignore an invalid suffix.
+Renaming letters consistently can preserve this wrong relation; that transport
+proof does not prove equality to A4. Compare pure model definitions independently
+against arbitrary canonical subjects and preserve the original source snapshot.
+
+From $i<n$ and $n\leq\mathit{usize::MAX}$ obtain $i+1\leq n$ and no overflow.
+For current residual $q$ and consumed prefix $p$, require for every suffix $t$
+that $q$ matches $t$ iff the original regex matches $p+t$. Derivative correctness
+advances this relation. Nullability observes the just-consumed prefix. The trace
+length is $|p|$, and each trace position records its corresponding nonempty
+prefix; termination uses remaining input. Empty input has an empty trace but
+still requires the original regex's nullable final answer.
+
+Runtime derivations are ordinary data read by the compiled checker. Dafny ghost
+records and Verus tracked evidence are erased proof data. A validity premise on
+a tracked wrapper remains an explicit hypothesis: constructing an arbitrary
+wrapper does not establish validity. Verus moves tracked evidence in proof mode;
+it is not a runtime authority or a PointsTo cell permission. The mutable tracked
+output slot avoids a non-void proof return in the canonical empty-body gate.
+The checkpoint counts consumed character leaves and constructs repeated-character
+certificates in a fresh loop; it does not call the general soundness or search
+solutions. Dafny's printed induction-disabled lever makes the designated empty
+proofs fail although max-auto can prove them.
+
+The Vec fallback bounds targets and specifies the exact changed edge and
+unchanged nodes. Rust borrowing controls executable access; these results do not
+implement or prove the skipped PointsTo permission arena. Full native gates,
+assumption audits, immutable original snapshots and independent rule-model
+checks answer different questions. Finite compiled observations can falsify
+particular defects and test actual emitted code; they are not universal
+metatheory or evidence of deferred live actor sessions.
+\end{answer}
+\end{document}
