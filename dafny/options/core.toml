@@ -18,3 +18,8 @@ resource-limit = 5000000
 [[override]]
 modules = "Q03-Q18"
 options = { manual-lemma-induction = true }
+
+# R03–R16 use manual lemma induction (PLAN §8 R2, DVR1; Δ251).
+[[override]]
+modules = "R03-R16"
+options = { manual-lemma-induction = true }

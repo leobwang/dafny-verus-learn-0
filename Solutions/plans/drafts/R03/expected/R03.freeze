@@ -1,0 +1,282 @@
+# expected/R03.freeze — statement-freeze pins for R03 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R03` from the files as shipped; checked by
+# `scripts/specfreeze --check R03`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R03"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R03_Modules/core/R03_Modules.dfy"
+lang = "d"
+open_bodies = ["R03_Modules.CharClasses.ClassMember", "R03_Modules.CharClasses.ClassRange", "R03_Modules.CharClasses.ClassUnion", "R03_Modules.Client.ClassOfString"]
+[file.statements]
+"R03_Modules.CharClasses.CRange" = "c2acda459479d879aecab10deefb6ec1d2cbe995ea938c3e0a1d9d02560fc379"
+"R03_Modules.CharClasses.CharClass" = "7d5cbf9d4aeb5b0806b5738d0baa7b3349e53969e9ae2589a83e39dfb6feed5e"
+"R03_Modules.CharClasses.ClassEmpty" = "683c26d57f443f87fb24d253f7dc881204183261414b2cdfa1226689dfca72b6"
+"R03_Modules.CharClasses.ClassInsert" = "146ab7a135be0827d6cda16524d013f20f3dc3e18f75d4fd40e9e5bc196394bc"
+"R03_Modules.CharClasses.ClassMember" = "dd2c40cfd26e8dff682507693a7a453f1d9892a80fd0dcbce3951cf00444a0d8"
+"R03_Modules.CharClasses.ClassRange" = "8ff9520b24c888e4e48f5bc9e68b3c33752c8f3ec1d8537f0cfdf8607340a339"
+"R03_Modules.CharClasses.ClassRank" = "acaf76e43e64b936048166808e0af81270d192149072c4ee1f70dea24537715f"
+"R03_Modules.CharClasses.ClassUnion" = "1b88ba8ff177bf7954fb5a6b5c25055fd76f977afd4e2ca48370cddf007770e7"
+"R03_Modules.CharClasses.ClassValid" = "e1fe6f1f77934872a4f82c6b374d66986f0bfb24ffb142d6d8ad7b723ec07cb9"
+"R03_Modules.CharClasses.InClass" = "07787c4bafc7536336abea290cdcd93ef5ce24a2b546c928660d702e84d61a09"
+"R03_Modules.CharClasses.InRange" = "a7a1fa6dfcc1a221afafc859c69f0fb3128a3b737a8495ad3716af13b1e7effb"
+"R03_Modules.CharClasses.InsertRanges" = "aafa8427989ed9bea213928c9d409db35ed3c4caa7b7fe69812dbe17f820674a"
+"R03_Modules.CharClasses.MaxC" = "ef150a8f5f72c6af82693add1dbd0fa5bbfe7b6cd709f646ddea0375df2f685b"
+"R03_Modules.CharClasses.MinC" = "81ca4e2cef93e2d30cc900a305e39f4fb9a4928ae4b0e6e34181fadfbfa87d35"
+"R03_Modules.CharClasses.RangeSeq" = "3f0c77d9be6d54b7ca8371208f1cf0b6bc9cdf65594911a923f117f14609d32b"
+"R03_Modules.CharClasses.RangesContain" = "2d1b1eeda3073eb2984eebbe0c2d4757a0a08fb4f30cb03dbeb20fa60cecbbcf"
+"R03_Modules.CharClasses.RangesValid" = "ff688ede0146de1d1e92597d8c1dfe020f9074e6edb0f275fa14315e5fa483e3"
+"R03_Modules.Client.ClassOfString" = "b9d2414ebe4ef4fb594d0153d8935a1626e13d699f6fe03f20b4d5cf88041d9a"
+"R03_Modules.Client.Union3" = "43dd93d47997aaf8a8e6a48a42fea56ccc5a83550259c708675f83bf75359d82"
+"R03_Modules.SpanAPI.MakeSpan" = "ae07cfb53ecb427f65e8c8bb31d8052ae1e8169e3704e20711ebd90dd9116144"
+"R03_Modules.SpanAPI.SpanBox" = "a42af38e8adb6ba40974b2724bb22a7565b613a736d070182a6d44e3584ee409"
+"R03_Modules.SpanAPI.SpanHas" = "53fc1c1fc9401d62b2c624aaba17d7a69ba4f9d9c7045f23e2bb950ba298bbf0"
+"R03_Modules.SpanAPI.SpanModel" = "6bd50ff79a134612cbce127029a9dc83240d99f6ad374b34cc7ec3701e86f315"
+"R03_Modules.SpanAPI.SpanValid" = "aa12ced7b740b438b5c631bef669980812f51829a0eb8d263e72a6c580510b4a"
+"R03_Modules.SpanClient.SpanContractExample" = "06f9c9cbf84a5cb1447e6c72221c373d397923d6a6bf17d1a83d60bf60d44591"
+"R03_Modules.SpanCode" = "19ad37d5b0d88393277b189efa0f395017384747e6859f88fc02df3cd9f25b9f"
+[file.frozen_imports]
+"R03_Modules" = ["6d85e55449da6d688db0b299c5dbce2a3924728e98c4224be348fa37be726918", "e2fa8ec3f00b37a3efdebee538e0ee70a4b4ef1b1b2b49dd0a5c2bf4feddfb32"]
+[file.frozen_exports]
+"R03_Modules.CharClasses" = ["export provides CharClass , ClassValid , InClass , ClassEmpty , ClassInsert , ClassRank reveals CRange , InRange"]
+
+[[file]]
+path = "verus/r/r03_modules/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"char_class::<CharClass as View>::V" = "9813cd417c5978de116e6b354d906c55c2f6170dc13dce23af80753fc93d5948"
+"char_class::<CharClass as View>::view" = "54ae2267ec50fb6e3fbe877d801dc96797e583de449df89b280161d46fe1f4b5"
+"char_class::CharClass" = "8f3f6fab3c9f4b089d0a8634acca6e13f9b1d79c879c6d37394a451f10c9c409"
+"char_class::CharClass::class_empty" = "d942f326a352150e7b10f5d6eb680e3b24155147f4b68d0a97fd7bad20310740"
+"char_class::CharClass::class_insert" = "e160e4ea1773dc1a7af58f7f6d0ce5746efbf071f4c453e1c6e3c1cc2f323934"
+"char_class::CharClass::class_member" = "33cd12a919c34422ec45d95aec339dff20d6421baeadcee63f5ca97f3788f563"
+"char_class::CharClass::class_range" = "ddd5b508eec7ad2c030c7e7bc70501ff9a92d61f4b5f050c1af78cc5c443e39e"
+"char_class::CharClass::class_union" = "e931293d5fb9c1f40e7eb14107b7789cad9d8cb8672acb8a00c71d047d383480"
+"char_class::CharClass::copy_class" = "3f81d80cdee0ec841c3a743c4d33c18b4b6d21755e0735ea9a4b3234dcdf7704"
+"char_class::CharClass::member_from" = "ff88e7558e61a71783c60be9194537bbfa4b80d61350b0469b4647fd9a5e74c8"
+"char_class::CharClass::valid" = "b7da0edaf1de0a9d23083ef160f8fb201c64b0e7b4565554c4095423e24a5cba"
+"char_class::cover" = "b238aa58db2f9e636622f967413f70cc07b51a18cad799fb7d3d0ed44cffd947"
+"char_class::in_range" = "b9e4b903f6bcdc23bbb0ef4c6be03547e07a935e3c7df9e4071da2edf73762e7"
+"char_class::in_ranges" = "c693bed4cb6bb42f43b7ec100e036c6151677f6a3bde0de1bc91d399a7454367"
+"char_class::lemma_in_ranges_drop" = "068d6193a6a202caa20c8b6a37905bb48346c1160fa417763d820f420ce4ce9f"
+"char_class::lemma_in_ranges_push" = "c5e19a888915b3aecd4b980e51194bc8f241345c4892f7f78e7d5687e9e12d40"
+"char_class::lemma_insert_step" = "9168a9fe115f12e9b54e888c755586f990f28496de451933c4d9b14aacb1a1a2"
+"char_class::sorted_ranges" = "f389ca06bc0165f38c6c80004d377f3a62fd0a5654479bd3fffb2fc069c73795"
+"char_class::target" = "f5b2e3b3d829815c75aa4b841bb6641848777983c2666c8f83176ed72815ebd7"
+"client::class_chars" = "b5094505ce72651ed44d3ab135ee41a60e77c6cd02ed274d8ea850424c19171d"
+"client::class_of_string" = "6098aa15e347bf8cba1fad18c75403be47586ad7fee9babc5e32b20a93e766fe"
+"client::lemma_class_chars_push" = "a2e7be70f67afcd511a7a4ed9ec941438cdfe17778c7650e770f89ae22fcba14"
+"client::union3" = "d060660db8327842e7b6c4ce9bce591c3c2eb546d5dcb4f94ee31968562dacfc"
+"span_api::<SpanBox as View>::V" = "390c7c7d845b70e54c7b878dc8329917a1dc620892fd62ba8c959af43f22f007"
+"span_api::<SpanBox as View>::view" = "e7a002ed511df8c67335fad2c0064255c8cd76d97ed71effd7a3510fbdaa05ed"
+"span_api::SpanBox" = "a529b1f632321731451312d800f6e485c504ae32687d5959a8fa4ab10907f80c"
+"span_api::SpanBox::make_span" = "c4831cd9c5a280beada4ea7b4a485135a369817a3956b1fb1b9e3bb65b4a881b"
+"span_api::SpanBox::span_has" = "e30257bfb6eb0e6fca8369dafd2aa6f6cd7df9285f90fd22ac72c8c4e5d27190"
+"span_api::SpanBox::valid" = "34d39076d480c85f31099b8bfd52e40d0872fc6b8e75078565c718cc677e9406"
+"span_api::span_code" = "1ea69ccce91cc58c8ef41b2ebab7834231354162360850d598c27849c8a065b0"
+"span_client::span_contract_example" = "8a8d3821369eaff74563e1c87b1239b0f7efad0035ef0b444f61645607c140ca"
+
+[[file]]
+path = "specimens/R03/P1d.dfy.specimen"
+lang = "d"
+open_bodies = ["R03_P1.API.ClassMember"]
+[file.statements]
+"R03_P1.API.CRange" = "c2acda459479d879aecab10deefb6ec1d2cbe995ea938c3e0a1d9d02560fc379"
+"R03_P1.API.CaseC" = "83ab175643ee43b02ae60a9060924227ef06def78a5b56e3a0f5812f89f9b41c"
+"R03_P1.API.CharClass" = "7d5cbf9d4aeb5b0806b5738d0baa7b3349e53969e9ae2589a83e39dfb6feed5e"
+"R03_P1.API.ClassEmpty" = "683c26d57f443f87fb24d253f7dc881204183261414b2cdfa1226689dfca72b6"
+"R03_P1.API.ClassInsert" = "146ab7a135be0827d6cda16524d013f20f3dc3e18f75d4fd40e9e5bc196394bc"
+"R03_P1.API.ClassMember" = "7e2d56ff69fb9965775b9d4c8c0a4ee985424cbf9c1e24e68cc07fa86251874c"
+"R03_P1.API.ClassRank" = "acaf76e43e64b936048166808e0af81270d192149072c4ee1f70dea24537715f"
+"R03_P1.API.ClassSingle" = "c61370b14d32bbc23b855248e1831a5f7c5137c500d611feabd4e1d890c3450c"
+"R03_P1.API.ClassValid" = "e1fe6f1f77934872a4f82c6b374d66986f0bfb24ffb142d6d8ad7b723ec07cb9"
+"R03_P1.API.InClass" = "07787c4bafc7536336abea290cdcd93ef5ce24a2b546c928660d702e84d61a09"
+"R03_P1.API.InRange" = "a7a1fa6dfcc1a221afafc859c69f0fb3128a3b737a8495ad3716af13b1e7effb"
+"R03_P1.API.InsertRanges" = "aafa8427989ed9bea213928c9d409db35ed3c4caa7b7fe69812dbe17f820674a"
+"R03_P1.API.MaxC" = "ef150a8f5f72c6af82693add1dbd0fa5bbfe7b6cd709f646ddea0375df2f685b"
+"R03_P1.API.MinC" = "81ca4e2cef93e2d30cc900a305e39f4fb9a4928ae4b0e6e34181fadfbfa87d35"
+"R03_P1.API.RangeSeq" = "3f0c77d9be6d54b7ca8371208f1cf0b6bc9cdf65594911a923f117f14609d32b"
+"R03_P1.API.RangesContain" = "2d1b1eeda3073eb2984eebbe0c2d4757a0a08fb4f30cb03dbeb20fa60cecbbcf"
+"R03_P1.API.RangesValid" = "ff688ede0146de1d1e92597d8c1dfe020f9074e6edb0f275fa14315e5fa483e3"
+"R03_P1.Client.CaseA" = "7a735df7aa7ced9c389cffadbaec53502040167eb7d75b0913b16c22c8db10da"
+"R03_P1.Client.CaseB" = "2de4abad95c145ea7e2be054f11be6d9517c2769d178e4b7939765d70b38f9c3"
+"R03_P1.Client.CaseD" = "15b5b3afb8aef7012e8977666b803d8faf3d4d2387241b0726f618f2991ead12"
+
+[[file]]
+path = "specimens/R03/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"char_class::<CharClass as View>::V" = "9813cd417c5978de116e6b354d906c55c2f6170dc13dce23af80753fc93d5948"
+"char_class::<CharClass as View>::view" = "54ae2267ec50fb6e3fbe877d801dc96797e583de449df89b280161d46fe1f4b5"
+"char_class::CharClass" = "8f3f6fab3c9f4b089d0a8634acca6e13f9b1d79c879c6d37394a451f10c9c409"
+"char_class::CharClass::class_empty" = "d942f326a352150e7b10f5d6eb680e3b24155147f4b68d0a97fd7bad20310740"
+"char_class::CharClass::class_insert" = "e160e4ea1773dc1a7af58f7f6d0ce5746efbf071f4c453e1c6e3c1cc2f323934"
+"char_class::CharClass::class_single" = "887819aef4e1cb841bc14738958f3fccd30264e83f19832091cc68bcbdb3d590"
+"char_class::CharClass::copy_class" = "3f81d80cdee0ec841c3a743c4d33c18b4b6d21755e0735ea9a4b3234dcdf7704"
+"char_class::CharClass::member_contract" = "5b612f3b964723942b2b4d19fa8fc79f632e46c0b8d24c44fd7e3a6078420240"
+"char_class::CharClass::valid" = "b7da0edaf1de0a9d23083ef160f8fb201c64b0e7b4565554c4095423e24a5cba"
+"char_class::case_c" = "39765aaa106594ae8c8d077b344ec10a3941f9bb4e90fc9325579ca4ba5b62a4"
+"char_class::cover" = "b238aa58db2f9e636622f967413f70cc07b51a18cad799fb7d3d0ed44cffd947"
+"char_class::in_range" = "b9e4b903f6bcdc23bbb0ef4c6be03547e07a935e3c7df9e4071da2edf73762e7"
+"char_class::in_ranges" = "c693bed4cb6bb42f43b7ec100e036c6151677f6a3bde0de1bc91d399a7454367"
+"char_class::lemma_in_ranges_drop" = "068d6193a6a202caa20c8b6a37905bb48346c1160fa417763d820f420ce4ce9f"
+"char_class::lemma_in_ranges_push" = "c5e19a888915b3aecd4b980e51194bc8f241345c4892f7f78e7d5687e9e12d40"
+"char_class::lemma_insert_step" = "9168a9fe115f12e9b54e888c755586f990f28496de451933c4d9b14aacb1a1a2"
+"char_class::sorted_ranges" = "f389ca06bc0165f38c6c80004d377f3a62fd0a5654479bd3fffb2fc069c73795"
+"char_class::target" = "f5b2e3b3d829815c75aa4b841bb6641848777983c2666c8f83176ed72815ebd7"
+"client::case_a" = "f2fafa3dae347884c60fa0b9012e5b006ade8be296b03051bd74322938d9fd55"
+"client::case_b" = "beb5cde887d786704e337ba9ef015a9c6a845e7dedcd51e2d4fb3d41a94ed633"
+"client::case_d" = "c53a5a6e83a3a00ea132e5c522a7b2853b50d6e786d0adcd0e3ae8da92f55da1"
+
+[[file]]
+path = "specimens/R03/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"API.Value" = "04582a9cac45c1fd9909df4ab7bf70e1f0d9b7dbb02113035a4396d745f09f10"
+"Client.Demo" = "45a2e00da61bcbd00ddf0bb8087d75655c658fd8a07a2b2b0798023b8d81d031"
+
+[[file]]
+path = "specimens/R03/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Boxed" = "63d1c582c9d725d57430f4605d535dcfa80d304233a656d98d2a141728552dbb"
+"demo" = "cb142b30bbc437b1d028ee0b759022c7b5f70cd2e6c072446c7e1711746b1ab4"
+
+[[file]]
+path = "specimens/R03/card-c4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"api::seven" = "0a38767ccab3c35f4f8299bcc724e35301f04d7eb5f94b71bfda9fa187ef67d8"
+"client::demo" = "25993d9abd190ccf4829fb3bb325dc9c5027127c6212b01cf466e8ca55737e43"
+
+[[file]]
+path = "specimens/R03/card-c5v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"api::Boxed" = "26ae90c2f0fbf615b385db0d6cb5331aaf43da8be1bf45aeccd471f63eac459d"
+"client::demo" = "6bbebf0921934f9fadc96b55cf5d2cd07efe2ae4735765b822cb8bdfa107d458"
+
+[[file]]
+path = "specimens/R03/card-c8dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"API.Seven" = "0456be3235b0891046da38efaefe02705224189468bcb7e725a17ff0a8e71cf1"
+"Client.Demo" = "45a2e00da61bcbd00ddf0bb8087d75655c658fd8a07a2b2b0798023b8d81d031"
+
+[[file]]
+path = "specimens/R03/card-c8dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"api::seven" = "f34d09045fd091ed11d6602bda8c1be0a44f21a7114e45d074e3bf818f75c800"
+"api::seven_model" = "2bde1b99f566779bc8a61b0ea34537f5b1e0ea51264e0c8433b8355d0849254f"
+"client::demo" = "d945a79db2df8330e89ab9e2dec1e33a7e71fc5ff43ec305040a9cc557f9e85a"
+
+[[file]]
+path = "specimens/R03/chapter-p3-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R03_P3.API.CRange" = "c2acda459479d879aecab10deefb6ec1d2cbe995ea938c3e0a1d9d02560fc379"
+"R03_P3.API.CharClass" = "7d5cbf9d4aeb5b0806b5738d0baa7b3349e53969e9ae2589a83e39dfb6feed5e"
+"R03_P3.API.ClassSingle" = "c61370b14d32bbc23b855248e1831a5f7c5137c500d611feabd4e1d890c3450c"
+"R03_P3.API.ClassValid" = "e13eff4affcba915a39a1bad48be5e8cf59d760bf50df6abcdf6a54ce95892c5"
+"R03_P3.API.InClass" = "2f28931b8bade9bd6533a619c5061f6e18591be4c971c96022c57ba6df49d0e4"
+"R03_P3.Client.Check" = "d77a6900fda2a2a33854f2284b80855511cab92299ed1af6b5003bfc8bbf7160"
+
+[[file]]
+path = "specimens/R03/chapter-p3-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"api::<CharClass as View>::V" = "9813cd417c5978de116e6b354d906c55c2f6170dc13dce23af80753fc93d5948"
+"api::<CharClass as View>::view" = "e891a1dc181be2bdb0843b43f621f57a0a3dcc9ae01158809724f921e573186f"
+"api::CharClass" = "fa5abd390183081a0fa856c7d7605a04be93e829fdeebf81b72a81c0dcaf5cd8"
+"api::CharClass::class_single" = "887819aef4e1cb841bc14738958f3fccd30264e83f19832091cc68bcbdb3d590"
+"api::CharClass::valid" = "d4060cb83ef457c86a2b73e4d231fdaec2d380169f5b5b8bd70384bb1988c5f8"
+"client::check" = "b7ad6e5a942afd7be9b8cff01753f12670c13a96a26a51e8b97d224a3ef846e7"
+
+[[file]]
+path = "specimens/R03/chapter-p4-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R03_P4.API.CRange" = "c2acda459479d879aecab10deefb6ec1d2cbe995ea938c3e0a1d9d02560fc379"
+"R03_P4.API.CharClass" = "7d5cbf9d4aeb5b0806b5738d0baa7b3349e53969e9ae2589a83e39dfb6feed5e"
+"R03_P4.API.ClassSingle" = "c61370b14d32bbc23b855248e1831a5f7c5137c500d611feabd4e1d890c3450c"
+"R03_P4.API.ClassValid" = "e13eff4affcba915a39a1bad48be5e8cf59d760bf50df6abcdf6a54ce95892c5"
+"R03_P4.API.InClass" = "2f28931b8bade9bd6533a619c5061f6e18591be4c971c96022c57ba6df49d0e4"
+"R03_P4.Client.Check" = "d77a6900fda2a2a33854f2284b80855511cab92299ed1af6b5003bfc8bbf7160"
+
+[[file]]
+path = "specimens/R03/chapter-p4-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"api::<CharClass as View>::V" = "9813cd417c5978de116e6b354d906c55c2f6170dc13dce23af80753fc93d5948"
+"api::<CharClass as View>::view" = "afaee3e03abe327875932db49ed8413f2e25d8bc054c12e43a1ed71b3439afc3"
+"api::CharClass" = "fa5abd390183081a0fa856c7d7605a04be93e829fdeebf81b72a81c0dcaf5cd8"
+"api::CharClass::class_single" = "887819aef4e1cb841bc14738958f3fccd30264e83f19832091cc68bcbdb3d590"
+"api::CharClass::valid" = "ab6885c73bbf008df5e3fd31105656311451976512baa281f7a6d118b5ffc813"
+"client::check" = "b7ad6e5a942afd7be9b8cff01753f12670c13a96a26a51e8b97d224a3ef846e7"
+
+[[file]]
+path = "dafny/R/R03_Modules/agent/R03_AgentApi.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R03_AgentApi.CRange" = "c2acda459479d879aecab10deefb6ec1d2cbe995ea938c3e0a1d9d02560fc379"
+"R03_AgentApi.CharClass" = "7d5cbf9d4aeb5b0806b5738d0baa7b3349e53969e9ae2589a83e39dfb6feed5e"
+"R03_AgentApi.CharNext" = "5b0555fe37417dbf644ab5c63478cc7c484da036315d8ab61699141a4b361f98"
+"R03_AgentApi.CharPrev" = "fadfc64d3db4008245dc7ca81367b3abada27a7e4935a46f9e89e9d8ad6d8ca3"
+"R03_AgentApi.ClassDiff" = "134e90fc3f1aeeb6a695be08da3ce46cfeda33aae21dbfa90235a2aab999d33b"
+"R03_AgentApi.ClassEmpty" = "683c26d57f443f87fb24d253f7dc881204183261414b2cdfa1226689dfca72b6"
+"R03_AgentApi.ClassInsert" = "146ab7a135be0827d6cda16524d013f20f3dc3e18f75d4fd40e9e5bc196394bc"
+"R03_AgentApi.ClassIntersect" = "d450eb0e2dd65ca088c267a6692dd2d0151a96a5709da17048e5ed4ff410e66e"
+"R03_AgentApi.ClassRank" = "acaf76e43e64b936048166808e0af81270d192149072c4ee1f70dea24537715f"
+"R03_AgentApi.ClassValid" = "e1fe6f1f77934872a4f82c6b374d66986f0bfb24ffb142d6d8ad7b723ec07cb9"
+"R03_AgentApi.InClass" = "07787c4bafc7536336abea290cdcd93ef5ce24a2b546c928660d702e84d61a09"
+"R03_AgentApi.InRange" = "a7a1fa6dfcc1a221afafc859c69f0fb3128a3b737a8495ad3716af13b1e7effb"
+"R03_AgentApi.InsertRanges" = "aafa8427989ed9bea213928c9d409db35ed3c4caa7b7fe69812dbe17f820674a"
+"R03_AgentApi.MaxC" = "ef150a8f5f72c6af82693add1dbd0fa5bbfe7b6cd709f646ddea0375df2f685b"
+"R03_AgentApi.MinC" = "81ca4e2cef93e2d30cc900a305e39f4fb9a4928ae4b0e6e34181fadfbfa87d35"
+"R03_AgentApi.RangeSeq" = "3f0c77d9be6d54b7ca8371208f1cf0b6bc9cdf65594911a923f117f14609d32b"
+"R03_AgentApi.RangesContain" = "2d1b1eeda3073eb2984eebbe0c2d4757a0a08fb4f30cb03dbeb20fa60cecbbcf"
+"R03_AgentApi.RangesHead" = "eee21a37d59b26bb1c4f942d790d72b08218b90afeb50d987d6b4eb99302ec7e"
+"R03_AgentApi.RangesValid" = "ff688ede0146de1d1e92597d8c1dfe020f9074e6edb0f275fa14315e5fa483e3"
+
+[[file]]
+path = "verus/r/r03_modules/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<CharClass as View>::V" = "9813cd417c5978de116e6b354d906c55c2f6170dc13dce23af80753fc93d5948"
+"<CharClass as View>::view" = "54ae2267ec50fb6e3fbe877d801dc96797e583de449df89b280161d46fe1f4b5"
+"CharClass" = "8f3f6fab3c9f4b089d0a8634acca6e13f9b1d79c879c6d37394a451f10c9c409"
+"CharClass::class_diff" = "7a17f10aac4637c269fd18d6bdda916d9a84e572987693b70dfff42a64d6a093"
+"CharClass::class_empty" = "d942f326a352150e7b10f5d6eb680e3b24155147f4b68d0a97fd7bad20310740"
+"CharClass::class_insert" = "e160e4ea1773dc1a7af58f7f6d0ce5746efbf071f4c453e1c6e3c1cc2f323934"
+"CharClass::class_intersect" = "ed6835e54de668c6503fbe138950f830dd7953e3066255e9e7a57123e143e0a6"
+"CharClass::copy_class" = "3f81d80cdee0ec841c3a743c4d33c18b4b6d21755e0735ea9a4b3234dcdf7704"
+"CharClass::valid" = "b7da0edaf1de0a9d23083ef160f8fb201c64b0e7b4565554c4095423e24a5cba"
+"cover" = "b238aa58db2f9e636622f967413f70cc07b51a18cad799fb7d3d0ed44cffd947"
+"in_range" = "b9e4b903f6bcdc23bbb0ef4c6be03547e07a935e3c7df9e4071da2edf73762e7"
+"in_ranges" = "c693bed4cb6bb42f43b7ec100e036c6151677f6a3bde0de1bc91d399a7454367"
+"lemma_in_ranges_drop" = "068d6193a6a202caa20c8b6a37905bb48346c1160fa417763d820f420ce4ce9f"
+"lemma_in_ranges_push" = "c5e19a888915b3aecd4b980e51194bc8f241345c4892f7f78e7d5687e9e12d40"
+"lemma_insert_step" = "9168a9fe115f12e9b54e888c755586f990f28496de451933c4d9b14aacb1a1a2"
+"lemma_prefix_step" = "3bda2fe722cf2e7317954f8d55ac67f8424619e0b9a08be6cbd6362dbd3b403f"
+"sorted_ranges" = "f389ca06bc0165f38c6c80004d377f3a62fd0a5654479bd3fffb2fc069c73795"
+"target" = "f5b2e3b3d829815c75aa4b841bb6641848777983c2666c8f83176ed72815ebd7"

@@ -1,0 +1,22 @@
+// after: R03.P4dv
+module R03_P4 {
+  module API {
+    export reveals ClassSingle, InClass, CharClass, CRange provides ClassValid
+    datatype CRange = CRange(lo: char, hi: char)
+    datatype CharClass = CharClass(ranges: seq<CRange>)
+    predicate ClassValid(cc: CharClass) {
+      (forall i | 0 <= i < |cc.ranges| :: cc.ranges[i].lo <= cc.ranges[i].hi) &&
+      (forall i, j | 0 <= i < j < |cc.ranges| :: cc.ranges[i].hi < cc.ranges[j].lo)
+    }
+    ghost predicate InClass(cc: CharClass, c: char) {
+      exists i | 0 <= i < |cc.ranges| :: cc.ranges[i].lo <= c <= cc.ranges[i].hi
+    }
+    function ClassSingle(c: char): (r: CharClass)
+      ensures ClassValid(r)
+    { CharClass([CRange(c, c)]) }
+  }
+  module Client {
+    import opened API
+    lemma Check() { assert InClass(ClassSingle('b'), 'b'); }
+  }
+}

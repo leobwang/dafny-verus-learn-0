@@ -248,6 +248,7 @@ class Source:
     imports: list = field(default_factory=list)      # [(line, qualified name)]
     import_decls: list = field(default_factory=list)  # [(line, module qual, statement text)]
     attrs: list = field(default_factory=list)        # every attribute in the file
+    export_decls: list = field(default_factory=list)  # (line, module qual, token text)
 
     def decl(self, symbol):
         """The declaration named `symbol` (qualified, or a unique suffix after a dot)."""
@@ -393,7 +394,10 @@ class _Parser:
             elif kw == "import":
                 i = self.import_(i, prefix)
             elif kw == "export":
-                i = self.skip_member(i + 1, end)
+                stop = self.skip_member(i + 1, end)
+                self.src.export_decls.append((self.t[i].line, prefix,
+                                              " ".join(t.text for t in self.t[i:stop])))
+                i = stop
             elif kw in METHODLIKE:
                 i = self.methodlike(start, i, attrs, mods, prefix, ckind, container, end)
             elif kw in TYPEDECL or kw in CLASSLIKE:
@@ -1130,6 +1134,90 @@ def frozen_import_modules(src):
             m = max(inside, key=lambda x: (x.line, x.open))
             out.setdefault(m.qual, ln)
     return out
+
+
+FROZEN_EXPORTS_MARKER = re.compile(r"^\s*//\s*specfreeze:\s*frozen-exports\b")
+
+
+def frozen_export_modules(src):
+    """Modules whose existing export boundary is frozen (R03)."""
+    out = {}
+    for ln, line in enumerate(src.text.split("\n"), 1):
+        if FROZEN_EXPORTS_MARKER.match(line):
+            inside = [m for m in src.modules if m.line <= ln <= m.end_line]
+            if inside:
+                m = max(inside, key=lambda x: (x.line, x.open))
+                out.setdefault(m.qual, ln)
+    return out
+
+
+def module_exports(src):
+    """{module: [token-normalized export declarations]} (layout/comments free)."""
+    out = {m.qual: [] for m in src.modules}
+    out.setdefault("", [])
+    for _, mod, text in src.export_decls:
+        out.setdefault(mod, []).append(text.rstrip(" ;"))
+    return out
+
+
+def export_sets(statements):
+    """Parse the export-boundary profile: named/default sets with explicit
+    provides/reveals/extends lists. Unsupported syntax fails closed, only in
+    modules that opt into the freeze. Entry order is irrelevant."""
+    out = {}
+    for statement in statements:
+        words = [t.text for t in tokenize(statement)]
+        if not words or words.pop(0) != "export":
+            raise ValueError("an export declaration must start with export")
+        modes = ("provides", "reveals", "extends")
+        name = words.pop(0) if words and words[0] not in modes else ""
+        if name and not ID_RE.fullmatch(name):
+            raise ValueError("unsupported export set name")
+        if name in out:
+            raise ValueError("duplicate export set")
+        parts, mode, entry = {k: set() for k in modes}, None, []
+
+        def flush():
+            if entry:
+                value = "".join(entry)
+                if not re.fullmatch(r"(?:[A-Za-z_][A-Za-z0-9_'?]*\.)*"
+                                    r"(?:[A-Za-z_][A-Za-z0-9_'?]*|\*)", value):
+                    raise ValueError("unsupported export entry")
+                parts[mode].add(value)
+                entry.clear()
+
+        for word in words:
+            if word in modes:
+                flush()
+                mode = word
+            elif word in (",", ";"):
+                flush()
+            elif mode is None:
+                raise ValueError("an export entry needs provides, reveals or extends")
+            else:
+                entry.append(word)
+        flush()
+        out[name] = parts
+    return out
+
+
+def exports_preserved(frozen, candidate, additions=()):
+    """Keep every shipped set, exposure and inheritance edge. Only explicit
+    provides entries for pinned open-body definitions may be added. Reveals,
+    wildcards, extra sets and aliases cannot expose the hidden representation.
+    Removing the source marker does not remove a recorded boundary."""
+    before, after = export_sets(frozen), export_sets(candidate)
+    if not before or before.keys() != after.keys():
+        return False
+    allowed = set(additions)
+    for name, old in before.items():
+        new = after[name]
+        if new["reveals"] != old["reveals"] or new["extends"] != old["extends"]:
+            return False
+        if not old["provides"] <= new["provides"] or not (
+                new["provides"] - old["provides"]) <= allowed:
+            return False
+    return True
 
 
 def spec_hash(path, symbols=None):

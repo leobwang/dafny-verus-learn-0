@@ -86,6 +86,13 @@ the candidate's with the frozen file's the same way. Adding a lever, or
 removing any other (a trust escape, an option the lint refuses), is no
 finding here; `--lab` keeps its stricter two-way lever check.
 
+Frozen export boundaries (R03). `// specfreeze: frozen-exports` inside a
+Dafny module pins its existing export sets, provided/revealed entries and
+inheritance edges. Only explicit `provides` entries for that module's pinned
+open-body definitions may be added. Existing opacity, wildcards, set names
+and inheritance stay fixed. Unmarked modules retain the existing behaviour.
+Both --check and --against enforce the boundary, even if a marker is removed.
+
 Python statements (the registry's `harness` files, DV4): dvl.python.spec_hash,
 each function's and class's signature (name, parameters with annotations and
 defaults, return annotation, decorators, bases), never a body or docstring,
@@ -352,6 +359,7 @@ def render_freeze(mid, entries, unfrozen):
         specs, sclauses = (entry[6], entry[7]) if len(entry) > 6 else ([], {})
         fimports = entry[8] if len(entry) > 8 else {}
         flevers = entry[9] if len(entry) > 9 else []
+        fexports = entry[10] if len(entry) > 10 else {}
         out += ["[[file]]", f"path = {toml_str(rel)}", f"lang = {toml_str(lang)}",
                 "open_bodies = [" + ", ".join(toml_str(b) for b in bodyless) + "]"]
         if flevers:
@@ -377,6 +385,10 @@ def render_freeze(mid, entries, unfrozen):
             out.append("[file.frozen_imports]")
             out += [f"{toml_str(mod)} = [" + ", ".join(toml_str(h) for h in hs) + "]"
                     for mod, hs in sorted(fimports.items())]
+        if fexports:
+            out.append("[file.frozen_exports]")
+            out += [f"{toml_str(mod)} = [" + ", ".join(toml_str(x) for x in exports) + "]"
+                    for mod, exports in sorted(fexports.items())]
         out.append("")
     return "\n".join(out)
 
@@ -432,6 +444,43 @@ def import_findings(path, frozen, text=None):
     return out
 
 
+def frozen_exports_of(path, lang, text=None):
+    if lang != "d":
+        return {}
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    src = D.parse_source(text, str(path))
+    exports = D.module_exports(src)
+    out = {mod: exports[mod] for mod in sorted(D.frozen_export_modules(src))}
+    for mod, declarations in out.items():
+        if not D.export_sets(declarations):
+            raise ValueError(f"{path}: marked module {mod} has no export set")
+    return out
+
+
+def export_findings(path, frozen, open_bodies=(), text=None):
+    """Keep the recorded boundary, allowing requested definition exports."""
+    if not frozen:
+        return []
+    text = Path(path).read_text(encoding="utf-8") if text is None else text
+    src = D.parse_source(text, str(path))
+    exports = D.module_exports(src)
+    lines = {m.qual: m.line for m in src.modules}
+    out = []
+    for mod, old in sorted(frozen.items()):
+        allowed = {s[len(mod) + 1:] for s in open_bodies if s.startswith(mod + ".")
+                   and "." not in s[len(mod) + 1:]}
+        if mod not in exports:
+            out.append((0, "freeze-missing", f"module {mod}"))
+            continue
+        try:
+            kept = D.exports_preserved(old, exports[mod], allowed)
+        except ValueError:
+            kept = False
+        if not kept:
+            out.append((lines[mod], "freeze-exports-changed", f"module {mod}"))
+    return out
+
+
 def mode_pin(root, mid):
     core.require_author(root, "specfreeze --pin")
     rec = core.record(root, mid)
@@ -449,7 +498,8 @@ def mode_pin(root, mid):
         hashes, _, _ = statements(Path(root) / rel, lang, set(opened), frames, specs)
         entries.append((rel, lang, hashes, opened, frames, fens, specs, sclauses,
                         frozen_imports_of(Path(root) / rel, lang),
-                        LEV.off_levers(Path(root) / rel) if lang in ("d", "v") else []))
+                        LEV.off_levers(Path(root) / rel) if lang in ("d", "v") else [],
+                        frozen_exports_of(Path(root) / rel, lang)))
     if not entries:
         print(f"specfreeze: {rec['id']}: no statement in any Dafny, Verus or Python file of the "
               "module (an empty pin fails)", file=sys.stderr)
@@ -529,6 +579,9 @@ def check_module(root, rec):
         if lang == "d" and e.get("frozen_imports"):
             out += [(rel, line, kind, what)
                     for line, kind, what in import_findings(f, e["frozen_imports"])]
+        if lang == "d" and e.get("frozen_exports"):
+            out += [(rel, line, kind, what) for line, kind, what in export_findings(
+                f, e["frozen_exports"], e.get("open_bodies", []))]
         if lang in ("d", "v") and e.get("frozen_levers"):
             try:
                 gone = Counter(e["frozen_levers"]) - Counter(LEV.off_levers(f))
@@ -575,6 +628,12 @@ def against_findings(frozen, candidate):
         found = set(found) | set(opacity_findings(frozen, candidate))
         found |= {core.common.Finding(str(candidate), line, kind, what) for line, kind, what in
                   import_findings(candidate, frozen_imports_of(frozen, "d"))}
+        exports = frozen_exports_of(frozen, "d")
+        if exports:
+            _, _, bodyless = statements(frozen, "d")
+            opened = set(bodyless) | set(core.open_body_symbols(frozen, "d"))
+            found |= {core.common.Finding(str(candidate), line, kind, what)
+                      for line, kind, what in export_findings(candidate, exports, opened)}
     return sorted(found, key=lambda x: (x.file, x.line, x.kind, x.message))
 
 

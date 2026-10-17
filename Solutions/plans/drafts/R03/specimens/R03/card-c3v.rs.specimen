@@ -1,0 +1,5 @@
+use vstd::prelude::*;
+verus! {
+struct Boxed { value: u32, }
+fn demo(b: Boxed) { assert(b@ == 7); }
+}

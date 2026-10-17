@@ -74,6 +74,82 @@ class RootCase(unittest.TestCase):
 # Q52 and Q62: the freeze pin's placeholder bodies and frozen import lists
 # =====================================================================================
 
+class DafnyExports(RootCase):
+    TEXT = '''module Api {
+  // specfreeze: frozen-exports
+  export provides T, Valid reveals PublicTag
+  type T = int
+  predicate Valid(x: T) { x >= 0 }
+  function PublicTag(): int { 1 }
+  function Make(): (r: T)
+    ensures Valid(r)
+}
+'''
+
+    def pin(self):
+        (self.root / CORE).write_text(self.TEXT)
+        rc, out, err = self.tool("specfreeze", "--pin", "Q04", env={"CI": "true"})
+        self.assertEqual(rc, 0, out + err)
+        return next(f for f in tomllib.loads((self.root / "expected/Q04.freeze").read_text())[
+            "file"] if f["path"] == CORE)
+
+    def check(self, text):
+        (self.root / CORE).write_text(text)
+        rc, out, err = self.tool("specfreeze", "--check", "Q04")
+        return rc, out + err
+
+    def test_a_completed_definition_can_be_provided(self):
+        pin = self.pin()
+        self.assertIn("Api", pin["frozen_exports"])
+        self.assertIn("Api.Make", pin["open_bodies"])
+        text = self.TEXT.replace("T, Valid reveals", "Valid, T, Make reveals").replace(
+            "ensures Valid(r)", "ensures Valid(r) { 0 }")
+        self.assertEqual(self.check(text)[0], 0)
+
+    def test_the_boundary_cannot_be_opened_or_erased(self):
+        self.pin()
+        variants = [
+            self.TEXT.replace("T, Valid", "Valid"),
+            self.TEXT.replace("provides T, Valid reveals PublicTag",
+                              "provides Valid reveals T, PublicTag"),
+            self.TEXT.replace("reveals PublicTag", "reveals PublicTag, Make"),
+            self.TEXT.replace("T, Valid", "T, Valid, *"),
+            self.TEXT.replace("T, Valid", "T, Valid, T.Hidden"),
+            self.TEXT.replace("export provides", "export extends Escape provides"),
+            self.TEXT.replace("  type T", "  export Escape reveals *\n  type T"),
+            self.TEXT.replace("  export provides T, Valid reveals PublicTag\n", ""),
+            self.TEXT.replace("// specfreeze: frozen-exports", "// removed marker").replace(
+                "T, Valid", "Valid"),
+        ]
+        for text in variants:
+            with self.subTest(text=text):
+                rc, out = self.check(text)
+                self.assertEqual(rc, 1, out)
+                self.assertIn("freeze-exports-changed", out)
+
+    def test_against_checks_exports_without_a_module_pin(self):
+        frozen = self.root / "instructor/scratch/exports.dfy"
+        frozen.parent.mkdir(parents=True, exist_ok=True)
+        frozen.write_text(self.TEXT)
+        p = self.root / CORE
+        p.write_text(self.TEXT.replace("T, Valid", "T, Valid, Make"))
+        self.assertEqual(self.tool("specfreeze", "--against", str(frozen), str(p))[0], 0)
+        p.write_text(self.TEXT.replace("T, Valid", "Valid"))
+        rc, out, err = self.tool("specfreeze", "--against", str(frozen), str(p))
+        self.assertEqual(rc, 1, out + err)
+        self.assertIn("freeze-exports-changed", out)
+
+    def test_only_the_marked_module_is_opted_in(self):
+        src = D.parse_source(self.TEXT + "module Other { export reveals * }\n")
+        self.assertEqual(set(D.frozen_export_modules(src)), {"Api"})
+        self.assertEqual(D.module_exports(src)["Other"], ["export reveals *"])
+        # A nested declaration is not a top-level open-body export target.
+        self.assertTrue(D.exports_preserved(["export provides T"],
+                                            ["export provides T, Make"], ["Make"]))
+        self.assertFalse(D.exports_preserved(["export provides T"],
+                                             ["export provides T, Hidden"], ["Make"]))
+
+
 class DafnyImports(unittest.TestCase):
     TEXT = ("module A { const x := 1 }\n"
             "module B {\n  import opened A\n  import Z = A\n}\n"

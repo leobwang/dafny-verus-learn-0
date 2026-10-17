@@ -1,0 +1,14 @@
+// after: R03.P3dv
+// after: R03.P4dv
+use vstd::prelude::*;
+verus! {
+pub mod api {
+  use vstd::prelude::*;
+  pub open spec fn seven_model() -> int { 7 }
+  pub fn seven() -> (n: u32) ensures n <= 10, { 7 }
+}
+pub mod client {
+  use vstd::prelude::*;
+  fn demo() { let n=super::api::seven(); assert(n as int == super::api::seven_model()); }
+}
+}

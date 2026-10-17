@@ -1,0 +1,9 @@
+// after: R03.P3dv
+module API {
+  export provides Value
+  function Value(): int { 7 }
+}
+module Client {
+  import opened API
+  lemma Demo() { assert Value() == 7; }
+}

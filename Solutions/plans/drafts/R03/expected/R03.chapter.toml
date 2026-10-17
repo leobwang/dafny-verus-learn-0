@@ -1,0 +1,106 @@
+schema = 1
+
+[[entry]]
+id = "obligation-d"
+cmd = ["scripts/vcheck", "specimens/R03/P1d.dfy.specimen"]
+answers = ["R03.P1d"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "obligation-v"
+cmd = ["scripts/vcheck", "specimens/R03/P2v.rs.specimen"]
+answers = ["R03.P2v"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "p3-d"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p3-d.dfy.specimen"]
+answers = ["R03.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "p3-v"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p3-v.rs.specimen"]
+answers = ["R03.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "p4-d"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p4-d.dfy.specimen"]
+answers = ["R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "p4-v"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p4-v.rs.specimen"]
+answers = ["R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R03_Modules/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r03_modules"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R03_Modules/agent/R03_AgentApi.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r03_modules/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "card-export"
+cmd = ["scripts/vcheck", "specimens/R03/card-c1d.dfy.specimen"]
+answers = ["R03.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "card-view"
+cmd = ["scripts/vcheck", "specimens/R03/card-c3v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "card-closed"
+cmd = ["scripts/vcheck", "specimens/R03/card-c4v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "card-visibility"
+cmd = ["scripts/vcheck", "specimens/R03/card-c5v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "divergence-d"
+cmd = ["scripts/vcheck", "specimens/R03/card-c8dv-d.dfy.specimen"]
+answers = ["R03.P3dv", "R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+
+[[entry]]
+id = "divergence-v"
+cmd = ["scripts/vcheck", "specimens/R03/card-c8dv-v.rs.specimen"]
+answers = ["R03.P3dv", "R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]

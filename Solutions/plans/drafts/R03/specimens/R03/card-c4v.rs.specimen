@@ -1,0 +1,11 @@
+use vstd::prelude::*;
+verus! {
+pub mod api {
+  use vstd::prelude::*;
+  pub closed spec fn seven() -> int { 7 }
+}
+pub mod client {
+  use vstd::prelude::*;
+  proof fn demo() { assert(super::api::seven() == 7); }
+}
+}

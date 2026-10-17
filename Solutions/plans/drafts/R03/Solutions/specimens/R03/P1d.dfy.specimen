@@ -1,0 +1,129 @@
+// item: R03.P1d obligation
+// The API now requires a valid class at ClassMember's call sites.
+// Which labelled calls fail? Answer: FAILS followed by labels, or FAILS none.
+// FAILS c d
+module R03_P1 {
+  module API {
+    export provides CharClass, ClassValid, InClass, ClassEmpty, ClassInsert, ClassSingle, ClassMember
+           reveals CRange, InRange
+    datatype CRange = CRange(lo: char, hi: char)
+    datatype CharClass = CharClass(ranges: seq<CRange>)
+    type RangeSeq = seq<CRange>
+
+predicate InRange(g: CRange, c: char) { g.lo <= c <= g.hi }
+
+ghost predicate RangesContain(cc: RangeSeq, c: char)
+  {
+    exists i | 0 <= i < |cc| :: InRange(cc[i], c)
+  }
+
+predicate RangesValid(cc: RangeSeq)
+  {
+    (forall i | 0 <= i < |cc| :: cc[i].lo <= cc[i].hi) &&
+    (forall i, j | 0 <= i < j < |cc| :: cc[i].hi < cc[j].lo)
+  }
+
+function MinC(a: char, b: char): char { if a <= b then a else b }
+
+function MaxC(a: char, b: char): char { if a <= b then b else a }
+
+function InsertRanges(cc: RangeSeq, g: CRange): (res: RangeSeq)
+    requires RangesValid(cc) && g.lo <= g.hi
+    ensures RangesValid(res)
+    ensures forall c :: RangesContain(res, c) <==> RangesContain(cc, c) || InRange(g, c)
+    ensures forall k | 0 <= k < |res| :: res[k].lo >= (if cc == [] then g.lo else MinC(g.lo, cc[0].lo))
+    decreases |cc|
+  {
+    if cc == [] then
+      assert forall c :: RangesContain([g], c) <==> InRange(g, c) by {
+        forall c ensures RangesContain([g], c) <==> InRange(g, c) {
+          if InRange(g, c) { assert InRange([g][0], c); }
+        }
+      }
+      [g]
+    else
+      var h := cc[0];
+      var t := cc[1..];
+      if g.hi < h.lo then
+        var res := [g] + cc;
+        assert forall c :: RangesContain(res, c) <==> InRange(g, c) || RangesContain(cc, c) by {
+          forall c ensures RangesContain(res, c) <==> InRange(g, c) || RangesContain(cc, c) {
+            if RangesContain(res, c) {
+              var i :| 0 <= i < |res| && InRange(res[i], c);
+              if i > 0 { assert InRange(cc[i - 1], c); }
+            }
+            if RangesContain(cc, c) {
+              var i :| 0 <= i < |cc| && InRange(cc[i], c);
+              assert InRange(res[i + 1], c);
+            }
+            if InRange(g, c) { assert InRange(res[0], c); }
+          }
+        }
+        res
+      else if h.hi < g.lo then
+        var r2 := InsertRanges(t, g);
+        var res := [h] + r2;
+        assert forall c :: RangesContain(res, c) <==> InRange(h, c) || RangesContain(r2, c) by {
+          forall c ensures RangesContain(res, c) <==> InRange(h, c) || RangesContain(r2, c) {
+            if RangesContain(res, c) {
+              var i :| 0 <= i < |res| && InRange(res[i], c);
+              if i > 0 { assert InRange(r2[i - 1], c); }
+            }
+            if RangesContain(r2, c) {
+              var i :| 0 <= i < |r2| && InRange(r2[i], c);
+              assert InRange(res[i + 1], c);
+            }
+            if InRange(h, c) { assert InRange(res[0], c); }
+          }
+        }
+        res
+      else
+        var g2 := CRange(MinC(g.lo, h.lo), MaxC(g.hi, h.hi));
+        var res := InsertRanges(t, g2);
+        res
+  }
+
+    predicate ClassValid(cc: CharClass) { RangesValid(cc.ranges) }
+    ghost function ClassRank(cc: CharClass): nat { |cc.ranges| }
+    ghost predicate InClass(cc: CharClass, c: char) { RangesContain(cc.ranges, c) }
+
+    function ClassEmpty(): (r: CharClass)
+      ensures ClassValid(r) && (forall c :: !InClass(r, c))
+    { CharClass([]) }
+
+    /** PROVIDED: total insertion. A reversed input range contributes no member.
+        The private merge proof above preserves sorted, separated ranges. */
+    function ClassInsert(cc: CharClass, g: CRange): (res: CharClass)
+      requires ClassValid(cc)
+      ensures ClassValid(res) && (forall c :: InClass(res, c) <==> InClass(cc, c) || InRange(g, c))
+    { if g.lo > g.hi then cc else CharClass(InsertRanges(cc.ranges, g)) }
+
+
+    function ClassSingle(c: char): (r: CharClass)
+      ensures ClassValid(r)
+    { CharClass([CRange(c, c)]) }
+
+    // Abstract specification for this prediction, with no executable definition.
+    function ClassMember(cc: CharClass, c: char): (b: bool)
+      requires ClassValid(cc)
+      ensures b == InClass(cc, c)
+
+    method CaseC() {
+      var cc := CharClass([CRange('c', 'a')]);
+      var b := ClassMember(cc, 'b'); // [c]
+    }
+  }
+  module Client {
+    import opened API
+    method CaseA() {
+      var b := ClassMember(ClassSingle('x'), 'x'); // [a]
+    }
+    method CaseB() {
+      var cc := ClassInsert(ClassEmpty(), CRange('a', 'f'));
+      var b := ClassMember(cc, 'b'); // [b]
+    }
+    method CaseD(cc: CharClass) {
+      var b := ClassMember(cc, 'b'); // [d]
+    }
+  }
+}

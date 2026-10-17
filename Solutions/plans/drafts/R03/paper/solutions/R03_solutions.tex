@@ -1,0 +1,27 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R03 --- Modules and APIs \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} This position paper treats incomplete requests as inputs to a specification-development process. It surveys a spectrum from finite examples to logical contracts and domain-specific languages rather than reporting a new model benchmark.
+
+\textbf{Oracle:} The user supplies the ultimate judgement of intent. Examples and proposed mutated outputs test a candidate predicate, but neither automatically establishes that the predicate captures every intended behaviour.
+
+\textbf{Trust:} A verifier checks the stated mathematical claim and its library boundary. Choosing that claim and deciding whether the user meant it remain separate judgements; an opaque API contract can be formally valid while omitting a behaviour clients need.
+
+\textbf{Cheat surface:} A one-way membership implication can accept an empty result. Mutant rejection probes such omissions, although a limited mutation family can leave other weaknesses unseen. Universal proof against a weak contract does not repair the contract.
+
+\textbf{Metric:} The source calls a predicate sound when it accepts all designated input/output examples. Its completeness score measures rejection of mutated outputs across those examples. These are test-relative scores; the section also recounts prior systems' results, not a fresh experiment by this paper.
+
+\textbf{Budget:} The excerpt gives no common model-call, token, wall-time or money allowance for the proposed programme. A surveyed system's result does not supply that missing experimental budget.
+
+\textbf{Variance:} The summary provides no repeated-run spread for a new experiment, because there is no new experiment here. Its reported TiCoder significance value concerns surveyed prior work and is not a confidence interval for specification quality.
+
+\textbf{Artifact:} The identified object is the position paper, arXiv2603.17150, and the cited prior systems. The excerpt supplies neither a new benchmark release nor an immutable code revision or reproducibility manifest for this proposal.
+\end{answer}
+
+\end{document}
