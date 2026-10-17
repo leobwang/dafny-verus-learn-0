@@ -524,12 +524,20 @@ class Corpus(unittest.TestCase):
 
 
 class StudyModeShipped(unittest.TestCase):
-    """The static job's study-mode check (spec §7.4, §8.5; Δ80, Δ87)."""
+    """The static job's study-mode check (spec §7.4, §8.5; Δ80, Δ87), and its
+    release-history step (D42, D46) on a root whose basic is one squash atop main."""
 
     @classmethod
     def setUpClass(cls):
         cls.base = C.tmpdir("ci-static-")
         cls.root = C.course_root(cls.base)
+        C.git("init", "-q", cwd=cls.root)
+        (cls.root / "DESIGN.txt").write_text("invented design\n", encoding="utf-8")
+        C.git("add", "DESIGN.txt", cwd=cls.root)
+        C.git("commit", "-qm", "design", cwd=cls.root)
+        C.git("checkout", "-qb", "basic", cwd=cls.root)
+        C.git("add", "-A", cwd=cls.root)
+        C.git("commit", "-qm", "basic: release the frozen course", cwd=cls.root)
 
     @classmethod
     def tearDownClass(cls):
@@ -540,9 +548,14 @@ class StudyModeShipped(unittest.TestCase):
         rc, out, err = C.run_ci("--job", "static", root=self.root, logs=logs)
         self.assertEqual(rc, 0, (out, err, (logs / "static.log").read_text()))
         self.assertIn("study mode shipped: yes", (logs / "static.log").read_text())
+        self.assertIn("release history: OK", (logs / "static.log").read_text())
         self.assertIn("specfreeze: no armed module", C.job_line(out, "static"))
         self.assertIn("chapter_lint: no armed module, no chapter to lint", C.job_line(out, "static"))
 
+        # a fix commit whose subject lacks "basic: " breaks the release history
+        (self.root / "FIX.txt").write_text("a fix\n", encoding="utf-8")
+        C.git("add", "FIX.txt", cwd=self.root)
+        C.git("commit", "-qm", "fix a rubric line", cwd=self.root)
         canon, always = C.course_lists()
         C.write_settings(self.root, [r for r in canon + always if r != canon[1]])
         (self.root / ".claude" / "state").mkdir()
@@ -551,7 +564,10 @@ class StudyModeShipped(unittest.TestCase):
         rc, out, err = C.run_ci("--job", "static", root=self.root, logs=logs)
         self.assertEqual(rc, 1, (out, err))
         self.assertIn("study mode shipped (exit 1)", C.job_line(out, "static"))
+        self.assertIn("release history (check_release_history.py) (exit 1)",
+                      C.job_line(out, "static"))
         log = (logs / "static.log").read_text()
+        self.assertIn("does not start with 'basic:'", log)
         self.assertIn(".claude/state/mode exists (it says authoring)", log)
         self.assertIn(f"the canonical deny rule {canon[1]} is missing", log)
         self.assertNotIn(canon[1], out)

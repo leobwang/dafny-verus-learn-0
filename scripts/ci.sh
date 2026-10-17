@@ -35,7 +35,10 @@
 #                   containers, agents or sudo); the sandbox's refused source
 #                   classes against the guard's and the checker's reference
 #                   paths; .gitignore leaves the ledger anchors, ledgers and
-#                   run records tracked (DV4);
+#                   run records tracked (DV4); check_release_history.py on
+#                   basic (the local branch, else origin/basic) against main:
+#                   a linear chain of single-parent "basic: " commits with no
+#                   archived ancestry (D42, D46; loud when either is absent);
 #                   firsttry.sh --lint-hollow --all; specfreeze --check per
 #                   armed module; chapter_lint.py --all (each armed module's
 #                   chapter: the spec §2.4.3 skeleton, the files table's
@@ -191,7 +194,7 @@ QUICK_JOBS=(static hook-test)
 
 describe() {
   case "$1" in
-    static)         echo "study mode shipped; checker, its suite, unit generator, fixture drift, single route, sandbox classes, ledger-anchor gitignore, hollow lint, specfreeze --check, chapter lint, avoid.sh; [A] reference_lint" ;;
+    static)         echo "study mode shipped; checker, its suite, unit generator, fixture drift, single route, sandbox classes, ledger-anchor gitignore, release history, hollow lint, specfreeze --check, chapter lint, avoid.sh; [A] reference_lint" ;;
     hook-test)      echo "scripts/test_hooks.sh (guard fixtures, course_mode.sh, banners, settings wiring)" ;;
     verify-q-dafny) echo "Q track, Dafny: toolchain sha; given layers gate and audit clean; armed files in their shipped state (vcheck --shipped), unit holes = shipped hole forms; [A] unit, exit, check and agent twins gate and audit" ;;
     verify-q-verus) echo "Q track, Verus: the same, plus vaudit --check-trust once per run" ;;
@@ -287,6 +290,13 @@ learner_prefix() {
 }
 PREFIX="$(learner_prefix)"
 git_of() { git -C "$ROOT" "$@" 2>/dev/null; }
+release_ref() {   # NAME — the local branch NAME, else origin/NAME; fails when neither exists
+  local r
+  for r in "refs/heads/$1" "refs/remotes/origin/$1"; do
+    if git_of rev-parse --verify -q "$r^{commit}" > /dev/null; then printf '%s' "$r"; return 0; fi
+  done
+  return 1
+}
 BRANCH="$(git_of symbolic-ref --short -q HEAD || true)"
 author_why() {   # empty when the three-condition test holds, else the reason
   local gd cd
@@ -805,8 +815,17 @@ job_static() {
       fi
     done
     log "ledger anchors: .gitignore leaves research/ledger-heads.jsonl, ledgers and run.json tracked"
+    # D42 and D46: the shipped branch is a linear chain of single-parent "basic: "
+    # commits atop design-only main, with no archived (archive/*) ancestry.
+    local rel_base rel_cand
+    if rel_base="$(release_ref main)" && rel_cand="$(release_ref basic)"; then
+      step "release history (check_release_history.py)" python3 -B "$SCRIPTS/check_release_history.py" \
+        --root "$ROOT" --base "$rel_base" "$rel_cand"
+    else
+      loud "no basic or no main branch in this checkout: the release-history check did not run"
+    fi
   else
-    loud "not a git checkout: the ledger-anchor .gitignore check did not run"
+    loud "not a git checkout: the ledger-anchor .gitignore and release-history checks did not run"
   fi
   step "firsttry --lint-hollow --all" bash "$SCRIPTS/firsttry.sh" --lint-hollow --all --root "$ROOT"
   if registry_ok; then
