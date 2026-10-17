@@ -150,3 +150,24 @@ all card controls, both live bank probes, four PP gates/audits, both full agent
 gates/audits, five TeX documents and the synthetic estimator controls pass.
 Study workflow, final pins/leak and focused CI remain to run on a committed
 source candidate. Live race/model calibration remains D45 debt, never a pass.
+
+## Focused CI result and deterministic coverage fixture
+
+Clean7826548 focused author run20261017T094115Z-3220671:5pass/1fail in847s.
+Both R native jobs108s each, paper37s, rubric0s and harness74s pass. Static520s
+fails only an old test fixture: its title says a planned-module item is pending,
+but it relies on real R07 staying planned and names nonexistent R07.H1dv.
+Make the synthetic registry explicitly set R07.status=planned and scope this
+coverage case to --only coverage, like the adjacent coverage case. This avoids
+unrelated generated-project checks against the real authored tree. Preserve
+the same item, pending assertion, production checker and armed-item negatives.
+A first targeted attempt without the group scope exposed stale generated
+projects; retain that failure. The corrected targeted existing test now passes
+before a full static-only rerun. Add no fake course item and waive no coverage.
+No proof, model, import, pin, tool setting or acceptance change.
+
+Private study workflow15/15 passes on exact7826548:5P+2T genuine first tries,
+strict/freeze, five full target gates/audits and both agent snapshots. All46pin
+checks pass. The finite-premise ISet positive control verifies with zero holes,
+paired with the missing-premise negative. Successful clone removed, records
+retained privately. Release CI/live D45 sessions are not inferred passed.

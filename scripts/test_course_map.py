@@ -1484,8 +1484,11 @@ case("rows: a paper home is language-free", cov_edit("S5.import-tiers", '"Q04.S5
 case("rows: a paper home in a planned module is pending",
      cov_edit(PLANNED_ROW, f'"{PLANNED_HOME}"',
               f'"{PLANNED_HOME}", "{PLANNED}.B1"'), 0, "pending)")
-case("rows: an item home in a planned module is pending", cov_edit("S5.import-tiers", '"R07"', '"R07.H1dv"'),
-     0, "pending)")
+# Pin the synthetic subject to planned; actual R07 may already be authored.
+case("rows: an item home in a planned module is pending",
+     setf("R07", "status", '"planned"',
+          cov_edit("S5.import-tiers", '"R07"', '"R07.H1dv"')),
+     0, "pending)", args=("--only", "coverage"))
 case("rows: an armed strand home resolves", ARMED, 0, f"coverage: {1 + len(REAL_ARMED)} module(s) past planned", armed=True,
      args=("--only", "coverage"))
 case("rows: an armed item home that does not resolve", cov_edit("S5.import-tiers", '"Q04.S5"', '"Q04.H9d"', ARMED),

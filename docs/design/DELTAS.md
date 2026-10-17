@@ -4081,3 +4081,13 @@ native behaviour after installing an actual mismatch. Installed tools, limits,
 imports, trust and acceptance checks remain unchanged. Final study workflow,
 freeze/leak/pins and focused CI remain required. R07 is not shipped; D45 live
 model validation remains recorded debt, never a pass.
+
+**Δ257 validation checkpoint.** Clean7826548's focused run passes both R native
+jobs, paper, rubric and harness; static fails only a fixture assuming real R07
+remains planned. Explicitly plan that synthetic R07 and run its coverage group
+independently of the authored tree's generated projects. Keep the same pending
+assertion, production checker and armed-item resolution negatives. A targeted
+first attempt caught the unrelated project drift; the scoped case now passes.
+Full static rerun follows. Study workflow15/15 passes with7genuine first tries
+and both agent snapshots; all46pins pass. The ISet finite-premise control also
+verifies. No release CI or live actor validation is inferred.
