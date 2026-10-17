@@ -3946,3 +3946,12 @@ needed. Source hollow/reference lint, avoid and the22-module leak scan pass;
 final workflow, stability and CI remain to complete. R05 is not yet shipped.
 Live Claude validation remains explicit D45 debt, R03 stays parked, and the
 primary main checkout and external branches are untouched.
+
+
+**Δ255 validation checkpoint (2026-10-17 UTC).** Source178657f passes six
+focused author CI jobs in696s, ten canonical admission items, thirteen study
+workflow commands with four genuine first tries, all four native reference
+targets at three seeds and40pin checks. All five written documents compile;
+four parallel-problem references gate/audit. Protected notes and the private
+author-probe archive preserve exact scopes and failures. Full release CI is
+still pending; R05 remains authoring and live model validation remains debt.

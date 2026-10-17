@@ -94,3 +94,35 @@ failures alongside successful reruns. Archive final evidence under
 At most three16GiB native lanes/48GiB total; GATE_WORKERS=1. Author probes use
 a second Verus pool slot beside R04's capped lane; CI owns its pinned serial
 discipline. Check available memory before each launch. No subagents are used.
+
+
+## Final local validation — supersedes the pending checklist
+
+Clean source candidate178657f passes focused author CI
+20261017T075349Z-2561337:6passed,0failed,0skipped,0absent in696s. Static,
+R Dafny, R Verus, paper, rubric and harness all pass. Actual full R04 author
+CI remains separately running onbf1b73a; R05 does not claim a full global run.
+
+Completed-reference private study clone:13/13commands, four genuine passing
+first tries, strict report and freeze, both hand gates/audits, Python gate/audit
+and both agent gates/audits. Original source baseline is pinned as local Basic
+inside that disposable clone, never by moving the shared Basic branch.
+Four native reference targets (hand/agent in both languages) each pass all
+three pinned seeds. Final R05 pins:40checked,0problems. All ten canonical
+admission items pass; Python38acceptance cases and both TRIV controls pass.
+
+Both native viva probes reach verification with their expected observations;
+all four parallel-problem references gate and audit clean. The Verus PP2
+visibility correction is included. All five written documents compile, including
+protected gold/flawed fixtures under /tmp/dvl0-dvr1-r05/paper-fixtures.
+Reference lint0findings over189twins/22modules/515reference files; hollow
+lint clean, avoid0hits, chapter5914words/4predicts/3diagrams/19pins.
+Final source leakage scan is repeated below before archiving and committing
+this evidence checkpoint. No live model or external publish is represented
+by these results. R05 stays authoring pending the broader Basic release bar.
+
+The whitespace-only source cleanup before178657f did not change proof tokens;
+chapter input pins and rubric digests were recaptured afterward. The earlier
+trailing-whitespace warnings and failed lint/prototype logs remain archived.
+
+Final source scan: leak verifier: 22 module(s), 1826 public files scanned, OK. Archive: author-probes/dvr1/r05-final-20261017.
