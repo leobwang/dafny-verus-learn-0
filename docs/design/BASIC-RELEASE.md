@@ -212,3 +212,11 @@ checker. The draft and evidence are preserved privately; no tier exception,
 new trust assumption or relaxed gate is adopted. R03 stays planned. Record
 and skip that blocker while R04 is built independently. Resolve primitive
 placement or a prelude-only implementation before accepting R03.
+
+
+R integration validation follow-up (Δ252): the six-job run
+20261017T061521Z-1670472 passes native Dafny/Verus,paper,rubric and harness;
+static fails on37 stale Q chapter input hashes after the R-only shared-option
+edit. All37 entries have been executed and recaptured with every published
+chapter byte unchanged. All20 chapter lints pass. The static rerun and targeted
+R01/R02 pins still precede Basic advancement; no failed run is relabelled passed.

@@ -3848,3 +3848,19 @@ This entry is carried into the canonical sequence after Q's reserved release ent
 - **Evidence:** guarded author archives `author-probes/dvr1/r01-final-20261017/` and `r02-final-20261017/`; R03 export tests and native probe in private build evidence. Preserve old authoring history outside shipped ancestry, leave design-only main unchanged, and transplant R changes onto the released Basic baseline before shipping the R core.
 
 R03 packaging blocker (2026-10-17 UTC): standalone core/reference and agent prototypes verify; their canonical module kit is NOT accepted. The Verus inclusive-range difference reference needs scalar neighbours. The pinned std char::from_u32 has no usable specification. A fully verified UTF-8 adapter works against existing vstd contracts, but imports utf8/string before OD8's R07 library boundary. Both direct and A1-transitive arrangements are rejected by the existing tier checker. No exception, gate weakening or new trust assumption is adopted. The complete draft is parked privately under Solutions/plans/drafts/R03; the public registry stays planned. Continue R04 independently under the user's record-and-skip instruction. Resolve the primitive's placement or a prelude-only implementation before R03 activation; full R03 module checks and release remain pending.
+
+### Δ252 · Refresh shared-option input pins after the R induction decision — adopted (2026-10-17 UTC)
+
+The first Basic-based R01/R02 integration CI has five passing jobs (native
+Dafny23s, native Verus42s, paper4s, rubric0s, harness70s) and one failed static
+job in472s. Its only failing step is chapter lint:37 Q output captures pin the
+whole core/std option file, whose bytes changed for the R03–R16 induction
+override. Q's effective settings and formal payload did not change.
+
+Recaptured all37 entries through scripts/pins.py --update --chapter, with
+normal pinned execution. Every command succeeded and every affected published
+chapter stayed byte-for-byte identical. Only the expected input metadata is
+refreshed. No hand-edited digest, output change or relaxed stale-input rule.
+All20 chapters now lint clean. Rerun static CI and R01/R02 pin checks before
+advancing Basic; keep the failed run as evidence. Private before/after hashes,
+commands and results are archived under author-probes/dv7-freeze/q-option-recapture.

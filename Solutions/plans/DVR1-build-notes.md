@@ -74,3 +74,11 @@ Active R04 draft still lives in ../dafny-verus-learn-0-r04-authoring, with
 standalone native paired source/ref cores; source6holes/errors0 each, refs
 17/17 native tasks, zero holes/errors. Admission/predictions/kit are in progress.
 Live Claude debt remains deferred under D45.
+
+
+Integration follow-up Δ252: combined CI20261017T061521Z-1670472 has5pass and
+1static failure, exclusively37 stale Q chapter option-file input hashes. All
+37 were recaptured through canonical pins commands; every affected chapter
+is byte-identical. Native R/paper/rubric/harness pass on the transplanted tree.
+Only expected chapter input metadata and status notes change for the rerun.
+Rerun static, then targeted R01/R02 pins; final leak/study checks precede Basic.
