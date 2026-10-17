@@ -752,6 +752,28 @@ case("a statement file not named Statement",
           'sha256 = "PENDING" }]'), 1, "a statement file's name holds 'Statement'")
 case("challenge past planned without statements", setf("Q19", "status", '"authoring"'), 1,
      "lists its frozen statement files")
+# R08's planned F6 interface is provided, immutable input, never a learner file.
+R08_STATEMENT = "dafny/given/R/RG_A2_MatcherStatement.dfy"
+R08_PIN = __import__("hashlib").sha256((ROOT / R08_STATEMENT).read_bytes()).hexdigest()
+R08_DESC = '[{ path = "' + R08_STATEMENT + '", sha256 = "' + R08_PIN + '" }]'
+case("R08: exact provided matcher statement", setf("R08", "statements", R08_DESC),
+     0, "course map OK")
+case("R08: no pending matcher pin", setf("R08", "statements",
+     '[{ path = "' + R08_STATEMENT + '", sha256 = "PENDING" }]'),
+     1, "needs an actual SHA256 pin")
+case("R08: statement cannot be a learner file", setf("R08", "statements",
+     '[{ path = "dafny/R/R08_Abstraction/std/R08_Statement.dfy", sha256 = "' + R08_PIN + '" }]'),
+     1, "uses the exact provided A2 matcher")
+case("R08: only one provided statement", setf("R08", "statements",
+     R08_DESC[:-1] + ', ' + R08_DESC[1:]), 1, "one frozen matcher statement")
+case("R08: matcher bytes cannot change", BASE, 1, "statement hash mismatch",
+     files={R08_STATEMENT: (ROOT / R08_STATEMENT).read_text() + "\n// changed bytes\n"})
+case("R08: matcher file cannot disappear", BASE, 1, "provided matcher statement does not exist",
+     files={R08_STATEMENT: None})
+case("R08: existing matcher cannot lose its pin", setf("R08", "statements", "[]"),
+     1, "provided matcher must be declared and pinned")
+case("R07: provided statements remain disallowed", setf("R07", "statements", R08_DESC),
+     1, "statements are the frozen statement files of Q19–Q33")
 case("gated item with minutes",
      setf("Q14", "admissible", '{ "Q14.H4d" = { admitted = false, minutes = 30, fallback = "x" } }'),
      1, "is gated: no minutes (0) and a named fallback")

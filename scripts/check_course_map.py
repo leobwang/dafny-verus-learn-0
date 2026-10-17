@@ -40,7 +40,7 @@ registry
            policy or agent (the lab's pre-registration unlocks its runs)
   model    engines ⊆ contract/policy/agent, contract ⇔ agentic; budget
            non-zero iff policy or agent; gpu_hours ≤ 10 per module and ≤ 45
-           over the registry (design §3, §11.3); statements only on Q19–Q33,
+           over the registry (design §3, §11.3); statements on Q19–Q33 and R08's exact frozen provided matcher,
            each file named *Statement* / *statement* (guard rule 2f)
   slugs    write_/recognise_ lists are slugs, per language, disjoint; at most
            6 WRITE units and 10 slugs; Q01–Q09 list WRITE constructs in both
@@ -148,6 +148,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -326,6 +327,8 @@ TRUST_REPORT = re.compile(r"(dafny/R|verus/r|harness/r)/(.*/)?[^/]*trust[-_]repo
 Q_GATE = re.compile(r"harness/q/[^/]+/gate(/|\.py$|$)")
 GATE_WORD = re.compile(r"(?<![a-z])gates?(?![a-z])")
 STATEMENT_NAME = re.compile(r"[Ss]tatement")
+# PLAN F6: the exact frozen A2 matcher interface introduced by R08.
+PROVIDED_STATEMENTS = {"R08": "dafny/given/R/RG_A2_MatcherStatement.dfy"}
 SHA256 = re.compile(r"[0-9a-f]{64}")
 KEBAB = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 CONCEPT_KEY = re.compile(r"S(1[0-3]|[1-9])\.[a-z0-9]+(?:-[a-z0-9]+)*(?:@(d|v|py))?")
@@ -733,15 +736,24 @@ def check_model_fields(m):
             err(f"budget.gpu_hours = {b['gpu_hours']} exceeds the per-lab cap of "
                 f"{GPU_HOURS_PER_MODULE} (design §3)")
     st = m["statements"]
-    if is_core_module(mid) and st:
+    if is_core_module(mid) and st and mid not in PROVIDED_STATEMENTS:
         err("statements are the frozen statement files of Q19–Q33; must be []")
+    if mid in PROVIDED_STATEMENTS and len(st) > 1:
+        err("R08 declares one frozen matcher statement, not additional statement files")
     for i, s in enumerate(st, 1):
         if not isinstance(s, dict) or list(s) != ["path", "sha256"] or not all(
                 isinstance(x, str) for x in s.values()):
             err(f"statements[{i}] must be {{ path = \"…\", sha256 = \"…\" }}")
             continue
         topic_dir = TOPIC_DIRS.get(m["topic"], "?")
-        if not s["path"].startswith(f"Challenges/{topic_dir}/{mid}_"):
+        if mid in PROVIDED_STATEMENTS:
+            if s["path"] != PROVIDED_STATEMENTS[mid]:
+                err(f"statements[{i}]: R08 uses the exact provided A2 matcher "
+                    f"'{PROVIDED_STATEMENTS[mid]}'")
+            if s["sha256"] == "PENDING":
+                err(f"statements[{i}]: the provided matcher needs an actual SHA256 pin, "
+                    "including while planned")
+        elif not s["path"].startswith(f"Challenges/{topic_dir}/{mid}_"):
             err(f"statements[{i}]: '{s['path']}' must sit under Challenges/{topic_dir}/{mid}_<Name>/")
         if not STATEMENT_NAME.search(PurePosixPath(s["path"]).name):
             err(f"statements[{i}]: '{s['path']}': a statement file's name holds 'Statement' "
@@ -1221,6 +1233,19 @@ def check_paths(m, root):
                 errs.append(f"{mid}: {key}: directory '{p}' does not exist")
         elif not target.is_file():
             errs.append(f"{mid}: {key}: file '{p}' does not exist")
+    if mid in PROVIDED_STATEMENTS:
+        rel = PROVIDED_STATEMENTS[mid]
+        statement = root / rel
+        entries = m.get("statements") or []
+        if (statement.exists() or not planned) and not entries:
+            errs.append(f"{mid}: provided matcher must be declared and pinned in statements")
+        for entry in entries:
+            if not isinstance(entry, dict) or entry.get("path") != rel:
+                continue  # the schema reports malformed or non-exact entries
+            if not statement.is_file():
+                errs.append(f"{mid}: provided matcher statement does not exist: '{rel}'")
+            elif entry.get("sha256") != hashlib.sha256(statement.read_bytes()).hexdigest():
+                errs.append(f"{mid}: provided matcher statement hash mismatch: '{rel}'")
     pair = [f"paper/{mid}_problems.tex", f"paper/{mid}_answers.tex"]
     have = [p for p in pair if (root / p).is_file()]
     if m["paper"] and shipped and len(have) < 2:

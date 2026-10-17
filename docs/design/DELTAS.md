@@ -4099,3 +4099,21 @@ bars. Workflow15/15,7genuine first tries, two agent snapshots and46pins pass.
 Frozen STUDY leak scan24modules/1927publicfiles/OK. Exact source hashes,
 private logs and provenance are archived. R07 is still authoring; no full
 release CI, live race/model validation or Basic completion is inferred.
+
+## Δ258 — R08 frozen matcher interface (2026-10-17)
+
+PLAN F6 needs the abstract Dafny matcher in provided infrastructure. Add the
+exact A2 matcher statement and a body-free Verus WordMatcher trait. Extend
+registry validation only for R08's exact given-role statement path, with an
+actual SHA256 even while planned, existence/content checks and eight negative
+and positive regressions. Other core/challenge statement rules, import tiers,
+hole/gate/audit policy and CI remain unchanged. Existing A2 proof bodies are
+unchanged. R07 declares the additive A2 files as their first-layer owner.
+
+Validation:404/404 course-map cases,58/58 Dafny static cases, and12 A2,
+provided-statement and R07 gate/audit/pins/freeze compatibility commands pass.
+Private R08 cores, semantic-negative agent plants and faithful repairs pass
+their intended native controls. R08 remains planned at this checkpoint;
+canonical admission, complete learner material and module CI are outstanding.
+D45 live-model debt and R03's Unicode packaging blocker remain recorded and
+skipped under the user's instruction; neither is treated as a pass.
