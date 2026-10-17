@@ -149,3 +149,26 @@ while retaining all fixed signatures/models and H3induction levers.
 
 Frozen source STUDY scan: leak verifier: 27 module(s), 2072 public files scanned, OK. Source checkpoint precedes the
 scripted STUDY workflow and focused six-job CI; neither is inferred yet.
+
+
+Source98b7dad focused CI first static job fails only chapter skeleton/layout
+(32findings) and reference lint (slot-file comment grammar plus one closing
+automation receipt). Correct chapter required headings/order, separators,
+file-table numeric counts and quoted Mermaid labels without changing any
+pinned native fence body. Correct .slots header and place the H3v unfold
+receipt adjacent to its step. All native statements and proof code are
+unchanged. Targeted chapter lint0problems (5279prosewords) and reference
+lint0findings/11twins pass in the separate worktree. Update the rubric hash.
+The original CI worktree remains untouched until its five other jobs finish;
+then inherit this correction and rerun static. No six-job pass is inferred.
+
+The STUDY author fixture completes20commands with5actual first-prediction
+receipts. It lays author reference clauses over3typed body stubs per language
+before snapshotting, checks sufficiency before bodies, then applies complete
+reference bodies and checks snapshots/gates/audits/base freeze, all3default
+actual-source tools and sufficiency again. This is an author stand-in, not
+a human learner design session or live actor run. Its first fixture failed
+slot parsing before any prediction attempt because the generic reference
+comment used // rather than #; the corrected fixture removes that header,
+which is the same reference-only format correction above. Native answers
+and source code remain unchanged. Final guarded-source pins37/37 pass.

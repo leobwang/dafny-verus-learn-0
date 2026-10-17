@@ -35,13 +35,15 @@ It does not supply this module's compiled full normalizer or the flagship's
 semantic proofs. Certificate soundness, completeness and executable checking
 belong to R11; do not broaden a claim about this chapter to those tasks.
 
+**This module's files** include the following source and validation inputs.
+
 | artifact | purpose |
 |---|---|
 | `dafny/given/R/RG_A4_Norm.dfy`, `verus/given/rg_re_a4/` | frozen shape definitions, wrappers, models and given facts |
-| `dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy`, `verus/r/r10_type_invariants/src/lib.rs` | four hand holes per language and complete worked boundaries |
+| `dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy`, `verus/r/r10_type_invariants/src/lib.rs` | 4 holes each; complete worked boundaries |
 | `dafny/checks/R10_checks.dfy` | given-only std value check, with no hand-hole dependency |
 | `specimens/R10/`, `slots/R10.slots` | five predictions, six WRITE cards and paired spectrum probes |
-| `dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy`, `verus/r/r10_type_invariants/src/agent.rs` | three constructor body holes each; human adds the semantic statements first |
+| `dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy`, `verus/r/r10_type_invariants/src/agent.rs` | 3 holes each, 0 errors; human adds the semantic statements first |
 | `tools/R10/check_statements.py` | contract sufficiency without using implementation bodies |
 | `tools/R10/check_normalizer.py`, `tools/R10/check_constructors.py` | fixed actual-source compiled observations and retained native evidence |
 | `paper/R10_problems.tex`, `paper/R10_answers.tex` | SpecGen card03.5 and an erasure/contract argument |
@@ -86,6 +88,8 @@ unfinished work. That is a stated course fact, not another prediction. Done
 means a complete gate with zero tool-counted holes, an audit, and preserved
 original statements. Inspect the native stage whenever a command fails.
 
+---
+
 ## 1. A representation predicate becomes a boundary
 
 The supplied normal predicate describes selected syntactic reductions. It
@@ -119,10 +123,10 @@ domain explicitly when reasoning about arbitrary model values.
 
 ```mermaid
 flowchart LR
-    Raw[Raw regex] --> Obligation[Validate or prove shape]
-    Obligation --> Wrapped[Normal representation]
-    Wrapped --> Client[Client uses supplied facts]
-    Client --> Separate[Additional semantic claim needs its own relation]
+    Raw["Raw regex"] --> Obligation["Validate or prove shape"]
+    Obligation --> Wrapped["Normal representation"]
+    Wrapped --> Client["Client uses supplied facts"]
+    Client --> Separate["Additional semantic claim needs its own relation"]
 ```
 
 W1d and W1v expose the packet representation built around that boundary. First
@@ -138,6 +142,8 @@ around an executable object and offers an abstract view. They serve a similar
 client goal here, but their native syntax, mode restrictions and opening rules
 are not interchangeable. The purpose of the paired work is to understand both
 boundaries, including the differences you must account for in a port.
+
+---
 
 ## 2. Erased fields carry proof information
 
@@ -187,6 +193,8 @@ allocation sharing, peak heap use, stack depth or runtime speed. Describe the
 observed representation and the target configuration. A precise small claim
 is more useful than a performance story that the experiment did not measure.
 
+---
+
 ## 3. A method implements a mathematical function
 
 Dafny's by-method boundary separates a function's mathematical result from
@@ -230,6 +238,8 @@ failed obligation and preserve the model while repairing the body. H1 and H2
 then require actual hand uses of the declared constructs in the full packet
 setting, so recognizing a syntax example is not the whole learning objective.
 
+---
+
 ## 4. Runtime checks, optional values and preconditions
 
 Take one arbitrary raw regex and imagine three interfaces around the same
@@ -254,11 +264,11 @@ site is not a runtime validation result.
 
 ```mermaid
 flowchart TD
-    Input[Original raw-input domain] --> Test[Runtime predicate]
-    Input --> Optional[Optional validated result]
-    Proof[Caller proves original predicate] --> Required[Precondition-only constructor]
-    Optional --> Some[Validated original representation]
-    Optional --> None[Characterized rejection]
+    Input["Original raw-input domain"] --> Test["Runtime predicate"]
+    Input --> Optional["Optional validated result"]
+    Proof["Caller proves original predicate"] --> Required["Precondition-only constructor"]
+    Optional --> Some["Validated original representation"]
+    Optional --> None["Characterized rejection"]
 ```
 
 The spectrum lab takes30minutes. Draw the three interfaces, write each
@@ -281,6 +291,8 @@ The original task determines which inputs must remain supported. A smaller
 domain can produce an easier proof while changing the service offered to the
 client. Write an original valid input that would be excluded, and keep that
 witness in the review. The proof's assumptions are part of its result.
+
+---
 
 ## 5. The four paired hand exercises
 
@@ -326,7 +338,136 @@ checks can expose a wrong implementation or shared model binding, but their
 finite nature remains explicit. The full native contract and its domain are
 the universal statement you actually proved.
 
-## 6. Human statements before contractor bodies
+---
+
+## 6. What the consumer can and cannot establish
+
+The statement checker uses the course's native parsers to extract the proposed
+requires and ensures clauses. It generates a proof consumer over arbitrary
+normal inputs and a fresh arbitrary normal result. First the original domain
+must establish the proposed preconditions. Then those preconditions and the
+proposed postconditions must establish the required raw-operation language
+relationship. No concrete constructor body is assumed in that implication.
+
+This matters because calling a known correct implementation can hide an
+inadequate interface. A body might preserve the original language for reasons
+that its public contract never mentions. A client restricted to the contract
+cannot use those hidden reasons. Quantifying over a fresh result asks which
+results the proposed clauses actually permit. If the clauses permit a normal
+result with the wrong language, the consumer still has an unproved goal.
+
+A native proof failure means this consumer was not proved under this
+configuration. It is not a universal semantic decision procedure for arbitrary
+specifications. Inspect whether the failure is a failed obligation, an
+unsupported expression, a resolution problem or a resource limit. Keep the
+original source and native output. Repairing the wrong problem can otherwise
+look like progress while leaving the intended interface unresolved.
+
+Logical sufficiency also has a classic limitation: an inconsistent
+postcondition implies any consumer goal. That does not make it a useful
+specification. An actual implementation over the original domain must
+establish the postcondition, and nonvacuous witness calls must remain
+supported. Use the full implementation gate and compiled observations as
+separate controls. Do not interpret a green implication as a completed
+constructor delivery.
+
+```mermaid
+flowchart LR
+    Human["Human original statements"] --> Consumer["Logical sufficiency"]
+    Human --> Implementation["Full implementation gate"]
+    Human --> Snapshot["Original snapshot comparison"]
+    Implementation --> Runtime["Actual-source finite observations"]
+    Consumer --> Review["Human design review"]
+    Runtime --> Review
+    Snapshot --> Review
+```
+
+The local negative controls illustrate the distinction. A complete shape-only
+delivery can pass its native contract while failing fixed semantic runtime
+observations. A false-domain clause can make body verification easy while
+failing the original-domain consumer. An inconsistent postcondition can make
+the consumer implication easy while failing implementation verification.
+Those are distinct failures with different remedies. Keep their evidence
+separate in the audit rather than reducing every result to one Boolean.
+
+---
+
+## 7. On paper, before the keyboard
+
+Paper card03.5 covers SpecGen using the exact pinned local excerpt. Fill all
+eight fields: Task shape, Oracle, Trust, Cheat surface, Metric, Budget,
+Variance and Artifact. Describe the program-to-annotation task and the oracle
+that checks it. Then ask what accepted annotations establish about the
+program's actual behavior and what remains unknown about an independently
+intended requirement.
+
+Preserve the two benchmark denominators and distinguish their total from a
+separately reported success-probability estimator. Describe the conversational
+round budget, model, examples and mutation priorities without inventing a
+matched dollar, token or wall-clock budget. Report unavailable variance or
+replication metadata as unavailable. A percentage of verifier calls saved is
+a claim about calls in a particular comparison, not automatically a timing
+speedup or evidence that every contract is strong.
+
+Relate the paper to your flagship. A proposer can produce annotations that
+verify while dropping requirements a consumer needs. A specification for
+buggy behavior can faithfully describe that behavior without repairing the
+bug. Write one original-domain review question that would expose this gap.
+Your question should identify a missing relationship, rather than merely
+requesting more tests or a larger model.
+
+The second problem asks for an erasure and contract argument. Name the
+executable and ghost fields, state their coherence, explain construction and
+use obligations, and justify the concatenation cases from the original
+packet facts. Explain why by-method agreement survives the reasoning even
+though fields disappear from the executable representation. Finally separate
+sufficiency, implementability, witnesses, snapshots and finite observations.
+An argument that conflates these evidence types has missed the module's point.
+
+---
+
+## 8. The exercise file
+
+After filling holes, record receipts and run the full code gates and audits
+for both hand files and both agent files. Check the course statement snapshot
+and your original human snapshots. Run the three supplied actual-source
+checkers under the course's memory caps. Keep all concurrent solver lanes
+within48GiB, with a16GiB cap and no swap per native lane. Tools print retained
+private driver and result paths; read their stage and claim scope.
+
+```sh
+scripts/firsttry.sh R10 --check
+scripts/vcheck --gate dafny/R/R10_TypeInvariants/std
+scripts/vcheck --gate verus/r/r10_type_invariants
+scripts/vaudit dafny/R/R10_TypeInvariants/std
+scripts/vaudit verus/r/r10_type_invariants
+scripts/vcheck --gate dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
+scripts/vcheck --gate verus/r/r10_type_invariants/src/agent.rs
+scripts/specfreeze --check R10
+python3 tools/R10/check_normalizer.py
+python3 tools/R10/check_statements.py
+python3 tools/R10/check_constructors.py
+scripts/firsttry.sh R10 --report --strict
+```
+
+Complete the paper pair, your bench card, spectrum record, flagship audit and
+viva. The strict report checks course receipts; it cannot replace those human
+artifacts or infer a contractor session. Keep the original failing observations
+when you revise a body. A source change after a capture requires re-capturing
+the affected evidence before calling that capture current.
+
+
+Done means four H solutions per language and all three agent constructors satisfy their original statements, zero-hole gates, audits, snapshots and the required paper/bench/viva work.
+
+---
+
+## 9. Exercise (agentic): human statements before contractor bodies
+
+> **CONTRACT (for /contract R10 — run it in a FRESH session):** Use the
+> human's fixed statements and witnesses. Edit only permitted constructor
+> bodies and proof helpers, preserve original snapshots and given models,
+> and return full zero-hole gates, audits and actual-source observations.
+> Human statement design precedes body work; deferred live work is not a pass.
 
 The flagship starts with three fixed constructor signatures and shape-typed
 results. You write the semantic requires/ensures clauses yourself. Spend40
@@ -371,89 +512,9 @@ correct-looking bodies but a changed language predicate is a changed task.
 A supplied reference demonstrates local implementability; it does not supply
 your missing human design work or a measured actor success.
 
-## 7. What the consumer can and cannot establish
+---
 
-The statement checker uses the course's native parsers to extract the proposed
-requires and ensures clauses. It generates a proof consumer over arbitrary
-normal inputs and a fresh arbitrary normal result. First the original domain
-must establish the proposed preconditions. Then those preconditions and the
-proposed postconditions must establish the required raw-operation language
-relationship. No concrete constructor body is assumed in that implication.
-
-This matters because calling a known correct implementation can hide an
-inadequate interface. A body might preserve the original language for reasons
-that its public contract never mentions. A client restricted to the contract
-cannot use those hidden reasons. Quantifying over a fresh result asks which
-results the proposed clauses actually permit. If the clauses permit a normal
-result with the wrong language, the consumer still has an unproved goal.
-
-A native proof failure means this consumer was not proved under this
-configuration. It is not a universal semantic decision procedure for arbitrary
-specifications. Inspect whether the failure is a failed obligation, an
-unsupported expression, a resolution problem or a resource limit. Keep the
-original source and native output. Repairing the wrong problem can otherwise
-look like progress while leaving the intended interface unresolved.
-
-Logical sufficiency also has a classic limitation: an inconsistent
-postcondition implies any consumer goal. That does not make it a useful
-specification. An actual implementation over the original domain must
-establish the postcondition, and nonvacuous witness calls must remain
-supported. Use the full implementation gate and compiled observations as
-separate controls. Do not interpret a green implication as a completed
-constructor delivery.
-
-```mermaid
-flowchart LR
-    Human[Human original statements] --> Consumer[Logical sufficiency]
-    Human --> Implementation[Full implementation gate]
-    Human --> Snapshot[Original snapshot comparison]
-    Implementation --> Runtime[Actual-source finite observations]
-    Consumer --> Review[Human design review]
-    Runtime --> Review
-    Snapshot --> Review
-```
-
-The local negative controls illustrate the distinction. A complete shape-only
-delivery can pass its native contract while failing fixed semantic runtime
-observations. A false-domain clause can make body verification easy while
-failing the original-domain consumer. An inconsistent postcondition can make
-the consumer implication easy while failing implementation verification.
-Those are distinct failures with different remedies. Keep their evidence
-separate in the audit rather than reducing every result to one Boolean.
-
-## 8. On paper, before the keyboard
-
-Paper card03.5 covers SpecGen using the exact pinned local excerpt. Fill all
-eight fields: Task shape, Oracle, Trust, Cheat surface, Metric, Budget,
-Variance and Artifact. Describe the program-to-annotation task and the oracle
-that checks it. Then ask what accepted annotations establish about the
-program's actual behavior and what remains unknown about an independently
-intended requirement.
-
-Preserve the two benchmark denominators and distinguish their total from a
-separately reported success-probability estimator. Describe the conversational
-round budget, model, examples and mutation priorities without inventing a
-matched dollar, token or wall-clock budget. Report unavailable variance or
-replication metadata as unavailable. A percentage of verifier calls saved is
-a claim about calls in a particular comparison, not automatically a timing
-speedup or evidence that every contract is strong.
-
-Relate the paper to your flagship. A proposer can produce annotations that
-verify while dropping requirements a consumer needs. A specification for
-buggy behavior can faithfully describe that behavior without repairing the
-bug. Write one original-domain review question that would expose this gap.
-Your question should identify a missing relationship, rather than merely
-requesting more tests or a larger model.
-
-The second problem asks for an erasure and contract argument. Name the
-executable and ghost fields, state their coherence, explain construction and
-use obligations, and justify the concatenation cases from the original
-packet facts. Explain why by-method agreement survives the reasoning even
-though fields disappear from the executable representation. Finally separate
-sufficiency, implementability, witnesses, snapshots and finite observations.
-An argument that conflates these evidence types has missed the module's point.
-
-## 9. Bench card, viva and instructor touchpoints
+## 10. Bench card and viva
 
 Build your ninth card from one of your own completed invariant or normalization
 goals. Preserve its original statement and model, complete and stripped
@@ -521,52 +582,9 @@ constraints and native statements. A term that feels familiar in one language
 is a reason to inspect its paired boundary carefully before assuming the same
 construction and use rules apply.
 
-## 10. Complete the module under the original statements
+---
 
-After filling holes, record receipts and run the full code gates and audits
-for both hand files and both agent files. Check the course statement snapshot
-and your original human snapshots. Run the three supplied actual-source
-checkers under the course's memory caps. Keep all concurrent solver lanes
-within48GiB, with a16GiB cap and no swap per native lane. Tools print retained
-private driver and result paths; read their stage and claim scope.
-
-```sh
-scripts/firsttry.sh R10 --check
-scripts/vcheck --gate dafny/R/R10_TypeInvariants/std
-scripts/vcheck --gate verus/r/r10_type_invariants
-scripts/vaudit dafny/R/R10_TypeInvariants/std
-scripts/vaudit verus/r/r10_type_invariants
-scripts/vcheck --gate dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
-scripts/vcheck --gate verus/r/r10_type_invariants/src/agent.rs
-scripts/specfreeze --check R10
-python3 tools/R10/check_normalizer.py
-python3 tools/R10/check_statements.py
-python3 tools/R10/check_constructors.py
-scripts/firsttry.sh R10 --report --strict
-```
-
-Complete the paper pair, your bench card, spectrum record, flagship audit and
-viva. The strict report checks course receipts; it cannot replace those human
-artifacts or infer a contractor session. Keep the original failing observations
-when you revise a body. A source change after a capture requires re-capturing
-the affected evidence before calling that capture current.
-
-## 11. What R10 planted
-
-You can now read a representation invariant as an explicit promise, build a
-value that satisfies it, and use erased evidence without confusing it with
-runtime computation. You can implement a fixed mathematical normalization
-model and explain what its interface does and does not promise about language.
-You can also challenge a proposed contract using an arbitrary-result consumer,
-original-domain obligations and separate implementation controls.
-
-R11 will use the provided certificate definitions for new correctness and
-construction work. Its obligations remain distinct from normal-form shape and
-from finite observations in this module. Bring forward the habit that matters
-most: identify the original domain, the exact formal relation, the actual
-native scope and the evidence supporting each claimed result.
-
-## 12. Pinned native captures
+## Captured native examples
 
 Dafny card inputs import provided layers. Copy a card to a real `.dfy` file
 and give the wrapper its R10 context, for example:
@@ -726,3 +744,55 @@ vcheck: specimens/R10/shape-v.rs.specimen [verus, learner loop]: verified — 1 
 $ scripts/vcheck dafny/checks/R10_checks.dfy
 vcheck: dafny/checks/R10_checks.dfy [dafny, learner loop]: verified — 47 verified, 0 holes, 0 errors
 ```
+
+---
+
+## Instructor touchpoints
+
+Use `/tutor R10` for a legal next step, `/discuss R10` for the type boundary,
+`/review R10` for a disputed concept, `/viva R10` for a committed six-question
+draw, `/grade-paper R10` for the written pair, and `/review-code R10` for the
+complete native evidence and original snapshots. `/contract R10` requires a
+fresh available actor session after human statement design. Solutions are
+reference-class and yours to open LAST, after attempts and original receipts.
+
+### What the instruments can and cannot see
+
+The gate checks formal obligations and counts unfinished holes. The audit
+checks trust escapes; snapshots bind original statements and referenced models.
+The statement consumer tests a particular logical consequence over an explicit
+domain. Runtime observations compare the fixed finite cases. None decides
+whether a formal relation is the requirement a person intended. Keep the
+question and evidence paired when explaining a result.
+
+When two results disagree, retain both original artifacts and identify the
+first stage at which their claims differ. A changed precondition, different
+model binding, unresolved dependency or untested implementation requires a
+different repair. Ask the instructor to inspect that exact boundary before
+resampling an actor. Do not erase an earlier failed result, report a deferred
+live grade as measured, or turn an author fixture into a learner transcript.
+
+---
+
+## What R10 planted
+
+You can now read a representation invariant as an explicit promise, build a
+value that satisfies it, and use erased evidence without confusing it with
+runtime computation. You can implement a fixed mathematical normalization
+model and explain what its interface does and does not promise about language.
+You can also challenge a proposed contract using an arbitrary-result consumer,
+original-domain obligations and separate implementation controls.
+
+R11 will use the provided certificate definitions for new correctness and
+construction work. Its obligations remain distinct from normal-form shape and
+from finite observations in this module. Bring forward the habit that matters
+most: identify the original domain, the exact formal relation, the actual
+native scope and the evidence supporting each claimed result.
+
+| seed | harvest |
+|---|---|
+| Explicit normal-form type boundary | certificate and VM representation reviews |
+| Erased evidence with an executable payload | later resource and trust-report claims |
+| Original-domain arbitrary-result consumer | statement-strength audits and fixed-task deliveries |
+| Separate implementation, snapshot and runtime controls | evaluations with honest claim scope |
+

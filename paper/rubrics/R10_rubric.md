@@ -7,7 +7,7 @@ Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R10_solutions.tex  sha256 5396d7621d1bc96e1f3bdbd5860b035ba72d701ee52b9f64ddc855710c955f74
 paper/R10_problems.tex  sha256 f14405fb4b3fbe752af471c515f444ead1278439920eb98bdcf58c3f9731e77a
 Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy  sha256 48f6f947d1b0009281104f7e3428bde009f833c06860780ef94dd726b23b2701
-Solutions/verus/r/r10_type_invariants/src/lib.rs  sha256 bb80c92e192178b0d70e868a8acc65a78e254d8769643042e101ce742ae7f1f3
+Solutions/verus/r/r10_type_invariants/src/lib.rs  sha256 d9dca59ef4f869137af19256a22c59d321550292b85e8883a6052b3d543c73bf
 Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy  sha256 f4539ead6c35cab05e01cd0e94553e0d194336e456ae86a0c71a3743db059c14
 Solutions/verus/r/r10_type_invariants/src/agent.rs  sha256 fad479cf1eab4f9d746a9440f3e259c416695f1551df8974b58373905ce0731c
 

@@ -4298,3 +4298,15 @@ copies with explicit provided-layer context; misleading standalone sidecars
 are removed, without changing the earlier source or model. Exact final pins,
 workflow and CI results follow in protected notes. No Basic shipment or live
 D45 actor/calibration result is inferred; R03 stays parked as requested.
+
+
+## Δ266 — R10 static format correction (2026-10-17)
+
+Conform the chapter to the required skeleton, section order, file/hole table,
+quoted Mermaid labels and seed-harvest table. Preserve all19captured native
+fence bodies. Remove a non-slot-grammar reference comment and attach the H3v
+unfold receipt to its step; update the rubric hash. No native statement,
+model or proof code changes. Targeted chapter/reference lint passes; the
+initial focused CI's static failure and corrected replay remain separate
+results. The20-command scripted STUDY workflow and37guarded pins pass;
+neither supplies a measured human/actor session. D45/R03 remain recorded skips.

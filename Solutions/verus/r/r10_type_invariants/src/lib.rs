@@ -66,8 +66,7 @@ proof fn normal_fixed_r10(r:Re)
  ensures norm(r)==r,
  decreases r,
 {
- // did: implement the fixed R10.H3v contract and preserve its model.
-
+ // did: unfold the fixed normalization model before structural induction.
  reveal_with_fuel(norm,2);
  match r {
   Re::Alt(a,b)=>{normal_fixed_r10(*a);normal_fixed_r10(*b);},
