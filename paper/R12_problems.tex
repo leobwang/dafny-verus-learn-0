@@ -28,7 +28,7 @@ full original-task zero-hole proof-stage gate, with original source, models,
 code, levers, audit and executor provenance preserved. Missing scores and empty
 localization do not establish success. Specify paired permutation tests at each
 registered budget point with Holm correction over the named family, and
-bootstrap bands with the task as cluster. Compose \texttt{fvh.stats} rather
+bootstrap bands with the original algorithm as cluster, preserving both languages. Compose \texttt{fvh.stats} rather
 than reimplementing estimators. State whether bands are pointwise; do not call
 pointwise intervals simultaneous bands. Define how crossing and ties are
 reported when uncertainty prevents ordering.
@@ -48,8 +48,12 @@ State seeds, prompts, settings, per-arm time/token/GPU accounting, throughput
 assumption and its measured source, truncation sensitivity, exclusions, stopping
 rule,80\%prediction intervals and the fallback when the ceiling is infeasible.
 Compute the MDE with \texttt{fvh.stats.mde\_two\_proportions} at the number of
-independent task clusters, baseline, paired flag and family-adjusted alpha;
-explain why three repeats do not turn40tasks into120independent tasks.
+declared algorithm clusters, baseline, paired flag and family-adjusted alpha;
+explain why twenty paired-language clusters do not become40independent tasks or120repeats.
+At baseline0.5, n=20and alpha0.05/40 the frozen planning call returns infinity.
+Report that result and its conservative assumptions explicitly; do not invent
+a finite MDE, turn repeats into independent tasks or shrink the family after
+seeing data. Keep the comparison exploratory when the allocation is underpowered.
 Write all17fields in the answer template. Finalize the batch file, then bind its
 actual64hex digest and re-grade the changed registration before execution.
 \end{problem}

@@ -5,11 +5,11 @@ not favorable results. A prospective calibration fixture cannot unlock a batch.
 D45 live work and unavailable containers remain recorded skips, never passes.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
-paper/solutions/R12_solutions.tex  sha256 db2ceb03f0f32532dcfd1cf71bd39a14432a81c9ce46e46ba520df97db2d560b
-paper/R12_problems.tex  sha256 970e7273d2e2b4ea7692960b502933dcdd318ebdcfd3f87eba5df59f2672ffe5
+paper/solutions/R12_solutions.tex  sha256 bbc1ed910cdda559914285ba2bafe66e998a15758012355eaf95304c5e2d651a
+paper/R12_problems.tex  sha256 b304d28e8797d7d528c83cce44b84361ad2a9f6f5f61ef498054af24ebfcd8ae
 Solutions/dafny/R/R12_Driving/std/R12_Driving.dfy  sha256 fc09a5fa307b2afca91dd98b3ae2fa8d290fdace65a03203fbf21533124893f6
 Solutions/verus/r/r12_driving/src/lib.rs  sha256 e2d8c76d32ee777f1c32f91525485adab5cef83458b0185ff7dd667177b4db0c
-Solutions/harness/r/fvh_r/engine.py  sha256 dc719db121288d780ba486e6434c742d5ff4345fb642197a754e906878b1cc80
+Solutions/harness/r/fvh_r/engine.py  sha256 ed13132730688e587dcde203d6bd4613cd26324e67eaa1fee575949829952c26
 Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317bead68da9eeecadb241f4d15
 
 ## Verifier anchors
@@ -23,7 +23,7 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
   registered totals, and each arm's tokens/GPU/wall cost within10GPU-hours.
   Baseline verification is no model call; malformed generation is one node.
 - **Probe M:** run fvh.stats.mde_two_proportions at the registration's actual
-  task-cluster n, baseline, pairing and family-adjusted alpha. Repeats do not
+  algorithm-cluster n, baseline, pairing and family-adjusted alpha. Repeats do not
   create independent tasks. Reproduce Holm and bootstrap from the same logs.
 - **Probe F:** tools/R12/admit_forms.py checks actual native model/header and
   executable skeleton identity, with each call bound to a local proof callee.
@@ -45,7 +45,7 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
 - **HP.a:** name primary localized-minus-raw best-first contrasts, budget points,
   secondary regime comparisons, direction, refutation and unresolved crossings.
 - **HP.b:** define cumulative success from the full original-task gate and exact
-  task-level paired estimator. Score0, missing diagnostics or empty obligations
+  algorithm-cluster paired estimator. Score0, missing diagnostics or empty obligations
   cannot mean accepted. Native source/model/code/context bindings stay explicit.
 - **HP.c:** state80%prediction intervals before data and all stopping rules.
   Stop on fixed cap, success or exhausted frontier, never an arm's early lead.
@@ -65,14 +65,17 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
 
 ### variance
 
-- **VA.a:** task clusters are independent units; keep all repeats/budgets/arms
+- **VA.a:** the20paired-language algorithm clusters are the uncertainty units; keep all repeats/budgets/arms
   paired inside a task. Register repeated runs and actual request seeds;
   Claude repeated runs are not controllable seeds.
 - **VA.b:** use fvh.stats for paired permutation tests, Holm over the registered
   family and bootstrap intervals. State resampling counts/seeds. Pointwise
   intervals cannot be described as simultaneous bands without a valid method.
-- **VA.c:** MDE matches Probe M at independent task n and adjusted alpha. Name
-  approximation/correlation limits and report uncertainty around crossings.
+- **VA.c:** MDE matches Probe M at independent n=20algorithm clusters and adjusted alpha. Name
+  approximation/correlation limits and report uncertainty around crossings. At
+  n20/baseline0.5/alpha0.05÷40/pairedTrue the frozen call returns infinity;
+  a truthful exploratory/underpowered disclosure is required. No finite value
+  or post-hoc multiplicity reduction is accepted as a repair.
 
 ### contamination
 

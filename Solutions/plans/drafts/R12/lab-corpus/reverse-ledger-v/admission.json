@@ -1,0 +1,360 @@
+{
+  "id": "reverse-ledger-v",
+  "source_sha256": "369b7e5113a8f7f24dbbad516af4812edd368a4afd1556e7fc4efd9272342656",
+  "reference_source_sha256": "20f09fad69eadeb9746caa2eaad4765ce01d686a7eb77ea4e2031cb2c5cbe291",
+  "status": "admitted",
+  "checks": {
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true,
+    "audit-clean": true,
+    "original-model-code-frame": true
+  },
+  "evidence": {
+    "form-gate": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+        "exit_code": 1,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+            "line": 6,
+            "col": 2,
+            "severity": "info",
+            "message": "function body check: not all errors may have been reported; rerun with a higher value for --multiple-errors to find other potential errors in this function",
+            "code": ""
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+            "line": 6,
+            "col": 57,
+            "severity": "error",
+            "message": "postcondition not satisfied",
+            "code": "W-V03"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+            "line": 6,
+            "col": 80,
+            "severity": "error",
+            "message": "postcondition not satisfied",
+            "code": "W-V03"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+            "line": 6,
+            "col": 114,
+            "severity": "info",
+            "message": "recommendation not met",
+            "code": ""
+          },
+          {
+            "file": "",
+            "line": 0,
+            "col": 0,
+            "severity": "error",
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); exit 1",
+            "code": "gate"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121121-faufj8w2",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reverse_ledger_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "good-gate": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121119-4jup77ht",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reverse_ledger_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "frame": {
+      "passed": true,
+      "native_form": {
+        "source": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/reverse-ledger-v.rs",
+        "source_sha256": "369b7e5113a8f7f24dbbad516af4812edd368a4afd1556e7fc4efd9272342656",
+        "lang": "verus",
+        "sites": [
+          {
+            "name": "loop1",
+            "kind": "expr",
+            "callee_bindings": []
+          }
+        ],
+        "statement_sha256": "ed00693bfba9c5682d5babbbd2e080d076564fac44972b70bbe39b3ff3c4f3c7",
+        "code_sha256": "c07fd1736eb8dfbbf1faf432edda4cd3d2fd93dc13ed2a496e73725ba5b978d5"
+      },
+      "validated_span": {
+        "symbol": "lab_task",
+        "start": 6,
+        "end": 12
+      }
+    },
+    "audit": {
+      "passed": true,
+      "findings": []
+    },
+    "empty-automation": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+        "exit_code": null,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "E0 seed=1": "fails(error)",
+          "E0 seed=2": "fails(error)",
+          "E0 seed=3": "fails(error)",
+          "E0H seed=1": "fails(error)",
+          "E0H seed=2": "fails(error)",
+          "E0H seed=3": "fails(error)",
+          "E1 seed=1": "fails(error)",
+          "E1 seed=2": "fails(error)",
+          "E1 seed=3": "fails(error)",
+          "E2 seed=1": "fails(error)",
+          "E2 seed=2": "fails(error)",
+          "E2 seed=3": "fails(error)",
+          "EM seed=1": "fails(error)",
+          "INV seed=1": "fails(error)",
+          "INV seed=2": "fails(error)",
+          "INV seed=3": "fails(error)",
+          "TRIV seed=1": "fails(error)",
+          "TRIV seed=2": "fails(error)",
+          "TRIV seed=3": "fails(error)"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-121833-f_xuxjpa",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-121833-f_xuxjpa/variant-E0/reverse-ledger-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reverse_ledger_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--output-json",
+          "--error-format=json",
+          "--time",
+          "--verify-root",
+          "--verify-function",
+          "lab_task"
+        ]
+      }
+    },
+    "seed-1": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121835-kqy2de2g",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reverse_ledger_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "seed-2": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121835-zrkofyum",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reverse_ledger_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=2",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "seed-3": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121836-9m4exm4e",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/reverse-ledger-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reverse_ledger_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=3",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "wrong-hints": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/reverse-ledger-v/wrong.rs",
+        "exit_code": 1,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/reverse-ledger-v/wrong.rs",
+            "line": 9,
+            "col": 12,
+            "severity": "error",
+            "message": "invariant not satisfied before loop",
+            "code": ""
+          },
+          {
+            "file": "",
+            "line": 0,
+            "col": 0,
+            "severity": "error",
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); exit 1",
+            "code": "gate"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121837-9q53j2zr",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/reverse-ledger-v/wrong.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "wrong",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    }
+  }
+}

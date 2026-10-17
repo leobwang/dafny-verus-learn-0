@@ -1,0 +1,16 @@
+// R12_HINT_SITES: [{"name":"loop1","identifiers":["RepeatSum","amount","i","n","out"]}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.LabTask","start":6,"end":11}]
+module R12_LabCase {
+ghost function RepeatSum(amount:nat,k:nat):nat decreases k {if k==0 then 0 else RepeatSum(amount,k-1)+amount}
+lemma StepModel(amount:nat,i:nat) ensures RepeatSum(amount,i+1)==RepeatSum(amount,i)+amount {}
+ method LabTask(n:nat,amount:nat) returns(out:nat) requires n<=1000 && amount<=1000 ensures out==RepeatSum(amount,n)
+ {
+var i:=0;out:=0;while i<n
+ invariant (0<=i<=n && out<=1000*i && out==RepeatSum(amount,i))
+ {StepModel(amount,i);out:=out+amount;i:=i+1;}
+ }
+}
+
+module R12_CorpusObservation {import P=R12_LabCase
+ @Test method OriginalDomain() {var actual:=P.LabTask(3,4);expect actual==12;}
+}

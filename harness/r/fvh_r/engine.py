@@ -382,6 +382,7 @@ class R12Policy:
             if not isinstance(doc,dict) or doc.get('files_sha256')!=dict(state.files):raise ValueError('missing or stale native feedback')
             outcome=native_outcome(doc,ctx,self.spans,raw_feedback=self.raw_feedback)
             if self.engine is None:
+                if outcome.accepted:raise ValueError('original benchmark form already verifies; re-admit the registered stratum')
                 w,d,p=self.config;self.engine=SearchR12(outcome,width=w,depth=d,priority=p)
             else:self.engine.observe(outcome)
             if self.engine.solved:return [P.Stop('done','full original-task gate passed')]

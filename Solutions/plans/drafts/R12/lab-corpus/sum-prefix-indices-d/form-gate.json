@@ -1,0 +1,52 @@
+{
+  "lang": "dafny",
+  "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+  "exit_code": 4,
+  "verdict": "failed",
+  "stage": "verify",
+  "verified_count": 3,
+  "holes": [],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+      "line": 7,
+      "col": 2,
+      "severity": "error",
+      "message": "a postcondition could not be proved on this return path",
+      "code": "W-D10"
+    },
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+      "line": 6,
+      "col": 69,
+      "severity": "related",
+      "message": "this is the postcondition that could not be proved",
+      "code": "W-D10"
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "R12_LabCase.StepModel": "verified",
+    "R12_LabCase.IndexSum": "verified",
+    "R12_LabCase.LabTask": "failed"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121134-kimyjndv",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+    "verify",
+    "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+    "--json-output",
+    "--resource-limit",
+    "5000000",
+    "--cores",
+    "2",
+    "--solver-path",
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+    "--allow-axioms",
+    "false",
+    "--allow-warnings",
+    "false",
+    "--log-format",
+    "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121134-kimyjndv/tasks.csv"
+  ]
+}

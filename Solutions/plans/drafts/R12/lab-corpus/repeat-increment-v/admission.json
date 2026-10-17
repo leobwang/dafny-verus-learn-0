@@ -1,0 +1,364 @@
+{
+  "id": "repeat-increment-v",
+  "source_sha256": "aef301b4caa1bddb8e6eafee5bcc7082b0c49dff72099ce1a09164eaee3663be",
+  "reference_source_sha256": "c248f996bf75c72db235e38563e5b004b2c537e519051a86846de11f1348671d",
+  "status": "admitted",
+  "checks": {
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true,
+    "audit-clean": true,
+    "original-model-code-frame": true
+  },
+  "evidence": {
+    "form-gate": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/repeat-increment-v.rs",
+        "exit_code": 1,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/repeat-increment-v.rs",
+            "line": 8,
+            "col": 2,
+            "severity": "info",
+            "message": "function body check: not all errors may have been reported; rerun with a higher value for --multiple-errors to find other potential errors in this function",
+            "code": ""
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/repeat-increment-v.rs",
+            "line": 13,
+            "col": 50,
+            "severity": "error",
+            "message": "possible arithmetic underflow/overflow",
+            "code": "W-V06"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/repeat-increment-v.rs",
+            "line": 8,
+            "col": 88,
+            "severity": "error",
+            "message": "postcondition not satisfied",
+            "code": "W-V03"
+          },
+          {
+            "file": "",
+            "line": 0,
+            "col": 0,
+            "severity": "error",
+            "message": "gate: 'success' is false, not true; exit 1",
+            "code": "gate"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "failed",
+          "repeat_sum": "verified",
+          "step_model": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121252-a8i8w9xl",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/form/repeat-increment-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "repeat_increment_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "good-gate": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 3,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified",
+          "repeat_sum": "verified",
+          "step_model": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121251-wf_vz3xx",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "repeat_increment_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "frame": {
+      "passed": true,
+      "native_form": {
+        "source": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/repeat-increment-v.rs",
+        "source_sha256": "aef301b4caa1bddb8e6eafee5bcc7082b0c49dff72099ce1a09164eaee3663be",
+        "lang": "verus",
+        "sites": [
+          {
+            "name": "loop1",
+            "kind": "expr",
+            "callee_bindings": []
+          }
+        ],
+        "statement_sha256": "a052188e4ff5dbbf809c3bfc1830efe7d244103292e08acdaca974572ec9296b",
+        "code_sha256": "074607f9cb5de743d411c32279fb6b9d329e2cc5d159c523f9b8fd149bf6d37e"
+      },
+      "validated_span": {
+        "symbol": "lab_task",
+        "start": 8,
+        "end": 14
+      }
+    },
+    "audit": {
+      "passed": true,
+      "findings": []
+    },
+    "empty-automation": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+        "exit_code": null,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "E0 seed=1": "fails(error)",
+          "E0 seed=2": "fails(error)",
+          "E0 seed=3": "fails(error)",
+          "E0H seed=1": "fails(error)",
+          "E0H seed=2": "fails(error)",
+          "E0H seed=3": "fails(error)",
+          "E1 seed=1": "fails(error)",
+          "E1 seed=2": "fails(error)",
+          "E1 seed=3": "fails(error)",
+          "E2 seed=1": "fails(error)",
+          "E2 seed=2": "fails(error)",
+          "E2 seed=3": "fails(error)",
+          "EM seed=1": "fails(error)",
+          "INV seed=1": "fails(error)",
+          "INV seed=2": "fails(error)",
+          "INV seed=3": "fails(error)",
+          "TRIV seed=1": "fails(error)",
+          "TRIV seed=2": "fails(error)",
+          "TRIV seed=3": "fails(error)"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-122005-qt743iuf",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-122005-qt743iuf/variant-E0/repeat-increment-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "repeat_increment_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--output-json",
+          "--error-format=json",
+          "--time",
+          "--verify-root",
+          "--verify-function",
+          "lab_task"
+        ]
+      }
+    },
+    "seed-1": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 3,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified",
+          "repeat_sum": "verified",
+          "step_model": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-122007-8hq1072v",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "repeat_increment_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "seed-2": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 3,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified",
+          "repeat_sum": "verified",
+          "step_model": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-122008-hnevqawp",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "repeat_increment_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=2",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "seed-3": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 3,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified",
+          "repeat_sum": "verified",
+          "step_model": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-122008-gjuefvj6",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/repeat-increment-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "repeat_increment_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=3",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "wrong-hints": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/repeat-increment-v/wrong.rs",
+        "exit_code": 1,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/repeat-increment-v/wrong.rs",
+            "line": 11,
+            "col": 12,
+            "severity": "error",
+            "message": "invariant not satisfied before loop",
+            "code": ""
+          },
+          {
+            "file": "",
+            "line": 0,
+            "col": 0,
+            "severity": "error",
+            "message": "gate: 'success' is false, not true; exit 1",
+            "code": "gate"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "failed",
+          "repeat_sum": "verified",
+          "step_model": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-122009-q4p6gje5",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/repeat-increment-v/wrong.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "wrong",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    }
+  }
+}

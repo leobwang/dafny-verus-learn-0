@@ -1,0 +1,7 @@
+# pins.py golden for specimens/R12/bound-v.rs.specimen: SEALED. This demo waits for R12.P5dv,
+# so its whole normalized output (exit code, verdict, stage, counts, holes and
+# every diagnostic) is one salted hash, and none of it is shown (spec §3.8.6,
+# Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R12/bound-v.rs.specimen`; never edit.
+command: verify
+after: R12.P5dv
+outcome: salted-sha256 c96198c42ddec13e5bf43907e6779e1d85e6f02adf4467a27fc32add4b3308c9

@@ -1,0 +1,75 @@
+{
+  "id": "last-acceptance-d",
+  "scope": "one original-domain actual-source compiled observation; not a live model result",
+  "reference_source_sha256": "4d865ef13faae2b97b4283830d93a9e25670a698932822a2cd7e0c127d8b4ab0",
+  "observation_source_sha256": "24653d066a8876ebbbb3a6aa76f93fc16a81fa43ebd80f0b10f46f1b98298cf9",
+  "expected": 2,
+  "gate": {
+    "lang": "dafny",
+    "target": "/tmp/dvl0-dvr2-r12/corpus-witnesses/last-acceptance-d/witness.dfy",
+    "exit_code": 0,
+    "verdict": "verified",
+    "stage": "verify",
+    "verified_count": 3,
+    "holes": [],
+    "diagnostics": [],
+    "findings": [],
+    "per_symbol": {
+      "R12_LabCase.LabTask": "verified",
+      "R12_CorpusObservation.OriginalDomain": "verified"
+    },
+    "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-130224-myp85nl9",
+    "cmd": [
+      "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+      "verify",
+      "/tmp/dvl0-dvr2-r12/corpus-witnesses/last-acceptance-d/witness.dfy",
+      "--json-output",
+      "--resource-limit",
+      "5000000",
+      "--cores",
+      "2",
+      "--solver-path",
+      "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+      "--allow-axioms",
+      "false",
+      "--allow-warnings",
+      "false",
+      "--log-format",
+      "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-130224-myp85nl9/tasks.csv"
+    ]
+  },
+  "test": {
+    "lang": "dafny",
+    "target": "/tmp/dvl0-dvr2-r12/corpus-witnesses/last-acceptance-d/witness.dfy",
+    "exit_code": 0,
+    "verdict": "verified",
+    "stage": "test",
+    "verified_count": 3,
+    "holes": [],
+    "diagnostics": [],
+    "findings": [],
+    "per_symbol": {
+      "R12_CorpusObservation.OriginalDomain": "passed"
+    },
+    "raw_dir": "/tmp/dvl-test-1000/runs/dafny-test-20261017-130224-bv221kje",
+    "cmd": [
+      "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+      "test",
+      "--target",
+      "py",
+      "/tmp/dvl-test-1000/runs/dafny-test-20261017-130224-bv221kje/src/witness.dfy",
+      "--show-snippets",
+      "false",
+      "--resource-limit",
+      "5000000",
+      "--cores",
+      "2",
+      "--solver-path",
+      "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+      "--allow-axioms",
+      "false",
+      "--allow-warnings"
+    ]
+  },
+  "passed": true
+}

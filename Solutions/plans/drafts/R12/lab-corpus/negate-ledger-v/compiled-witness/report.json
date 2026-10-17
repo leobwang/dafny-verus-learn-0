@@ -1,0 +1,62 @@
+{
+  "id": "negate-ledger-v",
+  "scope": "one original-domain actual-source compiled observation; not a live model result",
+  "reference_source_sha256": "d0f94a013502a93d4589a77847e0b1435f0cdf992382155f56c856123dc911fb",
+  "observation_source_sha256": "033d95eb7001e80d4bb5ba055faa41dfc261177f94c05a77869cf37b1938a9f8",
+  "expected": [
+    false,
+    true
+  ],
+  "gate": {
+    "lang": "verus",
+    "target": "/tmp/dvl0-dvr2-r12/corpus-witnesses/negate-ledger-v/crate",
+    "exit_code": 0,
+    "verdict": "verified",
+    "stage": "verify",
+    "verified_count": 2,
+    "holes": [],
+    "diagnostics": [],
+    "findings": [],
+    "per_symbol": {
+      "lab_task": "verified",
+      "original_domain_witness": "verified"
+    },
+    "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-130248-2_sdf2ol",
+    "cmd": [
+      "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+      "/tmp/dvl0-dvr2-r12/corpus-witnesses/negate-ledger-v/crate/src/lib.rs",
+      "--crate-type=lib",
+      "--crate-name",
+      "r12_corpus_witness",
+      "--rlimit",
+      "2",
+      "--num-threads",
+      "1",
+      "--no-cheating",
+      "--output-json",
+      "--error-format=json",
+      "--time"
+    ]
+  },
+  "test": {
+    "lang": "verus",
+    "target": "/tmp/dvl0-dvr2-r12/corpus-witnesses/negate-ledger-v/crate",
+    "exit_code": 0,
+    "verdict": "verified",
+    "stage": "test",
+    "verified_count": 2,
+    "holes": [],
+    "diagnostics": [],
+    "findings": [],
+    "per_symbol": {
+      "r12_observe::original_domain": "passed"
+    },
+    "raw_dir": "/tmp/dvl-test-1000/runs/verus-test-20261017-130248-xmrywdcg",
+    "cmd": [
+      "/tmp/dvl-test-1000/runs/verus-test-20261017-130248-xmrywdcg/testbin",
+      "--test-threads",
+      "1"
+    ]
+  },
+  "passed": true
+}

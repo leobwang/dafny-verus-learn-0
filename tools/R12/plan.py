@@ -17,6 +17,8 @@ import sys
 import tomllib
 
 ROOT=Path(__file__).resolve().parents[2]
+sys.path.insert(0,str(ROOT/'harness'))
+from fvh.budget import CLAUDE,QWEN
 POLICIES=(('independent','R12Independent'),('repair','R12Repair'),('best','R12BestFirst'),('best-raw','R12BestFirstRaw'))
 
 
@@ -37,6 +39,8 @@ def load_stratum(root,path):
     if data.get('schema')!=1 or data.get('lab')!='R12':raise ValueError('R12 stratum schema1 required')
     cards=data.get('card',[])
     if len(cards)!=40 or Counter(c.get('lang') for c in cards)!=Counter({'dafny':20,'verus':20}):raise ValueError('exactly40admitted cards,20per language required')
+    clusters={c.get('cluster') for c in cards}
+    if data.get('cluster_rule')!='paired-language-original-algorithm' or data.get('analysis_clusters')!=20 or len(clusters)!=20 or any(Counter(c['lang'] for c in cards if c.get('cluster')==cluster)!=Counter({'dafny':1,'verus':1}) for cluster in clusters):raise ValueError('twenty explicit paired-language algorithm clusters required')
     ids=set();hashes=set()
     for card in cards:
         name=card.get('id')
@@ -57,17 +61,20 @@ def load_stratum(root,path):
         if not isinstance(checks,dict) or set(checks)!=expected or any(type(x) is not bool or x is not True for x in checks.values()):
             raise ValueError('all native admission controls must precede plan construction')
     unused=data.get('unused_public',[])
-    if not unused:raise ValueError('unused pinned public slice must be recorded separately')
+    if len(unused)!=10 or Counter(Path(row.get('task','')).suffix for row in unused)!=Counter({'.dfy':5,'.rs':5}):raise ValueError('unused pinned public slice must contain5tasks per language')
     pools_path=course_path(root,data.get('pools'))
     if digest(pools_path)!=data.get('pools_sha256'):raise ValueError('public pool metadata changed; recheck unused slice')
     pools=tomllib.loads(pools_path.read_text())
     sys.path.insert(0,str(ROOT/'scripts'))
     from dvl import bench
+    seen_problems={int(m[1]) for d in pools.get('draw',[]) for card in d.get('cards',[]) if (m:=re.fullmatch(r'[dv]p\d+-he(\d+)',card))}
     selected=set()
     for row in unused:
         key=(row.get('set'),row.get('task'))
         pool=next((p for p in pools.get('pool',[]) if p.get('set')==key[0]),None)
         if pool is None or row.get('pool_sha256')!=pool.get('pool_sha256') or key[1] not in pool.get('tasks',[]) or key[1] not in bench.lab_members(root,key[0],'R12') or key in selected:raise ValueError('public slice must be unique, pinned and unused by prior draws')
+        problem=re.match(r'human_eval_(\d+)(?:_|\.)',Path(key[1]).name)
+        if problem and int(problem[1]) in seen_problems:raise ValueError('public task duplicates a previously drawn HumanEval problem in another language/set')
         selected.add(key)
     return cards
 
@@ -78,7 +85,7 @@ def render_plan(cards,*,family,seed,repeats,arms):
     s+='lab = "R12"\nseed = '+str(seed)+'\nrepeats = '+str(repeats)+'\nattempts = 1\nmax_reissue = 3\nlever_check = true\n'
     s+='tasks = '+q([c['id'] for c in cards])+'\n'
     s+='system = '+q((ROOT/'tools/R12/lab_system.md').read_text())+'\ninstructions = '+q((ROOT/'tools/R12/lab_instructions.md').read_text())+'\n'
-    for card in cards:s+='\n[task.'+q(card['id'])+']\npath = '+q(card['path'])+'\nstatement = '+q('R12_TASK_SHA256: '+card['source_sha256']+'\n'+card['statement'])+'\n'
+    for card in cards:s+='\n[task.'+q(card['id'])+']\npath = '+q(card['path'])+'\nstatement = '+q('R12_TASK_SHA256: '+card['source_sha256']+'\nR12_CLUSTER: '+card['cluster']+'\nR12_EXPOSURE: '+card['exposure']+'\n'+card['statement'])+'\n'
     for name,policy in arms:
         s+='\n[[arm]]\nname = '+q(name)+'\nfamily = '+q(family)+'\nrounds = 10\nturns = 12\npolicy = '+q('fvh_r.engine:'+policy)+'\nconstruct = "seeded"\nlab_code = "preserve"\nacceptance = "verify"\n'
     return s
@@ -91,7 +98,7 @@ def build_plans(cards,*,seed,subset_seed):
     for lang in ('dafny','verus'):
         population=sorted([c for c in cards if c['lang']==lang],key=lambda c:c['id'])
         subset.extend(rng.sample(population,5))
-    return {'qwen':render_plan(cards,family='qwen',seed=seed,repeats=3,arms=POLICIES),'claude':render_plan(subset,family='claude',seed=seed+1,repeats=1,arms=(('best','R12BestFirst'),))},[c['id'] for c in subset]
+    return {QWEN:render_plan(cards,family=QWEN,seed=seed,repeats=3,arms=POLICIES),CLAUDE:render_plan(subset,family=CLAUDE,seed=seed+1,repeats=1,arms=(('best','R12BestFirst'),))},[c['id'] for c in subset]
 
 
 def main():

@@ -1,0 +1,39 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "compiled_original_domain_witness": {
+    "evidence_sha256": "38fe24eacacd47d0446087e22961257e2efe92ee6a0f13502643d63c8629aee7",
+    "passed": true,
+    "scope": "one actual-source compiled observation; original-domain call verified, not universal testing or a live model result"
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "a9d4dc20679a4f86e1833ef7303fc7f1938239762933ed9cd5b8847eac83086d",
+    "statement_sha256": "8c85f416e4eb158678887fc66722e8fd69b9edf8377bcc2d031a3d79f3619720"
+  },
+  "id": "accepted-ledger-v",
+  "private_evidence_sha256": "9a2f37206b624ede1318f98104f9a433a7aea02ef92f9e531d094ce40a02bea2",
+  "reference_verified": 3,
+  "schema": 1,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "source_sha256": "d034f8064417746f5743f672fe57126cc4345aa6e932c9fa9067edc98d121278",
+  "status": "admitted",
+  "validated_span": {
+    "end": 21,
+    "start": 12,
+    "symbol": "lab_task"
+  },
+  "wrong_hint_verdict": "failed"
+}

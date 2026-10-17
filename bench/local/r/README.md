@@ -68,3 +68,8 @@ the original normal-form and count models, statement/domain, complete/stripped
 pair, witness, negative controls and native gate/audit provenance. Mark it
 course-derived and previously exposed; do not report an independent unseen
 result or automatic later pool admission. The learner supplies their own card.
+
+`labalpha/` is the separate course-authored R12benchmark stratum, with its own
+native admission and exposure records. Its prepared task forms do not fill or
+replace your personal cards above. Treat its paired-language reconstructions
+as course-derived/exposed and preserve their declared analysis clusters.

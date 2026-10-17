@@ -1,0 +1,387 @@
+{
+  "id": "last-acceptance-d",
+  "source_sha256": "6c1aa811934bd6245aa0e1be57a3746d11cf3772c21a5d883d7a8c53769fa7d2",
+  "reference_source_sha256": "4d865ef13faae2b97b4283830d93a9e25670a698932822a2cd7e0c127d8b4ab0",
+  "status": "admitted",
+  "checks": {
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true,
+    "audit-clean": true,
+    "original-model-code-frame": true
+  },
+  "evidence": {
+    "form-gate": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+            "line": 4,
+            "col": 64,
+            "severity": "related",
+            "message": "this is the postcondition that could not be proved",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+            "line": 4,
+            "col": 98,
+            "severity": "related",
+            "message": "this is the postcondition that could not be proved",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+            "line": 4,
+            "col": 115,
+            "severity": "related",
+            "message": "this is the postcondition that could not be proved",
+            "code": "W-D10"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-120847-wbh147jd",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-120847-wbh147jd/tasks.csv"
+        ]
+      }
+    },
+    "good-gate": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-120847-g7frdc9w",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-120847-g7frdc9w/tasks.csv"
+        ]
+      }
+    },
+    "frame": {
+      "passed": true,
+      "native_form": {
+        "source": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-d.dfy",
+        "source_sha256": "6c1aa811934bd6245aa0e1be57a3746d11cf3772c21a5d883d7a8c53769fa7d2",
+        "lang": "dafny",
+        "sites": [
+          {
+            "name": "loop1",
+            "kind": "expr",
+            "callee_bindings": []
+          }
+        ],
+        "statement_sha256": "ee98b9df8aeb4198fceaefe86a70e3aea710bdadcec18546f3a1a4a9f6352ef3",
+        "code_sha256": "55894633177c76730771dac6e53b1d4603c515c628e0f44eda682061b086dacc"
+      },
+      "validated_span": {
+        "symbol": "R12_LabCase.LabTask",
+        "start": 4,
+        "end": 9
+      }
+    },
+    "audit": {
+      "passed": true,
+      "findings": []
+    },
+    "empty-automation": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": null,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+            "line": 5,
+            "col": 3,
+            "severity": "error",
+            "message": "out-parameter 'last', which is subject to definite-assignment rules, might be uninitialized at this return point",
+            "code": ""
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "maxauto": "failed",
+          "shipped:seed=1": "failed",
+          "shipped:seed=2": "failed",
+          "shipped:seed=3": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261017-121701-y3clql70",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "3",
+          "--mutations",
+          "1",
+          "/tmp/dvl-test-1000/runs/dafny-eb-20261017-121703-q3a8rs9z/src/last-acceptance-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261017-121701-y3clql70/shipped-seed3/tasks.csv",
+          "--filter-symbol",
+          "R12_LabCase.LabTask."
+        ]
+      }
+    },
+    "seed-1": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121703-hrfweg71",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "1",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121703-hrfweg71/tasks.csv"
+        ]
+      }
+    },
+    "seed-2": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121704-w8irvyxp",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "2",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121704-w8irvyxp/tasks.csv"
+        ]
+      }
+    },
+    "seed-3": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121704-tcaxr8gf",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "3",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121704-tcaxr8gf/tasks.csv"
+        ]
+      }
+    },
+    "wrong-hints": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/last-acceptance-d/wrong.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/last-acceptance-d/wrong.dfy",
+            "line": 7,
+            "col": 12,
+            "severity": "error",
+            "message": "this loop invariant could not be proved on entry\nRelated message: loop invariant violation",
+            "code": ""
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121705-zbhmvz6s",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/last-acceptance-d/wrong.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121705-zbhmvz6s/tasks.csv"
+        ]
+      }
+    }
+  }
+}

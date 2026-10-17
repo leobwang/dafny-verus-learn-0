@@ -1,0 +1,30 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/copy-ledger-v.rs",
+  "exit_code": 0,
+  "verdict": "verified",
+  "stage": "verify",
+  "verified_count": 1,
+  "holes": [],
+  "diagnostics": [],
+  "findings": [],
+  "per_symbol": {
+    "lab_task": "verified"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121116-pze1cooi",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl0-dvr2-r12/lab-prototypes/good/copy-ledger-v.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "copy_ledger_v",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time"
+  ]
+}

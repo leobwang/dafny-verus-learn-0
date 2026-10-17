@@ -1,0 +1,367 @@
+{
+  "id": "sum-prefix-indices-d",
+  "source_sha256": "113d5ed83b2853bed86f11286b8004aef322b5448e76e1a5b27f8427b7876a61",
+  "reference_source_sha256": "94ae6fd953f3949fc6acdefb11173b65ee6ccafe94ffebd10353fef835b0a2a6",
+  "status": "admitted",
+  "checks": {
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true,
+    "audit-clean": true,
+    "original-model-code-frame": true
+  },
+  "evidence": {
+    "form-gate": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 3,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+            "line": 7,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+            "line": 6,
+            "col": 69,
+            "severity": "related",
+            "message": "this is the postcondition that could not be proved",
+            "code": "W-D10"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.StepModel": "verified",
+          "R12_LabCase.IndexSum": "verified",
+          "R12_LabCase.LabTask": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121134-kimyjndv",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121134-kimyjndv/tasks.csv"
+        ]
+      }
+    },
+    "good-gate": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 4,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.StepModel": "verified",
+          "R12_LabCase.IndexSum": "verified",
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121133-lxhjp6_0",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121133-lxhjp6_0/tasks.csv"
+        ]
+      }
+    },
+    "frame": {
+      "passed": true,
+      "native_form": {
+        "source": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-d.dfy",
+        "source_sha256": "113d5ed83b2853bed86f11286b8004aef322b5448e76e1a5b27f8427b7876a61",
+        "lang": "dafny",
+        "sites": [
+          {
+            "name": "loop1",
+            "kind": "expr",
+            "callee_bindings": []
+          }
+        ],
+        "statement_sha256": "39d907f7e9caaa33041ab5515f6a702ab313168eb9250ca5ae50649ae75adcbd",
+        "code_sha256": "984197dcdb1a51e54083a3e6ef632be06a274e7b4427bc586e186dcae13cec4f"
+      },
+      "validated_span": {
+        "symbol": "R12_LabCase.LabTask",
+        "start": 6,
+        "end": 11
+      }
+    },
+    "audit": {
+      "passed": true,
+      "findings": []
+    },
+    "empty-automation": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": null,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+            "line": 7,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+            "line": 7,
+            "col": 3,
+            "severity": "error",
+            "message": "out-parameter 'out', which is subject to definite-assignment rules, might be uninitialized at this return point",
+            "code": ""
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "maxauto": "failed",
+          "shipped:seed=1": "failed",
+          "shipped:seed=2": "failed",
+          "shipped:seed=3": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261017-121908-5nx4n5n4",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "3",
+          "--mutations",
+          "1",
+          "/tmp/dvl-test-1000/runs/dafny-eb-20261017-121910-bapw7kd4/src/sum-prefix-indices-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261017-121908-5nx4n5n4/shipped-seed3/tasks.csv",
+          "--filter-symbol",
+          "R12_LabCase.LabTask."
+        ]
+      }
+    },
+    "seed-1": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 4,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.IndexSum": "verified",
+          "R12_LabCase.StepModel": "verified",
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121911-yv0ja_0k",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "1",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121911-yv0ja_0k/tasks.csv"
+        ]
+      }
+    },
+    "seed-2": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 4,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.IndexSum": "verified",
+          "R12_LabCase.StepModel": "verified",
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121911-l7mxb8qu",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "2",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121911-l7mxb8qu/tasks.csv"
+        ]
+      }
+    },
+    "seed-3": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 4,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.StepModel": "verified",
+          "R12_LabCase.IndexSum": "verified",
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121912-g0ht0w5m",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "3",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/sum-prefix-indices-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121912-g0ht0w5m/tasks.csv"
+        ]
+      }
+    },
+    "wrong-hints": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/sum-prefix-indices-d/wrong.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 3,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/sum-prefix-indices-d/wrong.dfy",
+            "line": 9,
+            "col": 12,
+            "severity": "error",
+            "message": "this loop invariant could not be proved on entry\nRelated message: loop invariant violation",
+            "code": ""
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.StepModel": "verified",
+          "R12_LabCase.IndexSum": "verified",
+          "R12_LabCase.LabTask": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121912-9h9re3b5",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/sum-prefix-indices-d/wrong.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121912-9h9re3b5/tasks.csv"
+        ]
+      }
+    }
+  }
+}

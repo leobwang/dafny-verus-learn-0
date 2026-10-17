@@ -1,0 +1,360 @@
+{
+  "id": "last-acceptance-v",
+  "source_sha256": "0e28b8341c99d0820f4f354062a878178eb11f8ed70bc6e3fc5ac2a3b299ce8c",
+  "reference_source_sha256": "80ab8d861d42882e40bbca8c96ae13622aba3dc4a8a60559095a7fe24c072e6a",
+  "status": "admitted",
+  "checks": {
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true,
+    "audit-clean": true,
+    "original-model-code-frame": true
+  },
+  "evidence": {
+    "form-gate": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+        "exit_code": 1,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+            "line": 6,
+            "col": 2,
+            "severity": "info",
+            "message": "function body check: not all errors may have been reported; rerun with a higher value for --multiple-errors to find other potential errors in this function",
+            "code": ""
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+            "line": 6,
+            "col": 54,
+            "severity": "error",
+            "message": "postcondition not satisfied",
+            "code": "W-V03"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+            "line": 6,
+            "col": 72,
+            "severity": "error",
+            "message": "postcondition not satisfied",
+            "code": "W-V03"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+            "line": 6,
+            "col": 83,
+            "severity": "info",
+            "message": "recommendation not met",
+            "code": ""
+          },
+          {
+            "file": "",
+            "line": 0,
+            "col": 0,
+            "severity": "error",
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); exit 1",
+            "code": "gate"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-120850-x036dey8",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "last_acceptance_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "good-gate": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-120849-xrkdy6jo",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "last_acceptance_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "frame": {
+      "passed": true,
+      "native_form": {
+        "source": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/last-acceptance-v.rs",
+        "source_sha256": "0e28b8341c99d0820f4f354062a878178eb11f8ed70bc6e3fc5ac2a3b299ce8c",
+        "lang": "verus",
+        "sites": [
+          {
+            "name": "loop1",
+            "kind": "expr",
+            "callee_bindings": []
+          }
+        ],
+        "statement_sha256": "be44ccf44e4e4d014ac135921370c66b2ebe33a7151bc77c2a0984b6f8ca5ee3",
+        "code_sha256": "0e81cb96960eb23d75447791d924619a7b40bfcbe08ea35fb54e86a9122d781e"
+      },
+      "validated_span": {
+        "symbol": "lab_task",
+        "start": 6,
+        "end": 12
+      }
+    },
+    "audit": {
+      "passed": true,
+      "findings": []
+    },
+    "empty-automation": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+        "exit_code": null,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "E0 seed=1": "fails(error)",
+          "E0 seed=2": "fails(error)",
+          "E0 seed=3": "fails(error)",
+          "E0H seed=1": "fails(error)",
+          "E0H seed=2": "fails(error)",
+          "E0H seed=3": "fails(error)",
+          "E1 seed=1": "fails(error)",
+          "E1 seed=2": "fails(error)",
+          "E1 seed=3": "fails(error)",
+          "E2 seed=1": "fails(error)",
+          "E2 seed=2": "fails(error)",
+          "E2 seed=3": "fails(error)",
+          "EM seed=1": "fails(error)",
+          "INV seed=1": "fails(error)",
+          "INV seed=2": "fails(error)",
+          "INV seed=3": "fails(error)",
+          "TRIV seed=1": "fails(error)",
+          "TRIV seed=2": "fails(error)",
+          "TRIV seed=3": "fails(error)"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-121706-64t2_sn0",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/runs/verus-emptybody-20261017-121706-64t2_sn0/variant-E0/last-acceptance-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "last_acceptance_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--output-json",
+          "--error-format=json",
+          "--time",
+          "--verify-root",
+          "--verify-function",
+          "lab_task"
+        ]
+      }
+    },
+    "seed-1": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121708-7s2yrsrv",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "last_acceptance_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "seed-2": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121709-vtarrxfo",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "last_acceptance_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=2",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "seed-3": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121709-y18mnb75",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/last-acceptance-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "last_acceptance_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=3",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    },
+    "wrong-hints": {
+      "passed": true,
+      "document": {
+        "lang": "verus",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/last-acceptance-v/wrong.rs",
+        "exit_code": 1,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 0,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/last-acceptance-v/wrong.rs",
+            "line": 9,
+            "col": 12,
+            "severity": "error",
+            "message": "invariant not satisfied before loop",
+            "code": ""
+          },
+          {
+            "file": "",
+            "line": 0,
+            "col": 0,
+            "severity": "error",
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); exit 1",
+            "code": "gate"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "lab_task": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121710-pivbkdtl",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/last-acceptance-v/wrong.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "wrong",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ]
+      }
+    }
+  }
+}

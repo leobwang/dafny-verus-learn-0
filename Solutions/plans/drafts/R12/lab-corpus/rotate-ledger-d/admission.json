@@ -1,0 +1,371 @@
+{
+  "id": "rotate-ledger-d",
+  "source_sha256": "46e026d33d6c2d9b13009a45e89da80c98ff493672258f29313fc3843b2f745c",
+  "reference_source_sha256": "d6183103f8cbc2ba547aad142051f7a8e976d76efe08580f009a8100e909f68b",
+  "status": "admitted",
+  "checks": {
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true,
+    "audit-clean": true,
+    "original-model-code-frame": true
+  },
+  "evidence": {
+    "form-gate": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+            "line": 4,
+            "col": 89,
+            "severity": "related",
+            "message": "this is the postcondition that could not be proved",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+            "line": 4,
+            "col": 107,
+            "severity": "related",
+            "message": "this is the postcondition that could not be proved",
+            "code": "W-D10"
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121130-2rnzztc4",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121130-2rnzztc4/tasks.csv"
+        ]
+      }
+    },
+    "good-gate": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121129-fj07f608",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121129-fj07f608/tasks.csv"
+        ]
+      }
+    },
+    "frame": {
+      "passed": true,
+      "native_form": {
+        "source": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+        "source_sha256": "46e026d33d6c2d9b13009a45e89da80c98ff493672258f29313fc3843b2f745c",
+        "lang": "dafny",
+        "sites": [
+          {
+            "name": "loop1",
+            "kind": "expr",
+            "callee_bindings": []
+          }
+        ],
+        "statement_sha256": "e5649d38497e35af1fc5d4430f34c3787c275b7895dca59a31afb08fec5cf021",
+        "code_sha256": "9c301064ad7637fa10feb0a9778fe38b7b2d5c9fd3aebcdb610adc2a77625f02"
+      },
+      "validated_span": {
+        "symbol": "R12_LabCase.LabTask",
+        "start": 4,
+        "end": 9
+      }
+    },
+    "audit": {
+      "passed": true,
+      "findings": []
+    },
+    "empty-automation": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": null,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+            "line": 5,
+            "col": 2,
+            "severity": "error",
+            "message": "a postcondition could not be proved on this return path",
+            "code": "W-D10"
+          },
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+            "line": 5,
+            "col": 3,
+            "severity": "error",
+            "message": "out-parameter 'out', which is subject to definite-assignment rules, might be uninitialized at this return point",
+            "code": ""
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "maxauto": "failed",
+          "shipped:seed=1": "failed",
+          "shipped:seed=2": "failed",
+          "shipped:seed=3": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261017-121858-d4elgf1b",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "3",
+          "--mutations",
+          "1",
+          "/tmp/dvl-test-1000/runs/dafny-eb-20261017-121900-4fbu67_u/src/rotate-ledger-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261017-121858-d4elgf1b/shipped-seed3/tasks.csv",
+          "--filter-symbol",
+          "R12_LabCase.LabTask."
+        ]
+      }
+    },
+    "seed-1": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121900-scgiirgm",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "1",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121900-scgiirgm/tasks.csv"
+        ]
+      }
+    },
+    "seed-2": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121901-94_9uk8z",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "2",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121901-94_9uk8z/tasks.csv"
+        ]
+      }
+    },
+    "seed-3": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+        "exit_code": 0,
+        "verdict": "verified",
+        "stage": "verify",
+        "verified_count": 2,
+        "holes": [],
+        "diagnostics": [],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121901-pb67au_e",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "measure-complexity",
+          "--random-seed",
+          "3",
+          "--mutations",
+          "1",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/good/rotate-ledger-d.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121901-pb67au_e/tasks.csv"
+        ]
+      }
+    },
+    "wrong-hints": {
+      "passed": true,
+      "document": {
+        "lang": "dafny",
+        "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/rotate-ledger-d/wrong.dfy",
+        "exit_code": 4,
+        "verdict": "failed",
+        "stage": "verify",
+        "verified_count": 1,
+        "holes": [],
+        "diagnostics": [
+          {
+            "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/rotate-ledger-d/wrong.dfy",
+            "line": 7,
+            "col": 12,
+            "severity": "error",
+            "message": "this loop invariant could not be proved on entry\nRelated message: loop invariant violation",
+            "code": ""
+          }
+        ],
+        "findings": [],
+        "per_symbol": {
+          "R12_LabCase.LabTask": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121902-rmxwzqdx",
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr2-r12/lab-prototypes/admission/rotate-ledger-d/wrong.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121902-rmxwzqdx/tasks.csv"
+        ]
+      }
+    }
+  }
+}

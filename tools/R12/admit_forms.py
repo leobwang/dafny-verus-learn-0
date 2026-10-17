@@ -9,6 +9,7 @@ This does not prove that a good completion exists or unlock a live lab run.
 """
 from __future__ import annotations
 import argparse
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -24,11 +25,13 @@ def analyze_form(path,core,source_task):
     native_lang='dafny' if lang=='d' else 'verus'
     if lang=='d':
         src=core.D.parse_source(text,str(path));decls=src.decls
-        proof={d.name for d in decls if d.kind in ['lemma','colemma'] or (d.kind=='method' and 'ghost' in d.modifiers)}
+        proof_decls=[d for d in decls if d.kind in ['lemma','colemma'] or (d.kind=='method' and 'ghost' in d.modifiers)]
+        namespace=lambda d:d.container
         code={d.name for d in decls if d.kind in ['method','constructor'] and 'ghost' not in d.modifiers}
     else:
         src=core.V.vs.parse(text);decls=[d for d in src.walk() if d.kind=='fn']
-        proof={d.name for d in decls if d.mode=='proof'}
+        proof_decls=[d for d in decls if d.mode=='proof' and d.owner is None]
+        namespace=lambda d:d.path
         code={d.name for d in decls if d.mode=='exec'}
     statement=core.statement_table(path,lang,text=text)[0]
     skeleton=core.LC.skeleton(text,native_lang,annotations=True,target='r12_unused_target',witness='r12_unused_witness')
@@ -36,7 +39,16 @@ def analyze_form(path,core,source_task):
     for site in task.sites:
         if site.kind=='expr':probes=['false']
         else:
-            if not set(site.callees)<=proof or set(site.callees)&code:raise ValueError(f'{site.name}: callees must be unambiguous local proof declarations')
+            position=text.index(site.marker)
+            callers=[d for d in proof_decls if d.body and src.toks[d.body[0]].start<position<src.toks[d.body[1]].end]
+            if len(callers)!=1:raise ValueError(f'{site.name}: calls require a native proof-declaration body')
+            caller=callers[0]
+            proof=Counter(d.name for d in proof_decls if namespace(d)==namespace(caller))
+            # A bare callee must bind to the declared local helper. Existing uses,
+            # parameters or local bindings of that name need a different explicit
+            # wrapper; this deliberately small grammar does not guess shadowing.
+            tokens=[t.text for t in src.toks[caller.start:caller.body[1]+1]]
+            if any(proof[name]!=1 or tokens.count(name)!=(1 if name==caller.name else 0) for name in site.callees) or set(site.callees)&code:raise ValueError(f'{site.name}: callees must be unambiguous local proof declarations without shadowing')
             probes=[name+'();' for name in site.callees]
         for replacement in probes:
             variant=text.replace(site.marker,replacement,1)

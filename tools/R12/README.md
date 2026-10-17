@@ -16,7 +16,9 @@ Unfinished learner sources are refused before compilation.
 `.rs` task form. Its committed `R12_HINT_SITES` JSON lists one site per source line.
 An `expr` site replaces `/*R12_HINT:name*/ true` with a bounded expression using
 only its declared identifiers. A `calls` site replaces `/*R12_CALLS:name*/` with
-at most eight calls to its listed local proof declarations. These are data
+at most eight calls to its listed local proof declarations. Call sites belong
+to native proof-declaration bodies; each bare name must uniquely bind in the
+same native namespace without shadowing. These are data
 vocabularies; arbitrary code, trust statements, attributes, imports, declarations,
 comments, strings and newlines are rejected. Native grammar checks independently
 preserve declarations/models and executable skeletons, and call sites cannot
@@ -48,7 +50,8 @@ The plan statement binds the original source with exactly one
 `R12_TASK_SHA256: <64 hex>` line; the policy refuses missing/stale bindings
 before sampling or editing. Ten generation requests require twelve fixed executor
 turns: baseline, at most
-ten generations and closure. A baseline native Verify is not a model call.
+ten generations and closure. A baseline native Verify is not a model call. An already-green original form
+is rejected as inadmissible rather than counted as a zero-call model success.
 Missing native phase/count and synthetic kills remain incomplete observations.
 
 `python3 tools/R12/profiler.py TARGET --symbol SYMBOL --repeats 3` measures each
@@ -71,4 +74,6 @@ never starts a language server or turns a diagnostic into a full gate verdict.
 `tools/R12/plan.py` constructs separate locked Qwen/Claude plans only from a
 complete source-bound40-task stratum. It uses the frozen public-pool eligibility
 checks, fixes inline prompt bytes and preserves all pre-registration/budget locks.
-See `bench/local/r/labalpha/README.md`; corpus assembly remains explicit work.
+See `bench/local/r/labalpha/README.md`; the complete40-task corpus is admitted over20paired-language clusters.
+The unused public-pool reservation remains unrun and needs hint admission before
+future use.

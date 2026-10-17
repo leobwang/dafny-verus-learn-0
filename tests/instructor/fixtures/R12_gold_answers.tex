@@ -6,6 +6,7 @@
 \begin{document}
 \maketitle
 \sloppy
+% PREREG-BEGIN
 \section*{Problem B1}\label{ans:B1}
 \begin{answer}
 This is a prospective author method exemplar, not a graded registration, a
@@ -13,17 +14,17 @@ live result or a run authorization. A learner must choose and bind actual final
 artifacts before grading. It cannot supply a missing task-admission or cost pin.
 
 \textbf{Claim and refutation.} Primary contrast is localized minus raw
-best-first cumulative solve rate over the same40tasks at each registered budget
-1--10, two-sided; equal or negative estimates with compatible intervals refute a
-claim of positive advantage. Secondary comparisons are the three localized
+best-first cumulative solve rate over the same40task forms in20paired-language clusters at each registered budget
+1--10, two-sided; an effect interval wholly at or below zero contradicts a positive advantage;
+intervals that span zero leave the direction unresolved. Secondary comparisons are the three localized
 regimes pairwise. Predeclare all40pointwise comparisons as one Holm family.
 A crossing is a change in the sign of a registered paired difference; overlapping
 pointwise uncertainty gives an unresolved crossing, not evidence of a ranking.
 
-\textbf{Feedback and estimand.} A task's rate at a prefix averages its three
-recorded repeated runs. Estimate an arm difference by averaging task-level
-paired differences. Pair by original task, retaining every repeated run in its
-cluster. Localized feedback derives only from that candidate's trusted native
+\textbf{Feedback and estimand.} Each task's rate at a prefix averages its three
+recorded repeated runs. Average the two language tasks within each of20original
+algorithm clusters, then estimate the mean paired arm difference over clusters.
+Retain both languages, all repeats, arms and budgets within the same cluster. Localized feedback derives only from that candidate's trusted native
 Result plus original source spans. Raw feedback is the same Result document;
 no hidden reference, reference proof or human repair enters either prompt.
 
@@ -56,17 +57,22 @@ first or unlock a reserve. Stop at the fixed node cap, success or exhausted
 frontier. Administrative deferrals preserve the frozen resume rules and do not
 become best-of-n. State unavailable apparatus without host fallback.
 
-\textbf{Uncertainty.} Use paired permutation tests on40task-level values,
+\textbf{Uncertainty.} Use paired permutation tests on20algorithm-cluster values,
 Holm on the40declared comparisons, and \texttt{fvh.stats.bootstrap\_ci} over
-whole task-level vectors through a registered scalar statistic for each prefix.
-Declare these95\%intervals pointwise. Task clusters, not120repeats, define$n$.
+whole algorithm-cluster vectors through a registered scalar statistic for each prefix.
+Declare these95\%intervals pointwise. Twenty paired-language algorithm clusters, not40independent programs or
+120repeats, define$n$. These engineered, exposed tasks do not form a random
+unseen sample; uncertainty is conditional on the registered cluster assumptions.
 For baseline0.5, pairedTrue, alpha0.05/40, the frozen MDE call below is the
-planning approximation; correlation assumptions and repeated measures still
-limit interpretation. Register resampling seeds,10000resamples and80\%
+planning approximation and returns infinity: even a rise from0.5to1does not
+reach80\%power under this conservative formula at that family-adjusted level.
+This is an underpowered exploratory comparison, not a promise to establish a
+small effect or precise crossing. Actual correlated outcomes can differ from
+the approximation; non-significance does not establish absence of an effect. Register resampling seeds,10000resamples and80\%
 prediction intervals for each claim before data.
 \begin{verbatim}
 from fvh import stats
-stats.mde_two_proportions(40, 0.5, alpha=0.05/40, paired=True)
+stats.mde_two_proportions(20, 0.5, alpha=0.05/40, paired=True)
 \end{verbatim}
 
 \textbf{Integrity.} Hash the actual engine, adapter, task files, source spans,
@@ -83,6 +89,7 @@ The final learner registration supplies actual prediction intervals, final seeds
 all artifact hashes, cost measurement and a single final plan digest. This
 exemplar deliberately has no unlock row or pretend plan binding.
 \end{answer}
+% PREREG-END
 \section*{Problem B2}\label{ans:B2}
 \begin{answer}
 No live result is supplied. A valid report regenerates every table from frozen

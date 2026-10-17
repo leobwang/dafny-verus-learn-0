@@ -1,0 +1,16 @@
+// R12_HINT_SITES: [{"name":"loop1","identifiers":["at","j","left","len","right"]}]
+// R12_SOURCE_SPANS: [{"symbol":"lab_task","start":6,"end":12}]
+use vstd::prelude::*;
+verus! {
+ #[verifier::loop_isolation(false)]
+ fn lab_task(left:&Vec<bool>,right:&Vec<bool>)->(at:usize) requires left.len()==right.len(), ensures at<=left.len(),forall|j:int|0<=j<at ==> left@[j]==right@[j],at==left.len() || left@[at as int]!=right@[at as int],
+ {
+let mut at:usize=0;while at<left.len() && left[at]==right[at]
+ invariant (at<=left.len() && (forall|j:int|0<=j<at ==> left@[j]==right@[j]))
+ decreases left.len()-at,
+ {at=at+1;}at
+ }
+}
+
+verus! {fn original_domain_witness()->usize {let left=vec![true,false];let right=vec![true,true];lab_task(&left,&right)}}
+#[cfg(test)]mod r12_observe {use super::*;#[test]fn original_domain(){assert_eq!(original_domain_witness(),1);}}

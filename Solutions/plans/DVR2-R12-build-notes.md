@@ -189,3 +189,94 @@ Keep course-authored forms distinct from the learner's personal bench cards.
 Docker info read-only check succeeds with29.1.3; do not claim Docker unavailable.
 Pinned image/agent/provider provenance and all D45 live outcomes remain unrun.
 Full source evidence stays under /tmp/dvl0-dvr2-r12; no live model/actor/grade claim.
+
+
+Practice/interfaces source checkpoint0156953is clean STUDY before resuming
+corpus construction. Course-map's own suite passes404/404. The broad generic
+CI-static unit suite was deliberately interrupted after its first clean fixture
+and29tests: its dirty-fixture case was repeating the entire long course-map
+suite and adds no validation of the new three-line profiler registration.
+It is recorded interrupted, not passed. Final focused CI still remains required.
+All14R12tool static/frame/plan/trace controls pass, with profiler8separate.
+The full Python capture now explicitly binds its imported frozen test files,
+not just the learner file; a test-only change cannot silently keep a stale pin.
+The complete40paired private native prototype forms/completions pass80actual
+full-gate/baseline controls. Initial arithmetic V model returned int after nat
+subtraction; casting the guarded summand to nat fixes it without a domain/model
+change. Preserve that resolve failure separately. Full seven-part corpus
+admission (including max-auto, three seeds, native spans, audit and negatives)
+is running before public installation. No task is declared admitted early.
+
+
+## Corpus admission and source closure
+
+All40private native forms/completions pass80initial full-gate/baseline controls,
+then all40pass every required admission control:120complete seed checks,
+460empty/max-auto variants,40wrong-hint checks,40clean audits, native parser
+model/code frame identity and exact declared target spans. The first audit
+orchestrator assumed lib.audit returned Result; it returns a list of findings.
+Preserve that first AttributeError, correct only orchestration, then resume the
+source-hash-bound cached native controls. All40installed public forms also pass
+native-baseline-and-frame-checked with audit under tools/R12/admit_forms.py.
+The exact real complete H5renderer reproduces all40verified source bodies.
+
+Public forms and concise source-bound ADMISSION summaries live in
+bench/local/r/labalpha; full exact-frame references are protected under
+Solutions/bench/local/r/labalpha. They intentionally add no reference header,
+which would change bytes outside the committed hint sites. Complete raw native
+reports/capture sources/generators are in protected lab-corpus notes and /tmp.
+Public summaries carry no reference body, private raw path or completion digest.
+These are course-authored adaptations, not filled personal learner bench cards
+or an unseen independent benchmark. Each D/Vpair shares one algorithm cluster.
+
+The20clusters, not40independent programs or120repeats, govern uncertainty. The
+frozen conservative MDE call n20/baseline0.5/pairedTrue/alpha0.05/40returnsinf.
+Document the approximation, exploratory/underpowered allocation and unresolved
+crossings instead of inventing a finite MDE or silently changing family/budget.
+Five unused pinned-pool members per language are reserved by the recorded seed,
+excluding prior draws and cross-language HumanEval identities; no sources are
+fetched, hint-admitted or run. No global draw/grade is forged. Actual task plans
+retain their fixed budgets and two separate exact executable bindings.
+
+Native proof-call sites now require one proof-declaration caller, unique local
+callee bindings in the same native namespace, and no shadowing/existing bare
+identifier use. This closes ambiguous/foreign/exec call contexts without a
+wrapper/lexer waiver. Eight static form controls pass; original two proof-call
+forms stay eligible. R12's corpus itself uses expression sites, unaffected by
+that stronger call-only rule. Trace tests use literal decoder fixtures instead
+of publishing a reusable outbound/client encoder under the owner split.
+
+The provided policy also refuses an already-verified original benchmark: it
+cannot become a zero-call model success. The reference passes144cases. The
+provided-model/guard AST frame is refreshed for that explicit provided change.
+The corpus author CIreplay passes320cases (40×4configs×correct/malformed) plus
+one edited-reference rejection. Native evidence is bound through the immutable
+private admission report's source/reference digests and its public summary hash;
+a changed completion cannot inherit an old native success. Every actual Result
+is retained; only target/diagnostic paths are remapped for executor staging.
+
+Twenty-two public tools/frame/trace/plan controls pass. Corpus actual-domain
+compiled witness checks are retained separately. Chapter is5642prose words,
+5boxes/3diagrams/14captures;3Vcomparison sidecars are sealed and pins CIchecks
+30pins with0problems. Updated paper/card/method files compile; the gold method
+fixture now has one unique PREREGmarker pair and remains only a prospective
+fixture, never an unlock. Source policy still has no live data or grading claim.
+
+check_single_route initially flagged the literal hosted-family argument as an
+agent argv token. Use canonical frozen fvh.budget family constants in this
+plan-data generator; the check passes34/34with no new allowlist or gate change.
+Generated plan bytes are unchanged; bindings refresh the actual engine/tool
+source hashes. Source commit0156953is the practice/interfaces checkpoint; final
+corpus source and focused CI/STUDY closure follow. R12 is not locally complete
+or shipped until those remaining checks actually finish.
+
+
+Corpus nonvacuity/compiled follow-up:40/40actual-source original-domain witnesses
+pass full gates and compiled tests, one per admitted task. Native implementations
+are embedded in each root, not merely included. Rust has an in-verus executable
+caller proving the concrete preconditions before an outer compiled observation;
+D @Testcalls similarly verify the original domain. The finite expected values
+are independent small mathematical observations. Sources/reports are protected,
+public summaries carry only their evidence digest/status, and this is no live
+model result or universal test claim. Initial native/empty/seed observations are
+not rerun after their unchanged source hashes are established.

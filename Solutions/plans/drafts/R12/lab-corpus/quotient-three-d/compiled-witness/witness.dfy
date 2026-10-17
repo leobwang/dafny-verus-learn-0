@@ -1,0 +1,15 @@
+// R12_HINT_SITES: [{"name":"loop1","identifiers":["n","q","rest"]}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.LabTask","start":4,"end":10}]
+module R12_LabCase {
+ method LabTask(n:nat) returns(q:nat) ensures q==n/3
+ {
+q:=0;var rest:=n;while rest>=3
+ invariant (3*q+rest==n)
+ decreases rest
+ {rest:=rest-3;q:=q+1;}
+ }
+}
+
+module R12_CorpusObservation {import P=R12_LabCase
+ @Test method OriginalDomain() {var actual:=P.LabTask(8);expect actual==2;}
+}

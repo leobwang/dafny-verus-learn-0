@@ -4422,3 +4422,40 @@ D45 live provider/actor/grading work remains the user-directed recorded skip,
 not a pass. Docker29.1.3daemon availability alone validates no pinned image or
 live provider. R03 and the PointsTo arena keep their earlier recorded skips.
 This source checkpoint is not Basic completion, a release or an empirical result.
+
+
+### Δ271 — R12 admitted corpus and source-bound replay (DVR2)
+
+Install40course-authored native hint forms,20per language, with20paired-language
+algorithm clusters and explicit prior course exposure. All40pass seven-part
+admission: full zero-hole failing baselines, complete references, three seeds,
+maximal/empty automation, wrong hints, audits and original model/code/native-span
+checks. There are460empty variants and120reference seed observations. All40also
+pass installed-context native frame/baseline/audit checks. Public summaries do
+not expose reference bodies or private paths. This does not fill the learner's
+personal bench cards or claim an unseen benchmark.
+
+The actual complete renderer reproduces every verified completion. Author CI
+replays320correct/malformed controls across40tasks and4fixed configs, plus a
+changed-reference rejection. Private admission digests bind original/native
+source bytes; old success cannot be rebound to an edited completion. No live
+model, container, grade, ledger or provider event is created. The provided policy
+rejects an already-green original form as inadmissible.144Python acceptance
+cases and22tools/frames/trace/plan controls pass. Proof-call sites require unique
+same-native-namespace bindings inside proof declarations without shadowing.
+This strengthens the independent form check without changing frozen core APIs.
+
+Five pinned-pool members per language are reserved as an unused public slice,
+excluding prior draws and cross-language HumanEval identities. They stay unrun
+and are not yet R12hint forms; future use needs its own admission, budget
+allocation and exact graded plan binding. Main budgets and planned minutes are
+unchanged. The20cluster conservative MDE at baseline0.5/pairedTrue/alpha0.05÷40
+is infinity. The methods material explicitly treats the allocation as exploratory
+and underpowered under that approximation. Repeats cannot create independent
+tasks, and no family or reserve is silently changed to obtain a favorable result.
+
+The5642-word chapter has5prediction boxes,3diagrams,14source captures and3sealed
+Vcomparison sidecars. All30pins, exact local card pins, updated TeX builds,
+source/statement/frame checks and route check pass. Final scripted STUDY workflow
+and focused clean-source CI remain before local completion; D45 live work stays
+deferred. This corpus source build is not a Basic shipment or empirical result.

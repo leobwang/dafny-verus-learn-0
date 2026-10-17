@@ -1,5 +1,8 @@
 """Plan structure/binding controls only; neutral files are not admitted lab data."""
 import hashlib
+import json
+import shutil
+import re
 import importlib.util
 from pathlib import Path
 import tempfile
@@ -19,7 +22,7 @@ def cards(root):
  for lang,ext in [('dafny','.dfy'),('verus','.rs')]:
   for i in range(20):
    name=('d' if lang=='dafny' else 'v')+str(i);p=root/(name+ext);p.write_text('// neutral structure-only fixture '+name+'\n')
-   rows.append(dict(id=name,lang=lang,path=p.name,statement='Neutral fixture; no native admission claim.',source_sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
+   rows.append(dict(id=name,lang=lang,path=p.name,statement='Neutral fixture; no native admission claim.',cluster='algorithm-'+str(i),exposure='neutral fixture; no exposure claim',source_sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
  return rows
 
 
@@ -59,5 +62,43 @@ class PlanContract(unittest.TestCase):
    root=Path(temporary);(root/'Solutions').mkdir();(root/'Solutions/answer.rs').write_text('protected fixture')
    for path in ['../escape.rs','/tmp/absolute.rs','Solutions/answer.rs','missing.rs']:
     with self.assertRaises(ValueError):module.course_path(root,path)
+
+
+
+class CatalogBindings(unittest.TestCase):
+ def setUp(self):
+  self.directory=tempfile.TemporaryDirectory();self.addCleanup(self.directory.cleanup)
+  self.root=Path(self.directory.name)
+  paths=[ROOT/'bench/local/r/labalpha/STRATUM.toml',ROOT/'bench/public/POOLS.toml']
+  data=tomllib.loads(paths[0].read_text())
+  for card in data['card']:paths.extend([ROOT/card['path'],ROOT/card['admission']])
+  for path in paths:
+   dest=self.root/path.relative_to(ROOT);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dest)
+  self.stratum=self.root/'bench/local/r/labalpha/STRATUM.toml'
+ def test_actual_catalog_has40_bound_tasks_and20_paired_clusters(self):
+  rows=module.load_stratum(self.root,self.stratum)
+  self.assertEqual(len(rows),40);self.assertEqual(len({r['cluster'] for r in rows}),20)
+ def test_source_change_after_admission_refused(self):
+  card=tomllib.loads(self.stratum.read_text())['card'][0];source=self.root/card['path'];source.write_text(source.read_text()+'// changed bytes\n')
+  with self.assertRaisesRegex(ValueError,'stale'):module.load_stratum(self.root,self.stratum)
+ def test_boolean_admission_checks_cannot_be_numeric_or_missing(self):
+  card=tomllib.loads(self.stratum.read_text())['card'][0];path=self.root/card['admission'];original=json.loads(path.read_text());text=self.stratum.read_text()
+  for bad in [1,False,None]:
+   report=json.loads(json.dumps(original))
+   if bad is None:del report['checks']['max-auto-empty-fails']
+   else:report['checks']['max-auto-empty-fails']=bad
+   path.write_text(json.dumps(report));new=hashlib.sha256(path.read_bytes()).hexdigest();self.stratum.write_text(text.replace(card['admission_sha256'],new))
+   with self.subTest(value=bad),self.assertRaisesRegex(ValueError,'all native'):module.load_stratum(self.root,self.stratum)
+ def test_cluster_pairing_cannot_silently_make40_independent_units(self):
+  text=self.stratum.read_text().replace('cluster = "accepted-ledger"','cluster = "first-rejection"',1);self.stratum.write_text(text)
+  with self.assertRaisesRegex(ValueError,'paired-language'):module.load_stratum(self.root,self.stratum)
+ def test_cross_language_public_problem_already_drawn_is_not_unused(self):
+  pools=tomllib.loads((self.root/'bench/public/POOLS.toml').read_text());used={int(m[1]) for d in pools.get('draw',[]) for c in d.get('cards',[]) if (m:=re.fullmatch(r'[dv]p\d+-he(\d+)',c))}
+  sys.path.insert(0,str(ROOT/'scripts'));from dvl import bench
+  eligible=bench.lab_members(self.root,'humaneval-verus','R12')
+  candidate=next(t for t in eligible if int(re.search(r'human_eval_(\d+)',t)[1]) in used)
+  current=next(r for r in tomllib.loads(self.stratum.read_text())['unused_public'] if r['set']=='humaneval-verus')
+  self.stratum.write_text(self.stratum.read_text().replace('task = '+json.dumps(current['task']),'task = '+json.dumps(candidate),1))
+  with self.assertRaisesRegex(ValueError,'another language'):module.load_stratum(self.root,self.stratum)
 
 if __name__=='__main__':unittest.main()

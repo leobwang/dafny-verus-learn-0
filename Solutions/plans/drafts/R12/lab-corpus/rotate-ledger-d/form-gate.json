@@ -1,0 +1,66 @@
+{
+  "lang": "dafny",
+  "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+  "exit_code": 4,
+  "verdict": "failed",
+  "stage": "verify",
+  "verified_count": 1,
+  "holes": [],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+      "line": 5,
+      "col": 2,
+      "severity": "error",
+      "message": "a postcondition could not be proved on this return path",
+      "code": "W-D10"
+    },
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+      "line": 4,
+      "col": 89,
+      "severity": "related",
+      "message": "this is the postcondition that could not be proved",
+      "code": "W-D10"
+    },
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+      "line": 5,
+      "col": 2,
+      "severity": "error",
+      "message": "a postcondition could not be proved on this return path",
+      "code": "W-D10"
+    },
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+      "line": 4,
+      "col": 107,
+      "severity": "related",
+      "message": "this is the postcondition that could not be proved",
+      "code": "W-D10"
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "R12_LabCase.LabTask": "failed"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261017-121130-2rnzztc4",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/dafny",
+    "verify",
+    "/tmp/dvl0-dvr2-r12/lab-prototypes/form/rotate-ledger-d.dfy",
+    "--json-output",
+    "--resource-limit",
+    "5000000",
+    "--cores",
+    "2",
+    "--solver-path",
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+    "--allow-axioms",
+    "false",
+    "--allow-warnings",
+    "false",
+    "--log-format",
+    "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261017-121130-2rnzztc4/tasks.csv"
+  ]
+}

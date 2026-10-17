@@ -388,7 +388,10 @@ deferral. Preserve those statuses so a later report cannot turn a provider
 interruption into another favorable best-of-many trial.
 
 The seeded policy bridge first verifies the initial form without calling a
-model. Ten generation requests then need ten metered model calls at most.
+model. If that original form already verifies, the bridge rejects the
+inadmissible entry rather than counting a zero-call model success. Record and
+re-admit such a stratum; do not reinterpret it as a search improvement.
+Ten generation requests then need ten metered model calls at most.
 The batch allows twelve fixed executor turns for the baseline, generation turns
 and closure. A native baseline Verify is not a model generation; malformed
 generation still spends a model call. Keep these separate counts in both the
@@ -402,7 +405,7 @@ acceptance-case failures are omitted.
 <!-- pin: shipped-python -->
 ```
 $ scripts/vcheck harness/r/fvh_r/engine.py
-vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 15 passed, 128 failed, 5 holes
+vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 15 passed, 129 failed, 5 holes
 harness/r/fvh_r/engine.py:72:1: hole raise-not-implemented R12.H1py
 harness/r/fvh_r/engine.py:86:1: hole raise-not-implemented R12.H2py
 harness/r/fvh_r/engine.py:164:1: hole raise-not-implemented R12.H4py
@@ -422,7 +425,9 @@ stand in for the executor-level invariants that connect those helpers.
 
 H5py renders one bounded hint per committed site. An expression site has a fixed
 marker and identifier vocabulary. A call site admits only bounded calls to its
-listed local proof declarations. The model returns a JSON `hints` array in the
+listed local proof declarations. Call sites live in native proof-declaration
+bodies, with each bare callee uniquely bound in the same native namespace and
+without a shadowing parameter or local use. The model returns a JSON `hints` array in the
 same order as the sites. The legacy `invariants` key works only when every site
 is an expression. Neither representation grants arbitrary source edits.
 
@@ -546,11 +551,15 @@ repeated Qwen runs:480runs and at most4800generation calls. The small Claude
 comparison uses ten language-stratified tasks, ten calls each and at most ten
 sentinels, within110calls. Treat Claude's repeated runs descriptively; request
 seeds are not a claim that a hosted model is controllably deterministic. An
-unused public slice stays separate and explicitly possibly seen by the models.
+unused public slice of five pinned-pool members per language stays separate and
+explicitly possibly seen by the models. It is reserved in metadata, not yet
+materialized or admitted as R12hint forms.
 It is not a free additional pilot outside the registered ceiling.
 
-Keep task admission and exposure records before generation. The complete
-40-task stratum is required; a partial software fixture cannot stand in for it.
+Keep task admission and exposure records before generation. The installed
+40-task stratum contains20paired-language algorithm clusters; all40forms passed
+native baseline, maximal-automation, complete reference/three-seed, audit, wrong
+hint and model/code-frame controls. A partial software fixture cannot replace it.
 The provided plan builder refuses missing/stale admission, binds inline prompt
 bytes and selects the ten-task Claude subset using an explicit stratified draw.
 Because the frozen plan has global task/repeat fields, Qwen and Claude use
@@ -564,10 +573,12 @@ whether a subject has encountered the source idea, supplied helpers or an
 isomorphic task. Hash forms and actual context rather than describing a task
 pool only by its nominal size.
 
-The unit of uncertainty is the registered independent task cluster, with repeats,
+The unit of uncertainty is the registered original-algorithm cluster, with repeats,
 arms and budgets kept together. If task forms share a source family, account for
 that dependency in the clustering or state why an independence assumption is
-reasonable. Three runs do not turn40tasks into120independent tasks. Likewise,
+reasonable. The shipped20language-paired clusters do not become40independent programs or
+120repeats. Use20as the planning MDE sample size for this stratum, and state the
+remaining dependence and engineered-task limits. Likewise,
 ten budget points are correlated repeated observations, not ten new samples of
 the task distribution.
 
@@ -575,6 +586,11 @@ Compose paired permutation tests and bootstrap intervals from `fvh.stats`.
 Register the family of comparisons and its Holm correction before looking at
 the curves. Explain whether intervals are pointwise or simultaneous. Pointwise
 intervals at every budget do not automatically provide simultaneous curve bands.
+At baseline0.5,20clusters and alpha0.05/40, the frozen conservative planning
+MDE returns infinity. Even the maximum possible rise at that baseline misses
+the requested80%power in this approximation. Keep the study exploratory and
+disclose that limitation; repeated runs do not manufacture independent tasks.
+This is not a theorem that no actual correlated data could ever show an effect.
 A visual crossing with unresolved uncertainty should remain unresolved in the
 report instead of becoming a favorable discovered budget threshold.
 

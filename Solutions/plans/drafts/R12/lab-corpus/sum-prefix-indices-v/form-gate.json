@@ -1,0 +1,65 @@
+{
+  "lang": "verus",
+  "target": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-v.rs",
+  "exit_code": 1,
+  "verdict": "failed",
+  "stage": "verify",
+  "verified_count": 2,
+  "holes": [],
+  "diagnostics": [
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-v.rs",
+      "line": 8,
+      "col": 2,
+      "severity": "info",
+      "message": "function body check: not all errors may have been reported; rerun with a higher value for --multiple-errors to find other potential errors in this function",
+      "code": ""
+    },
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-v.rs",
+      "line": 13,
+      "col": 36,
+      "severity": "error",
+      "message": "possible arithmetic underflow/overflow",
+      "code": "W-V06"
+    },
+    {
+      "file": "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-v.rs",
+      "line": 8,
+      "col": 62,
+      "severity": "error",
+      "message": "postcondition not satisfied",
+      "code": "W-V03"
+    },
+    {
+      "file": "",
+      "line": 0,
+      "col": 0,
+      "severity": "error",
+      "message": "gate: 'success' is false, not true; exit 1",
+      "code": "gate"
+    }
+  ],
+  "findings": [],
+  "per_symbol": {
+    "index_sum": "verified",
+    "lab_task": "failed",
+    "step_model": "verified"
+  },
+  "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261017-121244-ik3vrv66",
+  "cmd": [
+    "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-r12-authoring/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+    "/tmp/dvl0-dvr2-r12/lab-prototypes/form/sum-prefix-indices-v.rs",
+    "--crate-type=lib",
+    "--crate-name",
+    "sum_prefix_indices_v",
+    "--rlimit",
+    "2",
+    "--num-threads",
+    "1",
+    "--no-cheating",
+    "--output-json",
+    "--error-format=json",
+    "--time"
+  ]
+}

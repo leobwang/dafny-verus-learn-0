@@ -112,3 +112,13 @@ def test_plan_digest_rejects_changed_unbound_or_duplicate_original_before_sampli
  runner=RecordedShapeRunner()
  result=executor.Executor(c,{'task.dfy':TEXT},runner=runner).run(R12BestFirst(lambda p,s:pytest.fail('unbound source reached model'),[1]))
  assert result.outcome=='malformed' and result.files=={'task.dfy':TEXT} and runner.texts==[TEXT] # frozen executor final check, no policy edit or model call
+
+
+def test_green_original_benchmark_cannot_count_as_zero_call_model_success():
+ class GreenOriginal(RecordedShapeRunner):
+  def execute(self,instrument,target,*,timeout_s=None):
+   self.texts.append(Path(target).read_text());d=doc(str(target),good=True)
+   return tools.ToolResult(instrument,str(target),d,0,None,'replay','agent',P.text_sha256(json.dumps(d)))
+ runner=GreenOriginal()
+ result=executor.Executor(ctx(),{'task.dfy':TEXT},runner=runner).run(R12BestFirst(lambda p,s:pytest.fail('inadmissible baseline reached model'),[1]))
+ assert result.outcome=='malformed' and result.files=={'task.dfy':TEXT} and runner.texts==[TEXT]

@@ -1707,3 +1707,22 @@ registration under the frozen global task/repeat schema. Full task corpus,
 final pins/STUDY workflow and focused CI remain source-construction work.
 Live D45 work stays deferred, not passed; Docker daemon availability alone is
 not validation of pinned containers or providers. No task gate or budget waiver.
+
+
+R12 corpus/source follow-up: all40course-authored native forms (20per language)
+pass the seven admission requirements. They span20language-paired algorithm
+clusters; do not manufacture40independent programs or120independent repeats.
+Initial full reference/baseline80controls,120seed checks,460empty-automation
+variants,40wrong-hint checks and40audits pass. All40also pass the installed
+R12-context frame/baseline/audit tool. The actual complete renderer reproduces
+every native-verified completion. Corpus replay320controls plus a reference-byte
+drift rejection join author CI; they use retained real Results and scripted
+transports, not live models. The public slice reserves5DafnyBench/5HumanEval-Verus
+members, excludes prior draws and cross-language HumanEval identities, and stays
+unrun/not yet transformed into R12hint forms. Budgets and learner minutes stand.
+The conservative frozen MDE(n20,baseline0.5,pairedTrue,alpha0.05/40)is infinity;
+this is explicit exploratory/underpowered disclosure, not a quota/scope waiver.
+Provided policy rejects an already-green original form, and proof-call admission
+requires unique same-namespace ghost bindings without shadowing. Final source
+CI/STUDY closure remains before declaring local completion. D45 live work stays
+deferred; no registration, grade, run, reserve or provider event is fabricated.
