@@ -1,0 +1,273 @@
+# expected/R02.freeze — statement-freeze pins for R02 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R02` from the files as shipped; checked by
+# `scripts/specfreeze --check R02`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R02"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R02_Datatypes/core/R02_Datatypes.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R02_Datatypes.NodeCountBackwards {:induction false}", "R02_Datatypes.NullableBackwards {:induction false}"]
+[file.statements]
+"R02_Datatypes.CatEpsLeft" = "80f6a70e0660fd8cc65432bb489c227505f6421438e2974cf030e80ce8ac52f1"
+"R02_Datatypes.IsVoid" = "b1914cdf3ddc9c05208d9d9f5d56b48770e15fe9e6f77d803a54eb796a03eed8"
+"R02_Datatypes.MarkedPosition" = "6d065ea946d83f621ddba98f5dc13899b5759294962b2b0f91cf02eecdfeac26"
+"R02_Datatypes.MatchesAB" = "435ea1b65ea96f10f19e35c94af191370ed793d774b38e40071bb5ab0657f76e"
+"R02_Datatypes.NodeCountBackwards" = "0a6c04deb11b21d7385734531d77b5d64aada86faa62e4ef50f7ce2e799efc88"
+"R02_Datatypes.NullableBackwards" = "72520aeea86084cf6e5e7c369707b3ae3709e5970395b68e15f53217d3b5cd38"
+"R02_Datatypes.NullableCorrect" = "7cac67b89803a728ab129c78fc42dbf74c8682960486f91fc4c771a9ca04b923"
+"R02_Datatypes.OuterStars" = "d8050add5d90bf191f183bd3eb10cbbd8a31d38a159fe33e3eeaef5223972679"
+"R02_Datatypes.RegexOuterTag" = "84a01d218def295d7923c3ae34eb3b6a4965ebd6ccf31ea2dd0d2fe744e99bac"
+"R02_Datatypes.RegexSampleTest" = "82d132816218d20f69e47778651ccf43c92b3d30b592e9830875a33ced531907"
+"R02_Datatypes.StarCount" = "497ed996cdfe286fac7ba97b85f497d3cf13de2b30c353799699223a821c9c25"
+"R02_Datatypes.StarCountSpec" = "3b30591fe99a890e7eb734e6f88b430c088eab7e7cb657055bdb368d68af7b40"
+"R02_Datatypes.VoidSpec" = "0b75c5f13b9849c1e3e640503c8794aead8351fbb70a630321e7b7612bc2529a"
+
+[[file]]
+path = "dafny/checks/R02_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_Checks.NullableValue" = "c2321d6796e6dce26918ea6a6de73b194677fb11b8dd33af66a8b308efaf439d"
+
+[[file]]
+path = "verus/r/r02_datatypes/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"boxed_regex" = "ca37f8826483f44dea49c88f748f8387240e9394b3a24c628a2e7fc6d3ce76b4"
+"is_void" = "0c3937c66299797b0cf16f07e96f31c4263e8ab2c3d6092249fe7f8d1388aa05"
+"lemma_cat_eps_left" = "035d87e9bf8f3d18e0b5976684f6ad90555a344a2529ff75637f71c807d9e63b"
+"lemma_marked_position" = "28174938b5ee7feb14bde9e7ef6872ec0d28cdfaa620bcf9fba676ae03cbc7b7"
+"lemma_matches_ab" = "bdc011fdfff8aec98eee7bc46cf86c755c7293d3c2194e4a9a4b12241e926727"
+"lemma_node_count_backwards" = "2456d8ffa0f1719d7d3e82177b1b07e080059573a56f1852aa5872a58e93f66f"
+"lemma_nullable_backwards" = "85a26da963c087061e50fea363d703e2583603dd6d06adb1a55482e7cb76d55d"
+"lemma_nullable_correct" = "8ff4cdea6bee445bf3f38765f50ece8a6d0bdeba28ad5b98467eb73b49ad66df"
+"outer_stars" = "f0558d78b7af2e1f3538bd64d10594c5ec21277a059ec9cb97ee50be70e0f042"
+"regex_outer_tag" = "c3d1b82542ab7db5d7d73db869c0c2dbe2f9dcba39ae86f275a01bf77f49c6f7"
+"star_count" = "81a38c9e82f78a0177cdb94f02b96b91a7a0b1bad78722cb3ab371868af9b47a"
+"star_count_spec" = "53e4d03861864e182a6352893fc97f003497ec744a5ebdd44a3ee659df07a6fa"
+"void_spec" = "05430c8f5cbab01f1ae10d59ca0d6114b87ab2387f0d813cc2a3ad9b16aef728"
+
+[[file]]
+path = "specimens/R02/P1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_P1D.CaseA" = "56651b21470d66dc242d93d980da2c5d21fea50b766a6833d9ee5cad5f9855aa"
+"R02_P1D.CaseB" = "bc49b7961d8d77bc4fa3f286f5f470c6146afbbb81617e97258897e690efeb40"
+"R02_P1D.CaseC" = "3620c15a2acfc731718c5a0e0e151a1580e600fc374ee66c96760c026326ba95"
+"R02_P1D.CaseD" = "41192f1036fd0ab5de29f8eb555e3e46a9d3b49429e17de2ea2445ff3f26e08b"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R02/P2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"case_a" = "84d58eca103c38921433b531db0998f38b2e23e246e1d2d814d2cecae3793a15"
+"case_b" = "bfed81f0ae54a0ae93a0cf98e7e96558c0ed5859cc14d2a5dd9448a5b87b252b"
+"case_c" = "c801f878c262b7d2b605386dc403fb28f566af0e13d50a59da02c4dd5f7c25e9"
+"case_d" = "8a00f271619b9352c16ac9bf7fab1696ed7b3696299be62206c0b19ed635a17c"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+
+[[file]]
+path = "specimens/R02/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_MatchDemo.RegexTag" = "0027c4f31d68b65b45a865cffcdeec63344da9cce1181511e7378a808819d9d3"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R02/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+"regex_tag" = "cd6380a6d2345e62a0c8351e3286a0f1310fa4c1de52270b9821e92aec4dd3c7"
+
+[[file]]
+path = "specimens/R02/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_DecreasesDemo.VisitRegex" = "b9b1ac425e7a6a7b2e5d60956d325c2f0c66462bd19ad50fc6e13a2a7f4e99f7"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R02/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+"visit_regex" = "69d96d3fd85b0ad1707ecf105f7015b05d4cab9a0605a5861c43d0ccb40ca188"
+
+[[file]]
+path = "specimens/R02/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_WitnessDemo.NamedChar" = "ac009c2875ce83fb2861e24c9c609c9e23be0b3b21cccddba228fd03fd83f842"
+
+[[file]]
+path = "specimens/R02/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"named_char" = "1e1d4210b41978402f019345e246e9ec9282e5f44d1750371919ff179b6e0a57"
+
+[[file]]
+path = "specimens/R02/card-c7dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_BoxDemo.Child" = "d70aef818493b014f7c19034f450b8e8a01e2751120829c03987a0a5bbd78703"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R02/card-c7dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"child" = "5bdc9ee4c923a5a8c456b66073094f6ba3bb32cca0e5e36dbccfc2ca03510dd6"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+
+[[file]]
+path = "specimens/R02/chapter-p3-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "dcc6905604559fd921347920570d05c01d1ab7700a5311911217c7245eb1aa35"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R02/chapter-p3-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "68fdf52de8e5b3a774ffad045d9601953d15fad64eb459880d3ebd6247833ff8"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+
+[[file]]
+path = "specimens/R02/chapter-p4-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "220f45caf25710cde81ef603bd355cd7aa74b1fa512240af5e71fbc743579b3c"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R02/chapter-p4-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "41b8c092b289d3ec4cb11981f092a75ae29f81595557e7508f484db84549a169"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+
+[[file]]
+path = "dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy"
+lang = "d"
+open_bodies = ["R02_AgentImplement.Alphabet", "R02_AgentImplement.MinLen", "R02_AgentImplement.StarHeight"]
+[file.statements]
+"R02_AgentImplement.Alphabet" = "c7ae5553fe03d0a070a94737dfe0d109ddac3cf491c5e9196624964938669a92"
+"R02_AgentImplement.AlphabetLeafCheck" = "ad5a9b79804bb28b0810c71c71f59f742fda8e3f8865144339919c71ffecf4f5"
+"R02_AgentImplement.AlphabetPairCheck" = "8907bb51c56c8f3c608e66ac267874dcf8ed642b108894ef35e49ece243d49c2"
+"R02_AgentImplement.MinLen" = "c37468261729609c91aa813364cebfa73c8c5a44f78325caa38012703659fdc6"
+"R02_AgentImplement.MinLenLeafCheck" = "69773100bca08c931836d4b583d3c0e85843240cd3086c185021b385a69ae887"
+"R02_AgentImplement.MinLenPairCheck" = "f5ee72f123dfa72f57f7b9bcb22afcf19544e036fd659b8ea18d7d8414932bf5"
+"R02_AgentImplement.StarHeight" = "9bb62fbf797438ed20d9cf2331bb2d2a02ad67e5feecef5421ade1aa2865a39a"
+"R02_AgentImplement.StarHeightLeafCheck" = "b26c6cd28af1924dae5d2c38287444cab99b660392ac125367869ba3001c5876"
+"R02_AgentImplement.StarHeightPairCheck" = "58097173e0af77ddbed84a8c347cdf16f31b78b63c4ff69fa5c02579f52b46ea"
+
+[[file]]
+path = "verus/r/r02_datatypes/src/agent.rs"
+lang = "v"
+open_bodies = ["alphabet", "min_len", "star_height"]
+[file.statements]
+"alphabet" = "b5a81c9e09b11450e977696e8d8f907b3453d82dcfe99a9741879090930e8727"
+"alphabet_leaf_check" = "73ab40b8349e3eb742ccdd921ea664f345b5422092fd256ac853a58fc6e33a60"
+"alphabet_pair_check" = "d3aefaf86fc5e4762b64fc8c072c905163eae1c818c8c9087da3b4e7f0c44219"
+"lemma_alphabet_bound" = "da130449941b1e866e9cc27e74a61fb2f9a21f09870352e250bb0ec61da61d64"
+"lemma_min_len_bound" = "7df5b8bdac0abe923e0a12cb572b746615182b4d4546fefe4d2757f5a1c5e806"
+"lemma_star_height_bound" = "88907b94d13b12f093d0f78c73b4f928da5729e967afdb97dacfdfc895f2baf9"
+"min_len" = "4f4e2d09f407c344d79b4b55234626d9a402733d8c645807969463eef5446cef"
+"min_len_leaf_check" = "1e5b45f6e5d68062bb7d11753fa9e0a17ac88ef4965efa3da594451cee4da4ba"
+"min_len_pair_check" = "b8783af0849266ec25f863257feaa13ffc7c64ccd600746f195d6dc4f565c2af"
+"star_height" = "d2891822e56337fab244ffccb59a0ead50b68063ad8e11d7f7b503d8bee7b70f"
+"star_height_leaf_check" = "8e7e90e265f775cb1600f422a7a7cb462819083a49add05e99ad555f21dce184"
+"star_height_pair_check" = "cfa8666551c9a290677ae6cd590dab861cfac380ae5040e3546fd017782f557f"

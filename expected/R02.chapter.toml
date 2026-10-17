@@ -1,0 +1,161 @@
+# expected/R02.chapter.toml — the chapter pins of R02's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R02 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "obligation-d"
+cmd = ["scripts/vcheck", "specimens/R02/P1d.dfy.specimen"]
+answers = ["R02.P1d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5bbb673bf37f200679bd3387d5e80af495d832009c69591873c3c61045646640"
+[entry.pinned.inputs]
+"specimens/R02/P1d.dfy.specimen" = "fbf4e464ca5b624d86827719ae93de831af48d794e7af26c8a6f2eb16d40176e"
+
+[[entry]]
+id = "obligation-v"
+cmd = ["scripts/vcheck", "specimens/R02/P2v.rs.specimen"]
+answers = ["R02.P2v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b799985af33726e9253414d269213693b2bd6dcf6a0fa1c1aaebc7b14c916d30"
+[entry.pinned.inputs]
+"specimens/R02/P2v.rs.specimen" = "53964945fa6f99235f5110a4184a4ddd4f81a05f8f52f45c402dc4f5fec51357"
+
+[[entry]]
+id = "p3-d"
+cmd = ["scripts/vcheck", "specimens/R02/chapter-p3-d.dfy.specimen"]
+answers = ["R02.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c3930ed36c9559eb53a6ba476d7087d55039324a96a6728f283b3b9d2d6a6f84"
+[entry.pinned.inputs]
+"specimens/R02/chapter-p3-d.dfy.specimen" = "4b41f4b88821b6492747b81701deb0d2e6192d9db9c6dfa07599cf914a700a6c"
+
+[[entry]]
+id = "p3-v"
+cmd = ["scripts/vcheck", "specimens/R02/chapter-p3-v.rs.specimen"]
+answers = ["R02.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "ebabbb0bf6e79245baed44825909889e3fc5fa0d6c614f07c9caf342bfa33324"
+[entry.pinned.inputs]
+"specimens/R02/chapter-p3-v.rs.specimen" = "a073749585739999f8dded0466ee4d712f00191fadb40aa0817e1c4e41de840e"
+
+[[entry]]
+id = "p4-d"
+cmd = ["scripts/vcheck", "specimens/R02/chapter-p4-d.dfy.specimen"]
+answers = ["R02.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "7f070dbc8c068a60309c98f41eceed2b41454e50f6ac02478790d7ed0e3f3d55"
+[entry.pinned.inputs]
+"specimens/R02/chapter-p4-d.dfy.specimen" = "56fb5a80fdd8ad2c1d68d5afb46d1c1609b56262c5cada5e6145ca981cd196a0"
+
+[[entry]]
+id = "p4-v"
+cmd = ["scripts/vcheck", "specimens/R02/chapter-p4-v.rs.specimen"]
+answers = ["R02.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "36c4c23d4f109ee1aa292c41fb297ecbb168bdadd4de58d7121a84697251180f"
+[entry.pinned.inputs]
+"specimens/R02/chapter-p4-v.rs.specimen" = "96160c9f188fa04bae667b8aee56c549529cd3b0f1a3a1ba6b65d21caaa8e528"
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R02_Datatypes/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "7b266aae5ecd2a1246a1f1f9cf2f48a31692273e967efaeb15c2779a086909f2"
+[entry.pinned.inputs]
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "66de859ccc5d5285eabb229612aadd549f9f6bd030f96f35d0ca6d98f740f201"
+"dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r02_datatypes"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3dced22d3c5eaf22e168188a4abe8fc66a799facabe134488b81550d83a848ca"
+[entry.pinned.inputs]
+"verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
+"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
+"verus/r/r02_datatypes/src/lib.rs" = "49f5d383e3723678523c96ffddd2743e81d09f0e4a3144b805f54cb15b4c3aac"
+
+[[entry]]
+id = "gate-d"
+cmd = ["scripts/vcheck", "--gate", "dafny/R/R02_Datatypes/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e27a186b31a28ce7fac0db8b445786e3beca18205cce016766d5324f7a5052ad"
+[entry.pinned.inputs]
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "66de859ccc5d5285eabb229612aadd549f9f6bd030f96f35d0ca6d98f740f201"
+"dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
+
+[[entry]]
+id = "gate-v"
+cmd = ["scripts/vcheck", "--gate", "verus/r/r02_datatypes"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "84547a2ba55b7c857a65d1faf775edf001eb78cc34982ec7b5a9067116a879d1"
+[entry.pinned.inputs]
+"verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
+"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
+"verus/r/r02_datatypes/src/lib.rs" = "49f5d383e3723678523c96ffddd2743e81d09f0e4a3144b805f54cb15b4c3aac"
+
+[[entry]]
+id = "audit-d"
+cmd = ["scripts/vaudit", "dafny/R/R02_Datatypes/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "f1bd9f300cdd58a619f4eca11bab0c964160f427acaceb8ccf501db6879c16dc"
+[entry.pinned.inputs]
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "66de859ccc5d5285eabb229612aadd549f9f6bd030f96f35d0ca6d98f740f201"
+"dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
+
+[[entry]]
+id = "audit-v"
+cmd = ["scripts/vaudit", "verus/r/r02_datatypes"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "71048a5fdd6b1e8a6e3caf0a7619ee0dfe74cf4d50c647a9c2e13e0e4594ce90"
+[entry.pinned.inputs]
+"verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
+"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
+"verus/r/r02_datatypes/src/lib.rs" = "49f5d383e3723678523c96ffddd2743e81d09f0e4a3144b805f54cb15b4c3aac"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6719ba07bec1561f501714068387f937faeb29fe71e80a1f22f89cd98cbc9f6c"
+[entry.pinned.inputs]
+"dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy" = "5d2a378e05c080cb738d395d0bd9d00e23b2d8350fc3db1fcdecd6b6e05fda59"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r02_datatypes/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "f636078171813cacee1de96eeb6ac133bdeb0dd9d1c6de1d7ba89a4641909a8f"
+[entry.pinned.inputs]
+"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"

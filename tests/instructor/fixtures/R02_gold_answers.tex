@@ -1,0 +1,53 @@
+% R02 calibration gold; live calibration deferred under D45.
+% EXPECTED[B1][card-fidelity][4]: correct control; no finding.
+% EXPECTED[B2][termination][4]: correct control; no finding.
+% EXPECTED[B3][split-rigour][4]: correct control; no finding.
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R02 --- Datatypes and recursion \\ \large Written answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} These are 161 translated HumanEval problems. The two deliverables are a faithful specification and verified executable code, each with a proof obligation.
+
+\textbf{Oracle:} A trusted target specification judges the implementation. The generated specification separately needs equivalence to that target across possible implementations.
+
+\textbf{Trust:} Lean checks formal statements. The human translation from the docstring to the reference statement remains an additional assumption about what should be solved.
+
+\textbf{Cheat surface:} Copying a computable spec or satisfying a vacuous property can create misleading success. Non-computability and reference equivalence address different versions of that problem.
+
+\textbf{Metric:} Compilation, specification proof, implementation proof and full success are distinct columns. The given systems achieve at most a single complete task among the 161 within the reported time allowance.
+
+\textbf{Budget:} A 600-second limit is described; reference curation also takes author and reviewer time. A universal token allocation or call count is absent from this pinned summary.
+
+\textbf{Variance:} No confidence intervals are reported. Results near zero, public tasks and a parsing-confounded row make strong comparative claims unwarranted.
+
+\textbf{Artifact:} CLEVER is the Lean task collection with hidden reference specs described by the card. This excerpt identifies no immutable release hash or licence to put in a reproduction manifest.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+Compare the regex before the input size. A recursive call on a constructor's
+child already lowers the first coordinate. Star also makes a call retaining
+the same regex; there the suffix must be shorter. A strictly positive split
+index supplies that inequality, since suffix length is original length minus
+the index. Allowing a zero index removes this reason, while removing string
+length from the tuple removes the coordinate that could justify this call.
+The two recursive calls therefore have distinct well-founded arguments.
+\end{answer}
+
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+The accepted one-character input uses an empty prefix and its full suffix:
+index zero, choosing the Eps alternative. The two-character accepted input
+splits after its first character, choosing the character alternative on the
+left. These boundaries are unique because the final factor accepts exactly
+one character. On the rejected input, index zero leaves too much suffix,
+index two leaves too little, and index one gives a left prefix accepted by
+neither alternative. Those exhaust the legal indices. Each match concerns
+the complete slice, so merely locating the final character does not suffice.
+\end{answer}
+
+\end{document}

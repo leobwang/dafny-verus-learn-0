@@ -1,0 +1,5 @@
+module R02_WitnessDemo {
+  lemma NamedChar(s: seq<char>)
+    requires |s| > 0
+  { assert exists i :: 0 <= i < |s| && s[i] == '#'; }
+}

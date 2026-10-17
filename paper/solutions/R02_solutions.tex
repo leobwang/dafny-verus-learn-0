@@ -1,0 +1,50 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R02 --- Datatypes and recursion \\ \large Reference solutions (author-only)}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} The card describes 161 HumanEval tasks re-specified in Lean. A system supplies a specification with a faithfulness proof, and an implementation with its correctness proof.
+
+\textbf{Oracle:} Specification certification compares the candidate and hidden reference for all implementations; implementation correctness is judged against the hidden reference, not merely the generated specification.
+
+\textbf{Trust:} The result relies on Lean and its logical foundation plus the faithfulness of the human reference and task translation. Successful checking does not certify the natural-language intent without that external reference judgement.
+
+\textbf{Cheat surface:} A directly executable specification can be copied into the implementation, while a weak property may admit a constant program. The curated non-computable specifications and equivalence obligation target those shortcuts.
+
+\textbf{Metric:} The source reports stage-wise compilation and proof rates plus end-to-end success under pass-at-600-seconds. The largest reported end-to-end count is one task out of 161; a high compilation rate alone is not end-to-end success.
+
+\textbf{Budget:} The reported allowance is 600 seconds; the card also states approximately 25 minutes of specification authoring plus 15 minutes of review. It supplies no common token or model-call budget for all systems.
+
+\textbf{Variance:} The range reports a severe floor effect and no error bars. It does not provide repeated-run uncertainty estimates from which to infer a stable ranking between nearly tied systems.
+
+\textbf{Artifact:} The named artifact is the curated Lean benchmark and its reference specifications. The source range does not supply a release commit, download checksum or licence; those would need separate evidence.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+The measure is $(r,|s|)$ in lexicographic order. An Alt or Cat call
+uses a strict constructor child for the first component, independently of the
+slice length. In Star's first recursive call the regex is its strict child.
+In its second call the regex is the same Star value, but $0<i\leq |s|$ makes
+$|s[i..]|=|s|-i<|s|$. Allowing $i=0$ loses that strict second-component decrease.
+Removing the length component loses the comparison for the second Star call
+even when a nonempty prefix is consumed. The argument needs both the bound
+and the lexicographic order, not the recursive call's spelling alone.
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+For \texttt{r}, the only successful split is $i=0$: the prefix is
+empty and uses Eps in Alt; the suffix is \texttt{r} and uses its single Chr.
+For \texttt{qr}, the only successful split is $i=1$: prefix \texttt{q} uses
+Alt's Chr, and suffix \texttt{r} uses the final Chr. For \texttt{rr}, $i=0$
+leaves a two-character suffix, which the final Chr cannot match; $i=1$ gives
+prefix \texttt{r}, which is neither the empty string nor \texttt{q}; $i=2$
+leaves an empty suffix, also not matched by the final Chr. These are all
+indices from zero through two. Each constructor consumes its entire slice;
+finding an occurrence of the final character inside a longer slice is insufficient.
+\end{answer}
+
+\end{document}

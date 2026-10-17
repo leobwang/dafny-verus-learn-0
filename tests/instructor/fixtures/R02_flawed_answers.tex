@@ -1,0 +1,40 @@
+% R02 calibration fixture; live calibration deferred under D45.
+% EXPECTED[B1][card-fidelity][2]: Oracle, Metric and Variance contradict the pinned card.
+% EXPECTED[B2][termination][2]: the second Star call keeps the same regex, not a strict child.
+% EXPECTED[B3][split-rigour][2]: at i=1 the prefix is r, not the empty string.
+% EXPECTED[B1][card-fidelity][4]: Task shape, Trust, Cheat surface, Budget and Artifact are controls.
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R02 --- Datatypes and recursion \\ \large Written answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} These are 161 translated HumanEval problems. The two deliverables are a faithful specification and verified executable code, each with a proof obligation.
+
+\textbf{Oracle:} Implementation correctness is checked only against whatever specification the model generated; agreement with a hidden reference is unnecessary.
+
+\textbf{Trust:} Lean checks formal statements. The human translation from the docstring to the reference statement remains an additional assumption about what should be solved.
+
+\textbf{Cheat surface:} Copying a computable spec or satisfying a vacuous property can create misleading success. Non-computability and reference equivalence address different versions of that problem.
+
+\textbf{Metric:} The reported high compilation percentage is the end-to-end solved percentage for the benchmark.
+
+\textbf{Budget:} A 600-second limit is described; reference curation also takes author and reviewer time. A universal token allocation or call count is absent from this pinned summary.
+
+\textbf{Variance:} Repeated independent runs establish tight 95 percent intervals, so these rows yield a reliable ranking.
+
+\textbf{Artifact:} CLEVER is the Lean task collection with hidden reference specs described by the card. This excerpt identifies no immutable release hash or licence to put in a reproduction manifest.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+The second Star call is a strict subtree of itself, so decreases $r$ alone suffices.
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+For \texttt{rr}, split at one. The prefix matches Eps and the suffix matches the final character, so the entire string matches.
+\end{answer}
+
+\end{document}

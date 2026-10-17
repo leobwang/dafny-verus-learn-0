@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R02 --- Datatypes and recursion \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Record all five predictions before opening these problems. Allow 15 minutes
+per problem. Keep the labels in \texttt{R02\_answers.tex}. Give the actual
+constructor, input, witness and measure; general remarks are not a proof.
+The paper card is source fidelity, not a claim that its historical result
+holds for a different toolchain, task set or model today.
+
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card 05.6: CLEVER: A Curated Benchmark for Formally Verified Code Generation.}
+Read your pinned card and fill the eight fields in your own words. Cite the
+source for every numerical claim. Separate specification certification from
+implementation certification, and compiled code from a proved result.
+\begin{verbatim}
+sed -n '2035,2064p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+3ae9131287d7a47a872072839bf7a4bd7e7dd24987a96f932bbcca2980df9d3b  -
+\end{verbatim}
+The source range is part of the question. A mismatch needs a source re-pin,
+not a grader's guess. Fields: Task shape; Oracle; Trust; Cheat surface;
+Metric; Budget; Variance; Artifact. State an absence where the range is silent.
+The card grade is the minimum of the eight field grades.
+\end{problem}
+
+\begin{problem}[proof]\label{prob:B2}
+Explain why the A1 \texttt{Matches} definition terminates. Use its actual
+lexicographic measure, considering the first and second recursive call in
+the \texttt{Star} branch separately. State what follows from the split bounds.
+Then identify a concrete obligation lost by each of the two prediction
+mutations, without appealing to a remembered verifier verdict. Show how
+your argument distinguishes structural recursion from consuming input.
+\end{problem}
+
+\begin{problem}[proof]\label{prob:B3}
+Let $R=\mathsf{Cat}(\mathsf{Alt}(\mathsf{Chr}('q'),\mathsf{Eps}),
+\mathsf{Chr}('r'))$. Give every successful outer split for strings
+\texttt{r} and \texttt{qr}, including both substrings and which alternative
+matches the first one. Show that \texttt{rr} has no successful split by
+covering every legal split index. A drawing without the slice equations is
+incomplete. State where you use whole-string rather than substring matching.
+\end{problem}
+
+\end{document}

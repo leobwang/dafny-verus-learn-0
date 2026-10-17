@@ -1,0 +1,129 @@
+//! rg_re_a1 — regex spine, layer A1 (PROVIDED, complete; frozen).
+//! Imported by R02–R16: definitions only; no module lemma is supplied.
+//! Use only the layer chain declared by your module; PLAN.md §2.2 and §2.4.
+#![allow(unused_imports)]
+use vstd::prelude::*;
+
+verus! {
+
+/// Regular expressions over `char`.
+pub enum Re {
+    Empty,
+    Eps,
+    Chr(char),
+    Alt(Box<Re>, Box<Re>),
+    Cat(Box<Re>, Box<Re>),
+    Star(Box<Re>),
+}
+
+/// Whole-string semantics by splits. `Star` peels a non-empty first chunk, which keeps the
+/// definition well-founded on `(r, s.len())` even for a nullable body.
+pub open spec fn matches(r: Re, s: Seq<char>) -> bool
+    decreases r, s.len(),
+{
+    match r {
+        Re::Empty => false,
+        Re::Eps => s.len() == 0,
+        Re::Chr(c) => s.len() == 1 && s[0] == c,
+        Re::Alt(a, b) => matches(*a, s) || matches(*b, s),
+        Re::Cat(a, b) => exists|i: int|
+            0 <= i <= s.len() && matches(*a, #[trigger] s.subrange(0, i)) && matches(
+                *b,
+                s.subrange(i, s.len() as int),
+            ),
+        Re::Star(a) => s.len() == 0 || exists|i: int|
+            1 <= i <= s.len() && matches(*a, #[trigger] s.subrange(0, i)) && matches(
+                r,
+                s.subrange(i, s.len() as int),
+            ),
+    }
+}
+
+/// Does `r` accept the empty string? (structural)
+pub open spec fn nullable(r: Re) -> bool
+    decreases r,
+{
+    match r {
+        Re::Empty => false,
+        Re::Eps => true,
+        Re::Chr(_) => false,
+        Re::Alt(a, b) => nullable(*a) || nullable(*b),
+        Re::Cat(a, b) => nullable(*a) && nullable(*b),
+        Re::Star(_) => true,
+    }
+}
+
+/// The number of nodes of `r`.
+pub open spec fn node_count(r: Re) -> nat
+    decreases r,
+{
+    match r {
+        Re::Empty => 1,
+        Re::Eps => 1,
+        Re::Chr(_) => 1,
+        Re::Alt(a, b) => 1 + node_count(*a) + node_count(*b),
+        Re::Cat(a, b) => 1 + node_count(*a) + node_count(*b),
+        Re::Star(a) => 1 + node_count(*a),
+    }
+}
+
+/// The regex read backwards.
+pub open spec fn backwards(r: Re) -> Re
+    decreases r,
+{
+    match r {
+        Re::Empty => Re::Empty,
+        Re::Eps => Re::Eps,
+        Re::Chr(c) => Re::Chr(c),
+        Re::Alt(a, b) => Re::Alt(Box::new(backwards(*a)), Box::new(backwards(*b))),
+        Re::Cat(a, b) => Re::Cat(Box::new(backwards(*b)), Box::new(backwards(*a))),
+        Re::Star(a) => Re::Star(Box::new(backwards(*a))),
+    }
+}
+
+/// The string read backwards.
+pub open spec fn backwards_str(s: Seq<char>) -> Seq<char>
+    decreases s.len(),
+{
+    if s.len() == 0 {
+        Seq::empty()
+    } else {
+        backwards_str(s.subrange(1, s.len() as int)) + seq![s[0]]
+    }
+}
+
+/// Exec `nullable`, tied to the spec.
+pub fn is_nullable(r: &Re) -> (b: bool)
+    ensures
+        b == nullable(*r),
+    decreases r,
+{
+    match r {
+        Re::Empty => false,
+        Re::Eps => true,
+        Re::Chr(_) => false,
+        Re::Alt(a, b) => is_nullable(a) || is_nullable(b),
+        Re::Cat(a, b) => is_nullable(a) && is_nullable(b),
+        Re::Star(_) => true,
+    }
+}
+
+/// Exec deep copy (`Re` has no derived `Clone` inside `verus!`).
+pub fn copy_re(r: &Re) -> (out: Re)
+    ensures
+        out == *r,
+    decreases r,
+{
+    match r {
+        Re::Empty => Re::Empty,
+        Re::Eps => Re::Eps,
+        Re::Chr(c) => Re::Chr(*c),
+        Re::Alt(a, b) => Re::Alt(Box::new(copy_re(a)), Box::new(copy_re(b))),
+        Re::Cat(a, b) => Re::Cat(Box::new(copy_re(a)), Box::new(copy_re(b))),
+        Re::Star(a) => Re::Star(Box::new(copy_re(a))),
+    }
+}
+
+} // verus!
+
+verus! { fn regex_tag(r: &Re) -> u8 { match r { Re::Empty => 0 } } }
