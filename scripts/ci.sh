@@ -636,7 +636,7 @@ def prune(scratch, *reports):
     keep = set()
     for r in reports:
         for f in ([Path(r)] if Path(r).is_file() else sorted(Path(r).rglob("*"))):
-            if not f.is_file():
+            if not f.is_file() or f.is_relative_to(base):   # the scratch never names itself
                 continue
             try:
                 text = f.read_text(encoding="utf-8", errors="replace")
