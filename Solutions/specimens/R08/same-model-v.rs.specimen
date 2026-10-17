@@ -1,0 +1,10 @@
+// Reference Solution.
+// after: R08.P5dv
+use vstd::prelude::*;
+verus! {
+pub open spec fn a(c:char,w:Seq<char>)->bool { w == seq![c] }
+pub open spec fn b(c:char,w:Seq<char>)->bool { w.len() == 1 && w[0] == c }
+proof fn same_model(c:char,w:Seq<char>)
+ ensures a(c,w) == b(c,w),
+{ if b(c,w) { assert(w =~= seq![c]); } }
+}

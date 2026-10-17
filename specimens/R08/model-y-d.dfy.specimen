@@ -1,0 +1,7 @@
+// after: R08.P3dv
+module R08_Modely {
+ ghost predicate Language(p:char,word:seq<char>) { |word| == 2 && word[0] == p }
+ method Run(p:char,word:seq<char>) returns (b:bool)
+  ensures b == Language(p,word)
+ { b := |word| == 2 && word[0] == p; }
+}

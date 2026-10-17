@@ -1,0 +1,27 @@
+# R08 withheld H implementation/proof windows; no prediction answers.
+# from Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy
+# source: { b := A2.DerivMatch(p,word); } (R08.H1d)
+# verified: solutions=1 public=0
+\{\s*b\s*:=\s*A2\.DerivMatch\(p,word\);\s*\}
+# source: { if |word| != 1 { b := false; } else { b := A2.ClassMember(p,word[0]); } } (R08.H2d)
+# verified: solutions=1 public=0
+\{\s*if\s*\|word\|\s*!=\s*1\s*\{\s*b\s*:=\s*false;\s*\}\s*else\s*\{\s*b\s*:=\s*A2\.ClassMember\(p,word\[0\]\);\s*\}\s*\}
+# source: { reveal HiddenWord(); } (R08.H3d)
+# verified: solutions=1 public=0
+\{\s*reveal\s*HiddenWord\(\);\s*\}
+# source: { reveal HiddenResidual(); A2.DerivCorrect(r,c,word); } (R08.H4d)
+# verified: solutions=1 public=0
+\{\s*reveal\s*HiddenResidual\(\);\s*A2\.DerivCorrect\(r,c,word\);\s*\}
+# from Solutions/verus/r/r08_abstraction/src/lib.rs
+# source: { deriv_match(&self.pattern,word) } (R08.H1v)
+# verified: solutions=1 public=0
+\{\s*deriv_match\(\&self\.pattern,word\)\s*\}
+# source: { if word.len() != 1 { false } else { self.class.class_member(word[0]) } } (R08.H2v)
+# verified: solutions=1 public=0
+\{\s*if\s*word\.len\(\)\s*!=\s*1\s*\{\s*false\s*\}\s*else\s*\{\s*self\.class\.class_member\(word\[0\]\)\s*\}\s*\}
+# source: { reveal(hidden_word); } (R08.H3v)
+# verified: solutions=1 public=0
+\{\s*reveal\(hidden_word\);\s*\}
+# source: { reveal(hidden_residual); lemma_deriv_correct(r,c,word); } (R08.H4v)
+# verified: solutions=1 public=0
+\{\s*reveal\(hidden_residual\);\s*lemma_deriv_correct\(r,c,word\);\s*\}

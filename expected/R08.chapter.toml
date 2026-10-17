@@ -1,0 +1,165 @@
+# expected/R08.chapter.toml — the chapter pins of R08's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R08 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R08_Abstraction/std"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "995454a768b9e93b347ed890f29fecdc214791ad167d113f7b1782fe41896761"
+[entry.pinned.inputs]
+"dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "3b662bd923bd125bc7c44c783ebd6613225f25f1c42d77eb4d72062519cbec6a"
+"dafny/R/R08_Abstraction/std/dfyconfig.toml" = "e8e0434c8bf5e2211eca8c316dbfba3a5e0e11ac7274bb7fe60c058ae7d2a6bb"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r08_abstraction"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "8e80b67575e960839d119e34ae9c127d0b3ec6db645679f1b68cc49e43eda909"
+[entry.pinned.inputs]
+"verus/r/r08_abstraction/Cargo.toml" = "45401b0369d3bff1957a0d62486365d401bdead474908b7ca5fb99b253e25f01"
+"verus/r/r08_abstraction/src/agent.rs" = "8244385c3b63c245987bc4903d42540256d679f0754370babe7eab531f4f766e"
+"verus/r/r08_abstraction/src/lib.rs" = "7fbc647b6dc7f0069f2ad8e86cddd2c420a095a216b05146e08117c0bbccbe39"
+
+[[entry]]
+id = "checks-d"
+cmd = ["scripts/vcheck", "dafny/checks/R08_checks.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d2cf4c8fa0084a3c48b500ef83c2c2c1ec08bd30f632ea5211fd5042d48672cd"
+[entry.pinned.inputs]
+"dafny/checks/R08_checks.dfy" = "8f94952f0c0e606f4dd754ce1c796ff8701d494ae30ad04504343a82641df485"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c7fbf89533d068347550cb55da904e635d6297e7b31efeca6bb3e39f399a2caa"
+[entry.pinned.inputs]
+"dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy" = "64d93a52ac55c6a4c04205920641be1e2431a9fd720bc1739ff67ef14a7060b3"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r08_abstraction/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b290f7ac7c5245d4e817424ff07d88bfb1e5174f95f8e9c6633fcbc596060d46"
+[entry.pinned.inputs]
+"verus/r/r08_abstraction/src/agent.rs" = "8244385c3b63c245987bc4903d42540256d679f0754370babe7eab531f4f766e"
+
+[[entry]]
+id = "refinement-d"
+cmd = ["scripts/vcheck", "specimens/R08/card-c1d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e9762d1a4151c0f53e83d1c57a660e684a934ef4f69420da80c81fed811aac3c"
+[entry.pinned.inputs]
+"specimens/R08/card-c1d.dfy.specimen" = "dad373ed167da4b0b31dc84276589ec9fae2334d1fa877a436b045b571a579b1"
+
+[[entry]]
+id = "trait-v"
+cmd = ["scripts/vcheck", "specimens/R08/card-c1v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a9386cbdebfb499ae56745d040ee7a0a163bc507d21d3b97b9380dd8ed6f95e5"
+[entry.pinned.inputs]
+"specimens/R08/card-c1v.rs.specimen" = "fbdeb94006f4d6c6025390ac0a2f0833f5dfbd8084589c93fcc49254052b3270"
+
+[[entry]]
+id = "reveal-d"
+cmd = ["scripts/vcheck", "specimens/R08/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4a8a27eeaf786ffd1b675c6a217e9a118ad82e7fc173eaaa107a00598733fbf3"
+[entry.pinned.inputs]
+"specimens/R08/card-c2d.dfy.specimen" = "8f0d61f52e6ddfcd475e7b572300d9133401d5c988c16abe0ea9631c414a5daa"
+
+[[entry]]
+id = "reveal-v"
+cmd = ["scripts/vcheck", "specimens/R08/card-c2v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "56de6d468e8d2be9860875ce5a98a113e2a90ba83cd9d07c31ed2ec2e56b148a"
+[entry.pinned.inputs]
+"specimens/R08/card-c2v.rs.specimen" = "53cd2200cb9d58462e8e8cd3af1f7bb1ebe3c114a6dbbdadb4b3c6d5f4dc60ae"
+
+[[entry]]
+id = "model-x-d"
+cmd = ["scripts/vcheck", "specimens/R08/model-x-d.dfy.specimen"]
+answers = ["R08.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5dbff65d53e84ec9be870e75926f049244abb7582049dbde3d285e835ad34fd1"
+[entry.pinned.inputs]
+"specimens/R08/model-x-d.dfy.specimen" = "5ed55e3facf8f5c5afe8690ee6b4324c8acf13a6ed2fd50d735fe6338177bb14"
+
+[[entry]]
+id = "model-y-d"
+cmd = ["scripts/vcheck", "specimens/R08/model-y-d.dfy.specimen"]
+answers = ["R08.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4c85f061e678184a4d7a5af0cdc29131805782fc1c6dd39e4cc7e9b96eab4031"
+[entry.pinned.inputs]
+"specimens/R08/model-y-d.dfy.specimen" = "11763f068cb383c532843e85eac9aaba61bcb6dca6124270db73b2a3e81c7ffa"
+
+[[entry]]
+id = "same-d"
+cmd = ["scripts/vcheck", "specimens/R08/same-model-d.dfy.specimen"]
+answers = ["R08.P5dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "38f4ba710ad58438d3da2047e576cc8867f22d3b908a416efe99573f30e5d6e1"
+[entry.pinned.inputs]
+"specimens/R08/same-model-d.dfy.specimen" = "d85ad4e6d271b4b2fa11502bc22fae884061b172a2ea40f8157317b47cdcd2d3"
+
+[[entry]]
+id = "model-x-v"
+cmd = ["scripts/vcheck", "specimens/R08/model-x-v.rs.specimen"]
+answers = ["R08.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "55a623d04ea49e2b1ff0d1c5fdf90e203ec1c25522b03182bcd4d05958e07252"
+[entry.pinned.inputs]
+"specimens/R08/model-x-v.rs.specimen" = "7458af1d6264b29d63d87f92ccae7f31c7284fda6715c6d5547bf6acd3e93f00"
+
+[[entry]]
+id = "model-y-v"
+cmd = ["scripts/vcheck", "specimens/R08/model-y-v.rs.specimen"]
+answers = ["R08.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "71bb1aba6a15352e115d94a8cf6b3d681499343914eb1767f1cfe1f52f900f68"
+[entry.pinned.inputs]
+"specimens/R08/model-y-v.rs.specimen" = "aaf293eaf73a3031dc76d70c6b5c5531e2f8c9c65d544dcac60e3776264eb503"
+
+[[entry]]
+id = "same-v"
+cmd = ["scripts/vcheck", "specimens/R08/same-model-v.rs.specimen"]
+answers = ["R08.P5dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "bffed145e7b0937cbcadcc2774076ff9df427de18c2cd736b7b4ee2cbcb47075"
+[entry.pinned.inputs]
+"specimens/R08/same-model-v.rs.specimen" = "bce43ab0767c006d938d525184118d31093ef8189a22e6f9c9e6a31bea35b2e4"

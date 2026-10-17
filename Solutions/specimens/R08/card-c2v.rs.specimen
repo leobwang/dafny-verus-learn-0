@@ -1,0 +1,11 @@
+// Reference Solution.
+use vstd::prelude::*;
+verus! {
+#[verifier::opaque]
+pub open spec fn double(c:char,w:Seq<char>)->bool { w == seq![c,c] }
+// item: R08.C2v write:reveal
+// WRITE: one local reveal; retain the opaque boundary.
+proof fn open_double(c:char,w:Seq<char>)
+ ensures double(c,w) == (w == seq![c,c]),
+{ reveal(double); }
+}

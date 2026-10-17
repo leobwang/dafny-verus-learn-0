@@ -72,3 +72,56 @@ and all private prediction programs behave as expected. Initial specimen
 visibility errors (public trait/type/field requirements) are retained, repaired
 before claiming semantic evidence. No module admission or learner workflow
 pass is inferred yet. Core/agent/prediction/card generators remain private.
+
+## Assembled R08 source checkpoint
+
+Eight hand holes pass canonical firsttry --empty-body, with no modes/seeds
+narrowed. Admitted minutes15/16/6/8 each language,45each/90total. No T or X.
+Source core states: each4holes/0errors; Dcheck0holes/0errors. Agent source
+D/V each0holes and1own-file semantic error; the Verus trait diagnostic also
+appears in its provided file. These are native verify-stage failures, not
+missing implementations. Reference cores D26/min7 andV6/min6. Four core/agent
+reference targets pass all three seeded runs. Five predictions pass; four
+WRITE omission/completion pairs are native observed (the empty Verus execution
+card has a missing-result type error, not a claimed semantic rejection).
+
+Initial count capture pinned only3/6Verus contract declarations: source parser
+uses <Type as Trait>::method, backend reports Type::method. Fix count identities
+for simple concrete self types only, preserving trait-qualified freeze names;
+complex self types are not guessed. Ambiguous task identities refuse rather
+than collapsing two contracts into one pin. Three meaningful new regressions
+cover exact/missing task, hole-held identity, and ambiguity; all9CountPins tests
+pass. Full tool-free tools suite:124tests OK,1existing skip. Normal native
+re-pin now pins all6/6Verus contracts. No pin is hand-edited; no CI/native
+verification, tier or trust policy is weakened.
+
+P3's as-built full/shortened literal-model contrast replaces the preliminary
+proper-prefix property. P5 checks genuinely equivalent full-word definitions.
+C3v recognises open-spec visibility; trait-spec remains WRITE only. Banks use
+the existing opacity concept rather than inventing opaque/reveal tag aliases.
+Initial quoted??? verdict slots, Boolean-literal label spelling and missing
+proof-step receipts were corrected under the existing parser/lint rules.
+Source/form fixes are in scratch logs. Initial materials run raced missing
+verdict pins and failed only those2pins; the completed re-run passes all5Ps,
+10non-Pspecimens,2native bank probes,4PPgate/audit pairs,2agentgate/audit pairs,
+15chapter captures and10non-Psidecars. The check-unit comment correction got
+its own normal chapter recapture. All36module pins pass,0problems.
+
+Both private changed-model agent alternatives verify with zero holes/findings,
+yet original snapshot checks reject each semantic-definition change. Both
+faithful original-model repairs gate/audit and preserve original statements.
+The fifteen-command full study-clone workflow remains to be run on this commit.
+The chapter has5boxes/3diagrams/15captures,4728words and0lint. FiveTeXdocuments
+build. Reference lint:0findings over245twins/25modules/583referencefiles.
+Full-source leak scan is successful; exact frozen STUDY count follows below.
+Source generators are now stale after canonical metadata/receipts/labels fixes:
+do not re-run them over final artifacts or reset captured manifests.
+
+Live Claude skill/guard/grading/contractor validations stay deferred D45 debt.
+R03 stays planned with its existing private Unicode-adapter packaging blocker.
+Do not invoke models, release reserves, weaken imports or push this candidate.
+R04 full global CI continues on its original untouched candidate; this R08 tree
+needs its own focused static/native/paper/rubric/harness bars before claiming
+complete local construction. Neither module is newly shipped on Basic.
+
+Frozen STUDY source scan: leak verifier: 25 module(s), 1970 public files scanned, OK

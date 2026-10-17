@@ -1,0 +1,9 @@
+module R08_RefinementCard refines RG_A2_MatcherSpec {
+ type Pattern = char
+ ghost predicate WordLanguage(p:Pattern,word:seq<char>) { word == [p,p] }
+ // item: R08.C1d write:refines
+ // WRITE: complete this refinement body; preserve both the binding and interface.
+ method MatchWord(p:Pattern,word:seq<char>) returns (b:bool)
+  ensures b == WordLanguage(p,word)
+ {}
+}

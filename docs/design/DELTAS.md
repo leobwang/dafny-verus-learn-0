@@ -4117,3 +4117,29 @@ their intended native controls. R08 remains planned at this checkpoint;
 canonical admission, complete learner material and module CI are outstanding.
 D45 live-model debt and R03's Unicode packaging blocker remain recorded and
 skipped under the user's instruction; neither is treated as a pass.
+
+## Δ259 — R08 abstraction construction candidate (2026-10-17)
+
+Build four admitted hand items per language under the provided matcher:
+derivative and one-character class engines with fixed model bindings, then
+two local-opacity proofs. Supply complete literal-engine/client examples,
+five prediction controls, four native WRITE cards, a refinement lab, a source-
+pinned QED at Large card and abstraction-square problem, a twelve-question
+bank with disjoint draws/native probes/paired parallels, and a seventh
+course-derived bench activity. The zero-hole semantic-debugger plant delegates
+on a shortened word; faithful repairs verify, while changed-model alternatives
+verify a different task and fail both original snapshot comparisons.
+
+Correct the count pin's trait-implementation identity mapping for simple self
+types so native Type::method tasks are pinned, while statement freeze retains
+<Type as Trait>::method. Ambiguous identities refuse. Three new regressions
+cover exact/missing task, hole-held identity and ambiguity. R08 native re-pin
+now covers all6/6Verus contract declarations; no pin, gate, tier, trust or CI
+check is relaxed.124tool-free tools tests pass with1existing skip.
+
+Local source checks:8/8canonical admission,4reference targets×3seeds, five
+predictions,4WRITEpairs,2bankprobes,4PPgate/audit pairs, semantic-fidelity
+controls,5TeXbuilds,15chaptercaptures/10sidecars and36pins with0problems.
+Course map, chapter lint and all245reference twins pass. Study-clone workflow
+and focused CI are pending on this source checkpoint; it is not a release.
+D45 live-model debt and R03's packaging blocker remain deferred, never passes.

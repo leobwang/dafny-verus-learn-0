@@ -1,0 +1,197 @@
+# expected/R08.freeze — statement-freeze pins for R08 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R08` from the files as shipped; checked by
+# `scripts/specfreeze --check R08`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R08"
+unfrozen = []
+
+[[file]]
+path = "dafny/R/R08_Abstraction/std/R08_Abstraction.dfy"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R08_Opacity.RevealResidual {:induction false}", "R08_Opacity.RevealWord {:induction false}"]
+[file.statements]
+"R08_Class.MatchWord" = "db1ea343b4cc8d64732a272f561f51c1f26443ed1d90c273159d66b7ac257931"
+"R08_Class.Pattern" = "8d93049c438dc4b9eb58a5bfc3633424c079dca6a42cce34ca8e96ec49bd5b6e"
+"R08_Class.WordLanguage" = "ed7762352bf5c915a6b062256ec4b625b90e9023b013599dd09ef8d3b319a785"
+"R08_Derivative.MatchWord" = "db1ea343b4cc8d64732a272f561f51c1f26443ed1d90c273159d66b7ac257931"
+"R08_Derivative.Pattern" = "298d23ca01b1043d64ed82d19adaddfc7964d084f4b8b6173ead8be2747ca348"
+"R08_Derivative.WordLanguage" = "23fc05e43cd4196ad12e53ef84def687bb634a67942dcbdd4bb3eb97c3532626"
+"R08_Literal.MatchWord" = "db1ea343b4cc8d64732a272f561f51c1f26443ed1d90c273159d66b7ac257931"
+"R08_Literal.Pattern" = "8a487b32c34ded6f050457d9cd08fd20b9a5374f24eb6b6639fdca11f86af3b9"
+"R08_Literal.WordLanguage" = "075b21dade80bc9f10af8b80b87b9183a38e8e049e30a2553dc64c934d496937"
+"R08_LiteralClient.ReadModel" = "835e38dd896e9d93e0a96d69c444483d9522dbcc7ee83bf20cfe741efaa4b217"
+"R08_Opacity.HiddenResidual" = "b681486aec37404ec9abb258a51e633ecbc01e7014a4168178d27c4483cd352d"
+"R08_Opacity.HiddenWord" = "8a205c88d02846582077cf7bb744027be4d83bd76d57868ebfe663a388803295"
+"R08_Opacity.RevealResidual" = "1b43fa6b561de0c7cc54e25e1e140a821590bd51cda83ea6f2d9ed06db65efc0"
+"R08_Opacity.RevealWord" = "ae6484dda4719fe8529cfe03b02646d78a355835b279ae7dfcd992dc91cf293c"
+
+[[file]]
+path = "dafny/checks/R08_checks.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R08_Checks.LiteralInterfaceValue" = "18516c02fbcece8a3d971545714e43e4d82c80bb39a3988ffa67e1d1f71049fa"
+"R08_PredictLiteral.MatchWord" = "db1ea343b4cc8d64732a272f561f51c1f26443ed1d90c273159d66b7ac257931"
+"R08_PredictLiteral.Pattern" = "8a487b32c34ded6f050457d9cd08fd20b9a5374f24eb6b6639fdca11f86af3b9"
+"R08_PredictLiteral.WordLanguage" = "075b21dade80bc9f10af8b80b87b9183a38e8e049e30a2553dc64c934d496937"
+
+[[file]]
+path = "verus/r/r08_abstraction/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<ClassEngine as WordMatcher>::match_word" = "8d12e4df969881e702452cf64bfd47c2cbd0eee93e11113f3b91b2a7b7d4f307"
+"<ClassEngine as WordMatcher>::word_language" = "3b5334f9b8d44fc5bed0edd35bae99bc1b11c9c743b69c7429b85fed19e9cd6e"
+"<DerivEngine as WordMatcher>::match_word" = "8d12e4df969881e702452cf64bfd47c2cbd0eee93e11113f3b91b2a7b7d4f307"
+"<DerivEngine as WordMatcher>::word_language" = "44726b5420c79ae5a84307ffaa0e6782782f2e9dbe1cc7aa6dd2d6bb874f5a43"
+"<LiteralEngine as WordMatcher>::match_word" = "8d12e4df969881e702452cf64bfd47c2cbd0eee93e11113f3b91b2a7b7d4f307"
+"<LiteralEngine as WordMatcher>::word_language" = "5875326cd9088d37a0f6a96f3908180ca4266a3c8f09319c4e8e5562916a5a89"
+"ClassEngine" = "220a8d203878c75bf9d3224afb7d96a08c0c30dcfce14a8f947e3c2e6c35d7b2"
+"DerivEngine" = "3878d102c136d79ec1db26063d52a7320c778cc98531301a31a245516127e757"
+"LiteralEngine" = "3f6e225ceea6b2d8705dcfc765a22df0d18481cf4f7f7ad7819f89a7bb486367"
+"hidden_residual" = "b1d9e409f13032f27a2991c80fb6479bbfdaa950c6e60224b3922fa3ad581528"
+"hidden_word" = "18cc444ca3ce0ae88a86765415f0f5f65a4439652cafcbf7315c24657b879ad0"
+"read_model" = "1c99705d42f4f403b4582f6e6987351ee57e45c7a1166095034bd2335852b142"
+"reveal_residual" = "f00341fcd5b76902faea5b58314fd6890a92f79a15b77f6e7026e173045325dc"
+"reveal_word" = "ba67b4c252ba824af9488f26f3a4580db59d0139c113fd95de88ea69b8c980bb"
+
+[[file]]
+path = "specimens/R08/P2v.rs.specimen"
+lang = "v"
+open_bodies = ["LiteralContract::language"]
+[file.statements]
+"<Literal as LiteralContract>::language" = "d375314d37c047ee80d184c2273b8e3be0f2c6241ce39523c63193504e050463"
+"<Literal as LiteralContract>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"Literal" = "76b856f91120e60666058d58a000455ee8e79e3973f2353e2e7e154a44091be7"
+"LiteralContract::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
+"LiteralContract::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"scalar_model_value" = "4e9f13b170ee19f47c15cb3d25236224f3c7d24cb4b3d9d810dfbe572024df9a"
+
+[[file]]
+path = "specimens/R08/P4v.rs.specimen"
+lang = "v"
+open_bodies = ["LiteralContract::language"]
+[file.statements]
+"<Literal as LiteralContract>::language" = "d375314d37c047ee80d184c2273b8e3be0f2c6241ce39523c63193504e050463"
+"<Literal as LiteralContract>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"Literal" = "76b856f91120e60666058d58a000455ee8e79e3973f2353e2e7e154a44091be7"
+"LiteralContract::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
+"LiteralContract::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+"receiver_obligations" = "f2200e2208166a23d0dafef5fb678b8d18bbc1f1b127c5ec7e99bd56d726b547"
+
+[[file]]
+path = "specimens/R08/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R08_RefinementCard.MatchWord" = "db1ea343b4cc8d64732a272f561f51c1f26443ed1d90c273159d66b7ac257931"
+"R08_RefinementCard.Pattern" = "8a487b32c34ded6f050457d9cd08fd20b9a5374f24eb6b6639fdca11f86af3b9"
+"R08_RefinementCard.WordLanguage" = "d3759b145c29412788f32db7cfcfd34627518349430e166f5ced4cdfaed413f5"
+
+[[file]]
+path = "specimens/R08/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = ["DoubleContract::language"]
+[file.statements]
+"<Double as DoubleContract>::language" = "efe087f566180f45d4e3f9b55ed05383c5bb4ff86e7b1826494817973a2fc0e0"
+"<Double as DoubleContract>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"Double" = "8ec1c1ad82d18280ab5436dff75987cbdc4b75f02f54fe9025e43a3cd170ec30"
+"DoubleContract::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
+"DoubleContract::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+
+[[file]]
+path = "specimens/R08/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+frozen_levers = ["R08_RevealCard.OpenDouble {:induction false}"]
+[file.statements]
+"R08_RevealCard.Double" = "fe2f6aef1485ef04290fa6d603cc7f973029dbe752dda490ad22809542d8d035"
+"R08_RevealCard.OpenDouble" = "f298745e032d760c73dd6613b0e16806fa3f5203b1cdbc5689d94f95c699212c"
+
+[[file]]
+path = "specimens/R08/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"double" = "5cde06207f26bfd06d1855e8b494b3d4e87830d453ac2df9eb4e5cc96fa98c75"
+"open_double" = "7513bde38d4a425bc9a8961a2429da049b673589f71d8c1cd5543678f3ed090b"
+
+[[file]]
+path = "specimens/R08/model-x-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R08_Modelx.Language" = "43ade558f98f6bcee1a64ebf410077df35db56f0306ea8ff4bba0382abc51ac4"
+"R08_Modelx.Run" = "856658154c9be1223a180b4cd4f88a0f7188a727dd0aece4e9c4562a14d7a8f4"
+
+[[file]]
+path = "specimens/R08/model-x-v.rs.specimen"
+lang = "v"
+open_bodies = ["Matcher::language"]
+[file.statements]
+"<Engine as Matcher>::language" = "d375314d37c047ee80d184c2273b8e3be0f2c6241ce39523c63193504e050463"
+"<Engine as Matcher>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"Engine" = "a8818da46adf031cb047b94429318794e0524b640d65789b630e7d3169f399f7"
+"Matcher::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
+"Matcher::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+
+[[file]]
+path = "specimens/R08/model-y-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R08_Modely.Language" = "f71cac14df2c3bd51f95f2185bca3b7d58a0e8e2ca6b997ce56c1cd28c215560"
+"R08_Modely.Run" = "856658154c9be1223a180b4cd4f88a0f7188a727dd0aece4e9c4562a14d7a8f4"
+
+[[file]]
+path = "specimens/R08/model-y-v.rs.specimen"
+lang = "v"
+open_bodies = ["Matcher::language"]
+[file.statements]
+"<Engine as Matcher>::language" = "e297f89ce21dcf763d3f1decfad289feb5487cbd67eeb2338ba688b5dffc4f51"
+"<Engine as Matcher>::run" = "28e65e4feeae1e3f023c00b89e179b22ef319b3146e2393b26d24b7d1a388636"
+"Engine" = "a8818da46adf031cb047b94429318794e0524b640d65789b630e7d3169f399f7"
+"Matcher::language" = "f6a2fff216b22c122cedccc340ffe10fa311e2cc3ed551f6b8b91dd2ad17bee6"
+"Matcher::run" = "97e1fdd875f70c23b1c9e9f6add5316c63490779ed39776b98a72a50d483f947"
+
+[[file]]
+path = "specimens/R08/same-model-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R08_ModelEquality.A" = "a8859793d669e2d2665d3909dd7c1f74f34f2151b6fbd8d58362c50670ed7cb8"
+"R08_ModelEquality.B" = "52a05f7b8525ec81c252a8ab7353843250269638155b3d65bbccbd2e7d4d585c"
+"R08_ModelEquality.SameModel" = "d4f76e12847f8ac05ac51258c34ef1dbbfd3de5e550121571c98921c33a3e18b"
+
+[[file]]
+path = "specimens/R08/same-model-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"a" = "02c199a542c0019a8db8f9c7ffa63b8935fe5253989c6679192d41a9dcc48a56"
+"b" = "03cec63f272c75e66e48d4c2a9f4d951937c108634dfd9640c7d41f8d7c2efd8"
+"same_model" = "fedaa5edc361e78cc194ea4a238c82c92a518919d8355d79926df7dfde60346d"
+
+[[file]]
+path = "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R08_AgentInfra.MatchWord" = "db1ea343b4cc8d64732a272f561f51c1f26443ed1d90c273159d66b7ac257931"
+"R08_AgentInfra.Pattern" = "298d23ca01b1043d64ed82d19adaddfc7964d084f4b8b6173ead8be2747ca348"
+"R08_AgentInfra.WordLanguage" = "23fc05e43cd4196ad12e53ef84def687bb634a67942dcbdd4bb3eb97c3532626"
+
+[[file]]
+path = "verus/r/r08_abstraction/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"<InfraEngine as WordMatcher>::match_word" = "8d12e4df969881e702452cf64bfd47c2cbd0eee93e11113f3b91b2a7b7d4f307"
+"<InfraEngine as WordMatcher>::word_language" = "44726b5420c79ae5a84307ffaa0e6782782f2e9dbe1cc7aa6dd2d6bb874f5a43"
+"InfraEngine" = "3baf69fd4e24e4a1f259ce15fb5e8160ee13b9444bb5826d4679874ba2d3f077"
+"copy_prefix" = "a961094ad7df5da93530c6670e97d365c41bd4bb59cd9e3f223591af818a3c9c"

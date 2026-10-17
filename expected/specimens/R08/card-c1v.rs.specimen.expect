@@ -1,0 +1,43 @@
+# pins.py golden for specimens/R08/card-c1v.rs.specimen: the normalized output of the pinned verifier (spec
+# §3.8.6, Δ36, Δ37, Δ59). Regenerate with `scripts/pins.py --update specimens/R08/card-c1v.rs.specimen`; never edit.
+command: verify
+exit: 1
+verdict: failed
+stage: resolve
+verified: 0
+holes: 0
+{
+ "diagnostics": [
+  {
+   "col": 0,
+   "file": "",
+   "labels": [],
+   "level": "failure-note",
+   "line": 0,
+   "message": "For more information about this error, try `rustc --explain E0308`."
+  },
+  {
+   "col": 36,
+   "file": "card-c1v.rs",
+   "labels": [
+    "expected `bool`, found `()`",
+    "implicitly returns `()` as its body has no tail or `return` expression"
+   ],
+   "level": "error",
+   "line": 12,
+   "message": "mismatched types"
+  }
+ ],
+ "json": {
+  "func-details": {},
+  "verification-results": {
+   "encountered-error": true,
+   "encountered-vir-error": false,
+   "errors": 0,
+   "is-verifying-entire-crate": true,
+   "success": false,
+   "verified": 0
+  }
+ },
+ "other": []
+}

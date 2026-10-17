@@ -1,0 +1,17 @@
+// Reference Solution.
+use vstd::prelude::*;
+verus! {
+pub trait DoubleContract {
+ spec fn language(&self,word:Seq<char>)->bool;
+ fn run(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
+}
+pub struct Double { pub c:char }
+impl DoubleContract for Double {
+ open spec fn language(&self,word:Seq<char>)->bool { word.len()==2 && word[0]==self.c && word[1]==self.c }
+ // item: R08.C1v write:trait-spec
+ // WRITE: complete the implementation under this fixed trait model.
+ fn run(&self,word:&Vec<char>)->(b:bool)
+  ensures b == self.language(word@),
+ { word.len()==2 && word[0]==self.c && word[1]==self.c }
+}
+}

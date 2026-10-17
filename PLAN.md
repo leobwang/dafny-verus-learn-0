@@ -1364,7 +1364,7 @@ extension; do not alter existing definition bodies or permit an extra axiom.
 | H4d/H4v | proof hole | Relate an opaque one-step residual model to the original prefixed-word language using the supplied A2 correctness interface | 8 each |
 | P1d | value | A literal-character refinement invoked through its interface on a concrete word; Boolean literal | 3 |
 | P2v | value | A different literal-character trait model on a concrete scalar word; Boolean literal | 3 |
-| P3dv | verdict | A claimed proper-prefix property of a supplied whole-word language under the printed context | 3 |
+| P3dv | verdict | Same literal execution under full-word versus shortened-word model bindings; native verdict for each complete program | 3 |
 | P4v | obligation | Two receiver instances and one word: name the labelled claims justified by the actual call's contract | 3 |
 | P5dv | verdict | Equivalence of two complete one-character model bindings; retain the exact sequence-length/index conditions | 3 |
 | C1d/C1v | WRITE | Refinement / trait-contract syntax on a separate literal model | 2.5 each |
@@ -1402,3 +1402,10 @@ provenance. Live model/contractor validation remains D45 debt.
 The354-minute record remains: setup10, read60, worked30, other cards7,
 predicts15, holes90, refinement lab30, agent25, paper30, bench20, viva30 and
 calibration7. The two language-specific hole totals remain45minutes each.
+
+**R08 as-built prediction scope.** P3 now contrasts the same literal execution
+under a whole-word model and a consistent shortened-word model. It directly
+exposes model meaning, while P5 checks equivalence of two genuinely equivalent
+full-word bindings. This replaces the preliminary generic proper-prefix claim;
+no refinement-legality prediction is added. C3v recognises open-spec visibility,
+since trait-spec is already WRITE and cannot also be RECOGNISE.

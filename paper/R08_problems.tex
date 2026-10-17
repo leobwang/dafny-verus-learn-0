@@ -1,0 +1,37 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R08 --- Abstraction \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Commit all five predictions before reading. Allow 30 minutes: 15 for each
+problem. This card is a survey of proof engineering, not a measured agent
+benchmark. Do not convert heterogeneous cited numbers into one success rate.
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card 06.7: QED at Large.} Fill Task shape, Oracle, Trust, Cheat surface,
+Metric, Budget, Variance and Artifact using the pinned local source. State
+which observations belong to the surveyed systems and which are not supplied.
+Explain the connection between information hiding, refinement and maintenance.
+The card score is the minimum of its eight field scores.
+\begin{verbatim}
+sed -n '2516,2547p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+e53d3fe3fc66b8a9c70b49d94fc7ba47204d29e5aba79dcff27ab7d97fbd66ff  -
+\end{verbatim}
+Source drift requires an author re-pin before grading.
+\end{problem}
+\begin{problem}[proof]\label{prob:B2}
+Draw the abstraction square for an interface promising
+$b=L(p,w)$, a fixed binding $L(p,w)=\operatorname{Matches}(p,w)$, a concrete
+implementation, and its executable backend. Label every obligation and who
+must discharge it. Describe what remains fixed when a method body is repaired.
+Then analyse an implementation that delegates on $\operatorname{dropLast}(w)$.
+Give a concrete distinguishing pattern and word; explain why replacing the
+model by $L'(p,w)=\operatorname{Matches}(p,\operatorname{dropLast}(w))$ can make
+verification succeed without meeting the original task. State the two
+implications governing preconditions and postconditions in a refinement,
+and explain what a local reveal does and does not change in this square.
+\end{problem}
+
+\end{document}

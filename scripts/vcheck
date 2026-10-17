@@ -1288,6 +1288,21 @@ def _dafny_is_test(d):
     return any((a.style, a.name) in (("{:", "test"), ("@", "Test")) for a in d.attrs)
 
 
+def verus_count_symbol(it):
+    """Task identity at the pin: simple trait impls report Type::method.
+
+    Statement/freeze identities retain <Type as Trait>::method. Do not guess
+    the backend's spelling for generic or otherwise complex self types.
+    """
+    sym = V.vs.item_symbol(it)
+    if it.owner:
+        match = re.fullmatch(r"<([A-Za-z_][A-Za-z_0-9]*(?:::[A-Za-z_][A-Za-z_0-9]*)*) as .+>",
+                             it.owner)
+        if match:
+            sym = "::".join(filter(None, [it.path, match[1], it.name]))
+    return sym
+
+
 def contract_symbols(root, unit, lang):
     """{symbol: (repo-relative file, line)} of the learner-declared
     declarations of a unit whose statement carries a contract, so a finished
@@ -1322,8 +1337,11 @@ def contract_symbols(root, unit, lang):
                 continue
             kws = {k for k, _, _ in it.clauses}
             if "ensures" in kws or (it.mode == "spec" and it.body and "decreases" in kws):
-                sym = "::".join(filter(None, [modpath, V.vs.item_symbol(it)]))
-                out.setdefault(sym, (rel_to(f, root), src.line_of(it.head)))
+                sym = "::".join(filter(None, [modpath, verus_count_symbol(it)]))
+                if sym in out:
+                    raise Refusal(f"{unit}: ambiguous verification task identity {sym}; "
+                                  "cannot pin distinct contract declarations as one task")
+                out[sym] = (rel_to(f, root), src.line_of(it.head))
     return out
 
 
@@ -1373,7 +1391,7 @@ def hole_held_symbols(root, unit, lang, holes):
         for it in src.walk():
             if it.kind == "fn" and it.in_verus and \
                     hit(f, src.line_of(it.start), src.line_of(max(it.start, it.end - 1))):
-                out.add("::".join(filter(None, [modpath, V.vs.item_symbol(it)])))
+                out.add("::".join(filter(None, [modpath, verus_count_symbol(it)])))
     return out
 
 

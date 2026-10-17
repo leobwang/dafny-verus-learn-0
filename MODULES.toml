@@ -2155,14 +2155,14 @@ concept_items = {}
 id = "R08"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "Abstraction"
 tier = ""
 topic = ""
 strands = []
 langs = ["d", "v"]
 chapter = "docs/R08_Abstraction.md"
-exercises = ["dafny/R/R08_Abstraction/std/R08_Abstraction.dfy", "verus/r/r08_abstraction/src/lib.rs", "specimens/R08/"]
+exercises = ["dafny/R/R08_Abstraction/std/R08_Abstraction.dfy", "dafny/checks/R08_checks.dfy", "verus/r/r08_abstraction/src/lib.rs", "specimens/R08/"]
 exits = []
 agentic = ["dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy", "verus/r/r08_abstraction/src/agent.rs"]
 harness = []
@@ -2182,13 +2182,13 @@ viva_mode = "module"
 tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
-write_d = []
-write_v = []
-recognise_d = []
-recognise_v = []
+write_d = ["refines", "reveal"]
+write_v = ["trait-spec", "reveal"]
+recognise_d = ["abstract-module"]
+recognise_v = ["open-spec"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
-imports = {}
+admissible = { "R08.H1d" = { admitted = true, minutes = 15, fallback = "" }, "R08.H2d" = { admitted = true, minutes = 16, fallback = "" }, "R08.H3d" = { admitted = true, minutes = 6, fallback = "" }, "R08.H4d" = { admitted = true, minutes = 8, fallback = "" }, "R08.H1v" = { admitted = true, minutes = 15, fallback = "" }, "R08.H2v" = { admitted = true, minutes = 16, fallback = "" }, "R08.H3v" = { admitted = true, minutes = 6, fallback = "" }, "R08.H4v" = { admitted = true, minutes = 8, fallback = "" } }
+imports = { "dafny/checks/R08_checks.dfy" = "core",  "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy" = "core", "verus/r/r08_abstraction/src/agent.rs" = "prelude",  "dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "std", "verus/r/r08_abstraction/src/lib.rs" = "prelude" }
 concept_items = {}
 
 [[module]]

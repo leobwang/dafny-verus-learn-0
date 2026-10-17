@@ -1,0 +1,45 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R08 --- Abstraction \\ \large Gold calibration fixture}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} A 183-page survey of proof engineering across interactive theorem provers meeting the de Bruijn criterion, including Coq, Isabelle/HOL, HOL Light and Agda. It covers foundations, automation, organization, reuse and evolution. The unit is a synthesis of existing work, not a newly executed common task suite.
+
+\textbf{Oracle:} The surveyed ITPs check proof objects with a kernel. The LCF example protects an abstract theorem type while tactics transform goals into subgoals and a proof. The survey does not define one agent acceptance harness or a new uniform oracle across the cited corpora.
+
+\textbf{Trust:} The foundation, kernel and surrounding checking pipeline of each system must be identified. A small checking kernel and a sound abstract theorem interface support the stated criterion; the reported 23 documented critical Coq soundness bugs caution against declaring an implementation infallible. Dafny-style program verifiers are outside this survey summary's scope.
+
+\textbf{Cheat surface:} Information hiding and refinement can protect clients from representation changes; structural tactics avoid dependence on unstable generated names. A repair that changes the theorem may be formally checked yet change the intended claim. Eligibility of artifacts, preserved statements and maintenance intent therefore require separate review; no agent reward-hacking experiment is reported here.
+
+\textbf{Metric:} The cited figures have different denominators: CompCert code versus specification/proof is 13 versus 87 percent of about 35,000 lines; seL4 has about 480,000 proof lines and 20 person-years; hammer results refer to their own corpora. They are second-hand heterogeneous observations, not entries in a pooled ranking or a measured course success rate.
+
+\textbf{Budget:} The summary gives some project engineering scales but no common per-task token, runtime, dollar or sampling budget for an agent experiment. About 20 person-years for seL4 is project effort, not a budget for one repair. Mark the unavailable common budget as unavailable.
+
+\textbf{Variance:} The summary says empirical data on real proof changes and processes is scarce. Its pre-LLM 2019 scope and Coq/Isabelle emphasis limit transfer. The several cited percentages and speedups are different experimental settings; they supply no shared repeated-run variance estimate or confidence interval.
+
+\textbf{Artifact:} Ringer, Palmskog, Sergey, Gligoric and Tatlock, Foundations and Trends in Programming Languages 5(2--3), 2019, arXiv 2003.06458. Retain the exact local line range and digest. The excerpt does not supply an immutable implementation commit, a universal reproduction manifest or a new agent benchmark artifact.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+The interface specifies a relation between its original inputs and result.
+The fixed model binding connects that relation to whole-word semantics. The
+implementation must establish the interface relation on every permitted input;
+the backend contributes only its actual contract, instantiated with the inputs
+it receives. A client may use the interface promise without reading that body.
+For a pattern matching the single character \texttt{k} and word \texttt{k},
+whole-word matching succeeds but matching the empty shortened word fails.
+Changing the binding to shortened-word semantics can discharge a different
+obligation, but the original source snapshot rejects that definition change.
+For domain weakening, $P_{\rm original}\Rightarrow P_{\rm implementation}$.
+For promise strengthening, the implementation establishes at least the original
+postcondition (in the original domain); its stronger postcondition implies the
+original promise. A local reveal permits reasoning with an existing opaque
+body in that proof scope. It neither changes that body nor grants an arbitrary
+new axiom, broader input domain, or different semantic target.
+\end{answer}
+
+\end{document}

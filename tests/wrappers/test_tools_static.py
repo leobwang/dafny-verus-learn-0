@@ -1563,6 +1563,61 @@ class CountPins(RootCase):
         self.assertEqual(set(core.contract_symbols(self.root, self.CRATE, "v")),
                          {"h1", "sum", "sum_formula", "twice"})
 
+    def test_trait_impl_task_identity_and_missing_task(self):
+        path = self.root / self.CRATE / "src/lib.rs"
+        path.write_text('''use vstd::prelude::*;
+verus! {
+pub trait Model { fn run(&self) -> (b: bool) ensures b; }
+pub struct Engine { }
+impl Model for Engine {
+    fn run(&self) -> (b: bool) ensures b, { true }
+}
+}
+''')
+        symbols = core.contract_symbols(self.root, self.CRATE, "v")
+        self.assertIn("Engine::run", symbols)
+        self.assertNotIn("<Engine as Model>::run", symbols)
+        # Freeze still identifies the exact trait implementation separately.
+        self.assertIn("<Engine as Model>::run", core.V.spec_hash(path))
+        self.pin([(self.CRATE, "verus", 1, ["Engine::run"])])
+        good = core.apply_count_pin(self.result("verus", self.CRATE, count=1,
+                                   per={"Engine::run": "verified"}),
+                                   self.root / self.CRATE, self.root)
+        self.assertEqual((good.verdict, good.findings), ("verified", []))
+        missing = core.apply_count_pin(self.result("verus", self.CRATE, count=1,
+                                      per={"unrelated": "verified"}),
+                                      self.root / self.CRATE, self.root)
+        self.assertIn("pinned-symbol-missing", {f.kind for f in missing.findings})
+
+    def test_trait_impl_hole_holds_task_identity(self):
+        path = self.root / self.CRATE / "src/lib.rs"
+        text = '''use vstd::prelude::*;
+verus! {
+pub struct Engine { }
+impl Model for Engine {
+ fn run(&self) -> (b: bool) ensures b,
+ { assume(false); true }
+}
+}
+'''
+        path.write_text(text)
+        line = next(i for i, s in enumerate(text.splitlines(), 1) if "assume(false)" in s)
+        hole = core.common.Hole(str(path), line, 1, "assume", "H1")
+        self.assertEqual(core.hole_held_symbols(self.root, self.CRATE, "verus", [hole]),
+                         {"Engine::run"})
+
+    def test_trait_impl_ambiguous_task_identity_refused(self):
+        path = self.root / self.CRATE / "src/lib.rs"
+        path.write_text('''use vstd::prelude::*;
+verus! {
+pub struct Engine { }
+impl First for Engine { fn run(&self)->(b:bool) ensures b, { true } }
+impl Second for Engine { fn run(&self)->(b:bool) ensures b, { true } }
+}
+''')
+        with self.assertRaisesRegex(core.Refusal, "ambiguous verification task identity"):
+            core.contract_symbols(self.root, self.CRATE, "v")
+
     def test_unit_of(self):
         r = self.root
         for path, want in ((self.CORE, ("Q04", self.CORE)),
