@@ -205,7 +205,7 @@ pass) and D49 (Lab α redesigned around one pre-registered primary contrast,
 at least 60 regex-lemma clusters plus a public slice sized by a power
 simulation, and a 5-cluster pilot outside the confirmatory runs).
 
-The fixes, each a `basic: ` commit on basic (Δ251 lists the evidence):
+The fixes, each a `basic: ` commit on basic (Δ251 lists the evidence; F-1 to F-5 were found by the live-check lane running under D47):
 
 | # | fix | where |
 |---|---|---|
@@ -221,6 +221,12 @@ The fixes, each a `basic: ` commit on basic (Δ251 lists the evidence):
 | 10 | every capped solver job runs in the user slice `dvl0.slice` (MemoryMax=48G, MemorySwapMax=0), each with its own cap; Δ245 corrected | `scripts/dvl/common.py` |
 | 11 | a passing CI run keeps the scratch its reports name | `scripts/ci.sh` |
 | 12 | a Verus build that fails after verification reports stage `link` or `compile`, never `verify` | `scripts/dvl/verus.py`, Q12 §2 |
+| 13 | the armed-units test fixture no longer depends on the real records' shipping state (found by this lane's full CI) | `tests/wrappers/test_dafny_tool.py` |
+| F-1 | the three study-clone harnesses run from a detached HEAD (`clone_head`) | `tests/acceptance/guard_doors.py`, `skill_sims.py`, `calibrate.py` |
+| F-2 | `ReadMcpResourceDirTool` (Claude Code 2.1.302) is left alone, as its sibling is | `guard_doors.LEFT_ALONE` |
+| F-3 | the six lab calibration fixtures no longer hold the drop-in marker word; all 36 make a drop-in | `tests/instructor/fixtures/` |
+| F-4 | a study root's cleanup removes and records a session's stray files | `guard_doors.remove_study_root` |
+| F-5 | a tutor turn asks no question of a higher rung | `.claude/skills/tutor/SKILL.md` |
 
 Checks on the fixed tree before its full CI: `check_course_map.py` (49
 modules, 18 shipped), `chapter_lint --all` (18 chapters, 0 problems),
