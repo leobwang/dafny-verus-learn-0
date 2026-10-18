@@ -110,6 +110,19 @@ class Synthetic(unittest.TestCase):
         with self.assertRaises(cal.Refusal):
             cal.dropin_text(cal.ROOT, "Q02", "flawed")
 
+    def test_every_shipped_fixture_makes_a_drop_in(self):
+        """The 36 shipped calibration fixtures splice into drop-ins with no marker left,
+        against the committed skeletons (rev HEAD)."""
+        shipped = Path(self._old)
+        cal.FIXTURES = shipped
+        n = 0
+        for mid in [f"Q{i:02d}" for i in range(1, 19)]:
+            for kind in ("flawed", "gold"):
+                with self.subTest(module=mid, kind=kind):
+                    self.assertIn("\\documentclass", cal.dropin_text(cal.ROOT, mid, kind))
+                    n += 1
+        self.assertEqual(n, 36)
+
     def test_parsers(self):
         g = cal.parse_graders(GOOD_FEEDBACK.splitlines())
         self.assertEqual([(x["b"], x["dim"], x["score"]) for x in g],

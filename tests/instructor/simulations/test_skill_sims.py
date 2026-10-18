@@ -550,6 +550,20 @@ class DropIn(unittest.TestCase):
         with self.assertRaises(sims.Refusal):
             sims.dropin_text("Q98", "flawed", root=self.root)
 
+    def test_every_shipped_fixture_makes_a_drop_in(self):
+        """The 36 shipped calibration fixtures (flawed and gold, Q01-Q18) each splice into a
+        drop-in with no calibration marker left (a body word such as `fixture` refused the
+        lab modules' drop-ins until the basic fix round)."""
+        import tomllib
+        reg = tomllib.loads((sims.ROOT / "MODULES.toml").read_text(encoding="utf-8"))
+        mids = [m["id"] for m in reg["module"] if m.get("status") == "shipped"
+                and m["id"].startswith("Q")]
+        self.assertEqual(len(mids), 18)
+        for mid in mids:
+            for kind in sims.DROPIN_KINDS:
+                with self.subTest(module=mid, kind=kind):
+                    self.assertIn("\\documentclass", sims.dropin_text(mid, kind))
+
     def test_prereg_line(self):
         rx = sims.PREREG_LINE_RX
         self.assertEqual(rx.findall("PREREG Q99: HELD — budget-parity at 2"), [("Q99", "HELD")])
