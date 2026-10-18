@@ -405,9 +405,9 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
 
       Reference: reveal AltRes here and nowhere wider. Induction on `|st|`:
       NullableCorrect turns `Nullable(st[0])` into `Matches(st[0], [])`, the
-      induction hypothesis handles `st[1..]`, and one witness index moves
-      between `st` and `st[1..]` (index `i + 1` of `st` is index `i` of
-      `st[1..]`). */
+      induction hypothesis handles `st[1..]`, and one `assert forall` relates
+      index `i` of `st` to index `i - 1` of `st[1..]`, which lets the solver
+      move the witness itself. */
   lemma {:induction false} AltFinalLaw(st: seq<Re>)
     ensures AnyNullable(st) <==> AltRes(st, [])
     decreases |st|
@@ -416,18 +416,10 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
     if st != [] {
       AltFinalLaw(st[1..]);
       B.NullableCorrect(st[0]);
-      if AnyMatches(st[1..], []) {
-        var i :| 0 <= i < |st[1..]| && Matches(st[1..][i], []);
-        assert Matches(st[i + 1], []);
-      }
-      if AnyMatches(st, []) {
-        var i :| 0 <= i < |st| && Matches(st[i], []);
-        if i > 0 {
-          assert Matches(st[1..][i - 1], []);
-        }
-      }
+      assert forall i | 0 < i < |st| :: st[i] == st[1..][i - 1];
     }
   }
+
 }
 
 // =============================================================================

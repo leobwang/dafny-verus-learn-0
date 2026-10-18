@@ -49,7 +49,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R06 | `R06.txt`: 8 (H1d/v,T1d/v,H4d/v,X1d,A1v) | 2026-10-17 (DVR1 build; final scan in protected notes) | 8 author controls; live sessions deferred |
 | R07 | `R07.txt`: 8 (H1d/v, H2d/v, H4v, H5v, A1d/v) | 2026-10-17 (D48 port, Δ274: A1d/A1v re-cut from the reformatted agent twins; the verifier over all 30 pattern files, 2,301 public files) | 8 OK |
-| R08 | `R08.txt`: 8 (H1d/v–H4d/v) | 2026-10-17 (frozen STUDY construction candidate; exact count in protected notes) | 8 OK |
+| R08 | `R08.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-18 (DVR4 step 3 rebuild: the step-matcher interface; the verifier over R08, 2,305 public files) | 8 OK |
 
 | R09 | `R09.txt`: 8 (H1d/v–H4d/v) | 2026-10-17 (D48 port, Δ274: H2d/H2v re-cut from the u32 answers; the verifier over all 30 pattern files, 2,301 public files) | 8 OK; live sessions deferred |
 

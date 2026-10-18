@@ -13,7 +13,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "e62846eb8205bf895b2ebbd089b73d63207caf87c2d18c85daacbae495f1e51e"
 [entry.pinned.inputs]
-"dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "905d92d9730a4cd2e18beb8b155ae97e47e0a182fedc47c709a3fa8d91e6c2c5"
+"dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "38980796165eeae68e935e25df11d1d3288ecf1dbca7edb2552150799605907f"
 "dafny/R/R08_Abstraction/std/dfyconfig.toml" = "e8e0434c8bf5e2211eca8c316dbfba3a5e0e11ac7274bb7fe60c058ae7d2a6bb"
 
 [[entry]]
@@ -25,7 +25,7 @@ drop = ["^raw output: "]
 body = "11690d427ff34d06b53c05751b2c13c183f2afe1243ed2276170722ca01d35e4"
 [entry.pinned.inputs]
 "verus/r/r08_abstraction/Cargo.toml" = "45401b0369d3bff1957a0d62486365d401bdead474908b7ca5fb99b253e25f01"
-"verus/r/r08_abstraction/src/agent.rs" = "bb42c0604185546ad4426d0f90e225f7210165bcf2bd4958575e7185ca03ed81"
+"verus/r/r08_abstraction/src/agent.rs" = "b3ee1961ee5b07b3e36ef667599f9e15a1a6803885814e13b54c262af3966921"
 "verus/r/r08_abstraction/src/lib.rs" = "c9442763897ee0ab824a26cb6d557ac3dfbcd6294ed95c64ea2611614ffa477a"
 
 [[entry]]
@@ -319,9 +319,9 @@ cmd = ["scripts/vcheck", "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "240c4ae343a0b65f0a1adab37f154370312ca448a74327528d93356cc2d428bb"
+body = "558919dac7d7abacdca79807554479868aa3e6798899d76cdcf182f2c9fcce42"
 [entry.pinned.inputs]
-"dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy" = "cb875e6ec168675a51f2352381c4303fe5aac26fd7a6396aa29dee8316532232"
+"dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy" = "ad00350aba206291caf40a12e1de5f8e0cac9dcdcbb98dd4233b20d5c0228dff"
 
 [[entry]]
 id = "agent-v"
@@ -329,9 +329,9 @@ cmd = ["scripts/vcheck", "verus/r/r08_abstraction/src/agent.rs"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "7d8607809c5d579a4641735d1914d7656fdc452a7fe2f3bb6e6ca43b79b16a39"
+body = "16ea4b142403f043972ae98c0cfd059ff873e54e7f02707c76ec67d48fcecba7"
 [entry.pinned.inputs]
-"verus/r/r08_abstraction/src/agent.rs" = "bb42c0604185546ad4426d0f90e225f7210165bcf2bd4958575e7185ca03ed81"
+"verus/r/r08_abstraction/src/agent.rs" = "b3ee1961ee5b07b3e36ef667599f9e15a1a6803885814e13b54c262af3966921"
 
 [[entry]]
 id = "recurse-default-d"

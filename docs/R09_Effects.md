@@ -554,7 +554,7 @@ module context; the manifest pins the card and its provided dependencies.
 <!-- pin: card-c1d -->
 ```
 $ scripts/vcheck --module R09 card-c1d.dfy
-vcheck: card-c1d.dfy [dafny, learner loop]: failed — 50 verified, 0 holes, 1 error
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 51 verified, 0 holes, 1 error
 card-c1d.dfy:7:2: error: a postcondition could not be proved on this return path
 card-c1d.dfy:6:14: related: this is the postcondition that could not be proved
 ```

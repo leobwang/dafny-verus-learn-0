@@ -16,6 +16,9 @@ AltFinalLaw\(st\[1\.\.\]\);\s*B\.NullableCorrect\(st\[0\]\);
 # source: lemma_ranges_set_law(tail, c); if in_char_ranges(tail, c) (R08.H1v)
 # verified: solutions=1 public=0
 lemma_ranges_set_law\(tail,\s*c\);\s*if\s+in_char_ranges\(tail,\s*c\)
+# source: assert((pa + pb)[pa.len() + i] == pb[i]); (R08.H2v)
+# verified: solutions=1 public=0
+assert\(\(pa\s*\+\s*pb\)\[pa\.len\(\)\s*\+\s*i\]\s*==\s*pb\[i\]\);
 # source: lemma_alt_feed_law(m.drop_first(), c, w); lemma_parts_law(deriv(m[0], c), w); (R08.H3v)
 # verified: solutions=1 public=0
 lemma_alt_feed_law\(m\.drop_first\(\),\s*c,\s*w\);\s*lemma_parts_law\(deriv\(m\[0\],\s*c\),\s*w\);

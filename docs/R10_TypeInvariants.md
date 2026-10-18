@@ -645,7 +645,7 @@ verus/r/r10_type_invariants/src/agent.rs:29:1: hole external_body R10.A1v
 <!-- pin: card-c1d-dfy -->
 ```
 $ scripts/vcheck --module R10 card-c1d.dfy
-vcheck: card-c1d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 card-c1d.dfy:7:8: error: value does not satisfy the subset constraints of 'NormRe'
 ```
 
@@ -659,7 +659,7 @@ specimens/R10/card-c1v.rs.specimen:10:46: error: constructed value may fail to m
 <!-- pin: card-c2d-dfy -->
 ```
 $ scripts/vcheck --module R10 card-c2d.dfy
-vcheck: card-c2d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
+vcheck: card-c2d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 card-c2d.dfy:7:13: error: a postcondition could not be proved on this return path
 card-c2d.dfy:7:2: related: this is the postcondition that could not be proved
 ```
@@ -674,7 +674,7 @@ specimens/R10/card-c2v.rs.specimen:6:10: error: postcondition not satisfied
 <!-- pin: card-c3d-dfy -->
 ```
 $ scripts/vcheck --module R10 card-c3d.dfy
-vcheck: card-c3d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+vcheck: card-c3d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
 card-c3d.dfy:8:28: error: value does not satisfy the subset constraints of 'UnitLeafR10'
 ```
 
@@ -688,7 +688,7 @@ specimens/R10/card-c3v.rs.specimen:11:9: error: precondition not satisfied
 <!-- pin: language-d-dfy -->
 ```
 $ scripts/vcheck --module R10 language-d.dfy
-vcheck: language-d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
+vcheck: language-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 language-d.dfy:7:2: error: a postcondition could not be proved on this return path
 language-d.dfy:6:26: related: this is the postcondition that could not be proved
 dafny/given/R/RG_A4_Norm.dfy:11:46: related: this proposition could not be proved
@@ -704,7 +704,7 @@ specimens/R10/language-v.rs.specimen:7:10: error: postcondition not satisfied
 <!-- pin: option-d-dfy -->
 ```
 $ scripts/vcheck --module R10 option-d.dfy
-vcheck: option-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+vcheck: option-d.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: option-v-rs -->
@@ -716,7 +716,7 @@ vcheck: specimens/R10/option-v.rs.specimen [verus, learner loop]: verified — 2
 <!-- pin: precondition-d-dfy -->
 ```
 $ scripts/vcheck --module R10 precondition-d.dfy
-vcheck: precondition-d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
+vcheck: precondition-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 precondition-d.dfy:6:42: error: value does not satisfy the subset constraints of 'NormRe'
 ```
 
@@ -730,7 +730,7 @@ specimens/R10/precondition-v.rs.specimen:8:13: error: precondition not satisfied
 <!-- pin: shape-d-dfy -->
 ```
 $ scripts/vcheck --module R10 shape-d.dfy
-vcheck: shape-d.dfy [dafny, learner loop]: verified — 62 verified, 0 holes, 0 errors
+vcheck: shape-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: shape-v-rs -->

@@ -1007,26 +1007,26 @@ The gate sees whether the engines meet the interface: each law, each `ensures`, 
 
 ## 11. Exercise (agentic): find the semantic fault
 
-The agent files hold a fourth engine: Config = Re, and each step is `Prune(Deriv(st, c))`, where `Prune` simplifies a regex's alternatives (it drops impossible ones and duplicates). The engine claims the language `Matches(p, w)`. Its proofs are complete: `PruneLaw` is an induction with two recursive calls, and the three laws each call it or a layer lemma. Both files reach the verifier with zero holes and fail at one real postcondition:
+The agent files hold a fourth engine: Config = Re, and each step is `Prune(Deriv(st, c))`, where `Prune` simplifies a regex's alternatives (it drops impossible ones and duplicates) and promises to keep the language. The engine claims the language `Matches(p, w)`. In Dafny, `Prune` is a function whose `ensures` is that promise, and the three laws are each one call or none; in Verus the model of a state is the language it accepts (`words_of(st)`, a set of words), the laws hold by definition, and what must be proved is that the executable `start` and `feed` keep the language, which rests on `prune_exec`'s promise. Both files reach the verifier with zero holes and fail at one real postcondition:
 
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy
-vcheck: dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy [dafny, learner loop]: failed — 38 verified, 0 holes, 1 error
-dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy:73:5: error: a postcondition could not be proved on this return path
-dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy:70:34: related: this is the postcondition that could not be proved
+vcheck: dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy [dafny, learner loop]: failed — 37 verified, 0 holes, 1 error
+dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy:77:38: error: a postcondition could not be proved on this return path
+dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy:72:13: related: this is the postcondition that could not be proved
 ```
 
 <!-- pin: agent-v -->
 ```
 $ scripts/vcheck verus/r/r08_abstraction/src/agent.rs
-vcheck: verus/r/r08_abstraction/src/agent.rs [verus, learner loop]: failed — 9 verified, 0 holes, 1 error
-verus/r/r08_abstraction/src/agent.rs:152:9: error: postcondition not satisfied
+vcheck: verus/r/r08_abstraction/src/agent.rs [verus, learner loop]: failed — 7 verified, 0 holes, 1 error
+verus/r/r08_abstraction/src/agent.rs:124:9: error: postcondition not satisfied
 ```
 
-The question the contract asks is the one this module is about: is the proof wrong, or the engine? Find a concrete regex and word on which `Prune` changes the language before you let anyone edit anything. The faithful repair changes the engine's function bodies and leaves `Lang`, `Res`, the interface and every `ensures` as shipped; a delivery that edits `Lang` (or `Res`) until the engine is consistent verifies a different task, and `scripts/specfreeze --against <snapshot>` refuses it.
+The question the contract asks is the one this module is about: is the proof wrong, or the engine? Find a concrete regex and word on which `Prune` changes the language before you let anyone edit anything. The faithful repair changes the pruning rule and leaves `Lang`, `Res`, the interface and every `ensures` as shipped; a delivery that edits `Lang` (or `Res`, or the model) until the engine is consistent verifies a different task. `scripts/specfreeze --check R08` tells them apart: it compares every statement of the file with the shipped one, and a definition's body is part of its statement, except `Prune`'s body in Dafny, which the module's freeze pin lists as the part the repair may change (in Verus the rule lives in the executable `prune_exec`, whose body is never a statement).
 
-> **CONTRACT (for /contract R08 — run it in a FRESH session):** Repair the pruning engine in one agent file so that it honours the interface's laws for its original language. Save the original snapshot and its native diagnostic before the first edit. Edit only the bodies of the engine's functions and lemmas; keep the interface, the types, `Lang`, `Res` and every `requires` and `ensures`. After every edit run `scripts/vcheck` on the file and keep the stage, holes and diagnostics. Done: `scripts/vcheck --gate` exits 0 with zero holes over the whole file, `scripts/vaudit` reports no finding, `scripts/specfreeze --against <snapshot>` preserves every original statement, and the delivery names a concrete pattern and word on which the original step law fails.
+> **CONTRACT (for /contract R08 — run it in a FRESH session):** Repair the pruning engine in one agent file so that it honours the interface's laws for its original language. Save the original snapshot and its native diagnostic before the first edit. Edit only the pruning rule (Dafny `Prune`'s body, Verus `prune_exec`'s) and the bodies of lemmas and proof blocks; keep the interface, the types, `Lang`, `Res`, the model and every `requires` and `ensures`. After every edit run `scripts/vcheck` on the file and keep the stage, holes and diagnostics. Done: `scripts/vcheck --gate` exits 0 with zero holes over the whole file, `scripts/vaudit` reports no finding, `scripts/specfreeze --check R08` reports no finding, and the delivery names a concrete pattern and word on which the original promise of `Prune` fails.
 
 The allowed paths are `dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy` and `verus/r/r08_abstraction/src/agent.rs`, one per run; the in-file CONTRACT block is the acceptance list. Review the delivery with the refinement lab's table: which row was false, which edit made it true, and whether that edit is in the engine or in its meaning. Live contractor sessions remain recorded validation debt (D45, now run in the separate validation lane under D47); the author controls show that the plant fails as described and that a body-only repair passes the gate, the audit and the freeze, not how an agent behaves.
 

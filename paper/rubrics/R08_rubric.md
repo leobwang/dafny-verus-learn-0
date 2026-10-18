@@ -4,25 +4,26 @@ Use CORE.md and code-review bar library-conventions. Fixture compilation is
 local validation; live model grading and contractor sessions remain D45 debt.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
-paper/solutions/R08_solutions.tex  sha256 7682ab5336b1d2d0b27e80b376dd7f1bee0f847e9e423fc2cbb86a07dba7cbb1
-paper/R08_problems.tex  sha256 4fa1af4f361ce9030adda17eba88adbfcbcc3a03f7af2ce00ba44d611357102e
-Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 9a7f37c9f9e30c8dd3833b2669c7f6880105553884a4b52e9390b7b40245a2d4
-Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 495c984eb6832301f2e909210eeed8e149613d190a7a5c529ca12d5151fd0d8d
-Solutions/dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy  sha256 781659838dd9d9ae164eeae7637383349d2323f6ce74fae704998bc5324bf845
-Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 da5f50863eb1e667c1373cae81385dfeb821817ab1c6be669f167d693f63aef4
+paper/solutions/R08_solutions.tex  sha256 b02d56103f8076cb10f3a25b5cfc61c843482535a4412684242cf11c99438801
+paper/R08_problems.tex  sha256 7fd6855e551a72f428c28eaab424f6166dd3b9c4333ca1e9e8e660f53fc4c29c
+Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 9533e71d9b5d498fec4fd8294b68ec3c43a499358797c6e711e743e1c3c9fbf0
+Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 b5cb28400d349a5436f06a409ceb553290cf5cf20344cc768b00faa2d6b00650
+Solutions/dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy  sha256 5304f661af07633faa2ba9fcac79e225aa8df1feb9364b08499c71d729dd6e62
+Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 8cf139beb333088a2d8535c93a5567b4c40ddf7329571830c9a40b5d883868c9
 
 ## Verifier anchors
 
-- **Probe A:** reproduce the exact B1 local source hash; drift needs author re-pin.
-- **Probe B:** instantiate the claimed model on the learner's distinguishing
-  word in fresh native scratch, retaining the original interface and binding.
-- **Probe C:** remove a reveal in a private scratch copy, preserving opacity;
-  retain the actual diagnostic and stage rather than guessing what was hidden.
-- **Probe D:** run the original snapshot comparison on the disputed semantic
-  binding, even if the changed implementation passes a native gate.
-- **Probe F:** full-file gate and audit of the faithful agent repair, not a
-  filtered goal or a parser-only result. The source plant is verify-stage with
-  zero holes; Verus reports both the trait and implementation promise.
+- **Probe A:** reproduce the exact B1 local source hash; drift needs an author re-pin.
+- **Probe B:** evaluate the learner's B2(b) counterexample in fresh native scratch: the
+  derivative, the trimmed term, and both `Matches` facts as `ensures` of one lemma
+  (`Matches(st, [c] + w)` true, the trimmed derivative's match false).
+- **Probe C:** a refinement of the step-matcher interface that adds a `requires` to
+  `MatchWord`, and one that adds an `ensures`; retain both stages (resolve, verify).
+- **Probe D:** run the original snapshot comparison on a delivery that changes `Lang`,
+  even if the changed engine passes the native gate.
+- **Probe F:** full-file gate, audit and `scripts/specfreeze --check R08` of the faithful
+  agent repair, never a filtered goal. The source plant is verify-stage with zero holes
+  and one error, at the pruning function's language-preservation postcondition.
 
 ## B1 — QED at Large (paper-card; dimension: card-fidelity)
 
@@ -39,42 +40,47 @@ Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 da5f50863eb1e667c1373cae8
   claiming the survey directly evaluated these Dafny/Verus exercises. Missing
   artifact and runtime evidence must be labelled unavailable.
 
-## B2 — The abstraction square (proof; dimension: abstraction-rigour)
+## B2 — Refinement obligations (proof; dimension: obligation-rigour)
 
-### abstraction-rigour
+### obligation-rigour
 
-- **A.a:** identify original domain, fixed semantic binding, implementation,
-  backend instantiation and client promise. Each arrow names its obligation.
-- **A.b:** a concrete nonvacuous word distinguishes full and shortened input;
-  both outcomes and the fixed target must be justified.
-- **A.c:** original precondition implies implementation precondition; stronger
-  implementation promises imply the original result relation on its domain.
-  Reversing a direction scores at most2 with the failing input obligation.
-- **A.d:** changing the model changes the task even if the new task verifies;
-  snapshot comparison protects model definitions, not just visible signatures.
-  A reveal exposes the existing body locally and does not redefine semantics.
-  A contradictory claim scores at most2 with Probe B/C/D as appropriate.
+- **O.a:** all four obligations listed with the engine's definitions substituted
+  (StartLaw, FeedLaw, FinalLaw, `MatchWord`'s postcondition), each with the side
+  that discharges it (engine, layer lemma, interface) and the instrument (verification;
+  the statements also by the freeze). A missing obligation, or `MatchWord` said to be
+  re-proved by the engine, scores at most 2.
+- **O.b:** a concrete counterexample to FeedLaw on which `Trim` fires (a
+  `Star(Empty)` that a derivative exposes), both sides evaluated, the false one named;
+  the failure located in the engine's lemma or FeedLaw against the postcondition stated
+  in the given interface file. An instance on which `Trim` does not fire, or no
+  evaluation, scores at most 2 (Probe B).
+- **O.c:** a changed `Lang` proves a different task: the client or the frozen statement
+  is the reference, and `scripts/specfreeze --against` refuses the delivery. Calling the
+  changed engine a repair scores at most 2 (Probe D).
+- **O.d:** postconditions may be added and are checked (Dafny against the inherited
+  body, Verus against the implementation's); preconditions may not (both refuse at
+  resolution), with the client argument. A reversed direction scores at most 2 (Probe C).
 
 ## Code and semantic debugger
 
-All hand references and final deliveries must gate at zero counted holes,
-audit clean, and preserve original interface/model/imports. H1/H2 supply
-implementations under fixed models; H3/H4 use local reveals. A provided
-abstract module is a specification parameter, not a trusted concrete engine.
-The class model recognises exactly one-character words: other lengths remain
-in the input domain and return the result prescribed by that unchanged model.
-Check library preconditions and instantiated arguments in each backend call.
-The full-word versus shortened-word agent defect must be repaired in the
-implementation; accepting the model substitution is a fidelity failure.
-Retain original diagnostic stage and both native and snapshot results.
-The seventh bench card is explicitly course-derived, with source identity;
-it is not an independently unseen benchmark. All five predictions retain
-first-try records. No live session or performance rate follows from author
-reference checks or expected calibration grades.
+All hand references and final deliveries gate at zero counted holes, audit clean, and
+preserve the shipped statements (`scripts/specfreeze --check R08`). H1 is the range-star
+engine's start fact over A2's class API, H2 `PartsLaw`, H3 the alternative-set step law,
+H4 its final law with the engine's own opaque model revealed in H4 alone. Under
+library-conventions, look for: given helpers used as given (no re-implementation of
+`Parts`, `FeedAll`, `RangesClass`), reveals scoped to the proof that needs them, witness
+indices named rather than left to the solver, and no lever (`{:induction}`, resource
+attributes) added. The agent's defect is in the engine (`Prune` / `prune_exec` drops `Eps`
+alternatives); the faithful repair edits the pruning rule and keeps `Lang`, `Res` and the model;
+accepting a changed `Lang` is a fidelity failure. Retain the original diagnostic and both
+the native and the freeze results. The seventh bench card is course-derived, with its
+source identity, not an unseen benchmark. All five predictions keep their first-try
+records. No live session or rate follows from author reference checks.
 
 ## Calibration fixtures
 
-Gold:4 in both dimensions. Flawed: B1 pools heterogeneous rates (CF.c) and B2
-reverses the precondition direction, changes the fixed model and misstates
-reveal (A.c/A.d), so both dimensions score at most2 with quoted learner lines.
-These are expected outcomes, not completed live grading sessions.
+Gold: 4 in both dimensions. Flawed: B1 pools heterogeneous rates (CF.c), and B2 omits
+`MatchWord`'s obligation, gives a counterexample on which `Trim` does not fire, accepts a
+changed `Lang` as a repair and reverses the precondition direction (O.a–O.d), so both
+dimensions score at most 2 with quoted learner lines. These are expected outcomes, not
+completed live grading sessions.

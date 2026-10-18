@@ -25,21 +25,52 @@
 \end{answer}
 \section*{Problem B2}\label{ans:B2}
 \begin{answer}
-The interface specifies a relation between its original inputs and result.
-The fixed model binding connects that relation to whole-word semantics. The
-implementation must establish the interface relation on every permitted input;
-the backend contributes only its actual contract, instantiated with the inputs
-it receives. A client may use the interface promise without reading that body.
-For a pattern matching the single character \texttt{k} and word \texttt{k},
-whole-word matching succeeds but matching the empty shortened word fails.
-Changing the binding to shortened-word semantics can discharge a different
-obligation, but the original source snapshot rejects that definition change.
-For domain weakening, $P_{\rm original}\Rightarrow P_{\rm implementation}$.
-For promise strengthening, the implementation establishes at least the original
-postcondition (in the original domain); its stronger postcondition implies the
-original promise. A local reveal permits reasoning with an existing opaque
-body in that proof scope. It neither changes that body nor grants an arbitrary
-new axiom, broader input domain, or different semantic target.
+(a) \emph{StartLaw}: $\mathit{Matches}(p, w) \iff \mathit{Matches}(p, w)$;
+discharged by the engine with an empty proof, checked by verification.
+\emph{FeedLaw}: $\mathit{Matches}(\mathit{Trim}(\mathit{Deriv}(st, c)), w)
+\iff \mathit{Matches}(st, [c] + w)$; discharged by the engine, from A2's
+\emph{DerivCorrect} and a lemma of its own that $\mathit{Trim}$ keeps the
+language (the engine must state and prove it in an ordinary lemma, since a
+refining lemma inherits the interface's decreases clause). \emph{FinalLaw}:
+$\mathit{Nullable}(st) \iff \mathit{Matches}(st, [\,])$; discharged by A1b's
+\emph{NullableCorrect}. \texttt{MatchWord}'s postcondition
+$b = \mathit{Lang}(p, w)$ is discharged once, by the interface, from the three
+laws' statements; a client's postcondition is discharged by
+\texttt{MatchWord}'s if and only if the client needs exactly $\mathit{Lang}$.
+All are checked by verification; the statements (and $\mathit{Lang}$) by the
+specification freeze.
+
+(b) \emph{FeedLaw} fails, because $\mathit{Star}(\mathit{Empty})$ accepts the
+empty word and $\mathit{Empty}$ accepts nothing. Take
+$st = \mathit{Cat}(\mathit{Chr}(a), \mathit{Star}(\mathit{Empty}))$, $c = a$
+and $w = [\,]$. The derivative is
+$\mathit{Cat}(\mathit{Eps}, \mathit{Star}(\mathit{Empty}))$, which
+$\mathit{Trim}$ rewrites to $\mathit{Cat}(\mathit{Eps}, \mathit{Empty})$: the
+left side, $\mathit{Matches}(\mathit{Cat}(\mathit{Eps}, \mathit{Empty}), [\,])$,
+is false. The right side, $\mathit{Matches}(st, [a])$, is true: $a$ matches
+$\mathit{Chr}(a)$ and the empty rest matches the star. The verifier reports
+the engine's own lemma that $\mathit{Trim}$ keeps the language (or, if the
+engine has none, \emph{FeedLaw}'s return path) against a postcondition: the
+lemma's own, or \emph{FeedLaw}'s, which is stated in the given interface file
+\texttt{dafny/given/R/RG\_A2\_MatcherStatement.dfy} (Verus: the trait in
+\texttt{rg\_re\_a2/src/step\_matcher.rs}).
+
+(c) $\mathit{Lang}$ is the engine's semantic binding: the interface lets each
+engine choose it, so an engine consistent with its own $\mathit{Trim}$ can be
+made to verify by redefining what it matches. That proves a different task
+(a client wanting $\mathit{Matches}(p, w)$ still fails, as P5 shows), and the
+specification freeze (\texttt{scripts/specfreeze --against} the original
+snapshot) refuses a delivery whose $\mathit{Lang}$ differs from the shipped
+one, whatever the gate says.
+
+(d) A refinement may add a postcondition: Dafny re-verifies the inherited
+body of \texttt{MatchWord} against it, Verus checks an implementation's own
+body; a client that knows the concrete engine may then use it. It may not add
+a precondition: Dafny refuses at resolution (``a refining method is not
+allowed to add preconditions''), Verus refuses any \texttt{requires} on a
+trait method's implementation. A client of the interface calls
+\texttt{MatchWord} on every pattern and word, so a stronger precondition
+would break it; a stronger promise gives it more, never less.
 \end{answer}
 
 \end{document}

@@ -25,11 +25,14 @@
 \end{answer}
 \section*{Problem B2}\label{ans:B2}
 \begin{answer}
-The shortened-word implementation is correct whenever we change the model
-to describe shortened words. A green result proves the original whole-word
-intent, so the original snapshot can be discarded. Preconditions may be
-strengthened freely because the implementation then has fewer inputs to handle.
-Reveal changes the opaque model to whatever formula the proof needs.
+(a) The engine owes StartLaw, FeedLaw and FinalLaw, each checked by the verifier;
+the interface's laws are proved by the engine, and nothing else is needed.
+(b) FeedLaw fails for $st = \mathit{Cat}(\mathit{Chr}(a), \mathit{Chr}(b))$,
+$c = a$, $w = b$, since trimming can only lose words.
+(c) Redefining $\mathit{Lang}$ to match the trimmed pattern is the repair: once the
+engine verifies, the gate has accepted the task.
+(d) A refinement may strengthen the precondition of \texttt{MatchWord}, since it
+then has fewer inputs to handle, and may weaken its postcondition.
 \end{answer}
 
 \end{document}

@@ -22,16 +22,27 @@ e53d3fe3fc66b8a9c70b49d94fc7ba47204d29e5aba79dcff27ab7d97fbd66ff  -
 Source drift requires an author re-pin before grading.
 \end{problem}
 \begin{problem}[proof]\label{prob:B2}
-Draw the abstraction square for an interface promising
-$b=L(p,w)$, a fixed binding $L(p,w)=\operatorname{Matches}(p,w)$, a concrete
-implementation, and its executable backend. Label every obligation and who
-must discharge it. Describe what remains fixed when a method body is repaired.
-Then analyse an implementation that delegates on $\operatorname{dropLast}(w)$.
-Give a concrete distinguishing pattern and word; explain why replacing the
-model by $L'(p,w)=\operatorname{Matches}(p,\operatorname{dropLast}(w))$ can make
-verification succeed without meeting the original task. State the two
-implications governing preconditions and postconditions in a refinement,
-and explain what a local reveal does and does not change in this square.
+\textbf{Refinement obligations.} An engine refines A2's step-matcher interface
+with \texttt{Pattern = State = Re} (the state type is \texttt{Config} in the
+course's files), \texttt{Start(p) = p},
+$\mathit{Feed}(st, c) = \mathit{Trim}(\mathit{Deriv}(st, c))$ and
+$\mathit{Final}(st) = \mathit{Nullable}(st)$, where $\mathit{Trim}$ rewrites
+every subterm $\mathit{Star}(\mathit{Empty})$ to $\mathit{Empty}$, and binds
+$\mathit{Lang}(p, w) = \mathit{Res}(p, w) = \mathit{Matches}(p, w)$.
+(a) List every obligation this refinement generates: each of the three laws
+with the engine's definitions substituted, and the postcondition of
+\texttt{MatchWord}. For each, name the side that discharges it (the
+interface, the engine, a layer lemma) and the instrument that checks it.
+(b) One of the laws is false. Give a concrete pattern, character and word on
+which it fails, with both sides of the law evaluated, and name the obligation
+in which the verifier reports the failure and the file in which it is stated.
+(c) Explain why redefining $\mathit{Lang}(p, w)$ as
+$\mathit{Matches}(\mathit{Trim}^{*}(p), w)$ for a suitable closure
+$\mathit{Trim}^{*}$ might make the engine verify and still not deliver the
+original task, and which instrument refuses that delivery.
+(d) State what a refinement of this interface may add to
+\texttt{MatchWord}'s contract and what it may not, in each language, and why
+those are the two directions a client needs.
 \end{problem}
 
 \end{document}

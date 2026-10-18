@@ -651,7 +651,7 @@ vcheck: dafny/checks/R11_checks.dfy [dafny, learner loop]: verified — 64 verif
 <!-- pin: changed-rule-d -->
 ```
 $ scripts/vcheck --module R11 changed-rule-d.dfy
-vcheck: changed-rule-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+vcheck: changed-rule-d.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: changed-rule-v -->
@@ -663,7 +663,7 @@ vcheck: specimens/R11/changed-rule-v.rs.specimen [verus, learner loop]: verified
 <!-- pin: original-rule-d -->
 ```
 $ scripts/vcheck --module R11 original-rule-d.dfy
-vcheck: original-rule-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+vcheck: original-rule-d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
 original-rule-d.dfy:11:20: error: assertion might not hold
 dafny/given/R/RG_A4_Norm.dfy:125:75: related: this proposition could not be proved
 ```
@@ -678,7 +678,7 @@ specimens/R11/original-rule-v.rs.specimen:18:9: error: assertion failed
 <!-- pin: weak-producer-d -->
 ```
 $ scripts/vcheck --module R11 weak-producer-d.dfy
-vcheck: weak-producer-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+vcheck: weak-producer-d.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: weak-producer-v -->
@@ -690,7 +690,7 @@ vcheck: specimens/R11/weak-producer-v.rs.specimen [verus, learner loop]: verifie
 <!-- pin: complete-producer-d -->
 ```
 $ scripts/vcheck --module R11 complete-producer-d.dfy
-vcheck: complete-producer-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+vcheck: complete-producer-d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
 complete-producer-d.dfy:9:2: error: a postcondition could not be proved on this return path
 complete-producer-d.dfy:8:34: related: this is the postcondition that could not be proved
 ```

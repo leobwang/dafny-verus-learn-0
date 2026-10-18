@@ -542,8 +542,8 @@ pub proof fn lemma_alt_feed_law(m: Seq<Re>, c: char, w: Seq<char>)
 ///
 /// Reference: reveal `alt_res` here and nowhere wider. Induction on `m.len()`:
 /// `lemma_nullable_correct` turns `nullable(m[0])` into a match of the empty word, the
-/// induction hypothesis handles `m.drop_first()`, and one witness index moves between `m`
-/// and `m.drop_first()`.
+/// induction hypothesis handles `m.drop_first()`, and one `assert forall` relates index `i`
+/// of `m` to index `i - 1` of the tail, which lets the solver move the witness itself.
 pub proof fn lemma_alt_final_law(m: Seq<Re>)
     ensures
         any_nullable(m) == alt_res(m, Seq::<char>::empty()),
@@ -551,19 +551,9 @@ pub proof fn lemma_alt_final_law(m: Seq<Re>)
 {
     reveal(alt_res);
     if m.len() > 0 {
-        let e = Seq::<char>::empty();
         lemma_alt_final_law(m.drop_first());
         lemma_nullable_correct(m[0]);
-        if any_matches(m.drop_first(), e) {
-            let i = choose|i: int|
-                0 <= i < m.drop_first().len() && matches(#[trigger] m.drop_first()[i], e);
-            assert(matches(m[i + 1], e));
-        }
-        if any_matches(m, e) {
-            let i = choose|i: int| 0 <= i < m.len() && matches(#[trigger] m[i], e);
-            if i > 0 {
-                assert(matches(m.drop_first()[i - 1], e));
-            }
+        assert forall|i: int| 0 < i < m.len() implies m[i] == m.drop_first()[i - 1] by {
         }
     }
 }

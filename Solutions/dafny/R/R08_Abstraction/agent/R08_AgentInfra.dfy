@@ -4,19 +4,20 @@ allowed-files:
   - dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy
 acceptance:
   - before the first edit, retain the original snapshot and the native verify-stage diagnostic of scripts/vcheck dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy
-  - preserve the provided interface, the types, Lang, Res and every requires and ensures; edit only the bodies of the engine's functions and lemmas
+  - preserve the provided interface, the types, Lang, Res and every requires and ensures; edit only Prune's body and the bodies of lemmas
   - after every edit run scripts/vcheck dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy and retain the actual stage, holes and diagnostics
   - scripts/vcheck --gate dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy exits 0 with zero counted holes over the full file
-  - scripts/vaudit dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy has no findings and scripts/specfreeze --against <snapshot> dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy preserves every original statement
+  - scripts/vaudit dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy has no findings, and scripts/specfreeze --check R08 reports no finding: every statement as shipped, Prune's body excepted (the engine is what the repair may change)
   - name a concrete pattern and word on which the original engine's step law fails, and explain why a verified engine with a changed Lang would not repair this contract; retain costs and the failed attempt
 */
 /*!
 # R08 semantic debugger (Reference Solution)
 
 A third engine for A2's step-matcher interface: Config = Re, and each step prunes the
-derivative's alternatives, dropping the impossible ones and duplicates. It reaches the
-verifier with zero holes and fails at a real postcondition. The fault is semantic: decide
-whether the proof or the engine is wrong before you edit anything.
+derivative's alternatives, dropping the impossible ones and duplicates. Prune promises to
+keep the language. The file reaches the verifier with zero holes and fails at a real
+postcondition. The fault is semantic: decide whether the proof or the engine is wrong
+before you edit anything.
 */
 module R08_AgentInfra refines RG_A2_StepMatcher {
   import opened RG_A1_Re
@@ -25,19 +26,6 @@ module R08_AgentInfra refines RG_A2_StepMatcher {
 
   type Pattern = Re
   type Config = Re
-
-  // The engine: simplify the alternatives of a regex.
-  function Prune(r: Re): Re
-  {
-    match r
-    case Alt(a, b) =>
-      var x, y := Prune(a), Prune(b);
-      if x == Empty then y
-      else if y == Empty then x
-      else if x == y then x
-      else Alt(x, y)
-    case _ => r
-  }
 
   ghost predicate Lang(p: Pattern, w: seq<char>)
   {
@@ -64,31 +52,32 @@ module R08_AgentInfra refines RG_A2_StepMatcher {
     Nullable(st)
   }
 
-  // item: R08.A1d
-  // Pruning keeps the language.
-  lemma {:induction false} PruneLaw(r: Re, w: seq<char>)
-    ensures Matches(Prune(r), w) <==> Matches(r, w)
-  {
-    match r
-    case Alt(a, b) =>
-      PruneLaw(a, w);
-      PruneLaw(b, w);
-    case _ =>
-  }
-
   lemma StartLaw(p: Pattern, w: seq<char>)
   {
-    PruneLaw(p, w);
   }
 
   lemma FeedLaw(st: Config, c: char, w: seq<char>)
   {
-    PruneLaw(A2.Deriv(st, c), w);
     A2.DerivCorrect(st, c, w);
   }
 
   lemma FinalLaw(st: Config)
   {
     B.NullableCorrect(st);
+  }
+
+  // item: R08.A1d
+  // The engine: simplify the alternatives of a regex, keeping its language.
+  function Prune(r: Re): (out: Re)
+    ensures forall w :: Matches(out, w) <==> Matches(r, w)
+  {
+    match r
+    case Alt(a, b) =>
+      var x, y := Prune(a), Prune(b);
+      if x == Empty then y
+      else if y == Empty then x
+      else if x == y then x
+      else Alt(x, y)
+    case _ => r
   }
 }

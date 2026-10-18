@@ -9,8 +9,8 @@ paper/solutions/R07_solutions.tex  sha256 fb97dac6165a04f0f508f2ff24bae953214944
 paper/R07_problems.tex  sha256 83e96a6c9771ee3984d5898f305292c41471f7b6a6234b491b1c3876fbdf7b9b
 Solutions/dafny/R/R07_Libraries/std/R07_Libraries.dfy  sha256 34c008b0290bd59b8867a4905b7cce678301a6e2baf995a20cb4aa0d4fb9631b
 Solutions/verus/r/r07_libraries/src/lib.rs  sha256 3527ba9d45d45be5b22d1807a333b9970f3c6229dbfc90470a0996cb55bd8509
-Solutions/dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy  sha256 1341292c7cd90c011c0ff976e8ec2bdc866472df2bb0562ba6253874bb7e723c
-Solutions/verus/r/r07_libraries/src/agent.rs  sha256 08df8047f01ebb0b9f51c1471f8692b2fe7b4a04a60538801feee8fce404a9a5
+Solutions/dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy  sha256 afd6370a3cc7f6aeb9dbedee6426137a7b98198776e813129f2740c09f1f3832
+Solutions/verus/r/r07_libraries/src/agent.rs  sha256 2a7e647880f0deca576ae46fa41244ea33622be4d9c05c134aa59c44547c80eb
 
 ## Verifier anchors
 
