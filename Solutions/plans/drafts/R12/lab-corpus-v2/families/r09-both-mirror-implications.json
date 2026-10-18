@@ -1,0 +1,22 @@
+{
+  "cluster": "r09-both-mirror-implications",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "BothMirrorImplicationsR09",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::BothMirrorImplicationsR09",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::both_mirror_implications_r09"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r09-both-mirror-implications",
+      "form": 0,
+      "result": "no form built: the reference body is a bare case split (if/match with empty arms) in both languages; the hint grammar admits no control flow, so a form would have no argument-carrying site, and the obligation is a parser-contract restatement (two predicates over the parse result), not a regex obligation"
+    }
+  ],
+  "notes": "Two separate families (neither calls the other); both rejected."
+}

@@ -20,7 +20,9 @@ sealed_slot = "R08 (rebuilt), R13- and R14-derived regex families: a later step,
 # not admitted: r07-flatten-class-batches (rejected)
 # not admitted: r07-observed-alphabet-bound (rejected)
 # not admitted: r07-sample-batch-bound (rejected)
+# not admitted: r09-both-mirror-implications (rejected)
 # not admitted: r09-copies-nodes (rejected)
+# not admitted: r09-mirror-implication (rejected)
 # not admitted: r09-optional-nodes (rejected)
 # not admitted: r09-repetition-cost (rejected)
 # not admitted: r10-mk-alt-correct (rejected)
@@ -487,6 +489,14 @@ source = "R06 DerivsAppend (Solutions/dafny/R/R06_Induction/exit/R06_Checkpoint.
 role = "unassigned"
 descriptive = false
 tasks = ["r06-derivs-append-d", "r06-derivs-append-v"]
+
+[[cluster]]
+id = "r06-star-unfold-refuted"
+kind = "regex"
+source = "R06 StarUnfoldRefuted (Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::StarUnfoldRefuted (R06.H3d); Solutions/verus/r/r06_induction/src/lib.rs::lemma_star_unfold_refuted (R06.H3v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-star-unfold-refuted-d", "r06-star-unfold-refuted-v"]
 
 [[cluster]]
 id = "r06-star-unfold"
@@ -1505,6 +1515,32 @@ exposure = "course-authored lemma from the R06 reference, written 2026-10, after
 admission = "bench/local/r/labalpha/r06-derivs-append-v/ADMISSION.json"
 admission_sha256 = "c91096aa3935cd568d08dfe4bedd152e96f32d80d2ac2ac90f433866c469d2d6"
 target = "lemma_derivs_append"
+sites = 2
+
+[[task]]
+id = "r06-star-unfold-refuted-d"
+cluster = "r06-star-unfold-refuted"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-star-unfold-refuted-d/tasks/r06-star-unfold-refuted-d.dfy"
+source_sha256 = "3d5fb6f1efbdfdcc2a14f9747c6d4ba1f857b340c1aeacd29bfae18244f84cd4"
+statement = "Complete the proof of the target lemma R12_LabCase.StarUnfoldRefuted (R06 StarUnfoldRefuted) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-star-unfold-refuted-d/ADMISSION.json"
+admission_sha256 = "16829d41f1fe0406c4d3b5d6f898dfe35c5d4182cb778cab9d9cb7a1d174f703"
+target = "R12_LabCase.StarUnfoldRefuted"
+sites = 2
+
+[[task]]
+id = "r06-star-unfold-refuted-v"
+cluster = "r06-star-unfold-refuted"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-star-unfold-refuted-v/tasks/r06-star-unfold-refuted-v.rs"
+source_sha256 = "9ead099f7e79f75acb1df6d3806b38fe35fa2252a0a67131d3372ce07ae60719"
+statement = "Complete the proof of the target lemma lemma_star_unfold_refuted (R06 StarUnfoldRefuted) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-star-unfold-refuted-v/ADMISSION.json"
+admission_sha256 = "11d10dcf7678eccfe5ec317d4894dee9e0c33f545adb0ea243fd11a6c7470baa"
+target = "lemma_star_unfold_refuted"
 sites = 2
 
 [[task]]
