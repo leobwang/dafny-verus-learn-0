@@ -29,7 +29,7 @@ module R08_Checks {
 
   // item: R08.P1d value
   // The state [Cat(Chr('a'), Chr('b')), Star(Chr('a'))] reads the character 'b'.
-  // How many alternatives does the next state hold? Answer form: a natural number.
+  // How many alternatives does the next state hold? Answer form: numeral.
   @Test
   method StateSizeAfterB()
   {

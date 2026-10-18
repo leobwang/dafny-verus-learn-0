@@ -11,7 +11,7 @@ cmd = ["scripts/vcheck", "dafny/R/R07_Libraries/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "71683dcde2531443f992be2896bea80618427e3ec127ec6c99e544509e0fe4db"
+body = "67871a7dd3b6c9c31c53df34338b42ec9a41054c6ccca132e485bbc17f5e9468"
 [entry.pinned.inputs]
 "dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "566ed0591862d0d8b21dfd54879e9cabfc48e7f76bd4a2378cb32b4a39e7c9f4"
 "dafny/R/R07_Libraries/std/dfyconfig.toml" = "47d4d9fba809651f8aa2e15dc8eaab34dcb1d2673e7bdea6c0f448b210de8aff"
@@ -34,7 +34,7 @@ cmd = ["scripts/vcheck", "dafny/checks/R07_checks.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "2dc0ec8b4968e24f8fbae3f1503029fe863305ce73e1e85d50ec99839dfdfb0b"
+body = "0c31310cfae5ad51ea1e620b347778ea0cd95c8e43497eef0653557253a5f414"
 [entry.pinned.inputs]
 "dafny/checks/R07_checks.dfy" = "1c9442d147ae334f721ce82d7bff290d923fc040010105cd99435e678ba595b4"
 
@@ -44,7 +44,7 @@ cmd = ["scripts/vcheck", "dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "04b59e26d83908e558f61ca7031ecf4ce5aa95479d730d6534e4e47382d7a6a9"
+body = "67584192fc9fe6fd7dbfe54047810e2da5ac1161a5faa0cd38c3f5ec77b3b16b"
 [entry.pinned.inputs]
 "dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy" = "308444be352eb3af609db49fb545b7e51e2bd345fd0953fb70475adf1709bee4"
 

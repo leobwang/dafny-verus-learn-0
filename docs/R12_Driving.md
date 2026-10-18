@@ -122,7 +122,7 @@ symbol R12_SelectionProbe.GoodR12: verified
 <!-- pin: selection-d-full -->
 ```
 $ scripts/vcheck --module R12 selection-d.dfy
-vcheck: selection-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+vcheck: selection-d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
 selection-d.dfy:4:32: error: a postcondition could not be proved on this return path
 selection-d.dfy:4:28: related: this is the postcondition that could not be proved
 ```
@@ -222,7 +222,7 @@ each language. These captures show the editing state, not completed exercises.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R12_Driving/std
-vcheck: dafny/R/R12_Driving/std [dafny, learner loop]: verified — 68 verified, 3 holes, 0 errors
+vcheck: dafny/R/R12_Driving/std [dafny, learner loop]: verified — 69 verified, 3 holes, 0 errors
 dafny/R/R12_Driving/std/R12_Driving.dfy:28:3: hole assume R12.T1d
 dafny/R/R12_Driving/std/R12_Driving.dfy:35:3: hole assume R12.H1d
 dafny/R/R12_Driving/std/R12_Driving.dfy:58:3: hole assume R12.H2d
@@ -278,7 +278,7 @@ from text. Its given-only observation is captured here after the commitment.
 <!-- pin: span-value -->
 ```
 $ scripts/vcheck --module R12 span-value.dfy
-vcheck: span-value.dfy [dafny, learner loop]: verified — 62 verified, 0 holes, 0 errors
+vcheck: span-value.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
 
 A diagnostic maps to a symbol only when its language and file agree and one
@@ -459,13 +459,13 @@ specified original revision. The comparisons preserve the original domain.
 <!-- pin: fields-d -->
 ```
 $ scripts/vcheck --module R12 fields-d.dfy
-vcheck: fields-d.dfy [dafny, learner loop]: verified — 62 verified, 0 holes, 0 errors
+vcheck: fields-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: bound-d -->
 ```
 $ scripts/vcheck --module R12 bound-d.dfy
-vcheck: bound-d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
+vcheck: bound-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 bound-d.dfy:9:18: error: assertion might not hold
 bound-d.dfy:6:80: related: this proposition could not be proved
 ```

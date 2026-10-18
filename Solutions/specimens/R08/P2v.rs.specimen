@@ -28,7 +28,7 @@ pub open spec fn feed_all_p2(st: Seq<Re>, c: char) -> Seq<Re>
 
 // item: R08.P2v value
 // The state `seq![Re::Eps, Re::Chr('a')]` reads the character 'a'. How many
-// alternatives does the next state hold? Answer form: a natural number.
+// alternatives does the next state hold? Answer form: numeral.
 proof fn state_size_after_a() {
     assert(feed_all_p2(seq![Re::Eps, Re::Chr('a')], 'a').len() == 1) by (compute_only);
 }

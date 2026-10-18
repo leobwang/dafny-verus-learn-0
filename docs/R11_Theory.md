@@ -594,7 +594,7 @@ masquerade as the intended proof result.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R11_Theory/std
-vcheck: dafny/R/R11_Theory/std [dafny, learner loop]: verified — 77 verified, 8 holes, 0 errors
+vcheck: dafny/R/R11_Theory/std [dafny, learner loop]: verified — 78 verified, 8 holes, 0 errors
 dafny/R/R11_Theory/std/R11_Theory.dfy:29:5: hole assume R11.H2d
 dafny/R/R11_Theory/std/R11_Theory.dfy:36:5: hole assume R11.H3d
 dafny/R/R11_Theory/std/R11_Theory.dfy:42:3: hole assume R11.H1d
@@ -624,7 +624,7 @@ verus/r/r11_theory/src/lib.rs:166:1: hole external_body R11.T1v
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy
-vcheck: dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy [dafny, learner loop]: verified — 66 verified, 1 hole, 0 errors
+vcheck: dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy [dafny, learner loop]: verified — 67 verified, 1 hole, 0 errors
 dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy:40:4: hole assume R11.A1d
 ```
 
@@ -645,7 +645,7 @@ specimens/R11/card-c1v.rs.specimen:10:21: error: use of moved value: `input`
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R11_checks.dfy
-vcheck: dafny/checks/R11_checks.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R11_checks.dfy [dafny, learner loop]: verified — 65 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: changed-rule-d -->

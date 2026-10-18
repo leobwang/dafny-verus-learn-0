@@ -607,7 +607,7 @@ an ordinary learner-loop capture.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R10_TypeInvariants/std
-vcheck: dafny/R/R10_TypeInvariants/std [dafny, learner loop]: verified — 71 verified, 4 holes, 0 errors
+vcheck: dafny/R/R10_TypeInvariants/std [dafny, learner loop]: verified — 72 verified, 4 holes, 0 errors
 dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:20:16: hole assume R10.H1d
 dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:26:16: hole assume R10.H2d
 dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:32:4: hole assume R10.H3d
@@ -627,7 +627,7 @@ verus/r/r10_type_invariants/src/lib.rs:55:1: hole external_body R10.H4v
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
-vcheck: dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy [dafny, learner loop]: verified — 64 verified, 3 holes, 0 errors
+vcheck: dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy [dafny, learner loop]: verified — 65 verified, 3 holes, 0 errors
 dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:18:5: hole assume R10.A1d
 dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:20:5: hole assume R10.A1d
 dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:22:5: hole assume R10.A1d
@@ -742,7 +742,7 @@ vcheck: specimens/R10/shape-v.rs.specimen [verus, learner loop]: verified — 1 
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R10_checks.dfy
-vcheck: dafny/checks/R10_checks.dfy [dafny, learner loop]: verified — 62 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R10_checks.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
 
 ---

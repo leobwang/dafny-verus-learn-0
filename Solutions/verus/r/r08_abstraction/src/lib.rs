@@ -423,6 +423,7 @@ impl StepMatcher for AltSetEngine {
     }
 
     proof fn lemma_start_law(p: Re, w: Seq<char>) {
+        // did: reveal the engine's model here, in this proof only
         reveal(alt_res);
         lemma_parts_law(p, w);
     }
@@ -499,6 +500,7 @@ pub proof fn lemma_alt_feed_law(m: Seq<Re>, c: char, w: Seq<char>)
         alt_res(feed_all(m, c), w) == alt_res(m, seq![c] + w),
     decreases m.len(),
 {
+    // did: reveal the engine's model here, in this proof only
     reveal(alt_res);
     if m.len() > 0 {
         let head = parts(deriv(m[0], c));
@@ -549,6 +551,7 @@ pub proof fn lemma_alt_final_law(m: Seq<Re>)
         any_nullable(m) == alt_res(m, Seq::<char>::empty()),
     decreases m.len(),
 {
+    // did: reveal the engine's model here, in this proof only
     reveal(alt_res);
     if m.len() > 0 {
         lemma_alt_final_law(m.drop_first());

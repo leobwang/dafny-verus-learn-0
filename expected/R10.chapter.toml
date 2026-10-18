@@ -11,7 +11,7 @@ cmd = ["scripts/vcheck", "dafny/R/R10_TypeInvariants/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "b7a11b8278daed5864e236ae5d3724550408590256a3e771405b5f3dcc1a8303"
+body = "e5dbfa496d0fbbda07ced8af92b641d5293c61611892edbd8576186a757b4139"
 [entry.pinned.inputs]
 "dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy" = "17508c664f5ad937dd5d755ae3723976542f8dcf959052c39deb8d181c36dbcc"
 "dafny/R/R10_TypeInvariants/std/dfyconfig.toml" = "5e6bdefdeabab2606b193c309570e557cf0f45ecd3e6375452a5b59568ddc418"
@@ -34,7 +34,7 @@ cmd = ["scripts/vcheck", "dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "bae5a136a0dd09fc39c062a65e0a911511702be4062316223b0990d305ce4ceb"
+body = "29da5c4d0c5e520158abab957d406629ffca1854f5f9b199bd21c0fa5b2087df"
 [entry.pinned.inputs]
 "dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy" = "10583d6730b12fe481321913ca145e9ee9c91f1a080f45b8696d89e86f807edb"
 
@@ -285,6 +285,6 @@ cmd = ["scripts/vcheck", "dafny/checks/R10_checks.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "033b31cfea3990ab753eb5fd465621f9e68752fd3363bf918e10b3f416084cb9"
+body = "9d7874f7039f9ed84e660b8769cc5b977cddae2f67e634e42ccb8f1f01ff4e64"
 [entry.pinned.inputs]
 "dafny/checks/R10_checks.dfy" = "c8796b6990cd7390fad75dedbf50fc395add0360381d28018d3b0cd2e01d69ae"

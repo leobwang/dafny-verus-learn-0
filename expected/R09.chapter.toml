@@ -11,7 +11,7 @@ cmd = ["scripts/vcheck", "dafny/R/R09_Effects/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "92bcc79f6e2bf1d1c15a09496eee07bbbf2774d0fc96bfb85d625e3ac12f9c65"
+body = "9a0db466aa4d8da1d13df263e103c5e94f955c8255a96bf6144f343e6eba2751"
 [entry.pinned.inputs]
 "dafny/R/R09_Effects/std/R09_Effects.dfy" = "2d7fe7edcf09629a064c5e9a2d40e823c93fa0d425fff6d8d4d8efed4715eb0b"
 "dafny/R/R09_Effects/std/dfyconfig.toml" = "f5d2b35febc28edda45d3668fcf262bd9fe694bd4fb6ede650455616e7a6365c"
@@ -34,7 +34,7 @@ cmd = ["scripts/vcheck", "dafny/checks/R09_checks.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "927e626fa659437f4094b0b39a0d445c03f1f9b7b6c2f96fa77f64bf4fef699e"
+body = "de1eca9189e9507a5bb651fada19431983651bc04cb9e1f8e63987e086d6aeba"
 [entry.pinned.inputs]
 "dafny/checks/R09_checks.dfy" = "81cb28e06449cd28b6e4093a023e16cb362eb5270fb9c645f071e70f84ddef35"
 
@@ -44,7 +44,7 @@ cmd = ["scripts/vcheck", "dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "96ed86357bc32af02dff905df22b02ea4e809c96fcb487fd7d8f5c0e014a560f"
+body = "1d81ad46bb035db781830b3ddd496014bcaf80e701d2c0711167c39493369336"
 [entry.pinned.inputs]
 "dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy" = "31d2521551649342e56f512f66aeb64f84347847ae46cc66d8e760268d75d759"
 

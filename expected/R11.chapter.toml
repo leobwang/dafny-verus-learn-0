@@ -11,7 +11,7 @@ cmd = ["scripts/vcheck", "dafny/R/R11_Theory/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "6bba2c0b6507c843bad8c36b706e8b421f4ee48ec89a28062df4ed22a285778e"
+body = "721b3d1325483a46ef57f579b973d7f49b7154fb790abccb755a8aad1857d46f"
 [entry.pinned.inputs]
 "dafny/R/R11_Theory/std/R11_Theory.dfy" = "df3f95b19d171d93500b42ccb0c6fb15d09bf0deb4e4b9ce3523b4dff2a688ad"
 "dafny/R/R11_Theory/std/dfyconfig.toml" = "923a850770868f4168904a1ff56b9b6ea9e2fc9621b3a04ceb9daf7a9cca1ca8"
@@ -35,7 +35,7 @@ cmd = ["scripts/vcheck", "dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "f0003c4aaad542bdafb56e48616d96d75a7fa743fd2a31e0be63cbf38d98b58c"
+body = "3c25a845c6fbdf2d48a14e4501e746ea19d80c7d0a4b476e3a481103fe802158"
 [entry.pinned.inputs]
 "dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy" = "dad60c6d607bc7662ed57480e76f56a66c9364f6ac742bc997977f8b9249932b"
 
@@ -65,7 +65,7 @@ cmd = ["scripts/vcheck", "dafny/checks/R11_checks.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "17cbae72d980a3a017c47bafae1794b7ebfdb01fd536ca9bbaf9cc46484b01e3"
+body = "2331f1ce8ea2ba05f07a39bc65d7de01b21817f9866a875658535735ae654b28"
 [entry.pinned.inputs]
 "dafny/checks/R11_checks.dfy" = "f41e32eb35b7e13257aa7230b6dd9920417c637d9edfcac37af8c37e17874b4e"
 

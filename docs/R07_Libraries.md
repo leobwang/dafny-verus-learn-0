@@ -48,7 +48,7 @@ After the first-try record, the following source runs establish the learner-loop
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R07_Libraries/std
-vcheck: dafny/R/R07_Libraries/std [dafny, learner loop]: verified — 38 verified, 4 holes, 0 errors
+vcheck: dafny/R/R07_Libraries/std [dafny, learner loop]: verified — 39 verified, 4 holes, 0 errors
 dafny/R/R07_Libraries/std/R07_Libraries.dfy:19:25: hole bodyless-method R07.T1d
 dafny/R/R07_Libraries/std/R07_Libraries.dfy:44:82: hole bodyless-method R07.H1d
 dafny/R/R07_Libraries/std/R07_Libraries.dfy:51:62: hole bodyless-method R07.H2d
@@ -70,7 +70,7 @@ verus/r/r07_libraries/src/lib.rs:72:38: hole assume R07.H5v
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R07_checks.dfy
-vcheck: dafny/checks/R07_checks.dfy [dafny, learner loop]: verified — 33 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R07_checks.dfy [dafny, learner loop]: verified — 34 verified, 0 holes, 0 errors
 ```
 
 ---
@@ -395,7 +395,7 @@ The supplied goals concern class-range batches, not the concrete samples used fo
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy
-vcheck: dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy [dafny, learner loop]: verified — 34 verified, 2 holes, 0 errors
+vcheck: dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy [dafny, learner loop]: verified — 35 verified, 2 holes, 0 errors
 dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy:23:37: hole bodyless-method R07.A1d
 dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy:28:41: hole bodyless-method R07.A2d
 ```

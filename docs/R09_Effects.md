@@ -82,7 +82,7 @@ holes. A failure to resolve a file is different from a failed proof.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R09_Effects/std
-vcheck: dafny/R/R09_Effects/std [dafny, learner loop]: verified — 339 verified, 6 holes, 0 errors
+vcheck: dafny/R/R09_Effects/std [dafny, learner loop]: verified — 340 verified, 6 holes, 0 errors
 dafny/R/R09_Effects/std/R09_Effects.dfy:144:4: hole assume R09.H1d
 dafny/R/R09_Effects/std/R09_Effects.dfy:152:4: hole assume R09.H2d
 dafny/R/R09_Effects/std/R09_Effects.dfy:262:4: hole assume R09.H3d
@@ -106,7 +106,7 @@ verus/r/r09_effects/src/lib.rs:743:1: hole external_body R09.H5v
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R09_checks.dfy
-vcheck: dafny/checks/R09_checks.dfy [dafny, learner loop]: verified — 53 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R09_checks.dfy [dafny, learner loop]: verified — 54 verified, 0 holes, 0 errors
 ```
 
 ---
@@ -536,7 +536,7 @@ cards. The first-try machinery checks the two slot-bearing specimens separately.
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy
-vcheck: dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy [dafny, learner loop]: verified — 57 verified, 0 holes, 0 errors
+vcheck: dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy [dafny, learner loop]: verified — 58 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: agent-v -->

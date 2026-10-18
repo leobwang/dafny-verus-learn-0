@@ -296,6 +296,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
 
   lemma StartLaw(p: Pattern, w: seq<char>)
   {
+    // did: reveal the engine's model here, in this proof only
     reveal AltRes();
     PartsLaw(p, w);
   }
@@ -368,6 +369,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
     ensures AltRes(FeedAll(st, c), w) <==> AltRes(st, [c] + w)
     decreases |st|
   {
+    // did: reveal the engine's model here, in this proof only
     reveal AltRes();
     if st != [] {
       var head, tail := Parts(A2.Deriv(st[0], c)), FeedAll(st[1..], c);
@@ -412,6 +414,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
     ensures AnyNullable(st) <==> AltRes(st, [])
     decreases |st|
   {
+    // did: reveal the engine's model here, in this proof only
     reveal AltRes();
     if st != [] {
       AltFinalLaw(st[1..]);
