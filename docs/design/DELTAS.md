@@ -288,6 +288,28 @@
 | 249 | Make synthetic registry fixtures independent of the real shipping state | adopted (2026-10-17 UTC) | author |
 | 250 | Release the initial Q core locally on Basic | adopted (2026-10-17 UTC); its Next bullet superseded by D46 (Δ275) | author |
 | 251 | R01/R02 foundation and local validation; R03–R16 manual lemma induction; opt-in export-boundary freeze | adopted in R authoring; integration follows Q release Δ250 (2026-10-17 UTC) | DVR1, within PLAN §8 R2 delegation |
+| 252 | Refresh shared-option input pins after the R induction decision: 37 Q chapter captures re-pinned, published chapters byte-identical | adopted (2026-10-17 UTC) | author |
+| 253 | Ship validated R01/R02 on the local Basic baseline | adopted (2026-10-17 UTC); rolled back from basic by D46 (Δ275) | author |
+| 254 | Build R04 logic and faithful-refusal author controls; the bodyless Verus header hash fix | adopted in authoring (2026-10-17 UTC) | DVR1's R04 lane |
+| 255 | Build R05 obligation reading and repeated-run measurements | adopted in authoring (2026-10-17 UTC); validation checkpoint passed, R05 remains authoring | DVR1's R05 lane |
+| 256 | Build R06 induction, loops and staged decomposition | adopted in authoring (2026-10-17 UTC); final local checkpoint passed, R06 remains authoring | DVR1's R06 lane |
+| 257 | Build R07 library interfaces and retrieval evidence | adopted in authoring (2026-10-17 UTC); final local checkpoint passed, R07 remains authoring | DVR2's R07 lane |
+| 258 | R08 frozen matcher interface: the A2 matcher statement and the body-free Verus trait | checkpoint (2026-10-17); R08 planned at this point | DVR2's R08 lane |
+| 259 | R08 abstraction construction candidate | authoring candidate (2026-10-17); study workflow and focused CI pending | DVR2's R08 lane |
+| 260 | R08 compact-example disjointness names; R08 final local follow-up | authoring candidate (2026-10-17); six local checks complete across two runs | DVR2's R08 lane |
+| 261 | R09 A3 definitions and faithful-port construction checkpoint | checkpoint (2026-10-17); R09 planned at this point | DVR2's R09 lane |
+| 262 | R09 effects construction candidate | local candidate (2026-10-17); study workflow and focused CI pending | DVR2's R09 lane |
+| 263 | R09 unfilled verdict-slot serialization; R09 local follow-up | local R09 construction complete (2026-10-17); not a Basic release | DVR2's R09 lane |
+| 264 | R10 provided A4 definitions checkpoint | checkpoint (2026-10-17); R10 planned at this point | DVR2's R10 lane |
+| 265 | R10 invariant kit and original-statement consumer | authoring (2026-10-17); pins, workflow and CI follow | DVR2's R10 lane |
+| 266 | R10 static format correction; R10 local follow-up | local R10 construction complete (2026-10-17); not a Basic shipment | DVR2's R10 lane |
+| 267 | R11 fixed-rule theory kit and admitted Vec fallback | authoring (DVR2); focused CI and study workflow pending | DVR2's R11 lane |
+| 268 | R11 local validation complete | locally complete (DVR2); R11 remains authoring | DVR2's R11 lane |
+| 269 | R12 private verifier-driving feasibility | private feasibility (DVR2); R12 planned at this point | DVR2's R12 lane |
+| 270 | R12 verifier-driving source kit and original bindings | authoring source checkpoint (DVR2); corpus, study workflow and focused CI remain | DVR2's R12 lane |
+| 271 | R12 admitted corpus and source-bound replay | corpus source build (DVR2); study workflow and focused CI remain | DVR2's R12 lane |
+| 272 | R12 local closure with strict harness packaging | local candidate complete (2026-10-17); R12 remains authoring | DVR2's R12 lane |
+| 273 | R13 pipelines and R-half forensic local closure | local authoring candidate complete (2026-10-17); not shipped | DVR3's R13 lane |
 | 274 | D48 implemented: u32 code-point class ranges, the hidden A2 class API with its range accessor, A3's `SpanClass` removed, R07 and R09 ported, R03's API core references rebuilt | adopted in R authoring (2026-10-17 UTC); A2's class half provisional until R03 and R06 pass | DVR4 step 2 |
 | 275 | Review of the Basic release; the user's decisions D46–D49; the review fixes on basic: release-history invariant, exact CI claims, stale text, D39 in Q12's B1 and CT.b, the learner's branch recipe, vp3-he077's marker, a host-independent lane fixture, spacing, DELTAS records, the shared solver slice, CI evidence retention, compile and link stages ; the armed-units fixture; the live-check lane's five findings | adopted (2026-10-17) | the user (D46–D49); the basic fix lane |
 
