@@ -1,138 +1,132 @@
 {
-  "schema": 1,
-  "scope": "12 exposed course assertions, bounded proof-site choices after completing the R14 core",
-  "cards": [
-    {
-      "id": "prefix-upper-d",
-      "lang": "dafny",
-      "mechanism": "prefix",
-      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(s:seq<int>,cap:nat)\n requires forall i |0<=i<|s| ::0<=s[i]<=cap\n ensures PrefixMassR14(s)<=|s|*cap\n {\n // R14_PROOF_SITE\n }\n}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert true;",
-        "lemma": "PrefixCapR14(s,cap);"
-      }
-    },
-    {
-      "id": "prefix-lower-d",
-      "lang": "dafny",
-      "mechanism": "prefix",
-      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(s:seq<int>,cap:nat)\n requires forall i |0<=i<|s| ::0<=s[i]<=cap\n ensures 0<=PrefixMassR14(s)\n {\n // R14_PROOF_SITE\n }\n}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert true;",
-        "lemma": "PrefixCapR14(s,cap);"
-      }
-    },
-    {
-      "id": "prefix-twice-d",
-      "lang": "dafny",
-      "mechanism": "prefix",
-      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(s:seq<int>,cap:nat)\n requires forall i |0<=i<|s| ::0<=s[i]<=cap\n ensures PrefixMassR14(s)+PrefixMassR14(s)<=(|s|*cap)+(|s|*cap)\n {\n // R14_PROOF_SITE\n }\n}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert true;",
-        "lemma": "PrefixCapR14(s,cap);"
-      }
-    },
-    {
-      "id": "odd-square-d",
-      "lang": "dafny",
-      "mechanism": "fuel",
-      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(n:nat)\n \n ensures OddTraceR14(n)==n*n\n {\n // R14_PROOF_SITE\n }\n}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert true;",
-        "lemma": "OddSquareR14(n);"
-      }
-    },
-    {
-      "id": "odd-next-d",
-      "lang": "dafny",
-      "mechanism": "fuel",
-      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(n:nat)\n \n ensures OddTraceR14(n+1)==OddTraceR14(n)+2*n+1\n {\n // R14_PROOF_SITE\n }\n}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert true;",
-        "lemma": "OddSquareR14(n);OddSquareR14(n+1);"
-      }
-    },
-    {
-      "id": "odd-double-d",
-      "lang": "dafny",
-      "mechanism": "fuel",
-      "template": "\nmodule R14_BatteryCell {import opened R14_Mechanics\n lemma {:induction false} BatteryCellR14(n:nat)\n \n ensures OddTraceR14(n)+OddTraceR14(n)==2*(n*n)\n {\n // R14_PROOF_SITE\n }\n}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert true;",
-        "lemma": "OddSquareR14(n);"
-      }
-    },
-    {
-      "id": "prefix-upper-v",
-      "lang": "verus",
-      "mechanism": "prefix",
-      "template": "\nverus! {pub proof fn battery_cell_r14(s:Seq<int>,cap:int)\n requires cap>=0,forall|i:int| 0<=i<s.len() ==> 0<=#[trigger] s[i]<=cap,\n ensures prefix_mass_r14(s)<=s.len()*cap,\n {\n // R14_PROOF_SITE\n }}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert(true);",
-        "lemma": "prefix_cap_r14(s,cap);"
-      }
-    },
-    {
-      "id": "prefix-lower-v",
-      "lang": "verus",
-      "mechanism": "prefix",
-      "template": "\nverus! {pub proof fn battery_cell_r14(s:Seq<int>,cap:int)\n requires cap>=0,forall|i:int| 0<=i<s.len() ==> 0<=#[trigger] s[i]<=cap,\n ensures 0<=prefix_mass_r14(s),\n {\n // R14_PROOF_SITE\n }}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert(true);",
-        "lemma": "prefix_cap_r14(s,cap);"
-      }
-    },
-    {
-      "id": "odd-square-v",
-      "lang": "verus",
-      "mechanism": "fuel",
-      "template": "\nverus! {pub proof fn battery_cell_r14(n:nat)\n \n ensures odd_trace_r14(n)==n*n,\n {\n // R14_PROOF_SITE\n }}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert(true);",
-        "lemma": "odd_square_r14(n);"
-      }
-    },
-    {
-      "id": "odd-next-v",
-      "lang": "verus",
-      "mechanism": "fuel",
-      "template": "\nverus! {pub proof fn battery_cell_r14(n:nat)\n \n ensures odd_trace_r14((n+1) as nat)==odd_trace_r14(n)+2*n+1,\n {\n // R14_PROOF_SITE\n }}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert(true);",
-        "lemma": "odd_square_r14(n);odd_square_r14((n+1) as nat);assert((n+1)*(n+1)==n*n+2*n+1) by(nonlinear_arith);"
-      }
-    },
-    {
-      "id": "word-strict-v",
-      "lang": "verus",
-      "mechanism": "bit-vector",
-      "template": "\nverus! {pub fn battery_cell_r14(x:u32) requires x>0u32, {let y=x&(x-1);\n proof {\n // R14_PROOF_SITE\n }\n assert(y<x);\n }}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert(x>0u32);",
-        "word-theory": "assert((x & ((x-1) as u32))<x) by(bit_vector) requires x>0u32;"
-      }
-    },
-    {
-      "id": "word-disjoint-v",
-      "lang": "verus",
-      "mechanism": "bit-vector",
-      "template": "\nverus! {pub fn battery_cell_r14(x:u32) requires x>0u32, {let y=x&(x-1);\n proof {\n // R14_PROOF_SITE\n }\n assert((y&(x^y))==0u32);\n }}\n",
-      "options": {
-        "none": "",
-        "local-bound": "assert(x>0u32);",
-        "word-theory": "assert(((x & ((x-1) as u32)) & (x ^ (x & ((x-1) as u32))))==0u32) by(bit_vector) requires x>0u32;"
-      }
-    }
-  ]
+ "schema": 2,
+ "scope": "12 exposed course assertions on R14's MatchesV, regex sizes, u32 code points and polynomial identities (6 Dafny, 6 Verus): trigger terms, fuel, a matching loop, nonlinear facts, bit-vectors and isolation; bounded proof-site choices, tried after the R14 core is complete",
+ "cards": [
+  {
+   "id": "split-d",
+   "lang": "dafny",
+   "mechanism": "trigger",
+   "template": "\nmodule R14_BatteryCell {\n  import opened RG_A1_Re\n  import A2 = RG_A2_Deriv\n  import opened R14_Mechanics\n\n  lemma BatteryCellR14()\n    ensures MatchesV(Cat(Chr('a'), Chr('b')), ['a', 'b'])\n  {\n    // R14_PROOF_SITE\n  }\n}\n",
+   "options": {
+    "none": "",
+    "split-only": "    assert ['a', 'b'][..1] == ['a'];",
+    "split-term": "    assert ['a', 'b'][..1] == ['a'] && MatchesV(Chr('a'), ['a', 'b'][..1]);"
+   }
+  },
+  {
+   "id": "star-d",
+   "lang": "dafny",
+   "mechanism": "fuel",
+   "template": "\nmodule R14_BatteryCell {\n  import opened RG_A1_Re\n  import A2 = RG_A2_Deriv\n  import opened R14_Mechanics\n\n  lemma BatteryCellR14()\n    ensures MatchesV(Star(Chr('z')), PowerWord('z', 5))\n  {\n    // R14_PROOF_SITE\n  }\n}\n",
+   "options": {
+    "none": "",
+    "unfold-one": "    assert PowerWord('z', 5)[..1] == ['z'];",
+    "lemma": "    StarPowV('z', 5);"
+   }
+  },
+  {
+   "id": "loop-d",
+   "lang": "dafny",
+   "mechanism": "matching-loop",
+   "template": "\nmodule R14_BatteryCell {\n  import opened RG_A1_Re\n  import A2 = RG_A2_Deriv\n  import opened R14_Mechanics\n\n  lemma BatteryCellR14(r: Re, u: seq<char>, v: seq<char>)\n    requires u != [] && MatchesV(r, u) && MatchesV(Star(r), v)\n    requires forall s {:trigger MatchesV(Star(r), s)} :: MatchesV(Star(r), s) ==> MatchesV(Star(r), s + s)\n    ensures MatchesV(Cat(r, Star(r)), u + v)\n  {\n    // R14_PROOF_SITE\n  }\n}\n",
+   "options": {
+    "none": "",
+    "lemma": "    CatIntroV(r, Star(r), u, v);"
+   }
+  },
+  {
+   "id": "nl-d",
+   "lang": "dafny",
+   "mechanism": "nonlinear",
+   "template": "\nmodule R14_BatteryCell {\n  import opened RG_A1_Re\n  import A2 = RG_A2_Deriv\n  import opened R14_Mechanics\n\n  lemma BatteryCellR14(r: Re, c: char)\n    ensures NodeCount(A2.Deriv(Alt(r, r), c)) <= 8 * NodeCount(r) * NodeCount(r) + 8 * NodeCount(r) + 2\n  {\n    // R14_PROOF_SITE\n  }\n}\n",
+   "options": {
+    "none": "",
+    "lemma": "    DerivSizeV(Alt(r, r), c);"
+   }
+  },
+  {
+   "id": "bv-d",
+   "lang": "dafny",
+   "mechanism": "bit-vector",
+   "template": "\nmodule R14_BatteryCell {\n  import opened RG_A1_Re\n  import A2 = RG_A2_Deriv\n  import opened R14_Mechanics\n\n  lemma BatteryCellR14(n: int)\n    requires 0xD800 <= n < 0xE000\n    ensures (n as bv32) & 0xFFFFF800 == 0xD800\n  {\n    // R14_PROOF_SITE\n  }\n}\n",
+   "options": {
+    "none": "",
+    "bv-bound": "    assert 0xD800 <= n as bv32 < 0xE000;"
+   }
+  },
+  {
+   "id": "iso-d",
+   "lang": "dafny",
+   "mechanism": "isolation",
+   "template": "\nmodule R14_BatteryCell {\n  import opened RG_A1_Re\n  import A2 = RG_A2_Deriv\n  import opened R14_Mechanics\n\n  lemma BatteryCellR14(a: int, b: int, c: int, d: int)\n    ensures (a + b + c + d) * (a + b + c + d) * (a + b + c + d) == a * a * a + 3 * a * a * b + 3 * a * a * c + 3 * a * a * d + 3 * a * b * b + 6 * a * b * c + 6 * a * b * d + 3 * a * c * c + 6 * a * c * d + 3 * a * d * d + b * b * b + 3 * b * b * c + 3 * b * b * d + 3 * b * c * c + 6 * b * c * d + 3 * b * d * d + c * c * c + 3 * c * c * d + 3 * c * d * d + d * d * d\n    ensures (a - b + c + d) * (a + b + c + d) * (a + b + c + d) == a * a * a + a * a * b + 3 * a * a * c + 3 * a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d + 3 * a * c * c + 6 * a * c * d + 3 * a * d * d - b * b * b - b * b * c - b * b * d + b * c * c + 2 * b * c * d + b * d * d + c * c * c + 3 * c * c * d + 3 * c * d * d + d * d * d\n    ensures (a + b + c + d) * (a + b - c + d) * (a + b + c + d) == a * a * a + 3 * a * a * b + a * a * c + 3 * a * a * d + 3 * a * b * b + 2 * a * b * c + 6 * a * b * d - a * c * c + 2 * a * c * d + 3 * a * d * d + b * b * b + b * b * c + 3 * b * b * d - b * c * c + 2 * b * c * d + 3 * b * d * d - c * c * c - c * c * d + c * d * d + d * d * d\n    ensures (a - b + c + d) * (a + b - c + d) * (a + b + c + d) == a * a * a + a * a * b + a * a * c + 3 * a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d + 3 * a * d * d - b * b * b + b * b * c - b * b * d + b * c * c + 2 * b * c * d + b * d * d - c * c * c - c * c * d + c * d * d + d * d * d\n    ensures (a + b + c + d) * (a + b + c + d) * (a + b + c - d) == a * a * a + 3 * a * a * b + 3 * a * a * c + a * a * d + 3 * a * b * b + 6 * a * b * c + 2 * a * b * d + 3 * a * c * c + 2 * a * c * d - a * d * d + b * b * b + 3 * b * b * c + b * b * d + 3 * b * c * c + 2 * b * c * d - b * d * d + c * c * c + c * c * d - c * d * d - d * d * d\n    ensures (a - b + c + d) * (a + b + c + d) * (a + b + c - d) == a * a * a + a * a * b + 3 * a * a * c + a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d + 3 * a * c * c + 2 * a * c * d - a * d * d - b * b * b - b * b * c + b * b * d + b * c * c + 2 * b * c * d + b * d * d + c * c * c + c * c * d - c * d * d - d * d * d\n    ensures (a + b + c + d) * (a + b - c + d) * (a + b + c - d) == a * a * a + 3 * a * a * b + a * a * c + a * a * d + 3 * a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d - a * d * d + b * b * b + b * b * c + b * b * d - b * c * c + 2 * b * c * d - b * d * d - c * c * c + c * c * d + c * d * d - d * d * d\n    ensures (a - b + c + d) * (a + b - c + d) * (a + b + c - d) == a * a * a + a * a * b + a * a * c + a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d - a * d * d - b * b * b + b * b * c + b * b * d + b * c * c - 2 * b * c * d + b * d * d - c * c * c + c * c * d + c * d * d - d * d * d\n  {\n    // R14_PROOF_SITE\n  }\n}\n",
+   "options": {
+    "none": "",
+    "asserts": "    assert (a + b + c + d) * (a + b + c + d) * (a + b + c + d) == a * a * a + 3 * a * a * b + 3 * a * a * c + 3 * a * a * d + 3 * a * b * b + 6 * a * b * c + 6 * a * b * d + 3 * a * c * c + 6 * a * c * d + 3 * a * d * d + b * b * b + 3 * b * b * c + 3 * b * b * d + 3 * b * c * c + 6 * b * c * d + 3 * b * d * d + c * c * c + 3 * c * c * d + 3 * c * d * d + d * d * d;\n    assert (a - b + c + d) * (a + b + c + d) * (a + b + c + d) == a * a * a + a * a * b + 3 * a * a * c + 3 * a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d + 3 * a * c * c + 6 * a * c * d + 3 * a * d * d - b * b * b - b * b * c - b * b * d + b * c * c + 2 * b * c * d + b * d * d + c * c * c + 3 * c * c * d + 3 * c * d * d + d * d * d;\n    assert (a + b + c + d) * (a + b - c + d) * (a + b + c + d) == a * a * a + 3 * a * a * b + a * a * c + 3 * a * a * d + 3 * a * b * b + 2 * a * b * c + 6 * a * b * d - a * c * c + 2 * a * c * d + 3 * a * d * d + b * b * b + b * b * c + 3 * b * b * d - b * c * c + 2 * b * c * d + 3 * b * d * d - c * c * c - c * c * d + c * d * d + d * d * d;\n    assert (a - b + c + d) * (a + b - c + d) * (a + b + c + d) == a * a * a + a * a * b + a * a * c + 3 * a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d + 3 * a * d * d - b * b * b + b * b * c - b * b * d + b * c * c + 2 * b * c * d + b * d * d - c * c * c - c * c * d + c * d * d + d * d * d;\n    assert (a + b + c + d) * (a + b + c + d) * (a + b + c - d) == a * a * a + 3 * a * a * b + 3 * a * a * c + a * a * d + 3 * a * b * b + 6 * a * b * c + 2 * a * b * d + 3 * a * c * c + 2 * a * c * d - a * d * d + b * b * b + 3 * b * b * c + b * b * d + 3 * b * c * c + 2 * b * c * d - b * d * d + c * c * c + c * c * d - c * d * d - d * d * d;\n    assert (a - b + c + d) * (a + b + c + d) * (a + b + c - d) == a * a * a + a * a * b + 3 * a * a * c + a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d + 3 * a * c * c + 2 * a * c * d - a * d * d - b * b * b - b * b * c + b * b * d + b * c * c + 2 * b * c * d + b * d * d + c * c * c + c * c * d - c * d * d - d * d * d;\n    assert (a + b + c + d) * (a + b - c + d) * (a + b + c - d) == a * a * a + 3 * a * a * b + a * a * c + a * a * d + 3 * a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d - a * d * d + b * b * b + b * b * c + b * b * d - b * c * c + 2 * b * c * d - b * d * d - c * c * c + c * c * d + c * d * d - d * d * d;\n    assert (a - b + c + d) * (a + b - c + d) * (a + b + c - d) == a * a * a + a * a * b + a * a * c + a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d - a * d * d - b * b * b + b * b * c + b * b * d + b * c * c - 2 * b * c * d + b * d * d - c * c * c + c * c * d + c * d * d - d * d * d;",
+    "isolated": "    assert {:isolate} (a + b + c + d) * (a + b + c + d) * (a + b + c + d) == a * a * a + 3 * a * a * b + 3 * a * a * c + 3 * a * a * d + 3 * a * b * b + 6 * a * b * c + 6 * a * b * d + 3 * a * c * c + 6 * a * c * d + 3 * a * d * d + b * b * b + 3 * b * b * c + 3 * b * b * d + 3 * b * c * c + 6 * b * c * d + 3 * b * d * d + c * c * c + 3 * c * c * d + 3 * c * d * d + d * d * d;\n    assert {:isolate} (a - b + c + d) * (a + b + c + d) * (a + b + c + d) == a * a * a + a * a * b + 3 * a * a * c + 3 * a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d + 3 * a * c * c + 6 * a * c * d + 3 * a * d * d - b * b * b - b * b * c - b * b * d + b * c * c + 2 * b * c * d + b * d * d + c * c * c + 3 * c * c * d + 3 * c * d * d + d * d * d;\n    assert {:isolate} (a + b + c + d) * (a + b - c + d) * (a + b + c + d) == a * a * a + 3 * a * a * b + a * a * c + 3 * a * a * d + 3 * a * b * b + 2 * a * b * c + 6 * a * b * d - a * c * c + 2 * a * c * d + 3 * a * d * d + b * b * b + b * b * c + 3 * b * b * d - b * c * c + 2 * b * c * d + 3 * b * d * d - c * c * c - c * c * d + c * d * d + d * d * d;\n    assert {:isolate} (a - b + c + d) * (a + b - c + d) * (a + b + c + d) == a * a * a + a * a * b + a * a * c + 3 * a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d + 3 * a * d * d - b * b * b + b * b * c - b * b * d + b * c * c + 2 * b * c * d + b * d * d - c * c * c - c * c * d + c * d * d + d * d * d;\n    assert {:isolate} (a + b + c + d) * (a + b + c + d) * (a + b + c - d) == a * a * a + 3 * a * a * b + 3 * a * a * c + a * a * d + 3 * a * b * b + 6 * a * b * c + 2 * a * b * d + 3 * a * c * c + 2 * a * c * d - a * d * d + b * b * b + 3 * b * b * c + b * b * d + 3 * b * c * c + 2 * b * c * d - b * d * d + c * c * c + c * c * d - c * d * d - d * d * d;\n    assert {:isolate} (a - b + c + d) * (a + b + c + d) * (a + b + c - d) == a * a * a + a * a * b + 3 * a * a * c + a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d + 3 * a * c * c + 2 * a * c * d - a * d * d - b * b * b - b * b * c + b * b * d + b * c * c + 2 * b * c * d + b * d * d + c * c * c + c * c * d - c * d * d - d * d * d;\n    assert {:isolate} (a + b + c + d) * (a + b - c + d) * (a + b + c - d) == a * a * a + 3 * a * a * b + a * a * c + a * a * d + 3 * a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d - a * d * d + b * b * b + b * b * c + b * b * d - b * c * c + 2 * b * c * d - b * d * d - c * c * c + c * c * d + c * d * d - d * d * d;\n    assert {:isolate} (a - b + c + d) * (a + b - c + d) * (a + b + c - d) == a * a * a + a * a * b + a * a * c + a * a * d - a * b * b + 2 * a * b * c + 2 * a * b * d - a * c * c + 2 * a * c * d - a * d * d - b * b * b + b * b * c + b * b * d + b * c * c - 2 * b * c * d + b * d * d - c * c * c + c * c * d + c * d * d - d * d * d;"
+   }
+  },
+  {
+   "id": "split-v",
+   "lang": "verus",
+   "mechanism": "trigger",
+   "template": "\nverus! {\n\npub proof fn battery_cell_r14()\n    ensures\n        matches_v(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Chr('b'))), seq!['a', 'b']),\n{\n    // R14_PROOF_SITE\n}\n\n} // verus!\n",
+   "options": {
+    "none": "",
+    "split-term": "    assert(seq!['a', 'b'].subrange(0, 1) =~= seq!['a']);\n    assert(seq!['a', 'b'].subrange(1, 2) =~= seq!['b']);",
+    "split-term-fuel": "    assert(seq!['a', 'b'].subrange(0, 1) =~= seq!['a']);\n    assert(seq!['a', 'b'].subrange(1, 2) =~= seq!['b']);\n    reveal_with_fuel(matches_v, 2);"
+   }
+  },
+  {
+   "id": "star-v",
+   "lang": "verus",
+   "mechanism": "fuel",
+   "template": "\nverus! {\n\npub proof fn battery_cell_r14()\n    ensures\n        matches_v(Re::Star(Box::new(Re::Chr('z'))), power_word('z', 5)),\n{\n    // R14_PROOF_SITE\n}\n\n} // verus!\n",
+   "options": {
+    "none": "",
+    "fuel": "    reveal_with_fuel(matches_v, 6);",
+    "lemma": "    lemma_star_pow_v('z', 5);"
+   }
+  },
+  {
+   "id": "loop-v",
+   "lang": "verus",
+   "mechanism": "matching-loop",
+   "template": "\nverus! {\n\npub proof fn battery_cell_r14(r: Re, u: Seq<char>, v: Seq<char>)\n    requires\n        u.len() > 0,\n        matches_v(r, u),\n        matches_v(Re::Star(Box::new(r)), v),\n        forall|s: Seq<char>|\n            #[trigger] matches_v(Re::Star(Box::new(r)), s) ==> matches_v(Re::Star(Box::new(r)), s + s),\n    ensures\n        matches_v(Re::Cat(Box::new(r), Box::new(Re::Star(Box::new(r)))), u + v),\n{\n    // R14_PROOF_SITE\n}\n\n} // verus!\n",
+   "options": {
+    "none": "",
+    "lemma": "    lemma_cat_intro_v(r, Re::Star(Box::new(r)), u, v);"
+   }
+  },
+  {
+   "id": "nl-v",
+   "lang": "verus",
+   "mechanism": "nonlinear",
+   "template": "\nverus! {\n\npub proof fn battery_cell_r14(x: nat, y: nat)\n    ensures\n        (x + y) * (x + y) >= x * x + y * y,\n{\n    // R14_PROOF_SITE\n}\n\n} // verus!\n",
+   "options": {
+    "none": "",
+    "nonlinear": "    assert((x + y) * (x + y) >= x * x + y * y) by (nonlinear_arith);"
+   }
+  },
+  {
+   "id": "bv-v",
+   "lang": "verus",
+   "mechanism": "bit-vector",
+   "template": "\nverus! {\n\npub proof fn battery_cell_r14(c: u32)\n    requires\n        0xD800 <= c < 0xE000,\n    ensures\n        c & 0xFFFF_F800 == 0xD800,\n{\n    // R14_PROOF_SITE\n}\n\n} // verus!\n",
+   "options": {
+    "none": "",
+    "bit-vector": "    assert(c & 0xFFFF_F800 == 0xD800) by (bit_vector)\n        requires\n            0xD800 <= c < 0xE000,\n    ;"
+   }
+  },
+  {
+   "id": "iso-v",
+   "lang": "verus",
+   "mechanism": "isolation",
+   "template": "\nverus! {\n\npub proof fn battery_cell_r14(a: int, b: int, c: int, d: int)\n    ensures\n        (a + b) * (a + b) * (a + b) == a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b,\n        (a + c) * (a + c) * (a + c) == a * a * a + 3 * a * a * c + 3 * a * c * c + c * c * c,\n        (a + d) * (a + d) * (a + d) == a * a * a + 3 * a * a * d + 3 * a * d * d + d * d * d,\n        (b + a) * (b + a) * (b + a) == a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b,\n        (b + c) * (b + c) * (b + c) == b * b * b + 3 * b * b * c + 3 * b * c * c + c * c * c,\n        (b + d) * (b + d) * (b + d) == b * b * b + 3 * b * b * d + 3 * b * d * d + d * d * d,\n        (c + a) * (c + a) * (c + a) == a * a * a + 3 * a * a * c + 3 * a * c * c + c * c * c,\n        (c + b) * (c + b) * (c + b) == b * b * b + 3 * b * b * c + 3 * b * c * c + c * c * c,\n{\n    // R14_PROOF_SITE\n}\n\n} // verus!\n",
+   "options": {
+    "none": "",
+    "one-query": "    assert(((a + b) * (a + b) * (a + b) == a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b) && ((a + c) * (a + c) * (a + c) == a * a * a + 3 * a * a * c + 3 * a * c * c + c * c * c) && ((a + d) * (a + d) * (a + d) == a * a * a + 3 * a * a * d + 3 * a * d * d + d * d * d) && ((b + a) * (b + a) * (b + a) == a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b) && ((b + c) * (b + c) * (b + c) == b * b * b + 3 * b * b * c + 3 * b * c * c + c * c * c) && ((b + d) * (b + d) * (b + d) == b * b * b + 3 * b * b * d + 3 * b * d * d + d * d * d) && ((c + a) * (c + a) * (c + a) == a * a * a + 3 * a * a * c + 3 * a * c * c + c * c * c) && ((c + b) * (c + b) * (c + b) == b * b * b + 3 * b * b * c + 3 * b * c * c + c * c * c)) by (nonlinear_arith);",
+    "per-fact": "    assert((a + b) * (a + b) * (a + b) == a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b) by (nonlinear_arith);\n    assert((a + c) * (a + c) * (a + c) == a * a * a + 3 * a * a * c + 3 * a * c * c + c * c * c) by (nonlinear_arith);\n    assert((a + d) * (a + d) * (a + d) == a * a * a + 3 * a * a * d + 3 * a * d * d + d * d * d) by (nonlinear_arith);\n    assert((b + a) * (b + a) * (b + a) == a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b) by (nonlinear_arith);\n    assert((b + c) * (b + c) * (b + c) == b * b * b + 3 * b * b * c + 3 * b * c * c + c * c * c) by (nonlinear_arith);\n    assert((b + d) * (b + d) * (b + d) == b * b * b + 3 * b * b * d + 3 * b * d * d + d * d * d) by (nonlinear_arith);\n    assert((c + a) * (c + a) * (c + a) == a * a * a + 3 * a * a * c + 3 * a * c * c + c * c * c) by (nonlinear_arith);\n    assert((c + b) * (c + b) * (c + b) == b * b * b + 3 * b * b * c + 3 * b * c * c + c * c * c) by (nonlinear_arith);"
+   }
+  }
+ ]
 }

@@ -1124,7 +1124,7 @@ def _lint_plan(run, plan, mode):
 
 def verify(target, gate=False, symbol=None, seed=None, isolate=False, *, extra_args=(),
            min_verified=None, lint_mode="learner", layer=None, timeout_s=None, allowlist=None,
-           root=None):
+           root=None, smt_log_dir=None):
     """Verify a target with the pinned flags in one --no-cheating run (after
     its path dependencies are verified and exported).
 
@@ -1137,6 +1137,13 @@ def verify(target, gate=False, symbol=None, seed=None, isolate=False, *, extra_a
     the pinned seed option; isolate adds `-V spinoff-all` (every function in
     its own Z3 instance). extra_args pass check_args or the call is refused.
     layer gives a standalone file the given layer chain up to that layer.
+    smt_log_dir (the user's D53, R14): the target's run also passes
+    `--log smt --log-dir <run>/smt-log` to Verus, and every file it writes is
+    copied into that directory (created if missing) before the run's scratch
+    is discarded; the result's `smt_logs` attribute (not a Result field, so the
+    JSON document is unchanged) lists the copies. It is refused with the gate:
+    a log changes nothing the run verifies, counts or reports, and the gate
+    keeps its pinned command. The job is the same capped job (run_capped).
     root names the course root whose given crates and trust allowlist apply
     (default: the target's own course root, root_for).
     timeout_s may shorten, never lengthen, the pinned wall-clock net.
@@ -1153,6 +1160,9 @@ def verify(target, gate=False, symbol=None, seed=None, isolate=False, *, extra_a
         reasons.append("a partial (--verify-*) run never passes the gate (Δ12, Δ41)")
     if gate and isolate:
         reasons.append("the gate runs the pinned command; -V spinoff-all is not part of it")
+    if gate and smt_log_dir is not None:
+        reasons.append("the gate runs the pinned command; an SMT log goes with the learner loop "
+                       "or the fast channel (D53)")
     if seed is not None and (isinstance(seed, bool) or not isinstance(seed, int) or seed < 0):
         reasons.append(f"seed {seed!r}: a non-negative integer")
     if seed is not None and any(f == "--smt-option" for f, _ in split_args(extra_args)):
@@ -1171,14 +1181,34 @@ def verify(target, gate=False, symbol=None, seed=None, isolate=False, *, extra_a
         return _toolchain_error(target, e)
     run = Run(common.scratch_dir("verus-verify"), str(target))
     try:
-        return _verify_run(run, target, vb, gate, symbol, seed, isolate, fast, extra_args,
-                           min_verified, lint_mode, layer, timeout_s, allowlist, root)
+        res = _verify_run(run, target, vb, gate, symbol, seed, isolate, fast, extra_args,
+                          min_verified, lint_mode, layer, timeout_s, allowlist, root,
+                          smt_log=smt_log_dir is not None)
+        if smt_log_dir is not None:
+            res.smt_logs = _copy_smt_log(run, Path(smt_log_dir))
+        return res
     finally:
         _discard(run)
 
 
+def _copy_smt_log(run, dest):
+    """Copy the files Verus wrote under <run>/smt-log into dest (D53); [copies]."""
+    src = Path(run.dir) / "smt-log"
+    out = []
+    if not src.is_dir():
+        return out
+    dest.mkdir(parents=True, exist_ok=True)
+    for f in sorted(src.rglob("*")):
+        if f.is_file() and not f.is_symlink():
+            to = dest / f.relative_to(src)
+            to.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(f, to)
+            out.append(str(to))
+    return out
+
+
 def _verify_run(run, target, vb, gate, symbol, seed, isolate, fast, extra_args, min_verified,
-                lint_mode, layer, timeout_s, allowlist, root):
+                lint_mode, layer, timeout_s, allowlist, root, smt_log=False):
     try:
         plan = resolve(target, run, layer, root)
     except Refused as e:
@@ -1200,6 +1230,8 @@ def _verify_run(run, target, vb, gate, symbol, seed, isolate, fast, extra_args, 
     if isolate:
         argv += ["-V", "spinoff-all"]
     argv += _passthrough(extra_args)
+    if smt_log:
+        argv += ["--log", "smt", "--log-dir", str(run.dir / "smt-log")]
     own = {run.orig(str(f)) for f, _, _ in plan.files}
     srcs = _Sources()
     job = _job(run, "target", argv, timeout_s)

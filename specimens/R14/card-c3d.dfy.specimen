@@ -1,0 +1,11 @@
+// Bit-vector reasoning: a code point's surrogate-block mask.
+// after: R14.P3d
+module R14_BvDemoD {
+  // item: R14.C3d recognise:bit-vector
+  // RECOGNISE: a bv32 value is a bit-vector in the solver; the fact is native.
+  lemma SurrogateMask(c: bv32)
+    requires 0xD800 <= c < 0xE000
+    ensures c & 0xFFFFF800 == 0xD800
+  {
+  }
+}

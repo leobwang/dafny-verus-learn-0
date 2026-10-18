@@ -1,0 +1,40 @@
+// Verus's side of the trigger divergence (card-c4dv-d): matches_v with the trigger on
+// the recursive call, as Dafny's MatchesV has it. The proof below fails.
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+pub open spec fn matches_r(r: Re, s: Seq<char>) -> bool
+    decreases r, s.len(),
+{
+    match r {
+        Re::Empty => false,
+        Re::Eps => s.len() == 0,
+        Re::Chr(c) => s.len() == 1 && s[0] == c,
+        Re::Alt(a, b) => matches_r(*a, s) || matches_r(*b, s),
+        Re::Cat(a, b) => exists|i: int|
+            0 <= i <= s.len() && #[trigger] matches_r(*a, s.subrange(0, i)) && matches_r(
+                *b,
+                s.subrange(i, s.len() as int),
+            ),
+        Re::Star(a) => s.len() == 0 || exists|i: int|
+            0 < i <= s.len() && #[trigger] matches_r(*a, s.subrange(0, i)) && matches_r(
+                r,
+                s.subrange(i, s.len() as int),
+            ),
+    }
+}
+
+proof fn lemma_cat_eps_r(a: Re, u: Seq<char>)
+    requires
+        matches_r(a, u),
+    ensures
+        matches_r(Re::Cat(Box::new(a), Box::new(Re::Eps)), u),
+{
+    assert(u.subrange(0, u.len() as int) =~= u);
+    assert(u.subrange(u.len() as int, u.len() as int) =~= Seq::<char>::empty());
+    reveal_with_fuel(matches_r, 2);
+}
+
+} // verus!

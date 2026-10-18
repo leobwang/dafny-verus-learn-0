@@ -1,0 +1,7 @@
+// after: R14.P2dv
+module R14_SquareD {
+  lemma SquareOfSum(x: nat, y: nat)
+    ensures (x + y) * (x + y) >= x * x + y * y
+  {
+  }
+}

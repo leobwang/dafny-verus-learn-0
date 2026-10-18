@@ -33,6 +33,22 @@ def gate(path,where,*,feedback=False):
     except json.JSONDecodeError:raise RuntimeError('native wrapper did not supply a Result; see '+str(where))
     return p.returncode,doc
 
+def audit(text,lang,where,tmp):
+    """vaudit on a staged copy of the R14 unit (the text as its one source file and
+    the unit's build file with absolute given paths), so a file outside the unit is
+    audited in R14's given context."""
+    unit=Path(tempfile.mkdtemp(prefix='audit-',dir=tmp))
+    if lang=='dafny':
+        cfg=(ROOT/'dafny/R/R14_Smt/std/dfyconfig.toml').read_text()
+        (unit/'dfyconfig.toml').write_text(cfg.replace('"../../../given/','"'+str(ROOT/'dafny/given')+'/'))
+        (unit/'R14_Smt.dfy').write_text(text)
+    else:
+        cfg=(ROOT/'verus/r/r14_smt/Cargo.toml').read_text()
+        (unit/'Cargo.toml').write_text(cfg.replace('path = "../../given/','path = "'+str(ROOT/'verus/given')+'/'))
+        (unit/'src').mkdir()
+        (unit/'src/lib.rs').write_text(text)
+    return command([str(ROOT/'scripts/vaudit'),str(unit)],where)
+
 def clean(code,doc):
     return code==0 and doc.get('verdict')=='verified' and doc.get('stage')=='verify' and doc.get('exit_code')==0 and type(doc.get('verified_count')) is int and doc['verified_count']>0 and not doc.get('holes') and not doc.get('findings') and not any(d.get('severity')=='error' for d in doc.get('diagnostics',[]))
 
@@ -46,7 +62,7 @@ def main():
     pinned=json.loads((ROOT/'expected/R14.battery.json').read_text());catalogue=(ROOT/'tools/R14/battery.json').read_bytes()
     if digest(catalogue)!=pinned['catalog_sha256']:raise ValueError('original battery catalogue changed')
     cards=json.loads(catalogue)['cards']
-    if len(cards)!=12 or len({c['id'] for c in cards})!=12:raise ValueError('battery must retain12unique assertions')
+    if len(cards)!=12 or len({c['id'] for c in cards})!=12:raise ValueError('battery must retain 12 unique assertions')
     if any(c['template'].count(SITE)!=1 or digest(c['template'].encode())!=pinned['templates'].get(c['id']) for c in cards):raise ValueError('original assertion/frame changed')
     p=command([str(ROOT/'scripts/specfreeze'),'--check','R14'],out/'course-frame.log')
     if p.returncode:raise ValueError('the course statement/model freeze does not match')
@@ -65,7 +81,7 @@ def main():
         if p.returncode:raise ValueError('core does not preserve the original statement/model frame')
         code,doc=gate(path,out/('core-gate-'+lang+'.log'))
         if not clean(code,doc):raise RuntimeError('complete the zero-hole native core before the battery')
-        p=command([str(ROOT/'scripts/vaudit'),str(path)],out/('core-audit-'+lang+'.log'))
+        p=audit(cores[lang],lang,out/('core-audit-'+lang+'.log'),tempfile.gettempdir())
         if p.returncode:raise RuntimeError('original core audit failed')
     rows=[]
     def stable():
@@ -79,13 +95,16 @@ def main():
             path.write_text(original);(dest/('baseline'+suffix)).write_text(original)
             code,baseline=gate(path,dest/'baseline.log')
             if clean(code,baseline):raise ValueError('already closed baseline; re-admit '+card['id'])
-            if baseline.get('verdict')!='failed' or baseline.get('stage')!='verify' or baseline.get('holes'):raise ValueError('baseline did not reach the original zero-hole proof question')
+            # A baseline fails at the proof stage: failed, or inconclusive (out of resources at the pin).
+            if baseline.get('verdict') not in ('failed','inconclusive') or baseline.get('stage')!='verify' or baseline.get('holes'):raise ValueError('baseline did not reach the original zero-hole proof question')
             feedback=b'';source_id=str(path)
             if card['lang']=='verus':
                 _,note=gate(path,dest/'native-feedback.log',feedback=True)
                 raw=Path(note['raw_dir']);logs=list(raw.glob('*-target/stderr.txt'))
                 if len(logs)==1:feedback=logs[0].read_bytes()
                 if note.get('cmd') and len(note['cmd'])>1:source_id=str(note['cmd'][1])
+                # D53: the SMT queries of the baseline, for the learner's audit (patterns only).
+                command([str(ROOT/'scripts/vcheck'),'--module','R14','--smt-log',str(dest/'smt-log'),str(path)],dest/'smt-log.log')
             # Dafny's unavailable trigger-note channel stays explicitly unavailable.
             (dest/'stderr.jsonl').write_bytes(feedback)
             (dest/'source.trace').write_text(original)
@@ -106,12 +125,12 @@ def main():
                 symbol='R14_BatteryCell.BatteryCellR14' if card['lang']=='dafny' else 'battery_cell_r14'
                 if doc.get('per_symbol',{}).get(symbol)!='verified':raise ValueError('original battery assertion has no verified symbol evidence')
                 (dest/('completed'+suffix)).write_text(text)
-                p=command([str(ROOT/'scripts/vaudit'),str(path)],dest/'audit.log')
+                p=audit(text,card['lang'],dest/'audit.log',tmp)
                 if p.returncode:raise ValueError('completed assertion audit failed')
                 row['passed']=True;row['choice']=label;break
             rows.append(row);(out/'report.json').write_text(json.dumps({'scope':'12 exposed source-bound author/learner assertions; no live actor/model result','core_sha256':{str(p):digest(x) for p,x in origins.items()},'results':rows},indent=2)+'\n')
             print(card['id'], 'closed' if row['passed'] else 'unresolved',flush=True)
             if not row['passed']:raise RuntimeError('bounded options did not close the original assertion')
-    stable();print('12/12original assertions closed and audited; advisory reports are not proof verdicts')
+    stable();print('12/12 original assertions closed and audited; advisory reports are not proof verdicts')
     return 0
 if __name__=='__main__':raise SystemExit(main())

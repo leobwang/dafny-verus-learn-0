@@ -1,0 +1,13 @@
+// after: R14.P5dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_three_stars(r: Re)
+    ensures
+        node_count(Re::Star(Box::new(Re::Star(Box::new(Re::Star(Box::new(r))))))) == node_count(r) + 3,
+{
+}
+
+} // verus!

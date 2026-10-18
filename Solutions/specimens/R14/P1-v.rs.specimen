@@ -1,0 +1,45 @@
+// Reference Solution.
+// after: R14.P1dv
+// A hypothesis that feeds its own trigger, and a goal that does not follow.
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+// R14's matches_v, copied.
+/// R14's own semantics: A1's `matches`, with the triggers stated. A split is found only
+/// through a term `s.subrange(0, i)` of the word being split. (A trigger on the recursive
+/// call `matches_v(*a, s.subrange(0, i))` would name the fuel-indexed copy of `matches_v`
+/// inside its own definition, and no proof outside could match it: §2 of the chapter.)
+pub open spec fn matches_v(r: Re, s: Seq<char>) -> bool
+    decreases r, s.len(),
+{
+    match r {
+        Re::Empty => false,
+        Re::Eps => s.len() == 0,
+        Re::Chr(c) => s.len() == 1 && s[0] == c,
+        Re::Alt(a, b) => matches_v(*a, s) || matches_v(*b, s),
+        Re::Cat(a, b) => exists|i: int|
+            0 <= i <= s.len() && matches_v(*a, #[trigger] s.subrange(0, i)) && matches_v(
+                *b,
+                s.subrange(i, s.len() as int),
+            ),
+        Re::Star(a) => s.len() == 0 || exists|i: int|
+            0 < i <= s.len() && matches_v(*a, #[trigger] s.subrange(0, i)) && matches_v(
+                r,
+                s.subrange(i, s.len() as int),
+            ),
+    }
+}
+
+proof fn lemma_doubling(r: Re, u: Seq<char>)
+    requires
+        matches_v(Re::Star(Box::new(r)), u),
+        forall|s: Seq<char>|
+            #[trigger] matches_v(Re::Star(Box::new(r)), s) ==> matches_v(Re::Star(Box::new(r)), s + s),
+    ensures
+        u.len() == 0,
+{
+}
+
+} // verus!

@@ -134,12 +134,33 @@ class Verify(unittest.TestCase):
         self.assertEqual(r.verdict, "verified")
         self.assertEqual(r.cmd[-2:], ["-V", "spinoff-all"])
 
+    def test_smt_log(self):
+        # D53 (R14): the learner loop with Verus's --log smt; the logs are copied out of
+        # the run's scratch, the verdict and counts are those of the ordinary run.
+        dest = Path(tempfile.mkdtemp(prefix="dvl-smt-", dir=os.environ.get("DVL_TEST_TMP")))
+        try:
+            plain = V.verify(FX / "clean.rs")
+            r = V.verify(FX / "clean.rs", smt_log_dir=dest / "log")
+            self.assertEqual((r.verdict, r.verified_count, r.holes),
+                             (plain.verdict, plain.verified_count, plain.holes))
+            self.assertIn("--log", r.cmd)
+            self.assertIn("smt", r.cmd)
+            self.assertTrue(r.smt_logs)
+            for f in r.smt_logs:
+                self.assertTrue(Path(f).is_file())
+                self.assertTrue(Path(f).is_relative_to(dest / "log"))
+            self.assertIn(":pattern", Path(r.smt_logs[0]).read_text())
+        finally:
+            shutil.rmtree(dest, ignore_errors=True)
+
     def test_refusals_run_nothing(self):
         for kw in ({"extra_args": ["--no-verify"]}, {"extra_args": ["--rlimit", "20"]},
                    {"extra_args": ["--smt-option", "smt.arith.solver=2"]},
                    {"extra_args": ["-V", "no-solver-version-check"]},
                    {"gate": True, "symbol": "lemma_double"},
-                   {"gate": True, "extra_args": ["--expand-errors"]}, {"seed": -1}):
+                   {"gate": True, "extra_args": ["--expand-errors"]}, {"seed": -1},
+                   {"gate": True, "smt_log_dir": "/nonexistent/smt"},
+                   {"extra_args": ["--log", "smt"]}):
             r = V.verify(FX / "clean.rs", **kw)
             self.assertEqual((r.verdict, r.exit_code, r.raw_dir), ("refused", None, None), kw)
             self.assertEqual([f.kind for f in r.findings], ["refused"])

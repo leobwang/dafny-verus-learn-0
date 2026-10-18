@@ -1,0 +1,36 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R14 --- SMT mechanics \\ \large Flawed calibration fixture}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} A harness for C and Rust/Verus program verification in which an untrusted agent plans, writes specifications or counterexamples, repairs lemmas and reviews failures, while trusted front ends and SMT solvers (cvc5, Bitwuzla, Z3) decide. A task ends as ``safe'' (every obligation \texttt{unsat}) or ``unsafe'' (a concrete counterexample replayed). The card reports four suites: AutoRocq-ReachSafety (112), KVerus-File (313), SV-COMP 2026 RS (1000) and an aggregate of 1475.
+
+\textbf{Oracle:} Safety is every local obligation discharged by the solver in its theory view; unsafety is concrete replay. Candidate lemmas are checked twice: sufficiency (the context and the lemmas entail the target) and justification (each lemma follows from the context and the earlier lemmas). Edits made to an SMT file are diagnostic only; fixes are lifted back to source and a final clean gate re-verifies from source.
+
+\textbf{Trust:} The agent (GPT-5.5 xhigh via Codex CLI) is untrusted. Trusted: the C and Rust front ends (about 220K lines of Rust), the solvers and the final source re-check. The card names the large, unverified front end as a limitation: an encoding error there is outside what the solvers check.
+
+\textbf{Cheat surface:} An agent could weaken a specification, edit the SMT query rather than the source, or add an unjustified lemma. The card's defences are the justification check for every lemma, the rule that SMT edits are diagnostic only, the final source-level clean gate, and concrete replay for ``unsafe''. The card does not report a separate audit of specification changes; that remains a reviewer's question.
+
+\textbf{Metric:} Solved tasks: 1367 of 1475, that is 92.7\,\% with a 95\,\% interval of 91.3 to 94.1\,\%, which shows the harness beats every baseline by a controlled margin.
+
+\textbf{Budget:} Four hours per task; short solver timeouts, often 10 to 20 seconds; snapshots checkpoint repair. No token, dollar or GPU cost is reported: mark it unavailable.
+
+\textbf{Variance:} No repeated runs are reported, so there is no run-to-run variance and no interval for any rate. Solver timeouts make outcomes depend on timing, which the card does not quantify.
+
+\textbf{Artifact:} Ke, Wu and Li, arXiv 2608.30803, 2026. The card notes that no code link is given and only two policies are described. Retain the local line range 703--736 and its digest.
+
+\textbf{Dischargeability and R14's tools:} A fact must be true and provable. R14's \texttt{trigscan} and \texttt{vcheck --smt-log} implement the card's local-obligation interface: they show the failed obligation and its instances, so an agent using them is solver-aware in the card's sense.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+(a) Ten seeds of my target; three ran out, so I report seven rows and the mean.
+(b) Mean over all ten runs, counting the out-of-resource runs at the limit: 4.6 million, CV 13\,\%.
+(c) The proof is stable under any seed: the CV is small, so another Z3 version would agree.
+(d) After looking at the table, seeds 1--5 have lower counts than 6--10; a permutation test on the two halves gives $p = 0.03$, so the second half is significantly harder.
+\end{answer}
+
+\end{document}

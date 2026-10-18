@@ -1,0 +1,27 @@
+// after: R14.P1dv
+// A hypothesis that feeds its own trigger, and a goal that does not follow.
+module R14_LoopD {
+  import opened RG_A1_Re
+
+  // R14's MatchesV, copied.
+  ghost predicate MatchesV(r: Re, s: seq<char>)
+    decreases r, |s|
+  {
+    match r
+    case Empty => false
+    case Eps => s == []
+    case Chr(c) => s == [c]
+    case Alt(a, b) => MatchesV(a, s) || MatchesV(b, s)
+    case Cat(a, b) =>
+      exists i {:trigger MatchesV(a, s[..i])} | 0 <= i <= |s| :: MatchesV(a, s[..i]) && MatchesV(b, s[i..])
+    case Star(a) =>
+      s == [] || exists i {:trigger MatchesV(a, s[..i])} | 0 < i <= |s| :: MatchesV(a, s[..i]) && MatchesV(Star(a), s[i..])
+  }
+
+  lemma Doubling(r: Re, u: seq<char>)
+    requires MatchesV(Star(r), u)
+    requires forall s {:trigger MatchesV(Star(r), s)} :: MatchesV(Star(r), s) ==> MatchesV(Star(r), s + s)
+    ensures u == []
+  {
+  }
+}

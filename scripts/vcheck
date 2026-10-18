@@ -28,6 +28,12 @@ Usage:
       (Solutions/harness/…) lays it over a scratch copy of harness/ and runs
       the same tests there; --test runs the tests alone; --shipped and
       --pin-counts include the file (role harness).
+  vcheck --smt-log DIR [--symbol S] <Verus target>
+      the learner loop (or the fast channel) with Verus's `--log smt` added:
+      the SMT queries sent to Z3 are copied into DIR (new or empty, never in
+      a reference tree) and listed as `smt log: <file> (<n> bytes)`; the run
+      is the same capped run, with the same verdict and hole count (D53, R14:
+      read the `:pattern` of each quantifier). Refused with the gate.
   vcheck --module <ID> <probe file>
       one probe (instructor/scratch/probe.dfy|rs) with the module's given
       layer chain and unit options.
@@ -1851,7 +1857,7 @@ def _toolchain_result(lang, target, e):
 
 
 def verify(t, gate=False, symbol=None, seed=None, isolate=False, lint_mode="learner",
-           extra=(), min_verified=None, solver=None):
+           extra=(), min_verified=None, solver=None, smt_log=None):
     """One verify call through the dvl library for a Target. The Dafny gate is
     Δ10/Δ11's (verification, no warnings, a positive count); its Δ3 lint is
     vaudit's (Δ4). The Verus gate lints by itself (Δ12) in lint_mode, with
@@ -1911,7 +1917,28 @@ def verify(t, gate=False, symbol=None, seed=None, isolate=False, lint_mode="lear
     return V.verify(str(t.path), gate=gate, symbol=symbol, seed=seed, isolate=isolate,
                     lint_mode=lint_mode, layer=layer, extra_args=extra,
                     min_verified=min_verified if gate else None,
-                    root=t.root if t.module is not None else None)
+                    root=t.root if t.module is not None else None,
+                    smt_log_dir=smt_log)
+
+
+def smt_log_check(a, targets, root, gate):
+    """Refusals for --smt-log DIR (the user's D53): the Verus learner loop or
+    fast channel only, one target, never the gate or another mode, and DIR a
+    new or empty directory outside the reference trees. The run itself is the
+    ordinary capped learner-loop run with `--log smt` added, so it counts the
+    same holes, gives the same verdict and passes nothing it would not."""
+    if gate or a.brittleness or a.test or a.lab_task is not None:
+        raise Usage("--smt-log goes with the Verus learner loop or fast channel (never the "
+                    "gate, --ref, --brittleness, --test or --lab-task)")
+    if len(targets) != 1 or targets[0].lang != "v":
+        raise Usage("--smt-log takes one Verus target (Dafny has no SMT log route at the pin)")
+    d = a.smt_log if a.smt_log.is_absolute() else Path.cwd() / a.smt_log
+    if is_reference_path(d, root) or is_reference_path(d / "x", root):
+        raise Refusal(f"{a.smt_log}: an SMT log is never written into a reference tree")
+    if d.exists() and (not d.is_dir() or any(d.iterdir())):
+        raise Usage(f"--smt-log {a.smt_log}: a new or empty directory (a log is never mixed "
+                    "with older files)")
+    a.smt_log = d
 
 
 def lab_gate(res, task, delivery, audit=None, code=True):
@@ -2801,6 +2828,10 @@ def parse_args(argv):
     ap.add_argument("--seed", type=int, help="a pinned-style solver seed (Δ59)")
     ap.add_argument("--isolate", action="store_true",
                     help="per-assertion (Dafny) or per-function (Verus) isolation")
+    ap.add_argument("--smt-log", type=Path, metavar="DIR",
+                    help="Verus learner loop or fast channel: also write the SMT queries Verus "
+                         "sends to Z3 (its --log smt) into DIR, a new or empty directory "
+                         "outside the reference trees (D53, R14); never with the gate")
     ap.add_argument("--lint-mode", choices=("learner", "agent", "reference"), default="learner",
                     help="the Verus gate's lint mode (default learner)")
     ap.add_argument("--brittleness", action="store_true", help="re-verify under every seed")
@@ -2979,6 +3010,8 @@ def main(argv=None):
                 h5_guard(root, t)
                 if a.test:
                     slot_guard(root, t)
+        if a.smt_log is not None:
+            smt_log_check(a, targets, root, a.gate or a.ref)
         if a.test:
             return test_mode(targets, root, a.name, a.json)
         if a.brittleness:
@@ -3023,7 +3056,8 @@ def main(argv=None):
             try:
                 res = verify(run_t, gate=gate, symbol=symbol, seed=a.seed, isolate=a.isolate,
                              lint_mode="reference" if a.ref else a.lint_mode, extra=extra,
-                             min_verified=None if a.ref else minv, solver=a.solver)
+                             min_verified=None if a.ref else minv, solver=a.solver,
+                             smt_log=a.smt_log)
                 if shadow is not None:
                     remap(res, src, dst)
             finally:
@@ -3039,6 +3073,8 @@ def main(argv=None):
                             if a.measures and not gate else None)
             if not a.json:
                 print_result(res, root, mode, locations_only=a.ref)
+                for f in getattr(res, "smt_logs", []):
+                    print(f"smt log: {f} ({Path(f).stat().st_size} bytes)")
                 if symbol:
                     want = symbol.rstrip(".")
                     for k, v in sorted(res.per_symbol.items()):

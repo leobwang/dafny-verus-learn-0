@@ -1,0 +1,21 @@
+// after: R14.P3d
+// Bit-vector reasoning: a code point's surrogate-block mask.
+use vstd::prelude::*;
+
+verus! {
+
+// item: R14.C3v recognise:bit-vector
+// RECOGNISE: by (bit_vector) proves the fact in the bit-vector theory, from its requires only.
+proof fn lemma_surrogate_mask(c: u32)
+    requires
+        0xD800 <= c < 0xE000,
+    ensures
+        c & 0xFFFF_F800 == 0xD800,
+{
+    assert(c & 0xFFFF_F800 == 0xD800) by (bit_vector)
+        requires
+            0xD800 <= c < 0xE000,
+    ;
+}
+
+} // verus!

@@ -1,42 +1,110 @@
-/*! R14 — SMT mechanics. Three counted native holes per language.
-H1 propagates quantified bounds through an original trace. H2 proves a property
-of an honestly recursive opaque definition. H3 keeps exact32bitword behavior.
-D H1/H2 explicitly disable induction: maximal automation solves their empty
-forms. Preserve these levers and all original domains; do not infer toolchain
-correctness from an automation result. The12assertion battery is separate.
-*/
-// item: R14.C1v write:trigger
-// Supply a matching term covering every quantified variable, using R14-owned subjects.
-// item: R14.C2v write:fuel
-// A fixed unfolding budget is not unbounded induction; preserve the original recursion.
-// item: R14.C3v write:bit-vector
-// Bit-vector arithmetic and mathematical integer arithmetic have different operations.
+//! # R14 — SMT mechanics (Exercises)
+//!
+//! Imports: the given regex spine `rg_re_a1` (`Re`, `node_count`) and `rg_re_a2`
+//! (`deriv`); nothing else: no earlier exercise file. R14 states its own copy of the
+//! regex semantics, `matches_v`, with triggers chosen here.
+//!
+//! Done = `scripts/vcheck --gate verus/r/r14_smt` prints only the summary line and exits
+//! 0, `scripts/vaudit verus/r/r14_smt` reports no finding, AND
+//! `scripts/firsttry.sh R14 --report --strict` exits 0.
+//!
+//! This file ships with exactly 3 holes: H1–H3.
+#![allow(unused_imports)]
 use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a2::*;
+
 verus! {
- pub open spec fn prefix_mass_r14(s:Seq<int>)->int
-  decreases s.len(),
- {if s.len()==0 {0} else {s[0]+prefix_mass_r14(s.subrange(1,s.len() as int))}}
- // item: R14.H1v
- // pair: R14.H1d
- pub proof fn prefix_cap_r14(s:Seq<int>,cap:int)
-  requires cap>=0,forall|i:int| 0<=i<s.len() ==> 0<=#[trigger] s[i]<=cap,
-  ensures 0<=prefix_mass_r14(s)<=s.len()*cap,
-  decreases s.len(),
- {#[verifier::proof_note("R14.H1v")] assume(false); }
- #[verifier::opaque]
- pub open spec fn odd_trace_r14(n:nat)->nat
-  decreases n,
- {if n==0 {0} else {(odd_trace_r14((n-1) as nat)+2*n-1) as nat}}
- // item: R14.H2v
- // pair: R14.H2d
- pub proof fn odd_square_r14(n:nat)
-  ensures odd_trace_r14(n)==n*n,
-  decreases n,
- {#[verifier::proof_note("R14.H2v")] assume(false); }
- // item: R14.H3v
- // pair: R14.H3d
- pub fn clear_low_bit_r14(x:u32)->(out:u32)
-  requires x>0,
-  ensures out==(x & ((x-1) as u32)),out<x,
- {proof {#[verifier::proof_note("R14.H3v")] assume(false);} 0}
+
+/// R14's own semantics: A1's `matches`, with the triggers stated. A split is found only
+/// through a term `s.subrange(0, i)` of the word being split. (A trigger on the recursive
+/// call `matches_v(*a, s.subrange(0, i))` would name the fuel-indexed copy of `matches_v`
+/// inside its own definition, and no proof outside could match it: §1 of the chapter.)
+pub open spec fn matches_v(r: Re, s: Seq<char>) -> bool
+    decreases r, s.len(),
+{
+    match r {
+        Re::Empty => false,
+        Re::Eps => s.len() == 0,
+        Re::Chr(c) => s.len() == 1 && s[0] == c,
+        Re::Alt(a, b) => matches_v(*a, s) || matches_v(*b, s),
+        Re::Cat(a, b) => exists|i: int|
+            0 <= i <= s.len() && matches_v(*a, #[trigger] s.subrange(0, i)) && matches_v(
+                *b,
+                s.subrange(i, s.len() as int),
+            ),
+        Re::Star(a) => s.len() == 0 || exists|i: int|
+            0 < i <= s.len() && matches_v(*a, #[trigger] s.subrange(0, i)) && matches_v(
+                r,
+                s.subrange(i, s.len() as int),
+            ),
+    }
 }
+
+/// Given: `n` copies of `c`.
+pub open spec fn power_word(c: char, n: nat) -> Seq<char>
+    decreases n,
+{
+    if n == 0 {
+        Seq::empty()
+    } else {
+        seq![c] + power_word(c, (n - 1) as nat)
+    }
+}
+
+// item: R14.H1v
+// uses: trigger
+// pair: R14.H1d
+/// **H1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`. The Cat existential
+/// of `matches_v` is triggered by `s.subrange(0, i)`: which subrange of `u + v` must
+/// appear, and what must the solver know it equals?
+pub proof fn lemma_cat_intro_v(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
+    requires
+        matches_v(a, u),
+        matches_v(b, v),
+    ensures
+        matches_v(Re::Cat(Box::new(a), Box::new(b)), u + v),
+{
+    #[verifier::proof_note("R14.H1v")] assume(false);  // HOLE: replace this line
+}
+// Hint(1): no induction: the proof is about which terms exist.
+// Hint(2): the trigger needs a term `s.subrange(0, i)` for the right `i`; an extensional
+//          equality (`=~=`) can introduce one.
+
+// item: R14.H2v
+// uses: trigger
+// pair: R14.H2d
+/// **H2.** Every power of `c` matches `Star(Chr(c))`. Why can `reveal_with_fuel` not prove
+/// this for every `n`, and which subrange terms must the Star case see once the recursive
+/// call has given you the rest?
+pub proof fn lemma_star_pow_v(c: char, n: nat)
+    ensures
+        matches_v(Re::Star(Box::new(Re::Chr(c))), power_word(c, n)),
+    decreases n,
+{
+    #[verifier::proof_note("R14.H2v")] assume(false);  // HOLE: replace this line
+}
+// Hint(1): induction on `n` with a recursive call on `(n - 1) as nat`.
+// Hint(2): the first chunk of `power_word(c, n)` is `seq![c]`: the Star case must see it as a
+//          term `s.subrange(0, 1)`, together with a match of that chunk.
+
+// item: R14.H3v
+// uses: nonlinear-arith, fuel
+// pair: R14.H3d
+/// **H3.** A derivative is at most twice the square of its regex's size. The induction is
+/// structural; what is left in the Alt, Cat and Star cases is an inequality between
+/// products of the subterms' sizes, and Verus's default arithmetic does not multiply
+/// unknowns. Which prover proves it, and how deep must `node_count` unfold?
+pub proof fn lemma_deriv_size_v(r: Re, c: char)
+    ensures
+        node_count(deriv(r, c)) <= 2 * node_count(r) * node_count(r),
+    decreases r,
+{
+    #[verifier::proof_note("R14.H3v")] assume(false);  // HOLE: replace this line
+}
+// Hint(1): one recursive call per subterm, then a helper proof fn over two naturals that
+//          states the product inequalities `by (nonlinear_arith)`.
+// Hint(2): in the Cat case `node_count` must unfold through an Alt and a Cat:
+//          `reveal_with_fuel(node_count, 3)`.
+
+} // verus!

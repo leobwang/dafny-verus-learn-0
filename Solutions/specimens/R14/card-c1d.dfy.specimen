@@ -1,0 +1,29 @@
+// Reference Solution.
+// The trigger card: R14's MatchesV and a two-character word.
+module R14_TriggerCardD {
+  import opened RG_A1_Re
+
+  ghost predicate MatchesV(r: Re, s: seq<char>)
+    decreases r, |s|
+  {
+    match r
+    case Empty => false
+    case Eps => s == []
+    case Chr(c) => s == [c]
+    case Alt(a, b) => MatchesV(a, s) || MatchesV(b, s)
+    case Cat(a, b) =>
+      exists i {:trigger MatchesV(a, s[..i])} | 0 <= i <= |s| :: MatchesV(a, s[..i]) && MatchesV(b, s[i..])
+    case Star(a) =>
+      s == [] || exists i {:trigger MatchesV(a, s[..i])} | 0 < i <= |s| :: MatchesV(a, s[..i]) && MatchesV(Star(a), s[i..])
+  }
+
+  // item: R14.C1d write:trigger
+  // WRITE: make the Cat existential fire; the statement stays.
+  lemma XyMatches()
+    ensures MatchesV(Cat(Chr('x'), Chr('y')), ['x', 'y'])
+  {
+    var s := ['x', 'y'];
+    assert s[..1] == ['x'] && s[1..] == ['y'];
+    assert MatchesV(Chr('x'), s[..1]);
+  }
+}

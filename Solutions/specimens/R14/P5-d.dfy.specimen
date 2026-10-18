@@ -1,0 +1,10 @@
+// Reference Solution.
+// after: R14.P5dv
+module R14_StarsD {
+  import opened RG_A1_Re
+
+  lemma ThreeStars(r: Re)
+    ensures NodeCount(Star(Star(Star(r)))) == NodeCount(r) + 3
+  {
+  }
+}

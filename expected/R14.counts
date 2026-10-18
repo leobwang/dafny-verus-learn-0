@@ -14,16 +14,16 @@ module = "R14"
 [[unit]]
 path = "dafny/R/R14_Smt/std"
 lang = "dafny"
-reference_verified = 67
+reference_verified = 68
 min_verified = 5
-symbols = ["R14_Mechanics.ClearLowBitR14", "R14_Mechanics.OddSquareR14", "R14_Mechanics.OddTraceR14", "R14_Mechanics.PrefixCapR14", "R14_Mechanics.PrefixMassR14"]
+symbols = ["R14_Mechanics.CatIntroV", "R14_Mechanics.DerivSizeV", "R14_Mechanics.MatchesV", "R14_Mechanics.PowerWord", "R14_Mechanics.StarPowV"]
 
 [[unit]]
 path = "verus/r/r14_smt"
 lang = "verus"
 reference_verified = 8
 min_verified = 5
-symbols = ["clear_low_bit_r14", "odd_square_r14", "odd_trace_r14", "prefix_cap_r14", "prefix_mass_r14"]
+symbols = ["lemma_cat_intro_v", "lemma_deriv_size_v", "lemma_star_pow_v", "matches_v", "power_word"]
 
 [[file]]
 path = "dafny/R/R14_Smt/std/R14_Smt.dfy"

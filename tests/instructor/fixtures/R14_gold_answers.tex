@@ -1,0 +1,77 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R14 --- SMT mechanics \\ \large Gold calibration fixture}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} A harness for C and Rust/Verus program verification in which an untrusted agent plans, writes specifications or counterexamples, repairs lemmas and reviews failures, while trusted front ends and SMT solvers (cvc5, Bitwuzla, Z3) decide. A task ends as ``safe'' (every obligation \texttt{unsat}) or ``unsafe'' (a concrete counterexample replayed). The card reports four suites: AutoRocq-ReachSafety (112), KVerus-File (313), SV-COMP 2026 RS (1000) and an aggregate of 1475.
+
+\textbf{Oracle:} Safety is every local obligation discharged by the solver in its theory view; unsafety is concrete replay. Candidate lemmas are checked twice: sufficiency (the context and the lemmas entail the target) and justification (each lemma follows from the context and the earlier lemmas). Edits made to an SMT file are diagnostic only; fixes are lifted back to source and a final clean gate re-verifies from source.
+
+\textbf{Trust:} The agent (GPT-5.5 xhigh via Codex CLI) is untrusted. Trusted: the C and Rust front ends (about 220K lines of Rust), the solvers and the final source re-check. The card names the large, unverified front end as a limitation: an encoding error there is outside what the solvers check.
+
+\textbf{Cheat surface:} An agent could weaken a specification, edit the SMT query rather than the source, or add an unjustified lemma. The card's defences are the justification check for every lemma, the rule that SMT edits are diagnostic only, the final source-level clean gate, and concrete replay for ``unsafe''. The card does not report a separate audit of specification changes; that remains a reviewer's question.
+
+\textbf{Metric:} Solved tasks: 1367 of 1475 (92.7\,\%), with no wrong accepted verdicts; per suite 94.6\,\% (vs AutoRocq 40.2\,\%), 95.5\,\% (vs KVerus 80.2\,\%, AutoVerus 69.3\,\%), 91.5\,\% (vs CPAchecker 60.1\,\%); SV-COMP score 1516 of 1672 (a pure agent 1212, with 17 wrong labels). The ablation: no policies 88.2\,\%, no lemmas 77.7\,\%, neither 73.3\,\%. Baselines use different models and problem formulations, so the gaps are not controlled comparisons.
+
+\textbf{Budget:} Four hours per task; short solver timeouts, often 10 to 20 seconds; snapshots checkpoint repair. No token, dollar or GPU cost is reported: mark it unavailable.
+
+\textbf{Variance:} No repeated runs are reported, so there is no run-to-run variance and no interval for any rate. Solver timeouts make outcomes depend on timing, which the card does not quantify.
+
+\textbf{Artifact:} Ke, Wu and Li, arXiv 2608.30803, 2026. The card notes that no code link is given and only two policies are described. Retain the local line range 703--736 and its digest.
+
+\textbf{Dischargeability and R14's tools:} The card's point is that a fact must be true \emph{and} stated in a form the solver can prove. R14's H1 is an instance: $\mathit{MatchesV}(\mathit{Cat}(a, b), u + v)$ is true from $\mathit{MatchesV}(a, u)$ and $\mathit{MatchesV}(b, v)$, but it is dischargeable only once the trigger term $(u + v)[..|u|]$ is in the proof. Of the card's local obligation $\langle l, \Gamma_l, \varphi_l, \tau_l\rangle$, R14's tools give the location $l$ (the verdict line), the patterns of the quantifiers in $\Gamma_l$ (the SMT log via \texttt{vcheck --smt-log} and \texttt{trigscan --smt}) and the theory view $\tau_l$ chosen by the author (\texttt{by (nonlinear\_arith)}, \texttt{by (bit\_vector)}); they do not give the failed obligation as a solver-level formula with its context, a lemma sufficiency/justification checker, or instance traces. The course's gate keeps acceptance, as the card's clean gate does.
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+The author's sweep, on the reference of H3d (\texttt{DerivSizeV}), as a model of the
+analysis; a learner's numbers differ with the target chosen.
+
+(a) Fixed: Dafny 4.11.0 with Z3 4.12.1, \texttt{--resource-limit 5000000}, the
+file \texttt{instructor/scratch/probe.dfy} (the reference with the prediction
+checks commented, sha256 \texttt{f4d9e023\ldots fa5}), \texttt{--module R14
+--symbol R14\_Mechanics.DerivSizeV}, one machine, one run per seed. All ten runs
+verified:
+
+\begin{tabular}{rrrr}
+seed & verdict & resource count & wall (s)\\\hline
+1 & verified & 1\,280\,420 & 1.200\\
+2 & verified & 1\,144\,365 & 1.192\\
+3 & verified & 1\,164\,099 & 1.197\\
+4 & verified & 1\,005\,439 & 1.158\\
+5 & verified & 1\,558\,371 & 1.197\\
+6 & verified & 960\,022 & 1.133\\
+7 & verified & 648\,881 & 1.143\\
+8 & verified & 613\,392 & 1.199\\
+9 & verified & 1\,390\,156 & 1.186\\
+10 & verified & 987\,271 & 1.146\\
+\end{tabular}
+
+(b) Mean 1\,075\,242, sample standard deviation 299\,691, so CV $\approx 0.279$;
+the percentile bootstrap of the mean (10\,000 resamples, seed 20261018) gives
+$[900\,370,\ 1\,249\,200]$. A run that ran out would have no resource total:
+its count is the limit, a censored value, and averaging it in would describe
+neither population. Such runs are reported as a count (``$k$ of 10 ran out'',
+with a Wilson interval for the proportion) and listed with their seeds.
+
+(c) The sweep licenses a description of these ten runs: on this toolchain and
+this file, seeds 1--10 all verified, and the resource count varied by about
+28\,\% of its mean, the largest run using under a third of the limit. It does
+not license a statement about seeds outside 1--10, about another Z3 or Dafny
+version (the search, and so the counts, change with the solver), or a claim
+that ``the proof is stable'' in general; the wall times are this machine's.
+The done rule (three seeds, all verified) is a gate on acceptance; ten runs are
+a measurement of spread. They answer different questions: the gate passes a
+proof, the sweep says how close to the limit it sits.
+
+(d) A comparison fixed in advance, for example ``the resource counts of
+\texttt{DerivSizeV} with and without \texttt{\{:isolate\_assertions\}} over seeds
+1--10, compared by a paired permutation test on the per-seed differences'',
+would be supported; a comparison chosen after looking at the numbers is a
+description, not a test.
+\end{answer}
+
+\end{document}

@@ -13,24 +13,142 @@ unfrozen = []
 path = "dafny/R/R14_Smt/std/R14_Smt.dfy"
 lang = "d"
 open_bodies = []
-frozen_levers = ["R14_Mechanics.OddSquareR14 {:induction false}", "R14_Mechanics.PrefixCapR14 {:induction false}"]
+frozen_levers = ["R14_Mechanics.DerivSizeV {:induction false}", "R14_Mechanics.StarPowV {:induction false}"]
 [file.statements]
-"R14_Mechanics.ClearLowBitR14" = "d238998db4a83908f8829022e17c033c6de15e04b495680d5d71cd263acba4f9"
-"R14_Mechanics.OddSquareR14" = "ffc2eda177a0a89497a6ab141fd868a77224f19f7d425aa50e9b74c0671f890a"
-"R14_Mechanics.OddTraceR14" = "d5ffd5558fea353ae5523c57f4ad389271d73a20e559c1ccadf1a9a74e05e4f8"
-"R14_Mechanics.PrefixCapR14" = "c910eaa40aaeb4e69929fc0240658ba54b75601bf5a6f5aae12d121c41ec9bc2"
-"R14_Mechanics.PrefixMassR14" = "edb268b4583d3e2a98f0399301fdc9605995b28c6d478bdd8ec292cb43257380"
+"R14_Mechanics.CatIntroV" = "fed2a8145016196b10d25cc723e86fe51cde04f7c4d7106eca279a1fc13ca9ff"
+"R14_Mechanics.DerivSizeV" = "fcff100be251329a13a4890b873a9f6f8be2fc978ef5cf32b0fa90df6d034605"
+"R14_Mechanics.MatchesV" = "609aa4fa822455c982d32316ef27eccd6ef003d1f0656b18fd24a2f147f171b6"
+"R14_Mechanics.PowerWord" = "d212a69f4db2767d9377ed55f893a1a592f27e1472cd7784720f89955d56a427"
+"R14_Mechanics.StarPowV" = "b30546f80421004040f79f9f73e3e73a9e6c1d05a04c21a1f7529ee8cfebe1d5"
 
 [[file]]
 path = "verus/r/r14_smt/src/lib.rs"
 lang = "v"
 open_bodies = []
 [file.statements]
-"clear_low_bit_r14" = "79c1fd6d967cfef77508c44d85e725614c5c38dd0a129739d5aec58aab678d72"
-"odd_square_r14" = "875f462eec44ab7fefbe27dfc8a04aec50b2dcba226a18d01923567fb06f2788"
-"odd_trace_r14" = "9923fb32a8a8a407edfb49f4974caf695167ac2573f716432ad101a3427e8c16"
-"prefix_cap_r14" = "9d4082f51225a0bd8c403594c4bc0fe0a891b21f959a3975db52d720b1fb0b07"
-"prefix_mass_r14" = "f4cf0270e8be24a5ba8dacc840954d8bf86cb3369195a81f8c05205afbca2d01"
+"lemma_cat_intro_v" = "8f356e497b0f0343ac18ee37045d930210e9885997e3c1f1fd96fa1860349aa6"
+"lemma_deriv_size_v" = "ba443c495a014ce1673642a82884b4f8e7a75736b962481cdce6d376bf87e775"
+"lemma_star_pow_v" = "d94adebd9c81aa10c22e853bfe66dfb5b1bc6442aec1cab3e6ea2126e84b1c86"
+"matches_v" = "6be7ee3af63c3d4efd33e6ba258fd2263e6a631e4e64cef3544f24899a1e7c8f"
+"power_word" = "94b5459c7319b0680a743cf0b4e081709ee0aefdd82450149cfdf2f33f8267a6"
+
+[[file]]
+path = "specimens/R14/P1-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_LoopD.Doubling" = "f117f4e8b9e6dd7cb2998ae982cdf33e141eee75bdc0642393123e17eabb7224"
+"R14_LoopD.MatchesV" = "609aa4fa822455c982d32316ef27eccd6ef003d1f0656b18fd24a2f147f171b6"
+
+[[file]]
+path = "specimens/R14/P1-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_doubling" = "81282cb915548c5370b6530280d15810e33b5e5234a9d6bc1d89c09d7befe467"
+"matches_v" = "6be7ee3af63c3d4efd33e6ba258fd2263e6a631e4e64cef3544f24899a1e7c8f"
+
+[[file]]
+path = "specimens/R14/P2-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_SquareD.SquareOfSum" = "da1677284053f5090ae8bfeef1fbadd24f87df980c95f9ba47598425eb765a0a"
+
+[[file]]
+path = "specimens/R14/P2-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_square_of_sum" = "15469dce3e077bd7b918415888273055f1b1e4bfc0287e81fb6ed4b0bb57f353"
+
+[[file]]
+path = "specimens/R14/P3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_MaskValueD.MaskValue" = "ced0a075401276bbb91126dd9a974b27f916e5ce81caed32740242a0a6438cc9"
+
+[[file]]
+path = "specimens/R14/P4v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"mask_value" = "66e350cdbd04b9ace84274f7d34bffb8e0cc1e8ccedcb5a1845518e5a7dc8361"
+
+[[file]]
+path = "specimens/R14/P5-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_StarsD.ThreeStars" = "57be5565a46a3ed40864610c09f1d092b52997118c12e71f8712f3a5f0422921"
+
+[[file]]
+path = "specimens/R14/P5-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_three_stars" = "85bf0edda75be9efb71bc75c65b2d36097cd0fafd73ae5695f352b1c2ad19b3f"
+
+[[file]]
+path = "specimens/R14/card-c1d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_TriggerCardD.MatchesV" = "609aa4fa822455c982d32316ef27eccd6ef003d1f0656b18fd24a2f147f171b6"
+"R14_TriggerCardD.XyMatches" = "0461f0b60372d93fcc4b3b8c9500d6f281ad439b0f61e90ebabebe073ec9f769"
+
+[[file]]
+path = "specimens/R14/card-c1v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_xy_matches" = "2174b02b7e7f6aaf353ae450a7a60288ccd01766e583b6ae8e01500cc0f88bf9"
+"matches_v" = "6be7ee3af63c3d4efd33e6ba258fd2263e6a631e4e64cef3544f24899a1e7c8f"
+
+[[file]]
+path = "specimens/R14/card-c2d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_FuelDemoD.ThreeStarsFuel" = "82d9ea381f576d45ce4c5aca319510e57c1c6c2de01f0cf356e555c7c2d22c03"
+
+[[file]]
+path = "specimens/R14/card-c2v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_three_stars_fuel" = "6971f2255d1bd37709bfd782b244eb8708dae8e07c86afdc33f2d6d62706cb9f"
+
+[[file]]
+path = "specimens/R14/card-c3d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_BvDemoD.SurrogateMask" = "2a2298482a48b2040cc8fc4482bb7c795c21662be6b9d57dfe59397e3be702d2"
+
+[[file]]
+path = "specimens/R14/card-c3v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_surrogate_mask" = "1290790ed600c71d8a903aca50addd80de2d353fab0e0078c28feb59237c8287"
+
+[[file]]
+path = "specimens/R14/card-c4dv-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R14_TriggerDivergeD.MatchesV" = "609aa4fa822455c982d32316ef27eccd6ef003d1f0656b18fd24a2f147f171b6"
+"R14_TriggerDivergeD.QThenEps" = "89b396e4940a08817a07f0523490824935cf41e5f29fb629308ea5906e5eace2"
+
+[[file]]
+path = "specimens/R14/card-c4dv-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"lemma_cat_eps_r" = "87ec3103976ac8552de3bf4a33a95da0d1b5e98c482750bb1f709234bbb07f65"
+"matches_r" = "943e0a2113cbbab8140359e1968694f9878f6127c43ff4f25a375b4b76878889"
 
 [[file]]
 path = "tools/R14/trigscan.py"
@@ -41,6 +159,7 @@ open_bodies = []
 "CaptureR14.__post_init__" = "7d5846024a479404d3129ce4747f100fcf649349fad1eef1e896ecef6d01e1b0"
 "GroupR14" = "4606a8ebcfc46555fcc02139fee5f274d85a74c9a946bda77006173da4e27d58"
 "PatternR14" = "aa86b40215d6fbf62faab384f247a3b65b3675c655e546bd628e5d52237e8f04"
+"QuantifierR14" = "8432625858b22175e6a5c0e4c8154bfe909739707c1b5980ff3a29b8a419a448"
 "TermR14" = "009a3daa582a9d30156707a2898c03b3d55f22c936edaf89fcac71c6eceb17ad"
 "TriggerScanR14" = "6a1c3dcb65d47d978a5e97fc2079c64196f3c7f1a28128bdee8d59d883cb32f2"
 "TriggerScanR14.availability" = "f4866bf65cc881c9a47090145d963bf37dacea9da3583d7dbb6cebe8d049d68f"
@@ -50,3 +169,6 @@ open_bodies = []
 "main" = "a8e32ea552792332b54349d4505050fba5401f9253c05b152431a8f86a3ceea0"
 "scan_trigger_notes_r14" = "2820fd0478b900fd296f983a6eda0f5f31205f18290d861634829da731e285fd"
 "sha_r14" = "7568ab7c06dff5fcd5ef677ad4215f042f0c85ab379c48edf0950626ea65a16f"
+"smt_quantifiers_r14" = "2ab93b5b1479fe94f236c45f85b93fb0d51b0c4f410a38ddb661c59f574a417a"
+"smt_quantifiers_r14.<locals>.show" = "1de30c084c633219214e15167128714f668d7728e05e5af276bd50138203a57a"
+"smt_quantifiers_r14.<locals>.visit" = "20887b4ab5f83d2798620b7a4d984212fdb084f8b766b068fb2eae82712116cf"

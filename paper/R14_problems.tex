@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R14 --- SMT mechanics \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\section*{Instructions}
+Commit all five predictions before reading. Allow 30 minutes: 15 for each
+problem. Card 02.5 describes a published agent harness; the tools you used in
+R14 (\texttt{trigscan}, \texttt{vcheck --smt-log}) are hand-built readers of
+what a solver was given, not that harness. Keep the paper's claims and the
+course's tools apart.
+
+\begin{problem}[paper-card]\label{prob:B1}
+\textbf{Card 02.5: Solver-aware agentic program verification.} Fill Task
+shape, Oracle, Trust, Cheat surface, Metric, Budget, Variance and Artifact
+using the pinned local source. Attribute every number to the card. Explain the
+card's notion of \emph{solver dischargeability} with one example from R14 (a
+true fact that is not yet in a form the solver proves), and say which part of
+the card's local-obligation interface R14's tools give you and which they do
+not. The card score is the minimum of its eight field scores.
+\begin{verbatim}
+sed -n '703,736p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+a0eaba4cc4b2eb9a45ad29d2a26a305080321908d6c48053cc69d2ba1a31fa71  -
+\end{verbatim}
+Source drift requires an author re-pin before grading.
+\end{problem}
+
+\begin{problem}[statistics]\label{prob:B2}
+\textbf{What a CV sweep licenses.} Take your ten-seed sweep of section 6 of the
+chapter (one target, seeds 1 to 10, \texttt{scripts/vcheck --json --measures
+--seed N}). (a) Report every run: seed, verdict, resource count and wall time,
+including runs that ran out of resources, and the settings that were held
+fixed (toolchain pins, resource limit, target file digest, machine). (b)
+Compute the coefficient of variation of the resource count over the runs that
+verified, and a 95\,\% bootstrap interval for its mean
+(\texttt{fvh.stats.bootstrap\_ci}); say why runs that ran out are not averaged
+in, and how you report them instead. (c) Say what the sweep licenses and what
+it does not, in particular about another seed range, another Z3 version and
+another machine; and whether three agreeing seeds (the done rule) and your ten
+runs answer the same question. (d) Name one comparison the sweep could support
+if, and only if, you had fixed it before running.
+\end{problem}
+
+\end{document}

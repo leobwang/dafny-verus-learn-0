@@ -1,0 +1,29 @@
+// Dafny's side of the trigger divergence: a definition's existential may trigger
+// on the definition's own recursive call, and a proof can supply that term.
+module R14_TriggerDivergeD {
+  import opened RG_A1_Re
+
+  ghost predicate MatchesV(r: Re, s: seq<char>)
+    decreases r, |s|
+  {
+    match r
+    case Empty => false
+    case Eps => s == []
+    case Chr(c) => s == [c]
+    case Alt(a, b) => MatchesV(a, s) || MatchesV(b, s)
+    case Cat(a, b) =>
+      exists i {:trigger MatchesV(a, s[..i])} | 0 <= i <= |s| :: MatchesV(a, s[..i]) && MatchesV(b, s[i..])
+    case Star(a) =>
+      s == [] || exists i {:trigger MatchesV(a, s[..i])} | 0 < i <= |s| :: MatchesV(a, s[..i]) && MatchesV(Star(a), s[i..])
+  }
+
+  // item: R14.C4dv diverge:trigger
+  // Dafny: the trigger MatchesV(a, s[..i]) is usable from outside. Verus: the same
+  // trigger names the fuel-indexed copy (card-c4dv-v), so R14's matches_v triggers
+  // on the subrange term instead.
+  lemma QThenEps()
+    ensures MatchesV(Cat(Chr('q'), Eps), ['q'])
+  {
+    assert ['q'][..1] == ['q'] && MatchesV(Chr('q'), ['q'][..1]);
+  }
+}

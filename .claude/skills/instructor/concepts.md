@@ -95,6 +95,7 @@ and `R06/loop-invariant` are one concept to it. Never rename a tag once a ledger
 | `resource-limits` | `resource-limit` | deterministic resource limits vs time limits; verdict kinds | Q06, Q12, Q18, R05, R14 |
 | `brittleness` | | seed sensitivity, solver swaps, resource-count variation; repair without weakening | Q09, Q15, Q18, R14, R16 |
 | `proof-splitting` | | isolating assertions and splitting a proof to stabilise it | Q07, Q09, Q18, R14 |
+| `smt-log` | | what the solver was given (each quantifier's `:pattern` and `:qid` in the SMT query) versus what it did; a pattern is not an instance | R14 |
 | `contract-allowlist` | | the CONTRACT block (goal, allowed files, acceptance); rules without gates are suggestions | Q03, Q09, Q18, R01, R15, R16 |
 | `agent-roles` | | the role ladder from repairer to adversary; each role's first failure mode | Q01, Q06, Q09, R01, R04, R10 |
 | `escalation-ladder` | | tests, property tests, then verification: the cheapest refutation first | Q06, R02, R15 |
@@ -125,7 +126,7 @@ treats them as different tags when it interleaves.
 - holes and empty proofs: `hole-contract`, `fake-green`, `vacuity`
 - specs under pressure: `spec-strength`, `vacuity`, `witnesses`, `prose-to-spec`, `spec-oracles`
 - induction: `induction-as-recursion`, `auto-induction`, `invariant-generalization`, `loop-invariant`
-- controlling what the solver sees: `fuel`, `opacity`, `triggers`, `matching-loop`
+- controlling what the solver sees: `fuel`, `opacity`, `triggers`, `matching-loop`, `smt-log`
 - trust: `tcb`, `trust-ledger`, `gate-design`, `fake-green`, `build-poisoning`
 - stability: `brittleness`, `resource-limits`, `variance`, `proof-splitting`
 - measurement: `statistics`, `variance`, `matched-compute`, `pre-registration`

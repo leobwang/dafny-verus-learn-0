@@ -1,0 +1,10 @@
+// A surrogate-block mask on a 32-bit code point.
+module R14_MaskValueD {
+  // item: R14.P3d value
+  // What is the masked value, as an integer? Answer form: numeral.
+  method {:test} MaskValue()
+  {
+    var x: bv32 := 0xDABC;
+    // SLOT: expect (x & 0xFFFFF800) as int == ???;
+  }
+}

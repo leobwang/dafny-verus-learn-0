@@ -1,0 +1,387 @@
+# expected/R14.chapter.toml — the chapter pins of R14's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R14 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R14_Smt/std"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2e1a48230d52caff9fa67de64c0617276a6f700dc11ebb097a8a4921179c4290"
+[entry.pinned.inputs]
+"dafny/R/R14_Smt/std/R14_Smt.dfy" = "e357c1c6f338445edb014c04c93e0068d199b1ae04fc8bf8355f823ff5a6f4ec"
+"dafny/R/R14_Smt/std/dfyconfig.toml" = "db2503838912ff39a81e7d8ab4d829780d72759a85666daba99c5822e3f07479"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r14_smt"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5e242d0b2473b083d98922b389f4065b84e2c887af293ad95272cbd9b62339e1"
+[entry.pinned.inputs]
+"verus/r/r14_smt/Cargo.toml" = "490b136433188c648df757cbfe7cf41cb6d7bc3c622ae5a0eef315c4c849e5f8"
+"verus/r/r14_smt/src/lib.rs" = "40b1480633533a7aecbd24c10be51c68e561841e6c15f8d41e683e6b91848ead"
+
+[[entry]]
+id = "trigger-none-d"
+cmd = ["scripts/vcheck", "--module", "R14", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The source shown above the pin, run in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "37479d71607a0e1894481eb39e0455433d541f63e7d4e9746a745784e38b0b06"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "068d8200c9c4ece7f5de81a4493b7f5e61420d719a0f13a431b32f744d03a4f9"
+
+[[entry]]
+id = "trigger-term-d"
+cmd = ["scripts/vcheck", "--module", "R14", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The source shown above the pin, run in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "74fe7fb733dd1ee2cf965cf95eddc74d1078610a37743765fa33f3b46da2345a"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "cf2f71ac414e4c6f0b81e2e21cb1aa65ae97b1008d687e52a8dfdebcd42f30ff"
+
+[[entry]]
+id = "rectrig-v"
+cmd = ["scripts/vcheck", "--module", "R14", "probe.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+note = "The source shown above the pin, run in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "20a7c2eb319cf7f0e656923f7598d47ccb15f711d98675f28de19103872349be"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "43011c29c5435284f3f0749e33fb27f367df305d0edde9c4a6259c672618d69d"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "smtlog-v"
+cmd = ["scripts/vcheck", "--module", "R14", "--smt-log", "smt", "probe.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+note = "The source above the pin with the SMT log route (D53); the log's size depends on the scratch paths inside it and is masked."
+[entry.normalize]
+drop = ["^raw output: "]
+replace = [["\\(\\d+ bytes\\)", "(<n> bytes)"]]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "70b91e24fff07e219d04e4c8e6dab2f5cbe468172e33cafb8ebb835f8c4138a7"
+[entry.pinned.inputs]
+"scratch:probe.rs" = "94142b21402d1eca9fda0f55d27e9bc6019a358315dc3ad01439092bf849ef7f"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "loop-d"
+cmd = ["scripts/vcheck", "--module", "R14", "P1-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+answers = ["R14.P1dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."P1-d.dfy"]
+copy = "specimens/R14/P1-d.dfy.specimen"
+[entry.pinned]
+body = "766d4621eca3a2d7a039a60dc1667d7adea65a3357cb5cc6c31e896bb2500723"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:P1-d.dfy" = "fd9aa2f8dab0bfcd711a33069dac0b896269eb6268f242f4db1e5181ee51a64e"
+"specimens/R14/P1-d.dfy.specimen" = "fd9aa2f8dab0bfcd711a33069dac0b896269eb6268f242f4db1e5181ee51a64e"
+
+[[entry]]
+id = "loop-v"
+cmd = ["scripts/vcheck", "--module", "R14", "P1-v.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+answers = ["R14.P1dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."P1-v.rs"]
+copy = "specimens/R14/P1-v.rs.specimen"
+[entry.pinned]
+body = "e29c99a2616881e4da4b27d3995b2e0eb877f219d2cb54534ae5727a8353e856"
+[entry.pinned.inputs]
+"scratch:P1-v.rs" = "ae2a5f5724362c41cc4b888f6783ff1d2036d754421e9da655b20e3d4c736325"
+"specimens/R14/P1-v.rs.specimen" = "ae2a5f5724362c41cc4b888f6783ff1d2036d754421e9da655b20e3d4c736325"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "fuel-none-d"
+cmd = ["scripts/vcheck", "--module", "R14", "P5-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+answers = ["R14.P5dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."P5-d.dfy"]
+copy = "specimens/R14/P5-d.dfy.specimen"
+[entry.pinned]
+body = "000539165981d1bdf1cce34bb8d108ecdb9a8a95fffea25a6d650a8dff959370"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:P5-d.dfy" = "bd77ba89ded6433186be5e079869cdcabec87e239253ba04b0fceceab76ba6cf"
+"specimens/R14/P5-d.dfy.specimen" = "bd77ba89ded6433186be5e079869cdcabec87e239253ba04b0fceceab76ba6cf"
+
+[[entry]]
+id = "fuel-none-v"
+cmd = ["scripts/vcheck", "--module", "R14", "P5-v.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+answers = ["R14.P5dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."P5-v.rs"]
+copy = "specimens/R14/P5-v.rs.specimen"
+[entry.pinned]
+body = "25ca714cee17bf4634838372b7a2b3beb0e3e313a9b145b9c717ba3003f56bf2"
+[entry.pinned.inputs]
+"scratch:P5-v.rs" = "9a1de56a22c3daec4c4832001ea8605be3fcb0fe47b2453fe2083169acdea3b7"
+"specimens/R14/P5-v.rs.specimen" = "9a1de56a22c3daec4c4832001ea8605be3fcb0fe47b2453fe2083169acdea3b7"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "fuel-four-d"
+cmd = ["scripts/vcheck", "--module", "R14", "card-c2d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+answers = ["R14.P5dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."card-c2d.dfy"]
+copy = "specimens/R14/card-c2d.dfy.specimen"
+[entry.pinned]
+body = "7fffd238a2df05ba9295d2100eccccadfc564ab64a5794bf246cbd13093c0203"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:card-c2d.dfy" = "d2522d6e61307fc2c025caa7bae2209deaf863e99a65b44ee6ca02979e008c3e"
+"specimens/R14/card-c2d.dfy.specimen" = "d2522d6e61307fc2c025caa7bae2209deaf863e99a65b44ee6ca02979e008c3e"
+
+[[entry]]
+id = "fuel-four-v"
+cmd = ["scripts/vcheck", "--module", "R14", "card-c2v.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+answers = ["R14.P5dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."card-c2v.rs"]
+copy = "specimens/R14/card-c2v.rs.specimen"
+[entry.pinned]
+body = "3e8d54b448a73d9a52a5209a7b856f6eaf9ff52fa17eae1c375227335960443a"
+[entry.pinned.inputs]
+"scratch:card-c2v.rs" = "ad4ce9227329d28b703ca2155d825b53537207dbec59cf5325127a5126fb2ce3"
+"specimens/R14/card-c2v.rs.specimen" = "ad4ce9227329d28b703ca2155d825b53537207dbec59cf5325127a5126fb2ce3"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "nl-d"
+cmd = ["scripts/vcheck", "--module", "R14", "P2-d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+answers = ["R14.P2dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."P2-d.dfy"]
+copy = "specimens/R14/P2-d.dfy.specimen"
+[entry.pinned]
+body = "1ffc62358cafd07ff7813d2265c764da5a86be60fed47015ec60d823ef72af64"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:P2-d.dfy" = "c5664fb1891b71cd4a1f0027a6b508890956caf1c2eefe2f4d18f425b4987e69"
+"specimens/R14/P2-d.dfy.specimen" = "c5664fb1891b71cd4a1f0027a6b508890956caf1c2eefe2f4d18f425b4987e69"
+
+[[entry]]
+id = "nl-v"
+cmd = ["scripts/vcheck", "--module", "R14", "P2-v.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+answers = ["R14.P2dv"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."P2-v.rs"]
+copy = "specimens/R14/P2-v.rs.specimen"
+[entry.pinned]
+body = "164f4247337b96749f20b6bfb7e2c51784f97c9de0cc446202a49c99f5491750"
+[entry.pinned.inputs]
+"scratch:P2-v.rs" = "4decb0d00a034c530bd1268480de4c620f608e10e3225471a2e0ef2d21e01bd5"
+"specimens/R14/P2-v.rs.specimen" = "4decb0d00a034c530bd1268480de4c620f608e10e3225471a2e0ef2d21e01bd5"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "bv-d"
+cmd = ["scripts/vcheck", "--module", "R14", "card-c3d.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+answers = ["R14.P3d"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."card-c3d.dfy"]
+copy = "specimens/R14/card-c3d.dfy.specimen"
+[entry.pinned]
+body = "b8ae96b878d57ca1dd4b07b379d575d4926ed0af3f3dc0a203dbbee05559828e"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:card-c3d.dfy" = "7fa4c26c1a8c744bd010d58ad2d71a7e70365579c1d323eb8bd84dea05c1932f"
+"specimens/R14/card-c3d.dfy.specimen" = "7fa4c26c1a8c744bd010d58ad2d71a7e70365579c1d323eb8bd84dea05c1932f"
+
+[[entry]]
+id = "bv-v"
+cmd = ["scripts/vcheck", "--module", "R14", "card-c3v.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs", "verus/given/rg_re_a1b/src/lib.rs", "verus/given/rg_re_a2/src/char_class.rs", "verus/given/rg_re_a2/src/lib.rs", "verus/given/rg_re_a2/src/step_matcher.rs", "verus/given/rg_re_a3/src/lib.rs", "verus/given/rg_re_a4/src/lib.rs"]
+answers = ["R14.P3d"]
+note = "A real-extension copy of the specimen in R14's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."card-c3v.rs"]
+copy = "specimens/R14/card-c3v.rs.specimen"
+[entry.pinned]
+body = "a781054b0f7e8ebe8d254323bbf58d104acc39bfb5906f4749427ad5411b1aec"
+[entry.pinned.inputs]
+"scratch:card-c3v.rs" = "e8ee2593442c3ccf3afc0dc5210e2245fd3fd5ff31eceb48e5219472e672f22b"
+"specimens/R14/card-c3v.rs.specimen" = "e8ee2593442c3ccf3afc0dc5210e2245fd3fd5ff31eceb48e5219472e672f22b"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+"verus/given/rg_re_a1b/src/lib.rs" = "008be94ab41d7cf32171e5700b1fa520c6112031e41e8900654e89a46437ba71"
+"verus/given/rg_re_a2/src/char_class.rs" = "d16125bb49e517c11da6eb05b9492410ad3c35c60bb1f72054bb83b6bea6d47b"
+"verus/given/rg_re_a2/src/lib.rs" = "4405819b4fc883c0cda1e9dbebf69a68b77da232b5598016d9bdb5c7421d6a9c"
+"verus/given/rg_re_a2/src/step_matcher.rs" = "1d860de96bc58c1a0946b4a9b55eca88a4185a69d1905d3ca29abc5a13aad9ce"
+"verus/given/rg_re_a3/src/lib.rs" = "089b5cff1771ad005b0997fb263a9bf5f525b1e7e7c626fbc1fb4d6c5146ce56"
+"verus/given/rg_re_a4/src/lib.rs" = "16c3d25ed0701fe892e3c02d8cd561642d4e0dd7a41b37b3c038fc667caac365"
+
+[[entry]]
+id = "seeds-d"
+cmd = ["scripts/vcheck", "--module", "R14", "--brittleness", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The source shown above the pin under the three pinned seeds, in R14's given context (the spread lines cover the given chain's symbols too)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "c165a028605392c6327d55577d7e062d8ac5dd6499258abfeaa5d057ee25dd3c"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "520eb7862de960fc92a109fbf57d3b8f14e2d6a1e2e9fb241eb22461112163ce"

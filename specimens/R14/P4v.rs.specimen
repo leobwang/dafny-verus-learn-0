@@ -1,0 +1,12 @@
+// A surrogate-block mask on a 32-bit code point.
+use vstd::prelude::*;
+
+verus! {
+
+// item: R14.P4v value
+// What is the masked value? Answer form: numeral.
+proof fn mask_value() {
+    // SLOT: assert((0xE7FFu32 & 0xFFFF_F800u32) == ???) by (compute_only);
+}
+
+} // verus!

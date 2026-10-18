@@ -1,0 +1,12 @@
+// after: R14.P2dv
+use vstd::prelude::*;
+
+verus! {
+
+proof fn lemma_square_of_sum(x: nat, y: nat)
+    ensures
+        (x + y) * (x + y) >= x * x + y * y,
+{
+}
+
+} // verus!

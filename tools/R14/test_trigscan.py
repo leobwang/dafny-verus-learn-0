@@ -1,5 +1,6 @@
 """Frozen R14 toolsmith controls: native byte spans, scope and original frame.
 Actual capture and synthetic boundary cases are distinguished explicitly.
+The SmtTests cover the provided SMT-log reader (D53), not the toolsmith hole.
 """
 import ast
 import argparse
@@ -19,7 +20,7 @@ selected,remaining=parser.parse_known_args();sys.argv=[sys.argv[0],*remaining]
 IMPLEMENTATION=selected.implementation or HERE/'trigscan.py'
 spec=importlib.util.spec_from_file_location('r14_tool_under_test',IMPLEMENTATION)
 m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=m;spec.loader.exec_module(m)
-FRAME_SHA256='77df9096e67eb220ff17ca46cceef597ea297a013a50872f168150714fa593b0'
+FRAME_SHA256='32534f79f1575428ea69fc2fbb8de6ba3b5dde11851f39c3412eff0819a84748'
 
 def capture(source=b'alpha[k]',records=(),identity='fixture://source',extra=b''):
  raw=b''.join((json.dumps(x,ensure_ascii=False)+'\n').encode() for x in records)+extra
@@ -81,4 +82,40 @@ class TriggerTests(unittest.TestCase):
    if isinstance(n,ast.FunctionDef) and n.name=='scan_trigger_notes_r14':n.body=n.body[:1]+[ast.Pass()];found.append(n.name)
   self.assertEqual(found,['scan_trigger_notes_r14'])
   self.assertEqual(hashlib.sha256(ast.dump(tree,include_attributes=False).encode()).hexdigest(),FRAME_SHA256)
+
+SMT_SAMPLE = """; a comment with (forall ((x Int)) x) that is not a quantifier
+(declare-fun f (Int) Int)
+(assert (forall ((x Int)) (! (=> (> x 0) (exists ((y Int)) (= (f y) x)))
+  :pattern ((f x))
+  :qid user_probe__outer_0
+  :skolemid skolem_user_probe__outer_0)))
+(assert (forall ((s |weird(name|) (t Int)) (! (= (f t) t)
+  :pattern ((f t) (g s))
+  :pattern ((h t))
+  :qid user_probe__two_1)))
+(check-sat)
+"""
+
+
+class SmtTests(unittest.TestCase):
+    def test_patterns_and_qids_are_read_as_printed(self):
+        found = m.smt_quantifiers_r14(SMT_SAMPLE)
+        self.assertEqual([(q.kind, q.qid, q.line) for q in found],
+                         [('forall', 'user_probe__outer_0', 3), ('exists', None, 3),
+                          ('forall', 'user_probe__two_1', 7)])
+        self.assertEqual(found[0].patterns, ('((f x))',))
+        self.assertEqual(found[1].patterns, ())
+        self.assertEqual(found[2].patterns, ('((f t) (g s))', '((h t))'))
+
+    def test_comments_and_quoted_symbols_are_not_quantifiers(self):
+        found = m.smt_quantifiers_r14('; (forall ((x Int)) x)\n(declare-fun |(forall| () Int)\n')
+        self.assertEqual(found, ())
+
+    def test_unbalanced_log_is_refused(self):
+        with self.assertRaisesRegex(ValueError, 'unbalanced'):
+            m.smt_quantifiers_r14('(assert (forall ((x Int)) x)')
+        with self.assertRaisesRegex(ValueError, 'unbalanced'):
+            m.smt_quantifiers_r14('(check-sat))')
+
+
 if __name__=='__main__':unittest.main()

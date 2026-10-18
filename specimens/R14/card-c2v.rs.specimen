@@ -1,0 +1,17 @@
+// A fuel demonstration: P5's lemma, with the unfolding depth raised.
+// after: R14.P5dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+// item: R14.C2v recognise:fuel
+// RECOGNISE: reveal_with_fuel raises how often node_count is opened at a term.
+proof fn lemma_three_stars_fuel(r: Re)
+    ensures
+        node_count(Re::Star(Box::new(Re::Star(Box::new(Re::Star(Box::new(r))))))) == node_count(r) + 3,
+{
+    reveal_with_fuel(node_count, 4);
+}
+
+} // verus!

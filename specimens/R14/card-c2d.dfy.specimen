@@ -1,0 +1,12 @@
+// A fuel demonstration: P5's lemma, with the unfolding depth raised.
+// after: R14.P5dv
+module R14_FuelDemoD {
+  import opened RG_A1_Re
+
+  // item: R14.C2d recognise:fuel
+  // RECOGNISE: the attribute raises how often NodeCount is opened at a term.
+  lemma {:fuel NodeCount, 4} ThreeStarsFuel(r: Re)
+    ensures NodeCount(Star(Star(Star(r)))) == NodeCount(r) + 3
+  {
+  }
+}

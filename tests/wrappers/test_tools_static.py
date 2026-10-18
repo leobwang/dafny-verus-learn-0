@@ -302,6 +302,28 @@ class Core(unittest.TestCase):
         rc, out, err = C.tool("vcheck", "--selftest", "--", "--expand-errors")
         self.assertEqual(rc, 2, err)
 
+    def test_smt_log_refusals(self):
+        # D53 (R14): --smt-log takes one Verus target in the learner loop or fast channel,
+        # and a new or empty directory outside the reference trees; no tool runs.
+        ok_d, ok_v = "tests/wrappers/fixtures/dafny/ok.dfy", "tests/wrappers/fixtures/verus/clean.rs"
+        tmp = Path(tempfile.mkdtemp(prefix="dvl-tools-smt-", dir=C.TMP_BASE))
+        try:
+            (tmp / "full").mkdir()
+            (tmp / "full" / "old.smt2").write_text("x")
+            for args, want in ((["--smt-log", str(tmp / "a"), "--gate", ok_v], "never the gate"),
+                               (["--smt-log", str(tmp / "a"), "--brittleness", ok_v],
+                                "never the gate"),
+                               (["--smt-log", str(tmp / "a"), ok_d], "one Verus target"),
+                               (["--smt-log", str(tmp / "a"), ok_v, ok_v], "one Verus target"),
+                               (["--smt-log", str(tmp / "full"), ok_v], "new or empty"),
+                               (["--smt-log", "Solutions/smt", ok_v], "reference tree")):
+                rc, out, err = C.tool("vcheck", *args)
+                self.assertNotEqual(rc, 0, (args, out, err))
+                self.assertIn(want, out + err, args)
+            self.assertFalse((tmp / "a").exists())
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
     def test_reference_targets_refused(self):
         tmp = Path(tempfile.mkdtemp(prefix="dvl-tools-ref-", dir=C.TMP_BASE))
         try:
