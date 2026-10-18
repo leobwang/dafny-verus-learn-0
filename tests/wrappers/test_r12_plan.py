@@ -1,104 +1,144 @@
-"""Plan structure/binding controls only; neutral files are not admitted lab data."""
+"""tools/R12/plan.py over the schema-2 stratum (DVR4 plan section 3.8): structure and
+binding controls on neutral fixtures only (no native admission claim, no model call)."""
 import hashlib
-import json
-import shutil
-import re
 import importlib.util
-from pathlib import Path
-import tempfile
-import tomllib
-import unittest
+import json
 import sys
+import tempfile
+import unittest
+from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[2]
-sys.path[:0]=[str(ROOT/'harness'),str(ROOT/'harness/r')]
-from fvh import batch,protocol as P
-spec=importlib.util.spec_from_file_location('r12_plan',ROOT/'tools/R12/plan.py')
-module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT / 'harness'), str(ROOT / 'harness/r')]
+from fvh import batch, prereg  # noqa: E402
+
+spec = importlib.util.spec_from_file_location('r12_plan', ROOT / 'tools/R12/plan.py')
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
+CHECKS = {k: True for k in module.CHECKS}
+# cluster id -> (kind, role, descriptive, languages)
+LAYOUT = {'rx-a': ('regex', 'pilot', False, 'dv'), 'rx-b': ('regex', 'pilot', False, 'dv'),
+          'rx-c': ('regex', 'pilot', False, 'dv'), 'pub-a': ('public', 'pilot', False, 'd'),
+          'pub-b': ('public', 'pilot', False, 'v'), 'rx-d': ('regex', 'confirmatory', True, 'dv'),
+          'rx-e': ('regex', 'confirmatory', False, 'dv'), 'pub-c': ('public', 'confirmatory', True, 'v'),
+          'rx-f': ('regex', 'unassigned', False, 'dv')}
 
 
-def cards(root):
- rows=[]
- for lang,ext in [('dafny','.dfy'),('verus','.rs')]:
-  for i in range(20):
-   name=('d' if lang=='dafny' else 'v')+str(i);p=root/(name+ext);p.write_text('// neutral structure-only fixture '+name+'\n')
-   rows.append(dict(id=name,lang=lang,path=p.name,statement='Neutral fixture; no native admission claim.',cluster='algorithm-'+str(i),exposure='neutral fixture; no exposure claim',source_sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
- return rows
+def write_root(root, layout=LAYOUT, mutate=None):
+    lines = ['schema = 2', 'lab = "R12"']
+    tasks = []
+    for cid, (kind, role, desc, langs) in layout.items():
+        ids = [cid + '-' + l for l in langs] if kind == 'regex' or len(langs) > 1 else [cid]
+        lines += ['[[cluster]]', f'id = "{cid}"', f'kind = "{kind}"', f'role = "{role}"',
+                  f'descriptive = {str(desc).lower()}', 'tasks = ' + json.dumps(ids)]
+        for tid, l in zip(ids, langs):
+            ext = '.dfy' if l == 'd' else '.rs'
+            rel = f'bench/local/r/labalpha/{tid}/tasks/{tid}{ext}'
+            p = root / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text('// neutral structure-only fixture ' + tid + '\n')
+            src = hashlib.sha256(p.read_bytes()).hexdigest()
+            adm = {'schema': 2, 'status': 'admitted', 'source_sha256': src, 'checks': dict(CHECKS)}
+            row = dict(id=tid, cluster=cid, lang='dafny' if l == 'd' else 'verus', path=rel,
+                       source_sha256=src, statement='Neutral fixture; no native admission claim.',
+                       exposure='neutral fixture', admission=f'bench/local/r/labalpha/{tid}/ADMISSION.json')
+            if mutate:
+                mutate(row, adm)
+            a = root / row['admission']
+            a.write_text(json.dumps(adm))
+            row['admission_sha256'] = hashlib.sha256(a.read_bytes()).hexdigest()
+            tasks.append(row)
+    for row in tasks:
+        lines.append('[[task]]')
+        lines += [f'{k} = {json.dumps(v)}' for k, v in row.items()]
+    path = root / 'bench/local/r/labalpha/STRATUM.toml'
+    path.write_text('\n'.join(lines) + '\n')
+    (root / module.FREEZE).write_text('schema = 1\n')       # an incomplete placeholder
+    return path
 
 
 class PlanContract(unittest.TestCase):
- def test_frozen_loader_matched_budgets_source_binding_and_inline_prompt_bytes(self):
-  with tempfile.TemporaryDirectory() as temporary:
-   root=Path(temporary);rows=cards(root);plans,subset=module.build_plans(rows,seed=1217,subset_seed=4217)
-   self.assertEqual(len(subset),10);self.assertEqual(sum(x.startswith('d') for x in subset),5)
-   for name,text in plans.items():
-    path=root/(name+'.toml');path.write_text(text);plan=batch.load_plan(path,root)
-    self.assertTrue(plan.lever_check);self.assertEqual(plan.attempts,1)
-    self.assertEqual(plan.repeats,3 if name=='qwen' else 1)
-    runs=len(plan.tasks)*len(plan.arms)*plan.repeats
-    self.assertEqual((runs,runs*10),(480,4800) if name=='qwen' else (10,100))
-    self.assertEqual(plan.system,(ROOT/'tools/R12/lab_system.md').read_text())
-    self.assertEqual(plan.instructions,(ROOT/'tools/R12/lab_instructions.md').read_text())
-    self.assertTrue(all(a.construct=='seeded' and a.caps['turns']==12 and a.rounds==10 and a.lab_code=='preserve' for a in plan.arms))
-    for card in rows:
-     if card['id'] in plan.tasks:self.assertTrue(plan.task_statements[card['id']].startswith('R12_TASK_SHA256: '+card['source_sha256']+'\n'))
-    if name=='qwen':self.assertEqual([a.policy for a in plan.arms],['fvh_r.engine:'+p for _,p in module.POLICIES])
- def test_subset_reproducible_without_reordering_main_stratum(self):
-  with tempfile.TemporaryDirectory() as temporary:
-   rows=cards(Path(temporary));original=[x['id'] for x in rows]
-   self.assertEqual(module.build_plans(rows,seed=4,subset_seed=5),module.build_plans(rows,seed=4,subset_seed=5))
-   self.assertEqual([x['id'] for x in rows],original)
- def test_incomplete_unbalanced_and_bool_seeds_refused(self):
-  with tempfile.TemporaryDirectory() as temporary:
-   rows=cards(Path(temporary))
-   for data,seed,subset in [(rows[:-1],1,2),([dict(r,lang='dafny') for r in rows],1,2),(rows,True,2),(rows,1,False)]:
-    with self.assertRaises(ValueError):module.build_plans(data,seed=seed,subset_seed=subset)
- def test_stratum_missing_admissions_or_hashes_cannot_produce_a_plan(self):
-  with tempfile.TemporaryDirectory() as temporary:
-   root=Path(temporary);path=root/'STRATUM.toml';path.write_text('schema=1\nlab="R12"\n')
-   with self.assertRaisesRegex(ValueError,'40'):module.load_stratum(root,path)
- def test_course_file_cannot_escape_or_discover_reference_material(self):
-  with tempfile.TemporaryDirectory() as temporary:
-   root=Path(temporary);(root/'Solutions').mkdir();(root/'Solutions/answer.rs').write_text('protected fixture')
-   for path in ['../escape.rs','/tmp/absolute.rs','Solutions/answer.rs','missing.rs']:
-    with self.assertRaises(ValueError):module.course_path(root,path)
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def plans(self, **kw):
+        _, clusters, tasks = module.load_stratum(self.root, write_root(self.root, **kw))
+        return module.build_plans(clusters, tasks, seed=1217, claude_subset_seed=4217)
+
+    def test_three_role_plans_with_the_pilot_arithmetic(self):
+        plans, subset, calls = self.plans()
+        self.assertEqual(set(plans), {'pilot', 'confirmatory', 'descriptive', 'descriptive-claude'})
+        self.assertEqual(calls['pilot'], {'tasks': 8, 'clusters': 5, 'runs': 96, 'generation_calls': 960})
+        self.assertEqual(calls['confirmatory']['tasks'], 5)
+        self.assertEqual(calls['descriptive']['clusters'], 2)
+        self.assertEqual(len(subset), 3)          # rx-d-d, rx-d-v, pub-c
+        for name, text in plans.items():
+            p = self.root / (name + '.toml')
+            p.write_text(text)
+            plan = batch.load_plan(p, self.root)
+            self.assertTrue(plan.lever_check)
+            self.assertEqual(plan.role, 'descriptive' if name == 'descriptive-claude' else name)
+            self.assertEqual(bool(plan.lab), name != 'pilot')
+            self.assertEqual(plan.freeze, '' if name == 'pilot' else module.FREEZE)
+            self.assertEqual(plan.system, (ROOT / 'tools/R12/lab_system.md').read_text())
+            self.assertTrue(all(a.construct == 'seeded' and a.caps['turns'] == 12 and a.rounds == 10
+                                and a.policy.startswith('fvh.labalpha:') for a in plan.arms))
+            want = {'pilot': ['independent', 'repair', 'best', 'best-raw'], 'confirmatory': ['best', 'best-raw'],
+                    'descriptive': ['independent', 'repair'], 'descriptive-claude': ['best']}[name]
+            self.assertEqual([a.name for a in plan.arms], want)
+            for t in plan.tasks:
+                self.assertRegex(plan.task_statements[t], r'^R12_TASK_SHA256: [0-9a-f]{64}\nR12_CLUSTER: ')
+
+    def test_the_batch_role_rules_accept_the_pilot_and_hold_the_rest_to_the_freeze(self):
+        plans, _, _ = self.plans()
+        for name, ok in (('pilot', True), ('confirmatory', False), ('descriptive', False)):
+            p = self.root / (name + '.toml')
+            p.write_text(plans[name])
+            plan = batch.load_plan(p, self.root)
+            if ok:
+                self.assertIsNone(prereg.check_roles(self.root, 'R12', plan))
+            else:
+                with self.assertRaisesRegex(prereg.FreezeRefused, 'incomplete'):
+                    prereg.check_roles(self.root, 'R12', plan)
+
+    def test_reproducible(self):
+        self.assertEqual(self.plans(), self.plans())
+
+    def test_stratum_refusals(self):
+        cases = [
+            (dict(mutate=lambda row, adm: adm['checks'].update({'wrong-hints-fail': False})), 'seven native'),
+            (dict(mutate=lambda row, adm: adm.update(schema=1)), 'not bound'),
+            (dict(mutate=lambda row, adm: row.update(source_sha256='0' * 64)), 'stale task source'),
+            (dict(layout={'rx-a': ('regex', 'pilot', False, 'd')}), 'Dafny and its Verus'),
+            (dict(layout={'pub-a': ('public', 'pilot', False, 'dv')}), 'cluster of its own'),
+            (dict(layout={'rx-a': ('regex', 'pilot', True, 'dv')}), 'descriptive subset'),
+            (dict(layout={'rx-a': ('regex', 'final', False, 'dv')}), 'role is one of'),
+        ]
+        for kw, msg in cases:
+            with self.subTest(msg=msg), tempfile.TemporaryDirectory() as t:
+                with self.assertRaisesRegex(ValueError, msg):
+                    module.load_stratum(Path(t), write_root(Path(t), **kw))
+
+    def test_the_toy_stratum_is_apparatus_smoke_never_data(self):
+        with self.assertRaisesRegex(ValueError, 'schema 2'):
+            module.load_stratum(ROOT, ROOT / 'bench/local/r/labalpha-smoke/STRATUM.toml')
+
+    def test_bool_or_negative_seeds_refused(self):
+        _, clusters, tasks = module.load_stratum(self.root, write_root(self.root))
+        for seed in (True, -1):
+            with self.assertRaises(ValueError):
+                module.build_plans(clusters, tasks, seed=seed)
+
+    def test_course_file_cannot_escape_or_discover_reference_material(self):
+        (self.root / 'Solutions').mkdir()
+        (self.root / 'Solutions/answer.rs').write_text('protected fixture')
+        for path in ['../escape.rs', '/tmp/absolute.rs', 'Solutions/answer.rs', 'missing.rs']:
+            with self.assertRaises(ValueError):
+                module.course_path(self.root, path)
 
 
-
-class CatalogBindings(unittest.TestCase):
- def setUp(self):
-  self.directory=tempfile.TemporaryDirectory();self.addCleanup(self.directory.cleanup)
-  self.root=Path(self.directory.name)
-  paths=[ROOT/'bench/local/r/labalpha/STRATUM.toml',ROOT/'bench/public/POOLS.toml']
-  data=tomllib.loads(paths[0].read_text())
-  for card in data['card']:paths.extend([ROOT/card['path'],ROOT/card['admission']])
-  for path in paths:
-   dest=self.root/path.relative_to(ROOT);dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,dest)
-  self.stratum=self.root/'bench/local/r/labalpha/STRATUM.toml'
- def test_actual_catalog_has40_bound_tasks_and20_paired_clusters(self):
-  rows=module.load_stratum(self.root,self.stratum)
-  self.assertEqual(len(rows),40);self.assertEqual(len({r['cluster'] for r in rows}),20)
- def test_source_change_after_admission_refused(self):
-  card=tomllib.loads(self.stratum.read_text())['card'][0];source=self.root/card['path'];source.write_text(source.read_text()+'// changed bytes\n')
-  with self.assertRaisesRegex(ValueError,'stale'):module.load_stratum(self.root,self.stratum)
- def test_boolean_admission_checks_cannot_be_numeric_or_missing(self):
-  card=tomllib.loads(self.stratum.read_text())['card'][0];path=self.root/card['admission'];original=json.loads(path.read_text());text=self.stratum.read_text()
-  for bad in [1,False,None]:
-   report=json.loads(json.dumps(original))
-   if bad is None:del report['checks']['max-auto-empty-fails']
-   else:report['checks']['max-auto-empty-fails']=bad
-   path.write_text(json.dumps(report));new=hashlib.sha256(path.read_bytes()).hexdigest();self.stratum.write_text(text.replace(card['admission_sha256'],new))
-   with self.subTest(value=bad),self.assertRaisesRegex(ValueError,'all native'):module.load_stratum(self.root,self.stratum)
- def test_cluster_pairing_cannot_silently_make40_independent_units(self):
-  text=self.stratum.read_text().replace('cluster = "accepted-ledger"','cluster = "first-rejection"',1);self.stratum.write_text(text)
-  with self.assertRaisesRegex(ValueError,'paired-language'):module.load_stratum(self.root,self.stratum)
- def test_cross_language_public_problem_already_drawn_is_not_unused(self):
-  pools=tomllib.loads((self.root/'bench/public/POOLS.toml').read_text());used={int(m[1]) for d in pools.get('draw',[]) for c in d.get('cards',[]) if (m:=re.fullmatch(r'[dv]p\d+-he(\d+)',c))}
-  sys.path.insert(0,str(ROOT/'scripts'));from dvl import bench
-  eligible=bench.lab_members(self.root,'humaneval-verus','R12')
-  candidate=next(t for t in eligible if int(re.search(r'human_eval_(\d+)',t)[1]) in used)
-  current=next(r for r in tomllib.loads(self.stratum.read_text())['unused_public'] if r['set']=='humaneval-verus')
-  self.stratum.write_text(self.stratum.read_text().replace('task = '+json.dumps(current['task']),'task = '+json.dumps(candidate),1))
-  with self.assertRaisesRegex(ValueError,'another language'):module.load_stratum(self.root,self.stratum)
-
-if __name__=='__main__':unittest.main()
+if __name__ == '__main__':
+    unittest.main()

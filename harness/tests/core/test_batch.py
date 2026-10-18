@@ -1504,3 +1504,54 @@ def test_the_live_routes_early_returns_carry_the_gates_counts(root, monkeypatch,
         seg = la.run_segment(spec(k))
         assert (seg.code, seg.ended_by, seg.calls, seg.gpu_s, seg.output_tokens) == \
             (1, ended, 5, 40.0, 9)
+
+
+# --- Lab alpha: plan roles, the freeze, the call record's accounting (DVR4 plan 3.8) -----
+
+def _schema2(root, roles):
+    lines = ["schema = 2", 'lab = "Q98"']
+    for t, role in roles.items():
+        lines += ["[[cluster]]", f'id = "{t}"', f'role = "{role}"', f'tasks = ["{t}"]']
+    (root / "bench/local/q/lab9/STRATUM.toml").write_text("\n".join(lines) + "\n")
+
+
+def test_a_plan_over_a_schema2_stratum_keeps_to_its_role(root):
+    _schema2(root, {"t1": "pilot", "t2": "confirmatory"})
+    git(root, "add", "."); git(root, "commit", "-qm", "stratum")
+    arms = [("A1", "qwen", 1, f"{root.mod}:Sampler", "sampler")]
+    for extra, tasks, msg in (("", ("t1",), "names its role"),
+                              ('role = "pilot"', ("t1", "t2"), "outside the pilot clusters"),
+                              ('role = "confirmatory"', ("t2",), "only under the committed freeze")):
+        p = write_plan(root, arms=arms, tasks=tasks, extra=extra)
+        b = make(root, p, lambda *a: batch.RecordingTransport(Fake("qwen", [GOOD]), a[1]))
+        with pytest.raises(batch.BatchError, match=msg):
+            b.open()
+        assert not budget.ledger_path(root, "Q98").exists()
+    p = write_plan(root, arms=arms, tasks=("t1",), extra='role = "pilot"')
+    assert batch.load_plan(p, root).role == "pilot"
+    b = make(root, p, lambda *a: batch.RecordingTransport(Fake("qwen", [GOOD]), a[1]))
+    b.open()
+    assert b.run() == 0
+    note = batch.batch_note(budget.Ledger(budget.ledger_path(root, "Q98")))
+    assert note["role"] == "pilot" and "freeze_sha256" not in note
+
+
+def test_an_unknown_role_or_a_missing_freeze_file_is_a_plan_error(root):
+    arms = [("A1", "qwen", 1, f"{root.mod}:Sampler", "sampler")]
+    with pytest.raises(batch.BatchError, match="role is one of"):
+        batch.load_plan(write_plan(root, arms=arms, extra='role = "final"'), root)
+    with pytest.raises(batch.BatchError, match="freeze"):
+        batch.load_plan(write_plan(root, arms=arms, extra='freeze = "nope/FREEZE.toml"'), root)
+
+
+def test_the_call_record_logs_the_message_and_feedback_sizes(tmp_path):
+    from fvh import labalpha
+    capped, _ = labalpha.cap_feedback(["q" * 10000], 64)
+    msg = json.dumps({"task": "t", "feedback": capped})
+    t = batch.RecordingTransport(Fake("qwen", [GOOD]), tmp_path)
+    t.complete(msg, seed=3)
+    t.complete("plain text", seed=4)
+    rows = [json.loads(x) for x in (tmp_path / "calls.jsonl").read_text().splitlines()]
+    assert rows[0]["message_bytes"] == len(msg.encode()) and rows[0]["feedback_truncated"] is True
+    assert rows[0]["feedback_bytes"] == len(json.dumps(capped, sort_keys=True, ensure_ascii=False).encode())
+    assert "feedback_bytes" not in rows[1] and rows[1]["message_bytes"] == 10

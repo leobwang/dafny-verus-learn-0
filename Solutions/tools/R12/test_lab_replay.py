@@ -69,8 +69,8 @@ def hints_for(template,complete):
 
 
 def main():
-    data=tomllib.loads((ROOT/'bench/local/r/labalpha/STRATUM.toml').read_text());cards=data['card'];assert len(cards)==40
-    plan=batch.load_plan(ROOT/'bench/local/r/labalpha/plans/qwen.toml',ROOT)
+    data=tomllib.loads((ROOT/'bench/local/r/labalpha-smoke/STRATUM.toml').read_text());cards=data['card'];assert len(cards)==40
+    plan=batch.load_plan(ROOT/'bench/local/r/labalpha-smoke/plans/qwen.toml',ROOT)
     passed=0
     with tempfile.TemporaryDirectory(prefix='dvl0-r12-corpus-replay-') as directory:
         for card in cards:

@@ -44,21 +44,46 @@ DV5 confirmed it: the analysis tables are the learner's).
       `verify`); a difference is a report finding. `run_id` "all" re-verifies
       every run of the module that recorded a verification.
 
+  labalpha(root, module, *, budget=10, primary=("best", "best-raw"), ...) -> LabAlpha
+      Lab alpha's tables from the logs only (DVR4 plan sections 3.1-3.3, 3.6):
+      every run's first-success call T (run.json's outcome `verified` at its
+      last model call, counted in calls.jsonl), its cluster (the `R12_CLUSTER:`
+      line of the task's statement in the batch plans the module's batches
+      copied), its class (success; policy failure, scored as no success:
+      failed, malformed, inconclusive and the model-path truncations; apparatus
+      failure, excluded: infra-failed, apparatus-mismatch, replay-diverged,
+      killed(memory), truncated:container, truncated:host-memory,
+      truncated:interrupted); per arm the share of runs solved at call 1 and never
+      solved, S(b) for b = 1..B with cluster-bootstrap bands, the calls' tokens,
+      GPU-seconds and wall clock, the feedback's bytes and the equal cap's
+      truncation rate, the gate's num_predict cut rate; per cluster and arm the
+      AUC; and, for the primary arms, the paired sign-flip test of the cluster
+      differences (fvh.stats.permutation_test), their bootstrap interval and the
+      worst-case sensitivity for excluded runs (0 in the first arm, 1 in the
+      second). `rejudged` (run id -> bool, from --reverify) marks successes the
+      verification container reproduced; a success not marked is listed.
+  format_labalpha(tables) -> str
+      the same as Markdown tables
+
 Frozen (guard rule 2f), standard library only.
 """
 
 import json
+import math
+import re
+import tomllib
 import shutil
 import subprocess
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from fvh import budget, executor, policies, protocol, runlog, tools
+from fvh import budget, executor, policies, protocol, runlog, stats, tools
 from fvh.records import VERDICTS
 
-__all__ = ["Report", "Reverified", "RunCheck", "build", "format_report", "rederive",
-           "reverify", "reverify_all"]
+__all__ = ["APPARATUS_FAILURES", "LabAlpha", "Report", "Reverified", "RunCheck", "build",
+           "format_labalpha", "format_report", "labalpha", "rederive", "reverify",
+           "reverify_all"]
 
 
 @dataclass(frozen=True)
@@ -424,3 +449,235 @@ def format_report(rep: Report) -> str:
     out += [f"  - {d}" for d in rep.disclosure] or ["  - none"]
     out.append("reproduced: " + ("yes" if rep.reproduced else "NO"))
     return "\n".join(out) + "\n"
+
+
+
+# =====================================================================================
+# Lab alpha's tables (DVR4 plan section 3), from the logs only
+# =====================================================================================
+
+APPARATUS_FAILURES = ("infra-failed", "apparatus-mismatch", "replay-diverged", "killed(memory)",
+                      "truncated:container", "truncated:host-memory", "truncated:interrupted",
+                      "planned", "deferred")
+_CLUSTER = re.compile(r"^R12_CLUSTER: (\S+)$", re.M)
+
+
+@dataclass
+class LabAlpha:
+    module: str
+    budget: int
+    runs: list = field(default_factory=list)          # one dict per run
+    arms: dict = field(default_factory=dict)          # arm -> per-arm summary
+    clusters: dict = field(default_factory=dict)      # cluster -> {arm: AUC}
+    primary: dict = field(default_factory=dict)       # the primary contrast
+    findings: list = field(default_factory=list)
+
+
+def _jsonl(path):
+    out = []
+    try:
+        text = Path(path).read_text(encoding="utf-8")
+    except OSError:
+        return out
+    for line in text.splitlines():
+        if line.strip():
+            try:
+                out.append(json.loads(line))
+            except ValueError:
+                out.append({"unreadable": True})
+    return out
+
+
+def _task_clusters(root, module):
+    """{task id: cluster} from the statements of every batch plan the module copied."""
+    out = {}
+    base = Path(root) / "research" / "runs" / module / "batches"
+    for f in sorted(base.glob("*.toml")) if base.is_dir() else []:
+        try:
+            data = tomllib.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for tid, entry in (data.get("task") or {}).items():
+            m = _CLUSTER.search(entry.get("statement", "") if isinstance(entry, dict) else "")
+            if m:
+                out.setdefault(tid, m.group(1))
+    return out
+
+
+def _run_row(d, meta, clusters, budget_):
+    calls = _jsonl(d / "calls.jsonl")
+    outcome = meta.outcome
+    if outcome == "verified":
+        cls, t = "success", len(calls)
+    elif outcome in APPARATUS_FAILURES:
+        cls, t = "apparatus", None
+    else:
+        cls, t = "failure", None
+    fb = [c for c in calls if "feedback_bytes" in c]
+    gates = [c.get("gate") or {} for c in calls]
+    return {"run_id": meta.run_id, "arm": meta.arm, "task": meta.task_id, "lang": meta.lang,
+            "repeat": meta.repeat, "outcome": outcome, "class": cls,
+            "first_success": t if (t is not None and t >= 1) else None,
+            "cluster": clusters.get(meta.task_id), "calls": len(calls),
+            "prompt_tokens": sum(int(g.get("prompt_tokens") or 0) for g in gates)
+            if gates else 0,
+            "gpu_s": round(sum(float(g.get("gpu_s") or 0.0) for g in gates), 3),
+            "wall_s": round(sum(float(c.get("wall_s") or 0.0) for c in calls), 3),
+            "client_out": sum(int((c.get("client_usage") or {}).get("output_tokens") or 0)
+                              for c in calls),
+            "feedback_calls": len(fb),
+            "feedback_bytes": sum(int(c["feedback_bytes"]) for c in fb),
+            "feedback_truncated": sum(1 for c in fb if c.get("feedback_truncated")),
+            "num_predict_cut": sum(1 for g in gates if g.get("capped")),
+            "call_errors": sum(1 for c in calls if c.get("error")),
+            # model calls that produced no candidate: the replies the hint grammar
+            # rejected (fvh.labalpha's failed nodes) and calls that ended in an error
+            "failed_nodes": max(0, len(calls) - _candidates(d))}
+
+
+def _candidates(d):
+    """The candidates a run verified: its proposals that hold an edit."""
+    n = 0
+    for rec in _jsonl(d / "actions.jsonl"):
+        if any(isinstance(a, dict) and a.get("type") == "edit" for a in rec.get("actions") or []):
+            n += 1
+    return n
+
+
+def labalpha(root, module: str, *, budget: int = 10, primary=("best", "best-raw"),
+             n_permutations: int = 10_000, n_resamples: int = 10_000, seed: int = 20261018,
+             confidence: float = 0.95, rejudged=None) -> LabAlpha:
+    """Lab alpha's tables (module docstring). Deterministic: the same logs and seed give
+    the same tables."""
+    root = Path(root)
+    out = LabAlpha(module, budget)
+    clusters = _task_clusters(root, module)
+    for d in runlog.run_dirs(root, module):
+        try:
+            meta = runlog.load_meta(d)
+        except ValueError as e:
+            out.findings.append(f"unreadable run: {e}")
+            continue
+        row = _run_row(d, meta, clusters, budget)
+        if row["cluster"] is None:
+            out.findings.append(f"run {meta.run_id}: task {meta.task_id} has no R12_CLUSTER line "
+                                "in the module's batch plans")
+        if row["class"] == "success" and row["first_success"] is None:
+            out.findings.append(f"run {meta.run_id}: verified with no recorded model call")
+        if row["class"] == "success" and rejudged is not None and not rejudged.get(meta.run_id):
+            out.findings.append(f"run {meta.run_id}: a success not re-judged in the "
+                                "verification container")
+        out.runs.append(row)
+    runs = [r for r in out.runs if r["cluster"] is not None]
+    for arm in sorted({r["arm"] for r in runs}):
+        rs = [r for r in runs if r["arm"] == arm]
+        kept = [r for r in rs if r["class"] != "apparatus"]
+        by_c = {}
+        for r in kept:
+            by_c.setdefault(r["cluster"], []).append(r["first_success"])
+        curves = {c: stats.success_curve(ts, budget) for c, ts in sorted(by_c.items())}
+        aucs = {c: stats.auc_budget(ts, budget) for c, ts in sorted(by_c.items())}
+        for c, a in aucs.items():
+            out.clusters.setdefault(c, {})[arm] = a
+        mean_curve = [math.fsum(v[b] for v in curves.values()) / len(curves)
+                      for b in range(budget)] if curves else []
+        bands = stats.cluster_bootstrap_ci(list(curves.values()), n_resamples=n_resamples,
+                                           confidence=confidence, seed=seed) if curves else []
+        fbc = sum(r["feedback_calls"] for r in rs)
+        calls = sum(r["calls"] for r in rs)
+        out.arms[arm] = {
+            "runs": len(rs), "kept": len(kept), "excluded": len(rs) - len(kept),
+            "clusters": len(curves),
+            "solved_at_call_1": (sum(1 for r in kept if r["first_success"] == 1) / len(kept))
+            if kept else None,
+            "never_solved": (sum(1 for r in kept if r["first_success"] is None) / len(kept))
+            if kept else None,
+            "solved_by_B": (sum(1 for r in kept if r["first_success"] is not None
+                                and r["first_success"] <= budget) / len(kept)) if kept else None,
+            "auc_mean_over_clusters": (math.fsum(aucs.values()) / len(aucs)) if aucs else None,
+            "curve": mean_curve, "bands": bands,
+            "calls": calls, "failed_nodes": sum(r["failed_nodes"] for r in rs),
+            "call_errors": sum(r["call_errors"] for r in rs),
+            "prompt_tokens": sum(r["prompt_tokens"] for r in rs),
+            "output_tokens": sum(r["client_out"] for r in rs),
+            "gpu_s": round(sum(r["gpu_s"] for r in rs), 3),
+            "wall_s": round(sum(r["wall_s"] for r in rs), 3),
+            "feedback_calls": fbc,
+            "feedback_bytes_mean": (sum(r["feedback_bytes"] for r in rs) / fbc) if fbc else None,
+            "feedback_truncation_rate": (sum(r["feedback_truncated"] for r in rs) / fbc)
+            if fbc else None,
+            "num_predict_cut_rate": (sum(r["num_predict_cut"] for r in rs) / calls)
+            if calls else None,
+            "outcomes": dict(sorted(_count_by(rs, "outcome").items()))}
+    a, b = primary
+    both = sorted(c for c, v in out.clusters.items() if a in v and b in v)
+    if both:
+        x = [out.clusters[c][a] for c in both]
+        y = [out.clusters[c][b] for c in both]
+        d = [p - q for p, q in zip(x, y)]
+        res = {"arms": [a, b], "clusters": len(both), "theta": math.fsum(d) / len(d)}
+        res["p_value"] = stats.permutation_test(x, y, paired=True, n_permutations=n_permutations,
+                                                seed=seed)
+        res["ci"] = stats.cluster_bootstrap_ci(d, n_resamples=n_resamples,
+                                               confidence=confidence, seed=seed)
+        # worst case for the claim: an excluded run scores 0 in arm a and 1 in arm b
+        worst = []
+        for c in both:
+            vals = {}
+            for arm, fill in ((a, None), (b, 1)):
+                ts = [r["first_success"] if r["class"] != "apparatus" else fill
+                      for r in runs if r["arm"] == arm and r["cluster"] == c]
+                vals[arm] = stats.auc_budget(ts, budget)
+            worst.append(vals[a] - vals[b])
+        res["theta_worst_case"] = math.fsum(worst) / len(worst)
+        out.primary = res
+    return out
+
+
+def _count_by(rows, key):
+    out = {}
+    for r in rows:
+        out[r[key]] = out.get(r[key], 0) + 1
+    return out
+
+
+def _f(v, nd=3):
+    return "n/a" if v is None else (f"{v:.{nd}f}" if isinstance(v, float) else str(v))
+
+
+def format_labalpha(t: LabAlpha) -> str:
+    """Lab alpha's tables as Markdown (every number from labalpha())."""
+    lines = [f"# {t.module} Lab alpha tables (from the logs; B = {t.budget})", "",
+             "| arm | runs | excluded | clusters | solved at call 1 | never solved | solved by B "
+             "| AUC (mean over clusters) | calls | failed nodes | GPU-s | wall s | feedback B/call "
+             "| cap truncation | num_predict cut |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for arm, s_ in t.arms.items():
+        lines.append(f"| {arm} | {s_['runs']} | {s_['excluded']} | {s_['clusters']} | "
+                     f"{_f(s_['solved_at_call_1'])} | {_f(s_['never_solved'])} | "
+                     f"{_f(s_['solved_by_B'])} | {_f(s_['auc_mean_over_clusters'])} | "
+                     f"{s_['calls']} | {s_['failed_nodes']} | {_f(s_['gpu_s'], 1)} | "
+                     f"{_f(s_['wall_s'], 1)} | {_f(s_['feedback_bytes_mean'], 0)} | "
+                     f"{_f(s_['feedback_truncation_rate'])} | {_f(s_['num_predict_cut_rate'])} |")
+    lines += ["", "## S(b) per arm (mean over clusters, cluster-bootstrap band)", "",
+              "| arm | " + " | ".join(f"b={b}" for b in range(1, t.budget + 1)) + " |",
+              "|---|" + "---|" * t.budget]
+    for arm, s_ in t.arms.items():
+        cells = [f"{v:.2f} [{lo:.2f}, {hi:.2f}]" for v, (lo, hi) in zip(s_["curve"], s_["bands"])]
+        lines.append(f"| {arm} | " + " | ".join(cells) + " |")
+    arms = sorted(t.arms)
+    lines += ["", "## AUC per cluster and arm", "", "| cluster | " + " | ".join(arms) + " |",
+              "|---|" + "---|" * len(arms)]
+    for c in sorted(t.clusters):
+        lines.append(f"| {c} | " + " | ".join(_f(t.clusters[c].get(a)) for a in arms) + " |")
+    if t.primary:
+        p = t.primary
+        lines += ["", "## Primary contrast", "",
+                  f"theta = mean over {p['clusters']} clusters of AUC({p['arms'][0]}) - "
+                  f"AUC({p['arms'][1]}) = {p['theta']:.4f}; 95 % cluster-bootstrap interval "
+                  f"[{p['ci'][0]:.4f}, {p['ci'][1]:.4f}]; paired sign-flip p = "
+                  f"{p['p_value']:.4f}; worst-case theta for excluded runs = "
+                  f"{p['theta_worst_case']:.4f}"]
+    if t.findings:
+        lines += ["", "## Findings", ""] + [f"- {x}" for x in t.findings]
+    return "\n".join(lines) + "\n"
