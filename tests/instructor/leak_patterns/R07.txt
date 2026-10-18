@@ -20,10 +20,10 @@
 # verified: solutions=1 public=0
 \{\s*broadcast\s*use\s*vstd::seq::Seq::lemma_filter_map_take_succ;\s*\}
 # from Solutions/dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy
-# source: { S.LemmaFlattenConcat(left,right); } (R07.A1d)
+# source: S.LemmaFlattenConcat(left, right); // found-by: grep (R07.A1d)
 # verified: solutions=1 public=0
-\{\s*S\.LemmaFlattenConcat\(left,right\);\s*\}
+\{\s*S\.LemmaFlattenConcat\(left,\s*right\);\s*//\s*found-by:\s*grep\s*\}
 # from Solutions/verus/r/r07_libraries/src/agent.rs
-# source: { lemma_flatten_concat(left,right); } (R07.A1v)
+# source: lemma_flatten_concat(left, right); // found-by: grep (R07.A1v)
 # verified: solutions=1 public=0
-\{\s*lemma_flatten_concat\(left,right\);\s*\}
+\{\s*lemma_flatten_concat\(left,\s*right\);\s*//\s*found-by:\s*grep\s*\}

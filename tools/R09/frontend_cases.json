@@ -1010,14 +1010,14 @@
   {
     "pattern": "[ba]",
     "cap": 32,
-    "expected": "0,4#K[97:97;98:98;]|N5",
-    "oracle": "prior compiled AST + independent size interpretation"
+    "expected": "0,4#K[97:98;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation; D48 adjacent-range merge"
   },
   {
     "pattern": "[ba]",
     "cap": 4096,
-    "expected": "0,4#K[97:97;98:98;]|N5",
-    "oracle": "prior compiled AST + independent size interpretation"
+    "expected": "0,4#K[97:98;]|N5",
+    "oracle": "prior compiled AST + independent size interpretation; D48 adjacent-range merge"
   },
   {
     "pattern": "[a-c]",
@@ -1550,14 +1550,14 @@
   {
     "pattern": "[a\\]b]",
     "cap": 32,
-    "expected": "0,6#K[93:93;97:97;98:98;]|N7",
-    "oracle": "prior compiled AST + independent size interpretation"
+    "expected": "0,6#K[93:93;97:98;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation; D48 adjacent-range merge"
   },
   {
     "pattern": "[a\\]b]",
     "cap": 4096,
-    "expected": "0,6#K[93:93;97:97;98:98;]|N7",
-    "oracle": "prior compiled AST + independent size interpretation"
+    "expected": "0,6#K[93:93;97:98;]|N7",
+    "oracle": "prior compiled AST + independent size interpretation; D48 adjacent-range merge"
   },
   {
     "pattern": "(a",
@@ -1640,14 +1640,14 @@
   {
     "pattern": "[ab]*",
     "cap": 32,
-    "expected": "0,5#S(0,4#K[97:97;98:98;])|N6",
-    "oracle": "prior compiled AST + independent size interpretation"
+    "expected": "0,5#S(0,4#K[97:98;])|N6",
+    "oracle": "prior compiled AST + independent size interpretation; D48 adjacent-range merge"
   },
   {
     "pattern": "[ab]*",
     "cap": 4096,
-    "expected": "0,5#S(0,4#K[97:97;98:98;])|N6",
-    "oracle": "prior compiled AST + independent size interpretation"
+    "expected": "0,5#S(0,4#K[97:98;])|N6",
+    "oracle": "prior compiled AST + independent size interpretation; D48 adjacent-range merge"
   },
   {
     "pattern": "[a-c]{1,2}|(δ😀)?",

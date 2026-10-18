@@ -1,7 +1,11 @@
 /*! A3 syntax model (PROVIDED, frozen). R09–R16.
+Do not open this file before R03 and R06 are done: it imports A2, which re-supplies
+their answers, and its class lowering reads classes through R03's API. R09 is its
+first module.
 Surface syntax and nested scalar spans; finite single-character bounds.
 Definitions and parser predicates only: no parser or lowering-correctness proof.
 Classes follow the printed below-0xD800 grammar; other literals are scalars.
+Class ranges are A2's u32 code-point ranges, read through A2's accessor ClassRanges.
 */
 module RG_A3_Syntax {
   import opened RG_A1_Re
@@ -35,25 +39,40 @@ module RG_A3_Syntax {
   // Classes as regexes (code points below the surrogate block)
   // ---------------------------------------------------------------------------
 
+  // Classes lower only below 0xD800, where every code is a char.
   const ClassMax: int := 0xD800
 
-  predicate ClassLowered(cc: CharClass)
+  // A range listing that lowers: every range non-empty and below ClassMax.
+  predicate RangesLowered(rs: seq<CRange>)
   {
-    forall i | 0 <= i < |cc| :: cc[i].lo <= cc[i].hi && (cc[i].hi as int) < ClassMax
+    forall i | 0 <= i < |rs| :: rs[i].lo <= rs[i].hi && (rs[i].hi as int) < ClassMax
   }
 
-  function RangeRe(lo: char, hi: char): Re
+  // A class lowers when its listing (read through A2's accessor) does.
+  predicate ClassLowered(cc: CharClass)
+  {
+    RangesLowered(ClassRanges(cc))
+  }
+
+  // The one place a code becomes a char: lo < ClassMax, so lo is a char's code.
+  function RangeRe(lo: Cp, hi: Cp): Re
     requires lo <= hi && (hi as int) < ClassMax
     decreases hi as int - lo as int
   {
-    if lo == hi then Chr(lo) else Alt(Chr(lo), RangeRe((lo as int + 1) as char, hi))
+    if lo == hi then Chr(lo as int as char) else Alt(Chr(lo as int as char), RangeRe(lo + 1, hi))
+  }
+
+  function RangesToRe(rs: seq<CRange>): Re
+    requires RangesLowered(rs)
+    decreases rs
+  {
+    if rs == [] then Empty else Alt(RangeRe(rs[0].lo, rs[0].hi), RangesToRe(rs[1..]))
   }
 
   function ClassToRe(cc: CharClass): Re
     requires ClassLowered(cc)
-    decreases cc
   {
-    if cc == [] then Empty else Alt(RangeRe(cc[0].lo, cc[0].hi), ClassToRe(cc[1..]))
+    RangesToRe(ClassRanges(cc))
   }
 
   // ---------------------------------------------------------------------------

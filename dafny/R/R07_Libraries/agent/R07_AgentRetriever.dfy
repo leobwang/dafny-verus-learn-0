@@ -11,15 +11,19 @@ acceptance:
   - scripts/vaudit dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy has no findings and scripts/specfreeze --against <snapshot> dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy preserves every original statement and import
   - retain all failed attempts, search and native-check costs; do not compare rates before matched arm evidence exists
 */
-/*! R07 library retriever (Exercises). A2 re-supplies the class API; no earlier learner file. */
+/*! R07 library retriever (Exercises). A2 re-supplies the class API; no earlier learner file.
+A batch is a sequence of range listings: each listing is one class's ranges as A2's
+accessor ClassRanges returns them (inclusive code-point pairs). */
 module R07_AgentRetriever {
- import opened RG_A2_Deriv
- import S = Std.Collections.Seq
- // item: R07.A1d
- lemma FlattenClassBatches(left: seq<CharClass>,right: seq<CharClass>)
-  ensures S.Flatten(left+right) == S.Flatten(left)+S.Flatten(right)
- // item: R07.A2d
- lemma ContainedClassBatch(batches: seq<CharClass>,i: int)
-  requires 0 <= i < |batches|
-  ensures |S.FlattenReverse(batches)| >= |batches[i]|
+  import opened RG_A2_Deriv
+  import S = Std.Collections.Seq
+
+  // item: R07.A1d
+  lemma FlattenClassBatches(left: seq<seq<CRange>>, right: seq<seq<CRange>>)
+    ensures S.Flatten(left + right) == S.Flatten(left) + S.Flatten(right)
+
+  // item: R07.A2d
+  lemma ContainedClassBatch(batches: seq<seq<CRange>>, i: int)
+    requires 0 <= i < |batches|
+    ensures |S.FlattenReverse(batches)| >= |batches[i]|
 }

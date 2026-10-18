@@ -44,7 +44,7 @@ drop = ["^raw output: "]
 [entry.scratch."proof-d.dfy"]
 copy = "specimens/R13/proof-d.dfy.specimen"
 [entry.pinned]
-body = "35424a6c68a8f0f84ccb7106a516c917c04051cadfead1bdc0a5f52682e65ed3"
+body = "b5d44d2259e3aa15b3658c9e5272350d9146d5e63c273ed6cd49b91acd6a3cb0"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:proof-d.dfy" = "1e13de320139a26c566a39a8aae83c84150959446501698eb1a57479653d8175"
@@ -72,7 +72,7 @@ drop = ["^raw output: "]
 [entry.scratch."P4d.dfy"]
 copy = "specimens/R13/P4d.dfy.specimen"
 [entry.pinned]
-body = "fb128b164917021846426c265b680bdfa91942e5ac0adf7a4d2685affb56b852"
+body = "86329bc3b64ace158bbd50144c93830db5b87644e7efe0fbe65f41a04f90e29e"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:P4d.dfy" = "e9375aae4349a8de855fe6699e5c198ba71031c690137b0776b6fe6f832521fb"
@@ -139,7 +139,7 @@ drop = ["^raw output: "]
 [entry.scratch."scope-d.dfy"]
 copy = "specimens/R13/selection-d.dfy.specimen"
 [entry.pinned]
-body = "a94c556a1828ffc3aee455ac1fbd0a9c5d971996e85e228b0992d6dc92fd8a78"
+body = "b56f5c836aebbb586a409f4b27ac1c45a2b48794cd618c4aa23c307ce38be54a"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:scope-d.dfy" = "fdc93aa80f3c442e2c3fb1c5732ca3dfdf230e2673371e37dacd2d1b018e0335"
@@ -173,7 +173,7 @@ cmd = ["scripts/vcheck", "dafny/R/R13_Pipelines/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "82fe67d9d4254fe6f338fe06b1f07aa6776435339245ccc3aa7c3aeece1077da"
+body = "c4c036e190dbcda572f4c18b679dfad97e6e543999461677b9f12157ed3c5319"
 [entry.pinned.inputs]
 "dafny/R/R13_Pipelines/std/R13_Pipelines.dfy" = "9ba113872d1b97f81cb97efebca0205272ee7a5fc344cf32bcf07dce54ec5619"
 "dafny/R/R13_Pipelines/std/dfyconfig.toml" = "09b824058706b994ebc220adc4ba6bf74a3996f4ed8ce39986d523f6544dbe18"

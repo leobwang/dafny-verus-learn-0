@@ -1,4 +1,9 @@
-//! rg_re_a2 — regex spine, layer A2 (PROVIDED, complete; frozen).
+//! rg_re_a2 — regex spine, layer A2 (PROVIDED, complete; frozen; provisional until R03 and
+//! R06 pass).
+//! Do not open this crate before R03 and R06 are done: it re-supplies, complete and proved,
+//! R03's character-class API (`char_class`) and R06's derivative proofs
+//! (`lemma_deriv_correct`, `deriv_match`). Finish their holes and record their first tries
+//! (`scripts/firsttry.sh R03 --check`, `scripts/firsttry.sh R06 --check`) first.
 //! Imported by R07–R16: the character-class API and derivative matcher re-supplied after band 1.
 //! Use only the layer chain declared by your module; PLAN.md §2.2 and §2.4.
 #![allow(unused_imports)]

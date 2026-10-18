@@ -1,4 +1,9 @@
 //! rg_re_a1b — regex spine, layer A1b (PROVIDED, complete; frozen).
+//! Do not open this crate before R02 and R05 are done: it re-supplies, complete and proved,
+//! the answers to R02's holes (`lemma_nullable_correct`, `lemma_cat_eps_left`) and R05's
+//! band-1 facts (`lemma_cat_assoc`, `lemma_star_one`, `lemma_star_concat`). Finish their
+//! holes and record their first tries (`scripts/firsttry.sh R02 --check`,
+//! `scripts/firsttry.sh R05 --check`) first.
 //! Imported by R06–R16: band-1 facts re-supplied after their original exercises.
 //! Use only the layer chain declared by your module; PLAN.md §2.2 and §2.4.
 #![allow(unused_imports)]

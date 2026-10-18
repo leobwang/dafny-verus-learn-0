@@ -16,7 +16,8 @@ include incomplete source, native/compile failures and observed mismatches;
 read the stored stage and holes before interpreting the result.
 
 The frontend's 297 exposed cases compare full nested AST spans, raw canonical
-class vectors, exact scalar failure positions and actual lowered tree-node
+class vectors (A2's u32 code-point ranges, read through its accessor; adjacent
+ranges merge), exact scalar failure positions and actual lowered tree-node
 counts. Existing parser AST records came from the checked original compiled
 Dafny parser; cost expectations use an independent arithmetic interpretation
 of those records, with additional hand-built ASTs for new cap cases. There is

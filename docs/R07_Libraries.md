@@ -48,7 +48,7 @@ After the first-try record, the following source runs establish the learner-loop
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R07_Libraries/std
-vcheck: dafny/R/R07_Libraries/std [dafny, learner loop]: verified — 24 verified, 4 holes, 0 errors
+vcheck: dafny/R/R07_Libraries/std [dafny, learner loop]: verified — 38 verified, 4 holes, 0 errors
 dafny/R/R07_Libraries/std/R07_Libraries.dfy:19:25: hole bodyless-method R07.T1d
 dafny/R/R07_Libraries/std/R07_Libraries.dfy:44:82: hole bodyless-method R07.H1d
 dafny/R/R07_Libraries/std/R07_Libraries.dfy:51:62: hole bodyless-method R07.H2d
@@ -70,7 +70,7 @@ verus/r/r07_libraries/src/lib.rs:72:38: hole assume R07.H5v
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R07_checks.dfy
-vcheck: dafny/checks/R07_checks.dfy [dafny, learner loop]: verified — 19 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R07_checks.dfy [dafny, learner loop]: verified — 33 verified, 0 holes, 0 errors
 ```
 
 ---
@@ -395,17 +395,17 @@ The supplied goals concern class-range batches, not the concrete samples used fo
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy
-vcheck: dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy [dafny, learner loop]: verified — 20 verified, 2 holes, 0 errors
-dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy:20:33: hole bodyless-method R07.A1d
-dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy:24:39: hole bodyless-method R07.A2d
+vcheck: dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy [dafny, learner loop]: verified — 34 verified, 2 holes, 0 errors
+dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy:23:37: hole bodyless-method R07.A1d
+dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy:28:41: hole bodyless-method R07.A2d
 ```
 
 <!-- pin: agent-v -->
 ```
 $ scripts/vcheck verus/r/r07_libraries/src/agent.rs
 vcheck: verus/r/r07_libraries/src/agent.rs [verus, learner loop]: verified — - verified, 2 holes, 0 errors
-verus/r/r07_libraries/src/agent.rs:21:38: hole assume R07.A1v
-verus/r/r07_libraries/src/agent.rs:26:38: hole assume R07.A2v
+verus/r/r07_libraries/src/agent.rs:28:5: hole assume R07.A1v
+verus/r/r07_libraries/src/agent.rs:39:5: hole assume R07.A2v
 ```
 
 A local author reference establishes that a task has a completion under the pins. It does not supply an agent success probability, a search speedup or an experimental winner. If live runs are deferred, record that they are deferred. You can still inspect task scope, test the acceptance pipeline and practise calculations on an explicitly synthetic table. Label those activities so that a later reader can tell which observations came from a model trial.

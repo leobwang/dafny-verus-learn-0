@@ -152,7 +152,7 @@ commands ask the proof question on the original unrestricted mathematical input.
 <!-- pin: proof-d -->
 ```
 $ scripts/vcheck --module R13 proof-d.dfy
-vcheck: proof-d.dfy [dafny, learner loop]: failed — 46 verified, 0 holes, 1 error
+vcheck: proof-d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
 proof-d.dfy:3:48: error: a postcondition could not be proved on this return path
 proof-d.dfy:3:43: related: this is the postcondition that could not be proved
 ```
@@ -194,7 +194,7 @@ contract remain the same while the command changes which evidence is requested.
 <!-- pin: p4d-verify -->
 ```
 $ scripts/vcheck --module R13 P4d.dfy
-vcheck: P4d.dfy [dafny, learner loop]: verified — 47 verified, 0 holes, 0 errors
+vcheck: P4d.dfy [dafny, learner loop]: verified — 62 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: p4d-test -->
@@ -271,7 +271,7 @@ symbol R13_SelectedD.CleanDeclarationR13: verified
 <!-- pin: scope-d-full -->
 ```
 $ scripts/vcheck --module R13 scope-d.dfy
-vcheck: scope-d.dfy [dafny, learner loop]: failed — 47 verified, 0 holes, 1 error
+vcheck: scope-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 scope-d.dfy:4:54: error: a postcondition could not be proved on this return path
 scope-d.dfy:4:49: related: this is the postcondition that could not be proved
 ```
@@ -516,7 +516,7 @@ source observations, before your work.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R13_Pipelines/std
-vcheck: dafny/R/R13_Pipelines/std [dafny, learner loop]: verified — 50 verified, 4 holes, 0 errors
+vcheck: dafny/R/R13_Pipelines/std [dafny, learner loop]: verified — 65 verified, 4 holes, 0 errors
 dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:21:3: hole assume R13.T1d
 dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:27:3: hole assume R13.H1d
 dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:32:3: hole assume R13.H2d

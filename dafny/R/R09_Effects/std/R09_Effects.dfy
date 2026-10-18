@@ -2,21 +2,26 @@
 Six holes per language: T1 cursor read, H1 counted suffix, H2 class body,
 H3 bounded expansion cost, H4 repetition interval proof, H5 cursor update.
 Complete infrastructure checks the logical tree-node cap before allocating
-expanded regexes. Positions count Unicode scalars, classes are below0xD800,
-finite counts are one character. Zero copies skip an unused oversized child.
+expanded regexes. Positions count Unicode scalars, classes are below 0xD800,
+finite counts are one character. Class ranges are A2's u32 code-point ranges,
+read through A2's accessor ClassRanges. Zero copies skip an unused oversized child.
 Native proofs and finite compiled differential checks are separate evidence.
 Live Claude/calibration remains recorded D45 debt, never a pass.
 */
 module R09_Size {
  import opened RG_A1_Re
  import opened RG_A3_Syntax
- ghost function RangeNodesR09(lo:char,hi:char):nat
-  requires lo<=hi && (hi as int)<ClassMax
- {2*((hi as int)-(lo as int))+1}
- ghost function ClassNodesR09(xs:seq<RG_A2_Deriv.CRange>):nat
-  requires ClassLowered(xs)
+ ghost function RangeNodesR09(lo: RG_A2_Deriv.Cp, hi: RG_A2_Deriv.Cp): nat
+  requires lo <= hi && (hi as int) < ClassMax
+ {
+  2 * ((hi as int) - (lo as int)) + 1
+ }
+ ghost function ClassNodesR09(xs: seq<RG_A2_Deriv.CRange>): nat
+  requires RangesLowered(xs)
   decreases xs
- {if xs==[] then 1 else 1+RangeNodesR09(xs[0].lo,xs[0].hi)+ClassNodesR09(xs[1..])}
+ {
+  if xs == [] then 1 else 1 + RangeNodesR09(xs[0].lo, xs[0].hi) + ClassNodesR09(xs[1..])
+ }
  ghost function LoweringNodesR09(t:Syn,len:nat):nat
   requires WF(t,len)
   decreases t
@@ -24,14 +29,20 @@ module R09_Size {
   match t
   case SEps(_,_) => 1
   case SChr(_,_,_) => 1
-  case SClass(cc,_,_) => ClassNodesR09(cc)
+  case SClass(cc,_,_) => ClassNodesR09(RG_A2_Deriv.ClassRanges(cc))
   case SAlt(a,b,_,_) => 1+LoweringNodesR09(a,len)+LoweringNodesR09(b,len)
   case SCat(a,b,_,_) => 1+LoweringNodesR09(a,len)+LoweringNodesR09(b,len)
   case SStar(a,_,_) => 1+LoweringNodesR09(a,len)
   case SPlus(a,_,_) => 2+2*LoweringNodesR09(a,len)
   case SOpt(a,_,_) => 2+LoweringNodesR09(a,len)
   case SGroup(a,_,_) => LoweringNodesR09(a,len)
-  case SRep(a,n,m,_,_) => 3+n*(LoweringNodesR09(a,len)+1)+(m-n)*(LoweringNodesR09(a,len)+3)
+  case SRep(a,n,m,_,_) => RepNodesR09(LoweringNodesR09(a,len),n,m)
+ }
+ // The logical size of a counted repetition whose child has c nodes.
+ ghost function RepNodesR09(c: nat, n: nat, m: nat): nat
+  requires n <= m
+ {
+  3 + n * (c + 1) + (m - n) * (c + 3)
  }
  lemma CopiesNodesR09(r:Re,k:nat)
   ensures NodeCount(Copies(r,k))==1+k*(NodeCount(r)+1)
@@ -41,16 +52,25 @@ module R09_Size {
   ensures NodeCount(CopiesUpTo(r,k))==1+k*(NodeCount(r)+3)
   decreases k
  {if k>0 {OptionalNodesR09(r,k-1);}}
- lemma RangeNodesCorrectR09(lo:char,hi:char)
-  requires lo<=hi && (hi as int)<ClassMax
-  ensures NodeCount(RangeRe(lo,hi))==RangeNodesR09(lo,hi)
-  decreases hi as int-lo as int
- {if lo<hi {RangeNodesCorrectR09((lo as int+1) as char,hi);}}
- lemma ClassNodesCorrectR09(xs:seq<RG_A2_Deriv.CRange>)
-  requires ClassLowered(xs)
-  ensures NodeCount(ClassToRe(xs))==ClassNodesR09(xs)
+ lemma RangeNodesCorrectR09(lo: RG_A2_Deriv.Cp, hi: RG_A2_Deriv.Cp)
+  requires lo <= hi && (hi as int) < ClassMax
+  ensures NodeCount(RangeRe(lo, hi)) == RangeNodesR09(lo, hi)
+  decreases hi as int - lo as int
+ {
+  if lo < hi {
+   RangeNodesCorrectR09(lo + 1, hi);
+  }
+ }
+ lemma ClassNodesCorrectR09(xs: seq<RG_A2_Deriv.CRange>)
+  requires RangesLowered(xs)
+  ensures NodeCount(RangesToRe(xs)) == ClassNodesR09(xs)
   decreases xs
- {if xs!=[] {RangeNodesCorrectR09(xs[0].lo,xs[0].hi);ClassNodesCorrectR09(xs[1..]);}}
+ {
+  if xs != [] {
+   RangeNodesCorrectR09(xs[0].lo, xs[0].hi);
+   ClassNodesCorrectR09(xs[1..]);
+  }
+ }
  lemma LoweringNodesCorrectR09(t:Syn,len:nat)
   requires WF(t,len)
   ensures NodeCount(Lower(t,len))==LoweringNodesR09(t,len)
@@ -59,7 +79,7 @@ module R09_Size {
   match t
   case SEps(_,_) =>
   case SChr(_,_,_) =>
-  case SClass(cc,_,_) => ClassNodesCorrectR09(cc);
+  case SClass(cc,_,_) => ClassNodesCorrectR09(RG_A2_Deriv.ClassRanges(cc));
   case SAlt(a,b,_,_) => LoweringNodesCorrectR09(a,len);LoweringNodesCorrectR09(b,len);
   case SCat(a,b,_,_) => LoweringNodesCorrectR09(a,len);LoweringNodesCorrectR09(b,len);
   case SStar(a,_,_) => LoweringNodesCorrectR09(a,len);
@@ -209,7 +229,8 @@ method ClassItems(s:seq<char>,i:nat,acc:CharClass) returns (res:Res<(CharClass,n
    if p.j<|s| && s[p.j]==')' {res:=Ok(PR(SGroup(p.t,i,p.j+1),p.j+1));}
    else {res:=Err(p.j,"expected ')'");}
   } else if c=='[' {
-   var cc :- ClassItems(s,i+1,[]);res:=Ok(PR(SClass(cc.0,i,cc.1),cc.1));
+   var cc :- ClassItems(s, i + 1, ClassEmpty());
+   res := Ok(PR(SClass(cc.0, i, cc.1), cc.1));
   } else if c=='\\' {
    if i+1<|s| {res:=Ok(PR(SChr(s[i+1],i,i+2),i+2));}
    else {res:=Err(i+1,"dangling escape");}
@@ -254,26 +275,32 @@ module R09_CheckedCost {
   if b>cap-extra-a {res:=OverBudget;return;}
   res:=FitsCost(a+b+extra);
  }
- method CheckedClassCostR09(cc:RG_A2_Deriv.CharClass,cap:CostU32) returns (res:BudgetDecision)
+ method CheckedClassCostR09(cc: RG_A2_Deriv.CharClass, cap: CostU32) returns (res: BudgetDecision)
   requires ClassLowered(cc)
-  ensures res.FitsCost? ==> res.cost<=cap && res.cost as int==ClassNodesR09(cc)
-  ensures res.OverBudget? ==> ClassNodesR09(cc)>cap as int
+  ensures res.FitsCost? ==> res.cost <= cap && res.cost as int == ClassNodesR09(RG_A2_Deriv.ClassRanges(cc))
+  ensures res.OverBudget? ==> ClassNodesR09(RG_A2_Deriv.ClassRanges(cc)) > cap as int
  {
-  if cap<1 {res:=OverBudget;return;}
-  var cost:CostU32:=1;var i:nat:=0;
-  while i<|cc|
-   invariant i<=|cc| && cost<=cap
-   invariant (cost as int)+ClassNodesR09(cc[i..])==ClassNodesR09(cc)+1
-   decreases |cc|-i
-  {
-   var lo:=cc[i].lo as int;var hi:=cc[i].hi as int;
-   var range:CostU32:=(2*(hi-lo)+1) as CostU32;
-   assert cc[i..][1..]==cc[i+1..];
-   assert ClassNodesR09(cc[i+1..])>=1;
-   cost :- CheckedAddCostR09(cost,range,1,cap);
-   i:=i+1;
+  var rs := RG_A2_Deriv.ClassRanges(cc);
+  if cap < 1 {
+   res := OverBudget;
+   return;
   }
-  res:=FitsCost(cost);
+  var cost: CostU32 := 1;
+  var i: nat := 0;
+  while i < |rs|
+   invariant i <= |rs| && cost <= cap
+   invariant (cost as int) + ClassNodesR09(rs[i..]) == ClassNodesR09(rs) + 1
+   decreases |rs| - i
+  {
+   var lo := rs[i].lo as int;
+   var hi := rs[i].hi as int;
+   var range: CostU32 := (2 * (hi - lo) + 1) as CostU32;
+   assert rs[i..][1..] == rs[i + 1..];
+   assert ClassNodesR09(rs[i + 1..]) >= 1;
+   cost :- CheckedAddCostR09(cost, range, 1, cap);
+   i := i + 1;
+  }
+  res := FitsCost(cost);
  }
  lemma RepetitionCostGrowsR09(base:nat,n:nat,m:nat)
   requires n<=m && m>0
@@ -324,35 +351,39 @@ module R09_CheckedCost {
 module R09_Lowering {
  import opened RG_A1_Re
  import opened RG_A3_Syntax
- method RangeLowerExecR09(lo:char,hi:char) returns (out:Re)
-  requires lo<=hi && (hi as int)<ClassMax
-  ensures out==RangeRe(lo,hi)
+ method RangeLowerExecR09(lo: RG_A2_Deriv.Cp, hi: RG_A2_Deriv.Cp) returns (out: Re)
+  requires lo <= hi && (hi as int) < ClassMax
+  ensures out == RangeRe(lo, hi)
  {
-  var low:=lo as int;var n:=hi as int;out:=Chr(hi);
-  while n>low
-   invariant 0<=low<=n<=hi as int<ClassMax
-   invariant low==lo as int
-   invariant out==RangeRe(n as char,hi)
-   decreases n-low
+  var low := lo as int;
+  var n := hi as int;
+  out := Chr(hi as int as char);
+  while n > low
+   invariant 0 <= low <= n <= hi as int < ClassMax
+   invariant low == lo as int
+   invariant out == RangeRe(n as RG_A2_Deriv.Cp, hi)
+   decreases n - low
   {
-   n:=n-1;
-   out:=Alt(Chr(n as char),out);
+   n := n - 1;
+   out := Alt(Chr(n as char), out);
   }
  }
- method ClassLowerExecR09(cc:RG_A2_Deriv.CharClass) returns (out:Re)
+ method ClassLowerExecR09(cc: RG_A2_Deriv.CharClass) returns (out: Re)
   requires ClassLowered(cc)
-  ensures out==ClassToRe(cc)
+  ensures out == ClassToRe(cc)
  {
-  var i:nat:=|cc|;out:=Empty;
-  while i>0
-   invariant i<=|cc|
-   invariant out==ClassToRe(cc[i..])
+  var rs := RG_A2_Deriv.ClassRanges(cc);
+  var i: nat := |rs|;
+  out := Empty;
+  while i > 0
+   invariant i <= |rs|
+   invariant out == RangesToRe(rs[i..])
    decreases i
   {
-   i:=i-1;
-   var first:=RangeLowerExecR09(cc[i].lo,cc[i].hi);
-   assert cc[i..][1..]==cc[i+1..];
-   out:=Alt(first,out);
+   i := i - 1;
+   var first := RangeLowerExecR09(rs[i].lo, rs[i].hi);
+   assert rs[i..][1..] == rs[i + 1..];
+   out := Alt(first, out);
   }
  }
  method CopiesLowerExecR09(r:Re,k:nat) returns (out:Re)

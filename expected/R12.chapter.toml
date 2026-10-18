@@ -33,7 +33,7 @@ drop = ["^raw output: "]
 [entry.scratch."selection-d.dfy"]
 copy = "specimens/R12/selection-d.dfy.specimen"
 [entry.pinned]
-body = "428ca74c6873375c857e36aedeb4ffc05d29076ee6786f7f95db876df6924203"
+body = "17bcb581ca59f4d367020e6cb2660939229a4ab2cf36b9f7bad95cf0dca7afac"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:selection-d.dfy" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
@@ -67,7 +67,7 @@ cmd = ["scripts/vcheck", "dafny/R/R12_Driving/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "9b3584e6e66f71afd3ca002a6bb4b7b22d07be81c2d5f65f8010583439689d50"
+body = "548157ffe0e99729f769a26d810fa4ad3f5d41da39fa6232b83714266639652d"
 [entry.pinned.inputs]
 "dafny/R/R12_Driving/std/R12_Driving.dfy" = "0d55a3b14fd2e5116b2f4c02af33327ade5512dde3e7cbbbd856bcafe3c00ad4"
 "dafny/R/R12_Driving/std/dfyconfig.toml" = "704e2555eb7014cd062d9853b5d730d32c75b967b2966b03be505ea96eaa0d7c"
@@ -94,7 +94,7 @@ drop = ["^raw output: "]
 [entry.scratch."span-value.dfy"]
 text = "/*! R12 given-only source-span observation: native lines are one-based. */\nmodule R12_SpanObservation {\n // item: R12.P1d value\n // Answer form: numeral.\n @Test method SecondDeclarationR12() {\n  var spans:seq<seq<nat>>:=[[7,12],[15,29]];\n  var line:=spans[1][0];\n  assert line == 15;\n }\n}\n"
 [entry.pinned]
-body = "7172925ddb554802fe18d2feab1cdeeef2c8e6aa85ffc504806c101db185e683"
+body = "74b38f03b75a1720621bbd87bc0ea60df221bfbc356b0e05a06c8ddc7b2c598d"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:span-value.dfy" = "3c0a65348d4421868f75441c9ed8a28194b0b92949b0830348ee9d70ccbf3217"
@@ -156,7 +156,7 @@ drop = ["^raw output: "]
 [entry.scratch."fields-d.dfy"]
 copy = "specimens/R12/fields-d.dfy.specimen"
 [entry.pinned]
-body = "00aebe1e1cbce00d27c43306cfb089395f58688ab6a6de8a86c33b12b7dc17a6"
+body = "90b3eed60f32a7ad95cd78982e9325357eb42f3b184d8432378233d59a32a4a4"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:fields-d.dfy" = "cb80ea786d8f003933ffda25f4e3773f6cd7f7c1caad719fe31401f46483097f"
@@ -173,7 +173,7 @@ drop = ["^raw output: "]
 [entry.scratch."bound-d.dfy"]
 copy = "specimens/R12/bound-d.dfy.specimen"
 [entry.pinned]
-body = "abde4f4e97154f7d348110e18aa7939f088a8ee8963b825f70d0f429efd2e2ce"
+body = "6f53c59bb63731af79303d036902bb977304c3d855e54e320af92225f61b56cc"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:bound-d.dfy" = "eeb8687861eb1196c88e539fdaebc49f23657f3e9ed0fd14b3cd187bcb8010c3"

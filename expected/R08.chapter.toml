@@ -11,7 +11,7 @@ cmd = ["scripts/vcheck", "dafny/R/R08_Abstraction/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "995454a768b9e93b347ed890f29fecdc214791ad167d113f7b1782fe41896761"
+body = "61ebca179f2e7e752a3df475239f294fd4a7b89818f817f4f262b7b831cc1c28"
 [entry.pinned.inputs]
 "dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "3b662bd923bd125bc7c44c783ebd6613225f25f1c42d77eb4d72062519cbec6a"
 "dafny/R/R08_Abstraction/std/dfyconfig.toml" = "e8e0434c8bf5e2211eca8c316dbfba3a5e0e11ac7274bb7fe60c058ae7d2a6bb"
@@ -34,7 +34,7 @@ cmd = ["scripts/vcheck", "dafny/checks/R08_checks.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "d2cf4c8fa0084a3c48b500ef83c2c2c1ec08bd30f632ea5211fd5042d48672cd"
+body = "20c802f7259175b32b1bd1a67ef065fadd473c7689869c83068869d786e61dea"
 [entry.pinned.inputs]
 "dafny/checks/R08_checks.dfy" = "8f94952f0c0e606f4dd754ce1c796ff8701d494ae30ad04504343a82641df485"
 
@@ -44,7 +44,7 @@ cmd = ["scripts/vcheck", "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "c7fbf89533d068347550cb55da904e635d6297e7b31efeca6bb3e39f399a2caa"
+body = "facc5d70162622ef2e537783e6a22551f1134e1dfde67b01c758ba98326d8d72"
 [entry.pinned.inputs]
 "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy" = "64d93a52ac55c6a4c04205920641be1e2431a9fd720bc1739ff67ef14a7060b3"
 
@@ -69,11 +69,11 @@ drop = ["^raw output: "]
 [entry.scratch."card-c1d.dfy"]
 copy = "specimens/R08/card-c1d.dfy.specimen"
 [entry.pinned]
-body = "9f73af03314710d05032f9e7f53ee3d14e5e31508ce57c1da7e30ff33d113c42"
+body = "a1ed9c650d6a882f59de15ad8019086da03ae3629047afb11b94121060526cd0"
 [entry.pinned.inputs]
 "dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
-"dafny/given/R/RG_A1b_Facts.dfy" = "99711e4da5db7190023206a1463aa877840c168226c4c923e9ed281381d8081a"
-"dafny/given/R/RG_A2_Deriv.dfy" = "5b65aab71bc6f25898bd398dc70c097891243b3799207031550e25d185b18657"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
 "dafny/given/R/RG_A2_MatcherStatement.dfy" = "ca14d626aa09490fb9d4d6565567d7b1156ce597b18ab90b4291652a02b81cb3"
 "dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
 "scratch:card-c1d.dfy" = "dad373ed167da4b0b31dc84276589ec9fae2334d1fa877a436b045b571a579b1"

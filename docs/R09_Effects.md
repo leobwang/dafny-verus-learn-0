@@ -82,31 +82,31 @@ holes. A failure to resolve a file is different from a failed proof.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R09_Effects/std
-vcheck: dafny/R/R09_Effects/std [dafny, learner loop]: verified — 323 verified, 6 holes, 0 errors
-dafny/R/R09_Effects/std/R09_Effects.dfy:124:4: hole assume R09.H1d
-dafny/R/R09_Effects/std/R09_Effects.dfy:132:4: hole assume R09.H2d
-dafny/R/R09_Effects/std/R09_Effects.dfy:241:4: hole assume R09.H3d
-dafny/R/R09_Effects/std/R09_Effects.dfy:521:43: hole bodyless-method R09.H4d
-dafny/R/R09_Effects/std/R09_Effects.dfy:555:4: hole assume R09.T1d
-dafny/R/R09_Effects/std/R09_Effects.dfy:568:4: hole assume R09.H5d
+vcheck: dafny/R/R09_Effects/std [dafny, learner loop]: verified — 339 verified, 6 holes, 0 errors
+dafny/R/R09_Effects/std/R09_Effects.dfy:144:4: hole assume R09.H1d
+dafny/R/R09_Effects/std/R09_Effects.dfy:152:4: hole assume R09.H2d
+dafny/R/R09_Effects/std/R09_Effects.dfy:262:4: hole assume R09.H3d
+dafny/R/R09_Effects/std/R09_Effects.dfy:552:43: hole bodyless-method R09.H4d
+dafny/R/R09_Effects/std/R09_Effects.dfy:586:4: hole assume R09.T1d
+dafny/R/R09_Effects/std/R09_Effects.dfy:599:4: hole assume R09.H5d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r09_effects
 vcheck: verus/r/r09_effects [verus, learner loop]: verified — - verified, 6 holes, 0 errors
-verus/r/r09_effects/src/lib.rs:172:1: hole external_body R09.H1v
-verus/r/r09_effects/src/lib.rs:183:1: hole external_body R09.H2v
-verus/r/r09_effects/src/lib.rs:320:1: hole external_body R09.H3v
-verus/r/r09_effects/src/lib.rs:662:38: hole assume R09.H4v
-verus/r/r09_effects/src/lib.rs:678:1: hole external_body R09.T1v
-verus/r/r09_effects/src/lib.rs:691:1: hole external_body R09.H5v
+verus/r/r09_effects/src/lib.rs:183:1: hole external_body R09.H1v
+verus/r/r09_effects/src/lib.rs:194:1: hole external_body R09.H2v
+verus/r/r09_effects/src/lib.rs:334:1: hole external_body R09.H3v
+verus/r/r09_effects/src/lib.rs:714:38: hole assume R09.H4v
+verus/r/r09_effects/src/lib.rs:730:1: hole external_body R09.T1v
+verus/r/r09_effects/src/lib.rs:743:1: hole external_body R09.H5v
 ```
 
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R09_checks.dfy
-vcheck: dafny/checks/R09_checks.dfy [dafny, learner loop]: verified — 38 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R09_checks.dfy [dafny, learner loop]: verified — 53 verified, 0 holes, 0 errors
 ```
 
 ---
@@ -191,12 +191,15 @@ parent and preserve the printed source order. The well-formedness predicate
 makes these constraints precise. It does not itself characterize which tree
 is the parser's correct output for every possible input string.
 
-The canonical class vector is part of this AST representation. Its insertion
-operation adapts the already-provided A2 construction; this does not expose
-A2's formerly opaque representation or change that earlier module's API.
-The new representation lets the checker reason about the actual interval
-vector that will be lowered. Comparing only the represented character set
-would hide redundant or reordered ranges and could hide a different cost.
+The canonical class vector is part of this AST representation. A class node
+holds A2's class, whose ranges are pairs of u32 code points, sorted and
+separated by at least one code, so adjacent ranges merge. A3 and the checker
+read the interval vector through A2's read-only accessor (`ClassRanges` in
+Dafny, `ranges` in Verus); the representation stays private, so a class is
+still built only through A2's API. Reading the actual vector lets the checker
+reason about the intervals that will be lowered. Comparing only the
+represented character set would hide redundant or reordered ranges and could
+hide a different cost.
 
 Read W3 together with the parser's literal-fragment guarantee. Ordinary
 literal strings must succeed, have full-source bounds, and match their own
@@ -216,6 +219,9 @@ interchangeable on long examples.
 
 H2 has a similar split. It maintains class validity, the below-surrogate class
 domain and the accumulator while making progress toward a closing delimiter.
+A2's insertion keeps a listing bound when the inserted range lies below it
+(`ClassBelow` in Dafny, `ranges_below` in Verus), and its accessor lemma states
+validity through the listing.
 The completion clause identifies a class body for which success is required.
 It is not sufficient to stop anywhere with a valid but unrelated class. On a
 range, check the relationship between endpoints and the next source position;
@@ -530,7 +536,7 @@ cards. The first-try machinery checks the two slot-bearing specimens separately.
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy
-vcheck: dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy [dafny, learner loop]: verified — 42 verified, 0 holes, 0 errors
+vcheck: dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy [dafny, learner loop]: verified — 57 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: agent-v -->
@@ -548,7 +554,7 @@ module context; the manifest pins the card and its provided dependencies.
 <!-- pin: card-c1d -->
 ```
 $ scripts/vcheck --module R09 card-c1d.dfy
-vcheck: card-c1d.dfy [dafny, learner loop]: failed — 35 verified, 0 holes, 1 error
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 50 verified, 0 holes, 1 error
 card-c1d.dfy:7:2: error: a postcondition could not be proved on this return path
 card-c1d.dfy:6:14: related: this is the postcondition that could not be proved
 ```

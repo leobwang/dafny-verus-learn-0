@@ -2228,7 +2228,7 @@ recognise_d = ["dynamic-frames"]
 recognise_v = ["mut-ref", "result"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = { "R09.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R09.H1d" = { admitted = true, minutes = 12, fallback = "" }, "R09.H2d" = { admitted = true, minutes = 9, fallback = "" }, "R09.H3d" = { admitted = true, minutes = 8, fallback = "" }, "R09.H4d" = { admitted = true, minutes = 14, fallback = "" }, "R09.H5d" = { admitted = true, minutes = 7, fallback = "" }, "R09.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R09.H1v" = { admitted = true, minutes = 15, fallback = "" }, "R09.H2v" = { admitted = true, minutes = 12, fallback = "" }, "R09.H3v" = { admitted = true, minutes = 9, fallback = "" }, "R09.H4v" = { admitted = true, minutes = 16, fallback = "" }, "R09.H5v" = { admitted = true, minutes = 8, fallback = "" } }
-imports = { "dafny/given/R/RG_A3_Syntax.dfy" = "core", "verus/given/rg_re_a3/src/lib.rs" = "prelude", "verus/given/rg_re_a3/src/ranges.rs" = "prelude", "dafny/R/R09_Effects/std/R09_Effects.dfy" = "std", "dafny/checks/R09_checks.dfy" = "core", "dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy" = "core", "verus/r/r09_effects/src/lib.rs" = "all", "verus/r/r09_effects/src/agent.rs" = "prelude" }
+imports = { "dafny/given/R/RG_A3_Syntax.dfy" = "core", "verus/given/rg_re_a3/src/lib.rs" = "prelude", "dafny/R/R09_Effects/std/R09_Effects.dfy" = "std", "dafny/checks/R09_checks.dfy" = "core", "dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy" = "core", "verus/r/r09_effects/src/lib.rs" = "all", "verus/r/r09_effects/src/agent.rs" = "prelude" }
 concept_items = {}
 
 [[module]]

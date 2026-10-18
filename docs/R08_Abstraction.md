@@ -47,7 +47,7 @@ The following captures show the learner-loop baseline. The counted placeholders 
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R08_Abstraction/std
-vcheck: dafny/R/R08_Abstraction/std [dafny, learner loop]: verified — 24 verified, 4 holes, 0 errors
+vcheck: dafny/R/R08_Abstraction/std [dafny, learner loop]: verified — 38 verified, 4 holes, 0 errors
 dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:42:4: hole assume R08.H1d
 dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:53:4: hole assume R08.H2d
 dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:64:30: hole bodyless-method R08.H3d
@@ -67,7 +67,7 @@ verus/r/r08_abstraction/src/lib.rs:69:38: hole assume R08.H4v
 <!-- pin: checks-d -->
 ```
 $ scripts/vcheck dafny/checks/R08_checks.dfy
-vcheck: dafny/checks/R08_checks.dfy [dafny, learner loop]: verified — 21 verified, 0 holes, 0 errors
+vcheck: dafny/checks/R08_checks.dfy [dafny, learner loop]: verified — 35 verified, 0 holes, 0 errors
 ```
 
 ---
@@ -121,7 +121,7 @@ module context; the manifest pins the card and its provided dependencies.
 <!-- pin: refinement-d -->
 ```
 $ scripts/vcheck --module R08 card-c1d.dfy
-vcheck: card-c1d.dfy [dafny, learner loop]: failed — 19 verified, 0 holes, 2 errors
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 33 verified, 0 holes, 2 errors
 card-c1d.dfy:8:2: error: a postcondition could not be proved on this return path
 dafny/given/R/RG_A2_MatcherStatement.dfy:9:13: related: this is the postcondition that could not be proved
 card-c1d.dfy:8:3: error: out-parameter 'b', which is subject to definite-assignment rules, might be uninitialized at this return point
@@ -313,7 +313,7 @@ The agent files contain a complete implementation with a planted semantic defect
 <!-- pin: agent-d -->
 ```
 $ scripts/vcheck dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy
-vcheck: dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy [dafny, learner loop]: failed — 19 verified, 0 holes, 1 error
+vcheck: dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy [dafny, learner loop]: failed — 33 verified, 0 holes, 1 error
 dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy:22:2: error: a postcondition could not be proved on this return path
 dafny/given/R/RG_A2_MatcherStatement.dfy:9:13: related: this is the postcondition that could not be proved
 ```

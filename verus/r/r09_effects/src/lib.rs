@@ -2,8 +2,9 @@
 Six holes per language: T1 cursor read, H1 counted suffix, H2 class body,
 H3 bounded expansion cost, H4 repetition interval proof, H5 cursor update.
 Complete infrastructure checks the logical tree-node cap before allocating
-expanded regexes. Positions count Unicode scalars, classes are below0xD800,
-finite counts are one character. Zero copies skip an unused oversized child.
+expanded regexes. Positions count Unicode scalars, classes are below 0xD800,
+finite counts are one character. Class ranges are A2's u32 code-point ranges,
+read through A2's accessor `ranges`. Zero copies skip an unused oversized child.
 Native proofs and finite compiled differential checks are separate evidence.
 Live Claude/calibration remains recorded D45 debt, never a pass.
 */
@@ -38,20 +39,28 @@ fn parse_relative_mirror_r09(s:&Vec<char>)->(r:Result<Syn,PErr>)
 }
 
 verus! {
-pub open spec fn range_nodes_r09(lo:char,hi:char)->nat {
- if range_valid(lo,hi) { (2*((hi as int)-(lo as int))+1) as nat } else {1}
+pub open spec fn range_nodes_r09(lo: u32, hi: u32) -> nat {
+    if range_valid(lo, hi) {
+        (2 * ((hi as int) - (lo as int)) + 1) as nat
+    } else {
+        1
+    }
 }
-pub open spec fn class_nodes_r09(xs:Seq<(char,char)>)->nat
- decreases xs.len(),
+pub open spec fn class_nodes_r09(xs: Seq<(u32, u32)>) -> nat
+    decreases xs.len(),
 {
- if xs.len()==0 {1} else {1+range_nodes_r09(xs[0].0,xs[0].1)+class_nodes_r09(xs.drop_first())}
+    if xs.len() == 0 {
+        1
+    } else {
+        1 + range_nodes_r09(xs[0].0, xs[0].1) + class_nodes_r09(xs.drop_first())
+    }
 }
 pub open spec fn lowering_nodes_r09(t:Syn)->nat
  decreases t,
 {
  match t.node {
   SyntaxKind::Eps | SyntaxKind::Chr(_) => 1,
-  SyntaxKind::Class(cc) => class_nodes_r09(cc.ranges@),
+  SyntaxKind::Class(cc) => class_nodes_r09(cc.ranges_spec()),
   SyntaxKind::Alt(a,b) | SyntaxKind::Cat(a,b) => 1+lowering_nodes_r09(*a)+lowering_nodes_r09(*b),
   SyntaxKind::Star(a) => 1+lowering_nodes_r09(*a),
   SyntaxKind::Plus(a) => 2+2*lowering_nodes_r09(*a),
@@ -98,19 +107,19 @@ proof fn lemma_optional_nodes_r09(r:Re,k:nat)
   assert(1+k*(b+3)==1) by (nonlinear_arith) requires k==0;
  }
 }
-proof fn lemma_range_nodes_r09(lo:char,hi:char)
- requires range_valid(lo,hi),
- ensures node_count(range_re(lo,hi))==range_nodes_r09(lo,hi),
- decreases (hi as int)-(lo as int),
+proof fn lemma_range_nodes_r09(lo: u32, hi: u32)
+    requires
+        range_valid(lo, hi),
+    ensures
+        node_count(range_re(lo, hi)) == range_nodes_r09(lo, hi),
+    decreases hi - lo,
 {
- reveal_with_fuel(node_count,2);
- if lo<hi {
-  let next=((lo as u32)+1) as char;
-  assert((next as u32)==(lo as u32)+1);
-  lemma_range_nodes_r09(next,hi);
- }
+    reveal_with_fuel(node_count, 2);
+    if lo < hi {
+        lemma_range_nodes_r09((lo + 1) as u32, hi);
+    }
 }
-proof fn lemma_class_nodes_r09(xs:Seq<(char,char)>)
+proof fn lemma_class_nodes_r09(xs: Seq<(u32, u32)>)
  requires class_valid(xs),
  ensures node_count(class_re(xs))==class_nodes_r09(xs),
  decreases xs.len(),
@@ -131,7 +140,9 @@ pub proof fn lemma_lowering_nodes_r09(t:Syn,len:nat)
  reveal_with_fuel(node_count,3);
  match t.node {
   SyntaxKind::Eps | SyntaxKind::Chr(_) => {},
-  SyntaxKind::Class(cc) => {lemma_class_nodes_r09(cc.ranges@);},
+  SyntaxKind::Class(cc) => {
+   lemma_class_nodes_r09(cc.ranges_spec());
+  },
   SyntaxKind::Alt(a,b) | SyntaxKind::Cat(a,b) => {lemma_lowering_nodes_r09(*a,len);lemma_lowering_nodes_r09(*b,len);},
   SyntaxKind::Star(a) | SyntaxKind::Plus(a) | SyntaxKind::Opt(a) | SyntaxKind::Group(a) => {lemma_lowering_nodes_r09(*a,len);},
   SyntaxKind::RepRange(a,n,m) => {
@@ -180,9 +191,12 @@ pub fn parse_counted(s:&Vec<char>,j:usize,x:Syn)->(res:Result<(Syn,usize),PErr>)
 // item: R09.H2v
 // pair: R09.H2d
 #[verifier::external_body]
-pub fn class_items(s:&Vec<char>,i:usize,mut acc:SpanClass)->(res:Result<(SpanClass,usize),PErr>)
- requires i<=s.len(),acc.valid() && class_valid(acc.ranges@),
- ensures match res {Ok((xs,k))=>i<k<=s.len() && xs.valid() && class_valid(xs.ranges@),Err(e)=>e.pos<=s.len()},
+pub fn class_items(s: &Vec<char>, i: usize, mut acc: CharClass) -> (res: Result<(CharClass, usize), PErr>)
+ requires i <= s.len(), acc.valid() && class_valid(acc.ranges_spec()),
+ ensures match res {
+  Ok((xs, k)) => i < k <= s.len() && xs.valid() && class_valid(xs.ranges_spec()),
+  Err(e) => e.pos <= s.len(),
+ },
  forall|k:int| #[trigger] simple_class_body(s@,i as int,k) ==> res is Ok && res->Ok_0.1==k+1,
 { unimplemented!() }
 // item: R09.W3v
@@ -276,7 +290,7 @@ pub fn parse_atom(s:&Vec<char>,i:usize)->(res:Result<(Syn,usize),PErr>)
   if j<s.len() && s[j]==')' {Ok((Syn {node:SyntaxKind::Group(Box::new(x)),span:Span {lo:i,hi:j+1}},j+1))}
   else {Err(PErr {pos:j,kind:ErrKind::UnclosedParen})}
  } else if c=='[' {
-  let (xs,j)=class_items(s,i+1,SpanClass::class_empty())?;
+  let (xs, j) = class_items(s, i + 1, CharClass::class_empty())?;
   Ok((Syn {node:SyntaxKind::Class(xs),span:Span {lo:i,hi:j}},j))
  } else if c=='\\' {
   if i+1<s.len() {Ok((Syn {node:SyntaxKind::Chr(s[i+1]),span:Span {lo:i,hi:i+2}},i+2))}
@@ -339,35 +353,56 @@ fn checked_add_cost_r09(a:u32,b:u32,extra:u32,cap:u32)->(res:Option<u32>)
  if b>cap-extra-a {return None;}
  Some(a+b+extra)
 }
-fn checked_class_cost_r09(cc:&SpanClass,cap:u32)->(res:Option<u32>)
- requires class_valid(cc.ranges@),
- ensures match res {Some(n)=>n<=cap && n==class_nodes_r09(cc.ranges@),None=>class_nodes_r09(cc.ranges@)>cap},
+fn checked_class_cost_r09(cc: &CharClass, cap: u32) -> (res: Option<u32>)
+    requires
+        class_valid(cc.ranges_spec()),
+    ensures
+        match res {
+            Some(n) => n <= cap && n == class_nodes_r09(cc.ranges_spec()),
+            None => class_nodes_r09(cc.ranges_spec()) > cap,
+        },
 {
- proof {assert(class_nodes_r09(cc.ranges@)>=1);}
- if cap<1 {return None;}
- let mut cost:u32=1;let mut i:usize=0;
- proof {assert(cc.ranges@.subrange(0,cc.ranges.len() as int) =~= cc.ranges@);}
- while i<cc.ranges.len()
-  invariant i<=cc.ranges.len(),cost<=cap,class_valid(cc.ranges@),
-   (cost as nat)+class_nodes_r09(cc.ranges@.subrange(i as int,cc.ranges.len() as int))==class_nodes_r09(cc.ranges@)+1,
-  decreases cc.ranges.len()-i,
- {
-  let (lo,hi)=cc.ranges[i];
-  let width=(hi as u32)-(lo as u32);
-  let range:u32=2*width+1;
-  proof {
-   let suffix=cc.ranges@.subrange(i as int,cc.ranges.len() as int);
-   let tail=cc.ranges@.subrange(i+1,cc.ranges.len() as int);
-   assert(suffix[0]==cc.ranges@[i as int]);
-   assert(suffix.drop_first() =~= tail);
-   assert(class_nodes_r09(tail)>=1);
-   assert(range==range_nodes_r09(lo,hi));
-  }
-  cost=checked_add_cost_r09(cost,range,1,cap)?;
-  i=i+1;
- }
- proof {assert(cc.ranges@.subrange(cc.ranges.len() as int,cc.ranges.len() as int) =~= Seq::<(char,char)>::empty());}
- Some(cost)
+    let rs = cc.ranges();
+    let ghost xs = cc.ranges_spec();
+    proof {
+        assert(class_nodes_r09(xs) >= 1);
+    }
+    if cap < 1 {
+        return None;
+    }
+    let mut cost: u32 = 1;
+    let mut i: usize = 0;
+    proof {
+        assert(xs.subrange(0, rs.len() as int) =~= xs);
+    }
+    while i < rs.len()
+        invariant
+            rs@ == xs,
+            xs == cc.ranges_spec(),
+            i <= rs.len(),
+            cost <= cap,
+            class_valid(xs),
+            (cost as nat) + class_nodes_r09(xs.subrange(i as int, rs.len() as int)) == class_nodes_r09(xs) + 1,
+        decreases rs.len() - i,
+    {
+        let (lo, hi) = rs[i];
+        let width = hi - lo;
+        let range: u32 = 2 * width + 1;
+        proof {
+            let suffix = xs.subrange(i as int, rs.len() as int);
+            let tail = xs.subrange(i + 1, rs.len() as int);
+            assert(suffix[0] == xs[i as int]);
+            assert(suffix.drop_first() =~= tail);
+            assert(class_nodes_r09(tail) >= 1);
+            assert(range == range_nodes_r09(lo, hi));
+        }
+        cost = checked_add_cost_r09(cost, range, 1, cap)?;
+        i = i + 1;
+    }
+    proof {
+        assert(xs.subrange(rs.len() as int, rs.len() as int) =~= Seq::<(u32, u32)>::empty());
+    }
+    Some(cost)
 }
 proof fn lemma_repetition_cost_grows_r09(base:nat,n:nat,m:nat)
  requires n<=m,m>0,
@@ -458,50 +493,67 @@ fn scalar_char_r09(n: u32) -> (c: char)
 }
 
 
-fn range_lower_exec_r09(lo:char,hi:char)->(out:Re)
- requires range_valid(lo,hi),
- ensures out==range_re(lo,hi),
+fn range_lower_exec_r09(lo: u32, hi: u32) -> (out: Re)
+    requires
+        range_valid(lo, hi),
+    ensures
+        out == range_re(lo, hi),
 {
- let low=lo as u32;
- let mut n=hi as u32;
- let mut out=Re::Chr(hi);
- while n>low
-  invariant low==lo as u32,low<=n<=hi as u32,(hi as u32)<CLASS_MAX,
-   out==range_re(n as char,hi),
-  decreases n-low,
- {
-  let ghost old_n=n;
-  n=n-1;
-  proof {assert(is_scalar(n));}
-  let c=scalar_char_r09(n);
-  proof {assert(((c as u32)+1) as char==old_n as char);}
-  out=Re::Alt(Box::new(Re::Chr(c)),Box::new(out));
- }
- out
+    let mut n = hi;
+    proof {
+        assert(is_scalar(hi));
+    }
+    let last = scalar_char_r09(hi);
+    let mut out = Re::Chr(last);
+    while n > lo
+        invariant
+            lo <= n <= hi,
+            hi < CLASS_MAX,
+            out == range_re(n, hi),
+        decreases n - lo,
+    {
+        n = n - 1;
+        proof {
+            assert(is_scalar(n));
+        }
+        let c = scalar_char_r09(n);
+        out = Re::Alt(Box::new(Re::Chr(c)), Box::new(out));
+    }
+    out
 }
-fn class_lower_exec_r09(cc:&SpanClass)->(out:Re)
- requires class_valid(cc.ranges@),
- ensures out==class_re(cc.ranges@),
+fn class_lower_exec_r09(cc: &CharClass) -> (out: Re)
+    requires
+        class_valid(cc.ranges_spec()),
+    ensures
+        out == class_re(cc.ranges_spec()),
 {
- let mut i=cc.ranges.len();
- let mut out=Re::Empty;
- while i>0
-  invariant i<=cc.ranges.len(),class_valid(cc.ranges@),
-   out==class_re(cc.ranges@.subrange(i as int,cc.ranges.len() as int)),
-  decreases i,
- {
-  i=i-1;
-  let (lo,hi)=cc.ranges[i];
-  let first=range_lower_exec_r09(lo,hi);
-  proof {
-   let suffix=cc.ranges@.subrange(i as int,cc.ranges.len() as int);
-   assert(suffix[0]==cc.ranges@[i as int]);
-   assert(suffix.drop_first() =~= cc.ranges@.subrange(i+1,cc.ranges.len() as int));
-  }
-  out=Re::Alt(Box::new(first),Box::new(out));
- }
- proof {assert(cc.ranges@.subrange(0,cc.ranges.len() as int) =~= cc.ranges@);}
- out
+    let rs = cc.ranges();
+    let ghost xs = cc.ranges_spec();
+    let mut i = rs.len();
+    let mut out = Re::Empty;
+    while i > 0
+        invariant
+            rs@ == xs,
+            xs == cc.ranges_spec(),
+            i <= rs.len(),
+            class_valid(xs),
+            out == class_re(xs.subrange(i as int, rs.len() as int)),
+        decreases i,
+    {
+        i = i - 1;
+        let (lo, hi) = rs[i];
+        let first = range_lower_exec_r09(lo, hi);
+        proof {
+            let suffix = xs.subrange(i as int, rs.len() as int);
+            assert(suffix[0] == xs[i as int]);
+            assert(suffix.drop_first() =~= xs.subrange(i + 1, rs.len() as int));
+        }
+        out = Re::Alt(Box::new(first), Box::new(out));
+    }
+    proof {
+        assert(xs.subrange(0, rs.len() as int) =~= xs);
+    }
+    out
 }
 fn copies_lower_exec_r09(r:&Re,k:u32)->(out:Re)
  ensures out==copies(*r,k as nat),
