@@ -1,0 +1,28 @@
+# bench/local/r/labalpha/FREEZE.toml — Lab alpha's frozen analysis plan (DVR4 plan sections 3.1-3.3,
+# 3.6; the user's D49-D52). PARTIAL BY DESIGN: the confirmatory size K, the regex/public composition
+# and the confirmatory cluster list are held for the design decision (the coordinator's instruction of
+# 2026-10-18: the admitted regex count is below D50's threshold), so this file lacks
+# confirmatory_clusters and K and fvh.prereg.load_freeze refuses it as incomplete: no confirmatory or
+# descriptive plan can run until they are added (and stratum_sha256 is re-taken on that stratum).
+schema = 1
+lab = "R12"
+status = "partial: K, the composition and the confirmatory cluster list await the design decision"
+frozen = "2026-10-18"
+estimand = "theta = mean over confirmatory clusters c of AUC_obl(c) - AUC_raw(c); AUC(c) = (1/B) sum_{b=1..B} S_c(b), S_c(b) the share of the cluster's runs (tasks x repeats) whose first verified and re-judged success came within b node calls; per run max(0, B - T + 1)/B for a first success at call T, 0 if none; clusters weigh equally"
+primary_contrast = "best-first search (width 3, depth 10, priority best) with obligation-localized feedback (arm best, fvh.labalpha:BestFirst) versus the same search with the raw wrapper document (arm best-raw, fvh.labalpha:BestFirstRaw), at equal node budget; fixed by the course (D51)"
+test = "one two-sided paired sign-flip permutation test on the cluster differences d_c (fvh.stats.permutation_test(x, y, paired=True, n_permutations=10000, seed=20261018)), alpha = 0.05, no multiplicity correction (one test); interval: percentile cluster bootstrap of mean d_c, 10,000 resamples (fvh.stats.cluster_bootstrap_ci, seed 20261018)"
+budget_axis = "node calls, B = 10, read as prefixes of each run (each regime's width, depth and priority are budget-independent); sensitivity: AUC on a cumulative-prompt-token axis at the same ten quantile budget points for both arms"
+B = 10
+repeats = 3
+aggregation = "run -> cluster-arm AUC (mean over the cluster's tasks x repeats) -> cluster difference -> equal-weight mean over clusters"
+missing_rule = "policy-attributable failures (a reply the hint grammar rejects, a refused edit, a model-call timeout) are failed nodes that consume budget (fvh.labalpha); apparatus failures (verifier memory kill, container error, interruption) are re-run once with the same seeds (max_reissue), and a persisting one is excluded; the cluster-arm AUC uses the remaining runs; a cluster with no run left in either primary arm leaves the contrast; counts per arm reported; sensitivity: excluded runs scored 0 in the obligation arm and 1 in the raw arm"
+resource_accounting = "identical generation settings in every arm (the apparatus pins: qwen3.8:latest digest 22130167..., temperature 0.6, top_p 0.95, top_k 20, num_predict 32768, num_ctx 262144, thinking as the pinned transport sends it), per-call seeds derive_seed(plan seed, attempt id, n); the feedback field capped at 2,048 tokens counted as ceil(bytes/4) in both formats (fvh.labalpha.FEEDBACK_CAP_TOKENS), truncation rate per arm reported; tokens in/out, GPU-seconds and wall clock logged per call"
+cluster_rule = "one cluster per source lemma family (a lemma and the helpers it calls); its Dafny and Verus forms are its tasks; several hint-site forms of one lemma are tasks of one cluster; a public task is a cluster of its own; a cluster enters only when every task passes the seven admission controls"
+rejudging = "every success re-judged: the lab gate against the frozen form, vcheck --module R12 --seed 1..3, vaudit, the independent source-frame check, and fvh report --reverify in the verification container"
+stopping_rule = "fixed N; no interim look at the primary contrast; the pilot clusters are excluded from the confirmatory sample"
+pilot_clusters = ["a1b-cat-assoc", "a1b-nullable-correct", "pub-db-052", "pub-hev-023", "r06-backwards-str-involution"]
+pilot_draw = "Solutions/plans/drafts/R12/lab-corpus-v2/pilot/PILOT_DRAW.md (sha256 a72d025c685c59c8864f8f4c224af72655999b060ece5260dcfc982cc935abf7), seed R12-labalpha-pilot-20261018"
+power_sim = "Solutions/plans/labalpha_power_sim.py"
+power_sim_sha256 = "45d06f0b672e1e1da110d41f73c526272e14a5d23bef63bb9baa29320271b816"
+stratum = "bench/local/r/labalpha/STRATUM.toml"
+stratum_sha256 = "97fc110738a0d7b4363e6266c6b30f4f4f226156118302aa763cd64288fb2ae4"

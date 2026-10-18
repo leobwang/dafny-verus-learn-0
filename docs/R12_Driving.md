@@ -529,74 +529,73 @@ original target, unfinished holes, imports and pinned course requirements.
 
 ## 7. Lab α: fixed trajectories and matched budgets
 
-The lab asks where success-versus-node-budget curves cross among independent,
-repair and best-first search, and whether obligation-localized feedback improves
-best-first search relative to raw native JSON. Hold the engine, task forms,
-source frame and acceptance route fixed. The three regimes are configurations
-of one implementation, not three separately optimized programs with different
-failure handling or different notions of a successful proof.
+The lab has one pre-registered question, fixed by the course: at an equal node
+budget, does obligation-localized feedback raise best-first search's success
+compared with the raw native JSON of the same verification? The other two
+regimes, independent sampling and depth-first repair, are run and described, but
+they carry no test. Hold the engine, the task forms, the source frame and the
+acceptance route fixed. The four arms are configurations of one implementation,
+not separately optimized programs with different failure handling or different
+notions of a successful proof.
 
-Each point at budgets1through10is a prefix of the same ten-node trajectory.
-Do not reconfigure width or depth at a smaller budget, restart a run for each
-point or discard early malformed nodes. Those changes make a different
-experiment. Fixed configurations can have different ways of exhausting a
-frontier; record that event and its remaining cap instead of quietly giving
-one regime extra generations.
+Each budget point from 1 to 10 is a prefix of the same ten-node trajectory, so
+one run gives the whole curve. Do not reconfigure width or depth at a smaller
+budget, restart a run for each point or discard early nodes. A reply the hint
+grammar rejects is a failed node: it consumes its call and its parent's
+expansion slot, and the run goes on (the provided `fvh.labalpha` wrapper applies
+this rule around your engine, so a malformed reply never ends a run early in one
+arm and late in another). Fixed configurations exhaust their frontiers
+differently; record that event and its remaining cap instead of giving one
+regime extra generations.
 
-The main local allocation is40tasks,20per native language, four arms and three
-repeated Qwen runs:480runs and at most4800generation calls. The small Claude
-comparison uses ten language-stratified tasks, ten calls each and at most ten
-sentinels, within110calls. Treat Claude's repeated runs descriptively; request
-seeds are not a claim that a hosted model is controllably deterministic. An
-unused public slice of five pinned-pool members per language stays separate and
-explicitly possibly seen by the models. It is reserved in metadata, not yet
-materialized or admitted as R12hint forms.
-It is not a free additional pilot outside the registered ceiling.
+The estimand is a mean over clusters. For one run with its first verified and
+re-judged success at node call T, the run's value is max(0, B - T + 1) / B, with
+B = 10 (0 when no success comes); this is the area under the run's
+success-versus-budget step curve. A cluster-arm's value is the mean over its
+tasks and repeats, the cluster's difference is the obligation arm's value minus
+the raw arm's, and θ is the equal-weight mean of those differences. The primary
+test is one two-sided paired sign-flip permutation test on the cluster
+differences at α = 0.05, with a percentile cluster bootstrap interval; there is
+no Holm family over budget points, because there is one test. `fvh.stats`
+supplies `auc_budget`, `success_curve`, `cluster_bootstrap_ci` and
+`permutation_test(…, paired=True)`; `fvh report R12 --labalpha` builds every
+table from the run logs alone.
 
-Keep task admission and exposure records before generation. The installed
-40-task stratum contains20paired-language algorithm clusters; all40forms passed
-native baseline, maximal-automation, complete reference/three-seed, audit, wrong
-hint and model/code-frame controls. A partial software fixture cannot replace it.
-The provided plan builder refuses missing/stale admission, binds inline prompt
-bytes and selects the ten-task Claude subset using an explicit stratified draw.
-Because the frozen plan has global task/repeat fields, Qwen and Claude use
-separate executable plans. Each separately executed plan needs its own exact
-digest binding and matching grade while preserving the registered method.
-A task form must
-fail at the proof stage with zero unfinished holes, preserve its fixed model
-and executable computation, and have a complete checked completion plus negative
-controls. A fresh filename does not make a course-derived goal unseen. Record
-whether a subject has encountered the source idea, supplied helpers or an
-isomorphic task. Hash forms and actual context rather than describing a task
-pool only by its nominal size.
+The unit of uncertainty is the cluster. A regex cluster is one source lemma
+family from the R06–R11 references and the A1b facts, its Dafny and its Verus
+forms together; a public cluster is one task from the pinned public pools,
+recorded as possibly seen. Repeats, arms and budget points stay inside their
+cluster; they never become independent samples. The planning power comes from a
+simulation of this design (cluster and task effects shared by the arms, effect
+heterogeneity across clusters and tasks): heterogeneity and the number of
+clusters drive the detectable difference, and the repeats buy less than more
+clusters. The confirmatory size and the regex/public composition are fixed in
+the freeze, after the pilot, from the clusters that passed admission.
 
-The unit of uncertainty is the registered original-algorithm cluster, with repeats,
-arms and budgets kept together. If task forms share a source family, account for
-that dependency in the clustering or state why an independence assumption is
-reasonable. The shipped20language-paired clusters do not become40independent programs or
-120repeats. Use20as the planning MDE sample size for this stratum, and state the
-remaining dependence and engineered-task limits. Likewise,
-ten budget points are correlated repeated observations, not ten new samples of
-the task distribution.
+Keep task admission and exposure records before any generation. Every form fails
+at the proof stage with zero unfinished holes, keeps its fixed models and
+executable code, has a complete checked reference under three seeds, fails with
+an empty body under maximal automation and fails with wrong hints. A fresh
+filename does not make a course-derived goal unseen: the regex forms were written
+after the pinned model's release, the public ones were not, and the report keeps
+the two strata visible.
 
-Compose paired permutation tests and bootstrap intervals from `fvh.stats`.
-Register the family of comparisons and its Holm correction before looking at
-the curves. Explain whether intervals are pointwise or simultaneous. Pointwise
-intervals at every budget do not automatically provide simultaneous curve bands.
-At baseline0.5,20clusters and alpha0.05/40, the frozen conservative planning
-MDE returns infinity. Even the maximum possible rise at that baseline misses
-the requested80%power in this approximation. Keep the study exploratory and
-disclose that limitation; repeated runs do not manufacture independent tasks.
-This is not a theorem that no actual correlated data could ever show an effect.
-A visual crossing with unresolved uncertainty should remain unresolved in the
-report instead of becoming a favorable discovered budget threshold.
+Resources are matched by construction. Every arm uses the same generation
+settings and per-call seeds rule, and the feedback text is capped at the same
+token budget in both formats (raw JSON is cut head and tail around a marker;
+obligation lists rarely reach the cap). The call records keep tokens in and out,
+GPU-seconds, wall clock, feedback bytes and the truncation flag, so a token-axis
+sensitivity line and the truncation rate per arm come from the logs. The
+pilot's clusters, drawn by a pre-registered seed and run before the freeze, check
+the ceilings and the instrumentation and never enter the confirmatory sample.
 
-The10GPU-hour ceiling is36000GPU-seconds. Dividing by4800calls gives7.5GPU-seconds
-per call as a ceiling calculation, before other GPU use; it is not a throughput
-measurement. Use current measured token/cost assumptions for the actual plan,
-with per-arm expected costs and truncation sensitivity. If the allocation does
-not fit, retain the locked/deferred experiment or amend and re-grade it. Do not
-spend a hidden reserve, run the favorite arm first or reissue scored truncations.
+What you register (the written pair's pre-registration) is this fixed primary
+contrast, by the freeze's hash, plus your own descriptive analyses: the four
+curves with bands, where they appear to cross (read off the bands, never
+tested), the by-language and by-source strata and the Claude arm's ten runs. The
+claim stays scoped: on these tasks, with this model, these prompts and B = 10.
+The lab cannot separate localization from a shorter prompt except through the
+token-axis line, and it cannot generalize beyond the corpus.
 
 The registration-to-report chain keeps administrative and empirical evidence
 separate.
