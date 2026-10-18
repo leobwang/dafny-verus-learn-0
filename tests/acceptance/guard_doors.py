@@ -490,12 +490,22 @@ def _rm_onerror(func, path, _exc):
     func(path)
 
 
-def remove_study_root(root):
-    """Delete a study root, then its parents up to /tmp while they are empty (never a
-    non-empty parent, never a path outside /tmp/dvl0-study-*): the deleted paths."""
+def remove_study_root(root, base="/tmp"):
+    """Delete a study root, then walk its parents up to the top study directory
+    (/tmp/dvl0-study-<phase>-<lane>/): at each one, a leftover plain file a session left
+    there (a stray output, never a directory: another run's study root stays) is deleted
+    and recorded as "leftover <path>", and the parent itself is deleted once empty. Never a
+    path outside base/dvl0-study-* (`base` is /tmp; tests pass their own). Returns the
+    deleted paths."""
+    base = Path(os.path.normpath(os.path.abspath(str(base))))
     root = Path(os.path.normpath(os.path.abspath(str(root))))
-    if len(root.parts) < 3 or root.parts[1] != "tmp" or not root.parts[2].startswith(STUDY_PREFIX):
-        raise ValueError(f"{root} is no study root (/tmp/{STUDY_PREFIX}*)")
+    try:
+        rel = root.relative_to(base)
+    except ValueError:
+        rel = None
+    if rel is None or not rel.parts or not rel.parts[0].startswith(STUDY_PREFIX):
+        raise ValueError(f"{root} is no study root ({base}/{STUDY_PREFIX}*)")
+    top = base / rel.parts[0]
     gone = []
     if root.is_symlink():
         root.unlink()
@@ -503,8 +513,14 @@ def remove_study_root(root):
     elif root.exists():
         shutil.rmtree(root, onerror=_rm_onerror)
         gone.append(str(root))
-    d = root.parent
-    while d != Path("/tmp") and d.is_dir() and not d.is_symlink() and not any(d.iterdir()):
+    d = root.parent if root != top else None
+    while d is not None and d.is_relative_to(top) and d.is_dir() and not d.is_symlink():
+        for f in sorted(d.iterdir()):
+            if f.is_symlink() or f.is_file():
+                f.unlink()
+                gone.append(f"leftover {f}")
+        if any(d.iterdir()):
+            break
         d.rmdir()
         gone.append(str(d))
         d = d.parent
@@ -552,6 +568,27 @@ def paths_of(work, state=None):
     return paths
 
 
+def clone_head(root, clone):
+    """Clone the worktree at `root` into `clone` at its HEAD: on its branch, or, when HEAD is
+    detached (a validation worktree pinned to a commit), on a new local branch
+    study-<sha12> at that commit. Returns (exit code, the clone's branch)."""
+    def run(*argv):
+        return subprocess.run(list(argv), capture_output=True, text=True)
+    branch = run("git", "-C", str(root), "symbolic-ref", "-q", "--short", "HEAD").stdout.strip()
+    if branch:
+        p = run("git", "clone", "-q", "--no-hardlinks", "--branch", branch, str(root), str(clone))
+        return p.returncode, branch
+    sha = run("git", "-C", str(root), "rev-parse", "--verify", "HEAD^{commit}").stdout.strip()
+    if not sha:
+        return 128, ""
+    p = run("git", "clone", "-q", "--no-hardlinks", "--no-checkout", str(root), str(clone))
+    if p.returncode != 0:
+        return p.returncode, ""
+    branch = f"study-{sha[:12]}"
+    p = run("git", "-C", str(clone), "switch", "-q", "-c", branch, sha)
+    return p.returncode, branch
+
+
 def phase_setup(work, state):
     paths = paths_of(work)
     clone = paths["clone"]
@@ -563,11 +600,9 @@ def phase_setup(work, state):
         raise Refusal(str(e))
     work.mkdir(parents=True, exist_ok=True)
     paths["study_root"].mkdir(parents=True, exist_ok=True)
-    branch = git("symbolic-ref", "--short", "HEAD").strip()
-    p = subprocess.run(["git", "clone", "-q", "--no-hardlinks", "--branch", branch, str(ROOT),
-                        str(clone)], capture_output=True, text=True)
-    if p.returncode != 0:
-        raise Refusal(f"git clone failed (exit {p.returncode})")
+    rc, branch = clone_head(ROOT, clone)
+    if rc != 0:
+        raise Refusal(f"git clone failed (exit {rc})")
     head = git("rev-parse", "HEAD", cwd=clone).strip()
 
     # The worktree's uncommitted files under .claude/, scripts/ and tests/ (the latest guard).
