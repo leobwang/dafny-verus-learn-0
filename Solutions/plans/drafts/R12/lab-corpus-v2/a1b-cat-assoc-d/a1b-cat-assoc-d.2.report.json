@@ -1,0 +1,161 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": false,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/a1b-cat-assoc-d/tasks/a1b-cat-assoc-d.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A1_Re.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A1b_Facts.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A2_Deriv.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A2_MatcherStatement.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A3_Syntax.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A4_Norm.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--manual-lemma-induction",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-033533-q8jtkcrl/tasks.csv"
+        ],
+        "count_unit": "tasks",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "dafny",
+        "per_symbol": {
+          "R12_LabCase.CatAssoc": "verified",
+          "R12_LabCase.Matches": "verified",
+          "RG_A1_Re.Backwards": "verified",
+          "RG_A1_Re.BackwardsStr": "verified",
+          "RG_A1_Re.Matches": "verified",
+          "RG_A1_Re.NodeCount": "verified",
+          "RG_A1_Re.Nullable": "verified",
+          "RG_A1b_Facts.CatAssoc": "verified",
+          "RG_A1b_Facts.CatEpsLeft": "verified",
+          "RG_A1b_Facts.CatEpsRight": "verified",
+          "RG_A1b_Facts.NullableCorrect": "verified",
+          "RG_A1b_Facts.StarConcat": "verified",
+          "RG_A1b_Facts.StarOne": "verified",
+          "RG_A2_Deriv.ClassBelow": "verified",
+          "RG_A2_Deriv.ClassEmpty": "verified",
+          "RG_A2_Deriv.ClassInsert": "verified",
+          "RG_A2_Deriv.ClassMember": "verified",
+          "RG_A2_Deriv.ClassOfString": "verified",
+          "RG_A2_Deriv.ClassRange": "verified",
+          "RG_A2_Deriv.ClassRangesFacts": "verified",
+          "RG_A2_Deriv.ClassRank": "verified",
+          "RG_A2_Deriv.ClassUnion": "verified",
+          "RG_A2_Deriv.Code": "verified",
+          "RG_A2_Deriv.ContainsCons": "verified",
+          "RG_A2_Deriv.Cp": "verified",
+          "RG_A2_Deriv.Deriv": "verified",
+          "RG_A2_Deriv.DerivCorrect": "verified",
+          "RG_A2_Deriv.DerivMatch": "verified",
+          "RG_A2_Deriv.InsertRanges": "verified",
+          "RG_A2_Deriv.InsertRangesBelow": "verified",
+          "RG_A2_Deriv.RangesContain": "verified",
+          "RG_A2_Deriv.RangesValid": "verified",
+          "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A3_Syntax.BoundVal": "verified",
+          "RG_A3_Syntax.ClassToRe": "verified",
+          "RG_A3_Syntax.Copies": "verified",
+          "RG_A3_Syntax.CopiesUpTo": "verified",
+          "RG_A3_Syntax.CountedAt": "verified",
+          "RG_A3_Syntax.Lower": "verified",
+          "RG_A3_Syntax.MaxBound": "verified",
+          "RG_A3_Syntax.NoSpecialFrom": "verified",
+          "RG_A3_Syntax.RangeRe": "verified",
+          "RG_A3_Syntax.RangesLowered": "verified",
+          "RG_A3_Syntax.RangesToRe": "verified",
+          "RG_A3_Syntax.RepRange": "verified",
+          "RG_A3_Syntax.Res.Extract": "verified",
+          "RG_A3_Syntax.Res.PropagateFailure": "verified",
+          "RG_A3_Syntax.SimpleClassBody": "verified",
+          "RG_A3_Syntax.Stop": "verified",
+          "RG_A3_Syntax.WF": "verified",
+          "RG_A4_Norm.CatCong": "verified",
+          "RG_A4_Norm.CatCongRight": "verified",
+          "RG_A4_Norm.CheckDeriv": "verified",
+          "RG_A4_Norm.MkAlt": "verified",
+          "RG_A4_Norm.MkCat": "verified",
+          "RG_A4_Norm.MkStar": "verified",
+          "RG_A4_Norm.NDeriv": "verified",
+          "RG_A4_Norm.Norm": "verified",
+          "RG_A4_Norm.NormRe": "verified",
+          "RG_A4_Norm.Normal": "verified",
+          "RG_A4_Norm.StarOfEps": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-033533-q8jtkcrl",
+        "stage": "verify",
+        "target": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/a1b-cat-assoc-d/tasks/a1b-cat-assoc-d.dfy",
+        "verdict": "verified",
+        "verified_count": 63
+      },
+      "passed": false
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+          "lang": "dafny",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h1"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h2"
+            }
+          ],
+          "source_sha256": "4ad8d21d6371d0f4def947ce2295a2b042a07c21f16b17469513ee758769c81a",
+          "statement_sha256": "291944e6399ba2a3be95c5d25b295b8b1fe6e8820d6d63980d8cc12303d24bf3"
+        },
+        "native_span": [
+          20,
+          45
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 45,
+          "start": 20,
+          "symbol": "R12_LabCase.CatAssoc"
+        }
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "ff69592d2985a0ce67d8fcdd93bf7f8fe16636a25944a526eec1708ee23cc8d5",
+  "id": "a1b-cat-assoc-d",
+  "lang": "dafny",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-a1b-cat-assoc-d/reference.dfy",
+  "reference_sha256": "711ecdd30a805968444d29bfc839b9345cfc37f3ec3bd1946b067e1220554a08",
+  "rejected_at": "baseline-proof-fails",
+  "schema": 2,
+  "source_sha256": "4ad8d21d6371d0f4def947ce2295a2b042a07c21f16b17469513ee758769c81a",
+  "status": "rejected",
+  "target": "R12_LabCase.CatAssoc"
+}

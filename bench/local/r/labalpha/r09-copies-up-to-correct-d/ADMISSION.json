@@ -1,0 +1,65 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "f4fa5cfc996c02ca4e7fabcd21402e1beb683bdc580e3183022635f6e92b0b13"
+  },
+  "id": "r09-copies-up-to-correct-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "14bbfa311c28f5abcc4a361803c840d1304668a9d6f85e9f3025629c863599bd",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    }
+  ],
+  "source_sha256": "0870575b91474ca8c39a43030ea92bd1b0058b24a4dd3f7eacbce4c5491740bb",
+  "status": "admitted",
+  "target": "R12_LabCase.CopiesUpToCorrect",
+  "validated_span": {
+    "end": 76,
+    "start": 34,
+    "symbol": "R12_LabCase.CopiesUpToCorrect"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

@@ -1,0 +1,262 @@
+// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i2","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i3","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i4","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i5","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i6","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i7","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"i8","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"a9","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"a10","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"a11","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"a12","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"a13","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]},{"name":"a14","identifiers":["Vec","c","char","current_group","current_nesting_level","drop_last","flatten","ghost_groups","groups","i","input","input_len","is_balanced_group","is_paren_char","is_sequence_of_balanced_groups","len","nesting_level","pos","prev_group","prev_groups","push","remove_nonparens","separate_paren_groups","vecs_to_seqs"]}]
+// R12_SOURCE_SPANS: [{"symbol":"separate_paren_groups","start":92,"end":189}]
+// R12 public task: humaneval-verus human_eval_001.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
+/*
+### ID
+HumanEval/1
+*/
+/*
+### VERUS BEGIN
+*/
+use vstd::prelude::*;
+
+verus! {
+
+/// This function computes the net nesting level at the end of a particular `input`,
+/// where a left parenthesis increments the net nesting level and a right parenthesis
+/// decrements it.
+pub open spec fn nesting_level(input: Seq<char>) -> int
+    decreases input.len(),
+{
+    if input.len() == 0 {
+        0
+    } else {
+        let prev_nesting_level = nesting_level(input.drop_last());
+        let c = input.last();
+        if c == '(' {
+            prev_nesting_level + 1
+        } else if c == ')' {
+            prev_nesting_level - 1
+        } else {
+            prev_nesting_level
+        }
+    }
+}
+
+pub open spec fn is_paren_char(c: char) -> bool {
+    c == '(' || c == ')'
+}
+
+/// A sequence of characters is a balanced group of parentheses if
+/// it's non-empty, it only consists of parentheses, its nesting level
+/// is zero, and any nonempty strict prefix has a positive nesting
+/// level.
+pub open spec fn is_balanced_group(input: Seq<char>) -> bool {
+    &&& input.len() > 0
+    &&& nesting_level(input) == 0
+    &&& forall|i| 0 <= i < input.len() ==> is_paren_char(#[trigger] input[i])
+    &&& forall|i: int| 0 < i < input.len() ==> nesting_level(#[trigger] input[..i]) > 0
+}
+
+/// A sequence of characters is a sequence of balanced groups of
+/// parentheses if its nesting level is zero and any prefix has
+/// a non-negative nesting level.
+pub open spec fn is_sequence_of_balanced_groups(input: Seq<char>) -> bool {
+    &&& nesting_level(input) == 0
+    &&& forall|i: int| 0 < i < input.len() ==> nesting_level(#[trigger] input[..i]) >= 0
+}
+
+pub open spec fn vecs_to_seqs<T>(s: Seq<Vec<T>>) -> Seq<Seq<T>> {
+    s.map(|_i, ss: Vec<T>| ss@)
+}
+
+pub open spec fn remove_nonparens(s: Seq<char>) -> Seq<char> {
+    s.filter(|c| is_paren_char(c))
+}
+
+/// This proof specifies the relationship between `remove_nonparens(s[..pos + 1])`
+/// and `remove_nonparens(s[..pos])`.
+proof fn lemma_remove_nonparens_maintained_by_push(s: Seq<char>, pos: int)
+    requires
+        0 <= pos < s.len(),
+    ensures
+        ({
+            let s1 = remove_nonparens(s[..pos]);
+            let s2 = remove_nonparens(s[..pos + 1]);
+            if is_paren_char(s[pos]) {
+                s2 == s1.push(s[pos])
+            } else {
+                s2 == s1
+            }
+        }),
+    decreases pos,
+{
+    reveal(Seq::filter);
+    assert(s[..pos + 1].drop_last() =~= s[..pos]);
+    if pos != 0 {
+        lemma_remove_nonparens_maintained_by_push(s, pos - 1);
+    }
+}
+
+/// This is the function specified at the top of the file.
+fn separate_paren_groups(input: &Vec<char>) -> (groups: Vec<Vec<char>>)
+    requires
+        is_sequence_of_balanced_groups(input@),
+    ensures
+// All groups in the result are balanced and non-nested
+
+        forall|i: int|
+            #![trigger groups[i]]
+            0 <= i < groups.len() ==> is_balanced_group(groups[i]@),
+        // The concatenation of all groups in the result equals the input string without spaces
+        vecs_to_seqs(groups@).flatten() == remove_nonparens(input@),
+{
+    // Loop through the input one character at a time, keeping track of:
+    //
+    // `groups`: A vector of complete balanced groups found so far.
+    // `current_group`: The current, incomplete balanced group found since then.
+    let mut groups: Vec<Vec<char>> = Vec::new();
+    let mut current_group: Vec<char> = Vec::new();
+    let input_len = input.len();
+    // For proof purposes, we also keep track of some ghost state that
+    // lets us more readily reason about
+    // `vecs_to_seqs(groups@)`. Specifically, we'll maintain
+    // the invariant that `ghost_groups == vecs_to_seqs(groups@)`.
+    let ghost mut ghost_groups: Seq<Seq<char>> = Seq::empty();
+    proof {
+        assert(vecs_to_seqs(groups@) =~= ghost_groups);
+        assert(remove_nonparens(input@[..0]) =~= Seq::<char>::empty());
+        assert(ghost_groups.flatten() + current_group@ =~= Seq::<char>::empty());
+    }
+    let mut current_nesting_level: usize = 0;
+    for pos in 0..input_len
+        invariant
+            /*R12_HINT:i1*/ true,
+            /*R12_HINT:i2*/ true,
+            /*R12_HINT:i3*/ true,
+            forall|i: int|
+                #![trigger groups[i]]
+                0 <= i < ghost_groups.len() ==> is_balanced_group(ghost_groups[i]),
+            /*R12_HINT:i4*/ true,
+            /*R12_HINT:i5*/ true,
+            /*R12_HINT:i6*/ true,  // this bound lets us prove that increments can't overflow a `usize`
+            /*R12_HINT:i7*/ true,
+            forall|i| 0 <= i < current_group@.len() ==> is_paren_char(#[trigger] current_group@[i]),
+            forall|i: int|
+                0 < i < current_group@.len() ==> nesting_level(#[trigger] current_group@[..i]) > 0,
+            /*R12_HINT:i8*/ true,
+    {
+        let ghost prev_group = current_group@;
+        let ghost prev_groups = ghost_groups;
+        let c = input[pos];
+        proof {
+            assert(/*R12_HINT:a9*/ true);
+            assert(/*R12_HINT:a10*/ true);
+            lemma_remove_nonparens_maintained_by_push(input@, pos as int);
+        }
+        if c == '(' {
+            current_nesting_level = current_nesting_level + 1;
+            current_group.push('(');
+            assert(/*R12_HINT:a11*/ true);
+            assert(ghost_groups.flatten() + current_group@ =~= (ghost_groups.flatten()
+                + prev_group).push('('));
+            assert(forall|i: int|
+                0 < i < prev_group.len() ==> #[trigger] current_group@[..i] == prev_group[..i]);
+        } else if c == ')' {
+            current_nesting_level = current_nesting_level - 1;
+            current_group.push(')');
+            assert(/*R12_HINT:a12*/ true);
+            assert(ghost_groups.flatten() + current_group@ =~= (ghost_groups.flatten()
+                + prev_group).push(')'));
+            assert(forall|i: int|
+                0 < i < prev_group.len() ==> #[trigger] current_group@[..i] == prev_group[..i]);
+            // We can tell whether the current group we just assembled is balanced
+            // by checking whether `current_nesting_level` is zero. In that case,
+            // it's done and we can add it to `groups`.
+            if current_nesting_level == 0 {
+                proof {
+                    ghost_groups = ghost_groups.push(current_group@);
+                    assert(vecs_to_seqs(groups@.push(current_group)) =~= vecs_to_seqs(groups@).push(
+                        current_group@,
+                    ));
+                    assert(/*R12_HINT:a13*/ true);
+                    assert(ghost_groups.flatten() =~= prev_groups.flatten() + current_group@) by {
+                        prev_groups.lemma_flatten_and_flatten_alt_are_equivalent();
+                        ghost_groups.lemma_flatten_and_flatten_alt_are_equivalent();
+                    }
+                }
+                groups.push(current_group);
+                current_group = Vec::<char>::new();
+                assert(ghost_groups.flatten() + current_group@ =~= remove_nonparens(
+                    input@[..pos + 1],
+                ));
+            }
+        }
+    }
+    assert(input@[..input_len] =~= input@);
+    assert(/*R12_HINT:a14*/ true);
+    groups
+}
+
+} // verus!
+
+/*
+### VERUS END
+*/
+
+/*
+### PROMPT
+from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """ Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """
+
+*/
+
+/*
+### ENTRY POINT
+separate_paren_groups
+*/
+
+/*
+### CANONICAL SOLUTION
+    result = []
+    current_string = []
+    current_depth = 0
+
+    for c in paren_string:
+        if c == '(':
+            current_depth += 1
+            current_string.append(c)
+        elif c == ')':
+            current_depth -= 1
+            current_string.append(c)
+
+            if current_depth == 0:
+                result.append(''.join(current_string))
+                current_string.clear()
+
+    return result
+
+*/
+
+/*
+### TEST
+
+
+METADATA = {
+    'author': 'jt',
+    'dataset': 'test'
+}
+
+
+def check(candidate):
+    assert candidate('(()()) ((())) () ((())()())') == [
+        '(()())', '((()))', '()', '((())()())'
+    ]
+    assert candidate('() (()) ((())) (((())))') == [
+        '()', '(())', '((()))', '(((())))'
+    ]
+    assert candidate('(()(())((())))') == [
+        '(()(())((())))'
+    ]
+    assert candidate('( ) (( )) (( )( ))') == ['()', '(())', '(()())']
+
+*/

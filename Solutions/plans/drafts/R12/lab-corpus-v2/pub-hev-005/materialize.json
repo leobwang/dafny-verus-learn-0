@@ -1,0 +1,65 @@
+{
+ "target": "separate_paren_groups",
+ "sites": 14,
+ "kept_annotations": [
+  {
+   "offset": 3777,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "vecs_to_seqs(groups@) =~= ghost_groups"
+  },
+  {
+   "offset": 3833,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "remove_nonparens(input@[..0]) =~= Seq::<char>::empty()"
+  },
+  {
+   "offset": 3905,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "ghost_groups.flatten() + current_group@ =~= Seq::<char>::empty()"
+  },
+  {
+   "offset": 4253,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| #![trigger groups[i]] 0 <= i < ghost_groups.len() ==> is_balanced_group(ghost_groups[i])"
+  },
+  {
+   "offset": 4720,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i| 0 <= i < current_group@.len() ==> is_paren_char(#[trigger] current_group@[i])"
+  },
+  {
+   "offset": 4821,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 < i < current_group@.len() ==> nesting_level(#[trigger] current_group@[..i]) > 0"
+  },
+  {
+   "offset": 5686,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 < i < prev_group.len() ==> #[trigger] current_group@[..i] == prev_group[..i]"
+  },
+  {
+   "offset": 6137,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 < i < prev_group.len() ==> #[trigger] current_group@[..i] == prev_group[..i]"
+  },
+  {
+   "offset": 6635,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "vecs_to_seqs(groups@.push(current_group)) =~= vecs_to_seqs(groups@).push( current_group@, )"
+  },
+  {
+   "offset": 7269,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "ghost_groups.flatten() + current_group@ =~= remove_nonparens( input@[..pos + 1], )"
+  },
+  {
+   "offset": 7431,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "input@[..input_len] =~= input@"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

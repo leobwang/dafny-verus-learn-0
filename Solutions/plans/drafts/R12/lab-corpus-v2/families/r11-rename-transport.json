@@ -1,0 +1,42 @@
+{
+  "cluster": "r11-rename-transport",
+  "source": {
+    "module": "R11",
+    "lemma": "RenameTransportR11 (with its helper RenameSplitR11)",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy::RenameTransportR11",
+      "verus": "Solutions/verus/r/r11_theory/src/agent.rs::rename_transport_r11"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1: Re",
+    "RG_A4_Norm / rg_re_a4: Derivation, CheckDeriv / valid_word_r10",
+    "R11 agent definitions RenameChar/RenameWord/RenamePattern/Rules (qualified layer names RG_A1_Re.Re, RG_A4_Norm.*, ::rg_re_a4::* read as the local copies)"
+  ],
+  "helpers_included": [
+    "RenameSplitR11 / rename_split_r11 (complete)"
+  ],
+  "tasks": [
+    "r11-rename-transport-d",
+    "r11-rename-transport-v"
+  ],
+  "status": "admitted",
+  "sites": {
+    "r11-rename-transport-d": 5,
+    "r11-rename-transport-v": 4
+  },
+  "attempts": [
+    {
+      "task": "r11-rename-transport-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r11-rename-transport-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "Verus DChr extensional bridge (=~= seq!) stays in the skeleton; Dafny DChr fact is an expression site.",
+  "kind": "regex"
+}

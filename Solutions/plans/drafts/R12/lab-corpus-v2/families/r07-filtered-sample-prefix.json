@@ -1,0 +1,31 @@
+{
+  "cluster": "r07-filtered-sample-prefix",
+  "kind": "regex",
+  "source": {
+    "module": "R07",
+    "lemma": "FilteredSamplePrefix",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R07_Libraries/std/R07_Libraries.dfy::FilteredSamplePrefix (R07.H1d)",
+      "verus": "Solutions/verus/r/r07_libraries/src/lib.rs::lemma_filtered_sample_prefix (R07.H1v)"
+    }
+  },
+  "layer_definitions": [],
+  "helpers_included": [],
+  "tasks": [],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r07-filtered-sample-prefix-d",
+      "form": 0,
+      "result": "rejected (no form built)",
+      "reason": "not admissible as a hint-site form, rejected before form construction: the reference proof is one or two standard-library lemma calls (Std.Collections.Seq / vstd seq_lib), the R12 hint grammar admits only local proof declarations as callees (tools/R12/admit_forms.py's callee binding), and the obligation is a generic sequence/set cardinality fact, not a regex proof obligation (the cluster rule asks for real regex obligations). Copying the library lemma locally would turn the task into a call to a renamed copy of the statement."
+    },
+    {
+      "task": "r07-filtered-sample-prefix-v",
+      "form": 0,
+      "result": "rejected (no form built)",
+      "reason": "not admissible as a hint-site form, rejected before form construction: the reference proof is one or two standard-library lemma calls (Std.Collections.Seq / vstd seq_lib), the R12 hint grammar admits only local proof declarations as callees (tools/R12/admit_forms.py's callee binding), and the obligation is a generic sequence/set cardinality fact, not a regex proof obligation (the cluster rule asks for real regex obligations). Copying the library lemma locally would turn the task into a call to a renamed copy of the statement."
+    }
+  ],
+  "notes": "R07's items are library-retrieval exercises (search then name); their admissible Lab alpha analogue would need a library-callee hint grammar, which the frozen grammar does not have."
+}

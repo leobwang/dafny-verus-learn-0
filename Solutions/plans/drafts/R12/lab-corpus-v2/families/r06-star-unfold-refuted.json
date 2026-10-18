@@ -1,0 +1,36 @@
+{
+  "cluster": "r06-star-unfold-refuted",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "StarUnfoldRefuted",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::StarUnfoldRefuted (R06.H3d)",
+      "verus": "Solutions/verus/r/r06_induction/src/lib.rs::lemma_star_unfold_refuted (R06.H3v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches), copied verbatim"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r06-star-unfold-refuted-d",
+    "r06-star-unfold-refuted-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-star-unfold-refuted-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 2
+    },
+    {
+      "task": "r06-star-unfold-refuted-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 2
+    }
+  ],
+  "notes": "An existential refutation: the witness bindings (a = Chr('x'), s = []) and, in Verus, the extensional bridge and the no-split forall-by stay in the skeleton; the two sites are the witness facts (the star accepts the empty word; the unfolded concatenation does not). Thin (two facts), but a regex obligation: the empty body fails under maximal automation."
+}

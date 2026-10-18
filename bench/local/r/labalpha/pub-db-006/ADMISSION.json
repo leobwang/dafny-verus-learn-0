@@ -1,0 +1,57 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "b07a7d0b6a2959b30c9b0c554499a7303354c344886e64f14c7c7f3936b5a0e3",
+    "statement_sha256": "b6043e279acaf4328ca393e17a9fb8a5072de79f28fba561397ef4ae3186bf03"
+  },
+  "id": "pub-db-006",
+  "lang": "dafny",
+  "private_evidence_sha256": "95771baefa65d8093bde7c957f2a04a602a108b8b11e22fdbbb8775d7fe77393",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    },
+    {
+      "kind": "expr",
+      "name": "i5"
+    }
+  ],
+  "source_sha256": "a449e2dc496a45c463bad22906b513affa72493e34e47cb964582ddbc0c99383",
+  "status": "admitted",
+  "target": "Getmini",
+  "validated_span": {
+    "end": 36,
+    "start": 4,
+    "symbol": "Getmini"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

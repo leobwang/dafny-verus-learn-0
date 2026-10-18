@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "427ae708f0c346b80a7c3e35f30187988a4fe496adc29b04163b7e196bb09689"
+  },
+  "id": "r09-copies-split-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "ce2c73106e7969d9235940b3f92f1054cebc1caba7a3435decfccac2524f3215",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    }
+  ],
+  "source_sha256": "819bf9a4dab0dbfe27855f1edfff3907ac81faaa2df9d10efe3774b457c6c4b0",
+  "status": "admitted",
+  "target": "R12_LabCase.CopiesSplit",
+  "validated_span": {
+    "end": 102,
+    "start": 86,
+    "symbol": "R12_LabCase.CopiesSplit"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

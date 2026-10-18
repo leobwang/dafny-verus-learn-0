@@ -1,540 +1,1856 @@
-# R12 author-admitted native hint forms. Course-derived/exposed, not independent unseen tasks.
-schema = 1
+# bench/local/r/labalpha/STRATUM.toml: Lab alpha's stratum, schema 2 (DVR4 plan sections 3.5, 3.8).
+# Built by the author tool Solutions/plans/drafts/R12/lab-corpus-v2/build_stratum.py from the admitted
+# family records; every task bound to its form bytes and its seven-control ADMISSION.json.
+# Cluster rule: one cluster per source lemma family (a lemma and the helpers it calls); its Dafny
+# and Verus forms are its tasks; several hint-site forms of one lemma are tasks of the same cluster;
+# a public task is a cluster of its own. Roles: pilot (the 5-cluster pilot, excluded from the
+# confirmatory sample), confirmatory (drawn at the freeze), unassigned (admitted, not drawn).
+schema = 2
 lab = "R12"
-authored = "2026-10-17"
-authoring_base_commit = "0156953"
-cluster_rule = "paired-language-original-algorithm"
-analysis_clusters = 20
+authored = "2026-10-18"
+cluster_rule = "one cluster per source lemma family; its Dafny and Verus forms are its tasks; a public task is a cluster of its own"
 pools = "bench/public/POOLS.toml"
 pools_sha256 = "794223b71f6df008bceff667a82870d07e677ad62ba2e1660df1342ac078f280"
-public_draw_seed = "R12-unused-public-20261017"
+sealed_slot = "R08 (rebuilt), R13- and R14-derived regex families: a later step, after the other lane rebuilds those modules; R13/R14 tasks are sealed under Hidden/labs/R12/ (D-L3 (a)) and enter as a separate sealed stratum with its own statements pin"
+# not admitted: r06-backwards-involution (rejected)
+# not admitted: r06-deriv-base (rejected)
+# not admitted: r07-contained-class-batch (rejected)
+# not admitted: r07-filtered-alphabet-exact (rejected)
+# not admitted: r07-filtered-sample-prefix (rejected)
+# not admitted: r07-flatten-class-batches (rejected)
+# not admitted: r07-observed-alphabet-bound (rejected)
+# not admitted: r07-sample-batch-bound (rejected)
+# not admitted: r09-both-mirror-implications (rejected)
+# not admitted: r09-copies-nodes (rejected)
+# not admitted: r09-mirror-implication (rejected)
+# not admitted: r09-optional-nodes (rejected)
+# not admitted: r09-repetition-cost (rejected)
+# not admitted: r10-mk-alt-correct (rejected)
+# not admitted: r10-normal-fixed (rejected)
+# not admitted: r10-replace-right (rejected)
+# not admitted: r11-certificate-length (rejected)
+# not admitted: r11-check-sound (rejected)
+# not admitted: r11-direct-complete (rejected)
+# not admitted: r11-residual-start (rejected)
+# not admitted: r11-uniform-step (rejected)
 
-[[card]]
-id = "accepted-ledger-d"
+[[cluster]]
+id = "a1b-cat-assoc"
+kind = "regex"
+source = "A1b (as a task over A1 only) CatAssoc (dafny/given/R/RG_A1b_Facts.dfy::CatAssoc; verus/given/rg_re_a1b/src/lib.rs::lemma_cat_assoc)"
+role = "pilot"
+descriptive = false
+tasks = ["a1b-cat-assoc-d", "a1b-cat-assoc-v"]
+
+[[cluster]]
+id = "a1b-cat-eps-left"
+kind = "regex"
+source = "A1b (as a task over A1 only) CatEpsLeft (dafny/given/R/RG_A1b_Facts.dfy::CatEpsLeft; verus/given/rg_re_a1b/src/lib.rs::lemma_cat_eps_left)"
+role = "unassigned"
+descriptive = false
+tasks = ["a1b-cat-eps-left-d", "a1b-cat-eps-left-v"]
+
+[[cluster]]
+id = "a1b-cat-eps-right"
+kind = "regex"
+source = "A1b (as a task over A1 only) CatEpsRight (dafny/given/R/RG_A1b_Facts.dfy::CatEpsRight; verus/given/rg_re_a1b/src/lib.rs::lemma_cat_eps_right)"
+role = "unassigned"
+descriptive = false
+tasks = ["a1b-cat-eps-right-d", "a1b-cat-eps-right-v"]
+
+[[cluster]]
+id = "a1b-nullable-correct"
+kind = "regex"
+source = "A1b (as a task over A1 only) NullableCorrect (dafny/given/R/RG_A1b_Facts.dfy::NullableCorrect; verus/given/rg_re_a1b/src/lib.rs::lemma_nullable_correct)"
+role = "pilot"
+descriptive = false
+tasks = ["a1b-nullable-correct-d", "a1b-nullable-correct-v"]
+
+[[cluster]]
+id = "a1b-star-concat"
+kind = "regex"
+source = "A1b (as a task over A1 only) StarConcat (dafny/given/R/RG_A1b_Facts.dfy::StarConcat; verus/given/rg_re_a1b/src/lib.rs::lemma_star_concat)"
+role = "unassigned"
+descriptive = false
+tasks = ["a1b-star-concat-d", "a1b-star-concat-v"]
+
+[[cluster]]
+id = "a1b-star-one"
+kind = "regex"
+source = "A1b (as a task over A1 only) StarOne (dafny/given/R/RG_A1b_Facts.dfy::StarOne; verus/given/rg_re_a1b/src/lib.rs::lemma_star_one)"
+role = "unassigned"
+descriptive = false
+tasks = ["a1b-star-one-d", "a1b-star-one-v"]
+
+[[cluster]]
+id = "pub-db-000"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/feup-mfes_tmp_tmp6_a1y5a5_examples_SelectionSort.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-000"]
+
+[[cluster]]
+id = "pub-db-002"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Clover_double_array_elements.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-002"]
+
+[[cluster]]
+id = "pub-db-004"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/ironsync-osdi2023_tmp_tmpx80antoe_linear-dafny_Test_c++_arrays.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-004"]
+
+[[cluster]]
+id = "pub-db-006"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/SENG2011_tmp_tmpgk5jq85q_exam_ex2.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-006"]
+
+[[cluster]]
+id = "pub-db-008"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Software-building-and-verification-Projects_tmp_tmp5tm1srrn_CVS-projeto_aula3.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-008"]
+
+[[cluster]]
+id = "pub-db-010"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_Generated_Code_LinearSearch.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-010"]
+
+[[cluster]]
+id = "pub-db-012"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_70.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-012"]
+
+[[cluster]]
+id = "pub-db-014"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Dafny-Exercises_tmp_tmpjm75muf__Session4Exercises_ExerciseAllEqual.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-014"]
+
+[[cluster]]
+id = "pub-db-016"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Prog-Fun-Solutions_tmp_tmp7_gmnz5f_extra_pow.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-016"]
+
+[[cluster]]
+id = "pub-db-020"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_599.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-020"]
+
+[[cluster]]
+id = "pub-db-022"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/MIEIC_mfes_tmp_tmpq3ho7nve_exams_mt2_19_p5.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-022"]
+
+[[cluster]]
+id = "pub-db-024"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Metodos_Formais_tmp_tmpql2hwcsh_Invariantes_potencia.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-024"]
+
+[[cluster]]
+id = "pub-db-026"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/t1_MF_tmp_tmpi_sqie4j_exemplos_colecoes_arrays_ex5.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-026"]
+
+[[cluster]]
+id = "pub-db-028"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-exercise_tmp_tmpouftptir_maxArray.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-028"]
+
+[[cluster]]
+id = "pub-db-030"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_dataset_detailed_examples_SelectionSort.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-030"]
+
+[[cluster]]
+id = "pub-db-032"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_790.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-032"]
+
+[[cluster]]
+id = "pub-db-034"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Clover_count_lessthan.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-034"]
+
+[[cluster]]
+id = "pub-db-036"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_AI_agent_verify_examples_IncrementMatrix.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-036"]
+
+[[cluster]]
+id = "pub-db-038"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Clover_remove_front.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-038"]
+
+[[cluster]]
+id = "pub-db-040"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_Test_Cases_solved_1_select.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-040"]
+
+[[cluster]]
+id = "pub-db-042"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_2.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-042"]
+
+[[cluster]]
+id = "pub-db-044"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/630-dafny_tmp_tmpz2kokaiq_Solution.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-044"]
+
+[[cluster]]
+id = "pub-db-048"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_578.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-048"]
+
+[[cluster]]
+id = "pub-db-050"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_307.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-050"]
+
+[[cluster]]
+id = "pub-db-052"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_629.dfy (Apache-2.0 (set licence))"
+role = "pilot"
+descriptive = false
+tasks = ["pub-db-052"]
+
+[[cluster]]
+id = "pub-db-054"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_AI_agent_validation_examples.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-054"]
+
+[[cluster]]
+id = "pub-db-056"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/dafny-exercise_tmp_tmpouftptir_appendArray.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-056"]
+
+[[cluster]]
+id = "pub-db-058"
+kind = "public"
+source = "dafnybench bench/public/dafnybench/answers/CVS-handout1_tmp_tmptm52no3k_2.dfy (Apache-2.0 (set licence))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-db-058"]
+
+[[cluster]]
+id = "pub-hev-005"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_001.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-005"]
+
+[[cluster]]
+id = "pub-hev-007"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_094.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-007"]
+
+[[cluster]]
+id = "pub-hev-011"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_051.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-011"]
+
+[[cluster]]
+id = "pub-hev-015"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_027.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-015"]
+
+[[cluster]]
+id = "pub-hev-019"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_082.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-019"]
+
+[[cluster]]
+id = "pub-hev-021"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_087.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-021"]
+
+[[cluster]]
+id = "pub-hev-023"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_127.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "pilot"
+descriptive = false
+tasks = ["pub-hev-023"]
+
+[[cluster]]
+id = "pub-hev-027"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_074.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-027"]
+
+[[cluster]]
+id = "pub-hev-029"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_010.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-029"]
+
+[[cluster]]
+id = "pub-hev-031"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_012.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-031"]
+
+[[cluster]]
+id = "pub-hev-033"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_018.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-033"]
+
+[[cluster]]
+id = "pub-hev-035"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_139.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-035"]
+
+[[cluster]]
+id = "pub-hev-039"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_056.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-039"]
+
+[[cluster]]
+id = "pub-hev-045"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_005.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-045"]
+
+[[cluster]]
+id = "pub-hev-047"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_085.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-047"]
+
+[[cluster]]
+id = "pub-hev-055"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_050.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-055"]
+
+[[cluster]]
+id = "pub-hev-059"
+kind = "public"
+source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_080.rs (MIT (set licence; HumanEval prompts MIT))"
+role = "unassigned"
+descriptive = false
+tasks = ["pub-hev-059"]
+
+[[cluster]]
+id = "r06-backwards-correct"
+kind = "regex"
+source = "R06 BackwardsCorrect (Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsCorrect (R06.A1d); Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_correct (R06.A1v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-backwards-correct-d", "r06-backwards-correct-v"]
+
+[[cluster]]
+id = "r06-backwards-sound"
+kind = "regex"
+source = "R06 BackwardsSound (Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsSound; Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_sound)"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-backwards-sound-d", "r06-backwards-sound-v"]
+
+[[cluster]]
+id = "r06-backwards-str-append"
+kind = "regex"
+source = "R06 BackwardsStrAppend (Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsStrAppend; Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_str_append)"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-backwards-str-append-d", "r06-backwards-str-append-v"]
+
+[[cluster]]
+id = "r06-backwards-str-involution"
+kind = "regex"
+source = "R06 BackwardsStrInvolution (Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsStrInvolution; Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_str_involution)"
+role = "pilot"
+descriptive = false
+tasks = ["r06-backwards-str-involution-d", "r06-backwards-str-involution-v"]
+
+[[cluster]]
+id = "r06-deriv-correct"
+kind = "regex"
+source = "R06 DerivCorrect (Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::DerivCorrect (R06.H1d); Solutions/verus/r/r06_induction/src/lib.rs::lemma_deriv_correct (R06.H1v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-deriv-correct-d", "r06-deriv-correct-v", "r06-deriv-correct-b-d", "r06-deriv-correct-b-v"]
+
+[[cluster]]
+id = "r06-derivs-append"
+kind = "regex"
+source = "R06 DerivsAppend (Solutions/dafny/R/R06_Induction/exit/R06_Checkpoint.dfy::DerivsAppend (R06.X1d); Solutions/verus/r/r06_induction/src/exit.rs::lemma_derivs_append (R06.X1v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-derivs-append-d", "r06-derivs-append-v"]
+
+[[cluster]]
+id = "r06-star-unfold-refuted"
+kind = "regex"
+source = "R06 StarUnfoldRefuted (Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::StarUnfoldRefuted (R06.H3d); Solutions/verus/r/r06_induction/src/lib.rs::lemma_star_unfold_refuted (R06.H3v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-star-unfold-refuted-d", "r06-star-unfold-refuted-v"]
+
+[[cluster]]
+id = "r06-star-unfold"
+kind = "regex"
+source = "R06 StarUnfold (Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::StarUnfold (R06.H4d); Solutions/verus/r/r06_induction/src/lib.rs::lemma_star_unfold (R06.H4v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r06-star-unfold-d", "r06-star-unfold-v"]
+
+[[cluster]]
+id = "r09-class-nodes-correct"
+kind = "regex"
+source = "R09 RangeNodesCorrectR09 / ClassNodesCorrectR09 (target ClassNodesCorrectR09) (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::ClassNodesCorrectR09; Solutions/verus/r/r09_effects/src/lib.rs::lemma_class_nodes_r09)"
+role = "unassigned"
+descriptive = false
+tasks = ["r09-class-nodes-correct-d", "r09-class-nodes-correct-v"]
+
+[[cluster]]
+id = "r09-copies-split"
+kind = "regex"
+source = "R09 CopiesSplit (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::CopiesSplit (R09.W4d); Solutions/verus/r/r09_effects/src/lib.rs::lemma_copies_join_r09 (R09.W4v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r09-copies-split-d", "r09-copies-split-v"]
+
+[[cluster]]
+id = "r09-copies-up-to-correct"
+kind = "regex"
+source = "R09 CopiesUpToCorrect (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::CopiesUpToCorrect; Solutions/verus/r/r09_effects/src/lib.rs::lemma_copies_optional_r09)"
+role = "unassigned"
+descriptive = false
+tasks = ["r09-copies-up-to-correct-d", "r09-copies-up-to-correct-v"]
+
+[[cluster]]
+id = "r09-literal-append"
+kind = "regex"
+source = "R09 LiteralAppendR09 (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::LiteralAppendR09; Solutions/verus/r/r09_effects/src/lib.rs::lemma_literal_append_r09)"
+role = "unassigned"
+descriptive = false
+tasks = ["r09-literal-append-d", "r09-literal-append-v"]
+
+[[cluster]]
+id = "r09-lowering-nodes-correct"
+kind = "regex"
+source = "R09 LoweringNodesCorrectR09 (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::LoweringNodesCorrectR09; Solutions/verus/r/r09_effects/src/lib.rs::lemma_lowering_nodes_r09)"
+role = "unassigned"
+descriptive = false
+tasks = ["r09-lowering-nodes-correct-d", "r09-lowering-nodes-correct-v"]
+
+[[cluster]]
+id = "r09-rep-range-correct"
+kind = "regex"
+source = "R09 RepRangeCorrect (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::RepRangeCorrect (R09.H4d); Solutions/verus/r/r09_effects/src/lib.rs::lemma_repetition_interval_r09 (R09.H4v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r09-rep-range-correct-d", "r09-rep-range-correct-v"]
+
+[[cluster]]
+id = "r10-mk-cat-correct"
+kind = "regex"
+source = "R10 MkCatCorrect (Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy::MkCatCorrect; Solutions/verus/r/r10_type_invariants/src/agent.rs::lemma_mk_cat_r10_ref (renamed lemma_mk_cat_r10))"
+role = "unassigned"
+descriptive = false
+tasks = ["r10-mk-cat-correct-d", "r10-mk-cat-correct-v"]
+
+[[cluster]]
+id = "r10-star-star"
+kind = "regex"
+source = "R10 StarStar (family of MkStarCorrect, which calls it with StarOfEps) (Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy::StarStar; Solutions/verus/r/r10_type_invariants/src/agent.rs::lemma_star_star_r10_ref (renamed lemma_star_star_r10))"
+role = "unassigned"
+descriptive = false
+tasks = ["r10-star-star-d", "r10-star-star-v"]
+
+[[cluster]]
+id = "r11-rename-transport"
+kind = "regex"
+source = "R11 RenameTransportR11 (with its helper RenameSplitR11) (Solutions/dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy::RenameTransportR11; Solutions/verus/r/r11_theory/src/agent.rs::rename_transport_r11)"
+role = "unassigned"
+descriptive = false
+tasks = ["r11-rename-transport-d", "r11-rename-transport-v"]
+
+[[cluster]]
+id = "r11-residual-observe"
+kind = "regex"
+source = "R11 ResidualObserveR11 (Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::ResidualObserveR11; Solutions/verus/r/r11_theory/src/lib.rs::residual_observe_r11)"
+role = "unassigned"
+descriptive = false
+tasks = ["r11-residual-observe-d", "r11-residual-observe-v"]
+
+[[cluster]]
+id = "r11-residual-step"
+kind = "regex"
+source = "R11 ResidualStepR11 (Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::ResidualStepR11 (R11.W3d); Solutions/verus/r/r11_theory/src/lib.rs::residual_step_r11 (R11.W3v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r11-residual-step-d", "r11-residual-step-v"]
+
+[[task]]
+id = "a1b-cat-assoc-d"
+cluster = "a1b-cat-assoc"
 lang = "dafny"
-path = "bench/local/r/labalpha/accepted-ledger-d/tasks/accepted-ledger-d.dfy"
-source_sha256 = "f721b1316a83c358d8f0c36b20d4a3f86f380baf1767f963f043697da1c031f5"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "accepted-ledger"
-statement = "Count every true flag in the original ordered ledger; preserve the provided code and count model."
-admission = "bench/local/r/labalpha/accepted-ledger-d/ADMISSION.json"
-admission_sha256 = "414361d8ad1786fa7bfc6a211b915b4adfb62f396b5af280486fec68b0c438ae"
+path = "bench/local/r/labalpha/a1b-cat-assoc-d/tasks/a1b-cat-assoc-d.dfy"
+source_sha256 = "e2aaf1dcec863e700f7e091f7e404ecb66b1a9c9fe62018a2c0cd63cd2480df1"
+statement = "Complete the proof of the target lemma R12_LabCase.CatAssoc (A1b (as a task over A1 only) CatAssoc) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-cat-assoc-d/ADMISSION.json"
+admission_sha256 = "cf5e46d41527ac03d3559cfb8bdf0a344c238b910fe7f1daa13e13c94aecac44"
+target = "R12_LabCase.CatAssoc"
+sites = 4
 
-[[card]]
-id = "accepted-ledger-v"
+[[task]]
+id = "a1b-cat-assoc-v"
+cluster = "a1b-cat-assoc"
 lang = "verus"
-path = "bench/local/r/labalpha/accepted-ledger-v/tasks/accepted-ledger-v.rs"
-source_sha256 = "d034f8064417746f5743f672fe57126cc4345aa6e932c9fa9067edc98d121278"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "accepted-ledger"
-statement = "Count every true flag in the original ordered ledger; preserve the provided code and count model."
-admission = "bench/local/r/labalpha/accepted-ledger-v/ADMISSION.json"
-admission_sha256 = "d55c5cdc8e11283062496d5765874ccb3b383e568024ce4f0bc2aa9fdc381fc7"
+path = "bench/local/r/labalpha/a1b-cat-assoc-v/tasks/a1b-cat-assoc-v.rs"
+source_sha256 = "395f198d27409026e961e808d7eb73de85b08ef7988de280cfc30e701defb864"
+statement = "Complete the proof of the target lemma lemma_cat_assoc (A1b (as a task over A1 only) CatAssoc) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-cat-assoc-v/ADMISSION.json"
+admission_sha256 = "9ba4975dca074aa5fa19e4814d5715b8754ee8e8dea19f27a263176fa8309b22"
+target = "lemma_cat_assoc"
+sites = 2
 
-[[card]]
-id = "first-rejection-d"
+[[task]]
+id = "a1b-cat-eps-left-d"
+cluster = "a1b-cat-eps-left"
 lang = "dafny"
-path = "bench/local/r/labalpha/first-rejection-d/tasks/first-rejection-d.dfy"
-source_sha256 = "49617de59372b0f82588a18a474394e2ed3a25ff4a96fd18a8c2fe027338b265"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "first-rejection"
-statement = "Return the first false flag, or the original length when every flag is true."
-admission = "bench/local/r/labalpha/first-rejection-d/ADMISSION.json"
-admission_sha256 = "35c2bb92727b6516315aad67b0490f0a9aa11d443c0fb240198763721c7f981d"
+path = "bench/local/r/labalpha/a1b-cat-eps-left-d/tasks/a1b-cat-eps-left-d.dfy"
+source_sha256 = "f20f703bea00fa3cab1301a7d9867dec6b322c15e1ea047c3bd51f2b55c933be"
+statement = "Complete the proof of the target lemma R12_LabCase.CatEpsLeft (A1b (as a task over A1 only) CatEpsLeft) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-cat-eps-left-d/ADMISSION.json"
+admission_sha256 = "c93d711a9a4b8c9f48924e1d9ab71e302aeb3726f39af0bfa8c40d057d157876"
+target = "R12_LabCase.CatEpsLeft"
+sites = 1
 
-[[card]]
-id = "first-rejection-v"
+[[task]]
+id = "a1b-cat-eps-left-v"
+cluster = "a1b-cat-eps-left"
 lang = "verus"
-path = "bench/local/r/labalpha/first-rejection-v/tasks/first-rejection-v.rs"
-source_sha256 = "44d62172a501d888e20047db2f6e4c17a7460a444f1b082f05e30057eeac5120"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "first-rejection"
-statement = "Return the first false flag, or the original length when every flag is true."
-admission = "bench/local/r/labalpha/first-rejection-v/ADMISSION.json"
-admission_sha256 = "a591fd80aa40e5a50902b3a7c226763b74440175f43a06ef043baec95de0ff09"
+path = "bench/local/r/labalpha/a1b-cat-eps-left-v/tasks/a1b-cat-eps-left-v.rs"
+source_sha256 = "11f5fc82c8123cd75f73396e859000b3f30c982e89b9566f95b8f4e70decc91f"
+statement = "Complete the proof of the target lemma lemma_cat_eps_left (A1b (as a task over A1 only) CatEpsLeft) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-cat-eps-left-v/ADMISSION.json"
+admission_sha256 = "b44da20bfdd511da63a05311839d7f51fb625096c9b0dc4b79ae675de97df6a1"
+target = "lemma_cat_eps_left"
+sites = 2
 
-[[card]]
-id = "last-acceptance-d"
+[[task]]
+id = "a1b-cat-eps-right-d"
+cluster = "a1b-cat-eps-right"
 lang = "dafny"
-path = "bench/local/r/labalpha/last-acceptance-d/tasks/last-acceptance-d.dfy"
-source_sha256 = "6c1aa811934bd6245aa0e1be57a3746d11cf3772c21a5d883d7a8c53769fa7d2"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "last-acceptance"
-statement = "Return one plus the last true index, or0if none; every flag after the returned prefix must be false."
-admission = "bench/local/r/labalpha/last-acceptance-d/ADMISSION.json"
-admission_sha256 = "834e5f9542a1ec6574dc0d0de4c917a704f6f6571209b07db2a7dec719c20a8f"
+path = "bench/local/r/labalpha/a1b-cat-eps-right-d/tasks/a1b-cat-eps-right-d.dfy"
+source_sha256 = "35195058c9922f24b691e8cca1761488dac4926d5d0c4484a631d4df69c7a741"
+statement = "Complete the proof of the target lemma R12_LabCase.CatEpsRight (A1b (as a task over A1 only) CatEpsRight) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-cat-eps-right-d/ADMISSION.json"
+admission_sha256 = "c1f200ffc8cb102e809d95314ecbe5cf91584c6ffd2a57b50c100adac3fb64ac"
+target = "R12_LabCase.CatEpsRight"
+sites = 3
 
-[[card]]
-id = "last-acceptance-v"
+[[task]]
+id = "a1b-cat-eps-right-v"
+cluster = "a1b-cat-eps-right"
 lang = "verus"
-path = "bench/local/r/labalpha/last-acceptance-v/tasks/last-acceptance-v.rs"
-source_sha256 = "0e28b8341c99d0820f4f354062a878178eb11f8ed70bc6e3fc5ac2a3b299ce8c"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "last-acceptance"
-statement = "Return one plus the last true index, or0if none; every flag after the returned prefix must be false."
-admission = "bench/local/r/labalpha/last-acceptance-v/ADMISSION.json"
-admission_sha256 = "e7b5050bf5ef3fe008501766aa5e47b7fe3bbef5d149bc9bee1ee9d5015ac96a"
+path = "bench/local/r/labalpha/a1b-cat-eps-right-v/tasks/a1b-cat-eps-right-v.rs"
+source_sha256 = "4ada2bfaa62edab6eb84b0447eaeb06c46970568e8b1a7dfe44b18a2d2eeae74"
+statement = "Complete the proof of the target lemma lemma_cat_eps_right (A1b (as a task over A1 only) CatEpsRight) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-cat-eps-right-v/ADMISSION.json"
+admission_sha256 = "ad5bb921a85ee9b16578cd21127bdea3fd16612a0c5cee3b09f091ee8f474422"
+target = "lemma_cat_eps_right"
+sites = 3
 
-[[card]]
-id = "exhaust-credit-d"
+[[task]]
+id = "a1b-nullable-correct-d"
+cluster = "a1b-nullable-correct"
 lang = "dafny"
-path = "bench/local/r/labalpha/exhaust-credit-d/tasks/exhaust-credit-d.dfy"
-source_sha256 = "432690b2c322a783a6328212b4deb0e8e00a957fc1981b80efea6a605d5a9717"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "exhaust-credit"
-statement = "Consume one credit per iteration and return the exact number consumed without changing the original limit."
-admission = "bench/local/r/labalpha/exhaust-credit-d/ADMISSION.json"
-admission_sha256 = "1d2d3ec0348a0ad51490ad63172d7fb91a4098a74fae71de8c2ab301bf315296"
+path = "bench/local/r/labalpha/a1b-nullable-correct-d/tasks/a1b-nullable-correct-d.dfy"
+source_sha256 = "e34a9bc52cfff9b6511cd674c0b78ee28238b9797a771b40fe2c4cd5ba935216"
+statement = "Complete the proof of the target lemma R12_LabCase.NullableCorrect (A1b (as a task over A1 only) NullableCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-nullable-correct-d/ADMISSION.json"
+admission_sha256 = "11ff133861a7714877e5f6530188b09ff39a79fa36faa96fcf71e81437432956"
+target = "R12_LabCase.NullableCorrect"
+sites = 3
 
-[[card]]
-id = "exhaust-credit-v"
+[[task]]
+id = "a1b-nullable-correct-v"
+cluster = "a1b-nullable-correct"
 lang = "verus"
-path = "bench/local/r/labalpha/exhaust-credit-v/tasks/exhaust-credit-v.rs"
-source_sha256 = "0fe99b23a9730283cd4510d68cda3bb0599f48206ceb1cad06bcdfbd5d22bba0"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "exhaust-credit"
-statement = "Consume one credit per iteration and return the exact number consumed without changing the original limit."
-admission = "bench/local/r/labalpha/exhaust-credit-v/ADMISSION.json"
-admission_sha256 = "d4df624939ac7692ccca21d2fc186dc06f3a26911750e45fdcca9b39fcb571e9"
+path = "bench/local/r/labalpha/a1b-nullable-correct-v/tasks/a1b-nullable-correct-v.rs"
+source_sha256 = "5dacab1f3c6ff29d0ca97ff54bfbead5d1f9b936df9db55ff875c79b8887e79f"
+statement = "Complete the proof of the target lemma lemma_nullable_correct (A1b (as a task over A1 only) NullableCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-nullable-correct-v/ADMISSION.json"
+admission_sha256 = "6e10558329f50a518143bcbe8293ec8cd71ee09b4d74e77e476bcc4cb28ee126"
+target = "lemma_nullable_correct"
+sites = 2
 
-[[card]]
-id = "double-progress-d"
+[[task]]
+id = "a1b-star-concat-d"
+cluster = "a1b-star-concat"
 lang = "dafny"
-path = "bench/local/r/labalpha/double-progress-d/tasks/double-progress-d.dfy"
-source_sha256 = "38272e5a793683776022b673799bb9fc3e06862b064d7f4a3be545fb0f5df6ab"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "double-progress"
-statement = "Advance a counter and its doubled output together under the original n<=1000 domain."
-admission = "bench/local/r/labalpha/double-progress-d/ADMISSION.json"
-admission_sha256 = "8592501a50e8c2973e74638127bd1771b2c34ac33d0250e0bfa0baddf110d6f5"
+path = "bench/local/r/labalpha/a1b-star-concat-d/tasks/a1b-star-concat-d.dfy"
+source_sha256 = "832b5258a77e418af860794b2316830c2d53b6e526c407a67b75a590d0a7052c"
+statement = "Complete the proof of the target lemma R12_LabCase.StarConcat (A1b (as a task over A1 only) StarConcat) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-star-concat-d/ADMISSION.json"
+admission_sha256 = "f99cd74be6e44c2333f0e6af9f39a878647c8a1d3df652821765281d0703f921"
+target = "R12_LabCase.StarConcat"
+sites = 4
 
-[[card]]
-id = "double-progress-v"
+[[task]]
+id = "a1b-star-concat-v"
+cluster = "a1b-star-concat"
 lang = "verus"
-path = "bench/local/r/labalpha/double-progress-v/tasks/double-progress-v.rs"
-source_sha256 = "5e55ed12cfa89a11902e4453e408c0c8c388507783fb8bcbc48c1c553b124349"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "double-progress"
-statement = "Advance a counter and its doubled output together under the original n<=1000 domain."
-admission = "bench/local/r/labalpha/double-progress-v/ADMISSION.json"
-admission_sha256 = "a53827fa83a3b466a570a4a72d92e8d7a5d27dadb3b64b3f52a8128dfb8c760e"
+path = "bench/local/r/labalpha/a1b-star-concat-v/tasks/a1b-star-concat-v.rs"
+source_sha256 = "c5645a93c87c0b1d43fdd3d8ad4ad6ab923348e0cd035a26caed130d160f5c60"
+statement = "Complete the proof of the target lemma lemma_star_concat (A1b (as a task over A1 only) StarConcat) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-star-concat-v/ADMISSION.json"
+admission_sha256 = "6ae6b27ee8f9ce2b1bd61457f9b69d112185f466b99297e960947be6acc7d7e3"
+target = "lemma_star_concat"
+sites = 1
 
-[[card]]
-id = "all-accepted-d"
+[[task]]
+id = "a1b-star-one-d"
+cluster = "a1b-star-one"
 lang = "dafny"
-path = "bench/local/r/labalpha/all-accepted-d/tasks/all-accepted-d.dfy"
-source_sha256 = "7cac6a03a21cc71d26f04974e1e009a8a8a275e741af596a3db22f19f0bdf3ef"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "all-accepted"
-statement = "Return the universal truth of flags over the original full ledger, including empty input."
-admission = "bench/local/r/labalpha/all-accepted-d/ADMISSION.json"
-admission_sha256 = "697620fef42344149fc79fb06b5ccade94f84b279b826da70191222381167409"
+path = "bench/local/r/labalpha/a1b-star-one-d/tasks/a1b-star-one-d.dfy"
+source_sha256 = "9805b3def5ea1be1d785528fc2b0814892a49cd0771e41df24c0d29399dd0ebd"
+statement = "Complete the proof of the target lemma R12_LabCase.StarOne (A1b (as a task over A1 only) StarOne) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-star-one-d/ADMISSION.json"
+admission_sha256 = "e3d0920bbabe6abbdecbf88ad3e44c7536a51d5396e84790ea6096a5e438aa85"
+target = "R12_LabCase.StarOne"
+sites = 1
 
-[[card]]
-id = "all-accepted-v"
+[[task]]
+id = "a1b-star-one-v"
+cluster = "a1b-star-one"
 lang = "verus"
-path = "bench/local/r/labalpha/all-accepted-v/tasks/all-accepted-v.rs"
-source_sha256 = "d71c30a44aab124ceb7d8c720acfaed927d2c58366dddad4e5ff07bd26bb5be4"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "all-accepted"
-statement = "Return the universal truth of flags over the original full ledger, including empty input."
-admission = "bench/local/r/labalpha/all-accepted-v/ADMISSION.json"
-admission_sha256 = "2ce23fe72737a8d61398d0bd208b88591eeb0030aa6e02ba5bfa15ea885df0a1"
+path = "bench/local/r/labalpha/a1b-star-one-v/tasks/a1b-star-one-v.rs"
+source_sha256 = "7837596ce05daf92f3926856c8eb479b823c477cb2b4349d7c8c25b2ae1467d9"
+statement = "Complete the proof of the target lemma lemma_star_one (A1b (as a task over A1 only) StarOne) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/a1b-star-one-v/ADMISSION.json"
+admission_sha256 = "34b9aa3a4424e68f95d0a9e5c03cf8e8e15d933a9126e7920398ef1ef72cd72b"
+target = "lemma_star_one"
+sites = 1
 
-[[card]]
-id = "any-accepted-d"
+[[task]]
+id = "pub-db-000"
+cluster = "pub-db-000"
 lang = "dafny"
-path = "bench/local/r/labalpha/any-accepted-d/tasks/any-accepted-d.dfy"
-source_sha256 = "34e6c9b65e3eb4ef280aa7460b6b4e6da4c952759828f3b8aa5fb73590489cca"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "any-accepted"
-statement = "Return the existential truth of flags over the original full ledger, including empty input."
-admission = "bench/local/r/labalpha/any-accepted-d/ADMISSION.json"
-admission_sha256 = "23ccc28d49fdd3962e6ea9332e50868613b6f83bdf5840e0995ab729d1330a52"
+path = "bench/local/r/labalpha/pub-db-000/tasks/pub-db-000.dfy"
+source_sha256 = "14ae0078c16a8063a339098990cabe16b94257aaed287b29533f3c123e430df1"
+statement = "Complete the verification of the target selectionSort (public task bench/public/dafnybench/answers/feup-mfes_tmp_tmp6_a1y5a5_examples_SelectionSort.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-000/ADMISSION.json"
+admission_sha256 = "8d771e51488080b8fdcb62a634e4a31dfad8b553bc47c40f1107ab77ae8247ac"
+target = "selectionSort"
+sites = 4
 
-[[card]]
-id = "any-accepted-v"
-lang = "verus"
-path = "bench/local/r/labalpha/any-accepted-v/tasks/any-accepted-v.rs"
-source_sha256 = "d98cbbc7a14ba25286faf544ddd794100b9c3b00728612b72e2fa756f81375c3"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "any-accepted"
-statement = "Return the existential truth of flags over the original full ledger, including empty input."
-admission = "bench/local/r/labalpha/any-accepted-v/ADMISSION.json"
-admission_sha256 = "a598682d3733eecab04dd3430e8ae819f75be8fcb53d13691501a607b9835806"
-
-[[card]]
-id = "copy-ledger-d"
+[[task]]
+id = "pub-db-002"
+cluster = "pub-db-002"
 lang = "dafny"
-path = "bench/local/r/labalpha/copy-ledger-d/tasks/copy-ledger-d.dfy"
-source_sha256 = "c162f524143bce6de5c1efe573850ccf5b3fd37a7ece5914cb2412767228b2d2"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "copy-ledger"
-statement = "Produce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
-admission = "bench/local/r/labalpha/copy-ledger-d/ADMISSION.json"
-admission_sha256 = "7382f230392f54faaacf329807e995351bb7d06df422837b9068e2eebc0ab7e6"
+path = "bench/local/r/labalpha/pub-db-002/tasks/pub-db-002.dfy"
+source_sha256 = "75b4ec0b71310b0a278064e501af785f545dd9112534aaefdd26b052890d14da"
+statement = "Complete the verification of the target double_array_elements (public task bench/public/dafnybench/answers/Clover_double_array_elements.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-002/ADMISSION.json"
+admission_sha256 = "16720fc1bb8de1863d51943a1d37d9b6890053d42dd4138292614af70da0407c"
+target = "double_array_elements"
+sites = 3
 
-[[card]]
-id = "copy-ledger-v"
-lang = "verus"
-path = "bench/local/r/labalpha/copy-ledger-v/tasks/copy-ledger-v.rs"
-source_sha256 = "b4c2b67c83f8538f22be880bb408117bb0283c59b108df0b433b7cd188bdcbdb"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "copy-ledger"
-statement = "Produce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
-admission = "bench/local/r/labalpha/copy-ledger-v/ADMISSION.json"
-admission_sha256 = "5c93da62db3af1f4ae4bee770b5aac9da9535ec8f45331c7f632b218e4994924"
-
-[[card]]
-id = "reverse-ledger-d"
+[[task]]
+id = "pub-db-004"
+cluster = "pub-db-004"
 lang = "dafny"
-path = "bench/local/r/labalpha/reverse-ledger-d/tasks/reverse-ledger-d.dfy"
-source_sha256 = "4da5c171becde4c07d17bb46f6ead77ff83cfa9694c0a8246c942b1771b2c3d0"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "reverse-ledger"
-statement = "Produce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
-admission = "bench/local/r/labalpha/reverse-ledger-d/ADMISSION.json"
-admission_sha256 = "bc1b0e42ce6c6429796eed2b83136a7c430c9b3c5314acdb4461026e6186d1a2"
+path = "bench/local/r/labalpha/pub-db-004/tasks/pub-db-004.dfy"
+source_sha256 = "48d97d0a82dbf63767a2d7072b9b702348ebcbfe0ef8b9e9de9b002f113e152c"
+statement = "Complete the verification of the target LinearSearch (public task bench/public/dafnybench/answers/ironsync-osdi2023_tmp_tmpx80antoe_linear-dafny_Test_c++_arrays.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-004/ADMISSION.json"
+admission_sha256 = "f733254be5c0749649c0b57625ac67f19072f56681a0a5a14fb7edcc4d21ffbf"
+target = "LinearSearch"
+sites = 1
 
-[[card]]
-id = "reverse-ledger-v"
-lang = "verus"
-path = "bench/local/r/labalpha/reverse-ledger-v/tasks/reverse-ledger-v.rs"
-source_sha256 = "369b7e5113a8f7f24dbbad516af4812edd368a4afd1556e7fc4efd9272342656"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "reverse-ledger"
-statement = "Produce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
-admission = "bench/local/r/labalpha/reverse-ledger-v/ADMISSION.json"
-admission_sha256 = "da3d0b27005d1fdcefdeadfb78e660d0a32d01c27a3d24d9147e150dc15314ed"
-
-[[card]]
-id = "negate-ledger-d"
+[[task]]
+id = "pub-db-006"
+cluster = "pub-db-006"
 lang = "dafny"
-path = "bench/local/r/labalpha/negate-ledger-d/tasks/negate-ledger-d.dfy"
-source_sha256 = "4b423cb86c889d53ed124027d09cbe38c46fd110353ed2c740381820a4598431"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "negate-ledger"
-statement = "Produce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
-admission = "bench/local/r/labalpha/negate-ledger-d/ADMISSION.json"
-admission_sha256 = "b1bd339e0b4384d3402983f484bf111aa23069b3eb1fc437cbfa6cb2ee163c36"
+path = "bench/local/r/labalpha/pub-db-006/tasks/pub-db-006.dfy"
+source_sha256 = "a449e2dc496a45c463bad22906b513affa72493e34e47cb964582ddbc0c99383"
+statement = "Complete the verification of the target Getmini (public task bench/public/dafnybench/answers/SENG2011_tmp_tmpgk5jq85q_exam_ex2.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-006/ADMISSION.json"
+admission_sha256 = "a09151f2e3f406ddb9a011f01c9cadbc834457fa0f97f35356d6067202937aeb"
+target = "Getmini"
+sites = 5
 
-[[card]]
-id = "negate-ledger-v"
-lang = "verus"
-path = "bench/local/r/labalpha/negate-ledger-v/tasks/negate-ledger-v.rs"
-source_sha256 = "9e4464f4879dcf5a6e0ccbbca0bc782da848c0f4f4616a84a8c9f6dff65c3b9e"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "negate-ledger"
-statement = "Produce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
-admission = "bench/local/r/labalpha/negate-ledger-v/ADMISSION.json"
-admission_sha256 = "539c2410681a52698681059b49b68bdefaa3d594d2539916b5f8adc3cad43095"
-
-[[card]]
-id = "concat-ledgers-d"
+[[task]]
+id = "pub-db-008"
+cluster = "pub-db-008"
 lang = "dafny"
-path = "bench/local/r/labalpha/concat-ledgers-d/tasks/concat-ledgers-d.dfy"
-source_sha256 = "8eded43c836c73dad4796ffe98003254a6e334ae7d30c5ab650875b5eac10156"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "concat-ledgers"
-statement = "Concatenate two immutable flag ledgers, preserving both ordered input segments. Verus requires the combined length to be representable."
-admission = "bench/local/r/labalpha/concat-ledgers-d/ADMISSION.json"
-admission_sha256 = "344d9d535c7b34137f504e970f055e36cc5580c6c48999d6cf5ecf6871536471"
+path = "bench/local/r/labalpha/pub-db-008/tasks/pub-db-008.dfy"
+source_sha256 = "623bdf021effcb2a0edb48c835a227b3c8cc4d00e91471fc793197903fe8f482"
+statement = "Complete the verification of the target Fib (public task bench/public/dafnybench/answers/Software-building-and-verification-Projects_tmp_tmp5tm1srrn_CVS-projeto_aula3.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-008/ADMISSION.json"
+admission_sha256 = "7d65f87e3eb940228e2b5aef7ef24b4adbab74c70b7876f1807e10c4a3c3daf6"
+target = "Fib"
+sites = 4
 
-[[card]]
-id = "concat-ledgers-v"
-lang = "verus"
-path = "bench/local/r/labalpha/concat-ledgers-v/tasks/concat-ledgers-v.rs"
-source_sha256 = "b7cac53cb32a1701c455f6af1950ec53c72d596e6e37a5faead95b98d2de7a57"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "concat-ledgers"
-statement = "Concatenate two immutable flag ledgers, preserving both ordered input segments. Verus requires the combined length to be representable."
-admission = "bench/local/r/labalpha/concat-ledgers-v/ADMISSION.json"
-admission_sha256 = "c3452e6eea9ee61b53c91a6d5b0a2d3bb3622332ffaeb2d7667a2427d7eed0ab"
-
-[[card]]
-id = "rotate-ledger-d"
+[[task]]
+id = "pub-db-010"
+cluster = "pub-db-010"
 lang = "dafny"
-path = "bench/local/r/labalpha/rotate-ledger-d/tasks/rotate-ledger-d.dfy"
-source_sha256 = "46e026d33d6c2d9b13009a45e89da80c98ff493672258f29313fc3843b2f745c"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "rotate-ledger"
-statement = "Rotate a nonempty immutable flag ledger left by one position, retaining the last-to-first boundary case."
-admission = "bench/local/r/labalpha/rotate-ledger-d/ADMISSION.json"
-admission_sha256 = "25d3d1fc2312fe25182ba516776e035b9a7ad4eba971cf90b98e80ae058606aa"
+path = "bench/local/r/labalpha/pub-db-010/tasks/pub-db-010.dfy"
+source_sha256 = "a7487d65bf413714c7bbc07551279fb902608da1b8a6ae9f7dc47fec4d1329af"
+statement = "Complete the verification of the target LinearSearch (public task bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_Generated_Code_LinearSearch.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-010/ADMISSION.json"
+admission_sha256 = "e461e3d3ff91e2b13eef71d0298c95422f3ad5a9c6c2a7e36722095e6ecca219"
+target = "LinearSearch"
+sites = 2
 
-[[card]]
-id = "rotate-ledger-v"
-lang = "verus"
-path = "bench/local/r/labalpha/rotate-ledger-v/tasks/rotate-ledger-v.rs"
-source_sha256 = "95171a609fa1b3212483e380ffd03cda25e736f9d93d8a7cb036664aa8ba7474"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "rotate-ledger"
-statement = "Rotate a nonempty immutable flag ledger left by one position, retaining the last-to-first boundary case."
-admission = "bench/local/r/labalpha/rotate-ledger-v/ADMISSION.json"
-admission_sha256 = "5ef19ac15f314c5879f91d0f1aa17ebd95736c4088309a3d4de202c3baca71f7"
-
-[[card]]
-id = "sum-prefix-indices-d"
+[[task]]
+id = "pub-db-012"
+cluster = "pub-db-012"
 lang = "dafny"
-path = "bench/local/r/labalpha/sum-prefix-indices-d/tasks/sum-prefix-indices-d.dfy"
-source_sha256 = "113d5ed83b2853bed86f11286b8004aef322b5448e76e1a5b27f8427b7876a61"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "sum-prefix-indices"
-statement = "Compute the original recursive arithmetic model by a provided bounded executable loop; keep the original n<=1000 domain."
-admission = "bench/local/r/labalpha/sum-prefix-indices-d/ADMISSION.json"
-admission_sha256 = "019d152cd0253bdd63f5e76a8c347d22304b933f5535d29b52d4255b7751b728"
+path = "bench/local/r/labalpha/pub-db-012/tasks/pub-db-012.dfy"
+source_sha256 = "67b568de94401796d77f64d2807253e9c8876ef3af79397dd25c3e129c3231b6"
+statement = "Complete the verification of the target AllSequencesEqualLength (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_70.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-012/ADMISSION.json"
+admission_sha256 = "963221d67c67326e9f602c2a91e97013e7bdcef9cb79e17315be9715fbcfd3dc"
+target = "AllSequencesEqualLength"
+sites = 2
 
-[[card]]
-id = "sum-prefix-indices-v"
-lang = "verus"
-path = "bench/local/r/labalpha/sum-prefix-indices-v/tasks/sum-prefix-indices-v.rs"
-source_sha256 = "81d58db92e58d6887388cbb5a935c08d273ac703bf34caafae41eb061e4d0bfc"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "sum-prefix-indices"
-statement = "Compute the original recursive arithmetic model by a provided bounded executable loop; keep the original n<=1000 domain."
-admission = "bench/local/r/labalpha/sum-prefix-indices-v/ADMISSION.json"
-admission_sha256 = "11bb50cd2bd79449a09680e932f133fdfe8a730ed525e345d01e7a3503902e71"
-
-[[card]]
-id = "sum-prefix-odds-d"
+[[task]]
+id = "pub-db-014"
+cluster = "pub-db-014"
 lang = "dafny"
-path = "bench/local/r/labalpha/sum-prefix-odds-d/tasks/sum-prefix-odds-d.dfy"
-source_sha256 = "533fc81ab85993767c0db6adfdf5f7b1616831183d9b37b7c5578b18cbf17805"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "sum-prefix-odds"
-statement = "Compute the original recursive arithmetic model by a provided bounded executable loop; keep the original n<=1000 domain."
-admission = "bench/local/r/labalpha/sum-prefix-odds-d/ADMISSION.json"
-admission_sha256 = "ada0f9d297840db3b9a3e36d65077fa007d03e397c740072cfafb9867fd8e39c"
+path = "bench/local/r/labalpha/pub-db-014/tasks/pub-db-014.dfy"
+source_sha256 = "6ae9843e8d0b9619ccab4fd517ddd66c1d2824a2c440ff1e911f829610ed006e"
+statement = "Complete the verification of the target mallEqual5 (public task bench/public/dafnybench/answers/Dafny-Exercises_tmp_tmpjm75muf__Session4Exercises_ExerciseAllEqual.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-014/ADMISSION.json"
+admission_sha256 = "630660e20279737efe896c0c59da9b84522301e0d111d3894e98b9123b90c99c"
+target = "mallEqual5"
+sites = 3
 
-[[card]]
-id = "sum-prefix-odds-v"
-lang = "verus"
-path = "bench/local/r/labalpha/sum-prefix-odds-v/tasks/sum-prefix-odds-v.rs"
-source_sha256 = "cb8671c3a90e4e7fb33dcbd53cd979a316286750b7c0128deaf248a3995f06f1"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "sum-prefix-odds"
-statement = "Compute the original recursive arithmetic model by a provided bounded executable loop; keep the original n<=1000 domain."
-admission = "bench/local/r/labalpha/sum-prefix-odds-v/ADMISSION.json"
-admission_sha256 = "c78cb6f2dbc17a4bfe35041d62637b2d344e94322fc4dd53f24cb980f71db916"
-
-[[card]]
-id = "repeat-increment-d"
+[[task]]
+id = "pub-db-016"
+cluster = "pub-db-016"
 lang = "dafny"
-path = "bench/local/r/labalpha/repeat-increment-d/tasks/repeat-increment-d.dfy"
-source_sha256 = "fa6d994eb76ec06bf3938fd7773f231c2bc735139acd6f912146f0fca3c672f0"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "repeat-increment"
-statement = "Compute the original recursive arithmetic model by a provided bounded executable loop; keep the original n<=1000 and amount<=1000 domain."
-admission = "bench/local/r/labalpha/repeat-increment-d/ADMISSION.json"
-admission_sha256 = "d3cb611445dc275416b92217f06ca0cbc35fb354ae317a513508bef1f96e609f"
+path = "bench/local/r/labalpha/pub-db-016/tasks/pub-db-016.dfy"
+source_sha256 = "96f4f1aaf0baa8e508245322ae8980adb006408840cf9d012c50b1bc738f8ac7"
+statement = "Complete the verification of the target Pow (public task bench/public/dafnybench/answers/Prog-Fun-Solutions_tmp_tmp7_gmnz5f_extra_pow.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-016/ADMISSION.json"
+admission_sha256 = "704b293db6cd852af72305dcc326502bcbc320d57f1f3b655c7686f37fbfed08"
+target = "Pow"
+sites = 8
 
-[[card]]
-id = "repeat-increment-v"
-lang = "verus"
-path = "bench/local/r/labalpha/repeat-increment-v/tasks/repeat-increment-v.rs"
-source_sha256 = "aef301b4caa1bddb8e6eafee5bcc7082b0c49dff72099ce1a09164eaee3663be"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "repeat-increment"
-statement = "Compute the original recursive arithmetic model by a provided bounded executable loop; keep the original n<=1000 and amount<=1000 domain."
-admission = "bench/local/r/labalpha/repeat-increment-v/ADMISSION.json"
-admission_sha256 = "9581d2f98fd625d739add3634c6f0be190a49221968f76fe939cc90ca8929bb2"
-
-[[card]]
-id = "quotient-three-d"
+[[task]]
+id = "pub-db-020"
+cluster = "pub-db-020"
 lang = "dafny"
-path = "bench/local/r/labalpha/quotient-three-d/tasks/quotient-three-d.dfy"
-source_sha256 = "adc165e3a254690fc81b35a14265ffb1dad3bd254cc3f0c828d4ecad766eb909"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "quotient-three"
-statement = "Compute division by3by repeatedly consuming three credits; return the exact Euclidean quotient."
-admission = "bench/local/r/labalpha/quotient-three-d/ADMISSION.json"
-admission_sha256 = "933b25385162bf93c78f2d5be215e1df618c58c7037c2fe9553d31c7494af39e"
+path = "bench/local/r/labalpha/pub-db-020/tasks/pub-db-020.dfy"
+source_sha256 = "c7a6ff98eebdf8d5861aae12740f68032f13316c8a5e9711a9b166f88b860e03"
+statement = "Complete the verification of the target SumAndAverage (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_599.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-020/ADMISSION.json"
+admission_sha256 = "8c2e1452d4e943d31e5fc799716a8222862d7b06111960fc6fa8d671ce1d1341"
+target = "SumAndAverage"
+sites = 2
 
-[[card]]
-id = "quotient-three-v"
-lang = "verus"
-path = "bench/local/r/labalpha/quotient-three-v/tasks/quotient-three-v.rs"
-source_sha256 = "6de853e642bfeafba9dc8dcff4e85c3701429235830ce6fd53f457ddf7aaf80d"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "quotient-three"
-statement = "Compute division by3by repeatedly consuming three credits; return the exact Euclidean quotient."
-admission = "bench/local/r/labalpha/quotient-three-v/ADMISSION.json"
-admission_sha256 = "568aac9ba856b839273dbc47b9b4a5af9611453747661b187f4cc2dc29f8f2ef"
-
-[[card]]
-id = "remainder-three-d"
+[[task]]
+id = "pub-db-022"
+cluster = "pub-db-022"
 lang = "dafny"
-path = "bench/local/r/labalpha/remainder-three-d/tasks/remainder-three-d.dfy"
-source_sha256 = "e4abbfc0c54342fb03317edf7bc9355c1128272501d0e5e11294c972f6573f87"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "remainder-three"
-statement = "Advance a cyclic0/1/2counter for every original input position and return n modulo3."
-admission = "bench/local/r/labalpha/remainder-three-d/ADMISSION.json"
-admission_sha256 = "1c0f828941b34403e955d0e6d0ab23d162aa673e791291a15f8217b492a60aa8"
+path = "bench/local/r/labalpha/pub-db-022/tasks/pub-db-022.dfy"
+source_sha256 = "12b71108daaca05985ce5cd7b0472fb72186b5c79443c49074a8bfc36decfe4f"
+statement = "Complete the verification of the target partition (public task bench/public/dafnybench/answers/MIEIC_mfes_tmp_tmpq3ho7nve_exams_mt2_19_p5.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-022/ADMISSION.json"
+admission_sha256 = "2d6cfa9578f5bd7777bc2c26711816b6565dd340de1f326b1bbd8f855438467c"
+target = "partition"
+sites = 4
 
-[[card]]
-id = "remainder-three-v"
-lang = "verus"
-path = "bench/local/r/labalpha/remainder-three-v/tasks/remainder-three-v.rs"
-source_sha256 = "05db7540ba4add77c916396b85123d3092c0298868f028db88d922e4d408f035"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "remainder-three"
-statement = "Advance a cyclic0/1/2counter for every original input position and return n modulo3."
-admission = "bench/local/r/labalpha/remainder-three-v/ADMISSION.json"
-admission_sha256 = "8a5f1ab362302f175a11cc7f8842c38f1636d5fdd0a8ab07fae580d849f9d40e"
-
-[[card]]
-id = "first-mismatch-d"
+[[task]]
+id = "pub-db-024"
+cluster = "pub-db-024"
 lang = "dafny"
-path = "bench/local/r/labalpha/first-mismatch-d/tasks/first-mismatch-d.dfy"
-source_sha256 = "5d38a6cd64d693648611e1aa1ecca03954ef18657b9efbf1cff485415cc48d6f"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "first-mismatch"
-statement = "Compare equally long original flag ledgers and return the first unequal position, or their length."
-admission = "bench/local/r/labalpha/first-mismatch-d/ADMISSION.json"
-admission_sha256 = "9646c2c29c05ae818fd2d95d6553c8ba74e62bd1a8cfb43254522009f697bb87"
+path = "bench/local/r/labalpha/pub-db-024/tasks/pub-db-024.dfy"
+source_sha256 = "58d72242da721f9605f915f649bd53fc18837211c275f8b0f1894897b7e157fb"
+statement = "Complete the verification of the target Pot (public task bench/public/dafnybench/answers/Metodos_Formais_tmp_tmpql2hwcsh_Invariantes_potencia.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-024/ADMISSION.json"
+admission_sha256 = "d9ea7f26b274492c4be7a5ee1784ed063f1be2c5efa0bf16e6420b4c09f45d58"
+target = "Pot"
+sites = 1
 
-[[card]]
-id = "first-mismatch-v"
-lang = "verus"
-path = "bench/local/r/labalpha/first-mismatch-v/tasks/first-mismatch-v.rs"
-source_sha256 = "d317c7f80b2e6a3b8b72474e47b13b086802fff16786faf7a96bbccc54dd0d18"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "first-mismatch"
-statement = "Compare equally long original flag ledgers and return the first unequal position, or their length."
-admission = "bench/local/r/labalpha/first-mismatch-v/ADMISSION.json"
-admission_sha256 = "b3b01895a1d2744cfe084a29f1a33ada083097164841e034046dc8321e11ac49"
-
-[[card]]
-id = "minimum-value-d"
+[[task]]
+id = "pub-db-026"
+cluster = "pub-db-026"
 lang = "dafny"
-path = "bench/local/r/labalpha/minimum-value-d/tasks/minimum-value-d.dfy"
-source_sha256 = "c5ee4afac5304abbeb4d138ded5e5053573a21ec2a29f2335134464b00214c5e"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "minimum-value"
-statement = "Return an extremal element of the original nonempty sequence; preserve both the bound and an actual membership witness."
-admission = "bench/local/r/labalpha/minimum-value-d/ADMISSION.json"
-admission_sha256 = "aeab0dd9747fc052b45fa7defd17fd7446bd7a63c949aa9eddd1f257995dd42f"
+path = "bench/local/r/labalpha/pub-db-026/tasks/pub-db-026.dfy"
+source_sha256 = "17ac1e72700e26caac742257d8e0c1726952ea2de6084c8ec84e45aecdf444d3"
+statement = "Complete the verification of the target Busca (public task bench/public/dafnybench/answers/t1_MF_tmp_tmpi_sqie4j_exemplos_colecoes_arrays_ex5.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-026/ADMISSION.json"
+admission_sha256 = "7f33cc87ce753aeec61949fc19a35d9443a8cccf1321d2b7a8577e845160af4e"
+target = "Busca"
+sites = 2
 
-[[card]]
-id = "minimum-value-v"
-lang = "verus"
-path = "bench/local/r/labalpha/minimum-value-v/tasks/minimum-value-v.rs"
-source_sha256 = "dc7bbcf1944fbcb89c655029e6a33da403018c6f8db91230e0994ef2c99f3ce1"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "minimum-value"
-statement = "Return an extremal element of the original nonempty sequence; preserve both the bound and an actual membership witness."
-admission = "bench/local/r/labalpha/minimum-value-v/ADMISSION.json"
-admission_sha256 = "0f454e139c6c24dab9f6e8af58dd41c84c42d426544ea185b8ae5e7b6951ac93"
-
-[[card]]
-id = "maximum-value-d"
+[[task]]
+id = "pub-db-028"
+cluster = "pub-db-028"
 lang = "dafny"
-path = "bench/local/r/labalpha/maximum-value-d/tasks/maximum-value-d.dfy"
-source_sha256 = "647c4d9008f064c6f5cc162c58f89838239cc22daf306157495393c281b12700"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "maximum-value"
-statement = "Return an extremal element of the original nonempty sequence; preserve both the bound and an actual membership witness."
-admission = "bench/local/r/labalpha/maximum-value-d/ADMISSION.json"
-admission_sha256 = "e9253cbc5319670817a701115705cb472be24fc8c4a538005af83a54f90879ac"
+path = "bench/local/r/labalpha/pub-db-028/tasks/pub-db-028.dfy"
+source_sha256 = "1bd57f229627166a384ebfa6661bfac1459bf7cddec470758e1ddfc0335dd8da"
+statement = "Complete the verification of the target MaxArray (public task bench/public/dafnybench/answers/dafny-exercise_tmp_tmpouftptir_maxArray.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-028/ADMISSION.json"
+admission_sha256 = "7d03e2982cdbe5be6a155ca63e43b650d03573854b30d2094557e4d711ef2082"
+target = "MaxArray"
+sites = 3
 
-[[card]]
-id = "maximum-value-v"
+[[task]]
+id = "pub-db-030"
+cluster = "pub-db-030"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-030/tasks/pub-db-030.dfy"
+source_sha256 = "9e9f6c900b714c4c5aad6aba7f974c77279fc446eaf739f5258044c63b16f7bc"
+statement = "Complete the verification of the target SelectionSort (public task bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_dataset_detailed_examples_SelectionSort.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-030/ADMISSION.json"
+admission_sha256 = "feba8a563d07a6ce6845f7320cc725fb9312ffb77fd358282746385536bf7409"
+target = "SelectionSort"
+sites = 8
+
+[[task]]
+id = "pub-db-032"
+cluster = "pub-db-032"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-032/tasks/pub-db-032.dfy"
+source_sha256 = "92cc8e711c00bca7f0263046f787dd892645b42a2e08e6b62fcd562b0a80dcbd"
+statement = "Complete the verification of the target IsEvenAtIndexEven (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_790.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-032/ADMISSION.json"
+admission_sha256 = "a84a676cab0345562960546c7369b69efa69db5bd30c6395ddf4e0fcc9216e09"
+target = "IsEvenAtIndexEven"
+sites = 2
+
+[[task]]
+id = "pub-db-034"
+cluster = "pub-db-034"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-034/tasks/pub-db-034.dfy"
+source_sha256 = "ef2b05936a2efa2029e525aba7f60ac261792eccd4992777f95ef988cac650bc"
+statement = "Complete the verification of the target CountLessThan (public task bench/public/dafnybench/answers/Clover_count_lessthan.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-034/ADMISSION.json"
+admission_sha256 = "28570210f55d229239c4372c2e0b7fb5852045294f6cb2bda18224f30492c532"
+target = "CountLessThan"
+sites = 3
+
+[[task]]
+id = "pub-db-036"
+cluster = "pub-db-036"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-036/tasks/pub-db-036.dfy"
+source_sha256 = "eb798429406938013f383df500747a91acf6cd0ba2dca2e1ff0fc7d9aca05bfc"
+statement = "Complete the verification of the target IncrementMatrix (public task bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_AI_agent_verify_examples_IncrementMatrix.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-036/ADMISSION.json"
+admission_sha256 = "a09a75e5745cbe811216691918b66c968b5aa87fda721a9aaf403a03efd40ef2"
+target = "IncrementMatrix"
+sites = 8
+
+[[task]]
+id = "pub-db-038"
+cluster = "pub-db-038"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-038/tasks/pub-db-038.dfy"
+source_sha256 = "674fad2ca69ef8c8bc9517afff665959f13da6d3afe85ace49880acf24fa3060"
+statement = "Complete the verification of the target remove_front (public task bench/public/dafnybench/answers/Clover_remove_front.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-038/ADMISSION.json"
+admission_sha256 = "aae6a88d30f4485f5255a4320cc6e74e1ddff2c0a419e74e7f5e5687fb976d16"
+target = "remove_front"
+sites = 2
+
+[[task]]
+id = "pub-db-040"
+cluster = "pub-db-040"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-040/tasks/pub-db-040.dfy"
+source_sha256 = "4c849106e48d1249f5a7507ed272753345be36709ccc8cc007af88a4b26a0540"
+statement = "Complete the verification of the target SelectionSort (public task bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_Test_Cases_solved_1_select.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-040/ADMISSION.json"
+admission_sha256 = "37dbebe3216a6421c2616ffc821b38bef77c964239c278912bca3d6336d01b1a"
+target = "SelectionSort"
+sites = 8
+
+[[task]]
+id = "pub-db-042"
+cluster = "pub-db-042"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-042/tasks/pub-db-042.dfy"
+source_sha256 = "fc3c36eeae38d7b0b4f6db5455df3544b09c8f5879f2d7d24882f14dc963b150"
+statement = "Complete the verification of the target SharedElements (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_2.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-042/ADMISSION.json"
+admission_sha256 = "f5a9bcf08c6c5a6cece6ac8a902673471715e3be16de4a7feb41b3f048fc2c4e"
+target = "SharedElements"
+sites = 3
+
+[[task]]
+id = "pub-db-044"
+cluster = "pub-db-044"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-044/tasks/pub-db-044.dfy"
+source_sha256 = "225259ba8c633f8decac8fb55355047028d7c0d7933facc4688429e70b70e5a1"
+statement = "Complete the verification of the target BinarySearch (public task bench/public/dafnybench/answers/630-dafny_tmp_tmpz2kokaiq_Solution.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-044/ADMISSION.json"
+admission_sha256 = "90cada98a5203603f755c492c4a252170de56a8ebf90cce5f44864e989820651"
+target = "BinarySearch"
+sites = 2
+
+[[task]]
+id = "pub-db-048"
+cluster = "pub-db-048"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-048/tasks/pub-db-048.dfy"
+source_sha256 = "8450147c2645247cd105cc24d759b9272438561c88624cf169dbdbc4365a7149"
+statement = "Complete the verification of the target Interleave (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_578.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-048/ADMISSION.json"
+admission_sha256 = "0f3935f2f13bb41dc18a7add05cc4f17f2ce4e1ca37c66cdeda610a897cef8fb"
+target = "Interleave"
+sites = 3
+
+[[task]]
+id = "pub-db-050"
+cluster = "pub-db-050"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-050/tasks/pub-db-050.dfy"
+source_sha256 = "d17770597e5e8b464c9cc2ce1480c15eaaa60ca8f2b588a6e9624f11e5a2fd46"
+statement = "Complete the verification of the target DeepCopySeq (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_307.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-050/ADMISSION.json"
+admission_sha256 = "90ae05f5b3b70c04ae86e81cc27d3764debab4b7080513243a416ee781f4c496"
+target = "DeepCopySeq"
+sites = 3
+
+[[task]]
+id = "pub-db-052"
+cluster = "pub-db-052"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-052/tasks/pub-db-052.dfy"
+source_sha256 = "5883675a32b05368562ce84f432a4d94514df25df2aae3452d2abce173b417ec"
+statement = "Complete the verification of the target FindEvenNumbers (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_629.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-052/ADMISSION.json"
+admission_sha256 = "0f3e340a3bd72e32df6d71e1609595be3be23ebab1c6919d9fa3f78588772a8a"
+target = "FindEvenNumbers"
+sites = 4
+
+[[task]]
+id = "pub-db-054"
+cluster = "pub-db-054"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-054/tasks/pub-db-054.dfy"
+source_sha256 = "81078433a469ff219e9cce85cc47f76cf39ea50a6ce5ebfff28877428884bf07"
+statement = "Complete the verification of the target IncrementMatrix (public task bench/public/dafnybench/answers/Dafny_Verify_tmp_tmphq7j0row_AI_agent_validation_examples.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-054/ADMISSION.json"
+admission_sha256 = "38285f18ade89a8aff43e764f4501b7f9a2b13e195cc91f7b354ce0f8e4ae2da"
+target = "IncrementMatrix"
+sites = 8
+
+[[task]]
+id = "pub-db-056"
+cluster = "pub-db-056"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-056/tasks/pub-db-056.dfy"
+source_sha256 = "a1e3439496580121a56b6a199b8fd1c0b070d71f4790e36fd943c67a095a763e"
+statement = "Complete the verification of the target appendArray (public task bench/public/dafnybench/answers/dafny-exercise_tmp_tmpouftptir_appendArray.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-056/ADMISSION.json"
+admission_sha256 = "3215523d28d6f2650c36b683e01d3917a8f19e86801267f15328fc1625f67b97"
+target = "appendArray"
+sites = 5
+
+[[task]]
+id = "pub-db-058"
+cluster = "pub-db-058"
+lang = "dafny"
+path = "bench/local/r/labalpha/pub-db-058/tasks/pub-db-058.dfy"
+source_sha256 = "6566e9558c29bfe52648ba9aff8ede73f541c3c1074e4eee9c9b149f5a107ced"
+statement = "Complete the verification of the target from_array (public task bench/public/dafnybench/answers/CVS-handout1_tmp_tmptm52no3k_2.dfy) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded"
+admission = "bench/local/r/labalpha/pub-db-058/ADMISSION.json"
+admission_sha256 = "a3e3b8b940550511fe66f486217047b15f7af9ec5b815be7fe89b91bfc675deb"
+target = "from_array"
+sites = 4
+
+[[task]]
+id = "pub-hev-005"
+cluster = "pub-hev-005"
 lang = "verus"
-path = "bench/local/r/labalpha/maximum-value-v/tasks/maximum-value-v.rs"
-source_sha256 = "3a3dc1b491818841709d7ec09cd5da435f35b551796476d5355ebad32a0de987"
-origin = "course-authored reconstruction of prefix/loop/frame reasoning; R04/R06/R09/R12 concepts, 2026-10-17"
-exposure = "treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee"
-cluster = "maximum-value"
-statement = "Return an extremal element of the original nonempty sequence; preserve both the bound and an actual membership witness."
-admission = "bench/local/r/labalpha/maximum-value-v/ADMISSION.json"
-admission_sha256 = "d9404b53ea3fdaacf6a386d4cdc117539dd14d9a29b1c1be429af89845c0145a"
+path = "bench/local/r/labalpha/pub-hev-005/tasks/pub-hev-005.rs"
+source_sha256 = "67224553d2f472ab4ab874601d07377ba0efaf2e0d0e3eb21cd90925275d89fd"
+statement = "Complete the verification of the target separate_paren_groups (public task bench/public/humaneval-verus/answers/human_eval_001.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-005/ADMISSION.json"
+admission_sha256 = "9498fdaed9bf62638513ae400c7c8cd300adf7436a0c5bfa8ce4ac612c1cf780"
+target = "separate_paren_groups"
+sites = 14
 
-[[unused_public]]
-set = "dafnybench"
-task = "dafny-synthesis_task_id_769.dfy"
-pool_sha256 = "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4"
+[[task]]
+id = "pub-hev-007"
+cluster = "pub-hev-007"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-007/tasks/pub-hev-007.rs"
+source_sha256 = "57fbe85f17de204c0ff0635c3db786c60068780b3399ea3547da6005410cd06e"
+statement = "Complete the verification of the target is_prime (public task bench/public/humaneval-verus/answers/human_eval_094.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-007/ADMISSION.json"
+admission_sha256 = "84fd3e89aa80c98b8adb122a3a7a232109184e02996b934c809c35be33c4741b"
+target = "is_prime"
+sites = 3
 
-[[unused_public]]
-set = "dafnybench"
-task = "CVS-handout1_tmp_tmptm52no3k_1.dfy"
-pool_sha256 = "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4"
+[[task]]
+id = "pub-hev-011"
+cluster = "pub-hev-011"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-011/tasks/pub-hev-011.rs"
+source_sha256 = "4ca42b5f29f0e668b6f071a6367a6fb74474743e793d0982a31b955b272de08c"
+statement = "Complete the verification of the target remove_vowels (public task bench/public/humaneval-verus/answers/human_eval_051.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-011/ADMISSION.json"
+admission_sha256 = "a0eeead5ae00c0000fe2311a357c0808cc5500b5af12ae01f0dbd44851fe53d2"
+target = "remove_vowels"
+sites = 4
 
-[[unused_public]]
-set = "dafnybench"
-task = "SENG2011_tmp_tmpgk5jq85q_flex_ex5.dfy"
-pool_sha256 = "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4"
+[[task]]
+id = "pub-hev-015"
+cluster = "pub-hev-015"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-015/tasks/pub-hev-015.rs"
+source_sha256 = "1d0c5e06dfbb9d246fea6ce86868c177602026ad800fa61f9f4727088d1ffec6"
+statement = "Complete the verification of the target flip_case (public task bench/public/humaneval-verus/answers/human_eval_027.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-015/ADMISSION.json"
+admission_sha256 = "97fff0bc6b2e558cdcd8b7cccc8d05705c337c84d1ee880de553dfca91ccfed2"
+target = "flip_case"
+sites = 3
 
-[[unused_public]]
-set = "dafnybench"
-task = "Final-Project-Dafny_tmp_tmpmcywuqox_Attempts_Exercise6_Binary_Search.dfy"
-pool_sha256 = "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4"
+[[task]]
+id = "pub-hev-019"
+cluster = "pub-hev-019"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-019/tasks/pub-hev-019.rs"
+source_sha256 = "f38407f0cc0af8907ee696f8df66c5aa4285b69fee839a975b819f7f6a32bf2d"
+statement = "Complete the verification of the target prime_length (public task bench/public/humaneval-verus/answers/human_eval_082.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-019/ADMISSION.json"
+admission_sha256 = "3e93040e1ac596f1b099ccc21f64702b5de86abd87bcab6b3f0f3feb266b5654"
+target = "prime_length"
+sites = 3
 
-[[unused_public]]
-set = "dafnybench"
-task = "Final-Project-Dafny_tmp_tmpmcywuqox_Attempts_Selection_Sort_Standard.dfy"
-pool_sha256 = "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4"
+[[task]]
+id = "pub-hev-021"
+cluster = "pub-hev-021"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-021/tasks/pub-hev-021.rs"
+source_sha256 = "3be770c60fc4f1e56ba966aeb58fdb0c0e6834450de5d5f3160a4657fc28b509"
+statement = "Complete the verification of the target get_row (public task bench/public/humaneval-verus/answers/human_eval_087.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-021/ADMISSION.json"
+admission_sha256 = "f79bbe93a76654186172866fe25131ca31d78da6a5e87444e29cf11515a6fc2d"
+target = "get_row"
+sites = 14
 
-[[unused_public]]
-set = "humaneval-verus"
-task = "human_eval_031.rs"
-pool_sha256 = "efbaf9020c11f2af6a4c85aa351147fb5d0f4340b3f9b1b1a50912b6ddb5ad09"
+[[task]]
+id = "pub-hev-023"
+cluster = "pub-hev-023"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-023/tasks/pub-hev-023.rs"
+source_sha256 = "edc0167242e96e894b6bb3873e7004961129d5486010ac37a267aed5c1a92737"
+statement = "Complete the verification of the target is_prime_2 (public task bench/public/humaneval-verus/answers/human_eval_127.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-023/ADMISSION.json"
+admission_sha256 = "5da92e6219aac0c8aa2f9ad123c5b54f64ded02ca8e3df94744023b8185e084e"
+target = "is_prime_2"
+sites = 2
 
-[[unused_public]]
-set = "humaneval-verus"
-task = "human_eval_055b.rs"
-pool_sha256 = "efbaf9020c11f2af6a4c85aa351147fb5d0f4340b3f9b1b1a50912b6ddb5ad09"
+[[task]]
+id = "pub-hev-027"
+cluster = "pub-hev-027"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-027/tasks/pub-hev-027.rs"
+source_sha256 = "129d20b2551adb75c7b2f2a477d80f22a09cfb43028a480d960bcb161c663223"
+statement = "Complete the verification of the target checked_total_str_len (public task bench/public/humaneval-verus/answers/human_eval_074.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-027/ADMISSION.json"
+admission_sha256 = "88b56f65d23ca0877513cfe58bbb3340e4aed7d663131e9e8cdbe8db14afa13e"
+target = "checked_total_str_len"
+sites = 7
 
-[[unused_public]]
-set = "humaneval-verus"
-task = "human_eval_075.rs"
-pool_sha256 = "efbaf9020c11f2af6a4c85aa351147fb5d0f4340b3f9b1b1a50912b6ddb5ad09"
+[[task]]
+id = "pub-hev-029"
+cluster = "pub-hev-029"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-029/tasks/pub-hev-029.rs"
+source_sha256 = "2531b4be716bc0c4f04bead3b59884f10d3c199f29ccf583c3f182d2c033c3c9"
+statement = "Complete the verification of the target make_palindrome (public task bench/public/humaneval-verus/answers/human_eval_010.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-029/ADMISSION.json"
+admission_sha256 = "85a8dd731527306cec77feab0cfd891e809ade5928bc4abddbe732a86c668b1e"
+target = "make_palindrome"
+sites = 4
 
-[[unused_public]]
-set = "humaneval-verus"
-task = "human_eval_034.rs"
-pool_sha256 = "efbaf9020c11f2af6a4c85aa351147fb5d0f4340b3f9b1b1a50912b6ddb5ad09"
+[[task]]
+id = "pub-hev-031"
+cluster = "pub-hev-031"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-031/tasks/pub-hev-031.rs"
+source_sha256 = "1ef171b0ced4d665c314ab8aa97466ec292d8c1b7e8c3d64e940e2f37890dd05"
+statement = "Complete the verification of the target longest (public task bench/public/humaneval-verus/answers/human_eval_012.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-031/ADMISSION.json"
+admission_sha256 = "8fbbe35703eb7c71e6f371f7edf5fb6b22ddf9f200cdac3d50e3ef157334ec27"
+target = "longest"
+sites = 3
 
-[[unused_public]]
-set = "humaneval-verus"
-task = "human_eval_126.rs"
-pool_sha256 = "efbaf9020c11f2af6a4c85aa351147fb5d0f4340b3f9b1b1a50912b6ddb5ad09"
+[[task]]
+id = "pub-hev-033"
+cluster = "pub-hev-033"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-033/tasks/pub-hev-033.rs"
+source_sha256 = "8c53295754470acde05173e1cc13503e037d4ce4819c20962a90593bf51ccfd5"
+statement = "Complete the verification of the target how_many_times_impl (public task bench/public/humaneval-verus/answers/human_eval_018.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-033/ADMISSION.json"
+admission_sha256 = "04f3513e162a42fe41e2acc64abc1889cc05ed4c458ba3c588e15cad3d918ce3"
+target = "how_many_times_impl"
+sites = 4
+
+[[task]]
+id = "pub-hev-035"
+cluster = "pub-hev-035"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-035/tasks/pub-hev-035.rs"
+source_sha256 = "954904664bcc0af3833b2c22ac7dbcdd8651dbccc26daf46f267c5c3e9c16f05"
+statement = "Complete the verification of the target brazilian_factorial_impl (public task bench/public/humaneval-verus/answers/human_eval_139.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-035/ADMISSION.json"
+admission_sha256 = "ba52e0b207f99d606e21cac522893f8c11ef1ff802cb85663d70b73d59d26f34"
+target = "brazilian_factorial_impl"
+sites = 4
+
+[[task]]
+id = "pub-hev-039"
+cluster = "pub-hev-039"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-039/tasks/pub-hev-039.rs"
+source_sha256 = "b6e6d406680decc6f9b0ad54d49b007da3873357d55e3d251e1541fd60cec3f8"
+statement = "Complete the verification of the target correct_bracketing (public task bench/public/humaneval-verus/answers/human_eval_056.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-039/ADMISSION.json"
+admission_sha256 = "b2a3c817e5d49816801f50497bbf9c07201974ff50614b6a13418009b4186d97"
+target = "correct_bracketing"
+sites = 3
+
+[[task]]
+id = "pub-hev-045"
+cluster = "pub-hev-045"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-045/tasks/pub-hev-045.rs"
+source_sha256 = "a6037465dbf9c580215e34aea0e74ad67b26952d1d11739e540899e78a352b00"
+statement = "Complete the verification of the target intersperse (public task bench/public/humaneval-verus/answers/human_eval_005.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-045/ADMISSION.json"
+admission_sha256 = "89ad6c1661ba9f9d3ac756bd3526551ec8f1434c1c46d33bcafeebe7735cca04"
+target = "intersperse"
+sites = 3
+
+[[task]]
+id = "pub-hev-047"
+cluster = "pub-hev-047"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-047/tasks/pub-hev-047.rs"
+source_sha256 = "abdf4d0ed7b673f065c41b4f551a88745aa468bf57f428d85f95803c8f4230c7"
+statement = "Complete the verification of the target add (public task bench/public/humaneval-verus/answers/human_eval_085.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-047/ADMISSION.json"
+admission_sha256 = "ad755f51f12b21ef3da5a615bc8225556e81a0783b1b58f8d82448405bff9038"
+target = "add"
+sites = 4
+
+[[task]]
+id = "pub-hev-055"
+cluster = "pub-hev-055"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-055/tasks/pub-hev-055.rs"
+source_sha256 = "93005aacd51c97d7c7b5644427f46cfb327b5334463c00d157738f5c35816cdf"
+statement = "Complete the verification of the target encode_shift (public task bench/public/humaneval-verus/answers/human_eval_050.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-055/ADMISSION.json"
+admission_sha256 = "dc9bb723fb410ca4927a67de4139c11e1c44bb608ffc4edd9e0e1c0d60b7a0ca"
+target = "encode_shift"
+sites = 1
+
+[[task]]
+id = "pub-hev-059"
+cluster = "pub-hev-059"
+lang = "verus"
+path = "bench/local/r/labalpha/pub-hev-059/tasks/pub-hev-059.rs"
+source_sha256 = "65cded95f18185e67dcd47ef3e4938234a82109ba5963129b9e5754208938b8a"
+statement = "Complete the verification of the target is_happy (public task bench/public/humaneval-verus/answers/human_eval_080.rs) by filling every hint site; the specification and the code are fixed."
+exposure = "public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)"
+admission = "bench/local/r/labalpha/pub-hev-059/ADMISSION.json"
+admission_sha256 = "ab384be0c5d2401e1cf6ce2e70d2901e7797595b3d2f57480097d5f81e95c32d"
+target = "is_happy"
+sites = 1
+
+[[task]]
+id = "r06-backwards-correct-d"
+cluster = "r06-backwards-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-backwards-correct-d/tasks/r06-backwards-correct-d.dfy"
+source_sha256 = "78fbc10cd0e97d2f20903e0a8afbf47d5c6ddfeb001b8765e3f78d2664221f96"
+statement = "Complete the proof of the target lemma R12_LabCase.BackwardsCorrect (R06 BackwardsCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-correct-d/ADMISSION.json"
+admission_sha256 = "b816d6dc17227dc4c04729fa05d9d2c805b57e210d33197e3c5eeb33bec634d4"
+target = "R12_LabCase.BackwardsCorrect"
+sites = 2
+
+[[task]]
+id = "r06-backwards-correct-v"
+cluster = "r06-backwards-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-backwards-correct-v/tasks/r06-backwards-correct-v.rs"
+source_sha256 = "37e71b309b7ad08fd56be1f8e290c747f287737f17980550d629689f700c3d77"
+statement = "Complete the proof of the target lemma lemma_backwards_correct (R06 BackwardsCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-correct-v/ADMISSION.json"
+admission_sha256 = "9c2d62cedd002f20bf64940cc3f4e563be054831ee3a38a90fcbb2a748ca33cf"
+target = "lemma_backwards_correct"
+sites = 2
+
+[[task]]
+id = "r06-backwards-sound-d"
+cluster = "r06-backwards-sound"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-backwards-sound-d/tasks/r06-backwards-sound-d.dfy"
+source_sha256 = "f32f43a2de3dca7a04a46529a5d3817a510342a807c684c915fb9459501aa4b6"
+statement = "Complete the proof of the target lemma R12_LabCase.BackwardsSound (R06 BackwardsSound) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-sound-d/ADMISSION.json"
+admission_sha256 = "bd8647afe7227ffff6ff65ea37534fcbe7a633a3ff598121c3341d11088a01d9"
+target = "R12_LabCase.BackwardsSound"
+sites = 10
+
+[[task]]
+id = "r06-backwards-sound-v"
+cluster = "r06-backwards-sound"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-backwards-sound-v/tasks/r06-backwards-sound-v.rs"
+source_sha256 = "dc79d750245b9b936760772d75589d9dafde87a217fa2b87f99561b12d8ce59f"
+statement = "Complete the proof of the target lemma lemma_backwards_sound (R06 BackwardsSound) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-sound-v/ADMISSION.json"
+admission_sha256 = "9c60d77d8b0fddf186f8ebb0e89c6615f13a4ae24b7fbad832808d246bc0d2e5"
+target = "lemma_backwards_sound"
+sites = 7
+
+[[task]]
+id = "r06-backwards-str-append-d"
+cluster = "r06-backwards-str-append"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-backwards-str-append-d/tasks/r06-backwards-str-append-d.dfy"
+source_sha256 = "112a288b886a5cc0f5664488599786f9690fcd8a061994ef7cbfac8ad2afdc1a"
+statement = "Complete the proof of the target lemma R12_LabCase.BackwardsStrAppend (R06 BackwardsStrAppend) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-str-append-d/ADMISSION.json"
+admission_sha256 = "b428dcc4772e2e5e08b9e23447ac50948c165fb033cdcbf6c5404eb4850b700a"
+target = "R12_LabCase.BackwardsStrAppend"
+sites = 4
+
+[[task]]
+id = "r06-backwards-str-append-v"
+cluster = "r06-backwards-str-append"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-backwards-str-append-v/tasks/r06-backwards-str-append-v.rs"
+source_sha256 = "20752265e8f10d863ab048b7cc03010c953fdc5bb4bf371289ea06dd5d168f72"
+statement = "Complete the proof of the target lemma lemma_backwards_str_append (R06 BackwardsStrAppend) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-str-append-v/ADMISSION.json"
+admission_sha256 = "03e877fa756d78f0d5538b6975a32d9456c4249c465a7188fe857ba3c408235d"
+target = "lemma_backwards_str_append"
+sites = 2
+
+[[task]]
+id = "r06-backwards-str-involution-d"
+cluster = "r06-backwards-str-involution"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-backwards-str-involution-d/tasks/r06-backwards-str-involution-d.dfy"
+source_sha256 = "cf7eb6cb5817f33ce8b734c4fd7a0a58b309feca798cd3cc9160f4cf49883749"
+statement = "Complete the proof of the target lemma R12_LabCase.BackwardsStrInvolution (R06 BackwardsStrInvolution) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-str-involution-d/ADMISSION.json"
+admission_sha256 = "ccb89d8eab3610c746ad8b2559073635e53e1c6a6811f4f03e2ec926f7947021"
+target = "R12_LabCase.BackwardsStrInvolution"
+sites = 4
+
+[[task]]
+id = "r06-backwards-str-involution-v"
+cluster = "r06-backwards-str-involution"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-backwards-str-involution-v/tasks/r06-backwards-str-involution-v.rs"
+source_sha256 = "1c6c2c10d401bb9be296e554f5717ca3198eb4e9e4fc9303a28e48c20da218f5"
+statement = "Complete the proof of the target lemma lemma_backwards_str_involution (R06 BackwardsStrInvolution) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-backwards-str-involution-v/ADMISSION.json"
+admission_sha256 = "1e44780d02e18cc2f7105d9dbfb15a9782ee1a4c08afec6e07179b605e80cdab"
+target = "lemma_backwards_str_involution"
+sites = 3
+
+[[task]]
+id = "r06-deriv-correct-d"
+cluster = "r06-deriv-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-deriv-correct-d/tasks/r06-deriv-correct-d.dfy"
+source_sha256 = "8abf1f05ec8037c67a4b1b8b62d814fab565e9be5504d986e7df28bacc27a5e2"
+statement = "Complete the proof of the target lemma R12_LabCase.DerivCorrect (R06 DerivCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-deriv-correct-d/ADMISSION.json"
+admission_sha256 = "f9086f2de061ae2b2639744da0e62bbb46bac3297cdaefeb1fafe7dbd3ebb2bb"
+target = "R12_LabCase.DerivCorrect"
+sites = 18
+
+[[task]]
+id = "r06-deriv-correct-v"
+cluster = "r06-deriv-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-deriv-correct-v/tasks/r06-deriv-correct-v.rs"
+source_sha256 = "700ed2e5b9366dea8e03c019a92b12d56f870969752d7bd414d2d3e3687ebb56"
+statement = "Complete the proof of the target lemma lemma_deriv_correct (R06 DerivCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-deriv-correct-v/ADMISSION.json"
+admission_sha256 = "89bcd0495cac9bbf9bfa94db72d596f1fd1b9495b14d66af5ffedc05ca465e0a"
+target = "lemma_deriv_correct"
+sites = 14
+
+[[task]]
+id = "r06-deriv-correct-b-d"
+cluster = "r06-deriv-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-deriv-correct-b-d/tasks/r06-deriv-correct-b-d.dfy"
+source_sha256 = "7a3fb093908fd9561258ab470f4e1c13b2ec2062837cf315a3f9b7963f042337"
+statement = "Complete the proof of the target lemma R12_LabCase.DerivCorrect (R06 DerivCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-deriv-correct-b-d/ADMISSION.json"
+admission_sha256 = "ff5b09aa4cec4df31bdfe2500f43186359bb32d3928e16224a8e2c90f0ef5cfa"
+target = "R12_LabCase.DerivCorrect"
+sites = 6
+
+[[task]]
+id = "r06-deriv-correct-b-v"
+cluster = "r06-deriv-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-deriv-correct-b-v/tasks/r06-deriv-correct-b-v.rs"
+source_sha256 = "2355e0ae27c506fcbb1d6facacddcd59368e92d7488fccc374cc1532ab87d3eb"
+statement = "Complete the proof of the target lemma lemma_deriv_correct (R06 DerivCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-deriv-correct-b-v/ADMISSION.json"
+admission_sha256 = "68051bfb50a695cfe0f859f1bb68f944d20a0966f211bd799e2deb15b7a92bc2"
+target = "lemma_deriv_correct"
+sites = 8
+
+[[task]]
+id = "r06-derivs-append-d"
+cluster = "r06-derivs-append"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-derivs-append-d/tasks/r06-derivs-append-d.dfy"
+source_sha256 = "68f56d3743de9690bec78503bbd7c46eb3d715c4d86dc1a381db652251ce75df"
+statement = "Complete the proof of the target lemma R12_LabCase.DerivsAppend (R06 DerivsAppend) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-derivs-append-d/ADMISSION.json"
+admission_sha256 = "9e18f9d2184bafbca75c0f68ab9888a7b5192eebc21d574ccbfacbbc7ee875b9"
+target = "R12_LabCase.DerivsAppend"
+sites = 4
+
+[[task]]
+id = "r06-derivs-append-v"
+cluster = "r06-derivs-append"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-derivs-append-v/tasks/r06-derivs-append-v.rs"
+source_sha256 = "8c5c217c1bc6db858b024bcb4a9d93ed42af98e92c532a0a963b3615be90a5f3"
+statement = "Complete the proof of the target lemma lemma_derivs_append (R06 DerivsAppend) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-derivs-append-v/ADMISSION.json"
+admission_sha256 = "c91096aa3935cd568d08dfe4bedd152e96f32d80d2ac2ac90f433866c469d2d6"
+target = "lemma_derivs_append"
+sites = 2
+
+[[task]]
+id = "r06-star-unfold-refuted-d"
+cluster = "r06-star-unfold-refuted"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-star-unfold-refuted-d/tasks/r06-star-unfold-refuted-d.dfy"
+source_sha256 = "3d5fb6f1efbdfdcc2a14f9747c6d4ba1f857b340c1aeacd29bfae18244f84cd4"
+statement = "Complete the proof of the target lemma R12_LabCase.StarUnfoldRefuted (R06 StarUnfoldRefuted) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-star-unfold-refuted-d/ADMISSION.json"
+admission_sha256 = "16829d41f1fe0406c4d3b5d6f898dfe35c5d4182cb778cab9d9cb7a1d174f703"
+target = "R12_LabCase.StarUnfoldRefuted"
+sites = 2
+
+[[task]]
+id = "r06-star-unfold-refuted-v"
+cluster = "r06-star-unfold-refuted"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-star-unfold-refuted-v/tasks/r06-star-unfold-refuted-v.rs"
+source_sha256 = "9ead099f7e79f75acb1df6d3806b38fe35fa2252a0a67131d3372ce07ae60719"
+statement = "Complete the proof of the target lemma lemma_star_unfold_refuted (R06 StarUnfoldRefuted) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-star-unfold-refuted-v/ADMISSION.json"
+admission_sha256 = "11d10dcf7678eccfe5ec317d4894dee9e0c33f545adb0ea243fd11a6c7470baa"
+target = "lemma_star_unfold_refuted"
+sites = 2
+
+[[task]]
+id = "r06-star-unfold-d"
+cluster = "r06-star-unfold"
+lang = "dafny"
+path = "bench/local/r/labalpha/r06-star-unfold-d/tasks/r06-star-unfold-d.dfy"
+source_sha256 = "4cd9ec0ad99a760a070a1c2508c87187c5d9a32dbb928eae671a362043ca06a5"
+statement = "Complete the proof of the target lemma R12_LabCase.StarUnfold (R06 StarUnfold) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-star-unfold-d/ADMISSION.json"
+admission_sha256 = "0de72b0687a0ee37c34cff58000ed1d7606afd730cfcff47acd9630b7c0281d4"
+target = "R12_LabCase.StarUnfold"
+sites = 5
+
+[[task]]
+id = "r06-star-unfold-v"
+cluster = "r06-star-unfold"
+lang = "verus"
+path = "bench/local/r/labalpha/r06-star-unfold-v/tasks/r06-star-unfold-v.rs"
+source_sha256 = "5cbe226aa7b5ed3fecfdb2284ea369843f50cec9c430b216ce4451e5bd1af114"
+statement = "Complete the proof of the target lemma lemma_star_unfold (R06 StarUnfold) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r06-star-unfold-v/ADMISSION.json"
+admission_sha256 = "b0e23f86df7f1b768059ec2b614b336934911d08cea46ab1d55651e7040fad08"
+target = "lemma_star_unfold"
+sites = 4
+
+[[task]]
+id = "r09-class-nodes-correct-d"
+cluster = "r09-class-nodes-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r09-class-nodes-correct-d/tasks/r09-class-nodes-correct-d.dfy"
+source_sha256 = "d9183045c9639ef7a7cb054c527b44baaa21c6fcaa3b0b86d47faedb106dffa2"
+statement = "Complete the proof of the target lemma R12_LabCase.ClassNodesCorrectR09 (R09 RangeNodesCorrectR09 / ClassNodesCorrectR09 (target ClassNodesCorrectR09)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-class-nodes-correct-d/ADMISSION.json"
+admission_sha256 = "18e5edd450ca751dde362cfbd477b060a0bb45ac0a62fab6c1cd4936e2d0073b"
+target = "R12_LabCase.ClassNodesCorrectR09"
+sites = 1
+
+[[task]]
+id = "r09-class-nodes-correct-v"
+cluster = "r09-class-nodes-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r09-class-nodes-correct-v/tasks/r09-class-nodes-correct-v.rs"
+source_sha256 = "c7c2f8cc30fb6a77ac609969c7772c589fb565a15d60344947fdca1a7ab3cdf3"
+statement = "Complete the proof of the target lemma lemma_class_nodes_r09 (R09 RangeNodesCorrectR09 / ClassNodesCorrectR09 (target ClassNodesCorrectR09)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-class-nodes-correct-v/ADMISSION.json"
+admission_sha256 = "394ec107654cbb14fedd7eca211dcc17a8a82d92ad5b56eb01dbb785ecce3f35"
+target = "lemma_class_nodes_r09"
+sites = 2
+
+[[task]]
+id = "r09-copies-split-d"
+cluster = "r09-copies-split"
+lang = "dafny"
+path = "bench/local/r/labalpha/r09-copies-split-d/tasks/r09-copies-split-d.dfy"
+source_sha256 = "819bf9a4dab0dbfe27855f1edfff3907ac81faaa2df9d10efe3774b457c6c4b0"
+statement = "Complete the proof of the target lemma R12_LabCase.CopiesSplit (R09 CopiesSplit) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-copies-split-d/ADMISSION.json"
+admission_sha256 = "137b6300e77bbbbbd1ae57d2ac4840eef11a3cfc8e5a01c605c19982743c5abf"
+target = "R12_LabCase.CopiesSplit"
+sites = 6
+
+[[task]]
+id = "r09-copies-split-v"
+cluster = "r09-copies-split"
+lang = "verus"
+path = "bench/local/r/labalpha/r09-copies-split-v/tasks/r09-copies-split-v.rs"
+source_sha256 = "ae1ba0f12cf654840c022b9452589d31f4f477be9377095641eff5ac81bddeef"
+statement = "Complete the proof of the target lemma lemma_copies_join_r09 (R09 CopiesSplit) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-copies-split-v/ADMISSION.json"
+admission_sha256 = "da08c0ea95501b457f691629429aa93014182abf2d76a371a6ad568edbd3f3b1"
+target = "lemma_copies_join_r09"
+sites = 4
+
+[[task]]
+id = "r09-copies-up-to-correct-d"
+cluster = "r09-copies-up-to-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r09-copies-up-to-correct-d/tasks/r09-copies-up-to-correct-d.dfy"
+source_sha256 = "0870575b91474ca8c39a43030ea92bd1b0058b24a4dd3f7eacbce4c5491740bb"
+statement = "Complete the proof of the target lemma R12_LabCase.CopiesUpToCorrect (R09 CopiesUpToCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-copies-up-to-correct-d/ADMISSION.json"
+admission_sha256 = "797361e0da1e8bb305e200f115c6319be7d29ba3c43e726fac50f94a7dadae35"
+target = "R12_LabCase.CopiesUpToCorrect"
+sites = 7
+
+[[task]]
+id = "r09-copies-up-to-correct-v"
+cluster = "r09-copies-up-to-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r09-copies-up-to-correct-v/tasks/r09-copies-up-to-correct-v.rs"
+source_sha256 = "e14a711a3f7867acedfe731718bf02e70afb9e1664cdc8db8f2c82e4f028ff26"
+statement = "Complete the proof of the target lemma lemma_copies_optional_r09 (R09 CopiesUpToCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-copies-up-to-correct-v/ADMISSION.json"
+admission_sha256 = "44c2bf39d6ef53c7a897e94d02513216ca4505055054352f65092d0f6bf7c10c"
+target = "lemma_copies_optional_r09"
+sites = 7
+
+[[task]]
+id = "r09-literal-append-d"
+cluster = "r09-literal-append"
+lang = "dafny"
+path = "bench/local/r/labalpha/r09-literal-append-d/tasks/r09-literal-append-d.dfy"
+source_sha256 = "02d57c5dc6e42ec856e5d5c3372207821a3ec99957496c6b4c7c1eb886b22e4e"
+statement = "Complete the proof of the target lemma R12_LabCase.LiteralAppendR09 (R09 LiteralAppendR09) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-literal-append-d/ADMISSION.json"
+admission_sha256 = "bdd16458a45d7727c83a1f5bd4aaba94c8cf70fd73636cf0c21e30146a199d11"
+target = "R12_LabCase.LiteralAppendR09"
+sites = 1
+
+[[task]]
+id = "r09-literal-append-v"
+cluster = "r09-literal-append"
+lang = "verus"
+path = "bench/local/r/labalpha/r09-literal-append-v/tasks/r09-literal-append-v.rs"
+source_sha256 = "11b574f41bf1bfd9fb8b01a0b70ef147762fd88490439ad02c41f772e2f95194"
+statement = "Complete the proof of the target lemma lemma_literal_append_r09 (R09 LiteralAppendR09) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-literal-append-v/ADMISSION.json"
+admission_sha256 = "9457e9be88511a42f317b8d13d424239f24c55c245103ae44890fd8bed3f4629"
+target = "lemma_literal_append_r09"
+sites = 1
+
+[[task]]
+id = "r09-lowering-nodes-correct-d"
+cluster = "r09-lowering-nodes-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r09-lowering-nodes-correct-d/tasks/r09-lowering-nodes-correct-d.dfy"
+source_sha256 = "c3de7bca1064369d56fba2a75502bc62054cdc8e86d1606e49595fcc59c49894"
+statement = "Complete the proof of the target lemma R12_LabCase.LoweringNodesCorrectR09 (R09 LoweringNodesCorrectR09) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-lowering-nodes-correct-d/ADMISSION.json"
+admission_sha256 = "0d6bbf6ff401c6ac582a1ab0da78a098a038be4666e6cd8e35f176aeb778e292"
+target = "R12_LabCase.LoweringNodesCorrectR09"
+sites = 8
+
+[[task]]
+id = "r09-lowering-nodes-correct-v"
+cluster = "r09-lowering-nodes-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs"
+source_sha256 = "b677b1041538f9b41df64c968ce614e118e46f8f3b21f9e214e0d4c1f17eef1c"
+statement = "Complete the proof of the target lemma lemma_lowering_nodes_r09 (R09 LoweringNodesCorrectR09) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-lowering-nodes-correct-v/ADMISSION.json"
+admission_sha256 = "4ee554c6e7ffc94884f4e5bfe6109dcdc87c19877151f894173b73beb77b4a05"
+target = "lemma_lowering_nodes_r09"
+sites = 4
+
+[[task]]
+id = "r09-rep-range-correct-d"
+cluster = "r09-rep-range-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r09-rep-range-correct-d/tasks/r09-rep-range-correct-d.dfy"
+source_sha256 = "60de009a9459da105fb2bf00ce4675d743cc837f501c196b98cb9a1c1db01d7d"
+statement = "Complete the proof of the target lemma R12_LabCase.RepRangeCorrect (R09 RepRangeCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-rep-range-correct-d/ADMISSION.json"
+admission_sha256 = "883f50c8d5c6056262c31d246ff5e40aff18e9786d6f6f5fc28a05051c8636c8"
+target = "R12_LabCase.RepRangeCorrect"
+sites = 6
+
+[[task]]
+id = "r09-rep-range-correct-v"
+cluster = "r09-rep-range-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r09-rep-range-correct-v/tasks/r09-rep-range-correct-v.rs"
+source_sha256 = "d29a2085af27988532c0736dc9ffcb0d86fc9b8eed8ae1922849a7063cb81fcf"
+statement = "Complete the proof of the target lemma lemma_repetition_interval_r09 (R09 RepRangeCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R09 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r09-rep-range-correct-v/ADMISSION.json"
+admission_sha256 = "6df548c7c0384f0c7b6e12d11784fa793980c387762e84ef2f581d7b79de5a2c"
+target = "lemma_repetition_interval_r09"
+sites = 6
+
+[[task]]
+id = "r10-mk-cat-correct-d"
+cluster = "r10-mk-cat-correct"
+lang = "dafny"
+path = "bench/local/r/labalpha/r10-mk-cat-correct-d/tasks/r10-mk-cat-correct-d.dfy"
+source_sha256 = "9d57b5e658fddbc3553da38fa6e98a01c458ebccd6fc1b4fd57ed265a37b7331"
+statement = "Complete the proof of the target lemma R12_LabCase.MkCatCorrect (R10 MkCatCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R10 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r10-mk-cat-correct-d/ADMISSION.json"
+admission_sha256 = "8024c3c7006b31f03d485d9efa483a69623a894d3dcc848ca8b999359ab70663"
+target = "R12_LabCase.MkCatCorrect"
+sites = 2
+
+[[task]]
+id = "r10-mk-cat-correct-v"
+cluster = "r10-mk-cat-correct"
+lang = "verus"
+path = "bench/local/r/labalpha/r10-mk-cat-correct-v/tasks/r10-mk-cat-correct-v.rs"
+source_sha256 = "2a460bed530e3ec393e45ee9f68c21691e2a35a0ecfda84edf32ac52aba644f6"
+statement = "Complete the proof of the target lemma lemma_mk_cat_r10 (R10 MkCatCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R10 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r10-mk-cat-correct-v/ADMISSION.json"
+admission_sha256 = "410ee308e5b923dd9b0c6c8ce6072622c7ab5e707bea280271de600cd21f2587"
+target = "lemma_mk_cat_r10"
+sites = 4
+
+[[task]]
+id = "r10-star-star-d"
+cluster = "r10-star-star"
+lang = "dafny"
+path = "bench/local/r/labalpha/r10-star-star-d/tasks/r10-star-star-d.dfy"
+source_sha256 = "665cadfa0cc83c8f17d4b9764ea862fe54ee58668f72eb85f71b5c2cd7605cbf"
+statement = "Complete the proof of the target lemma R12_LabCase.StarStar (R10 StarStar (family of MkStarCorrect, which calls it with StarOfEps)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R10 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r10-star-star-d/ADMISSION.json"
+admission_sha256 = "b74129f89b6bc4530f731f52c218832ff22b9f3646c02ca28e9688de6328c5bb"
+target = "R12_LabCase.StarStar"
+sites = 3
+
+[[task]]
+id = "r10-star-star-v"
+cluster = "r10-star-star"
+lang = "verus"
+path = "bench/local/r/labalpha/r10-star-star-v/tasks/r10-star-star-v.rs"
+source_sha256 = "3105bc759bed146ada48816a4a629027712e123a37f2664bed21f735c5580df1"
+statement = "Complete the proof of the target lemma lemma_star_star_r10 (R10 StarStar (family of MkStarCorrect, which calls it with StarOfEps)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R10 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r10-star-star-v/ADMISSION.json"
+admission_sha256 = "4b7d96a0def01d6bd45ab8b80bce3354712d2533c17679075416bc496ae6a27b"
+target = "lemma_star_star_r10"
+sites = 3
+
+[[task]]
+id = "r11-rename-transport-d"
+cluster = "r11-rename-transport"
+lang = "dafny"
+path = "bench/local/r/labalpha/r11-rename-transport-d/tasks/r11-rename-transport-d.dfy"
+source_sha256 = "f722b4ff5aa15cf76c9d19d2bc0fdad3dbc844353e087fdb545bcc2412b6209f"
+statement = "Complete the proof of the target lemma R12_LabCase.RenameTransportR11 (R11 RenameTransportR11 (with its helper RenameSplitR11)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-rename-transport-d/ADMISSION.json"
+admission_sha256 = "9505607501dc831c9b747ee03eba4d78ef5a3e4888eaa0677baa78212c880b97"
+target = "R12_LabCase.RenameTransportR11"
+sites = 5
+
+[[task]]
+id = "r11-rename-transport-v"
+cluster = "r11-rename-transport"
+lang = "verus"
+path = "bench/local/r/labalpha/r11-rename-transport-v/tasks/r11-rename-transport-v.rs"
+source_sha256 = "0a7812265a6e62cc76210b98914276cb6c346f75945015f1419c379760239128"
+statement = "Complete the proof of the target lemma rename_transport_r11 (R11 RenameTransportR11 (with its helper RenameSplitR11)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-rename-transport-v/ADMISSION.json"
+admission_sha256 = "99a2b50aa7cc6da42ffb389023089408f016a00364c5caebc2f2f5d3b263bc85"
+target = "rename_transport_r11"
+sites = 4
+
+[[task]]
+id = "r11-residual-observe-d"
+cluster = "r11-residual-observe"
+lang = "dafny"
+path = "bench/local/r/labalpha/r11-residual-observe-d/tasks/r11-residual-observe-d.dfy"
+source_sha256 = "003da653510f37fb481147a8db21bb9bc59260cd293900caf27edaede6d625d9"
+statement = "Complete the proof of the target lemma R12_LabCase.ResidualObserveR11 (R11 ResidualObserveR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-residual-observe-d/ADMISSION.json"
+admission_sha256 = "559cab6e154c9b6686e1acad0ac4e8ce44b2d3be5c9278fd68472ec19a6d13be"
+target = "R12_LabCase.ResidualObserveR11"
+sites = 2
+
+[[task]]
+id = "r11-residual-observe-v"
+cluster = "r11-residual-observe"
+lang = "verus"
+path = "bench/local/r/labalpha/r11-residual-observe-v/tasks/r11-residual-observe-v.rs"
+source_sha256 = "8b81154361f193fe5a9d4eba02b5a53acb08cd1a3382a1fb7beec660f61a7d73"
+statement = "Complete the proof of the target lemma residual_observe_r11 (R11 ResidualObserveR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-residual-observe-v/ADMISSION.json"
+admission_sha256 = "6c948a91198a15054a03b352c3be74c091b7d9a5e7778b37f75fa7d7c9df5208"
+target = "residual_observe_r11"
+sites = 1
+
+[[task]]
+id = "r11-residual-step-d"
+cluster = "r11-residual-step"
+lang = "dafny"
+path = "bench/local/r/labalpha/r11-residual-step-d/tasks/r11-residual-step-d.dfy"
+source_sha256 = "662a0c95020a06e43a1c2f86952c5727eff1cecab565c5de1d394273e55ed4a4"
+statement = "Complete the proof of the target lemma R12_LabCase.ResidualStepR11 (R11 ResidualStepR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-residual-step-d/ADMISSION.json"
+admission_sha256 = "147c20674b048ccd1d03fc4eb08e541509d6cbf1b396ded2f7d3655282e4819c"
+target = "R12_LabCase.ResidualStepR11"
+sites = 2
+
+[[task]]
+id = "r11-residual-step-v"
+cluster = "r11-residual-step"
+lang = "verus"
+path = "bench/local/r/labalpha/r11-residual-step-v/tasks/r11-residual-step-v.rs"
+source_sha256 = "80ccc8f3ed1f738a8b37f10a1f5cc4dfa2dfdac72cad2a1d747f1335a63fe1de"
+statement = "Complete the proof of the target lemma residual_step_r11 (R11 ResidualStepR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-residual-step-v/ADMISSION.json"
+admission_sha256 = "93193947c2dd78816b9af29f0b71eecde0f1e9ef82839a5c767856da5b21142f"
+target = "residual_step_r11"
+sites = 1

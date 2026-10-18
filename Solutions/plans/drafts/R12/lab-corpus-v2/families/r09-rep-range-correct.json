@@ -1,0 +1,41 @@
+{
+  "cluster": "r09-rep-range-correct",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "RepRangeCorrect",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::RepRangeCorrect (R09.H4d)",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_repetition_interval_r09 (R09.H4v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches), copied verbatim",
+    "RG_A3_Syntax / rg_re_a3 (Copies, CopiesUpTo, RepRange / rep_range)"
+  ],
+  "helpers_included": [
+    "CopiesSplit / lemma_copies_join_r09 (R09), complete",
+    "CopiesUpToCorrect / lemma_copies_optional_r09 (R09), complete",
+    "their callees CatEpsLeft, CatAssoc, CatCongRight (A1b, R09), complete"
+  ],
+  "tasks": [
+    "r09-rep-range-correct-d",
+    "r09-rep-range-correct-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r09-rep-range-correct-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 6
+    },
+    {
+      "task": "r09-rep-range-correct-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 6
+    }
+  ],
+  "notes": "Calls of the two repetition facts with their instantiations plus one match fact per direction are sites."
+}

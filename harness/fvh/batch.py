@@ -39,6 +39,19 @@ The plan (TOML; `python -m fvh run <ID> --plan PLAN.toml`):
                                   other than its shipped form, and their committed
                                   sha256 go into the batch note and every run.json.
                                   Required when a task lies in a sealed stratum
+    role = "pilot" | "confirmatory" | "descriptive"
+                                  required when the tasks lie in a schema-2 local
+                                  stratum (one with [[cluster]] roles: Lab alpha's,
+                                  DVR4 plan section 3.8): a pilot plan's tasks are
+                                  all pilot clusters'; a confirmatory or descriptive
+                                  plan runs only under the committed freeze
+    freeze = "<course path>"      the freeze file of a confirmatory or descriptive
+                                  plan (fvh.prereg.check_roles: complete, on the
+                                  current stratum, pilot and confirmatory clusters
+                                  disjoint, the plan's tasks inside its role's
+                                  clusters; a lab plan's PREREG block names its
+                                  sha256 as `freeze-sha256: <64 hex>`); its sha256
+                                  goes into the batch note
     gate = "<course path>"        the acceptance tool of a gated arm (Lab 3's gate
     gate_sha256 = "<64 hex>"      v2, harness/q/fvh_q/gate/gate_v2.py) and its
                                   pre-registered sha256: the batch refuses to open,
@@ -148,7 +161,10 @@ The run (one attempt), written to research/runs/<ID>/<run id>/:
               the plan's sha256 and the pre-registration hash
   calls.jsonl one line per model call: seed, wall clock, the client's usage,
               the window verdict, an error; for Qwen the gate's own counts
-              (calls, tokens, GPU-seconds) beside the client's
+              (calls, tokens, GPU-seconds) beside the client's; the message's
+              bytes and, for a JSON request with a `feedback` field, that
+              field's bytes and the equal cap's truncation flag
+              (fvh.labalpha.message_accounting)
   actions.jsonl, observations.jsonl, verify.json   the executor's
   inputs.tar.gz, inputs.sha256   the task form as staged
   returned/, patch.diff          the final work copy and its diff
@@ -224,7 +240,8 @@ import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
-from fvh import apparatus, backends, budget, executor, prereg, protocol, runlog, statements, tools
+from fvh import (apparatus, backends, budget, executor, labalpha, prereg, protocol, runlog,
+                 statements, tools)
 from fvh.records import VERDICTS as VERDICT_WORDS
 
 __all__ = ["ArmPlan", "Batch", "BatchError", "CONSTRUCTS", "Interrupted", "Plan", "derive_seed",
@@ -236,7 +253,7 @@ AGENT_MAX_TURNS = 200           # dvl.sandbox's [agent] turns bound
 AGENT_MIN_WALL_S = 120          # a session needs this much of the wall clock to start
 PLAN_KEYS = {"lab", "seed", "tasks", "repeats", "attempts", "max_reissue", "system",
              "system_file", "instructions", "instructions_file", "statement", "lever_check",
-             "task", "arm", "statements", "gate", "gate_sha256"}
+             "task", "arm", "statements", "gate", "gate_sha256", "role", "freeze"}
 ARM_KEYS = {"name", "family", "rounds", "policy", "construct", "turns", "wall_s", "gpu_s",
             "tokens", "acceptance", "lab_code", "feedback"}
 TASK_KEYS = {"path", "statement", "min_verified", "symbols"}
@@ -330,6 +347,8 @@ class Plan:
     gate: str = ""
     gate_sha256: str = ""
     task_pins: dict = field(default_factory=dict)   # id -> (min_verified, symbols)
+    role: str = ""              # a schema-2 stratum's plan role (fvh.prereg.check_roles)
+    freeze: str = ""            # the freeze file of a confirmatory/descriptive plan
 
     def __hash__(self):
         return hash(self.sha256)
@@ -551,13 +570,21 @@ def load_plan(path, root) -> Plan:
         if bad:
             raise BatchError(f"{path}: a gated arm runs a crate-scale gate: task(s) "
                              f"{', '.join(bad)} are not crate tasks")
+    role, frz = data.get("role", ""), data.get("freeze", "")
+    if role not in ("",) + prereg.PLAN_ROLES:
+        raise BatchError(f"{path}: role is one of " + ", ".join(prereg.PLAN_ROLES))
+    if not isinstance(frz, str):
+        raise BatchError(f"{path}: freeze is a course path")
+    if frz:
+        _course_text(root, frz, "freeze")
     plan = Plan(path=path, sha256=hashlib.sha256(raw).hexdigest(), text=raw.decode("utf-8"),
                 lab=lab, seed=seed, tasks=tasks, order=tuple(order), arms=tuple(arms),
                 repeats=_int(data.get("repeats", 1), "repeats", 1),
                 attempts=_int(data.get("attempts", 1), "attempts", 1), max_reissue=max_reissue,
                 system=text_of("system"), instructions=text_of("instructions"),
                 statement=statement, lever_check=lever, task_statements=task_statements,
-                statements=tuple(stm), gate=gate, gate_sha256=gate_sha, task_pins=task_pins)
+                statements=tuple(stm), gate=gate, gate_sha256=gate_sha, task_pins=task_pins,
+                role=role, freeze=frz)
     try:
         items = plan.items()
     except (ValueError, budget.BudgetError) as e:
@@ -677,7 +704,9 @@ class RecordingTransport:
         n, t0 = self.n, time.monotonic()
         self.n += 1
         rec = {"n": n, "seed": seed, "family": self.family, "message_sha256":
-               hashlib.sha256(message.encode("utf-8")).hexdigest()}
+               hashlib.sha256(message.encode("utf-8")).hexdigest(),
+               **labalpha.message_accounting(message)}   # bytes; a request's feedback size
+               # and the equal cap's truncation flag (Lab alpha's resource accounting)
         if hasattr(self.inner, "last_raw"):
             self.inner.last_raw = None
         try:
@@ -762,6 +791,7 @@ class Batch:
         self.ledger = budget.Ledger(budget.ledger_path(self.root, module))
         self.facts = apparatus.git_facts(self.root)
         self.prereg = ""
+        self.freeze_sha256 = ""      # the committed freeze of a confirmatory/descriptive plan
         self.watch = budget.OverageWatch(self.app.window())
         self.window_file = self.root / budget.WINDOW_FILE
         self.stop = None              # why the batch stops between attempts
@@ -798,6 +828,11 @@ class Batch:
                 prereg.check_plan(self.root, self.module, self.plan.sha256)
             except prereg.PreregRefused as e:
                 raise BatchError(str(e)) from None
+        try:
+            frozen = prereg.check_roles(self.root, self.module, self.plan)
+        except prereg.PreregRefused as e:
+            raise BatchError(str(e)) from None
+        self.freeze_sha256 = frozen["sha256"] if frozen else ""
         self.check_statements()
         self.check_gate()
         if budget.CLAUDE in self.plan.families():
@@ -826,7 +861,10 @@ class Batch:
                        **({"statements_sha256": dict(sorted(self.statements.items()))}
                           if self.statements else {}),
                        **({"gate": self.plan.gate, "gate_sha256": self.plan.gate_sha256}
-                          if self.plan.gate else {})})
+                          if self.plan.gate else {}),
+                       **({"role": self.plan.role} if self.plan.role else {}),
+                       **({"freeze": self.plan.freeze, "freeze_sha256": self.freeze_sha256}
+                          if self.freeze_sha256 else {})})
         return len(items)
 
     def check_statements(self):

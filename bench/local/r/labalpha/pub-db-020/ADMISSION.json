@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "f4bb7e2488fb125e3290252dc9fd6457d1712a0edcb141a21933698c1a10fa62",
+    "statement_sha256": "feeb21a1e6d15b8724287faed6c7bc52c8aad6f5d0977a155c4dc47cf6b0ea4c"
+  },
+  "id": "pub-db-020",
+  "lang": "dafny",
+  "private_evidence_sha256": "a8fbc89695ba398f1b4d9ec6b2cad5bbe77b2806278e7e372e5eacfdbed2104d",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "c7a6ff98eebdf8d5861aae12740f68032f13316c8a5e9711a9b166f88b860e03",
+  "status": "admitted",
+  "target": "SumAndAverage",
+  "validated_span": {
+    "end": 17,
+    "start": 4,
+    "symbol": "SumAndAverage"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

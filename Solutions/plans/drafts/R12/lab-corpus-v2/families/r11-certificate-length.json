@@ -1,0 +1,28 @@
+{
+  "cluster": "r11-certificate-length",
+  "source": {
+    "module": "R11",
+    "lemma": "CertificateLengthR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy::CertificateLengthR11 (R11.X1d)",
+      "verus": "Solutions/verus/r/r11_theory/src/exit.rs::certificate_length_r11 (R11.X1v)"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "max-auto-empty-fails (Dafny)",
+  "attempts": [
+    {
+      "task": "r11-certificate-length-d",
+      "form": 1,
+      "result": "rejected: Dafny max-auto-empty-fails: the empty body verifies at maximal automation (auto-induction on; finding lever-needed) and fails only under the shipped --manual-lemma-induction; a property of the statement and definitions, so no other site granularity can admit it"
+    },
+    {
+      "task": "r11-certificate-length-v",
+      "form": 1,
+      "result": "admitted (cluster incomplete)"
+    }
+  ],
+  "notes": "Forms and evidence kept under rejected/.",
+  "kind": "regex"
+}

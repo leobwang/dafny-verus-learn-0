@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "03914699725962be98f067f00bc3cf2254442470e21cdb0252f3d7ecdd91d471",
+    "statement_sha256": "176419f63bab97b22eeaef53713c79e04cb8f09a4ae1036959cffca26de335aa"
+  },
+  "id": "r10-mk-cat-correct-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "35bee6c900cca487fa2bbd5aa7880925480c31199941ee7422700388776b6da6",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    }
+  ],
+  "source_sha256": "9d57b5e658fddbc3553da38fa6e98a01c458ebccd6fc1b4fd57ed265a37b7331",
+  "status": "admitted",
+  "target": "R12_LabCase.MkCatCorrect",
+  "validated_span": {
+    "end": 74,
+    "start": 65,
+    "symbol": "R12_LabCase.MkCatCorrect"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

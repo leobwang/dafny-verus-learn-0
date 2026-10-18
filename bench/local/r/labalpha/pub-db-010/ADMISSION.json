@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "0651b79ccf6a94c5fc2c64882554a1f6e2e706acf1afce98efe7e6959eac2c89",
+    "statement_sha256": "6ff27e7d9fa30271a085bb668c54904ab64b97531ad092e4da3d6a4b0f981b5b"
+  },
+  "id": "pub-db-010",
+  "lang": "dafny",
+  "private_evidence_sha256": "eec80b144a7d834a3f9042e5241213aad66b5a2c67aabde2f6bace95cfb73ff8",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "a7487d65bf413714c7bbc07551279fb902608da1b8a6ae9f7dc47fec4d1329af",
+  "status": "admitted",
+  "target": "LinearSearch",
+  "validated_span": {
+    "end": 19,
+    "start": 4,
+    "symbol": "LinearSearch"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

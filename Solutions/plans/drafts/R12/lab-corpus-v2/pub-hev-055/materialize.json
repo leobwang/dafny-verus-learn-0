@@ -1,0 +1,20 @@
+{
+ "target": "encode_shift",
+ "sites": 1,
+ "kept_annotations": [
+  {
+   "offset": 1360,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|j: int| #![auto] 0 <= j < i ==> t[j] == encode_char_spec(s[j] as int)"
+  },
+  {
+   "offset": 1450,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|j: int| #![auto] 0 <= j < i ==> decode_char_spec(t[j] as int) == s[j]"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": false
+ }
+}

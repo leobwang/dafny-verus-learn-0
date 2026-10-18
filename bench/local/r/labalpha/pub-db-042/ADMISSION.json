@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "42625245c0110b1cfb19a26ff943ac0d13e8e2bcbc3fe92c17f0f02e2b4a6f67",
+    "statement_sha256": "d95d627efd369c1a0be1a97e2448740d26ec56c1d053d2d7ec3da68fa18c866d"
+  },
+  "id": "pub-db-042",
+  "lang": "dafny",
+  "private_evidence_sha256": "9a89be1eff157e582aa428e91f95a70d20af5c39b0c920f28c84dba0e5dfcc58",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "fc3c36eeae38d7b0b4f6db5455df3544b09c8f5879f2d7d24882f14dc963b150",
+  "status": "admitted",
+  "target": "SharedElements",
+  "validated_span": {
+    "end": 28,
+    "start": 10,
+    "symbol": "SharedElements"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

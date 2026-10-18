@@ -1,0 +1,23 @@
+{
+  "cluster": "r10-replace-right",
+  "source": {
+    "module": "R10",
+    "lemma": "ReplaceRightR10",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy::ReplaceRightR10 (R10.W3d)",
+      "verus": "Solutions/verus/r/r10_type_invariants/src/lib.rs::replace_right_r10"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "baseline-proof-fails (Dafny)",
+  "attempts": [
+    {
+      "task": "r10-replace-right-d",
+      "form": 1,
+      "result": "rejected: the reference is one call to RG_A4_Norm.CatCongRight, which states the same lemma; with CatCongRight's own proof as skeleton and its two witness facts as sites, the baseline (sites true) already verifies"
+    }
+  ],
+  "notes": "Restates an A4 lemma (DVR4 plan 3.5: CatCongRight verifies by construction). Verus form not built.",
+  "kind": "regex"
+}

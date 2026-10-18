@@ -1,0 +1,15 @@
+{
+ "target": "flip_case",
+ "sites": 3,
+ "kept_annotations": [
+  {
+   "offset": 1157,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 <= i < index ==> flipped_case[i] == flip_case_spec(#[trigger] str[i])"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

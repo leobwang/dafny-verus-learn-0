@@ -1,0 +1,60 @@
+# Generated R12 plan; creating this file does not unlock execution.
+lab = "R12"
+seed = 1218
+repeats = 1
+attempts = 1
+max_reissue = 3
+lever_check = true
+tasks = ["maximum-value-d", "exhaust-credit-d", "concat-ledgers-d", "last-acceptance-d", "quotient-three-d", "last-acceptance-v", "first-mismatch-v", "maximum-value-v", "negate-ledger-v", "reverse-ledger-v"]
+system = "You propose bounded proof annotation data for an original fixed verification task.\nUse the provided action schema, with one whole-file edit whose new text is a JSON\nstring of the form {\"hints\":[one expression or approved proof-call list per site]}.\nThe harness decodes this as data and renders the original task; you never supply\nsource code, a native Result, wrapper flags or an acceptance claim. Preserve the\noriginal task domain, provided definitions, executable code, imports and levers.\n"
+instructions = "Read the exact task statement, original source and hint-site manifest. Return one\nhint for every site in the manifest's order, using only its identifiers and,\nfor a call site, its approved local proof callees. Do not add declarations,\nattributes, assumptions, imports, comments, strings, newlines or control flow.\nFeedback concerns the named earlier candidate only. An empty diagnostic list or\nscore0is not proof acceptance. The trusted native full gate determines success.\n"
+
+[task."maximum-value-d"]
+path = "bench/local/r/labalpha-smoke/maximum-value-d/tasks/maximum-value-d.dfy"
+statement = "R12_TASK_SHA256: 647c4d9008f064c6f5cc162c58f89838239cc22daf306157495393c281b12700\nR12_CLUSTER: maximum-value\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nReturn an extremal element of the original nonempty sequence; preserve both the bound and an actual membership witness."
+
+[task."exhaust-credit-d"]
+path = "bench/local/r/labalpha-smoke/exhaust-credit-d/tasks/exhaust-credit-d.dfy"
+statement = "R12_TASK_SHA256: 432690b2c322a783a6328212b4deb0e8e00a957fc1981b80efea6a605d5a9717\nR12_CLUSTER: exhaust-credit\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nConsume one credit per iteration and return the exact number consumed without changing the original limit."
+
+[task."concat-ledgers-d"]
+path = "bench/local/r/labalpha-smoke/concat-ledgers-d/tasks/concat-ledgers-d.dfy"
+statement = "R12_TASK_SHA256: 8eded43c836c73dad4796ffe98003254a6e334ae7d30c5ab650875b5eac10156\nR12_CLUSTER: concat-ledgers\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nConcatenate two immutable flag ledgers, preserving both ordered input segments. Verus requires the combined length to be representable."
+
+[task."last-acceptance-d"]
+path = "bench/local/r/labalpha-smoke/last-acceptance-d/tasks/last-acceptance-d.dfy"
+statement = "R12_TASK_SHA256: 6c1aa811934bd6245aa0e1be57a3746d11cf3772c21a5d883d7a8c53769fa7d2\nR12_CLUSTER: last-acceptance\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nReturn one plus the last true index, or0if none; every flag after the returned prefix must be false."
+
+[task."quotient-three-d"]
+path = "bench/local/r/labalpha-smoke/quotient-three-d/tasks/quotient-three-d.dfy"
+statement = "R12_TASK_SHA256: adc165e3a254690fc81b35a14265ffb1dad3bd254cc3f0c828d4ecad766eb909\nR12_CLUSTER: quotient-three\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nCompute division by3by repeatedly consuming three credits; return the exact Euclidean quotient."
+
+[task."last-acceptance-v"]
+path = "bench/local/r/labalpha-smoke/last-acceptance-v/tasks/last-acceptance-v.rs"
+statement = "R12_TASK_SHA256: 0e28b8341c99d0820f4f354062a878178eb11f8ed70bc6e3fc5ac2a3b299ce8c\nR12_CLUSTER: last-acceptance\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nReturn one plus the last true index, or0if none; every flag after the returned prefix must be false."
+
+[task."first-mismatch-v"]
+path = "bench/local/r/labalpha-smoke/first-mismatch-v/tasks/first-mismatch-v.rs"
+statement = "R12_TASK_SHA256: d317c7f80b2e6a3b8b72474e47b13b086802fff16786faf7a96bbccc54dd0d18\nR12_CLUSTER: first-mismatch\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nCompare equally long original flag ledgers and return the first unequal position, or their length."
+
+[task."maximum-value-v"]
+path = "bench/local/r/labalpha-smoke/maximum-value-v/tasks/maximum-value-v.rs"
+statement = "R12_TASK_SHA256: 3a3dc1b491818841709d7ec09cd5da435f35b551796476d5355ebad32a0de987\nR12_CLUSTER: maximum-value\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nReturn an extremal element of the original nonempty sequence; preserve both the bound and an actual membership witness."
+
+[task."negate-ledger-v"]
+path = "bench/local/r/labalpha-smoke/negate-ledger-v/tasks/negate-ledger-v.rs"
+statement = "R12_TASK_SHA256: 9e4464f4879dcf5a6e0ccbbca0bc782da848c0f4f4616a84a8c9f6dff65c3b9e\nR12_CLUSTER: negate-ledger\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nProduce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
+
+[task."reverse-ledger-v"]
+path = "bench/local/r/labalpha-smoke/reverse-ledger-v/tasks/reverse-ledger-v.rs"
+statement = "R12_TASK_SHA256: 369b7e5113a8f7f24dbbad516af4812edd368a4afd1556e7fc4efd9272342656\nR12_CLUSTER: reverse-ledger\nR12_EXPOSURE: treat as course-derived and previously exposed; new filenames are no unseen/model-contamination guarantee\nProduce the specified output ledger from the immutable original flags, preserving its length and every indexed relation."
+
+[[arm]]
+name = "best"
+family = "claude"
+rounds = 10
+turns = 12
+policy = "fvh_r.engine:R12BestFirst"
+construct = "seeded"
+lab_code = "preserve"
+acceptance = "verify"

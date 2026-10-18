@@ -1,0 +1,37 @@
+{
+  "cluster": "r09-copies-up-to-correct",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "CopiesUpToCorrect",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::CopiesUpToCorrect",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_copies_optional_r09"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches), copied verbatim",
+    "RG_A3_Syntax / rg_re_a3 (Copies, CopiesUpTo)"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r09-copies-up-to-correct-d",
+    "r09-copies-up-to-correct-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r09-copies-up-to-correct-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 7
+    },
+    {
+      "task": "r09-copies-up-to-correct-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 7
+    }
+  ],
+  "notes": "Both recursive calls and the Copies-unfolding / match facts of each direction are sites; the choose/:| skeleton and the primed-variable existential asserts stay."
+}

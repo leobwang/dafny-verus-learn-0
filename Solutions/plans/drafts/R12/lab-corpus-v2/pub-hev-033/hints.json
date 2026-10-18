@@ -1,0 +1,8 @@
+{
+ "hints": [
+  "how_many_times(string@, substring@) == k + how_many_times(current_string@, substring@)",
+  "k <= u32::MAX as u64",
+  "substring.len() >= 1",
+  "how_many_times(string@, substring@) == k + 1 + how_many_times( current_string@, substring@, )"
+ ]
+}

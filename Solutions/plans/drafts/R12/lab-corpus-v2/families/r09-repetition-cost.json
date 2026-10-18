@@ -1,0 +1,31 @@
+{
+  "cluster": "r09-repetition-cost",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "RepetitionCostGrowsR09 / RepetitionCostFormulaR09",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::RepetitionCostGrowsR09, RepetitionCostFormulaR09",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_repetition_cost_grows_r09"
+    }
+  },
+  "layer_definitions": [],
+  "helpers_included": [],
+  "tasks": [],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r09-repetition-cost-d",
+      "form": 0,
+      "result": "rejected (no form built)",
+      "reason": "the Dafny references' bodies are empty ({}): max-auto-empty-fails fails by construction; the obligation is generic nonlinear arithmetic over nat (no regex object)"
+    },
+    {
+      "task": "r09-repetition-cost-v",
+      "form": 0,
+      "result": "rejected (no form built)",
+      "reason": "one nonlinear_arith assert restating the ensures; generic arithmetic, and the Dafny twin cannot be admitted"
+    }
+  ],
+  "notes": "excluded under the cluster rule (real regex proof obligations, not generic arithmetic)"
+}

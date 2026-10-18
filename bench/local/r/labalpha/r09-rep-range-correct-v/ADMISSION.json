@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "9c4bea4cb99efd29e6cce33bdf1f2fdcdb516df1fa2b0bf3cb1e8428799c7005"
+  },
+  "id": "r09-rep-range-correct-v",
+  "lang": "verus",
+  "private_evidence_sha256": "509bb9184f32e0dfd8412f4afa8495714b4a9aae06115598c1d477c9047c4a8b",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "d29a2085af27988532c0736dc9ffcb0d86fc9b8eed8ae1922849a7063cb81fcf",
+  "status": "admitted",
+  "target": "lemma_repetition_interval_r09",
+  "validated_span": {
+    "end": 218,
+    "start": 199,
+    "symbol": "lemma_repetition_interval_r09"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

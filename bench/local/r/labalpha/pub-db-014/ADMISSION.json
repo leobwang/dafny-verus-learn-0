@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "a907aa18c04c69a06b47e8ac133e40ccc0716e8d6384d8feeb6a1a1d69bb3f9a",
+    "statement_sha256": "39866c9e7317b5355cc3c078db4b608486792efad05526e525c60e939a7048fc"
+  },
+  "id": "pub-db-014",
+  "lang": "dafny",
+  "private_evidence_sha256": "a4354a39b3e82d3b4c51a470f4e7c3465d119eeb6860837c273782e512b586f4",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "6ae9843e8d0b9619ccab4fd517ddd66c1d2824a2c440ff1e911f829610ed006e",
+  "status": "admitted",
+  "target": "mallEqual5",
+  "validated_span": {
+    "end": 141,
+    "start": 126,
+    "symbol": "mallEqual5"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

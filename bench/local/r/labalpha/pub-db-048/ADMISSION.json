@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "948cf9e878c439bf58ef713fa178b13c7f4210aa5f5a8d36922b4efbe19bd0ee",
+    "statement_sha256": "63d10e87fedcff90bd2381a265b1b310e23f297826bf778c5894a5fc57aa74e5"
+  },
+  "id": "pub-db-048",
+  "lang": "dafny",
+  "private_evidence_sha256": "f711210e6a1c7d215b80cce17ce768e357da055edc1c0caa3f3ded945fe72b5c",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "8450147c2645247cd105cc24d759b9272438561c88624cf169dbdbc4365a7149",
+  "status": "admitted",
+  "target": "Interleave",
+  "validated_span": {
+    "end": 17,
+    "start": 4,
+    "symbol": "Interleave"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

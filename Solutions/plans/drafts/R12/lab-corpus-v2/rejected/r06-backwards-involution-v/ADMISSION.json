@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "dc48092a9c99e92fd29a61b734f32208ffb8cf40620c60ca7c1db31aed6e372e"
+  },
+  "id": "r06-backwards-involution-v",
+  "lang": "verus",
+  "private_evidence_sha256": "d6a0c2e451b6d513a9a81f85a51d7a2f3825c281cb9beda2a053aaf5c903a24c",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    }
+  ],
+  "source_sha256": "962233264a8eed9795602c39536cc1ddd86a0a22270fa0744f4a8df05dfd523e",
+  "status": "admitted",
+  "target": "lemma_backwards_involution",
+  "validated_span": {
+    "end": 48,
+    "start": 32,
+    "symbol": "lemma_backwards_involution"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

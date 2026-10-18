@@ -1,0 +1,7 @@
+{
+ "hints": [
+  "0 <= pos < i",
+  "result == &strings[pos as int]",
+  "exists|i: int| 0 <= i < strings.len() && strings[i] == result"
+ ]
+}

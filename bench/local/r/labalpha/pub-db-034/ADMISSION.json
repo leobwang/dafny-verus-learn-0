@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "9dc41382cd8e42a74e3c2e05949442a5c224b1292c53212f390153d724ed410f",
+    "statement_sha256": "c85b2da5235222a62a23de24af132f8bf5b97f7a4d51b9d64803e2adaa3dda4a"
+  },
+  "id": "pub-db-034",
+  "lang": "dafny",
+  "private_evidence_sha256": "649b20a2e5c47c5490e27d42b4916465feb14639a1d6d2191c9142980569491d",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "ef2b05936a2efa2029e525aba7f60ac261792eccd4992777f95ef988cac650bc",
+  "status": "admitted",
+  "target": "CountLessThan",
+  "validated_span": {
+    "end": 26,
+    "start": 4,
+    "symbol": "CountLessThan"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

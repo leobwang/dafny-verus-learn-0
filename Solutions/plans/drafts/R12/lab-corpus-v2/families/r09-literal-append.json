@@ -1,0 +1,44 @@
+{
+  "cluster": "r09-literal-append",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "LiteralAppendR09",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::LiteralAppendR09",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_literal_append_r09"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches), copied verbatim"
+  ],
+  "helpers_included": [
+    "Verus only: lemma_append_split, the reference's two =~= bridges stated as a lemma (the hint grammar has no =~=), complete"
+  ],
+  "tasks": [
+    "r09-literal-append-d",
+    "r09-literal-append-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r09-literal-append-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 1
+    },
+    {
+      "task": "r09-literal-append-v",
+      "form": 1,
+      "result": "rejected at baseline-proof-fails",
+      "reason": "the baseline verified: the skeleton's =~= bridges plus the exists ... by block carried the whole argument"
+    },
+    {
+      "task": "r09-literal-append-v",
+      "form": 2,
+      "result": "admitted",
+      "sites": 1
+    }
+  ],
+  "notes": "Dafny: one expression site (the split of u + [c]); Verus attempt 1 kept the =~= bridges in the skeleton and its baseline verified (rejected at baseline-proof-fails), attempt 2 moves the bridges into a provided lemma and makes its call the site."
+}

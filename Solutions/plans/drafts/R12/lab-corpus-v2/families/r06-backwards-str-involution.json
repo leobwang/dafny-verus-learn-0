@@ -1,0 +1,41 @@
+{
+  "cluster": "r06-backwards-str-involution",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "BackwardsStrInvolution",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsStrInvolution",
+      "verus": "Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_str_involution"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (BackwardsStr)"
+  ],
+  "helpers_included": [
+    "BackwardsStrAppend / lemma_backwards_str_append (R06 decomposer reference), complete"
+  ],
+  "tasks": [
+    "r06-backwards-str-involution-d",
+    "r06-backwards-str-involution-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-backwards-str-involution-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-backwards-str-involution-v",
+      "form": 1,
+      "result": "not admitted: max-auto-empty-fails",
+      "reason": "same tool reading as r06-backwards-str-append-v: BV variants killed(harness), vcheck verdict failed; checks 1-5 passed"
+    },
+    {
+      "task": "r06-backwards-str-involution-v",
+      "result": "admitted after the tool fix: the three BV empty-body variants end killed(harness) at their short clock, which Delta 58 counts as failing (vcheck verdict failed); the tool now reads them so"
+    }
+  ],
+  "notes": "Sites: the append call, the singleton fact, the recursive call, the split fact."
+}

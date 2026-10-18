@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "86dad54e85f4f7839aa0733911ca1644f8bf94010eaf6a0862cc34bbafecb186",
+    "statement_sha256": "279b0826689dcb2405e4c8dffc74a47b3d49e021069257fabad56ea111bc7102"
+  },
+  "id": "pub-db-026",
+  "lang": "dafny",
+  "private_evidence_sha256": "ae2525e8cb3cdf09688b41075973bdeff0f44755da93dcdde5c8ca5de4f23028",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "17ac1e72700e26caac742257d8e0c1726952ea2de6084c8ec84e45aecdf444d3",
+  "status": "admitted",
+  "target": "Busca",
+  "validated_span": {
+    "end": 20,
+    "start": 4,
+    "symbol": "Busca"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

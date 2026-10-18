@@ -1,0 +1,34 @@
+{
+  "cluster": "r06-derivs-append",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "DerivsAppend",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/exit/R06_Checkpoint.dfy::DerivsAppend (R06.X1d)",
+      "verus": "Solutions/verus/r/r06_induction/src/exit.rs::lemma_derivs_append (R06.X1v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (Re, Nullable) and R06's given Deriv, Derivs"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r06-derivs-append-d",
+    "r06-derivs-append-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-derivs-append-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-derivs-append-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "D 4 sites, V 2 sites (the =~= bridges kept)."
+}

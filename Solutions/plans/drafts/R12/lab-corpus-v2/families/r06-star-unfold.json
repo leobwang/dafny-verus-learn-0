@@ -1,0 +1,21 @@
+{
+  "cluster": "r06-star-unfold",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "StarUnfold",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::StarUnfold (R06.H4d)",
+      "verus": "Solutions/verus/r/r06_induction/src/lib.rs::lemma_star_unfold (R06.H4v)"
+    }
+  },
+  "layer_definitions": ["RG_A1_Re / rg_re_a1 (Re, Matches/matches, Nullable/nullable), copied verbatim"],
+  "helpers_included": ["NullableFact / lemma_nullable_fact = RG_A1b NullableCorrect, complete"],
+  "tasks": ["r06-star-unfold-d", "r06-star-unfold-v"],
+  "status": "admitted",
+  "attempts": [
+    {"task": "r06-star-unfold-d", "form": 1, "result": "admitted"},
+    {"task": "r06-star-unfold-v", "form": 1, "result": "admitted (first run rejected by the tool's own empty-body reading: no-verify BV variants; the tool was corrected to vcheck's rule that a no-verify variant counts as failing)"}
+  ],
+  "notes": "Reference calc with one step flattened to its case blocks; sites carry the nullable call and the case facts; the extensional bridges stay in the Verus skeleton (the hint grammar has no =~=)."
+}

@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "71f52719a50422280623d06097260e28558ad96050648d2d5738b424c8baa2d3",
+    "statement_sha256": "a3a868aceb252b5404eb9dd9cbdfa6232ea242e88c4993c945ec0aaa58c3526c"
+  },
+  "id": "pub-db-044",
+  "lang": "dafny",
+  "private_evidence_sha256": "9bef838dfe3fa0563326ad0ffc175162b18f3b646325b8ea3201b3d1f54f38ec",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "225259ba8c633f8decac8fb55355047028d7c0d7933facc4688429e70b70e5a1",
+  "status": "admitted",
+  "target": "BinarySearch",
+  "validated_span": {
+    "end": 36,
+    "start": 11,
+    "symbol": "BinarySearch"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

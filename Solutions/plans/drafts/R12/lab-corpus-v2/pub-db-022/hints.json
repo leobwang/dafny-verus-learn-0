@@ -1,0 +1,8 @@
+{
+ "hints": [
+  "0 <= i <= j < a.Length",
+  "forall k :: 0 <= k < i ==> a[k] < a[pivotPos]",
+  "forall k :: i <= k < j ==> a[k] >= a[pivotPos]",
+  "multiset(a[..]) == multiset(old(a[..]))"
+ ]
+}

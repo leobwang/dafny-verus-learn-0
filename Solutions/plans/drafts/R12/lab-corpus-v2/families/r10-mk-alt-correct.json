@@ -1,0 +1,17 @@
+{
+  "cluster": "r10-mk-alt-correct",
+  "source": {
+    "module": "R10",
+    "lemma": "MkAltCorrect",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy::MkAltCorrect",
+      "verus": "Solutions/verus/r/r10_type_invariants/src/agent.rs::lemma_mk_alt_r10_ref"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "no hint site (design)",
+  "attempts": [],
+  "notes": "The Dafny reference body is empty and the Verus one is a single trivial assert: the lemma falls to automation; no form built.",
+  "kind": "regex"
+}

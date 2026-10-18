@@ -1,0 +1,36 @@
+{
+  "cluster": "r06-backwards-sound",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "BackwardsSound",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsSound",
+      "verus": "Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_sound"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (Re, Matches, Backwards, BackwardsStr)"
+  ],
+  "helpers_included": [
+    "BackwardsStrAppend, StarOne, StarConcat (R06 reference / RG_A1b), complete"
+  ],
+  "tasks": [
+    "r06-backwards-sound-d",
+    "r06-backwards-sound-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-backwards-sound-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-backwards-sound-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "D 10 sites (6 call, 4 fact); V 7 sites (6 call, 1 fact), the =~= bridges kept."
+}

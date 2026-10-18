@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "7427a30848578e7cb65ecec49eddb8efabf3e10e8a77ef7e612f41a67b8784f1"
+  },
+  "id": "r09-copies-split-v",
+  "lang": "verus",
+  "private_evidence_sha256": "86309a9bd458812c06dc4bdb5daf4bc7c851b68542e9367d1de01c404ce20633",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    }
+  ],
+  "source_sha256": "ae1ba0f12cf654840c022b9452589d31f4f477be9377095641eff5ac81bddeef",
+  "status": "admitted",
+  "target": "lemma_copies_join_r09",
+  "validated_span": {
+    "end": 157,
+    "start": 142,
+    "symbol": "lemma_copies_join_r09"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

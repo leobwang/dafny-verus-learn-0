@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "fe15cc895b5a0e1a4aff4bdd677c64a0137b8d86453947a5bf80f53bca0d5b89",
+    "statement_sha256": "7b4ea44fee225f7a8d58aaa78419b91476debe06eff2b998667a8db8e13868fb"
+  },
+  "id": "r11-rename-transport-v",
+  "lang": "verus",
+  "private_evidence_sha256": "d6f7d7dcdcbb24f225c2fa5523c730ebaaadafefc469f78c28489aa88c3bed08",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    }
+  ],
+  "source_sha256": "0a7812265a6e62cc76210b98914276cb6c346f75945015f1419c379760239128",
+  "status": "admitted",
+  "target": "rename_transport_r11",
+  "validated_span": {
+    "end": 89,
+    "start": 66,
+    "symbol": "rename_transport_r11"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

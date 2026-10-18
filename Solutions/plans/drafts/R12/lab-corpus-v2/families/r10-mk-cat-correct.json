@@ -1,0 +1,41 @@
+{
+  "cluster": "r10-mk-cat-correct",
+  "source": {
+    "module": "R10",
+    "lemma": "MkCatCorrect",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy::MkCatCorrect",
+      "verus": "Solutions/verus/r/r10_type_invariants/src/agent.rs::lemma_mk_cat_r10_ref (renamed lemma_mk_cat_r10)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1: Re, Matches/matches",
+    "RG_A4_Norm / rg_re_a4: Normal, NormRe, MkCat / mk_cat, is_norm"
+  ],
+  "helpers_included": [
+    "CatEpsLeft, CatEpsRight (RG_A1b_Facts, complete; Dafny only, the Verus reference uses none)"
+  ],
+  "tasks": [
+    "r10-mk-cat-correct-d",
+    "r10-mk-cat-correct-v"
+  ],
+  "status": "admitted",
+  "sites": {
+    "r10-mk-cat-correct-d": 2,
+    "r10-mk-cat-correct-v": 4
+  },
+  "attempts": [
+    {
+      "task": "r10-mk-cat-correct-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r10-mk-cat-correct-v",
+      "form": 1,
+      "result": "admitted (a first launch hit a transiently reverted admit_forms.py without --admit: usage error, no verdict; rerun fresh)"
+    }
+  ],
+  "notes": "The two languages state the lemma as their references do (Verus adds the is_norm shape conjunct). Dafny sites are the two unit-law calls; Verus sites are the split-index and witness facts.",
+  "kind": "regex"
+}

@@ -224,3 +224,88 @@ def test_cli_usage_errors_exit_2():
     with pytest.raises(SystemExit) as e:
         cli.main(["frobnicate"])
     assert e.value.code == 2
+
+
+# --- Lab alpha's tables (fvh.report.labalpha; DVR4 plan sections 3.1-3.3, 3.6) ------------
+
+from fvh import stats  # noqa: E402
+
+CLUSTERS = {"a-d": "c1", "a-v": "c1", "b-d": "c2", "c-v": "c3"}
+
+
+def alpha_run(root, run_id, arm, task, outcome, calls, *, repeat=1, edits=None, truncated=0):
+    d = root / "research" / "runs" / "Q98" / run_id
+    d.mkdir(parents=True)
+    runlog.write_meta(d, runlog.RunMeta(run_id=run_id, module="Q98", arm=arm, task_id=task,
+                                        lang="dafny" if task.endswith("-d") else "verus",
+                                        attempt=1, repeat=repeat, mode="harness-executed",
+                                        backend="qwen", outcome=outcome))
+    rows = [{"n": i, "wall_s": 2.0, "client_usage": {"input_tokens": 10, "output_tokens": 5},
+             "gate": {"gpu_s": 1.5, "prompt_tokens": 10, "capped": 0}, "feedback_bytes": 100,
+             "feedback_truncated": i < truncated} for i in range(calls)]
+    (d / "calls.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+    n_edits = calls if edits is None else edits
+    acts = [{"step": i, "files": {}, "actions": [{"type": "edit", "path": "x", "old": "", "new": ""}]}
+            for i in range(n_edits)]
+    (d / "actions.jsonl").write_text("".join(json.dumps(a) + "\n" for a in acts))
+
+
+def alpha_tree(tmp_path, *, with_clusters=True):
+    root = course(tmp_path)
+    b = root / "research" / "runs" / "Q98" / "batches"
+    b.mkdir(parents=True)
+    plan = "".join(f'[task."{t}"]\npath = "x"\nstatement = "R12_TASK_SHA256: 0\\nR12_CLUSTER: {c}\\nS"\n'
+                   for t, c in CLUSTERS.items() if with_clusters)
+    (b / "b00001-x.toml").write_text(plan)
+    for rid, arm, task, outcome, calls, kw in (
+            ("r01", "best", "a-d", "verified", 1, {}),
+            ("r02", "best", "a-v", "verified", 3, dict(edits=2)),    # one failed node
+            ("r03", "best", "b-d", "verified", 2, {}),
+            ("r04", "best", "c-v", "infra-failed", 0, {}),
+            ("r05", "best", "c-v", "verified", 5, dict(repeat=2)),
+            ("r06", "best-raw", "a-d", "failed", 10, dict(truncated=4)),
+            ("r07", "best-raw", "a-v", "verified", 10, {}),
+            ("r08", "best-raw", "b-d", "malformed", 1, dict(edits=0)),
+            ("r09", "best-raw", "c-v", "verified", 5, {})):
+        alpha_run(root, rid, arm, task, outcome, calls, **kw)
+    return root
+
+
+def test_labalpha_tables_from_the_logs(tmp_path):
+    root = alpha_tree(tmp_path)
+    t = report.labalpha(root, "Q98", n_permutations=2000, n_resamples=500, seed=3)
+    assert t.clusters["c1"] == {"best": pytest.approx(0.9), "best-raw": pytest.approx(0.05)}
+    assert t.clusters["c2"] == {"best": pytest.approx(0.9), "best-raw": 0.0}
+    assert t.clusters["c3"] == {"best": pytest.approx(0.6), "best-raw": pytest.approx(0.6)}
+    best, raw = t.arms["best"], t.arms["best-raw"]
+    assert (best["runs"], best["excluded"], best["kept"]) == (5, 1, 4)
+    assert best["solved_at_call_1"] == 0.25 and best["never_solved"] == 0.0
+    assert raw["never_solved"] == 0.5 and raw["solved_at_call_1"] == 0.0
+    assert best["failed_nodes"] == 1 and raw["failed_nodes"] == 1
+    assert raw["feedback_truncation_rate"] == pytest.approx(4 / 26)
+    assert raw["gpu_s"] == pytest.approx(1.5 * 26)
+    assert best["curve"][0] == pytest.approx((0.5 + 0.0 + 0.0) / 3)    # S(1) per cluster: c1 1/2
+    p = t.primary
+    assert p["clusters"] == 3 and p["theta"] == pytest.approx((0.85 + 0.9 + 0.0) / 3)
+    assert p["p_value"] == stats.permutation_test([0.9, 0.9, 0.6], [0.05, 0.0, 0.6], paired=True,
+                                                  n_permutations=2000, seed=3)
+    assert p["ci"] == stats.cluster_bootstrap_ci([0.9 - 0.05, 0.9 - 0.0, 0.6 - 0.6],
+                                                 n_resamples=500, seed=3)
+    # worst case: the excluded run scores 0 in the obligation arm
+    assert p["theta_worst_case"] == pytest.approx((0.85 + 0.9 - 0.3) / 3)
+    assert not t.findings
+    again = report.labalpha(root, "Q98", n_permutations=2000, n_resamples=500, seed=3)
+    assert report.format_labalpha(again) == report.format_labalpha(t)   # from the logs alone
+    text = report.format_labalpha(t)
+    assert "| best | 5 | 1 | 3 | 0.250 | 0.000 |" in text and "Primary contrast" in text
+
+
+def test_labalpha_findings(tmp_path):
+    root = alpha_tree(tmp_path, with_clusters=False)
+    t = report.labalpha(root, "Q98", n_permutations=10, n_resamples=10)
+    assert any("no R12_CLUSTER line" in f for f in t.findings) and not t.primary
+    (tmp_path / "b").mkdir()
+    root = alpha_tree(tmp_path / "b")
+    t = report.labalpha(root, "Q98", n_permutations=10, n_resamples=10,
+                        rejudged={"r01": True, "r02": True})
+    assert sorted(f.split()[1] for f in t.findings) == ["r03:", "r05:", "r07:", "r09:"]

@@ -1,0 +1,20 @@
+{
+ "target": "intersperse",
+ "sites": 3,
+ "kept_annotations": [
+  {
+   "offset": 3387,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 <= i < index ==> #[trigger] result[even(i)] == numbers[i]"
+  },
+  {
+   "offset": 3479,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 <= i < index ==> #[trigger] result[odd(i)] == delimiter"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

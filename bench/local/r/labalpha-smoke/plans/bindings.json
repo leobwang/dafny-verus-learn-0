@@ -1,0 +1,34 @@
+{
+  "claude": {
+    "generation_calls": 100,
+    "plan_sha256": "c0227e48693b85eda10ab002bba3633c9cd72069ccdaf9cb49613c020c071046",
+    "runs": 10,
+    "sentinel_ceiling": 10
+  },
+  "claude_subset": [
+    "maximum-value-d",
+    "exhaust-credit-d",
+    "concat-ledgers-d",
+    "last-acceptance-d",
+    "quotient-three-d",
+    "last-acceptance-v",
+    "first-mismatch-v",
+    "maximum-value-v",
+    "negate-ledger-v",
+    "reverse-ledger-v"
+  ],
+  "inputs": {
+    "harness/r/fvh_r/engine.py": "d622fcf73801ed990bf3a880124c5eca1f023808343c863d679149866da3d477",
+    "tools/R12/lab_instructions.md": "562e2e910b02b5250aec27c5f7041e67a71993e20f53bec5247d316fdc065f28",
+    "tools/R12/lab_system.md": "93847c5331eb897a6764c8371829b4db8f33311e59650d5d5676707d11a73f68",
+    "tools/R12/plan.py": "a02a1fbe5610e809e780fa12d05efaf5bbd161292967c970da6f3955ac4b8757"
+  },
+  "qwen": {
+    "generation_calls": 4800,
+    "plan_sha256": "60514d84daf7a3f48099381d78e07f779851b6dc7bf6965e734490c131cce626",
+    "runs": 480
+  },
+  "scope": "apparatus-smoke replay fixtures (DVR4 step 3): the first build's locked plans with their task paths moved to bench/local/r/labalpha-smoke/; never data, no run, grade or budget event",
+  "stratum_sha256": "69c3cb0873924ca3bc9766f3a9bc4350a587bce921d641acf124f945d2a848d4",
+  "subset_seed": 4217
+}

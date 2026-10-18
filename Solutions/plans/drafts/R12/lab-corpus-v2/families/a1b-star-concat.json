@@ -1,0 +1,34 @@
+{
+  "cluster": "a1b-star-concat",
+  "kind": "regex",
+  "source": {
+    "module": "A1b (as a task over A1 only)",
+    "lemma": "StarConcat",
+    "reference": {
+      "dafny": "dafny/given/R/RG_A1b_Facts.dfy::StarConcat",
+      "verus": "verus/given/rg_re_a1b/src/lib.rs::lemma_star_concat"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "a1b-star-concat-d",
+    "a1b-star-concat-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "a1b-star-concat-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "a1b-star-concat-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "D 4 sites, V 1 call site."
+}

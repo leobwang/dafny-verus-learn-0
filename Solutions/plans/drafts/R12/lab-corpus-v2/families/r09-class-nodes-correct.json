@@ -1,0 +1,41 @@
+{
+  "cluster": "r09-class-nodes-correct",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "RangeNodesCorrectR09 / ClassNodesCorrectR09 (target ClassNodesCorrectR09)",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::ClassNodesCorrectR09",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_class_nodes_r09"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, NodeCount / node_count)",
+    "RG_A2_Deriv (Cp, CRange)",
+    "RG_A3_Syntax / rg_re_a3 (ClassMax, RangesLowered, RangeRe, RangesToRe / CLASS_MAX, range_valid, class_valid, range_re, class_re)",
+    "R09_Size (RangeNodesR09, ClassNodesR09)"
+  ],
+  "helpers_included": [
+    "RangeNodesCorrectR09 / lemma_range_nodes_r09 (R09), complete"
+  ],
+  "tasks": [
+    "r09-class-nodes-correct-d",
+    "r09-class-nodes-correct-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r09-class-nodes-correct-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 1
+    },
+    {
+      "task": "r09-class-nodes-correct-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 2
+    }
+  ],
+  "notes": "One call site holds the range fact and the recursive call; the Verus form adds the drop_first index fact as an expression site."
+}

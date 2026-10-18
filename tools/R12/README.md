@@ -71,9 +71,19 @@ conversation. It checks Content-Length against UTF-8 bytes, decoded documents
 against wire frames and didOpen text against the committed source fixture. It
 never starts a language server or turns a diagnostic into a full gate verdict.
 
-`tools/R12/plan.py` constructs separate locked Qwen/Claude plans only from a
-complete source-bound40-task stratum. It uses the frozen public-pool eligibility
-checks, fixes inline prompt bytes and preserves all pre-registration/budget locks.
-See `bench/local/r/labalpha/README.md`; the complete40-task corpus is admitted over20paired-language clusters.
-The unused public-pool reservation remains unrun and needs hint admission before
-future use.
+`tools/R12/plan.py` builds Lab alpha's locked plans from the schema-2 stratum
+`bench/local/r/labalpha/STRATUM.toml` (DVR4 plan section 3.8): a pilot plan (the
+pilot clusters, all four regimes), a confirmatory plan (the confirmatory clusters,
+the two primary arms) and a descriptive plan (the descriptive subset, the other two
+regimes), each arm a `fvh.labalpha` regime (the equal feedback cap and the
+failed-node rule around the engine's policy), three repeats, B = 10. It refuses a
+stratum whose tasks are not all admitted against their source bytes, and `fvh run`
+refuses a confirmatory or descriptive plan without the committed freeze
+(`fvh.prereg.check_roles`). The 40 toy forms of the first build are apparatus
+smoke in `bench/local/r/labalpha-smoke/` (CI replay only, never data).
+
+`tools/R12/admit_forms.py FORM --admit HINTS.json --evidence DIR` is the author's
+admission run: given a form and its reference hint data explicitly, it runs the
+seven controls (frame, failing baseline, lab-gate reference, three seeds, clean
+audit, failing empty body under maximal automation, failing wrong hints) and
+writes the evidence and the public ADMISSION.json. It never locates a reference.

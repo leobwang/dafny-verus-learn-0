@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "cdaa598e2188912449aceccf003398308fa59fae599e5dcec52dd0aa6b6a5b93",
+    "statement_sha256": "8a0b7a3b60db7dcd62ede592703549766f33a9cdcad6de8a288d6c5278ca7042"
+  },
+  "id": "pub-db-030",
+  "lang": "dafny",
+  "private_evidence_sha256": "80d0c77c4b204e693d86526f5d146828dae4b9c6480c4086f3a1b51357090903",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    },
+    {
+      "kind": "expr",
+      "name": "i5"
+    },
+    {
+      "kind": "expr",
+      "name": "i6"
+    },
+    {
+      "kind": "expr",
+      "name": "i7"
+    },
+    {
+      "kind": "expr",
+      "name": "i8"
+    }
+  ],
+  "source_sha256": "9e9f6c900b714c4c5aad6aba7f974c77279fc446eaf739f5258044c63b16f7bc",
+  "status": "admitted",
+  "target": "SelectionSort",
+  "validated_span": {
+    "end": 46,
+    "start": 6,
+    "symbol": "SelectionSort"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

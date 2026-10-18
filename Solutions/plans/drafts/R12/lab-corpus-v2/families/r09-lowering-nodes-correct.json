@@ -1,0 +1,41 @@
+{
+  "cluster": "r09-lowering-nodes-correct",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "LoweringNodesCorrectR09",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::LoweringNodesCorrectR09",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_lowering_nodes_r09"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, NodeCount)",
+    "RG_A2_Deriv / rg_re_a2::char_class (Cp, CRange, RangesValid, CharClass, ClassValid, ClassRanges / separated, CharClass, valid, ranges_spec)",
+    "RG_A3_Syntax / rg_re_a3 (Copies, CopiesUpTo, RepRange, class lowering, Syn, WF, Lower)",
+    "R09_Size (RangeNodesR09, ClassNodesR09, LoweringNodesR09, RepNodesR09)"
+  ],
+  "helpers_included": [
+    "ClassNodesCorrectR09, RangeNodesCorrectR09, CopiesNodesR09, OptionalNodesR09 (R09 references), complete"
+  ],
+  "tasks": [
+    "r09-lowering-nodes-correct-d",
+    "r09-lowering-nodes-correct-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r09-lowering-nodes-correct-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 8
+    },
+    {
+      "task": "r09-lowering-nodes-correct-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 4
+    }
+  ],
+  "notes": "One call site per syntax case (Dafny 8, Verus 4 merged or-patterns as in the reference); the RepRange case's site needs three instantiated calls. A2's hidden CharClass is copied transparently."
+}

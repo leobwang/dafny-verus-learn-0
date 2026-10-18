@@ -33,6 +33,13 @@ Run from harness/ (`uv run --offline --frozen --directory harness python -m fvh 
       on this machine needed; --truth names the archive sandbox/truth.toml
       pins, so a study session's guard refuses the line): one verdict word
       per run, printed, never written into a run directory.
+      --labalpha prints Lab alpha's tables from the logs (fvh.report.labalpha:
+      per arm the share solved at call 1 and never solved, S(b) with bands,
+      tokens, GPU-seconds, the feedback cap's truncation rate; per cluster the
+      AUC; the primary contrast's paired sign-flip test and interval);
+      --rejudged FILE names a JSON {run id: true|false} of the --reverify
+      results, so successes not reproduced are listed; --json prints the
+      tables as JSON.
   apparatus [--check]
       the apparatus facts as JSON; --check compares the host with the pins,
       and, when the apparatus pins a Qwen backend and models are enabled, the
@@ -63,6 +70,7 @@ Frozen (guard rule 2f), standard library only.
 """
 
 import argparse
+import dataclasses
 import json
 import os
 import sys
@@ -283,6 +291,19 @@ def cmd_report(a, root):
         say(f"reverify {rec['id']}: {n_ok}/{len(got)} run(s) re-verified to their recorded "
             "verdict" + ("" if n_ok == len(got) else "; a difference is a report finding"))
         return EXIT_OK if n_ok == len(got) else EXIT_FAIL
+    if a.labalpha:
+        rejudged = None
+        if a.rejudged:
+            try:
+                rejudged = json.loads(Path(a.rejudged).read_text(encoding="utf-8"))
+            except (OSError, ValueError) as e:
+                raise Refusal(f"--rejudged {a.rejudged}: {e}") from None
+        t = report.labalpha(root, rec["id"], rejudged=rejudged)
+        if a.json:
+            sys.stdout.write(json.dumps(dataclasses.asdict(t), indent=1, sort_keys=True) + "\n")
+        else:
+            sys.stdout.write(report.format_labalpha(t))
+        return EXIT_OK if t.runs and not t.findings else EXIT_FAIL
     rep = report.build(root, rec["id"])
     sys.stdout.write(report.format_report(rep))
     if not rep.ledger_ok:
@@ -383,6 +404,9 @@ def main(argv=None) -> int:
     p.add_argument("--reverify", metavar="RUN")
     p.add_argument("--judge", metavar="RUN")
     p.add_argument("--truth", metavar="ARCHIVE")
+    p.add_argument("--labalpha", action="store_true")
+    p.add_argument("--rejudged", metavar="FILE")
+    p.add_argument("--json", action="store_true")
     p.add_argument("--mem-gb", type=float)
     p = sub.add_parser("apparatus", allow_abbrev=False)
     p.add_argument("--check", action="store_true")

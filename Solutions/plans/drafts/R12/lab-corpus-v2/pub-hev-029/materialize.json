@@ -1,0 +1,20 @@
+{
+ "target": "make_palindrome",
+ "sites": 4,
+ "kept_annotations": [
+  {
+   "offset": 2514,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|bos: int| 0 <= bos < beginning_of_suffix ==> !spec_is_palindrome( #[trigger] string@[bos..len], )"
+  },
+  {
+   "offset": 2823,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "string@[len..len] =~= Seq::<char>::empty()"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

@@ -1,0 +1,7 @@
+{
+ "hints": [
+  "0 <= i <= a.Length",
+  "forall x :: x in res ==> InArray(a, x) && InArray(b, x)",
+  "forall i, j :: 0 <= i < j < |res| ==> res[i] != res[j]"
+ ]
+}

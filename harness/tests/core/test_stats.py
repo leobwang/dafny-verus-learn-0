@@ -344,3 +344,93 @@ def test_mde_is_infinite_when_no_difference_is_detectable():
 def test_mde_rejects_bad_arguments(args, kwargs):
     with pytest.raises(ValueError):
         stats.mde_two_proportions(*args, **kwargs)
+
+
+# --- Lab alpha: success against budget, cluster bootstrap, the design simulation ----------
+
+def test_success_curve_and_auc_known_values():
+    # runs succeed at calls 1 and 3, one never, one after the budget
+    ts = [1, 3, None, 12]
+    assert stats.success_curve(ts, 4) == [0.25, 0.25, 0.5, 0.5]
+    # per run max(0, B - T + 1) / B: 4/4, 2/4, 0, 0
+    assert stats.auc_budget(ts, 4) == pytest.approx((1 + 0.5) / 4, abs=1e-15)
+    # the AUC is the mean of the curve
+    assert stats.auc_budget(ts, 4) == pytest.approx(sum(stats.success_curve(ts, 4)) / 4)
+    assert stats.auc_budget([1, 1], 10) == 1.0 and stats.auc_budget([None, 11], 10) == 0.0
+    assert stats.auc_budget([10], 10) == pytest.approx(0.1)
+
+
+@pytest.mark.parametrize("ts, b, exc", [([], 10, ValueError), ([0], 10, ValueError),
+                                        ([1], 0, ValueError), ([1.0], 10, TypeError),
+                                        ([True], 10, TypeError)])
+def test_auc_rejects_bad_runs(ts, b, exc):
+    with pytest.raises(exc):
+        stats.auc_budget(ts, b)
+
+
+def test_cluster_bootstrap_of_numbers_is_the_percentile_bootstrap_of_the_mean():
+    d = [0.12, -0.05, 0.3, 0.0, 0.07, 0.21, -0.1]
+    got = stats.cluster_bootstrap_ci(d, n_resamples=2000, seed=5)
+    assert got == stats.bootstrap_ci(d, n_resamples=2000, seed=5)
+    assert got == stats.cluster_bootstrap_ci(d, n_resamples=2000, seed=5)
+
+
+def test_cluster_bootstrap_of_curves_resamples_whole_clusters():
+    curves = [[0.0, 0.5, 1.0], [0.5, 0.5, 0.5], [0.0, 0.0, 1.0], [1.0, 1.0, 1.0]]
+    bands = stats.cluster_bootstrap_ci(curves, n_resamples=1000, seed=9)
+    assert len(bands) == 3
+    for j in range(3):   # each point's band: the same resampled clusters as a number's
+        assert bands[j] == stats.cluster_bootstrap_ci([c[j] for c in curves], n_resamples=1000,
+                                                      seed=9)
+        assert 0.0 <= bands[j][0] <= bands[j][1] <= 1.0
+
+
+@pytest.mark.parametrize("vals", [[], [[0.1], 0.2], [[0.1, 0.2], [0.3]], [[]]])
+def test_cluster_bootstrap_rejects_mixed_or_empty(vals):
+    with pytest.raises(ValueError):
+        stats.cluster_bootstrap_ci(vals, n_resamples=10, seed=1)
+
+
+def test_paired_t_pvalue_closed_forms():
+    # df = 1, t = 1: the Cauchy distribution, p = 1/2
+    assert stats.paired_t_pvalue([0.0, 2.0]) == pytest.approx(0.5, abs=1e-12)
+    # df = 2: p = 1 - t / sqrt(2 + t^2); [m - 1, m, m + 1] has sd 1, t = m sqrt(3)
+    m = 2 / math.sqrt(3)
+    assert stats.paired_t_pvalue([m - 1, m, m + 1]) == pytest.approx(1 - 2 / math.sqrt(6),
+                                                                   abs=1e-12)
+    assert stats.paired_t_pvalue([0.0, 0.0, 0.0]) == 1.0
+    assert stats.paired_t_pvalue([0.1, 0.1]) == 0.0
+    with pytest.raises(ValueError):
+        stats.paired_t_pvalue([0.3])
+
+
+def test_mde_paired_clusters_sim_is_deterministic_and_pinned():
+    args = dict(n_sims=120, n_delta=2000, seed=7)
+    a = stats.mde_paired_clusters_sim({2: 5, 1: 3}, 3, 0.35, 0.15, 0.5, **args)
+    assert a == stats.mde_paired_clusters_sim({2: 5, 1: 3}, 3, 0.35, 0.15, 0.5, **args)
+    # the value Solutions/plans/labalpha_power_sim.py's `cell 2:5,1:3 3 0.35 0.15 0.5 100 2000 7`
+    # prints, to the last digit (the port's cross-check, recorded in DELTAS)
+    assert stats.mde_paired_clusters_sim({2: 5, 1: 3}, 3, 0.35, 0.15, 0.5, n_sims=100,
+                                         n_delta=2000, seed=7) == 0.3027927925946766
+
+
+def test_mde_falls_with_more_clusters_and_is_inf_when_unreachable():
+    kw = dict(n_sims=150, n_delta=2000, seed=20261017)
+    small = stats.mde_paired_clusters_sim({2: 10}, 3, 0.35, 0.15, 0.5, **kw)
+    large = stats.mde_paired_clusters_sim({2: 60}, 3, 0.35, 0.15, 0.5, **kw)
+    assert 0.0 < large < small < 1.0
+    assert stats.mde_paired_clusters_sim({1: 2}, 1, 0.35, 0.15, 1.0, betas=(0.05, 0.1),
+                                         **kw) == math.inf
+
+
+@pytest.mark.parametrize("kw", [dict(sizes={}), dict(sizes={2: 1}), dict(icc=1.0),
+                                dict(base_auc=1.0), dict(repeats=0), dict(tau=-0.1),
+                                dict(betas=(0.3, 0.2)), dict(n_sims=0)])
+def test_mde_paired_clusters_sim_validates(kw):
+    args = dict(sizes={2: 4}, repeats=1, base_auc=0.4, icc=0.1, tau=0.5)
+    args.update(kw)
+    sizes = args.pop("sizes")
+    with pytest.raises((ValueError, TypeError)):
+        stats.mde_paired_clusters_sim(sizes, args.pop("repeats"), args.pop("base_auc"),
+                                      args.pop("icc"), args.pop("tau"), seed=1, n_delta=10,
+                                      **{k: v for k, v in args.items() if k != "seed"})

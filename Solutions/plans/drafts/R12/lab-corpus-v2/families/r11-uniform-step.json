@@ -1,0 +1,17 @@
+{
+  "cluster": "r11-uniform-step",
+  "source": {
+    "module": "R11",
+    "lemma": "UniformStepR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy::UniformStepR11",
+      "verus": "Solutions/verus/r/r11_theory/src/exit.rs::uniform_step_r11"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "not a regex obligation (design)",
+  "attempts": [],
+  "notes": "A sequence-comprehension fact (seq(n, i => c) slicing) whose only hints are its own postconditions; excluded under the real-regex-obligation rule.",
+  "kind": "regex"
+}

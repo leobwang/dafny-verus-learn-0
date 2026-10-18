@@ -1,0 +1,7 @@
+{
+ "hints": [
+  "(stack_size as int, b) == spec_bracketing_helper(brackets@[..i])",
+  "stack_size <= i <= brackets@.len() <= i32::MAX",
+  "stack_size >= -i >= -brackets@.len() >= i32::MIN"
+ ]
+}
