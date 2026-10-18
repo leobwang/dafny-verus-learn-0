@@ -27,6 +27,13 @@ class NewToolRoutes(unittest.TestCase):
             ["mcp__firecrawl__firecrawl_parse", "Workflow", "ScheduleWakeup"],
             ROOT / ".claude/settings.json"), [])
 
+    def test_mcp_resource_readers_are_left_alone(self):
+        """Claude Code 2.1.302's ReadMcpResourceDirTool takes ReadMcpResourceTool's policy:
+        it lists an MCP server's resources and reaches no local file."""
+        self.assertEqual(doors.uncovered_tools(
+            ["ListMcpResourcesTool", "ReadMcpResourceTool", "ReadMcpResourceDirTool"],
+            ROOT / ".claude/settings.json"), [])
+
     def test_unknown_tool_still_fails_inventory(self):
         self.assertEqual(doors.uncovered_tools(
             ["Read", "FutureLocalFileReader", "FutureLocalFileReader"],

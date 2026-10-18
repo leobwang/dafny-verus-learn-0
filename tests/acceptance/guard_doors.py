@@ -205,7 +205,7 @@ LEFT_ALONE = [r"Agent", r"Task", r"TaskCreate", r"TaskGet", r"TaskList", r"TaskU
               r"SendMessage", r"ListAgents", r"PushNotification", r"SendFeedback",
               r"StructuredOutput", r"ReportFindings", r"CronCreate", r"CronDelete", r"CronList",
               r"RemoteTrigger", r"EnterWorktree", r"ExitWorktree", r"ListMcpResourcesTool",
-              r"ReadMcpResourceTool", r"Artifact\w*", r"DesignSync",
+              r"ReadMcpResourceTool", r"ReadMcpResourceDirTool", r"Artifact\w*", r"DesignSync",
               # cloud connectors and web-only MCP tools: they reach no local file
               r"mcp__claude_ai_\w+", r"mcp__firecrawl__firecrawl_(?!parse$)\w+"]
 
