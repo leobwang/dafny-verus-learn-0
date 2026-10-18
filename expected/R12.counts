@@ -14,16 +14,16 @@ module = "R12"
 [[unit]]
 path = "dafny/R/R12_Driving/std"
 lang = "dafny"
-reference_verified = 69
-min_verified = 5
-symbols = ["R12_HintSites.AcceptedCountR12", "R12_HintSites.AcceptedStepR12", "R12_HintSites.CountAcceptedR12", "R12_HintSites.FirstRejectionR12", "R12_HintSites.RemainingBudgetR12"]
+reference_verified = 66
+min_verified = 3
+symbols = ["R12_HintSites.CatWitnessR12", "R12_HintSites.CopiesAppendR12", "R12_HintSites.UpToMonoR12"]
 
 [[unit]]
 path = "verus/r/r12_driving"
 lang = "verus"
-reference_verified = 6
-min_verified = 5
-symbols = ["accepted_count_r12", "accepted_step_r12", "count_accepted_r12", "first_rejection_r12", "remaining_budget_r12"]
+reference_verified = 3
+min_verified = 3
+symbols = ["lemma_cat_witness_r12", "lemma_copies_append_r12", "lemma_up_to_mono_r12"]
 
 [[file]]
 path = "dafny/R/R12_Driving/std/R12_Driving.dfy"

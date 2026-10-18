@@ -21,24 +21,18 @@ path = "dafny/R/R12_Driving/std/R12_Driving.dfy"
 lang = "d"
 open_bodies = []
 [file.statements]
-"R12_HintSites.AcceptedCountR12" = "ad3360503043dab9aed0106135bc25264b745fd0d04e26297f21bbaf6546ca07"
-"R12_HintSites.AcceptedStepR12" = "8710c2a5f6129850066ca37a9ecaa4b9e40f00dc43add7d2e99baffab8e7b76f"
-"R12_HintSites.CountAcceptedR12" = "25fb77944a84a5040b3e6bde3eda6ba68b027d75bbf8065bd730689bdf33fe6a"
-"R12_HintSites.FirstRejectionR12" = "0b825e35375f901efcbc1db53a68e8f8752f4759114c12bff55823c1bbd43a05"
-"R12_HintSites.RemainingBudgetR12" = "c204cb76515a10defe2dc2b8e3ce8bd9530b7ff7d53af7e356c9e5c6c94e942a"
-[file.frozen_imports]
-"R12_HintSites" = []
+"R12_HintSites.CatWitnessR12" = "ca179ca830d15e5b0069fa3f166c6d35d679c41779bdec1bf695803fad796ece"
+"R12_HintSites.CopiesAppendR12" = "d4169766efa331a60fbbe7d6bf333be267ab1958aa82fd8c32ca299066e71d27"
+"R12_HintSites.UpToMonoR12" = "9cfe8943029ba1df207632f3c2d322f820a21d0142cc51cb9bc5fee55c72f2bc"
 
 [[file]]
 path = "verus/r/r12_driving/src/lib.rs"
 lang = "v"
 open_bodies = []
 [file.statements]
-"accepted_count_r12" = "cbf72ad19253b2e77712ae03b6fcc016e2accd1ffabf7d0de5e21edde6fb5217"
-"accepted_step_r12" = "530444aaf1072061e36db81ad157209b3175bedf02e6d5bb567efc7b641d75a1"
-"count_accepted_r12" = "675dc21d31dc13e2459edd76fca964bd7c0064d0ab602e5dccbd2a5b054b27bd"
-"first_rejection_r12" = "c1bcd6c4415bee160843685ee3a2792d36d389c9449a1fa407adbd81b4231ba9"
-"remaining_budget_r12" = "a63842e9dd9a3154f971aa8ab9dbb6aab0a68b5132e5d1680f97dfcc79e42512"
+"lemma_cat_witness_r12" = "0d9cd070cef4dfacef517c25b5df256f8456372478490911a558f440f4e5bd46"
+"lemma_copies_append_r12" = "ec37e2b45f60f5a501b1bdc777dc879c50c456b0301137bb08650262efb3e9c5"
+"lemma_up_to_mono_r12" = "043e9a7b5514c6355aeba344061a193498070b83b1d8bf41876ccff13cae6d9d"
 
 [[file]]
 path = "specimens/R12/P2v.rs.specimen"

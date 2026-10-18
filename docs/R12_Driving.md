@@ -18,12 +18,12 @@ Three ideas do all the work:
 
 ## 0. How this module works
 
-Allow786minutes: practice396and Lab α390. Practice estimates are setup10,
-test-out10, reading65, worked examples30, cards6, predictions20, hand hints40,
-doors/trace25, extractor80, bounded loop20, profiler25, paper30, viva30 and
-calibration5. Lab estimates are environment60, engine90, pre-registration40,
-grading10, setup25, analysis75, transcript audit20, post-review10, report50
-and calibration10. These are planned learner times, not measured sessions.
+Allow 786 minutes: practice 396 and Lab α 390. Practice estimates are setup 10,
+test-out 10, reading 65, worked examples 30, cards 6, predictions 20, hand hints 40,
+doors/trace 25, extractor 80, bounded loop 20, profiler 25, paper 30, viva 30 and
+calibration 5. Lab estimates are environment 60, engine 90, pre-registration 40,
+grading 10, setup 25, analysis 75, transcript audit 20, post-review 10, report 50
+and calibration 10. These are planned learner times, not measured sessions.
 Live model arms, live grading and unavailable container work remain recorded
 D45 deferrals. Building or replay-testing their software does not fill those rows.
 
@@ -39,13 +39,13 @@ it does not replace the full course gate or its unfinished-hole accounting.
 | artifact | purpose |
 |---|---|
 | `dafny/given/R/`, `verus/given/` | frozen provided layers; no earlier learner solution is imported |
-| `dafny/R/R12_Driving/std/R12_Driving.dfy` | 3 holes, 0 errors; test-out and two annotation tasks |
-| `verus/r/r12_driving/src/lib.rs` | 3 holes, 0 errors; corresponding native annotation tasks |
+| `dafny/R/R12_Driving/std/R12_Driving.dfy` | 3 holes, 0 errors; the test-out and two hint-site lemmas over A1 and A3 |
+| `verus/r/r12_driving/src/lib.rs` | 3 holes, 0 errors; the same three hint-site lemmas in Verus |
 | `dafny/checks/R12_checks.dfy` | 0 holes; given-only source-span observation |
 | `harness/r/fvh_r/engine.py` | 5 holes, 0 errors; extractor, localization, bounded loop, engine and renderer |
 | `tools/R12/profiler.py` | 1 hole, 0 errors; toolwright body inside the provided CLI and models |
 | `tools/R12/test_profiler.py` | frozen behavioral and original-frame acceptance tests |
-| `tools/R12/admit_forms.py`, `tools/R12/check_clients.py` | independent form checks and actual-source compiled observations |
+| `tools/R12/admit_forms.py` | the static and native checks of hint-site forms (Lab α's tasks and the shipped native forms) |
 | `specimens/R12/`, `slots/R12.slots` | five predictions, guarded comparisons and the own captured LSP trace |
 | `paper/R12_problems.tex`, `paper/R12_answers.tex` | two cards, registration and later report |
 | `Solutions/` | protected reference twins; open LAST after attempts and receipts |
@@ -54,7 +54,7 @@ All five Python holes share `engine.py` because the frozen reference adapter
 replaces one file at a time. The other modules provide stable public imports;
 their small type/shape tests are not independent solutions to the five holes.
 Read the contracts at the actual learner functions before designing a helper.
-The test-out is bounded remaining-credit arithmetic in each native language.
+The test-out is a one-site witness lemma in each native language.
 Keep the original attempt and let its receipt record what happened.
 
 Commit all five predictions before continuing. P1d is a numeral, P2v a Boolean
@@ -179,70 +179,84 @@ but that check cannot turn the refused run into an accepted edited delivery.
 
 ---
 
-## 2. Native hint sites and original input relations
+## 2. Native hint sites over regex lemmas
 
-The native exercises take verifier-outcome flags as ordinary input data. They
-count true flags or locate the first false flag. These programs do not decide
-whether a native verification document is trustworthy. Their contracts concern
-the supplied Boolean sequence and let you practice the invariant structure a
-client needs when it processes an ordered ledger.
+The native exercises are the same kind of object Lab α's engine fills by search: a lemma whose statement and proof skeleton are frozen, with a few marked **sites** where the proof's missing pieces go. A site is either an `expr` site, written `assert /*R12_HINT:<name>*/ true;` in Dafny (`assert(/*R12_HINT:<name>*/ true);` in Verus), which you replace with one boolean expression over the identifiers its entry lists, or a `calls` site, `/*R12_CALLS:<name>*/`, which you replace with calls to the proof declarations it lists. The file's `R12_HINT_SITES` line is the list of sites, with each site's vocabulary. Nothing else in the file is yours to change: not the statement, not the skeleton's case split or its `var … :|` / `choose`, not the imports. The shipped forms pass `python3 tools/R12/admit_forms.py`'s static frame check (each site listed, each marker once, the vocabulary well-formed); for your filled file, `scripts/specfreeze --check R12` holds the statements, and the review compares the rest with the shipped skeleton line by line.
 
-W1d and W1v provide a recursive accepted-count model and the fact connecting one
-prefix to the next. Read the recursion before using the step lemma. It removes
-the last element, so a loop that consumes a prefix must connect its current
-slice to exactly that recursive argument. The final full-slice identity is
-provided too. Neither fact supplies the learner's loop relation or proves that
-the current executable accumulator corresponds to the consumed prefix.
+What the learner fills by hand here is exactly what an engine would have to propose: an expression or a call, read off the failing obligation. That is the point of doing it by hand first. A site's content is small, but it is not guessable from the statement alone; it is the witness, the branch or the induction argument that the verifier reports it cannot find. Here is the move on a lemma that is not an exercise: a non-empty word of `a` matches `Star(a)`, with one site for the split.
 
-H1d/H1v preserve the provided computation and add annotation work inside the
-marked learner region. Track which input prefix has been consumed, what its
-count means and which bounds make the next machine addition safe. A bound on
-the index alone cannot characterize the returned count: two arrays of equal
-length can have different accepted flags. A relation only about the whole
-input can be too strong before the loop finishes. State the property at an
-arbitrary loop head, then check initialization, preservation and exit.
+```dafny
+// R12_HINT_SITES: [{"name":"d1","identifiers":["u"]}]
+module R12_SiteDemo {
+  import opened RG_A1_Re
 
-H2d/H2v locate the first rejection. An index within the vector is not enough;
-the firstness promise rules out an earlier false flag. Preserve what is known
-about every earlier position and connect the loop's exit condition to the
-returned index. Empty input, rejection at position0and no rejection at all are
-three different boundaries. Test each when explaining why the same invariant
-handles the original domain without a special weakened contract.
+  lemma OneChunkR12Demo(a: Re, u: seq<char>)
+    requires Matches(a, u) && u != []
+    ensures Matches(Star(a), u)
+  {
+    assert /*R12_HINT:d1*/ true;
+  }
+}
+```
 
-Termination annotations and the executable bodies remain provided. The Verus
-count function prints its loop-isolation setting explicitly, so the proof
-context in source and reference is the same. Preserve that setting rather than
-adding resources or moving a counted assumption into an uninspected helper.
-The learner region is annotation-only; removing a region must leave the same
-executable computation and a well-typed proof obligation.
+<!-- pin: site-blank-d -->
+```
+$ scripts/vcheck --module R12 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+probe.dfy:8:3: error: a postcondition could not be proved on this return path
+probe.dfy:7:20: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A1_Re.dfy:22:29: related: this proposition could not be proved
+```
 
-The shipped native loops verify while retaining their three counted holes in
-each language. These captures show the editing state, not completed exercises.
+The failure is at the `Star` case's existential: the verifier needs a chunk length, and nothing in the proof names one. With the site filled, the split at `|u|` is two slice facts, and the lemma verifies:
+
+```dafny
+// R12_HINT_SITES: [{"name":"d1","identifiers":["u"]}]
+module R12_SiteDemo {
+  import opened RG_A1_Re
+
+  lemma OneChunkR12Demo(a: Re, u: seq<char>)
+    requires Matches(a, u) && u != []
+    ensures Matches(Star(a), u)
+  {
+    assert /*R12_HINT:d1*/ u[..|u|] == u && u[|u|..] == [];
+  }
+}
+```
+
+<!-- pin: site-filled-d -->
+```
+$ scripts/vcheck --module R12 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+The three native items, in each language, are of this kind.
+
+- **T1d/T1v** `CatWitnessR12` / `lemma_cat_witness_r12`: a word of `a` followed by a word of `b` matches `Cat(a, b)`. One `expr` site; the obligation names the failing existential, and the site names its witness.
+- **H1d/H1v** `CopiesAppendR12` / `lemma_copies_append_r12`: `n` copies of `r` then `m` copies make `n + m` copies (A3's `Copies`). The skeleton is an induction on `n` that picks the split of the first word; one `calls` site is the induction call on the tail and one `expr` site regroups the pieces as `u + v`. The two sites depend on each other: a call on the wrong word leaves the regrouped equation about a fact the solver does not have, and verifies nothing.
+- **H2d/H2v** `UpToMonoR12` / `lemma_up_to_mono_r12`: a word of at most `j` copies is a word of at most `k >= j` copies (A3's `CopiesUpTo`). The empty word is the `Eps` branch's at every bound, which the skeleton handles; for a non-empty word, an `expr` site says which branch of the `Alt` holds and a `calls` site lifts the tail from `j - 1` to `k - 1`. The branch must be read from the obligation: it is the disjunct the verifier reports it cannot establish.
+
+Each item ships with a counted hole, `assume false;` in Dafny and a `proof_note` assumption in Verus, at the top of its body; delete it when you fill the sites. The shipped files verify in the learner loop while they keep their three counted holes in each language. These captures show the editing state, not completed exercises.
 
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R12_Driving/std
-vcheck: dafny/R/R12_Driving/std [dafny, learner loop]: verified — 69 verified, 3 holes, 0 errors
-dafny/R/R12_Driving/std/R12_Driving.dfy:28:3: hole assume R12.T1d
-dafny/R/R12_Driving/std/R12_Driving.dfy:35:3: hole assume R12.H1d
-dafny/R/R12_Driving/std/R12_Driving.dfy:58:3: hole assume R12.H2d
+vcheck: dafny/R/R12_Driving/std [dafny, learner loop]: verified — 66 verified, 3 holes, 0 errors
+dafny/R/R12_Driving/std/R12_Driving.dfy:47:5: hole assume R12.T1d
+dafny/R/R12_Driving/std/R12_Driving.dfy:63:5: hole assume R12.H1d
+dafny/R/R12_Driving/std/R12_Driving.dfy:86:5: hole assume R12.H2d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r12_driving
 vcheck: verus/r/r12_driving [verus, learner loop]: verified — - verified, 3 holes, 0 errors
-verus/r/r12_driving/src/lib.rs:22:45: hole assume R12.T1v
-verus/r/r12_driving/src/lib.rs:30:44: hole assume R12.H1v
-verus/r/r12_driving/src/lib.rs:51:44: hole assume R12.H2v
+verus/r/r12_driving/src/lib.rs:39:40: hole assume R12.T1v
+verus/r/r12_driving/src/lib.rs:58:40: hole assume R12.H1v
+verus/r/r12_driving/src/lib.rs:89:40: hole assume R12.H2v
 ```
 
-After solving the holes, run both full gates and their audits. The independent
-compiled-client tool first gates actual source, then observes63Boolean arrays
-of lengths0through5and three budget cases per language. Dafny source is embedded
-in the compilation root because verifying an include does not verify included
-implementations. Those finite checks exercise emitted code; they cannot replace
-the universal contracts or prove that a separate model-produced report is true.
+After filling the sites, run both full gates and their audits and `scripts/specfreeze --check R12` (the statements are frozen); keep a diff of your file against the shipped one for the review, which reads it for changes outside the sites. None of these lemmas enters Lab α's corpus: the engine's tasks are other modules' lemmas, so your hand fills are never a lab measurement.
 
 ---
 
@@ -655,11 +669,13 @@ a missing empirical report with a plausible numerical example.
 
 ## 9. The exercise file
 
-Run `scripts/firsttry.sh R12 --check` after committing predictions. Work on the
-native test-out and annotation regions with the original inputs, models and
-provided computation. Explain one initialization, preservation and exit VC in
-each loop before relying on a green summary. Keep all receipts, including a
-wrong first prediction or unsuccessful initial invariant.
+Run `scripts/firsttry.sh R12 --check` after committing predictions. Work the
+native test-out and the two hint-site lemmas in order, T1, H1, H2, in each
+language: delete the item's counted `assume`, fill its sites and nothing else.
+Before you fill a site, read the obligation the verifier reports with the site
+left `true` (or the call site empty) and say which witness, branch or call it
+lacks. Keep all receipts, including a wrong first prediction or a site text that
+did not close its obligation.
 
 In Python, implement the stream parser and localizer before the bounded loop,
 then the engine and renderer. A parser defect can corrupt every later search
@@ -669,14 +685,14 @@ private imports or alternate modules are not substitutes for the installed
 single-file composition.
 
 Run full native gates, assumption audits, the Python gate and `specfreeze --check
-R12`. Then run `python3 tools/R12/check_clients.py` on the actual completed learner
-source. Review form admission independently before any lab task enters a batch.
+R12`, and keep the diff of each native file against the shipped one for the
+review. Review form admission independently before any lab task enters a batch.
 Use exact command scope when collecting profiler measurements; an isolated
 symbol result remains outside the final full-target completion claim.
 
 **Done** means predictions and test-out receipts retained, original native and
 Python contracts solved with zero holes, clean gates/audits/freezes, independent
-frame checks and finite clients complete, and the paper, toolwright, viva and
+frame review complete, and the paper, toolwright, viva and
 lab artifacts assessed at their actual status. Deferred live D45 work stays
 separately recorded; it does not become a pass through software construction.
 R12 has no additional closed-book checkpoint or invented exit threshold.

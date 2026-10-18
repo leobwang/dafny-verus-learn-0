@@ -1,12 +1,12 @@
 # R12 withheld H/T/A answer tripwires; author-only.
 # from Solutions/dafny/R/R12_Driving/std/R12_Driving.dfy
-# source: out:=limit-spent;} (R12.T1d)
+# source: /*R12_CALLS:h1a*/ CopiesAppendR12(r, n - 1, m, u[i..], v); (R12.H1d)
 # verified: solutions=1 public=0
-out:=limit\-spent;\}
+R12_CALLS:h1a\*/\s*CopiesAppendR12\(r,\s*n\s*-\s*1,\s*m,\s*u\[i\.\.\],\s*v\);
 # from Solutions/verus/r/r12_driving/src/lib.rs
-# source: invariant i<=flags.len(),accepted<=i,accepted==accepted_count_r12(flags@.take(i as int)), (R12.H1v)
+# source: /*R12_CALLS:h2b*/ lemma_up_to_mono_r12(r, (j - 1) as nat, (k - 1) as nat, ...); (R12.H2v)
 # verified: solutions=1 public=0
-invariant\s+i<=flags\.len\(\),accepted<=i,accepted==accepted_count_r12\(flags@\.take\(i\s+as\s+int\)\),
+R12_CALLS:h2b\*/\s*lemma_up_to_mono_r12\(r,\s*\(j\s*-\s*1\)\s*as\s+nat,\s*\(k\s*-\s*1\)\s*as\s+nat,
 # from Solutions/harness/r/fvh_r/engine.py
 # source: out.append(NativeRun(number,copy.deepcopy(d))) (R12.H1py)
 # verified: solutions=1 public=0

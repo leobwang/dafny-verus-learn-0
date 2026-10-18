@@ -67,9 +67,9 @@ cmd = ["scripts/vcheck", "dafny/R/R12_Driving/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "cad51523c1804b9a40889eb7524076a7ac6e9abb83783ab796673d183efbcc5c"
+body = "4ca28a6a88d9e1540f208f13917ddc06a18633e0e8aa0954c0f30357983189f9"
 [entry.pinned.inputs]
-"dafny/R/R12_Driving/std/R12_Driving.dfy" = "0d55a3b14fd2e5116b2f4c02af33327ade5512dde3e7cbbbd856bcafe3c00ad4"
+"dafny/R/R12_Driving/std/R12_Driving.dfy" = "0d6239c8bc5cb823570f9fed0cc95c5b49f0ee0aa47785f1be3ea409d1a6c9b7"
 "dafny/R/R12_Driving/std/dfyconfig.toml" = "704e2555eb7014cd062d9853b5d730d32c75b967b2966b03be505ea96eaa0d7c"
 
 [[entry]]
@@ -78,10 +78,56 @@ cmd = ["scripts/vcheck", "verus/r/r12_driving"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "e062e77181b2123a3381c6a9a3ad130d7ba85fcc7f6acbf87d1e197058da98b4"
+body = "8ac1897d39f48590f64b7a660c0a6fbf41ad720293a94df076ca54743a84642e"
 [entry.pinned.inputs]
 "verus/r/r12_driving/Cargo.toml" = "5e7fc49cdc4a054981ac213b007cde26180f21b2ae99a2a29b14814ef5ffddf7"
-"verus/r/r12_driving/src/lib.rs" = "e32b0601b6486838acbfdbbbd1df094bc8610bd93e19e7e5862eb33811af5713"
+"verus/r/r12_driving/src/lib.rs" = "fcb5db032ea57c740010fa8b0d1055cd5897b17f1dda662cacc4142747da064d"
+
+[[entry]]
+id = "site-blank-d"
+cmd = ["scripts/vcheck", "--module", "R12", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The hint-site demonstration shown above the pin with its site left true, run in R12's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "92c6bbc078a6e78b30b78d276982db250b111e0371891351a299df4b2ef67a69"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "20c01f98de9fa077cc301c61e4e7c16dceede8d5eefbcd685c838590b3f6af34"
+
+[[entry]]
+id = "site-filled-d"
+cmd = ["scripts/vcheck", "--module", "R12", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The same demonstration with its site filled."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "d64fa2f9e6ee65f8da864cc708f650fb112ce05314a2ed1928cc6964021f9988"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "818e3aeff6eb48ca5b6148ed3cbdeee256c3e8d42e1919a7b0ddfa86e23afdb2"
 
 [[entry]]
 id = "span-value"
