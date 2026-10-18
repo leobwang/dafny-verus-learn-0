@@ -13,23 +13,26 @@ unfrozen = []
 path = "dafny/R/R13_Pipelines/std/R13_Pipelines.dfy"
 lang = "d"
 open_bodies = []
+frozen_levers = ["R13_Repairs.DerivsCatR13 {:induction false}", "R13_Repairs.NullableDerivsR13 {:induction false}"]
 [file.statements]
-"R13_Repairs.ClampIndexR13" = "5c806b60591ba58c477c8c012bf904bc5f1936bfa98693c987f0ded0b6855b8b"
-"R13_Repairs.PairWitnessR13" = "992cf2b2d8945e6d0adf1b3a5d4f38e77c7518c04967ac3115cbabc0782743f9"
-"R13_Repairs.RangeFitsR13" = "21bfe76f470274988a55853079df09556f9d61c6ff454a4b43ae94d998a276e4"
-"R13_Repairs.SaturatingSumR13" = "89343266a94c1504d4787a521ca2273c511363736c7278c2e811cda0731f4ca9"
+"R13_Repairs.AcceptsR13" = "9e2c100956e583f945e3a133580c06a5bc1cb28618e0d278683f8cfa71a79215"
+"R13_Repairs.ClassCoversR13" = "782f1c5d6f33a34f43c41f9984bfb6b0a92270faa88b4011eb13fb580865096d"
+"R13_Repairs.Derivs" = "db44fa75a8daa6a93b63293cf67b882dadcf709f6941e585b3c23d61f29a3530"
+"R13_Repairs.DerivsCatR13" = "fad470c73245edf2a5122a2bc6467535945b3fe7c8db9ad0041170539e733a3f"
+"R13_Repairs.NullableDerivsR13" = "e9d4c7ca44dc7adf2f88ae406aefd84244bd15133908717d1c0d151fec3d90d1"
 [file.frozen_imports]
-"R13_Repairs" = ["c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+"R13_Repairs" = ["c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26", "e4baae33e0e4ceaf257d0be2bb6ec3867ed265e36301d104fe0310c9a744da62", "f7ebae5425995070dc5730af2361722799bdffb26f355112d4df49721b443889"]
 
 [[file]]
 path = "verus/r/r13_pipelines/src/lib.rs"
 lang = "v"
 open_bodies = []
 [file.statements]
-"clamp_index_r13" = "4d086a01b5e8c3c57bd999c7fdc943e08a733be8e232e5f9810a06a912261631"
-"pair_witness_r13" = "b417eb1d0cc136babd017eb80084ddc47c25638e7b0b244269cc6907ae3065bb"
-"range_fits_r13" = "ea8e6b2cbb51e0e3dc3a6759792a95f81a9afccab39222f9dc2eb31d6af6d069"
-"saturating_sum_r13" = "465ace5447866e60bf376006835f851f6ce09d956eb792fbf130f2e00c477497"
+"accepts_r13" = "d75e3316cc9540abf523dab87b32c76588996f72ad598ea2cfa9b39295a8a6be"
+"class_covers_r13" = "2c027660ef546fba367b5158a392c12cc9c0090a8c13835b8c4ba61ed84092fd"
+"derivs" = "20ec11a7cbe10e8958622b7a07ffb647d267f53332b41e24604e67e8f9c356c0"
+"lemma_derivs_cat_r13" = "b459896f622b2eda8f19c57f841a78a465d81028611fa097007433a7ec987be6"
+"lemma_nullable_derivs_r13" = "8187d0d6363687da89199eec491713733337de07a147fdf3cae0b7fade718a35"
 
 [[file]]
 path = "specimens/R13/P1d.dfy.specimen"

@@ -6,8 +6,8 @@ local validation; live model grading and contractor sessions remain D45 debt.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R08_solutions.tex  sha256 b02d56103f8076cb10f3a25b5cfc61c843482535a4412684242cf11c99438801
 paper/R08_problems.tex  sha256 7fd6855e551a72f428c28eaab424f6166dd3b9c4333ca1e9e8e660f53fc4c29c
-Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 9533e71d9b5d498fec4fd8294b68ec3c43a499358797c6e711e743e1c3c9fbf0
-Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 b5cb28400d349a5436f06a409ceb553290cf5cf20344cc768b00faa2d6b00650
+Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 fab5ec1e6ccb0fa330aead58cc08c95c8259c7193b5188a81651e7e0ce4cb73e
+Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 313af9fa4f11cad9e767b575354ae714b7e3aefa5cf87a6336806e2052f2caf7
 Solutions/dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy  sha256 5304f661af07633faa2ba9fcac79e225aa8df1feb9364b08499c71d729dd6e62
 Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 8cf139beb333088a2d8535c93a5567b4c40ddf7329571830c9a40b5d883868c9
 

@@ -152,3 +152,17 @@ and full retained public/private CIlogs/structured results are preserved. This
 is a retention limit, not a failed proof or a reason to invent evidence. Under
 the user directive, record and skip the unavailable transient trees and keep
 building. There is no need to rerun passed CI solely to simulate old artifacts.
+
+
+## DVR4 step 3: the holes rebuilt as fake deliveries on regex objects (2026-10-18)
+
+Plan §2.5. Objective-to-hole table (PLAN §3 R13: stage attribution; forensic deliveries by two instruments; the trust story):
+
+| objective | item | the fake delivery and its instrument | the honest task | minutes D/V | reference lines (D) |
+|---|---|---|---|---|---|
+| stage attribution (resolve before proof) | T1d/T1v (test-out) | compiled code calls the ghost / spec matcher: stops at resolution, a selected-symbol run too | `AcceptsR13`: call A2's compiled matcher | 5/5 | 1 |
+| trust: a trusted lemma | H1d/H1v | `{:axiom}` lemma: 0 holes in Dafny's learner loop, listed by `vaudit`; Verus `external_body` is a counted hole | `DerivsCatR13`: induction with two sequence facts | 10/10 | 7 |
+| trust: a trusted executable helper | H2d/H2v | bodiless `{:axiom}` method / `external_body` helper | `ClassCoversR13`: a verified loop over A2's class API | 10/10 | 9 |
+| a weakened statement | H3d/H3v | an added `requires u == []`: verifies; only `specfreeze` sees it | `NullableDerivsR13`: induction with `DerivCorrect`, `NullableCorrect` | 10/10 | 7 |
+
+The fakes are chapter fences (source + capture), not specimens: a learner-visible `{:axiom}` specimen fails `--lint-hollow` (axiom-attribute). The compiled-observation tool now covers the two executable items (50 cases per language, expected values from Python's `re` and set membership). Admission: empty-body 8/8 (TRIV declared for T1v, H2v; Dafny `b := false` / `true` bodies fail for T1d and H2d), seeds 1–3 stable on both references, `vaudit` 0, `specfreeze --check R13` 0, reference lint 0; pasting the H1 axiom into the hand file gives `axiom-attribute` from `vaudit`, pasting the H3 fake gives `freeze-changed` from `specfreeze --check R13`. P5v's reference answer follows the wrapper's new `link` stage (Δ275 fix 12): `verified,verify;failed,link`.

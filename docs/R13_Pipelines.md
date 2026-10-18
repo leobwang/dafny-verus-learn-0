@@ -69,7 +69,7 @@ on it. Never write a fictional grade, claim, successful run or provider event.
 | `verus/r/r13_pipelines/src/lib.rs` | T1 and H1–H3, **4 holes** |
 | `dafny/R/R13_Pipelines/agent/R13_AgentForensic.dfy` | forensic delivery, **1 hole** in a helper, no planted source errors |
 | `verus/r/r13_pipelines/src/agent.rs` | forensic delivery, **1 hole** in a helper, no planted source errors |
-| `specimens/R13/`, `slots/R13.slots` | own pipeline subjects and six committed verdict answers |
+| `specimens/R13/`, `slots/R13.slots` | own pipeline subjects and six committed verdict answers; the four fake deliveries are in §8 |
 | `dafny/given/R/RG_A1_Re.dfy` through `RG_A4_Norm.dfy`, and `verus/given/rg_re_a1` through `rg_re_a4` | provided A1–A4 definitions and facts, with A1b; imported, never learner copies |
 | `tools/R13/inventory.py`, `tools/R13/check_repairs.py` | provided source inventory and finite actual-source compiled observations; default targets are learner files |
 | `research/r13_forensics.md`, `research/TRUST.md` | your evidence ledger and R-v0 trust account |
@@ -152,7 +152,7 @@ commands ask the proof question on the original unrestricted mathematical input.
 <!-- pin: proof-d -->
 ```
 $ scripts/vcheck --module R13 proof-d.dfy
-vcheck: proof-d.dfy [dafny, learner loop]: failed — 61 verified, 0 holes, 1 error
+vcheck: proof-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
 proof-d.dfy:3:48: error: a postcondition could not be proved on this return path
 proof-d.dfy:3:43: related: this is the postcondition that could not be proved
 ```
@@ -194,7 +194,7 @@ contract remain the same while the command changes which evidence is requested.
 <!-- pin: p4d-verify -->
 ```
 $ scripts/vcheck --module R13 P4d.dfy
-vcheck: P4d.dfy [dafny, learner loop]: verified — 62 verified, 0 holes, 0 errors
+vcheck: P4d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
 
 <!-- pin: p4d-test -->
@@ -226,24 +226,28 @@ vcheck: specimens/R13/P5v.rs.specimen [verus, learner loop]: verified — 1 veri
 <!-- pin: p5v-test -->
 ```
 $ scripts/vcheck --test specimens/R13/P5v.rs.specimen
-vcheck: specimens/R13/P5v.rs.specimen [verus, test]: failed — 0 passed, 0 failed, stage verify
+vcheck: specimens/R13/P5v.rs.specimen [verus, test]: failed — 0 passed, 0 failed, stage link
 NO-ERROR checked_identity_r13
 (no file): error: linking with `cc` failed: exit status: 1
 ```
 
-The pinned wrapper reports the failing combined test build at `stage=verify`,
-while the native diagnostic identifies linking. Its proof count is positive,
-its overall exit is nonzero, and no successfully linked test binary is delivered.
-Record the finer wrapper attribution as a limitation. Do not relabel the Result
-as a compile-stage observation or discard the linker diagnostic to claim a
-successful build. The unavailable dependency is deliberate in this subject;
-no library installation or provider action is part of the exercise.
+The pinned wrapper reports the failing combined test build at `stage=link`:
+its proof count is positive, its overall exit is nonzero, and the native
+diagnostic says that linking failed, so no test binary exists to run. The
+`link` stage is recent: the basic fix round (DELTAS Δ275, fix 12) added it,
+and before that the same run was reported at the coarser `stage=verify`. Keep
+both readings apart in your ledger: a run recorded before the fix keeps the
+stage it was recorded with. Do not relabel the Result as a compile-stage or a
+proof observation, or discard the linker diagnostic to claim a successful
+build. The unavailable dependency is deliberate in this subject; no library
+installation or provider action is part of the exercise.
 
 This is a useful reporting habit when a tool's schema is less detailed than
-your analysis. Keep the exact observation, explain the supported native
-subevent and leave the unsupported field-level claim unresolved. In a future
-wrapper repair, preserve both old and new provenance rather than silently
-rewriting old runs with a new interpretation.
+your analysis, or changes under you. Keep the exact observation, its tool
+version and the supported native subevent, and leave any unsupported
+field-level claim unresolved. When a wrapper is repaired, preserve both old and
+new provenance rather than silently rewriting old runs with a new
+interpretation.
 
 ---
 
@@ -271,7 +275,7 @@ symbol R13_SelectedD.CleanDeclarationR13: verified
 <!-- pin: scope-d-full -->
 ```
 $ scripts/vcheck --module R13 scope-d.dfy
-vcheck: scope-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+vcheck: scope-d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
 scope-d.dfy:4:54: error: a postcondition could not be proved on this return path
 scope-d.dfy:4:49: related: this is the postcondition that could not be proved
 ```
@@ -516,53 +520,333 @@ source observations, before your work.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R13_Pipelines/std
-vcheck: dafny/R/R13_Pipelines/std [dafny, learner loop]: verified — 65 verified, 4 holes, 0 errors
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:21:3: hole assume R13.T1d
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:27:3: hole assume R13.H1d
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:32:3: hole assume R13.H2d
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:37:3: hole assume R13.H3d
+vcheck: dafny/R/R13_Pipelines/std [dafny, learner loop]: verified — 66 verified, 4 holes, 0 errors
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:48:5: hole assume R13.T1d
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:62:30: hole bodyless-method R13.H1d
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:78:5: hole assume R13.H2d
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:91:36: hole bodyless-method R13.H3d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r13_pipelines
 vcheck: verus/r/r13_pipelines [verus, learner loop]: verified — - verified, 4 holes, 0 errors
-verus/r/r13_pipelines/src/lib.rs:9:45: hole assume R13.T1v
-verus/r/r13_pipelines/src/lib.rs:14:45: hole assume R13.H1v
-verus/r/r13_pipelines/src/lib.rs:19:45: hole assume R13.H2v
-verus/r/r13_pipelines/src/lib.rs:24:45: hole assume R13.H3v
+verus/r/r13_pipelines/src/lib.rs:47:44: hole assume R13.T1v
+verus/r/r13_pipelines/src/lib.rs:65:40: hole assume R13.H1v
+verus/r/r13_pipelines/src/lib.rs:81:44: hole assume R13.H2v
+verus/r/r13_pipelines/src/lib.rs:98:40: hole assume R13.H3v
 ```
 
 Run `scripts/firsttry.sh R13 --check` after your committed prediction slots and
-closed-book T1 attempts. T1 constructs an index satisfying the printed original
-clamping contract. H1 repairs bounded arithmetic while retaining the full input
-domain and exact saturation behavior. H2 implements the mathematical range-fit
-predicate without adding a precondition that removes overflowing boundary sums.
-H3 constructs executable witness data for the printed two-character language;
-its proof must connect that data to the original A1 `Matches` definition.
+closed-book T1 attempts. Every item is a regex task from the course's own
+artifact, and every item comes with a **fake delivery** (shown and run below) that
+some instrument reports as fine while the task is not done. Before you write the honest proof, run the
+fake's instruments, name the stage or the instrument that exposes it, and
+write that attribution in `research/r13_forensics.md`.
 
-For each repair, first state the unsupported original claim and an instrument
-that would expose it. Then implement the body, run the complete zero-hole gate
-and source audit, and compare the frozen statements. Preserve the original
-requires/ensures, imported models, types and bounds. Moving a problematic case
-out of the domain is a different theorem. An external body, trusted arithmetic
-or contradictory assumption is not a repair of the original delivery.
+- **T1** (closed book) `AcceptsR13` / `accepts_r13`: an executable matcher whose
+  contract is the regex semantics. The fake returns the ghost (Verus: spec)
+  matcher from compiled code, and the file stops at resolution, before any
+  proof: a run selected to the file's other method stops there too.
+- **H1** `DerivsCatR13` / `lemma_derivs_cat_r13`: derivatives by `u + v` are
+  derivatives by `u`, then by `v`. The fake states it as `{:axiom}` (Verus:
+  `#[verifier::external_body]`): look at what the learner loop's hole count
+  says in each language, and what `scripts/vaudit` lists.
+- **H2** `ClassCoversR13` / `class_covers_r13`: every character of a word lies
+  in an A2 class. The fake is a trusted bodiless method (Verus: an
+  `external_body` helper); the honest one is a verified loop over A2's class API.
+- **H3** `NullableDerivsR13` / `lemma_nullable_derivs_r13`: a word matches
+  exactly when its derivatives end in a nullable regex. The fake verifies, for
+  the empty word only, behind an added `requires`: the gate accepts its file,
+  and only a statement comparison (`scripts/specfreeze`) shows that the
+  statement is not the shipped one.
+
+For each repair, keep the statement as shipped: the requires, the ensures,
+the imported models and the types. A precondition that removes the hard
+cases, an axiom, an external body or a contradictory assumption is not a
+repair; it is one of the fake deliveries.
 
 Use `python3 tools/R13/check_repairs.py --output <your-output-directory>` for
-finite compiled observations after your complete gates. The default reads only
-your explicit learner sources. It embeds the actual Dafny source in the compiled
-root, verifies literal Rust client obligations and runs native assertions over
-the same Rust functions. Boundary values, mathematical expected results and
-non-ASCII two-character data are observations within the original domains.
-They do not prove a compiler correct or establish all-input correctness alone.
+finite compiled observations of the two executable items after your complete
+gates. The default reads only your learner files. It compiles a client that
+calls `AcceptsR13` and `ClassCoversR13` (Verus: `accepts_r13`,
+`class_covers_r13`) on 50 fixed inputs, including non-ASCII characters and an
+empty class, and compares each result with a value computed outside the
+verifier. They do not prove the compiler correct or establish all-input
+correctness alone.
 
 **Done:** T1/H1–H3 in both languages pass the full gates with zero counted holes,
-clean audits and unchanged statements; finite compiled observations pass; all
-six predictions retain first receipts; the twelve diagnoses and your R-v0 are
-complete. A skipped live actor row remains explicitly deferred. Use
-`scripts/specfreeze --check R13` and `python3 scripts/pins.py --ci --module R13`
-as the final structural checks. Do not interpret a rejected default tool run on
-four-hole source as a compiled-test result; the gate correctly stops it first.
+clean audits and unchanged statements; finite compiled observations pass; the
+four fake deliveries are attributed in your ledger; all six predictions retain
+first receipts; the twelve diagnoses and your R-v0 are complete. A skipped live
+actor row remains explicitly deferred. Use `scripts/specfreeze --check R13` and
+`python3 scripts/pins.py --ci --module R13` as the final structural checks. Do
+not interpret a rejected default tool run on four-hole source as a
+compiled-test result; the gate correctly stops it first.
+
+### The four fake deliveries
+
+Each fake below is a complete file, run as the course's tools run it. Read the
+source, then the output, and write down which instrument would accept it and
+which one exposes it before you read the paragraph after it.
+
+**T1.** Compiled code that calls the semantics:
+
+```dafny
+// A delivery of R13.T1d's task. Run it whole, then with --symbol on its other
+// method, LengthOf: which stage stops the file, and does selecting a symbol help?
+module R13_FakeAccepts {
+  import opened RG_A1_Re
+
+  method AcceptsFake(r: Re, s: seq<char>) returns (b: bool)
+    ensures b == Matches(r, s)
+  {
+    b := Matches(r, s);
+  }
+
+  method LengthOf(s: seq<char>) returns (n: nat)
+    ensures n == |s|
+  {
+    n := |s|;
+  }
+}
+```
+
+<!-- pin: fake-t1-d -->
+```
+$ scripts/vcheck --module R13 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+probe.dfy:9:17: error: a call to a ghost predicate is allowed only in specification contexts (consider declaring the predicate without the 'ghost' keyword)
+```
+
+<!-- pin: fake-t1-d-symbol -->
+```
+$ scripts/vcheck --module R13 --symbol R13_FakeAccepts.LengthOf probe.dfy
+vcheck: probe.dfy [dafny, fast channel R13_FakeAccepts.LengthOf]: failed — - verified, 0 holes, 1 error, stage resolve
+probe.dfy:9:17: error: a call to a ghost predicate is allowed only in specification contexts (consider declaring the predicate without the 'ghost' keyword)
+```
+
+```rust
+// A delivery of R13.T1v's task: an exec fn that returns the spec matcher.
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+pub fn accepts_fake(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b == matches(*r, s@),
+{
+    matches(*r, s@)
+}
+
+} // verus!
+```
+
+<!-- pin: fake-t1-v -->
+```
+$ scripts/vcheck --module R13 probe.rs
+vcheck: probe.rs [verus, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+probe.rs:11:5: error: cannot call function `rg_re_a1::matches` with mode spec
+```
+
+Both stop at resolution, before any proof obligation exists, and the run
+selected to `LengthOf` stops at the same place: resolution covers the whole
+file, so no selected-symbol run can be green while a ghost call sits in
+compiled code. The honest T1 calls a compiled matcher with the same contract.
+
+**H1.** A trusted lemma:
+
+```dafny
+// A delivery of R13.H1d's task. Run the learner loop, the gate and the audit.
+module R13_FakeDerivsCat {
+  import opened RG_A1_Re
+  import A2 = RG_A2_Deriv
+
+  function Derivs(r: Re, u: seq<char>): Re
+    decreases |u|
+  {
+    if u == [] then r else Derivs(A2.Deriv(r, u[0]), u[1..])
+  }
+
+  lemma {:axiom} DerivsCatFake(r: Re, u: seq<char>, v: seq<char>)
+    ensures Derivs(r, u + v) == Derivs(Derivs(r, u), v)
+}
+```
+
+<!-- pin: fake-h1-d -->
+```
+$ scripts/vcheck --module R13 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+```rust
+// A delivery of R13.H1v's task. Run the learner loop, the gate and the audit.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a2::*;
+
+verus! {
+
+pub open spec fn derivs(r: Re, u: Seq<char>) -> Re
+    decreases u.len(),
+{
+    if u.len() == 0 {
+        r
+    } else {
+        derivs(deriv(r, u[0]), u.drop_first())
+    }
+}
+
+#[verifier::external_body]
+pub proof fn lemma_derivs_cat_fake(r: Re, u: Seq<char>, v: Seq<char>)
+    ensures
+        derivs(r, u + v) == derivs(derivs(r, u), v),
+{
+}
+
+} // verus!
+```
+
+<!-- pin: fake-h1-v -->
+```
+$ scripts/vcheck --module R13 probe.rs
+vcheck: probe.rs [verus, learner loop]: verified — - verified, 1 hole, 0 errors
+probe.rs:19:1: hole external_body lemma_derivs_cat_fake
+```
+
+The two languages disagree about what this is. Dafny's `{:axiom}` silences the
+bodyless-lemma warning, so the learner loop reports 0 holes; the course's gate
+and `scripts/vaudit` list an `{:axiom}` declaration as an unproved assumption
+when it sits in your hand file. Verus's wrapper counts `external_body` as a
+hole, so the learner loop already says 1 hole. A grader who reads only the
+Dafny summary line accepts a theorem nobody proved.
+
+**H2.** A trusted executable helper:
+
+```dafny
+// A delivery of R13.H2d's task: a trusted method with no body.
+module R13_FakeCovers {
+  import A2 = RG_A2_Deriv
+
+  method {:axiom} ClassCoversFake(cc: A2.CharClass, s: seq<char>) returns (b: bool)
+    ensures b == (forall i | 0 <= i < |s| :: A2.InClass(cc, s[i]))
+
+}
+```
+
+<!-- pin: fake-h2-d -->
+```
+$ scripts/vcheck --module R13 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+```rust
+// A delivery of R13.H2v's task: a trusted exec helper.
+use vstd::prelude::*;
+use rg_re_a2::char_class::CharClass;
+
+verus! {
+
+#[verifier::external_body]
+pub fn class_covers_fake(cc: &CharClass, s: &Vec<char>) -> (b: bool)
+    ensures
+        b == (forall|i: int| 0 <= i < s@.len() ==> cc@.contains(#[trigger] s@[i])),
+{
+    true
+}
+
+} // verus!
+```
+
+<!-- pin: fake-h2-v -->
+```
+$ scripts/vcheck --module R13 probe.rs
+vcheck: probe.rs [verus, learner loop]: verified — - verified, 1 hole, 0 errors
+probe.rs:8:1: hole external_body class_covers_fake
+```
+
+The same split: Dafny's bodiless `{:axiom}` method verifies with 0 holes, and
+its promise is trusted by every caller; Verus counts the `external_body`
+helper as a hole, and its body (`true`) is never checked against the
+`ensures` it claims. The honest H2 is a loop whose invariant is checked.
+
+**H3.** A weakened statement:
+
+```dafny
+// A delivery of R13.H3d's task. It verifies; compare its statement with the
+// shipped one (scripts/specfreeze --check R13 on your file, after you paste it).
+module R13_FakeNullable {
+  import opened RG_A1_Re
+  import B = RG_A1b_Facts
+  import A2 = RG_A2_Deriv
+
+  function Derivs(r: Re, u: seq<char>): Re
+    decreases |u|
+  {
+    if u == [] then r else Derivs(A2.Deriv(r, u[0]), u[1..])
+  }
+
+  lemma NullableDerivsFake(r: Re, u: seq<char>)
+    requires u == []
+    ensures Nullable(Derivs(r, u)) <==> Matches(r, u)
+  {
+    B.NullableCorrect(r);
+  }
+}
+```
+
+<!-- pin: fake-h3-d -->
+```
+$ scripts/vcheck --module R13 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
+```
+
+```rust
+// A delivery of R13.H3v's task. It verifies; compare its statement with the
+// shipped one (scripts/specfreeze --check R13 on your file, after you paste it).
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a1b::*;
+use rg_re_a2::*;
+
+verus! {
+
+pub open spec fn derivs(r: Re, u: Seq<char>) -> Re
+    decreases u.len(),
+{
+    if u.len() == 0 {
+        r
+    } else {
+        derivs(deriv(r, u[0]), u.drop_first())
+    }
+}
+
+pub proof fn lemma_nullable_derivs_fake(r: Re, u: Seq<char>)
+    requires
+        u.len() == 0,
+    ensures
+        nullable(derivs(r, u)) == matches(r, u),
+{
+    lemma_nullable_correct(r);
+    assert(u =~= Seq::<char>::empty());
+}
+
+} // verus!
+```
+
+<!-- pin: fake-h3-v -->
+```
+$ scripts/vcheck --module R13 probe.rs
+vcheck: probe.rs [verus, learner loop]: verified — 2 verified, 0 holes, 0 errors
+```
+
+Both verify, honestly: for the empty word the lemma is A1b's
+`NullableCorrect`. The fault is the added `requires u == []`, which removes
+every word the lemma was about. The gate checks the file it is given and says
+nothing about whether that file's statements are the shipped ones; the
+statement freeze does, and paste this declaration over H3 in your hand file
+and `scripts/specfreeze --check R13` reports it as a changed statement.
 
 ---
 

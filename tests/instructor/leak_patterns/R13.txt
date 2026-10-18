@@ -1,25 +1,27 @@
-# R13 withheld answer tripwires, author-only.
+# R13 withheld hole answers (T1, H1–H3, both languages); no prediction answers.
 # from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
-# source: at:=if i<bound then i else bound-1; (R13.T1d)
-at:=if\s+i<bound\s+then\s+i\s+else\s+bound\-1;
+# source: b := A2.DerivMatch(r, s); (R13.T1d)
+# verified: solutions=1 public=0
+b\s*:=\s*A2\.DerivMatch\(r,\s*s\);
+# source: assert (u + v)[1..] == u[1..] + v; DerivsCatR13(A2.Deriv(r, u[0]), u[1..], v); (R13.H1d)
+# verified: solutions=1 public=0
+assert\s*\(u\s*\+\s*v\)\[1\.\.\]\s*==\s*u\[1\.\.\]\s*\+\s*v;\s*DerivsCatR13\(
+# source: if !A2.ClassMember(cc, s[k]) { (R13.H2d)
+# verified: solutions=1 public=0
+if\s*!A2\.ClassMember\(cc,\s*s\[k\]\)
+# source: NullableDerivsR13(A2.Deriv(r, u[0]), u[1..]); (R13.H3d)
+# verified: solutions=1 public=0
+NullableDerivsR13\(A2\.Deriv\(r,\s*u\[0\]\),\s*u\[1\.\.\]\);
 # from Solutions/verus/r/r13_pipelines/src/lib.rs
-# source: if i<bound {i} else {bound-1} (R13.T1v)
-if\s+i<bound\s+\{i\}\s+else\s+\{bound\-1\}
-# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
-# source: if a<=18446744073709551615-b {out:=a+b;} else {out:=18446744073709551615;} (R13.H1d)
-if\s+a<=18446744073709551615\-b\s+\{out:=a\+b;\}\s+else\s+\{out:=18446744073709551615;\}
-# from Solutions/verus/r/r13_pipelines/src/lib.rs
-# source: if a<=u64::MAX-b {a+b} else {u64::MAX} (R13.H1v)
-if\s+a<=u64::MAX\-b\s+\{a\+b\}\s+else\s+\{u64::MAX\}
-# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
-# source: fits:=pos<=limit && need<=limit-pos; (R13.H2d)
-fits:=pos<=limit\s+\&\&\s+need<=limit\-pos;
-# from Solutions/verus/r/r13_pipelines/src/lib.rs
-# source: pos<=limit && need<=limit-pos (R13.H2v)
-pos<=limit\s+\&\&\s+need<=limit\-pos
-# from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
-# source: s:=[c,d]; (R13.H3d)
-s:=\[c,d\];
-# from Solutions/verus/r/r13_pipelines/src/lib.rs
-# source: let s=vec![c,d]; (R13.H3v)
-let\s+s=vec!\[c,d\];
+# source: deriv_match(r, s) (R13.T1v)
+# verified: solutions=1 public=0
+\{\s*deriv_match\(r,\s*s\)\s*\}
+# source: lemma_derivs_cat_r13(deriv(r, u[0]), u.drop_first(), v); (R13.H1v)
+# verified: solutions=1 public=0
+lemma_derivs_cat_r13\(deriv\(r,\s*u\[0\]\),\s*u\.drop_first\(\),\s*v\);
+# source: if !cc.class_member(s[k]) { (R13.H2v)
+# verified: solutions=1 public=0
+if\s*!cc\.class_member\(s\[k\]\)
+# source: lemma_nullable_derivs_r13(deriv(r, u[0]), u.drop_first()); (R13.H3v)
+# verified: solutions=1 public=0
+lemma_nullable_derivs_r13\(deriv\(r,\s*u\[0\]\),\s*u\.drop_first\(\)\);

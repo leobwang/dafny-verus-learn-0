@@ -59,7 +59,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R12 | `R12.txt`: 8 (T1d,H1v,H1py–H5py,A1py) | 2026-10-17 (construction candidate; exact scan in protected notes) | author controls; live sessions deferred |
 
-| R13 | `R13.txt`: 8 (T1d/v,H1d/v–H3d/v) | 2026-10-17 (construction candidate; exact scan in protected notes) | author controls; live sessions deferred |
+| R13 | `R13.txt`: 8 (T1d/v, H1d/v, H2d/v, H3d/v) | 2026-10-18 (DVR4 step 3: the fake-delivery holes; the verifier over R13, 2,600 public files) | 8 OK |
 
 ## The verifier
 

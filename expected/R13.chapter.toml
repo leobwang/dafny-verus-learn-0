@@ -44,7 +44,7 @@ drop = ["^raw output: "]
 [entry.scratch."proof-d.dfy"]
 copy = "specimens/R13/proof-d.dfy.specimen"
 [entry.pinned]
-body = "b5d44d2259e3aa15b3658c9e5272350d9146d5e63c273ed6cd49b91acd6a3cb0"
+body = "61f06c0aa3d29e3a9d96f4ed956d4040b8b4d25e0289a0f6453e4b8103870ea3"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:proof-d.dfy" = "1e13de320139a26c566a39a8aae83c84150959446501698eb1a57479653d8175"
@@ -72,7 +72,7 @@ drop = ["^raw output: "]
 [entry.scratch."P4d.dfy"]
 copy = "specimens/R13/P4d.dfy.specimen"
 [entry.pinned]
-body = "86329bc3b64ace158bbd50144c93830db5b87644e7efe0fbe65f41a04f90e29e"
+body = "97078fdaee4120bb2a5fd4dc145f5ac35807393a5b1f0f777da4b9e5ae66cdb8"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:P4d.dfy" = "e9375aae4349a8de855fe6699e5c198ba71031c690137b0776b6fe6f832521fb"
@@ -107,7 +107,7 @@ answers = ["R13.P5v"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "5b5161525a415b2f1f64a393da119cb233652eeb51634b6b985590c16048745a"
+body = "2508b1d34594e5e7027478107721dc784672be65498e12985e8ae3e83c6cef5b"
 [entry.pinned.inputs]
 "specimens/R13/P5v.rs.specimen" = "7fd47fa7fbae172c9d5ef549573cee5b66b672c24ebc393e78e5ff65eff5106f"
 
@@ -139,7 +139,7 @@ drop = ["^raw output: "]
 [entry.scratch."scope-d.dfy"]
 copy = "specimens/R13/selection-d.dfy.specimen"
 [entry.pinned]
-body = "b56f5c836aebbb586a409f4b27ac1c45a2b48794cd618c4aa23c307ce38be54a"
+body = "d56ccd12b67aaeb45d863fbaaa400ba94340d67bae23bd097c76607d283d9c77"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:scope-d.dfy" = "fdc93aa80f3c442e2c3fb1c5732ca3dfdf230e2673371e37dacd2d1b018e0335"
@@ -173,9 +173,9 @@ cmd = ["scripts/vcheck", "dafny/R/R13_Pipelines/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "c4c036e190dbcda572f4c18b679dfad97e6e543999461677b9f12157ed3c5319"
+body = "608213a9830b02dd64793697c81682d39260be34a0e6043855c02a8c3b6cf0f9"
 [entry.pinned.inputs]
-"dafny/R/R13_Pipelines/std/R13_Pipelines.dfy" = "9ba113872d1b97f81cb97efebca0205272ee7a5fc344cf32bcf07dce54ec5619"
+"dafny/R/R13_Pipelines/std/R13_Pipelines.dfy" = "fdeab598fdeabb01a79512831faa3398ad22aa1ec5944e175774576ed23c0bb5"
 "dafny/R/R13_Pipelines/std/dfyconfig.toml" = "09b824058706b994ebc220adc4ba6bf74a3996f4ed8ce39986d523f6544dbe18"
 
 [[entry]]
@@ -184,8 +184,215 @@ cmd = ["scripts/vcheck", "verus/r/r13_pipelines"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "17e4cebd867ac8390026830b3c629c1fd641dfbc7e8637f56ec509ca73d8eefd"
+body = "c876441f7759748eddc0d90652879ce7de1839132126f9620095934664244ade"
 [entry.pinned.inputs]
 "verus/r/r13_pipelines/Cargo.toml" = "f0672c3aa5b65dc079dce02f71c53003fe203ef38d62952a0282947b140f66ab"
 "verus/r/r13_pipelines/src/agent.rs" = "489cea1e4d25755cba55bde99ae3f227e2d56d2bb9244509f8cfa455e985f70c"
-"verus/r/r13_pipelines/src/lib.rs" = "8d507af44c1ff05837d1e1d3337194b043e4b444be8cb78f5ba70bc06db2eae1"
+"verus/r/r13_pipelines/src/lib.rs" = "9fd12baa9f683b92b00ea275f7b4d0a3bc090cf77515fd945a12227581ae3132"
+
+[[entry]]
+id = "fake-t1-d"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "6197e78f526b196628fcb34347783b484a77d838d75f82fa2918ae59c9616994"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "bc85c0c3d79035f16398c028493c2d29a8b07c14074b939f0f422ca7feb74c49"
+
+[[entry]]
+id = "fake-t1-v"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.rs"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "788fc8e45a39f4fcae8594bfd88f9fb36fb20afb19c68ad01c64e9cec7a20be6"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.rs" = "eeec1ea8140bc02a7cf08b1d708a228610474585b8fb2b3f98b88c4749196437"
+
+[[entry]]
+id = "fake-h1-d"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "cca2b3303b972b09bcb7a472ed76ecee7230c194294d6b01bcd1155ca4be7c7d"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "8bdeb746eebbeec4d9cdd09b011b43621a2a7bdf3a67bb7f66046fee72393d18"
+
+[[entry]]
+id = "fake-h1-v"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.rs"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "bda7e3bf1c372ebad5118ea60c80de596edc6741aff60b44d0914b41a179cb47"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.rs" = "1de2e7d1096afd5d8ee38f23429b7e94568461ff81753d056b555b695d53b1c0"
+
+[[entry]]
+id = "fake-h2-d"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "cca2b3303b972b09bcb7a472ed76ecee7230c194294d6b01bcd1155ca4be7c7d"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "24cd9a7e43685e02ce00c616b213299bf7d2f5b8af2711d227042571bfd6e58d"
+
+[[entry]]
+id = "fake-h2-v"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.rs"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "741896589e33c11920625e226c7ae2300babe6c5e27059ef38aa1f30aecfad8d"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.rs" = "95be47e36663f063c55dc7d670b7cba36f0d40a15d6057a6fe7ba27a637d63c3"
+
+[[entry]]
+id = "fake-h3-d"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "5c6c413d54956abc8b509d031c58e469791d90a811dafadf095b9cf799a6af30"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "f39b0604acb9a9a090837899f509d9f9023dc8d9f68bff2d9ef82bd416c14d97"
+
+[[entry]]
+id = "fake-h3-v"
+cmd = ["scripts/vcheck", "--module", "R13", "probe.rs"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.rs"]
+fence = "above"
+[entry.pinned]
+body = "62bcd87cf25aefa7625b1f0b3c35044dff8eb67ba9404eb374efb7a08c213091"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.rs" = "c3a710fa886afab76bdbb9f40a0a45f7593d8ce3b9566073b62f6beb12fcddee"
+
+[[entry]]
+id = "fake-t1-d-symbol"
+cmd = ["scripts/vcheck", "--module", "R13", "--symbol", "R13_FakeAccepts.LengthOf", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy"]
+note = "The fake delivery shown above the pin, run in the given context of R13."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "005dcfcb0e268257aaacdbc70313d86e96ee9cb8b0e39b70f7f926b3594d4859"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "ab24fde7457dd46e2c5f4e47c36c89e688d34ded87d389db56925eaab7c9a812"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "3e30400d61ab0c8fd364691ba006fcf0caf2824c08bda9663c1c1b62e46597a8"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "bc85c0c3d79035f16398c028493c2d29a8b07c14074b939f0f422ca7feb74c49"

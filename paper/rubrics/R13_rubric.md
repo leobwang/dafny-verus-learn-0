@@ -7,8 +7,8 @@ accusation are mandatory.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R13_solutions.tex  sha256 27c58726a29254c63875ccacc482a68ad21f4294bddfa336cb5172a690f81a80
 paper/R13_problems.tex  sha256 106e9955a53d8b76ba8e0887f9dce20b24f1be2abb8b7dfff75011c29831ce8b
-Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy  sha256 a32a3c8d9ac6148aa904497fae0841988b5eae690a670fdec5e88ce9e5bcd0bc
-Solutions/verus/r/r13_pipelines/src/lib.rs  sha256 c6a746e7e50b5dbd3c1efb3a51e4f4b88a516fe3dcf703441b6e657203123eff
+Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy  sha256 7b3c4f98e8025ab5a055e2d30dc476bbcfabb5650997e0ce97c85133d86a5dd7
+Solutions/verus/r/r13_pipelines/src/lib.rs  sha256 76ed90dcce61c922233a251501dbb297a79fa8587937e696cccb790741d37f14
 Solutions/dafny/R/R13_Pipelines/agent/R13_AgentForensic.dfy  sha256 b2bd155a49da08709497cf289348606a22d1bd8f0074cafb044f80478be1e21f
 Solutions/verus/r/r13_pipelines/src/agent.rs  sha256 27cfdfa5034f60be3520027567d0335d6b7b3114a5b9fb3ed65475f3b5cb9380
 
@@ -40,11 +40,14 @@ Solutions/verus/r/r13_pipelines/src/agent.rs  sha256 27cfdfa5034f60be3520027567d
 ### design-judgment
 
 - **D.a:** all six actual predictions, exact source/command/hash scope. Preserve
-  P5's coarse failed/verify field plus native linking evidence; do not invent
-  fine attribution, a kernel certificate or a successfully linked binary.
+  P5's failed/link field (the stage the wrapper has reported since Δ275's fix
+  12; a run recorded before it keeps its failed/verify) plus the native linking
+  diagnostic; do not invent a kernel certificate or a successfully linked binary.
 - **D.b:** selected/full target, mathematical model/native delivery and
   proved/tested/assumed/unknown distinctions. Each repair retains original
-  domain and clauses. Saturating arithmetic keeps boundary inputs.
+  domain and clauses; each of the four fake deliveries (a ghost call in compiled
+  code, a trusted lemma, a trusted helper, an added precondition) is named
+  with the stage or instrument that exposes it.
 - **D.c:** twelve deliveries, at least two independent instruments each, clean
   observations retained. V13b needs original statement comparison despite
   clean gate/audit. Zero false accusations on four draw controls; include them
