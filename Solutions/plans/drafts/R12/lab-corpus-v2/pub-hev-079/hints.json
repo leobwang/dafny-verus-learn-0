@@ -1,0 +1,14 @@
+{
+ "hints": [
+  "lower <= i <= upper + 1",
+  "forall|i: int| 0 <= i < result.len() ==> result[i] % 2 == 0",
+  "forall|i: int| 0 <= i < result.len() ==> (result[i] == 2 || result[i] == 4 || result[i] == 6 || result[i] == 8)",
+  "forall|j: int| 0 <= j < result.len() ==> result[j] <= i",
+  "forall|i: int",
+  "j: int| 0 <= i < j < result.len() ==> result[i] <= result[j]",
+  "result@[result@.len() - 1] == i",
+  "old_result.contains(x as u32)",
+  "result@[i] == x as u32",
+  "result@.contains(x as u32)"
+ ]
+}

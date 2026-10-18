@@ -1,0 +1,14 @@
+{
+ "hints": [
+  "0 <= k <= n && x == f(k) && y == f(k+1) && a == fSum(k)",
+  "x == f(k) && y == f(k+1) && a == fSum(k)",
+  "x == f(k-1) && y == f(k) && a == fSum(k-1)",
+  "x == f(k-1) && y == f(k) && a == fSum(k) - f(k-1)",
+  "x == f(k-1) && y == f(k) && a == fSum(k) - f(k-1) + f(k-1)",
+  "x == f(k-1) && y == f(k) && a == fSum(k)",
+  "x == f(k) && y == k+1+f(k-1)*f(k) && a == fSum(k)",
+  "x == f(k) && y == k+1+f(k+1-2)*f(k+1-1) && a == fSum(k)",
+  "x == f(k) && y == f(k+1) && a == fSum(k)",
+  "a == fSum(k)"
+ ]
+}

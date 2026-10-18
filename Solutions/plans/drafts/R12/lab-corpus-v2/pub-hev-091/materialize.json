@@ -1,0 +1,20 @@
+{
+ "target": "correct_bracketing",
+ "sites": 3,
+ "kept_annotations": [
+  {
+   "offset": 1536,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "brackets@[..i + 1].drop_last() =~= brackets@[..i]"
+  },
+  {
+   "offset": 1621,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "brackets@ =~= brackets@[..i]"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

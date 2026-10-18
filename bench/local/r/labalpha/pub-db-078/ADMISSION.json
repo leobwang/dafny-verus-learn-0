@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "22ce9310e0a9899781a8e014dac1f03491a11363c60df022d2b0d7aa8074353c",
+    "statement_sha256": "7b8e1d8e4e0fd0ba4078bde5e5bbd2fdc336a2e9af9e136d7e3143a99e0a1d2a"
+  },
+  "id": "pub-db-078",
+  "lang": "dafny",
+  "private_evidence_sha256": "649225711a045048e6a7b3b028176620449cdc0d858fd2c8798718edb374c99f",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "a1"
+    },
+    {
+      "kind": "expr",
+      "name": "a2"
+    }
+  ],
+  "source_sha256": "419582b02c5dc18744e0918d0cacbee4e6aa1df5e4f5c48dc469effa83525ff2",
+  "status": "admitted",
+  "target": "overlap_ok",
+  "validated_span": {
+    "end": 86,
+    "start": 76,
+    "symbol": "overlap_ok"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

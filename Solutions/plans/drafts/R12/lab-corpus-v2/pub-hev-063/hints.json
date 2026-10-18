@@ -1,0 +1,7 @@
+{
+ "hints": [
+  "neg_x == -x",
+  "x == d * -neg_x_div_d",
+  "x == d as int * (-neg_x_div_d - 1) + (d - neg_x_mod_d) as int"
+ ]
+}

@@ -24,9 +24,11 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 V2 = HERE.parent
 ROOT = HERE.parents[5]
-ORDER = json.loads((HERE / "ORDER.json").read_text())
+ORDER = json.loads((HERE / ("ORDER2.json" if (HERE / "ORDER2.json").exists() else "ORDER.json")).read_text())  # Amendment 2
 STATE = Path("/tmp/dvl0-dvr4-labalpha/l4state")
-LIMIT_WALK, LIMIT_TAKE = 160, 45
+LIMIT_WALK, LIMIT_TAKE = 220, 70  # Amendment 2: 70 not counting the pilot clusters
+PILOT = {"pub-db-052", "pub-hev-023"}  # role pilot (the Lab alpha lane); never reinstalled here
+KEEP_BELOW = 60  # positions walked before Amendment 2: their materialization and results stay
 SHORT = {"dafnybench": "db", "humaneval-verus": "hev"}
 LANG = {"dafnybench": "dafny", "humaneval-verus": "verus"}
 EXT = {"dafnybench": ".dfy", "humaneval-verus": ".rs"}
@@ -91,14 +93,19 @@ def prepare():
             row["flags"]["c0_flag"] = "per-file upstream licence not recorded"
         # C1 form
         work = STATE / m["id"]
-        if work.exists():
+        if m["k"] < KEEP_BELOW and (work / "materialize.json").exists():
+            pass  # walked before Amendment 2: keep its materialization and admission
+        elif work.exists():
             shutil.rmtree(work)
-        p = subprocess.run([sys.executable, "-B", str(HERE / "materialize.py"), set_, task, m["id"], str(work)],
-                           capture_output=True, text=True)
-        try:
-            res = json.loads(p.stdout.strip().splitlines()[-1])
-        except (ValueError, IndexError):
-            res = {"c1": "materializer error: " + (p.stderr.strip().splitlines() or ["?"])[-1][:300]}
+        if (work / "materialize.json").exists():
+            res = {"ok": True}
+        else:
+            p = subprocess.run([sys.executable, "-B", str(HERE / "materialize.py"), set_, task, m["id"], str(work)],
+                               capture_output=True, text=True)
+            try:
+                res = json.loads(p.stdout.strip().splitlines()[-1])
+            except (ValueError, IndexError):
+                res = {"c1": "materializer error: " + (p.stderr.strip().splitlines() or ["?"])[-1][:300]}
         if "c1" in res:
             row["result"], row["failed"], row["reason"] = "skipped", "C1", res["c1"]
             rows.append(row)
@@ -157,10 +164,12 @@ def admit_one(row):
     return tid, p.returncode
 
 
-def admit(n):
-    """n workers per language, so Dafny members are not held behind the shared Verus slots."""
+def admit(n, upto=None):
+    """n workers per language, so Dafny members are not held behind the shared Verus slots;
+    upto: only walk positions below it (positions past the stop need no admission)."""
     rows = json.loads((STATE / "prepared.json").read_text())
-    todo = [r for r in rows if r["result"] == "prepared" and not (STATE / r["id"] / "admit.json").exists()]
+    todo = [r for r in rows if r["result"] == "prepared" and not (STATE / r["id"] / "admit.json").exists()
+            and (upto is None or r["k"] < upto)]
     pools = {lang: cf.ThreadPoolExecutor(n) for lang in ("dafny", "verus")}
     futs = [pools[LANG[r["set"]]].submit(admit_one, r) for r in todo]
     for f in cf.as_completed(futs):
@@ -173,8 +182,8 @@ def select():
     taken, seen_he, seen_ans, log = [], set(), set(), []
     for row in rows:
         r = dict(row)
-        if len(taken) >= LIMIT_TAKE:
-            r["result"], r["reason"] = "not walked", "the stop rule was met (45 admitted)"
+        if sum(t["id"] not in PILOT for t in taken) >= LIMIT_TAKE:
+            r["result"], r["reason"] = "not walked", "the stop rule was met (70 admitted besides the 2 pilot clusters)"
             r["failed"] = None
             r["checks"] = {}
             log.append(r)
@@ -227,6 +236,8 @@ def select():
     fam.mkdir(exist_ok=True)
     for r in taken:
         tid, set_ = r["id"], r["set"]
+        if tid in PILOT:
+            continue  # the pilot's task dirs and records belong to the Lab alpha lane now
         work = STATE / tid
         dest = ROOT / "bench/local/r/labalpha" / tid
         (dest / "tasks").mkdir(parents=True, exist_ok=True)
@@ -250,6 +261,6 @@ if __name__ == "__main__":
     if cmd == "prepare":
         prepare()
     elif cmd == "admit":
-        admit(int(sys.argv[2]))
+        admit(int(sys.argv[2]), int(sys.argv[3]) if len(sys.argv) > 3 else None)
     elif cmd == "select":
         select()

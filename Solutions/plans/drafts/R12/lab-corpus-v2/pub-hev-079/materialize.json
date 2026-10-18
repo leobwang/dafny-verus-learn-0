@@ -1,0 +1,15 @@
+{
+ "target": "generate_integers",
+ "sites": 10,
+ "kept_annotations": [
+  {
+   "offset": 1713,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|x: int| vmin(a as int, b as int) <= x < i && 2 <= x <= 8 && x % 2 == 0 ==> #[trigger] result@.contains(x as u32)"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

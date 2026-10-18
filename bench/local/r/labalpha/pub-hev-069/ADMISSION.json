@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "53d2d1aab96b6e6be524920541e2556498087a5cb37800bf61910d452236cabd",
+    "statement_sha256": "f98f6c9055a7a2b50c66ccdbab64657e48ab74010c288cf331ff2343882bb2a3"
+  },
+  "id": "pub-hev-069",
+  "lang": "verus",
+  "private_evidence_sha256": "57438dcb20cfc4d2a9685cb97d72e16868a99975f4e151d0d445a170a2bbd3ef",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "a4"
+    },
+    {
+      "kind": "expr",
+      "name": "a5"
+    },
+    {
+      "kind": "expr",
+      "name": "a6"
+    }
+  ],
+  "source_sha256": "33e7aab111d2740aaaa2a052cd428c2d089c2c7e2f376c2bde3ea8a69123c3f6",
+  "status": "admitted",
+  "target": "digit_sum",
+  "validated_span": {
+    "end": 64,
+    "start": 35,
+    "symbol": "digit_sum"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

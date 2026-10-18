@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 16,
+  "frame": {
+    "code_sha256": "11a140c82ab5bfc8e0628a3875b7156fac9fff35c7d6c78c4ac50c77ad0ed64c",
+    "statement_sha256": "908a38dbd85bd58d740fe62a6762cbb4a1ce03408b71a0b35657669a6ccaf90f"
+  },
+  "id": "pub-hev-077",
+  "lang": "verus",
+  "private_evidence_sha256": "317d59ecff2b1d22793e205de62a43ca782f451856f578846b253adc958cf2f4",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "a1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    },
+    {
+      "kind": "expr",
+      "name": "a5"
+    },
+    {
+      "kind": "expr",
+      "name": "a6"
+    },
+    {
+      "kind": "expr",
+      "name": "a7"
+    },
+    {
+      "kind": "expr",
+      "name": "a8"
+    }
+  ],
+  "source_sha256": "2a9e5283189d111a6fc838aea19bd579e14be0b3548976642ccb9ca1a2ad2680",
+  "status": "admitted",
+  "target": "parse_nested_parens",
+  "validated_span": {
+    "end": 110,
+    "start": 57,
+    "symbol": "parse_nested_parens"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

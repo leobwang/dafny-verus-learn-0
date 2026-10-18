@@ -1,0 +1,15 @@
+{
+ "target": "string_xor",
+ "sites": 1,
+ "kept_annotations": [
+  {
+   "offset": 1143,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|i: int| 0 <= i < pos ==> #[trigger] result[i] == xor_char(a[i], b[i])"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

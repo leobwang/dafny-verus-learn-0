@@ -89,3 +89,28 @@ grammar cannot express. Reason: the first admission run showed that a trigger-st
 reference can fail to resolve (human_eval_001: "Could not automatically infer triggers"), so
 the dropped-trigger reference is not the upstream proof. Admission results produced under the
 original rule were discarded and the materialization was re-run before selection.
+
+## Amendment 2 (2026-10-18, before any member after position 59 was taken)
+
+Text before this section: sha256 1d4b3b5e7df488fc6f8d3bf9e9569b743cebdb35e4626341f663b88295ea5e4e. Requested by the Lab alpha lane (the coordinator
+prefers lemma-shaped tasks; two admitted clusters, pub-db-052 and pub-hev-023, now have the
+pilot role and do not count toward the public slice's target).
+
+- Stop rule, replacing "45 admitted or 160 walked": 70 admitted clusters not counting the two
+  pilot clusters (72 admitted in all), or 220 members walked, whichever comes first.
+- Order for walk positions 60 and later (positions 0-59 and their results are unchanged): the
+  members not yet walked keep their per-set seeded order from ORDER.json and are stably
+  partitioned, lemma-shaped first, then the rest. "Lemma-shaped" is materialize.py's static
+  `lemma_shaped` flag (Dafny: the target is a lemma, or its text holds `seq<`, `string` or
+  `decreases`; Verus: the target's text holds `Seq<`, `seq`, `String`, `str` or
+  `decreases`); a member that does not materialize counts as not lemma-shaped. The two
+  partitioned orders are interleaved dafnybench first, as before. order2.py (sha256
+  cdf22892a4f870ec5a5a1131ccd7a44eee98884882f559dece4f272ff9844b0a) writes the result,
+  ORDER2.json (sha256 58cfb31a4ac13f1b051905bac0fbd163ca37500287cfd05090a67200bd174177):
+  137 of 273 remaining dafnybench and 27 of 48 remaining humaneval-verus members are
+  lemma-shaped. The flags were computed by the static materialization only (no solver run),
+  before any new member was taken.
+- Exclusion recorded: vericoding's answer DD0070 stays out of the walk (a known calibration
+  overlap with R06's core file). vericoding is not walked by this rule in any case.
+- Solver slots: the pilot holds one of the two Verus slots, so the walk's Verus jobs run one
+  at a time.

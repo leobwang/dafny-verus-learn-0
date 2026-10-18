@@ -1,0 +1,35 @@
+{
+  "checks": {
+    "C0": "pass: MIT (set licence; HumanEval prompts MIT)",
+    "C1": "pass: target is_prime, 2 sites, 0 annotations kept as provided",
+    "C2": "pass: PROMPT block present",
+    "C3": "pass",
+    "C4": "pass",
+    "C5": "pass",
+    "C6": "pass",
+    "C7": "pass: static frame control (statement table, models, executable skeleton); no Claude judging (D45)"
+  },
+  "cluster": "pub-hev-067",
+  "contamination": "possibly seen: a public 2023-2025 repository task; the perturbation probe is deferred (WALK.md)",
+  "flags": {
+    "dropped_triggers": 0,
+    "lemma_shaped": true
+  },
+  "humaneval_id": 150,
+  "kind": "public",
+  "lang": "verus",
+  "licence": "pass: MIT (set licence; HumanEval prompts MIT)",
+  "licence_flag": null,
+  "pool_sha256": "efbaf9020c11f2af6a4c85aa351147fb5d0f4340b3f9b1b1a50912b6ddb5ad09",
+  "set": "humaneval-verus",
+  "set_sha256": "89d53507eab46676c83e960dc3745bda555c4469953476bd7ea6fa7c5e9f9866",
+  "sites": 2,
+  "status": "admitted",
+  "target": "is_prime",
+  "tasks": [
+    "pub-hev-067"
+  ],
+  "upstream_answer_sha256": "fa4181215bd7f3723c9c324bb140496816409eb864e09605c501e207af60bbaa",
+  "upstream_task": "bench/public/humaneval-verus/answers/human_eval_150.rs",
+  "walk_position": 67
+}

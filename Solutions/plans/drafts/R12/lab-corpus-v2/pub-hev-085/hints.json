@@ -1,0 +1,18 @@
+{
+ "hints": [
+  "sorted(v@)",
+  "is_sorted_from_base_seq(vp, vp)",
+  "is_sorted_from_base_seq(vp, vs)",
+  "sorted(vs)",
+  "vp == vs",
+  "sorted(vh@)",
+  "vp.len() == vh.len()",
+  "vp[0] == vhp[1]",
+  "vp[1] == vhp[0]",
+  "vhp.to_multiset() == vp.to_multiset()",
+  "is_sorted_from_base_seq(vp, vhp)",
+  "is_sorted_from_base_seq(vp, vs)",
+  "sorted(vs)",
+  "vhp == vs"
+ ]
+}

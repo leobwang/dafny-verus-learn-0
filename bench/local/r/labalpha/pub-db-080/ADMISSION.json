@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "294f8869d1259eb75a77e58400d33fe5a5f36555f60246630abb3057c38469ce",
+    "statement_sha256": "a949233a36c5363c3e9f723aca3eb29ef3cf9cd435e6965cad2e2b9f99fe19be"
+  },
+  "id": "pub-db-080",
+  "lang": "dafny",
+  "private_evidence_sha256": "d7cef01211a044ee02bd34877234dd6f750f667a49fc3a03e4c1dc4d2c5031da",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    },
+    {
+      "kind": "expr",
+      "name": "a5"
+    },
+    {
+      "kind": "expr",
+      "name": "a6"
+    }
+  ],
+  "source_sha256": "92c44dfb3cd0fc08bf21d725d4447b20a6b097e92d4a98646a079d06a19c98d3",
+  "status": "admitted",
+  "target": "FindPositionOfElement",
+  "validated_span": {
+    "end": 38,
+    "start": 4,
+    "symbol": "FindPositionOfElement"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

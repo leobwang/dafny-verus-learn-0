@@ -1,0 +1,24 @@
+{
+ "file": "dafny/R/R06_Induction/core/R06_Induction.dfy",
+ "answer": "bench/public/vericoding/answers/DD0070.dfy",
+ "window_tokens": 32,
+ "threshold": 4,
+ "shared_windows": [
+  {
+   "r06_token_offset": 372,
+   "text": "{ b : = true ; var i : = 0 ; while i < | s | invariant 0 < = i < = | s | invariant b < ="
+  },
+  {
+   "r06_token_offset": 373,
+   "text": "b : = true ; var i : = 0 ; while i < | s | invariant 0 < = i < = | s | invariant b < = ="
+  },
+  {
+   "r06_token_offset": 374,
+   "text": ": = true ; var i : = 0 ; while i < | s | invariant 0 < = i < = | s | invariant b < = = >"
+  },
+  {
+   "r06_token_offset": 375,
+   "text": "= true ; var i : = 0 ; while i < | s | invariant 0 < = i < = | s | invariant b < = = > forall"
+  }
+ ]
+}

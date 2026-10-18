@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "d79f6d60759ca19360e8331f16d111a97316bd4c9f2d56d076b0545afa9e70a7",
+    "statement_sha256": "b4c16bca241ee2c19dbf0e60352c0ab7e4b48f560ceaadf88181ef6c082c59b0"
+  },
+  "id": "pub-db-060",
+  "lang": "dafny",
+  "private_evidence_sha256": "a37de414e210f51c57ec6154f545be5fea0f0e4e637adf0a5c005cb080047d87",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "e281e79c6b58ac37becf1b3d5a70635485e2e06b33f023380a9e6dbe55a167bb",
+  "status": "admitted",
+  "target": "mpositive3",
+  "validated_span": {
+    "end": 40,
+    "start": 27,
+    "symbol": "mpositive3"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

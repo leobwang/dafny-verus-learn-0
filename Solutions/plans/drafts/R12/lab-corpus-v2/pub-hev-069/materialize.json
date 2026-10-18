@@ -1,0 +1,20 @@
+{
+ "target": "digit_sum",
+ "sites": 6,
+ "kept_annotations": [
+  {
+   "offset": 894,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|j: int| 0 <= j <= index ==> (u64::MIN * index <= (count_uppercase_sum( #[trigger] text@[..j], )) <= u64::MAX * index)"
+  },
+  {
+   "offset": 1255,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "text@[..index] =~= text@[..index + 1].drop_last()"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

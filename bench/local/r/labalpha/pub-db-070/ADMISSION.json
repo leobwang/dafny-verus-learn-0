@@ -1,0 +1,73 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "798e6d9c0567da6ea7ac4e3f8fc7b0e4190c71d9ea255516f00dc190c8af8401",
+    "statement_sha256": "f95273c80d4549fd2658dbc20404d015ae760600e7f68cb8996b962e3fe6f095"
+  },
+  "id": "pub-db-070",
+  "lang": "dafny",
+  "private_evidence_sha256": "1eb661d13ba01e8ef528e4014d814ba81dfa9510f31e60527cf0cb55f105b80d",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    },
+    {
+      "kind": "expr",
+      "name": "i5"
+    },
+    {
+      "kind": "expr",
+      "name": "i6"
+    },
+    {
+      "kind": "expr",
+      "name": "i7"
+    },
+    {
+      "kind": "expr",
+      "name": "i8"
+    },
+    {
+      "kind": "expr",
+      "name": "i9"
+    }
+  ],
+  "source_sha256": "5e8d80bee2365fb5360f12d1ce230e6c07eb1815dbb64e66c6c9af1cef1a11f7",
+  "status": "admitted",
+  "target": "BubbleSort",
+  "validated_span": {
+    "end": 55,
+    "start": 21,
+    "symbol": "BubbleSort"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

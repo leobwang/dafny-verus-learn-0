@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "eb23e69d5034a77f8117451330d30cfeaad8f4503a4eb7ac01c4fb30be046a7a",
+    "statement_sha256": "9aac7ce08aeba31195d2e383058bd8e35ba72320a32fcba4a66945801cc06544"
+  },
+  "id": "pub-db-084",
+  "lang": "dafny",
+  "private_evidence_sha256": "5ec7be8238de93d4181133955bb825a7323b7730d1f901fdb23255d71a773048",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "21a2ed5f0a38db077b38819537cb05fd2f3bcac7280610fa17877ce100ba39c9",
+  "status": "admitted",
+  "target": "Fatorial",
+  "validated_span": {
+    "end": 23,
+    "start": 9,
+    "symbol": "Fatorial"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

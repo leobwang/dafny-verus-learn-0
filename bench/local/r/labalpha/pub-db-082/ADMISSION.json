@@ -1,0 +1,77 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "bfc54039ebd2c9f6eec39ec451c0d0960f9917e887b91dc0496595f3e75a4410",
+    "statement_sha256": "5cf2c5956adab4fb28b00e260922b8763a9164dc4b42827750ba940bd328fb13"
+  },
+  "id": "pub-db-082",
+  "lang": "dafny",
+  "private_evidence_sha256": "6fc2e2e7821e7c512ba9cefc518ca12cd87dc573161e4a4cbbfe195a7647dd24",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "a2"
+    },
+    {
+      "kind": "expr",
+      "name": "a3"
+    },
+    {
+      "kind": "expr",
+      "name": "a4"
+    },
+    {
+      "kind": "expr",
+      "name": "a5"
+    },
+    {
+      "kind": "expr",
+      "name": "a6"
+    },
+    {
+      "kind": "expr",
+      "name": "a7"
+    },
+    {
+      "kind": "expr",
+      "name": "a8"
+    },
+    {
+      "kind": "expr",
+      "name": "a9"
+    },
+    {
+      "kind": "expr",
+      "name": "a10"
+    }
+  ],
+  "source_sha256": "b384547829ec411c5681d53f55445aca27e6520246e829366a341139e4a1488a",
+  "status": "admitted",
+  "target": "problem6",
+  "validated_span": {
+    "end": 44,
+    "start": 19,
+    "symbol": "problem6"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

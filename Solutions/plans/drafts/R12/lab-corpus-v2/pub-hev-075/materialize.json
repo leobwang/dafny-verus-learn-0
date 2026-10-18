@@ -1,0 +1,20 @@
+{
+ "target": "vowels_count",
+ "sites": 4,
+ "kept_annotations": [
+  {
+   "offset": 1024,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "s@[..i + 1].drop_last() =~= s@[..i]"
+  },
+  {
+   "offset": 1300,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "s@[..len] =~= s@"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

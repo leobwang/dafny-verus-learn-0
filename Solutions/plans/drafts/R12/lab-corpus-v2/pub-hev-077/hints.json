@@ -1,0 +1,12 @@
+{
+ "hints": [
+  "s@[0..] == s@",
+  "i <= s_len == s@.len() <= usize::MAX",
+  "0 <= depth <= max_depth <= i",
+  "spec_nested_parens_helper(s@, 0, 0, seq![]) == spec_nested_parens_helper( s@[i..], depth as int, max_depth as int, all_depths@.map_values(|d| d as int), )",
+  "s@[i..].drop_first() == s@[i + 1..]",
+  "all_depths@.push(max_depth).map_values(|d| d as int) == all_depths@.map_values( |d| d as int, ) + seq![max_depth as int]",
+  "s@[s_len..].len() == 0",
+  "all_depths@.push(max_depth).map_values(|d| d as int) == all_depths@.map_values( |d| d as int, ) + seq![max_depth as int]"
+ ]
+}
