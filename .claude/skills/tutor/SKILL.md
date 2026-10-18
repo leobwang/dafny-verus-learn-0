@@ -23,7 +23,7 @@ Closed items get no hint at all, not even rung 1 (CORE.md MAY NOT): a prediction
 
 ## The hint ladder — ONE rung per learner turn
 
-Work up from the lowest plausible rung. Never skip ahead, even on request ("just tell me" gets the policy answer, below), and never climb above the record's `tutor_max_rung`.
+Work up from the lowest plausible rung. Never skip ahead, even on request ("just tell me" gets the policy answer, below), and never climb above the record's `tutor_max_rung`. A turn also asks no question that belongs to a higher rung: a rung-1 or rung-2 turn asks nothing about the learner's own verifier state (that question is rung 3), and a rung-3 question names no technique (rung 4).
 
 1. **Clarify the concept**: the underlying idea, with zero exercise specifics.
 2. **Point to the chapter section**: the exact section of the record's `chapter`, by its stable heading (`## 4. S4 — …`).
