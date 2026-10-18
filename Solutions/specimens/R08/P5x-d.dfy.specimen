@@ -1,0 +1,62 @@
+// Reference Solution.
+// after: R08.P5dv
+// One complete engine whose language is the reversed pattern's, and one client.
+module R08_BackEnginex refines RG_A2_StepMatcher {
+  import opened RG_A1_Re
+  import B = RG_A1b_Facts
+  import A2 = RG_A2_Deriv
+
+  type Pattern = Re
+  type Config = Re
+
+  ghost predicate Lang(p: Pattern, w: seq<char>)
+  {
+    Matches(Backwards(p), w)
+  }
+
+  ghost predicate Res(st: Config, w: seq<char>)
+  {
+    Matches(st, w)
+  }
+
+  function Start(p: Pattern): Config
+  {
+    Backwards(p)
+  }
+
+  function Feed(st: Config, c: char): Config
+  {
+    A2.Deriv(st, c)
+  }
+
+  predicate Final(st: Config)
+  {
+    Nullable(st)
+  }
+
+  lemma StartLaw(p: Pattern, w: seq<char>)
+  {
+  }
+
+  lemma FeedLaw(st: Config, c: char, w: seq<char>)
+  {
+    A2.DerivCorrect(st, c, w);
+  }
+
+  lemma FinalLaw(st: Config)
+  {
+    B.NullableCorrect(st);
+  }
+}
+
+module R08_BackClientx {
+  import opened RG_A1_Re
+  import E = R08_BackEnginex
+
+  // Client [x]: it only returns the engine's MatchWord.
+  method ClientBackx(p: Re, w: seq<char>) returns (b: bool)
+    ensures b == Matches(p, w)
+  {
+    b := E.MatchWord(p, w);
+  }
+}

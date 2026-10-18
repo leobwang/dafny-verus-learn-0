@@ -1,0 +1,68 @@
+// An implementation that adds a postcondition to the trait's feed.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a1b::*;
+use rg_re_a2::*;
+use rg_re_a2::step_matcher::StepMatcher;
+
+verus! {
+
+pub struct StrongerEngine;
+
+impl StepMatcher for StrongerEngine {
+    type Pattern = Re;
+    type Config = Re;
+    type Model = Re;
+
+    open spec fn lang(p: Re, w: Seq<char>) -> bool {
+        matches(p, w)
+    }
+
+    open spec fn model(st: Re) -> Re {
+        st
+    }
+
+    open spec fn res(m: Re, w: Seq<char>) -> bool {
+        matches(m, w)
+    }
+
+    open spec fn start_spec(p: Re) -> Re {
+        p
+    }
+
+    open spec fn feed_spec(m: Re, c: char) -> Re {
+        deriv(m, c)
+    }
+
+    open spec fn final_spec(m: Re) -> bool {
+        nullable(m)
+    }
+
+    fn start(p: Re) -> (st: Re) {
+        p
+    }
+
+    fn feed(st: Re, c: char) -> (r: Re)
+        ensures
+            r == deriv(st, c),
+    {
+        deriv_exec(&st, c)
+    }
+
+    fn is_final(st: &Re) -> (b: bool) {
+        is_nullable(st)
+    }
+
+    proof fn lemma_start_law(p: Re, w: Seq<char>) {
+    }
+
+    proof fn lemma_feed_law(m: Re, c: char, w: Seq<char>) {
+        lemma_deriv_correct(m, c, w);
+    }
+
+    proof fn lemma_final_law(m: Re) {
+        lemma_nullable_correct(m);
+    }
+}
+
+} // verus!

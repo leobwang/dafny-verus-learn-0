@@ -1,0 +1,35 @@
+// after: R08.P2v
+// P2's state, stepped: the part that died to Empty is gone.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a2::*;
+
+verus! {
+
+// The alternative-set engine's two given spec fns.
+pub open spec fn parts_p2(r: Re) -> Seq<Re>
+    decreases r,
+{
+    match r {
+        Re::Empty => Seq::empty(),
+        Re::Alt(a, b) => parts_p2(*a) + parts_p2(*b),
+        _ => seq![r],
+    }
+}
+
+pub open spec fn feed_all_p2(st: Seq<Re>, c: char) -> Seq<Re>
+    decreases st.len(),
+{
+    if st.len() == 0 {
+        Seq::empty()
+    } else {
+        parts_p2(deriv(st[0], c)) + feed_all_p2(st.drop_first(), c)
+    }
+}
+
+proof fn state_after_a() {
+    assert(feed_all_p2(seq![Re::Eps, Re::Chr('a')], 'a').len() == 1) by (compute_only);
+    assert(feed_all_p2(seq![Re::Eps, Re::Chr('a')], 'a')[0] is Eps) by (compute_only);
+}
+
+} // verus!

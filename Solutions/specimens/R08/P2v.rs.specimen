@@ -1,25 +1,36 @@
 // Reference Solution.
 use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a2::*;
+
 verus! {
-// Printed local interface for this complete prediction; no earlier learner file.
-pub trait LiteralContract {
- spec fn language(&self,word:Seq<char>)->bool;
- fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
+
+// The alternative-set engine's two given spec fns, printed here (no proof).
+pub open spec fn parts_p2(r: Re) -> Seq<Re>
+    decreases r,
+{
+    match r {
+        Re::Empty => Seq::empty(),
+        Re::Alt(a, b) => parts_p2(*a) + parts_p2(*b),
+        _ => seq![r],
+    }
 }
-pub struct Literal { pub c:char }
-impl LiteralContract for Literal {
- open spec fn language(&self,word:Seq<char>)->bool { word == seq![self.c] }
- fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool)
-  ensures b == self.language(word@),
- {
-  let b = word.len()==1 && word[0]==self.c;
-  proof { if b { assert(word@ =~= seq![self.c]); } }
-  b
- }
+
+pub open spec fn feed_all_p2(st: Seq<Re>, c: char) -> Seq<Re>
+    decreases st.len(),
+{
+    if st.len() == 0 {
+        Seq::empty()
+    } else {
+        parts_p2(deriv(st[0], c)) + feed_all_p2(st.drop_first(), c)
+    }
 }
+
 // item: R08.P2v value
-// Answer form: bool literal.
-proof fn scalar_model_value() {
- assert(Literal { c:'δ' }.language(seq!['δ']) == true) by (compute_only);
+// The state `seq![Re::Eps, Re::Chr('a')]` reads the character 'a'. How many
+// alternatives does the next state hold? Answer form: a natural number.
+proof fn state_size_after_a() {
+    assert(feed_all_p2(seq![Re::Eps, Re::Chr('a')], 'a').len() == 1) by (compute_only);
 }
-}
+
+} // verus!

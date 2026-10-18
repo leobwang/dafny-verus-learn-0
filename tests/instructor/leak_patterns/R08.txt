@@ -1,27 +1,24 @@
-# R08 withheld H implementation/proof windows; no prediction answers.
+# R08 withheld hole proofs (H1–H4, both languages) and the agent repair; no prediction answers.
 # from Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy
-# source: { b := A2.DerivMatch(p,word); } (R08.H1d)
+# source: RangesClassLaw(rs[1..], c); (R08.H1d)
 # verified: solutions=1 public=0
-\{\s*b\s*:=\s*A2\.DerivMatch\(p,word\);\s*\}
-# source: { if |word| != 1 { b := false; } else { b := A2.ClassMember(p,word[0]); } } (R08.H2d)
+RangesClassLaw\(rs\[1\.\.\],\s*c\);\s*if\s+InSomeRange\(rs\[1\.\.\],\s*c\)
+# source: assert (pa + pb)[|pa| + i] == pb[i]; (R08.H2d)
 # verified: solutions=1 public=0
-\{\s*if\s*\|word\|\s*!=\s*1\s*\{\s*b\s*:=\s*false;\s*\}\s*else\s*\{\s*b\s*:=\s*A2\.ClassMember\(p,word\[0\]\);\s*\}\s*\}
-# source: { reveal HiddenWord(); } (R08.H3d)
+assert\s*\(pa\s*\+\s*pb\)\[\|pa\|\s*\+\s*i\]\s*==\s*pb\[i\];
+# source: AltFeedLaw(st[1..], c, w); PartsLaw(A2.Deriv(st[0], c), w); (R08.H3d)
 # verified: solutions=1 public=0
-\{\s*reveal\s*HiddenWord\(\);\s*\}
-# source: { reveal HiddenResidual(); A2.DerivCorrect(r,c,word); } (R08.H4d)
+AltFeedLaw\(st\[1\.\.\],\s*c,\s*w\);\s*PartsLaw\(A2\.Deriv\(st\[0\],\s*c\),\s*w\);
+# source: AltFinalLaw(st[1..]); B.NullableCorrect(st[0]); (R08.H4d)
 # verified: solutions=1 public=0
-\{\s*reveal\s*HiddenResidual\(\);\s*A2\.DerivCorrect\(r,c,word\);\s*\}
+AltFinalLaw\(st\[1\.\.\]\);\s*B\.NullableCorrect\(st\[0\]\);
 # from Solutions/verus/r/r08_abstraction/src/lib.rs
-# source: { deriv_match(&self.pattern,word) } (R08.H1v)
+# source: lemma_ranges_set_law(tail, c); if in_char_ranges(tail, c) (R08.H1v)
 # verified: solutions=1 public=0
-\{\s*deriv_match\(\&self\.pattern,word\)\s*\}
-# source: { if word.len() != 1 { false } else { self.class.class_member(word[0]) } } (R08.H2v)
+lemma_ranges_set_law\(tail,\s*c\);\s*if\s+in_char_ranges\(tail,\s*c\)
+# source: lemma_alt_feed_law(m.drop_first(), c, w); lemma_parts_law(deriv(m[0], c), w); (R08.H3v)
 # verified: solutions=1 public=0
-\{\s*if\s*word\.len\(\)\s*!=\s*1\s*\{\s*false\s*\}\s*else\s*\{\s*self\.class\.class_member\(word\[0\]\)\s*\}\s*\}
-# source: { reveal(hidden_word); } (R08.H3v)
+lemma_alt_feed_law\(m\.drop_first\(\),\s*c,\s*w\);\s*lemma_parts_law\(deriv\(m\[0\],\s*c\),\s*w\);
+# source: lemma_alt_final_law(m.drop_first()); lemma_nullable_correct(m[0]); (R08.H4v)
 # verified: solutions=1 public=0
-\{\s*reveal\(hidden_word\);\s*\}
-# source: { reveal(hidden_residual); lemma_deriv_correct(r,c,word); } (R08.H4v)
-# verified: solutions=1 public=0
-\{\s*reveal\(hidden_residual\);\s*lemma_deriv_correct\(r,c,word\);\s*\}
+lemma_alt_final_law\(m\.drop_first\(\)\);\s*lemma_nullable_correct\(m\[0\]\);

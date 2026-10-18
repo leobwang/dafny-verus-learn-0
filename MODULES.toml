@@ -2148,7 +2148,7 @@ recognise_d = ["toolchain-mismatch"]
 recognise_v = ["toolchain-mismatch"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = { "R07.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R07.H1d" = { admitted = true, minutes = 8, fallback = "" }, "R07.H2d" = { admitted = true, minutes = 11, fallback = "" }, "R07.H3d" = { admitted = true, minutes = 12, fallback = "" }, "R07.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R07.H1v" = { admitted = true, minutes = 6, fallback = "" }, "R07.H2v" = { admitted = true, minutes = 7, fallback = "" }, "R07.H3v" = { admitted = true, minutes = 8, fallback = "" }, "R07.H4v" = { admitted = true, minutes = 5, fallback = "" }, "R07.H5v" = { admitted = true, minutes = 5, fallback = "" } }
-imports = { "dafny/given/R/RG_A2_MatcherStatement.dfy" = "core", "verus/given/rg_re_a2/src/word_matcher.rs" = "prelude",  "dafny/checks/R07_checks.dfy" = "std",  "dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy" = "std", "verus/r/r07_libraries/src/agent.rs" = "all",  "dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "std", "verus/r/r07_libraries/src/lib.rs" = "all",  "dafny/given/R/RG_A2_Deriv.dfy" = "core", "verus/given/rg_re_a2/src/lib.rs" = "prelude", "verus/given/rg_re_a2/src/char_class.rs" = "prelude" }
+imports = { "dafny/given/R/RG_A2_MatcherStatement.dfy" = "core", "verus/given/rg_re_a2/src/step_matcher.rs" = "prelude",  "dafny/checks/R07_checks.dfy" = "std",  "dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy" = "std", "verus/r/r07_libraries/src/agent.rs" = "all",  "dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "std", "verus/r/r07_libraries/src/lib.rs" = "all",  "dafny/given/R/RG_A2_Deriv.dfy" = "core", "verus/given/rg_re_a2/src/lib.rs" = "prelude", "verus/given/rg_re_a2/src/char_class.rs" = "prelude" }
 concept_items = {}
 
 [[module]]
@@ -2174,7 +2174,7 @@ build_target = "R"
 units = ["dafny/R/R08_Abstraction/std", "verus/r/r08_abstraction"]
 layer = "A2"
 engines = ["contract"]
-statements = [{ path = "dafny/given/R/RG_A2_MatcherStatement.dfy", sha256 = "ca14d626aa09490fb9d4d6565567d7b1156ce597b18ab90b4291652a02b81cb3" }]
+statements = [{ path = "dafny/given/R/RG_A2_MatcherStatement.dfy", sha256 = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49" }]
 deep_dive = []
 review_bar = "library-conventions"
 persona = "smt-skeptic"
@@ -2187,7 +2187,7 @@ write_v = ["trait-spec", "reveal"]
 recognise_d = ["abstract-module"]
 recognise_v = ["open-spec"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = { "R08.H1d" = { admitted = true, minutes = 15, fallback = "" }, "R08.H2d" = { admitted = true, minutes = 16, fallback = "" }, "R08.H3d" = { admitted = true, minutes = 6, fallback = "" }, "R08.H4d" = { admitted = true, minutes = 8, fallback = "" }, "R08.H1v" = { admitted = true, minutes = 15, fallback = "" }, "R08.H2v" = { admitted = true, minutes = 16, fallback = "" }, "R08.H3v" = { admitted = true, minutes = 6, fallback = "" }, "R08.H4v" = { admitted = true, minutes = 8, fallback = "" } }
+admissible = { "R08.H1d" = { admitted = true, minutes = 10, fallback = "printed induction-disabled levers" }, "R08.H2d" = { admitted = true, minutes = 15, fallback = "" }, "R08.H3d" = { admitted = true, minutes = 15, fallback = "" }, "R08.H4d" = { admitted = true, minutes = 5, fallback = "" }, "R08.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R08.H2v" = { admitted = true, minutes = 15, fallback = "" }, "R08.H3v" = { admitted = true, minutes = 15, fallback = "" }, "R08.H4v" = { admitted = true, minutes = 5, fallback = "" } }
 imports = { "dafny/checks/R08_checks.dfy" = "core",  "dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy" = "core", "verus/r/r08_abstraction/src/agent.rs" = "prelude",  "dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "std", "verus/r/r08_abstraction/src/lib.rs" = "prelude" }
 concept_items = {}
 

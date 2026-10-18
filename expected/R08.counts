@@ -14,16 +14,16 @@ module = "R08"
 [[unit]]
 path = "dafny/R/R08_Abstraction/std"
 lang = "dafny"
-reference_verified = 40
-min_verified = 7
-symbols = ["R08_Class.MatchWord", "R08_Class.WordLanguage", "R08_Derivative.MatchWord", "R08_Literal.MatchWord", "R08_LiteralClient.ReadModel", "R08_Opacity.RevealResidual", "R08_Opacity.RevealWord"]
+reference_verified = 56
+min_verified = 13
+symbols = ["R08_AltSetEngine.AltFeedLaw", "R08_AltSetEngine.AltFinalLaw", "R08_AltSetEngine.AnyMatches", "R08_AltSetEngine.AnyNullable", "R08_AltSetEngine.FeedAll", "R08_AltSetEngine.Parts", "R08_AltSetEngine.PartsLaw", "R08_DerivClient.MatchDeriv", "R08_RangeStarEngine.InSomeRange", "R08_RangeStarEngine.Lang", "R08_RangeStarEngine.RangesClass", "R08_RangeStarEngine.RangesClassLaw", "R08_RangeStarEngine.Res"]
 
 [[unit]]
 path = "verus/r/r08_abstraction"
 lang = "verus"
-reference_verified = 6
-min_verified = 6
-symbols = ["ClassEngine::match_word", "DerivEngine::match_word", "LiteralEngine::match_word", "read_model", "reveal_residual", "reveal_word"]
+reference_verified = 33
+min_verified = 14
+symbols = ["any_nullable", "feed_all", "feed_from", "lemma_alt_feed_law", "lemma_alt_final_law", "lemma_parts_law", "lemma_ranges_set_law", "match_alt", "match_deriv", "match_range_star", "parts", "parts_exec", "ranges_class", "ranges_set"]
 
 [[file]]
 path = "dafny/R/R08_Abstraction/std/R08_Abstraction.dfy"

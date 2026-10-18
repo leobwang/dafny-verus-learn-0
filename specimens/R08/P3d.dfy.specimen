@@ -1,0 +1,55 @@
+// after: R08.P3dv
+// A length engine for A2's step-matcher interface: its language is defined by
+// recursion, its state is a count, and its start law is proved by calling the
+// same law on a shorter word.
+module R08_LengthEngine refines RG_A2_StepMatcher {
+  type Pattern = nat
+  type Config = int
+
+  // Given: w has exactly n characters, by recursion on n.
+  ghost predicate LengthIs(n: nat, w: seq<char>)
+  {
+    if n == 0 then w == [] else w != [] && LengthIs(n - 1, w[1..])
+  }
+
+  ghost predicate Lang(p: Pattern, w: seq<char>)
+  {
+    LengthIs(p, w)
+  }
+
+  ghost predicate Res(st: Config, w: seq<char>)
+  {
+    |w| == st
+  }
+
+  function Start(p: Pattern): Config
+  {
+    p
+  }
+
+  function Feed(st: Config, c: char): Config
+  {
+    st - 1
+  }
+
+  predicate Final(st: Config)
+  {
+    st == 0
+  }
+
+  lemma StartLaw(p: Pattern, w: seq<char>)
+    decreases p
+  {
+    if p > 0 && w != [] {
+      StartLaw(p - 1, w[1..]);
+    }
+  }
+
+  lemma FeedLaw(st: Config, c: char, w: seq<char>)
+  {
+  }
+
+  lemma FinalLaw(st: Config)
+  {
+  }
+}

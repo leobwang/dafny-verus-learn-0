@@ -1,0 +1,44 @@
+// after: R08.P3dv
+// A small trait with one law about a recursive definition, and an implementation
+// that proves the law by calling it on a shorter list.
+use vstd::prelude::*;
+
+verus! {
+
+pub trait SumLaw {
+    spec fn summed(b: Seq<nat>) -> int;
+
+    proof fn lemma_summed_nonneg(b: Seq<nat>)
+        ensures
+            Self::summed(b) >= 0,
+    ;
+}
+
+/// Given: the sum of a list, by recursion.
+pub open spec fn sum_of(s: Seq<nat>) -> int
+    decreases s.len(),
+{
+    if s.len() == 0 {
+        0
+    } else {
+        s[0] + sum_of(s.drop_first())
+    }
+}
+
+pub struct SumList;
+
+impl SumLaw for SumList {
+    open spec fn summed(b: Seq<nat>) -> int {
+        sum_of(b)
+    }
+
+    proof fn lemma_summed_nonneg(b: Seq<nat>)
+        decreases b.len(),
+    {
+        if b.len() > 0 {
+            Self::lemma_summed_nonneg(b.drop_first());
+        }
+    }
+}
+
+} // verus!

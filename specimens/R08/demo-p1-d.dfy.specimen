@@ -1,0 +1,25 @@
+// after: R08.P1d
+// P1's state, stepped: the two alternatives after reading 'b' are dead, not gone.
+module R08_DemoPartsSize {
+  import opened RG_A1_Re
+  import A2 = RG_A2_Deriv
+
+  function Parts(r: Re): seq<Re>
+  {
+    match r
+    case Empty => []
+    case Alt(a, b) => Parts(a) + Parts(b)
+    case _ => [r]
+  }
+
+  function FeedAll(st: seq<Re>, c: char): seq<Re>
+  {
+    if st == [] then [] else Parts(A2.Deriv(st[0], c)) + FeedAll(st[1..], c)
+  }
+
+  lemma StateAfterB()
+    ensures FeedAll([Cat(Chr('a'), Chr('b')), Star(Chr('a'))], 'b')
+            == [Cat(Empty, Chr('b')), Cat(Empty, Star(Chr('a')))]
+  {
+  }
+}

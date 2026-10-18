@@ -1,0 +1,91 @@
+// Reference Solution.
+// after: R08.P5dv
+// One complete engine whose language is the reversed pattern's, and one client.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a1b::*;
+use rg_re_a2::*;
+use rg_re_a2::step_matcher::{StepMatcher, match_word};
+
+verus! {
+
+/// The reversed regex, executable.
+fn backwards_exec(r: &Re) -> (out: Re)
+    ensures
+        out == backwards(*r),
+    decreases r,
+{
+    match r {
+        Re::Empty => Re::Empty,
+        Re::Eps => Re::Eps,
+        Re::Chr(c) => Re::Chr(*c),
+        Re::Alt(a, b) => Re::Alt(Box::new(backwards_exec(a)), Box::new(backwards_exec(b))),
+        Re::Cat(a, b) => Re::Cat(Box::new(backwards_exec(b)), Box::new(backwards_exec(a))),
+        Re::Star(a) => Re::Star(Box::new(backwards_exec(a))),
+    }
+}
+
+pub struct BackEngine;
+
+impl StepMatcher for BackEngine {
+    type Pattern = Re;
+    type Config = Re;
+    type Model = Re;
+
+    open spec fn lang(p: Re, w: Seq<char>) -> bool {
+        matches(backwards(p), w)
+    }
+
+    open spec fn model(st: Re) -> Re {
+        st
+    }
+
+    open spec fn res(m: Re, w: Seq<char>) -> bool {
+        matches(m, w)
+    }
+
+    open spec fn start_spec(p: Re) -> Re {
+        backwards(p)
+    }
+
+    open spec fn feed_spec(m: Re, c: char) -> Re {
+        deriv(m, c)
+    }
+
+    open spec fn final_spec(m: Re) -> bool {
+        nullable(m)
+    }
+
+    fn start(p: Re) -> (st: Re) {
+        backwards_exec(&p)
+    }
+
+    fn feed(st: Re, c: char) -> (r: Re) {
+        deriv_exec(&st, c)
+    }
+
+    fn is_final(st: &Re) -> (b: bool) {
+        is_nullable(st)
+    }
+
+    proof fn lemma_start_law(p: Re, w: Seq<char>) {
+    }
+
+    proof fn lemma_feed_law(m: Re, c: char, w: Seq<char>) {
+        lemma_deriv_correct(m, c, w);
+    }
+
+    proof fn lemma_final_law(m: Re) {
+        lemma_nullable_correct(m);
+    }
+}
+
+// Client [x]: it only returns the engine's match_word.
+pub fn client_back_x(p: Re, w: &Vec<char>) -> (b: bool)
+    ensures
+        b == matches(p, w@),
+{
+    match_word::<BackEngine>(p, w)
+}
+
+} // verus!

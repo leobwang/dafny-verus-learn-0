@@ -1,10 +1,52 @@
 // Reference Solution.
-module R08_RefinementCard refines RG_A2_MatcherSpec {
- type Pattern = char
- ghost predicate WordLanguage(p:Pattern,word:seq<char>) { word == [p,p] }
- // item: R08.C1d write:refines
- // WRITE: complete this refinement body; preserve both the binding and interface.
- method MatchWord(p:Pattern,word:seq<char>) returns (b:bool)
-  ensures b == WordLanguage(p,word)
- { b := word == [p,p]; }
+// The star engine: the derivative engine run on Star(p), so its language is
+// Matches(Star(p), w). Its definitions are complete; two of its laws are not.
+module R08_StarCard refines RG_A2_StepMatcher {
+  import opened RG_A1_Re
+  import B = RG_A1b_Facts
+  import A2 = RG_A2_Deriv
+
+  type Pattern = Re
+  type Config = Re
+
+  ghost predicate Lang(p: Pattern, w: seq<char>)
+  {
+    Matches(Star(p), w)
+  }
+
+  ghost predicate Res(st: Config, w: seq<char>)
+  {
+    Matches(st, w)
+  }
+
+  function Start(p: Pattern): Config
+  {
+    Star(p)
+  }
+
+  function Feed(st: Config, c: char): Config
+  {
+    A2.Deriv(st, c)
+  }
+
+  predicate Final(st: Config)
+  {
+    Nullable(st)
+  }
+
+  lemma StartLaw(p: Pattern, w: seq<char>)
+  {
+  }
+
+  // item: R08.C1d write:refines
+  // WRITE: discharge these two interface laws for this engine; each is one call.
+  lemma FeedLaw(st: Config, c: char, w: seq<char>)
+  {
+    A2.DerivCorrect(st, c, w);
+  }
+
+  lemma FinalLaw(st: Config)
+  {
+    B.NullableCorrect(st);
+  }
 }

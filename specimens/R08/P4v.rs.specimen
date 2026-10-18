@@ -1,32 +1,87 @@
 use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a1b::*;
+use rg_re_a2::*;
+use rg_re_a2::step_matcher::StepMatcher;
+
 verus! {
-// Printed local interface for this complete prediction; no earlier learner file.
-pub trait LiteralContract {
- spec fn language(&self,word:Seq<char>)->bool;
- fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool) ensures b == self.language(word@);
+
+mod engine {
+    use vstd::prelude::*;
+    use rg_re_a1::*;
+    use rg_re_a1b::*;
+    use rg_re_a2::*;
+    use rg_re_a2::step_matcher::StepMatcher;
+
+    /// The derivative engine again, with `res` closed: its body is visible only
+    /// inside this module.
+    pub struct SealedDeriv;
+
+    impl StepMatcher for SealedDeriv {
+        type Pattern = Re;
+        type Config = Re;
+        type Model = Re;
+
+        open spec fn lang(p: Re, w: Seq<char>) -> bool {
+            matches(p, w)
+        }
+
+        open spec fn model(st: Re) -> Re {
+            st
+        }
+
+        closed spec fn res(m: Re, w: Seq<char>) -> bool {
+            matches(m, w)
+        }
+
+        open spec fn start_spec(p: Re) -> Re {
+            p
+        }
+
+        open spec fn feed_spec(m: Re, c: char) -> Re {
+            deriv(m, c)
+        }
+
+        open spec fn final_spec(m: Re) -> bool {
+            nullable(m)
+        }
+
+        fn start(p: Re) -> (st: Re) {
+            p
+        }
+
+        fn feed(st: Re, c: char) -> (r: Re) {
+            deriv_exec(&st, c)
+        }
+
+        fn is_final(st: &Re) -> (b: bool) {
+            is_nullable(st)
+        }
+
+        proof fn lemma_start_law(p: Re, w: Seq<char>) {
+        }
+
+        proof fn lemma_feed_law(m: Re, c: char, w: Seq<char>) {
+            lemma_deriv_correct(m, c, w);
+        }
+
+        proof fn lemma_final_law(m: Re) {
+            lemma_nullable_correct(m);
+        }
+    }
 }
-pub struct Literal { pub c:char }
-impl LiteralContract for Literal {
- open spec fn language(&self,word:Seq<char>)->bool { word == seq![self.c] }
- fn literal_decision_r08(&self,word:&Vec<char>)->(b:bool)
-  ensures b == self.language(word@),
- {
-  let b = word.len()==1 && word[0]==self.c;
-  proof { if b { assert(word@ =~= seq![self.c]); } }
-  b
- }
-}
+
+use engine::SealedDeriv;
+
 // item: R08.P4v obligation
-// Commit the failing labels under the printed receiver bindings.
+// One law call, outside the engine's module. Which labelled claims fail?
 // SLOT: FAILS ???
-fn receiver_obligations(word:&Vec<char>)
- requires word@ == seq!['k'],
-{
- let left=Literal { c:'k' };
- let right=Literal { c:'m' };
- let b=left.literal_decision_r08(word);
- assert(b == left.language(word@)); // [a]
- assert(b == right.language(word@)); // [b]
- assert(b); // [c]
+proof fn claims_after_one_law(m: Re, w: Seq<char>) {
+    SealedDeriv::lemma_feed_law(m, 'x', w);
+    assert(SealedDeriv::res(deriv(m, 'x'), w) == SealedDeriv::res(m, seq!['x'] + w));  // [a]
+    assert(SealedDeriv::res(m, seq!['x'] + w) == matches(m, seq!['x'] + w));  // [b]
+    assert(SealedDeriv::res(deriv(m, 'y'), w) == SealedDeriv::res(m, seq!['y'] + w));  // [c]
+    assert(SealedDeriv::lang(m, w) == matches(m, w));  // [d]
 }
-}
+
+} // verus!

@@ -1,9 +1,0 @@
-// Reference Solution.
-// after: R08.P5dv
-module R08_ModelEquality {
- ghost predicate A(c:char,w:seq<char>) { w == [c] }
- ghost predicate B(c:char,w:seq<char>) { |w| == 1 && w[0] == c }
- lemma SameModel(c:char,w:seq<char>)
-  ensures A(c,w) <==> B(c,w)
- { if B(c,w) { assert w == [c]; } }
-}

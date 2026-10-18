@@ -1,0 +1,22 @@
+// A refinement that adds a postcondition to the inherited MatchWord.
+module R08_DemoStronger refines RG_A2_StepMatcher {
+  import opened RG_A1_Re
+  import B = RG_A1b_Facts
+  import A2 = RG_A2_Deriv
+
+  type Pattern = Re
+  type Config = Re
+
+  ghost predicate Lang(p: Pattern, w: seq<char>) { Matches(p, w) }
+  ghost predicate Res(st: Config, w: seq<char>) { Matches(st, w) }
+  function Start(p: Pattern): Config { p }
+  function Feed(st: Config, c: char): Config { A2.Deriv(st, c) }
+  predicate Final(st: Config) { Nullable(st) }
+  lemma StartLaw(p: Pattern, w: seq<char>) { }
+  lemma FeedLaw(st: Config, c: char, w: seq<char>) { A2.DerivCorrect(st, c, w); }
+  lemma FinalLaw(st: Config) { B.NullableCorrect(st); }
+
+  method MatchWord(p: Pattern, w: seq<char>) returns (b: bool)
+
+    ensures b ==> w != []
+}

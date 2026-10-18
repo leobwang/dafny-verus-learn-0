@@ -12,7 +12,7 @@ use rg_re_a1::*;
 use rg_re_a1b::*;
 
 pub mod char_class;
-pub mod word_matcher;
+pub mod step_matcher;
 
 verus! {
 
