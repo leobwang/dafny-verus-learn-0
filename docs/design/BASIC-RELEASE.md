@@ -1,6 +1,6 @@
 # The `basic` release: the Q core's freeze bar
 
-*Latest follow-up: 2026-10-17, §14: the review fixes of the released `basic` (Δ251) and the user's decisions D46–D49; the deferred live checks run now in a separate lane (D47). §11 records the D45 deferral.*
+*Latest follow-up: 2026-10-17, §14: the review fixes of the released `basic` (Δ275) and the user's decisions D46–D49; the deferred live checks run now in a separate lane (D47). §11 records the D45 deferral.*
 
 *Status: **written by DV6's integration lane, 2026-10-14**, from the DV6 audit notes (`Solutions/plans/DV6-audit-*.md`), the clean-clone dry run, the fix round's notes (`Solutions/plans/DV6-fix-notes.md`) and the integration lane's own CI runs (DELTAS Δ238, Δ239, Δ241). The Simulate phase adds its lines after these (§5). A line is **HOLDS** with its evidence, **OPEN** with its owner, or **PARTLY** with both halves.*
 
@@ -26,7 +26,7 @@
 | F5 | `tests/acceptance/guard_doors.py all` passes | **DEFERRED — user waiver** | The Simulate phase; last run 2026-10-04 on an earlier hook. The Monitor door is built (Δ239). **Tool-coverage prerequisite resolved:** Δ242 covers Firecrawl’s local-file parser, Workflow and ScheduleWakeup in the matcher and hook, with regression tests (§7). A fresh model acceptance run is still required. **DV6 Simulate phase:** `setup` and `dryrun` only, 16 hook runs, 0 unexpected; no session (§5 S4). | D45 defers this live requirement for the current build; see §11.
 | F6 | A clean-clone dry run passes | **PARTLY** | HOLDS for every chapter command: a fresh clone in study mode ran every concrete command of the 18 chapters verbatim in three states, with 355 pinned fences matching and 0 problems, and no manual intervention beyond the learner's own steps (Δ238; `author-probes/dv6/dryrun/part1/`). Its findings are fixed (Δ239) including the host's rustup now restored under D41. **OPEN:** the capstone under the final contract and the three gold `/contract` transcripts (Q01, Q09, Q18), deferred by the window rule after 1 of 30 calls (the Simulate phase; Δ240 item 8; the prepared learner state is in `dv6/dryrun/specs/`). |
 | F7 | A final leak audit is clean | **HOLDS — LOCAL; transcript portion deferred** | Frozen candidate source scan and D42 history check pass at the release step (§13). One squash atop main excludes old authoring ancestry. D45 defers scans of live transcripts that have not been created; no scan result is inferred for them. |
-| F8 | No open DECISION NEEDED | **HOLDS** | The user approved all nine recommendations through interactive MCQs (D36–D44, Δ243); they are implemented (§8). D45 deferred the live checks (§11); D46–D49 settle the review round (Δ251, §14). The readings Δ251 took in building its fixes are listed there for the user to confirm; none blocks study. |
+| F8 | No open DECISION NEEDED | **HOLDS** | The user approved all nine recommendations through interactive MCQs (D36–D44, Δ243); they are implemented (§8). D45 deferred the live checks (§11); D46–D49 settle the review round (Δ275, §14). The readings Δ275 took in building its fixes are listed there for the user to confirm; none blocks study. |
 
 ## 2. Spec §12.1, Infrastructure (Phase 0)
 
@@ -191,7 +191,7 @@ current freeze table give the final local state. The read-only history
 checker now checks basic's whole chain as an invariant, and CI's static job
 runs it (§14).
 
-## 14. Review fixes on Basic (2026-10-17; Δ251)
+## 14. Review fixes on Basic (2026-10-17; Δ275)
 
 Independent reviewers audited Codex's round (Δ242–Δ250) and the released
 branch: the Q release implemented D36–D45 correctly and was squashed
@@ -205,7 +205,7 @@ pass) and D49 (Lab α redesigned around one pre-registered primary contrast,
 at least 60 regex-lemma clusters plus a public slice sized by a power
 simulation, and a 5-cluster pilot outside the confirmatory runs).
 
-The fixes, each a `basic: ` commit on basic (Δ251 lists the evidence; F-1 to F-5 were found by the live-check lane running under D47):
+The fixes, each a `basic: ` commit on basic (Δ275 lists the evidence; F-1 to F-5 were found by the live-check lane running under D47):
 
 | # | fix | where |
 |---|---|---|
@@ -217,7 +217,7 @@ The fixes, each a `basic: ` commit on basic (Δ251 lists the evidence; F-1 to F-
 | 6 | vp3-he077's kept-definition marker moved author-side; the card rebuilt and re-attested | `scripts/dvl/{benchstrip,lab2pub}.py`, `bench/local/q/lab2pub/`, `sandbox/attested.toml` |
 | 7 | the hook test's lane fixtures no longer depend on the host | `scripts/test_hooks.sh`, `tests/hooks/` |
 | 8 | words glued to numbers spaced | this file, Δ250 |
-| 9 | the DELTAS index complete; Δ251 records the review, D46–D49 and the fixes | DELTAS |
+| 9 | the DELTAS index complete; Δ275 records the review, D46–D49 and the fixes | DELTAS |
 | 10 | every capped solver job runs in the user slice `dvl0.slice` (MemoryMax=48G, MemorySwapMax=0), each with its own cap; Δ245 corrected | `scripts/dvl/common.py` |
 | 11 | a passing CI run keeps the scratch its reports name | `scripts/ci.sh` |
 | 12 | a Verus build that fails after verification reports stage `link` or `compile`, never `verify` | `scripts/dvl/verus.py`, Q12 §2 |
