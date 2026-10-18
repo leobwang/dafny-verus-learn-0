@@ -6,7 +6,7 @@
 
 Solution pins (scripts/ci.sh compares on every change; stale pins fail):
 paper/solutions/Q12_solutions.tex  sha256 06b1814127347673557aeca910ff1c23764a69d1d04bc615a1c5526ec145aec7 — the written track's reference (a reference plan for B1; the cards B3–B5)
-paper/Q12_problems.tex  sha256 021fe50b0eff08456ba3b38f51c248dd8048cdb9829aa6397ca22d2b324706f6 — the problems these lines grade, with the cards' pinned ranges
+paper/Q12_problems.tex  sha256 3cbd9880fb6bb60ccb20872417ab792a485c4acab1fcea086c4fe5a16a535d90 — the problems these lines grade, with the cards' pinned ranges
 Solutions/dafny/Q/Q12_PracticeIC/std/Q12_PracticeIC.dfy  sha256 7b40bfefcf46619d5f37ca1327ff21c9f02df5b4bc49324fe21c3a26de0745c5 — the Dafny exercise file's half of the code review
 Solutions/dafny/Q/Q12_PracticeIC/std/Q12_Lab1Hand.dfy  sha256 cce26f7a9d48fec0293200e82ec8fec87a00e9a3aca85ef586c572bf37cc99db — the Dafny hand part's half of the code review
 Solutions/verus/q/q12_practice_ic/src/lib.rs  sha256 d9ea63b962e55728ef891dc631da4a22c0f045a8b74c03418a084719e859886d — the crate root's half of the code review
@@ -49,7 +49,7 @@ The Batch plan field names the plan file and its final `plan-sha256:` binding. T
 
 ### contamination
 - **CT.a** — each stratum's source is stated with its exposure risk: the local stratum's authorship dates and the public sets flagged as possibly seen. A task set with no stated source scores ≤2.
-- **CT.b** — the draw seeds, the validation files' hashes and the sets' commits are stated, so the draw is fixed before the data. A missing seed or commit is a gap (3) unless the plan says the draw is open, which scores ≤2 with the quoted line.
+- **CT.b** — the draw seeds, the validation files' hashes and the sets' commits are stated, so the draw is fixed before the data, and the public draw names the members it draws from: each pool less the tasks another lab's `[[draw]]` record took, Lab 2's HumanEval problems excluded across both languages (D39; the 74 HumanEval-Verus members `scripts/get_bench.sh --members humaneval-verus --lab Q12` lists). A missing seed or commit is a gap (3) unless the plan says the draw is open, which scores ≤2 with the quoted line; a draw from the whole HumanEval-Verus pool, quoted, scores ≤2 (its task forms keep the specification, so a Lab 2 problem drawn in either language exposes a later Lab 2 reference).
 
 ### cheat-audit
 - **CA.a** — the cheat surface is named before the run: the instruments every claimed success passes (the learner's Q09 gate core in the verification container, the lab gate's lever check and its assumption audit (`scripts/vaudit`'s rules, D24), the spec freeze) and the classes reported `UNKNOWN`. A plan that lets a claimed success count before the gate's verdict, quoted, scores ≤2.

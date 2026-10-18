@@ -351,7 +351,11 @@ fn stamp(x: u32) -> (r: u32)
         self.assertIn("pub open spec fn parcel", f.text)
         self.assertNotIn("spec fn plain", f.text)
         self.assertEqual(f.definition_names, ["plain"])
-        self.assertEqual(B.definition_residue(f.text, "verus"), [])
+        # the kept definition travels beside the form, never named in it
+        self.assertEqual(f.quantified, ["parcel"])
+        self.assertNotIn("quantified", f.text)
+        self.assertEqual(B.definition_residue(f.text, "verus", kept=f.quantified), [])
+        self.assertEqual([n for _, n in B.definition_residue(f.text, "verus")], ["parcel"])
         dafny = '''function Parcel(x: int): int { x * 31 + 17 }
 predicate Plain(x: int) { x != 19 }
 method Stamp(x: int) returns (r: int)
@@ -362,7 +366,10 @@ method Stamp(x: int) returns (r: int)
         self.assertIn("function Parcel", f.text)
         self.assertNotIn("predicate Plain", f.text)
         self.assertEqual(f.definition_names, ["Plain"])
-        self.assertEqual(B.definition_residue(f.text, "dafny"), [])
+        self.assertEqual(f.quantified, ["Parcel"])
+        self.assertNotIn("quantified", f.text)
+        self.assertEqual(B.definition_residue(f.text, "dafny", kept=f.quantified), [])
+        self.assertEqual([n for _, n in B.definition_residue(f.text, "dafny")], ["Parcel"])
 
     def test_verus_seals_the_non_recursive_specification_only_spec_fns(self):
         f = B.lab2_form_verus(VERUS_D28)
@@ -476,10 +483,19 @@ class ShippedForms(unittest.TestCase):
                 self.assertIn(f"Lab 2 public task {c['id']} (Q15", text)
 
     def test_no_form_keeps_a_non_recursive_specification_only_definition(self):
+        """Every definition a form ships that no code needs is one D37 keeps: the set the
+        form shows equals the one its card's kept_definitions_sha256 records (the names are
+        author-side), and the form names none of them as kept."""
+        kept = 0
         for c in self.cards:
             with self.subTest(card=c["id"]):
                 text = L.form_path(ROOT, c["id"], c["lang"]).read_text(encoding="utf-8")
-                self.assertEqual(B.definition_residue(text, c["lang"]), [])
+                names = [n for _, n in B.definition_residue(text, c["lang"])]
+                self.assertEqual(L.kept_digest(names), c.get("kept_definitions_sha256"))
+                self.assertEqual(B.definition_residue(text, c["lang"], kept=names), [])
+                self.assertNotRegex(text, r"(?i)quantified|D37")
+                kept += len(names)
+        self.assertEqual(kept, 1)
 
     def test_the_header_says_what_a_delivery_adds(self):
         self.assertEqual(self.st.get("forms_date"), "2026-10-16")

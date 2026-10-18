@@ -11,9 +11,11 @@
 # "@SLUG@" for the session this harness injects (session_id and
 # transcript_path, unless the line says "nosession": true), "@UID@" for id -u,
 # "@LANE@" for a throwaway author lane scratch directory this harness creates
-# (/tmp/dvl0-dvhooks-*, holding one decoy file, removed on exit: a shell line's
-# file operand is checked only when it exists, so the fixture must not depend
-# on a real lane's scratch, which the lanes remove; DV5d).
+# (/tmp/dvl0-dvhooks-*, a symlink onto a directory under the run's own root,
+# holding one decoy file, removed on exit: a shell line's file operand is
+# checked only when it exists, so the fixture must not depend on a real lane's
+# scratch, which the lanes remove; DV5d), and "@LANE@-absent" for a lane path
+# that never exists.
 # A line with "raw" feeds that string verbatim. "contract": true puts the
 # seeded contract allowlist in place (it also names given, frozen and solo
 # paths, to prove rules 2f and 2s ignore them); otherwise the allowlist is
@@ -39,7 +41,8 @@
 #                 rule named there, and every other option of the tool
 #                 passes; a listed option the tool no longer has fails, and so
 #                 does a tool whose option list is empty
-#   study root    (D20) a fake checkout under /tmp/dvl0-study-dvhooks-*: a
+#   study root    (D20) a fake checkout under /tmp/dvl0-study-dvhooks-* (a
+#                 symlink onto the run's root, as @LANE@ is): a
 #                 Read of its CORE.md, a shell in it and a Read under its
 #                 DVL_SCRATCH pass, a lane's scratch stays refused; a fake
 #                 checkout under the lane dir (@LANE@/clone) is refused by
@@ -80,7 +83,18 @@ command -v jq >/dev/null 2>&1 || { echo "test_hooks: jq is required to unpack th
 # Throwaway roots live under /tmp itself, never under a Claude Code scratch
 # root (/tmp/claude-<uid>/), which rule 1e treats as other sessions' state.
 TMP="$(mktemp -d /tmp/dvl0-hooktest.XXXXXX)"
-LANE="$(mktemp -d /tmp/dvl0-dvhooks-XXXXXX)"
+# @LANE@ is a symlink named like a lane's scratch (/tmp/dvl0-dvhooks-<random>) onto a
+# directory under this run's root: the hook judges the name, so the fixtures see a lane's
+# scratch, while no real lane directory appears on the host (a simulation's set-up refuses
+# while one exists, and skill_sims.lane_scratch counts directories, never symlinks).
+# @LANE@-absent never exists: the fixture of a missing lane does not depend on the host.
+mkdir "$TMP/lane"
+LANE=""
+for _ in 1 2 3 4 5; do
+  cand="$(mktemp -u /tmp/dvl0-dvhooks-XXXXXX)"
+  if ln -s "$TMP/lane" "$cand" 2>/dev/null; then LANE="$cand"; break; fi
+done
+[ -n "$LANE" ] || { rm -rf "$TMP"; echo "test_hooks: could not create the lane fixture's symlink" >&2; exit 2; }
 trap 'rm -rf "$TMP" "$LANE"' EXIT
 mkdir -p "$LANE/crate/src"
 printf '// decoy lane scratch file (test_hooks.sh); not course material\n' > "$LANE/crate/src/lib.rs"
@@ -268,7 +282,15 @@ echo "== spoiler-guard: a study root beside the lane-scratch tripwire, and a che
 # pattern does not match: a session there reads its skill and runs its shell. A
 # checkout inside the tripwire is refused, and the message must not send the
 # session back into the directory it refuses. Each case under both parsers.
-STUDYR="$(mktemp -d /tmp/dvl0-study-dvhooks-XXXXXX)"
+# Like @LANE@, the study root is a symlink onto a directory under this run's root, so no
+# real /tmp/dvl0-study-* directory appears (a simulation's set-up refuses while one does).
+mkdir "$TMP/studyroot"
+STUDYR=""
+for _ in 1 2 3 4 5; do
+  cand="$(mktemp -u /tmp/dvl0-study-dvhooks-XXXXXX)"
+  if ln -s "$TMP/studyroot" "$cand" 2>/dev/null; then STUDYR="$cand"; break; fi
+done
+[ -n "$STUDYR" ] || { echo "test_hooks: could not create the study root's symlink" >&2; exit 2; }
 trap 'rm -rf "$TMP" "$LANE" "$STUDYR"' EXIT
 fake "$STUDYR/clone" studyroot
 fake "$LANE/clone" lanecheckout

@@ -24,724 +24,729 @@
 # memory, at the paths `fvh unseal Q18` writes (each entry's source); after
 # Q15's DV6 re-seal (the user's decisions D27 and D28) the 78 were re-scanned
 # again (78 of 78 re-attested) and Lab 2's ten public cards
-# (bench/local/q/lab2pub/) were attested under DV6: 88 entries.
+# (bench/local/q/lab2pub/) were attested under DV6: 88 entries. On 2026-10-17
+# vp3-he077's form lost its kept-definition marker line (the list moved
+# author-side, Solutions/bench/local/q/lab2pub/KEPT.toml): the new form was
+# attested under DV6, then every entry re-scanned (87 re-attested, 1 already
+# current, 2 stale: vp3-he077's two earlier hashes, kept for older runs):
+# 90 entries, 88 of them current.
 schema = 1
 
 [[card]]
 path = "bench/local/q/lab1/da1-addlimb-all-max/tasks/da1-addlimb-all-max.dfy"
 sha256 = "922f0417588c0dfa4d8a214954717e97ab7a90efdc0cbcde7362f16f117bd811"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da2-cmp-zeros-empty/tasks/da2-cmp-zeros-empty.dfy"
 sha256 = "1f2c582d4b9cc9b62b3ecccf6f2552c70ad6dc73b480daee5f06b40dab557810"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da3-mullimb-one/tasks/da3-mullimb-one.dfy"
 sha256 = "a63d627d7793af1bef2bfaa737154e32ff69bdfcf84a4e9057e4e292112c11f5"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da4-normalize-valid/tasks/da4-normalize-valid.dfy"
 sha256 = "6f8b676d261e8885bb7ecee79f2993f8e828cb7a120053aa8b41a987e08d3bad"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da5-cmp-empty-left/tasks/da5-cmp-empty-left.dfy"
 sha256 = "e3d1a745203e0537cd68cd4790f3f03f93bcb151fc8117191dfa4bad46ffcd24"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da6-fromnat-last/tasks/da6-fromnat-last.dfy"
 sha256 = "dce19eaf50381caf01247aa2ce50a8fa21da5e94e6d6b2484f2296f40199a391"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da7-normalize-last/tasks/da7-normalize-last.dfy"
 sha256 = "04ec62cc5b20fb391f1d6654fcb16fe9de5ebd515053c65d2077bcfd0260bf30"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/da8-normalize-empty-zeros/tasks/da8-normalize-empty-zeros.dfy"
 sha256 = "f52baea26eb30f275d3b189679926d22c3945552f205e8aaed3a4a4484adaaab"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/dh4-tonat-mono/tasks/dh4-tonat-mono.dfy"
 sha256 = "8b35e7247201fe51cd4bdef61ba5f768851972521a2e3a1d561b451bd42f944f"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/dh5-mullimb-zero/tasks/dh5-mullimb-zero.dfy"
 sha256 = "e63cf5d1222dd8de86964a123c922615f75f4627607ac0cfb947051582ccdf3b"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/dh6-cmp-trailing-zero/tasks/dh6-cmp-trailing-zero.dfy"
 sha256 = "67e7b91e8a5bb6dd19bae747388e4109d296454556cf17be49f44627e3947fcb"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/dh7-normalize-shorter/tasks/dh7-normalize-shorter.dfy"
 sha256 = "b4de929d6e8b9254d92bc3bc26a92aeb9513dbf74de9bd2a0d147a4b951982cb"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/va1-shorter-smaller/tasks/va1-shorter-smaller.rs"
 sha256 = "76fecb67b252fa9f0b52aea4254610b50ba0a6bca28da9522277058381c4b6cf"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/va2-is-one/tasks/va2-is-one.rs"
 sha256 = "a3734011efa8e6a076622e664333e575351a1d93c523520a487c096e9878cd60"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/va3-at-least-weight/tasks/va3-at-least-weight.rs"
 sha256 = "b8bc55f347c41d4ad858fd9a1fe949b546a109ca683027a7c279e30bdef72c25"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/va4-push-ge/tasks/va4-push-ge.rs"
 sha256 = "ae5a40b64fa10123a82ab43786423231002b8f868ae26705e83bf598d80155a5"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/va5-limb-or-zero/tasks/va5-limb-or-zero.rs"
 sha256 = "a7905222ea698b05ff04f46957060c8eedbab0d195c8628a8cc34ab02d580730"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/va6-prefix-le/tasks/va6-prefix-le.rs"
 sha256 = "fdfc715c3b2f55bccf282ce193f777d33d3b921ea20da14bd45e5247c584503e"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/vh4-seq-to-nat-mono/tasks/vh4-seq-to-nat-mono.rs"
 sha256 = "664ca1e9c5e65e6f0a3123320c9a3f955d071271f29fe8c58567858a0e4e1c78"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/vh5-is-zero/tasks/vh5-is-zero.rs"
 sha256 = "2e5abbab9e22380fc62a9b595e6b5caf6c60c9f72e9f79894e01ea16f7b8f0a5"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/vh6-eq-big/tasks/vh6-eq-big.rs"
 sha256 = "b916971d8c31155407b627d2ed48a62ea7f97fe665fc8c611ceecdaa92e0e985"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab1/vh7-size-bound/tasks/vh7-size-bound.rs"
 sha256 = "d85a00a1b872367cd6e2cc4737b1bb6e56bdfc6492ad9447846b1e33f01fc55f"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d01-third-limb/tasks/d01-third-limb.dfy"
 sha256 = "acd56d812b46deb8c8d97a6f4b977b0e73c78a31bad8fb4ba1c4389a7ed5e733"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d02-top-is-zero/tasks/d02-top-is-zero.dfy"
 sha256 = "7f6eae4600ce841d28e93353915de5f46ca758fdf938e4ec635901aacf9ee924"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d03-drop-low/tasks/d03-drop-low.dfy"
 sha256 = "68a9f083e29dee2637673a5c95feec3852089c48a1fc47ad24de41e1dee43a3c"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d04-zero-low/tasks/d04-zero-low.dfy"
 sha256 = "13c37c59e3367f7de15fe909a67dc78e85acf37ae0d8654a5d774b99055f6ef8"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d05-same-limbs/tasks/d05-same-limbs.dfy"
 sha256 = "3ac71eaafb0690d4501767e5209cccf9e33fff06c9402775b8b58d09e1a8132e"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d06-has-zero-limb/tasks/d06-has-zero-limb.dfy"
 sha256 = "0a71b6197c748a470580e816f4d3d9a6e35ee995546855bbce56d4fd816a0085"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d07-first-nonzero/tasks/d07-first-nonzero.dfy"
 sha256 = "70ff89c78809b766831261153799f6a3641a9d8634ecebfb9cbb96af7db559e1"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d08-limbwise-le/tasks/d08-limbwise-le.dfy"
 sha256 = "a168e6b6c3fb13bf93b41b2f0da948a95fb4aae6b028d10acbc514c5c0aa2f70"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d09-keep-low/tasks/d09-keep-low.dfy"
 sha256 = "86d1fd3654bc7b90cc8ec5dadc99665b3da504e929897e96b69fe76a8a83424a"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/d10-fits-in/tasks/d10-fits-in.dfy"
 sha256 = "e3d90cb0bc063123a79a198664bef740969e89f70cd9c53d11946c44d3305011"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v01-third-limb/tasks/v01-third-limb.rs"
 sha256 = "306d4366072d21df9b13f0b399cf9a70b7709b7f20fb338d1eca55249b28d5ed"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v02-top-two-equal/tasks/v02-top-two-equal.rs"
 sha256 = "f69db8822916cd71b5a1aed2246faf23c236b7b2547ca2e67ff7d4437e5b4622"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v03-is-canonical/tasks/v03-is-canonical.rs"
 sha256 = "4c9599ac18438fef7fef7e6f46da62db183fa8453e6cd10ac381e20489f6208d"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v04-add-carry/tasks/v04-add-carry.rs"
 sha256 = "1302e05e16a8c4a17f0da9dffadb96aa10ed84a681d4f68812555ebea089d297"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v05-sub-borrow/tasks/v05-sub-borrow.rs"
 sha256 = "849d0df19441d251bc9b47ee718115bf4bcbd58ae1dae59e360dabf27443c3c0"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v06-min-limb/tasks/v06-min-limb.rs"
 sha256 = "956e832266435c2d37e2fe09aa4720ab2490d13700110cc1f429471247a2960f"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v07-pair-le/tasks/v07-pair-le.rs"
 sha256 = "25276cbe524dead43817876114c0e2dc8aa87dd3a2d8120fe152e6348172e3bd"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v08-sig-two/tasks/v08-sig-two.rs"
 sha256 = "4dee1a313ec050365af793121b237f0c0cc22267e0d6c1db97ba68d0e4ad4d75"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v09-add-carry-in/tasks/v09-add-carry-in.rs"
 sha256 = "ca376c59b34009659523755670fb0bbe16d0e4cf65f3d9509132fc77ad09b790"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2/v10-same-length/tasks/v10-same-length.rs"
 sha256 = "bbdf81c98a4b4fb84e9dd54a5c613460bcec2718bd7ae06833b06cdada178a12"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/crate/c01-eq-word/tasks/Cargo.toml"
 sha256 = "8051438064187bc5e1731b5fe4eb0e529b31b7445103cec175b54a208f4eceb3"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c01-eq-word/tasks/frozen.rs"
 sha256 = "58e6394cd0830b88dc40b38feb914c8db1f8cf1e763fa2a21061c10d303c430e"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c01-eq-word/tasks/src/lib.rs"
 sha256 = "5ee6e24e7c68b4d8b4d9ddb6d0bfa428fd1677120104fdf12dd4cb06aa67f503"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c02-sat-minus/tasks/Cargo.toml"
 sha256 = "9072ceedcb85bd103c059a5ec20b2b5b439d40c529d7b889a61ad14dc6c86388"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c02-sat-minus/tasks/frozen.rs"
 sha256 = "07f4e552576e9bd523f415c84916278d8728a2a4a72a0534c6a13999a8ffdc27"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c02-sat-minus/tasks/src/lib.rs"
 sha256 = "1a18d678737f3a912191e7205427127d9cec99f251a8b273f64460288d855f2e"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c03-to-u32/tasks/Cargo.toml"
 sha256 = "3517517625f71df9b0f1a2871371b629bdb3432faebe47d241d145ec758b20e2"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c03-to-u32/tasks/frozen.rs"
 sha256 = "e1e107bd76c9c1443d07c5488a4f02919e7008cdb4095a848b5409eeaf9391d7"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c03-to-u32/tasks/src/lib.rs"
 sha256 = "e121bf1dd3c168b6f0d0062295e230d0a5671e06911ad2d51e4713391200c272"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c04-sum3/tasks/Cargo.toml"
 sha256 = "fcae83618ddd5afa0f29a0d0b72e3ac2ce888e3e22c2a69f702fc3eb523b34ef"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c04-sum3/tasks/frozen.rs"
 sha256 = "d27043cf78f47f26f83daf8b02f54c6afd4b4e6f3873d6b73ffe31484542a358"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c04-sum3/tasks/src/lib.rs"
 sha256 = "51e292b74865406787ddfc25ff9185ccfa68316ac9fc5141a7d469bad8f8f946"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c05-cmp-word/tasks/Cargo.toml"
 sha256 = "575b9baee07e2dd44794036414d58dba0505722eb30447194e6f4c23d2fc31b7"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c05-cmp-word/tasks/frozen.rs"
 sha256 = "9dd8e51cecbe87200047fec126651742823fe4b6270ff92023b495e2e8a4ad95"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c05-cmp-word/tasks/src/lib.rs"
 sha256 = "36a7c5885ef91647b513dc0dbbe8aca37f0d066ed11d1bfdda717e8ad6134e53"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c06-abs-diff/tasks/Cargo.toml"
 sha256 = "9466bca40b0f6c5f24fe0b65eb16447d2c9c8485fa8504bf31218c0845873f3a"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c06-abs-diff/tasks/frozen.rs"
 sha256 = "f276c39cd9905e291ca373c0f237a3bff752351534dcf641e18fb18f2645994b"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c06-abs-diff/tasks/src/lib.rs"
 sha256 = "3fff7860ed6721387acddf3eff7619cc127050511833983f287653b2591e9844"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c07-limb-count/tasks/Cargo.toml"
 sha256 = "bc6cb3e79b74f7d1fbaaa74395740416b961664a5c41f1b3c51730d36f660d0b"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c07-limb-count/tasks/frozen.rs"
 sha256 = "b5f684fcf0f56660ffc08daae8e5b603333ca8a4882662b7d001733bd3844f4b"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c07-limb-count/tasks/src/lib.rs"
 sha256 = "4235f5edf18f5f9c17f8024ef3f7b21003b2d09fa5fdc72ee6b99503ba6e50ab"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c08-gcd/tasks/Cargo.toml"
 sha256 = "f878586b421aee2eba15aabb61cdd8e5471f03dd1810898aa2440bcb87df3f99"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c08-gcd/tasks/frozen.rs"
 sha256 = "b37d2af03eacd6d1b6774a7039ec28fa4610d4f6d10dabb0ebb5037933f5651e"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/c08-gcd/tasks/src/lib.rs"
 sha256 = "311b936755bb85a6d579e02587821b4aa0234256fd341f9e40cab0429d151d85"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i01-sat-minus-below/tasks/Cargo.toml"
 sha256 = "29b1221cf794f01c6e812c622280f68f4757a49bff95e8d8d944026c82defb96"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i01-sat-minus-below/tasks/frozen.rs"
 sha256 = "cbdecc7f4e0c34ec063009ec9f03ca4c99b2191307df3c0292027828da9331cc"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i01-sat-minus-below/tasks/src/lib.rs"
 sha256 = "f96d8b260b9baeed6936f382d6f990559348efa4c2ac3bd81eb8934800bb3611"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i02-pred-big/tasks/Cargo.toml"
 sha256 = "22df5f45fd24287883cc1f339a1a2e9e5c249cb5c0a6667b5300732ea0bbf740"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i02-pred-big/tasks/frozen.rs"
 sha256 = "3eeb203a88e07c798823f5f76e4eafae8bdf0fbafd1091903a4fd70bc5ed2bc3"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i02-pred-big/tasks/src/lib.rs"
 sha256 = "578614d351d18694f32e855a0073a864df8f7da8ecbe945c7f051e0b061a0f73"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i03-limb-digest/tasks/Cargo.toml"
 sha256 = "6c489965af55013099da443c602427afe439d39e44e278ca9d843293de81efb9"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i03-limb-digest/tasks/frozen.rs"
 sha256 = "2ccb1b496ae5e0ba849f8d10b434b0671670f28d334193104271b442c1f1388d"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i03-limb-digest/tasks/src/lib.rs"
 sha256 = "2fa45addce7d6e56eaa6fd7256e1512eb45b2a55832ba81bfbdf4c00fc326086"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i04-rank-of/tasks/Cargo.toml"
 sha256 = "46edc7980c840235f26813a2ac5a74d1bf1fcdf6c9ace254db490fdfaf6e7bd6"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i04-rank-of/tasks/frozen.rs"
 sha256 = "f24b2336d71d6584a13b4713b44ec70db06ef07e35c234398d689a75e2962901"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/crate/i04-rank-of/tasks/src/lib.rs"
 sha256 = "8f6a1a8c01b81d5c985abe577899f0ef6428d346beb7869c27973dd91ee1972e"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 source = "sealed: bench/local/q/crate/tasks.tar.age (sha256 03a61d8839b3338a…, manifest 92b778e9abeec476…); attested from the author's decrypted copy at the path fvh unseal writes"
 
 [[card]]
 path = "bench/local/q/lab2pub/dp1-he048/tasks/dp1-he048.dfy"
 sha256 = "d2b261bf6340dd9f0bb750f4cf2a3d478af9b64656fe98898b3f8d8ae831d493"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/dp2-he052/tasks/dp2-he052.dfy"
 sha256 = "e08a979896e8e07b65b3a4ad1b85161f392547dc0bc9c5c38d71ca1fa8a2e508"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/dp3-he063/tasks/dp3-he063.dfy"
 sha256 = "11bffb3ddcc7fb5428c8aa97525d2923e125915c56a26f89ffbda49d8a8af313"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/dp4-he159/tasks/dp4-he159.dfy"
 sha256 = "cdeef1b2c0a1f3544ed25708711edd1587acc22d5e8660875544d8b25a5c6c1d"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/dp5-he062/tasks/dp5-he062.dfy"
 sha256 = "19f680ef2a26397a40b9050e3791425b7c10890075b21ad3ab790da141ff76cf"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/vp1-he100/tasks/vp1-he100.rs"
 sha256 = "f9e4ae760ef17e8d40d2cc7f551cce250494336d7364efe7f838ce522c8e9c53"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/vp2-he033/tasks/vp2-he033.rs"
 sha256 = "04363e6b251f1e3b015d72e640c6f3e8d1ac76ce7391f09c7fc810336ec7619f"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/vp3-he077/tasks/vp3-he077.rs"
@@ -754,18 +759,18 @@ refs = "68 twins, sha256 77a7234b1d33a98d"
 [[card]]
 path = "bench/local/q/lab2pub/vp4-he035/tasks/vp4-he035.rs"
 sha256 = "89f12957e83f1da28ba84352bfa7bad0775fddb61326e66a99f127c85f87a869"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/vp5-he060/tasks/vp5-he060.rs"
 sha256 = "0f5676647f3752618cca16125012928528ad2b5bc97dd78820d40c718055e728"
-attested = "2026-10-16"
+attested = "2026-10-17"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
-refs = "68 twins, sha256 f8afad1147878d79"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"
 
 [[card]]
 path = "bench/local/q/lab2pub/vp3-he077/tasks/vp3-he077.rs"
@@ -774,3 +779,11 @@ attested = "2026-10-16"
 scan = "DV6"
 pools = "10325 files, sha256 fb3396570c0c5030"
 refs = "68 twins, sha256 f8afad1147878d79"
+
+[[card]]
+path = "bench/local/q/lab2pub/vp3-he077/tasks/vp3-he077.rs"
+sha256 = "1b4b8625b25ede4f8334bffdeb311d1f810e4821b4cc6fba7c832000caad1cb0"
+attested = "2026-10-17"
+scan = "DV6"
+pools = "10325 files, sha256 fb3396570c0c5030"
+refs = "68 twins, sha256 9d3f55a1ed6e3a39"

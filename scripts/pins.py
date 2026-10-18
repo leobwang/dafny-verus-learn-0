@@ -503,7 +503,7 @@ def _judge_values(root, lang, target, entries, lines, rel):
         hits = [k for k in per if k == nm or k.endswith("." + nm) or k.endswith("::" + nm)]
         if hits:
             c.outcome = "pass" if per[hits[0]] == "passed" else "fail"
-        elif res.verdict == "failed" and res.stage in ("parse", "resolve", "compile"):
+        elif res.verdict == "failed" and res.stage in ("parse", "resolve", "compile", "link"):
             c.outcome = "fail"          # the enabled check does not even build
         else:
             c.outcome, c.why = "error", (f"the test did not run ({res.verdict}, stage "

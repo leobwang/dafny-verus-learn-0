@@ -1,0 +1,14 @@
+# Solutions/bench/local/q/lab2pub/KEPT.toml — author-only (the reference set). The definitions
+# each Lab 2 public form keeps although only its reference specification uses them, because
+# the reference applies them under a quantifier (the user's decision D37). Written by
+# `scripts/dvl/lab2pub.py record`; checked by `scripts/dvl/lab2pub.py build --check --author`.
+# The form itself names none of them (a marker would hint the hidden specification); its card
+# in bench/local/q/lab2pub/STRATUM.toml records only the sha256 of the sorted names, one per
+# line (kept_definitions_sha256).
+
+schema = 1
+
+[card."vp3-he077"]
+quantified_definitions = [
+  "cube",
+]

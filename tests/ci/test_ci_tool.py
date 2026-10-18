@@ -232,7 +232,17 @@ class AuthorRun(unittest.TestCase):
         jl = (logs / "verify-q-dafny.log").read_text()
         self.assertIn("(output: ~/.cache/dafny-verus-learn-0/ci/", jl)
         self.assertNotIn("reference gate]:", jl)
-        self.assertFalse((ref / "scratch").exists())
+        # a passing run keeps only the reference scratch that a log names (each raw_dir)
+        scratch = ref / "scratch"
+        if scratch.exists():
+            self.assertIn("ci.sh: reference scratch the logs name kept:", out)
+            named = "".join(f.read_text(errors="replace") for f in
+                            [*ref.glob("*.ref.log"), *logs.rglob("*")] if f.is_file())
+            for top in scratch.rglob("*"):
+                if top.is_dir() and top.parent.parent == scratch:
+                    self.assertIn(str(top), named, "kept, but no log names it")
+        else:
+            self.assertNotIn("reference scratch the logs name kept", out)
 
     def test_a_stale_or_missing_twin_fails_verify(self):
         twin = self.root / "Solutions" / STD

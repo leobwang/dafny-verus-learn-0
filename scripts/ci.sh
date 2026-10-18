@@ -35,7 +35,10 @@
 #                   containers, agents or sudo); the sandbox's refused source
 #                   classes against the guard's and the checker's reference
 #                   paths; .gitignore leaves the ledger anchors, ledgers and
-#                   run records tracked (DV4);
+#                   run records tracked (DV4); check_release_history.py on
+#                   basic (the local branch, else origin/basic) against main:
+#                   a linear chain of single-parent "basic: " commits with no
+#                   archived ancestry (D42, D46; loud when either is absent);
 #                   firsttry.sh --lint-hollow --all; specfreeze --check per
 #                   armed module; chapter_lint.py --all (each armed module's
 #                   chapter: the spec §2.4.3 skeleton, the files table's
@@ -145,7 +148,10 @@
 # canonical deny rule) and only that location reaches the job log. Tool
 # scratch (DVL_SCRATCH) lives in /tmp/dvl0-ci-<uid>/<run>/ (DVL_CI_WORK moves
 # the /tmp/dvl0-ci-<uid> part; the [A] steps' scratch lies under the cache
-# directory) and is deleted after a run that passed. The console shows one
+# directory). After a run that passed, only the scratch paths that a retained
+# report names are kept (a JSON document's raw_dir, a logged environment
+# path; the summary says how many) and the rest is deleted; after a failed
+# run all of it is kept. The console shows one
 # PASS/FAIL/SKIP/ABSENT line per job and a summary. No job reports ABSENT
 # today: the corpus job, its only user, fails instead since Δ109; the status
 # and the summary's "absent" count stay for a job a later phase lists before
@@ -191,7 +197,7 @@ QUICK_JOBS=(static hook-test)
 
 describe() {
   case "$1" in
-    static)         echo "study mode shipped; checker, its suite, unit generator, fixture drift, single route, sandbox classes, ledger-anchor gitignore, hollow lint, specfreeze --check, chapter lint, avoid.sh; [A] reference_lint" ;;
+    static)         echo "study mode shipped; checker, its suite, unit generator, fixture drift, single route, sandbox classes, ledger-anchor gitignore, release history, hollow lint, specfreeze --check, chapter lint, avoid.sh; [A] reference_lint" ;;
     hook-test)      echo "scripts/test_hooks.sh (guard fixtures, course_mode.sh, banners, settings wiring)" ;;
     verify-q-dafny) echo "Q track, Dafny: toolchain sha; given layers gate and audit clean; armed files in their shipped state (vcheck --shipped), unit holes = shipped hole forms; [A] unit, exit, check and agent twins gate and audit" ;;
     verify-q-verus) echo "Q track, Verus: the same, plus vaudit --check-trust once per run" ;;
@@ -287,6 +293,13 @@ learner_prefix() {
 }
 PREFIX="$(learner_prefix)"
 git_of() { git -C "$ROOT" "$@" 2>/dev/null; }
+release_ref() {   # NAME — the local branch NAME, else origin/NAME; fails when neither exists
+  local r
+  for r in "refs/heads/$1" "refs/remotes/origin/$1"; do
+    if git_of rev-parse --verify -q "$r^{commit}" > /dev/null; then printf '%s' "$r"; return 0; fi
+  done
+  return 1
+}
 BRANCH="$(git_of symbolic-ref --short -q HEAD || true)"
 author_why() {   # empty when the three-condition test holds, else the reason
   local gd cd
@@ -610,8 +623,52 @@ def coexist_verus(units):
     return 1 if dups else 0
 
 
+def prune(scratch, *reports):
+    """After a passing run: remove the run's tool scratch except every existing path that
+    a retained report (a log, a JSON document, the summary) names, with what lies under it
+    (a named path the run never created keeps nothing). Prints each kept path, relative to
+    the scratch root; a report that names the root itself keeps it whole."""
+    import shutil
+    base = Path(scratch)
+    if not base.is_dir():
+        return 0
+    pat = re.compile(re.escape(str(base)) + r"(/[^\s\"'`,;:=()\[\]{}<>|\\]*)?")
+    keep = set()
+    for r in reports:
+        for f in ([Path(r)] if Path(r).is_file() else sorted(Path(r).rglob("*"))):
+            if not f.is_file() or f.is_relative_to(base):   # the scratch never names itself
+                continue
+            try:
+                text = f.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            for m in pat.finditer(text):
+                q = base / (m.group(1) or "").strip("/").rstrip(".")
+                if q.exists() or q.is_symlink():
+                    keep.add(q)
+    if base in keep:
+        print(".")
+        return 0
+
+    def sweep(d):
+        for e in sorted(d.iterdir()):
+            if e in keep:
+                continue
+            if e.is_dir() and not e.is_symlink() and any(k.is_relative_to(e) for k in keep):
+                sweep(e)
+            elif e.is_dir() and not e.is_symlink():
+                shutil.rmtree(e, ignore_errors=True)
+            else:
+                e.unlink(missing_ok=True)
+    sweep(base)
+    for k in sorted(keep):
+        print(k.relative_to(base))
+    return 0
+
+
 cmd, args = sys.argv[1], sys.argv[2:]
 sys.exit({"modules": lambda: modules(),
+          "prune": lambda: prune(*args),
           "files": lambda: files(*args),
           "holes": lambda: holes(*args),
           "shipped": lambda: shipped(),
@@ -805,8 +862,17 @@ job_static() {
       fi
     done
     log "ledger anchors: .gitignore leaves research/ledger-heads.jsonl, ledgers and run.json tracked"
+    # D42 and D46: the shipped branch is a linear chain of single-parent "basic: "
+    # commits atop design-only main, with no archived (archive/*) ancestry.
+    local rel_base rel_cand
+    if rel_base="$(release_ref main)" && rel_cand="$(release_ref basic)"; then
+      step "release history (check_release_history.py)" python3 -B "$SCRIPTS/check_release_history.py" \
+        --root "$ROOT" --base "$rel_base" "$rel_cand"
+    else
+      loud "no basic or no main branch in this checkout: the release-history check did not run"
+    fi
   else
-    loud "not a git checkout: the ledger-anchor .gitignore check did not run"
+    loud "not a git checkout: the ledger-anchor .gitignore and release-history checks did not run"
   fi
   step "firsttry --lint-hollow --all" bash "$SCRIPTS/firsttry.sh" --lint-hollow --all --root "$ROOT"
   if registry_ok; then
@@ -1298,8 +1364,24 @@ VERDICT=PASS
 } | tee -a "$RUNDIR/summary.txt"
 
 if [ "$VERDICT" = PASS ]; then
-  rm -rf "$WORK"
-  if [ "$AUTHOR" = 1 ]; then rm -rf "$REFDIR/scratch"; rmdir "$REFDIR" 2>/dev/null || true; fi
+  # A passing run keeps exactly the scratch its retained reports name (vcheck's raw_dir
+  # of each JSON document, the harness's environment paths) and removes the rest.
+  REPORTS=("$RUNDIR")
+  [ "$AUTHOR" = 0 ] || REPORTS+=("$REFDIR")
+  if KEPT="$(py prune "$WORK" "${REPORTS[@]}")" && [ -n "$KEPT" ]; then
+    echo "ci.sh: tool scratch the logs name kept: $(lines "$KEPT") path(s) under $WORK (the rest removed)" \
+      | tee -a "$RUNDIR/summary.txt"
+  else
+    rm -rf "$WORK"
+  fi
+  if [ "$AUTHOR" = 1 ]; then
+    if KEPT="$(py prune "$REFDIR/scratch" "${REPORTS[@]}")" && [ -n "$KEPT" ]; then
+      echo "ci.sh: reference scratch the logs name kept: $(lines "$KEPT") path(s) under $(show "$REFDIR/scratch")" \
+        | tee -a "$RUNDIR/summary.txt"
+    else
+      rm -rf "$REFDIR/scratch"; rmdir "$REFDIR" 2>/dev/null || true
+    fi
+  fi
   exit 0
 fi
 echo "ci.sh: tool scratch kept for inspection: $WORK" >> "$RUNDIR/summary.txt"

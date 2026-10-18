@@ -58,9 +58,11 @@ transform changed how many files. The transforms:
 `proof_residue(text)` is an independent token check of a stripped Verus file:
 the proof constructs still in it (none for a task form). `spec_residue(text,
 lang, name)` is the same for a Lab 2 form: the specification or proof still in
-it; `definition_residue(text, lang)` the definitions a Lab 2 form keeps that
-D28 would remove (non-recursive, named by no code and reached by no recursive
-definition). Standard library only (the Dafny form reads the file with dvl.dafny).
+it; `definition_residue(text, lang, kept=())` the definitions a Lab 2 form keeps
+that D28 would remove (non-recursive, named by no code and reached by no recursive
+definition), less the `kept` ones D37 retains (a Lab2Form's `quantified`, recorded
+author-side, never in the form). Standard library only (the Dafny form reads the file
+with dvl.dafny).
 """
 
 from __future__ import annotations
@@ -766,6 +768,10 @@ class Lab2Form:
     #                             only the specification used, removed from the form, each its
     #                             declaration's text (Verus: made `pub open`), in file order
     definition_names: list = None   # their names, in the same order
+    quantified: list = None     # the definitions D37 keeps in the form although only the
+    #                             specification uses them (under a quantifier), sorted; the
+    #                             form carries no marker naming them (they would hint the
+    #                             hidden specification): lab2pub records them author-side
 
 
 def _reaches(graph, start):
@@ -861,12 +867,6 @@ def quantified_names(toks, spans):
                         break
                 names.update(t.text for t in toks[i:end + 1])
     return names
-
-
-def quantified_markers(text, names):
-    # The frozen task's markers are checked by regeneration from pinned sources;
-    # definition_residue cannot reconstruct the removed specification itself.
-    return "".join(f"// lab2-quantified-definition: {n}\n" for n in sorted(names)) + text
 
 
 def _verus_fns(p):
@@ -1117,8 +1117,8 @@ def lab2_form_verus(text):
     form = re.sub(r"\n\n\n+(/// A non-vacuity witness for `)", r"\n\n\1", form)
     if f"\n\n/// A non-vacuity witness for `{name}`" not in form:
         form = form.replace("/// A non-vacuity witness for `", "\n/// A non-vacuity witness for `", 1)
-    return Lab2Form(quantified_markers(form, retained_quantified),
-                    "verus", name, witness, removed, defs, def_names)
+    return Lab2Form(form, "verus", name, witness, removed, defs, def_names,
+                    sorted(retained_quantified))
 
 
 # --- Dafny -----------------------------------------------------------------------------------------
@@ -1387,8 +1387,8 @@ def lab2_form_dafny(text, prose=None):
         form = _apply_char_edits(text, edits)
     else:
         form = _apply_char_edits(text, edits).rstrip("\n") + "\n" + wtext
-    return Lab2Form(quantified_markers(form, retained_quantified),
-                    "dafny", d.name, witness, removed, defs, def_names)
+    return Lab2Form(form, "dafny", d.name, witness, removed, defs, def_names,
+                    sorted(retained_quantified))
 
 
 def _depth0(toks, a, x):
@@ -1488,13 +1488,15 @@ def spec_residue(text, lang, name):
     return out
 
 
-def definition_residue(text, lang):
+def definition_residue(text, lang, kept=()):
     """[(line, name)] definitions a Lab 2 form keeps that the user's decision D28 would remove,
     found from the form alone (independent of the transform and of any specification): a
     definition (Verus spec fn; Dafny function or predicate) that is not recursive, that no
-    line outside the definitions names, and that no recursive definition reaches. Such a
-    definition can only be specification vocabulary (or unused), which the form must not ship
-    unless it is recursive."""
+    line outside the definitions names, that no recursive definition reaches, and that is
+    not one of `kept` (the definitions D37 retains because the reference specification uses
+    them under a quantifier, with what they reach; recorded author-side, never in the form).
+    Such a definition can only be specification vocabulary (or unused), which the form must
+    not ship unless it is recursive or kept."""
     if lang == "verus":
         p = _Plan(text)
         fns = [f for f in _verus_fns(p) if f[0] == "spec"]
@@ -1521,9 +1523,8 @@ def definition_residue(text, lang):
     graph = {n: {toks[y].text for y in range(a, b + 1) if toks[y].kind == kind and y != at}
              & set(spans) for n, (a, b, at) in spans.items()}
     recursive = {n for n in graph if n in _reaches(graph, n)}
-    quantified = re.findall(r"^// lab2-quantified-definition: ([A-Za-z_]\w*)$", text, re.M)
     reached = _closure(graph, [n for n in code_named if n in graph] + sorted(recursive)
-                       + [n for n in quantified if n in graph])
+                       + [n for n in kept if n in graph])
     out = []
     for n, (a, _, _) in spans.items():
         if n not in reached:

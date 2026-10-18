@@ -453,11 +453,9 @@ def phase_setup(work, state):
                       "`cleanup` or remove it first (" + ", ".join(orphans) + ")")
     work.mkdir(parents=True, exist_ok=True)
     paths["study_root"].mkdir(parents=True, exist_ok=True)
-    branch = git("symbolic-ref", "--short", "HEAD").strip()
-    p = subprocess.run(["git", "clone", "-q", "--no-hardlinks", "--branch", branch, str(ROOT),
-                        str(clone)], capture_output=True, text=True)
-    if p.returncode != 0:
-        raise Refusal(f"git clone failed (exit {p.returncode})")
+    rc, branch = GD.clone_head(ROOT, clone)
+    if rc != 0:
+        raise Refusal(f"git clone failed (exit {rc})")
     head = git("rev-parse", "HEAD", cwd=clone).strip()
     copied, removed = {}, []
     for rel in [x for x in git("ls-files", "-m", "-o", "--exclude-standard", "-z").split("\0") if x]:

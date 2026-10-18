@@ -6,7 +6,6 @@
 // definition they need (a spec fn they name must be `pub open`), and one call whose `requires`
 // hold in `iscube_witness`. You may add proof annotations (loop invariants, assertions, proof
 // blocks, lemmas); never change its executable code, and keep every other line of the file.
-// lab2-quantified-definition: cube
 /*
 ### ID
 HumanEval/77

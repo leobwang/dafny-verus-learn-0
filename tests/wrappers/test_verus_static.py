@@ -487,6 +487,41 @@ class Classify(unittest.TestCase):
             r = classify(name, crate)
             self.assertEqual((r.verdict, r.stage), (verdict, stage), name)
 
+    def test_a_build_failure_after_verification_is_compile_or_link(self):
+        """--compile runs whose verification found nothing (verified > 0, errors 0, no VIR
+        error) and that still fail: the native linker's message is stage link, any other
+        rustc error stage compile; the same outputs from a run without --compile, an error
+        count, or a front-end error code keep their old stages."""
+        doc = {"verification-results": {"encountered-error": True, "encountered-vir-error": False,
+                                        "success": False, "verified": 1, "errors": 0,
+                                        "is-verifying-entire-crate": True}}
+
+        def diag(message, code=None):
+            return json.dumps({"$message_type": "diagnostic", "message": message,
+                               "code": {"code": code, "explanation": None} if code else None,
+                               "level": "error", "spans": [], "children": [],
+                               "rendered": f"error: {message}\n"})
+
+        link = diag("linking with `cc` failed: exit status: 1")
+        lint = diag("literal out of range for `u8`", "overflowing_literals")
+        typed = diag("mismatched types", "E0308")
+        run = V.Run(FX, "x")
+        compiling = ["verus", "x.rs", "--compile", "--test"]
+        for argv, d, err, want in ((compiling, doc, link, "link"),
+                                   (compiling, doc, lint, "compile"),
+                                   (compiling, doc, typed, "resolve"),
+                                   (["verus", "x.rs"], doc, lint, "verify")):
+            with self.subTest(want=want, argv=argv):
+                r = V._classify(run, V.Job("t", argv, 1, json.dumps(d), err, FX), "x", False,
+                                None, [], None)
+                self.assertEqual((r.verdict, r.stage), ("failed", want))
+        failed = json.loads(json.dumps(doc))
+        failed["verification-results"]["errors"] = 1
+        r = V._classify(run, V.Job("t", compiling, 1, json.dumps(failed), link, FX), "x",
+                        False, None, [], None)
+        self.assertEqual(r.stage, "verify")
+        self.assertIn("link", common.STAGES)
+
     def test_kills_and_exit_codes(self):
         run = V.Run(FX, "x")
         for rc, verdict, stage in ((137, "killed(memory)", "verify"),

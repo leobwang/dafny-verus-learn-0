@@ -16,6 +16,10 @@
 # scripts/get_bench.sh installs under bench/public/ (fetched on the pins) hold them either way,
 # which is why this stratum is no contamination control: the local stratum is (lab2/).
 #
+# A card whose form keeps a definition that no line of its code uses records the sha256 of
+# those definitions' sorted names, one per line (kept_definitions_sha256), which the shipped-
+# form check compares; the list itself is author-side.
+#
 # `python3 scripts/dvl/lab2pub.py build --check` re-derives every form from the installed sets
 # and compares it with form_sha256; the licences and the change statement are in NOTICE.
 
@@ -53,7 +57,8 @@ set = "humaneval-verus"
 task = "human_eval_077.rs"
 humaneval = 77
 answer_sha256 = "5dea91bea514bad2b87a00bda0a4efa1a3684e82a5ca4dcb5f4b6f7ddefc01f5"
-form_sha256 = "6c0072e6be68a6cefb525ba84a91dba483d89a507081f617a93649750a397b4e"
+form_sha256 = "1b4b8625b25ede4f8334bffdeb311d1f810e4821b4cc6fba7c832000caad1cb0"
+kept_definitions_sha256 = "8d27ffc0c5a16917a3b5e3fa82f1f68a19730414ad35c10c2e058375c13e9807"
 
 [[card]]
 id = "vp4-he035"

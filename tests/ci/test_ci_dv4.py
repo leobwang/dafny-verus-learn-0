@@ -8,6 +8,7 @@ the check must catch, in a throwaway root, and none of them reaches anything
 runs)."""
 
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -142,6 +143,18 @@ class HarnessTripwire(unittest.TestCase):
         rc, out, err = self.run_harness()
         self.assertEqual((rc, C.status_of(out, "harness")), (0, "PASS"), (out, err,
                                                                           (self.logs / "harness.log").read_text()[-3000:]))
+        # a passing run keeps the scratch its log names (the sterile environment, the
+        # project environment) and removes the rest (the tools' scratch root)
+        work = self.root.resolve().parent / "ci-work"
+        log = (self.logs / "harness.log").read_text()
+        (run,) = work.iterdir()
+        for rel in ("sterile/home", "sterile/bin", "py-env"):   # each made by the run
+            self.assertIn(f"{run}/{rel}", log)
+            self.assertTrue((run / rel).exists(), f"{rel}: named by harness.log, removed after a pass")
+        self.assertTrue((run / "sterile" / "bin" / "claude").is_file())
+        self.assertFalse((run / "scratch").exists())
+        self.assertFalse((run / "tmp").exists())
+        self.assertIn("ci.sh: tool scratch the logs name kept:", out)
 
 
 if __name__ == "__main__":

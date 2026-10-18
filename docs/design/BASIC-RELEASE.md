@@ -1,6 +1,6 @@
 # The `basic` release: the Q core's freeze bar
 
-*Latest follow-up: 2026-10-17 UTC, §11: the user defers Claude-dependent validation and authorizes continued building; local CI and release checks remain required.*
+*Latest follow-up: 2026-10-17, §14: the review fixes of the released `basic` (Δ275) and the user's decisions D46–D49; the deferred live checks run now in a separate lane (D47). §11 records the D45 deferral.*
 
 *Status: **written by DV6's integration lane, 2026-10-14**, from the DV6 audit notes (`Solutions/plans/DV6-audit-*.md`), the clean-clone dry run, the fix round's notes (`Solutions/plans/DV6-fix-notes.md`) and the integration lane's own CI runs (DELTAS Δ238, Δ239, Δ241). The Simulate phase adds its lines after these (§5). A line is **HOLDS** with its evidence, **OPEN** with its owner, or **PARTLY** with both halves.*
 
@@ -9,7 +9,7 @@
 ## 0. What ships, and when
 
 - **The release plan** (the user, 2026-10-13; DELTAS Δ234): review the Q core to the freeze bar below; then freeze it and ship it as the git branch `basic` (a feature freeze: fixes only); then build the R core and add it to `basic`; then build the challenges on the branch `challenge`, branched from `basic`, where every fix lands on `basic` first and is merged forward at once.
-- **The Q core:** Q01–Q18 (status `shipped` in the prepared release candidate; the released branch waits for local CI), the spine layers L1–L7, the three labs (Lab 1 in Q12, Lab 2 in Q15, Lab 3 in Q18) and the capstone, with the instructor layer, the guard, the tools and the harness they use.
+- **The Q core:** Q01–Q18 (status `shipped` on the released branch `basic`), the spine layers L1–L7, the three labs (Lab 1 in Q12, Lab 2 in Q15, Lab 3 in Q18) and the capstone, with the instructor layer, the guard, the tools and the harness they use.
 - **The branch step** is conditionally approved by the user (D42): after the freeze checks pass, create a single squashed content commit atop design-only `main`, validate its ancestry, flip the modules' status, and recreate authoring from the released `basic` baseline. Nothing in this file flips a status. A probe in a scratch copy showed the checker accepts Q01–Q18 as `shipped` (DV6's infrastructure audit).
 - **The current follow-up tree:** `authoring` at `5d9be4e` plus Δ246. The original DV6 review used `83531a8` plus the round's changes. Each CI line names its run; earlier passes remain historical evidence.
 
@@ -19,14 +19,14 @@
 
 | # | line | state | evidence, or owner |
 |---|---|---|---|
-| F1 | CI green, author mode (`scripts/ci.sh --author`) | **HOLDS** | Full run `build/ci/20261017T003253Z-2536741/`:14 passed,0 failed/skipped/absent in15,977s. Started clean at5d9be4e; subsequent changes through40a9b5a are paper/bank/status/test-fixture material, with no formal source, wrapper or native proof payload change. Focused author text CI passed3/3; full final-tree study and candidate static runs below cover those changes. |
-| F2 | CI green, study mode (`scripts/ci.sh`) | **HOLDS** | Full final Q-author tree `build/ci/20261017T045910Z-584851/`, clean40a9b5a:12 passed,0 failed,2 expected author-only skips,0 absent in4,271s. The native/tool payload equals the Q candidate; release status/readme differ. Candidate static `20261017T032721Z-61186` passed in417s after shipped-fixture fixes. |
+| F1 | CI green, author mode (`scripts/ci.sh --author`) | **HOLDS** | Release: full run `build/ci/20261017T003253Z-2536741/`: 14 passed, 0 failed, skipped or absent, in 15,977 s, on the pre-release authoring tree, started clean at `5d9be4e`; the changes through `40a9b5a` are paper, bank, status and test-fixture material, with no formal source, wrapper or native proof payload change, covered by focused author text CI (3/3) and the full study and candidate static runs of F2. The released tree itself had no full author run. Review fixes: §14. |
+| F2 | CI green, study mode (`scripts/ci.sh`) | **HOLDS** | Release: full run `build/ci/20261017T045910Z-584851/` on the final Q authoring tree, clean at `40a9b5a`: 12 passed, 0 failed, 2 expected author-only skips, 0 absent, in 4,271 s. Its native and tool payload equals the release candidate's; the release status, README and CLAUDE text differ. The released tree itself had a static run only: candidate static `20261017T032721Z-61186` passed in 417 s after the shipped-fixture fixes. Review fixes: §14. |
 | F3 | The skill simulations pass (every skill of Q01–Q18, zero leak-pattern hits, legal help delivered) | **DEFERRED — user waiver** | The Simulate phase. Every module's set is stale or never ran: Q01–Q12's ran on an earlier hook, skills and CLI (2026-10-05 to 10-07), Q13–Q15's in DV5b, Q16–Q18's never (Δ238). The tools are ready: the window rule, the code-mark token rule, the delivery exemption and the plant check (Δ239). Budget: D43. **DV6 Simulate phase (2026-10-15): deferred** by the window rule after set 1's first turn (§5 S1). | D45 defers this live requirement for the current build; see §11.
 | F4 | `tests/instructor/calibration/calibrate.py all` passes (78 sessions over Q01–Q18) | **DEFERRED — user waiver** | The Simulate phase; never run (the calibration README's *Last run*). D44 adds six `/review-code` cases on Q13/Q15; their clone preparation and strict first-try/unit checks passed, but no model session has run. Budget: D43. **DV6 Simulate phase:** `setup` only, 36 of 36 drop-ins compile; no session (§5 S3). | D45 defers this live requirement for the current build; see §11.
 | F5 | `tests/acceptance/guard_doors.py all` passes | **DEFERRED — user waiver** | The Simulate phase; last run 2026-10-04 on an earlier hook. The Monitor door is built (Δ239). **Tool-coverage prerequisite resolved:** Δ242 covers Firecrawl’s local-file parser, Workflow and ScheduleWakeup in the matcher and hook, with regression tests (§7). A fresh model acceptance run is still required. **DV6 Simulate phase:** `setup` and `dryrun` only, 16 hook runs, 0 unexpected; no session (§5 S4). | D45 defers this live requirement for the current build; see §11.
 | F6 | A clean-clone dry run passes | **PARTLY** | HOLDS for every chapter command: a fresh clone in study mode ran every concrete command of the 18 chapters verbatim in three states, with 355 pinned fences matching and 0 problems, and no manual intervention beyond the learner's own steps (Δ238; `author-probes/dv6/dryrun/part1/`). Its findings are fixed (Δ239) including the host's rustup now restored under D41. **OPEN:** the capstone under the final contract and the three gold `/contract` transcripts (Q01, Q09, Q18), deferred by the window rule after 1 of 30 calls (the Simulate phase; Δ240 item 8; the prepared learner state is in `dv6/dryrun/specs/`). |
 | F7 | A final leak audit is clean | **HOLDS — LOCAL; transcript portion deferred** | Frozen candidate source scan and D42 history check pass at the release step (§13). One squash atop main excludes old authoring ancestry. D45 defers scans of live transcripts that have not been created; no scan result is inferred for them. |
-| F8 | No open DECISION NEEDED | **HOLDS** | The user approved all nine recommendations through interactive MCQs (D36–D44, Δ243). Their implementation and validation remain required. |
+| F8 | No open DECISION NEEDED | **HOLDS** | The user approved all nine recommendations through interactive MCQs (D36–D44, Δ243); they are implemented (§8). D45 deferred the live checks (§11); D46–D49 settle the review round (Δ275, §14). The readings Δ275 took in building its fixes are listed there for the user to confirm; none blocks study. |
 
 ## 2. Spec §12.1, Infrastructure (Phase 0)
 
@@ -163,15 +163,15 @@ The candidate contains the Q-only course snapshot with all eighteen Q-core regis
 
 ## 13. Initial Q core released locally on Basic (2026-10-17 UTC; Δ250)
 
-The full author run passed14/14 in15,977s; the full study run passed12 jobs
-with two expected author-only skips in4,271s. The author run began at5d9be4e;
+The full author run passed 14/14 in 15,977 s; the full study run passed 12 jobs
+with two expected author-only skips in 4,271 s. The author run began at `5d9be4e`;
 its formal sources, wrappers and native proof payload are unchanged through
-the final Q author tree40a9b5a. The intervening paper, bank, status and
+the final Q author tree `40a9b5a`. The intervening paper, bank, status and
 synthetic-fixture changes have focused author text CI, full final study CI
-and candidate static coverage. The candidate differs from40a9b5a only in
+and candidate static coverage. The candidate differs from `40a9b5a` only in
 README/CLAUDE/release status documentation and the eighteen Q status fields.
 
-Candidate static `build/ci/20261017T032721Z-61186/` passed in417s. Final
+Candidate static `build/ci/20261017T032721Z-61186/` passed in 417 s. Final
 course-map, study settings, protected source-leak and D42 ancestry checks
 are recorded with the release evidence under `author-probes/dv7-freeze/`.
 Release-only documentation is then folded into the single content squash;
@@ -185,55 +185,51 @@ from the completed Basic course. D45's live guard/simulation/calibration and
 contractor/capstone transcript debt remains explicit and unpassed. Neither
 the provider reserve nor any course guard was overridden.
 
-Sections1–12 retain dated checkpoint history. Their earlier running/queued
+Sections 1–12 retain dated checkpoint history. Their earlier running/queued
 or not-promoted text describes that checkpoint; this release entry and the
-current freeze table give the final local state. Re-run the read-only history
-checker against the initial release commit, not later R development commits.
+current freeze table give the final local state. The read-only history
+checker now checks basic's whole chain as an invariant, and CI's static job
+runs it (§14).
 
-## 14. R integration candidate and recorded R03 blocker (2026-10-17 UTC)
+## 14. Review fixes on Basic (2026-10-17; Δ275)
 
-Initial Q release is39ba47b, still the sole-parent squash atop main. Its old
-source author history is preserved at authoring-q-archive-20261017 (40a9b5a).
-Authoring was recreated from Basic, then validated R01/R02 and the independent
-export-freeze/manual-induction checkpoint were transplanted with cherry-picks.
-No legacy authoring ancestry is merged into the released line.
+Independent reviewers audited Codex's round (Δ242–Δ250) and the released
+branch: the Q release implemented D36–D45 correctly and was squashed
+cleanly; it shipped past the freeze bar under D45, which the user has now
+resolved by D47 (the usage window has reset; the deferred live checks run
+in a separate validation lane, and the learner may start studying). The
+user also decided D46 (basic holds the Q core only; it was rolled back
+from a state that also had R01–R02, now archived), D48 (R03's classes as
+`u32` code-point pairs; the shared A2 layer provisional until R03 and R06
+pass) and D49 (Lab α redesigned around one pre-registered primary contrast,
+at least 60 regex-lemma clusters plus a public slice sized by a power
+simulation, and a 5-cluster pilot outside the confirmatory runs).
 
-R01/R02 candidate records are shipped while combined-tree static/native/paper/
-rubric/harness checks run. Basic advances only after that integration bar,
-module-specific pins, source leak and study settings pass. Earlier R evidence
-is indexed by Δ251 and protected DVR1 notes. This is not a claim that every R
-module or the full Basic objective is complete.
+The fixes, each a `basic: ` commit on basic (Δ275 lists the evidence; F-1 to F-5 were found by the live-check lane running under D47):
 
-R03's standalone native cores and agent references pass, but its canonical
-module packaging is blocked by OD8: the pinned Verus char conversion lacks a
-usable std contract, and the verified UTF-8 alternative reaches libraries
-before R07. Both direct and A1-transitive attempts were rejected by the tier
-checker. The draft and evidence are preserved privately; no tier exception,
-new trust assumption or relaxed gate is adopted. R03 stays planned. Record
-and skip that blocker while R04 is built independently. Resolve primitive
-placement or a prelude-only implementation before accepting R03.
+| # | fix | where |
+|---|---|---|
+| 1 | the release history is an invariant (a linear chain of single-parent `basic: ` commits on main, no archived ancestry), run by CI's static job | `scripts/check_release_history.py`, `scripts/ci.sh` |
+| 2 | the README and CLAUDE CI claims name the trees the full runs used | README, CLAUDE.md, F1, F2 |
+| 3 | stale text: §0, F8, QPLAN §22.6 (D39, 74 members) and §25 (Q15.H2d/H2v at 8/7 minutes, D40) | this file, QPLAN |
+| 4 | D39 in Q12's B1 tasks-and-strata field and rubric line CT.b, the fixtures kept consistent, the rubric re-pinned | `paper/Q12_problems.tex`, `paper/rubrics/Q12_rubric.md` |
+| 5 | the learner branches from the local `basic` until it is pushed | README Setup 3 |
+| 6 | vp3-he077's kept-definition marker moved author-side; the card rebuilt and re-attested | `scripts/dvl/{benchstrip,lab2pub}.py`, `bench/local/q/lab2pub/`, `sandbox/attested.toml` |
+| 7 | the hook test's lane fixtures no longer depend on the host | `scripts/test_hooks.sh`, `tests/hooks/` |
+| 8 | words glued to numbers spaced | this file, Δ250 |
+| 9 | the DELTAS index complete; Δ275 records the review, D46–D49 and the fixes | DELTAS |
+| 10 | every capped solver job runs in the user slice `dvl0.slice` (MemoryMax=48G, MemorySwapMax=0), each with its own cap; Δ245 corrected | `scripts/dvl/common.py` |
+| 11 | a passing CI run keeps the scratch its reports name | `scripts/ci.sh` |
+| 12 | a Verus build that fails after verification reports stage `link` or `compile`, never `verify` | `scripts/dvl/verus.py`, Q12 §2 |
+| 13 | the armed-units test fixture no longer depends on the real records' shipping state (found by this lane's full CI) | `tests/wrappers/test_dafny_tool.py` |
+| F-1 | the three study-clone harnesses run from a detached HEAD (`clone_head`) | `tests/acceptance/guard_doors.py`, `skill_sims.py`, `calibrate.py` |
+| F-2 | `ReadMcpResourceDirTool` (Claude Code 2.1.302) is left alone, as its sibling is | `guard_doors.LEFT_ALONE` |
+| F-3 | the six lab calibration fixtures no longer hold the drop-in marker word; all 36 make a drop-in | `tests/instructor/fixtures/` |
+| F-4 | a study root's cleanup removes and records a session's stray files | `guard_doors.remove_study_root` |
+| F-5 | a tutor turn asks no question of a higher rung | `.claude/skills/tutor/SKILL.md` |
 
-
-R integration validation follow-up (Δ252): the six-job run
-20261017T061521Z-1670472 passes native Dafny/Verus,paper,rubric and harness;
-static fails on37 stale Q chapter input hashes after the R-only shared-option
-edit. All37 entries have been executed and recaptured with every published
-chapter byte unchanged. All20 chapter lints pass. The static rerun and targeted
-R01/R02 pins still precede Basic advancement; no failed run is relabelled passed.
-
-## 15. R01/R02 added to local Basic (2026-10-17 UTC; Δ253)
-
-The combined integration bar passes with its exact two-run scope: the first
-six-job run20261017T061521Z-1670472 has native Dafny, native Verus, paper,
-rubric and harness passing; its failed static step is retained. After normal
-recapture of37 unchanged Q outputs, static-only author CI
-20261017T062822Z-1716277 passes in469s. R01 and R02 each pass25 targeted pin
-checks with zero problems. The final study settings and source-leak checks
-pass before Basic advances. No native proof body changed for the pin repair.
-
-R01/R02 are shipped on local Basic. Initial Q-only squash39ba47b remains
-available as basic-candidate and is the commit to use for the initial D42
-history check. Later R commits are ordinary descendants of that release;
-legacy author histories remain on separate branches. Main stays design-only.
-R03 is parked and R04 is being built. This does not claim the entire Basic
-course is finished. Live Claude debt remains explicitly deferred under D45.
+Checks on the fixed tree before its full CI: `check_course_map.py` (49
+modules, 18 shipped), `chapter_lint --all` (18 chapters, 0 problems),
+`update_rubric_pins --check` (112 current), the leak verifier (18 modules,
+1,644 public files, OK), `avoid.sh` (0 hits), `test_hooks.sh` (7,107
+passed, 0 failed), `lab2pub.py build --check --author` (10 cards current).

@@ -44,7 +44,9 @@ and 5 per stratum within each language, drawn with seed 4407.
 \texttt{bench/local/q/lab1/STRATUM.toml} (the levers-refused case; the maxauto case is
 not drawable without six more Dafny tasks); public 20 DafnyBench hint-free and 20
 HumanEval-Verus task forms, with the sets' commits and validation sha256 copied from
-\texttt{bench/manifest.toml}; draw seeds 5101 (local), 5102 (DafnyBench), 5103 (HumanEval-Verus); pilot: one sample on each of 80 public
+\texttt{bench/manifest.toml}; HumanEval-Verus drawn only from the 74 members left once
+every HumanEval problem of Lab 2's public cards is set aside in both languages
+(\texttt{scripts/get\_bench.sh --members humaneval-verus --lab Q12}); draw seeds 5101 (local), 5102 (DafnyBench), 5103 (HumanEval-Verus); pilot: one sample on each of 80 public
 candidates (seeds 90001--90080), a public stratum outside 0.1--0.9 is redrawn once with
 the next seed.
 
@@ -88,7 +90,7 @@ exceed 10 GPU-hours, two repeats instead of three.
 $= 0.2845$: with $n = 60$ paired tasks, baseline 0.3, power 0.8 and the Holm worst case
 $\alpha = 0.025$, the lab detects only differences of about 28 points.
 \textbf{Batch plan} Prospective file \texttt{research/q12-main.toml}.
-This method fixture does not open a batch. Once the policies are final,
+This prospective plan does not open a batch. Once the policies are final,
 record the exact file digest on its own \texttt{plan-sha256:} line and
 re-grade the changed pre-registration before executing it. Separately
 executed pilot or subset plans each need their own binding and gradebook
