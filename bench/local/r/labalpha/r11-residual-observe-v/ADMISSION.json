@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "676460ced0523eb0485044ad31d006cf84cc83a8fd65f86d97becfdf4be8257e"
+  },
+  "id": "r11-residual-observe-v",
+  "lang": "verus",
+  "private_evidence_sha256": "07a1db08060fe5344c627d24b4883952ccf415bf9bf293e564abee527eedfeb6",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    }
+  ],
+  "source_sha256": "8b81154361f193fe5a9d4eba02b5a53acb08cd1a3382a1fb7beec660f61a7d73",
+  "status": "admitted",
+  "target": "residual_observe_r11",
+  "validated_span": {
+    "end": 86,
+    "start": 79,
+    "symbol": "residual_observe_r11"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

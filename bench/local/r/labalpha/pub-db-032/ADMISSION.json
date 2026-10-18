@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "5ff35d1ece8742130386638cbfc00d29f071a5744b5e538c023211c12ca7f301",
+    "statement_sha256": "1c4ff4e24872bb12f83f86ff0ecdfd405563de08e5fc17197cdebc665a9917d4"
+  },
+  "id": "pub-db-032",
+  "lang": "dafny",
+  "private_evidence_sha256": "9a80a17f8f04c6cc999e4f1990dd7e3af485aa0bf9e4b1e45efa8e441005bf8e",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "92cc8e711c00bca7f0263046f787dd892645b42a2e08e6b62fcd562b0a80dcbd",
+  "status": "admitted",
+  "target": "IsEvenAtIndexEven",
+  "validated_span": {
+    "end": 23,
+    "start": 9,
+    "symbol": "IsEvenAtIndexEven"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

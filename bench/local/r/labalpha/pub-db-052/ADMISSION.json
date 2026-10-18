@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "b0d853948bbb8224a6660eee5bdab10d437553cf9c50e24b7fa14e0efa4d9bb2",
+    "statement_sha256": "3e46984eb3d816c26455492515e1525d93301978877fb6411fbf6210b50a5c83"
+  },
+  "id": "pub-db-052",
+  "lang": "dafny",
+  "private_evidence_sha256": "8af1257571394aeea39d5bef5a8a0a0958e989821fbc70fff792e72fca275158",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    }
+  ],
+  "source_sha256": "5883675a32b05368562ce84f432a4d94514df25df2aae3452d2abce173b417ec",
+  "status": "admitted",
+  "target": "FindEvenNumbers",
+  "validated_span": {
+    "end": 27,
+    "start": 9,
+    "symbol": "FindEvenNumbers"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

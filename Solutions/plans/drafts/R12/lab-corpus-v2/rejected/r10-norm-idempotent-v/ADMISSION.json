@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "8aec5d0039f851b5bfdbc7368d6fabe8a8825e74d619b38cae1601b228c9cd52"
+  },
+  "id": "r10-norm-idempotent-v",
+  "lang": "verus",
+  "private_evidence_sha256": "1b7661edbd8121e6f14c729dceebb584bc4d9bd32c77e6ba3b9bf1353022aed2",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    }
+  ],
+  "source_sha256": "c763e6d256c39f15f50ba8096185bfd65bba40c5b8b7e6cd2bb8b976a46986fd",
+  "status": "admitted",
+  "target": "norm_idempotent_r10",
+  "validated_span": {
+    "end": 121,
+    "start": 117,
+    "symbol": "norm_idempotent_r10"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

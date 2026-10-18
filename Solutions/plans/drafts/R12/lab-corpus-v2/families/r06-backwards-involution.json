@@ -1,0 +1,35 @@
+{
+  "cluster": "r06-backwards-involution",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "BackwardsInvolution",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsInvolution",
+      "verus": "Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_involution"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (Re, Backwards)"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r06-backwards-involution-d",
+    "r06-backwards-involution-v"
+  ],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r06-backwards-involution-d",
+      "form": 1,
+      "result": "rejected: max-auto-empty-fails",
+      "reason": "the empty body verifies in every Dafny run, maxauto and all three shipped seeds (the statement is automatic in Dafny); no form can change that"
+    },
+    {
+      "task": "r06-backwards-involution-v",
+      "form": 1,
+      "result": "admitted (moot: the cluster needs both languages)"
+    }
+  ],
+  "notes": "Both forms moved to rejected/."
+}

@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 16,
+  "frame": {
+    "code_sha256": "30d7bc1aac7e078042386b650e47dfe64563828e611c65c57048de6eb4715260",
+    "statement_sha256": "d2416fb1d163c3a5627f76ada2662813ddbde6dbe231bec79f2b644d16298cea"
+  },
+  "id": "pub-hev-011",
+  "lang": "verus",
+  "private_evidence_sha256": "67d462774df34c4ac51bddc5d66598aa2694813e314b5a5a60400646d92b21a1",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "a1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "a3"
+    },
+    {
+      "kind": "expr",
+      "name": "a4"
+    }
+  ],
+  "source_sha256": "4ca42b5f29f0e668b6f071a6367a6fb74474743e793d0982a31b955b272de08c",
+  "status": "admitted",
+  "target": "remove_vowels",
+  "validated_span": {
+    "end": 52,
+    "start": 32,
+    "symbol": "remove_vowels"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

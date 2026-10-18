@@ -1,0 +1,12 @@
+{
+ "hints": [
+  "0 <= n <= a.Length",
+  "forall i,j :: 0 <= i < j < a.Length && j < n ==> a[i] <= a[j]",
+  "forall i :: 0 <= i < n ==> forall j :: n <= j < a.Length ==> a[i] <= a[j]",
+  "multiset(a[..]) == old(multiset(a[..]))",
+  "n <= mindex < a.Length",
+  "n <= m <= a.Length",
+  "forall i :: n <= i < m ==> a[mindex] <= a[i]",
+  "multiset(a[..]) == old(multiset(a[..]))"
+ ]
+}

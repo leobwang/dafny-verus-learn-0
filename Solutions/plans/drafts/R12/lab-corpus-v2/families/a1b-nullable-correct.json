@@ -1,0 +1,34 @@
+{
+  "cluster": "a1b-nullable-correct",
+  "kind": "regex",
+  "source": {
+    "module": "A1b (as a task over A1 only)",
+    "lemma": "NullableCorrect",
+    "reference": {
+      "dafny": "dafny/given/R/RG_A1b_Facts.dfy::NullableCorrect",
+      "verus": "verus/given/rg_re_a1b/src/lib.rs::lemma_nullable_correct"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "a1b-nullable-correct-d",
+    "a1b-nullable-correct-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "a1b-nullable-correct-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "a1b-nullable-correct-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "D 3 sites, V 2 call sites."
+}

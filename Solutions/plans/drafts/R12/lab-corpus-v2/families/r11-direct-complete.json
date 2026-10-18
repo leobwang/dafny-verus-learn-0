@@ -1,0 +1,17 @@
+{
+  "cluster": "r11-direct-complete",
+  "source": {
+    "module": "R11",
+    "lemma": "DirectCompleteR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::DirectCompleteR11 (R11.H3d)",
+      "verus": "Solutions/verus/r/r11_theory/src/lib.rs::complete_word_r11 (R11.H3v)"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "hint grammar (design)",
+  "attempts": [],
+  "notes": "The Dafny lemma returns a Derivation built by assignments and result-binding recursive calls; the hint grammar's call sites cannot bind results and the reference has no asserted fact to site, so no Dafny form exists; the cluster needs both languages.",
+  "kind": "regex"
+}

@@ -1,0 +1,20 @@
+{
+ "target": "add",
+ "sites": 4,
+ "kept_annotations": [
+  {
+   "offset": 985,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "lst@ =~= lst@[0..]"
+  },
+  {
+   "offset": 1496,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "lst@[i - 1..][2..] =~= lst@[i + 1..]"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

@@ -1,0 +1,148 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": false,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-013/pub-hev-013.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "pub_hev_013",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "",
+            "col": 14,
+            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-013/pub-hev-013.rs",
+            "line": 65,
+            "message": "expected an expression",
+            "severity": "error"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {},
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035518-u048kip0",
+        "stage": "parse",
+        "target": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-013/pub-hev-013.rs",
+        "verdict": "failed",
+        "verified_count": 0
+      },
+      "passed": false
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "3d9932dde5471bd0a6f0bb840e53c247783c0af8448bd10c7c2560cdd38738a7",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a1"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i2"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i3"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i4"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a5"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a6"
+            }
+          ],
+          "source_sha256": "2ad0a1d5323cf42e0cba07fd5c7423dfd096debc28446725db7d9d992456f1e5",
+          "statement_sha256": "62e96ffe50f29127c21e99cf3b9b7dd0619a14c774f57ec8064b34bfe751ed1e"
+        },
+        "native_span": [
+          47,
+          103
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 103,
+          "start": 47,
+          "symbol": "parse_music"
+        }
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "cd4bd612f0d8552767102fb4bcff4add2dda0a2e9a3c3e0f1d9e8ff37192c7fa",
+  "id": "pub-hev-013",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-hev-013/reference.rs",
+  "reference_sha256": "8c3f179cd923097ee6cd1fe413282eceb1c4f42c1233734df50bb01dd6b0778e",
+  "rejected_at": "baseline-proof-fails",
+  "schema": 2,
+  "source_sha256": "2ad0a1d5323cf42e0cba07fd5c7423dfd096debc28446725db7d9d992456f1e5",
+  "status": "rejected",
+  "target": "parse_music"
+}

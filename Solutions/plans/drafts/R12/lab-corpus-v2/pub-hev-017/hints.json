@@ -1,0 +1,15 @@
+{
+ "hints": [
+  "max_minus_threshold == i64::MAX - threshold",
+  "numbers_len == numbers@.len()",
+  "forall|i: int",
+  "j: int| 0 <= i < j < numbers@.len() && i < x ==> abs(numbers[i] - numbers[j]) >= threshold",
+  "max_minus_threshold == i64::MAX - threshold",
+  "numbers_len == numbers@.len()",
+  "x < numbers@.len()",
+  "numbers_x == numbers[x as int]",
+  "forall|i: int",
+  "j: int| 0 <= i < j < numbers@.len() && i < x ==> abs(numbers[i] - numbers[j]) >= threshold",
+  "forall|j: int| x < j < y ==> abs(numbers_x - numbers[j]) >= threshold"
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "hints": [
+  "s@[0..] == s@",
+  "s_len == s@.len()",
+  "0 <= i <= s_len",
+  "spec_parse_music(s@) matches Some(all_beats) ==>",
+  "s@[i..][1..] == s@[i + 1..]",
+  "s@.len() >= i + 2 ==> s@[i..][2..] == s@[i + 2..]"
+ ]
+}

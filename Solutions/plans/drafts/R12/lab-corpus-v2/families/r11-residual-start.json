@@ -1,0 +1,17 @@
+{
+  "cluster": "r11-residual-start",
+  "source": {
+    "module": "R11",
+    "lemma": "ResidualStartR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::ResidualStartR11 (R11.W1d)",
+      "verus": "Solutions/verus/r/r11_theory/src/lib.rs::residual_start_r11"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "not a regex obligation (design)",
+  "attempts": [],
+  "notes": "After reveal, the only step is the sequence identity [] + tail == tail; excluded under the real-regex-obligation rule.",
+  "kind": "regex"
+}

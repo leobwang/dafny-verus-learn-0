@@ -1,0 +1,43 @@
+{
+  "cluster": "r11-residual-step",
+  "source": {
+    "module": "R11",
+    "lemma": "ResidualStepR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::ResidualStepR11 (R11.W3d)",
+      "verus": "Solutions/verus/r/r11_theory/src/lib.rs::residual_step_r11 (R11.W3v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1: Re, Matches/matches, Nullable/nullable",
+    "RG_A2_Deriv / rg_re_a2: Deriv/deriv",
+    "R11 ResidualR11 / residual_r11 (opaque)"
+  ],
+  "helpers_included": [
+    "DerivCorrect / lemma_deriv_correct (RG_A2_Deriv / rg_re_a2, complete)",
+    "NullableCorrect / lemma_nullable_correct (A1b, complete; used by DerivCorrect)"
+  ],
+  "tasks": [
+    "r11-residual-step-d",
+    "r11-residual-step-v"
+  ],
+  "status": "admitted",
+  "sites": {
+    "r11-residual-step-d": 2,
+    "r11-residual-step-v": 1
+  },
+  "attempts": [
+    {
+      "task": "r11-residual-step-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r11-residual-step-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "DerivCorrect is also an R06 family (lane L1); here it is a provided helper. The Verus associativity bridge (=~=) stays in the skeleton, so the Verus form has one call site.",
+  "kind": "regex"
+}

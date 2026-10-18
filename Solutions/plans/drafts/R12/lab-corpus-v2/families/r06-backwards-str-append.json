@@ -1,0 +1,39 @@
+{
+  "cluster": "r06-backwards-str-append",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "BackwardsStrAppend",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsStrAppend",
+      "verus": "Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_str_append"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (BackwardsStr)"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r06-backwards-str-append-d",
+    "r06-backwards-str-append-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-backwards-str-append-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-backwards-str-append-v",
+      "form": 1,
+      "result": "not admitted: max-auto-empty-fails",
+      "reason": "tool reading: the three BV empty-body variants end killed(harness) (the BV mode short clock); vcheck verdict failed, every other variant fails(error); admit_forms.py accepts only failed/inconclusive/fails(/no-verify( statuses. Checks 1-5 passed; evidence kept for a resumed run."
+    },
+    {
+      "task": "r06-backwards-str-append-v",
+      "result": "admitted after the tool fix: the three BV empty-body variants end killed(harness) at their short clock, which Delta 58 counts as failing (vcheck verdict failed); the tool now reads them so"
+    }
+  ],
+  "notes": "Verus keeps the =~= bridges in the skeleton; sites: the head fact and the recursive call."
+}

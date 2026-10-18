@@ -1,0 +1,28 @@
+{
+  "cluster": "r11-check-sound",
+  "source": {
+    "module": "R11",
+    "lemma": "CheckSoundR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::CheckSoundR11 (R11.H2d)",
+      "verus": "Solutions/verus/r/r11_theory/src/lib.rs::sound_word_r11 (R11.H2v)"
+    }
+  },
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "max-auto-empty-fails (Dafny)",
+  "attempts": [
+    {
+      "task": "r11-check-sound-d",
+      "form": 1,
+      "result": "rejected: Dafny max-auto-empty-fails: the empty body verifies at maximal automation (auto-induction on; finding lever-needed) and fails only under the shipped --manual-lemma-induction; a property of the statement and definitions, so no other site granularity can admit it"
+    },
+    {
+      "task": "r11-check-sound-v",
+      "form": 1,
+      "result": "admitted (cluster incomplete)"
+    }
+  ],
+  "notes": "Forms and evidence kept under rejected/.",
+  "kind": "regex"
+}

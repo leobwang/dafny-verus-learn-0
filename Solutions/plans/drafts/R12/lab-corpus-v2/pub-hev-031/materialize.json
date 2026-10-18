@@ -1,0 +1,20 @@
+{
+ "target": "longest",
+ "sites": 3,
+ "kept_annotations": [
+  {
+   "offset": 936,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|j: int| #![auto] 0 <= j < i ==> strings[j].len() <= result.len()"
+  },
+  {
+   "offset": 1021,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "forall|j: int| #![auto] 0 <= j < pos ==> strings[j].len() < result.len()"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

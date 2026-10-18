@@ -1,0 +1,30 @@
+{
+ "target": "checked_total_str_len",
+ "sites": 7,
+ "kept_annotations": [
+  {
+   "offset": 1143,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "lens =~= lst@.map_values(|s: &str| s@.len())[..i]"
+  },
+  {
+   "offset": 1206,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "lens =~= lst@[..i].map_values(|s: &str| s@.len())"
+  },
+  {
+   "offset": 1443,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "lens =~= lst@.map_values(|s: &str| s@.len())[..i + 1]"
+  },
+  {
+   "offset": 1683,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "lst@.map_values(|s: &str| s@.len()) =~= lst@.map_values( |s: &str| s@.len(), )[..lst@.len()]"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

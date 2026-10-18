@@ -1,0 +1,37 @@
+{
+  "cluster": "r09-copies-nodes",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "CopiesNodesR09",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::CopiesNodesR09",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_copies_nodes_r09"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, NodeCount/node_count)",
+    "RG_A3_Syntax / rg_re_a3 (Copies, CopiesUpTo)"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r09-copies-nodes-d",
+    "r09-copies-nodes-v"
+  ],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r09-copies-nodes-d",
+      "form": 1,
+      "result": "rejected at max-auto-empty-fails",
+      "reason": "the empty body verifies in every empty-body run (maxauto and shipped seeds 1-3): the lemma falls to automation; the reference body is already the single recursive call, so no other site granularity exists. Forms and evidence kept under rejected/r09-copies-nodes-d/"
+    },
+    {
+      "task": "r09-copies-nodes-v",
+      "form": 1,
+      "result": "not run",
+      "reason": "the cluster needs both languages and the Dafny twin cannot be admitted; form kept under rejected/r09-copies-nodes-v/"
+    }
+  ],
+  "notes": "Dafny's baseline (if k > 0 {} with the site empty) fails while the plain empty body verifies; vcheck's empty-body reading decides."
+}

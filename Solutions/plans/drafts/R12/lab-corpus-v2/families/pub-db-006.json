@@ -1,0 +1,39 @@
+{
+  "checks": {
+    "C0": "pass: Apache-2.0 (set licence)",
+    "C1": "pass: target Getmini, 5 sites, 0 annotations kept as provided",
+    "C2": "n/a (dafnybench has no prose prompt)",
+    "C3": "pass",
+    "C4": "pass",
+    "C5": "pass",
+    "C6": "pass",
+    "C7": "pass: static frame control (statement table, models, executable skeleton); no Claude judging (D45)"
+  },
+  "cluster": "pub-db-006",
+  "contamination": "possibly seen: a public 2023-2025 repository task; the perturbation probe is deferred (WALK.md)",
+  "flags": {
+    "c0_flag": "per-file upstream licence not recorded",
+    "lemma_shaped": false,
+    "restored_outside_target_lines": [
+      40
+    ],
+    "target_kind": "method"
+  },
+  "humaneval_id": null,
+  "kind": "public",
+  "lang": "dafny",
+  "licence": "pass: Apache-2.0 (set licence)",
+  "licence_flag": "per-file upstream licence not recorded",
+  "pool_sha256": "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4",
+  "set": "dafnybench",
+  "set_sha256": "0c1a4218c81f2dfd97ec22f0c87253fc3e7faa5b66cd1acc949cb3891494d6b6",
+  "sites": 5,
+  "status": "admitted",
+  "target": "Getmini",
+  "tasks": [
+    "pub-db-006"
+  ],
+  "upstream_answer_sha256": "e58a682cf1db298c14286bd853fb6078659896268545a11b7f5425ff09be0592",
+  "upstream_task": "bench/public/dafnybench/answers/SENG2011_tmp_tmpgk5jq85q_exam_ex2.dfy",
+  "walk_position": 6
+}

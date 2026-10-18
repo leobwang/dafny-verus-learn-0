@@ -1,0 +1,8 @@
+{
+ "hints": [
+  "1 <= i <= lst.len() + 1",
+  "0 < lst.len() < u32::MAX",
+  "sum <= (u32::MAX) * i",
+  "sum == add_odd_evens(lst@) - add_odd_evens(lst@[i - 1..])"
+ ]
+}

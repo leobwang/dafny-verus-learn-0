@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "a6658bed6a5dcbef8a0c22de464170e63eabf3a38b578f97d7b82e47336302f5",
+    "statement_sha256": "511e8269885e8836b3c6046728e45f7b88e1af1c5afbad1a7d6727779b3d47f0"
+  },
+  "id": "pub-db-050",
+  "lang": "dafny",
+  "private_evidence_sha256": "043fc8a1c1c408d07a15943fea72accdb9e72c7e6613edf9cae1cad79daa32dd",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "d17770597e5e8b464c9cc2ce1480c15eaaa60ca8f2b588a6e9624f11e5a2fd46",
+  "status": "admitted",
+  "target": "DeepCopySeq",
+  "validated_span": {
+    "end": 17,
+    "start": 4,
+    "symbol": "DeepCopySeq"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

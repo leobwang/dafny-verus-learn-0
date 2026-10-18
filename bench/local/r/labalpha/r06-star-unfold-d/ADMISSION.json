@@ -1,0 +1,57 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "276e9306f75823f8757fca5ffda135bf6ed125390eb82447f55684f9594f4827"
+  },
+  "id": "r06-star-unfold-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "37a4ccf15bd20591ea41c7828d77742c801bce4f78cef4f3c396a683ca3ecc53",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    }
+  ],
+  "source_sha256": "4cd9ec0ad99a760a070a1c2508c87187c5d9a32dbb928eae671a362043ca06a5",
+  "status": "admitted",
+  "target": "R12_LabCase.StarUnfold",
+  "validated_span": {
+    "end": 69,
+    "start": 52,
+    "symbol": "R12_LabCase.StarUnfold"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

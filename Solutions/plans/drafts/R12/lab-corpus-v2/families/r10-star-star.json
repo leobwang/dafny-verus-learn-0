@@ -1,0 +1,41 @@
+{
+  "cluster": "r10-star-star",
+  "source": {
+    "module": "R10",
+    "lemma": "StarStar (family of MkStarCorrect, which calls it with StarOfEps)",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy::StarStar",
+      "verus": "Solutions/verus/r/r10_type_invariants/src/agent.rs::lemma_star_star_r10_ref (renamed lemma_star_star_r10)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1: Re, Matches/matches"
+  ],
+  "helpers_included": [
+    "StarOne, StarConcat (RG_A1b_Facts, complete)",
+    "lemma_star_concat (rg_re_a1b, complete)"
+  ],
+  "tasks": [
+    "r10-star-star-d",
+    "r10-star-star-v"
+  ],
+  "status": "admitted",
+  "sites": {
+    "r10-star-star-d": 3,
+    "r10-star-star-v": 3
+  },
+  "attempts": [
+    {
+      "task": "r10-star-star-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r10-star-star-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "MkStarCorrect (two calls: StarOfEps, StarStar) folds into this family; the substantive form is StarStar. StarOne/StarConcat are also lane L1 A1b candidates (overlap noted).",
+  "kind": "regex"
+}

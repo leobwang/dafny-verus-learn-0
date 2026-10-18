@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "f2b08e0cac27179f249fe3f8783260245dddffc92ea5ae9f86c30328e48e13d5",
+    "statement_sha256": "55d5586227eddbfd4ee12e79d8b01fcd0a00d294a4312979171cf49f9e792e38"
+  },
+  "id": "pub-db-012",
+  "lang": "dafny",
+  "private_evidence_sha256": "9e4f1eadd300fb0f549e87e4fdc0400fd1edcaeda1b872bb907c314cd6af0e5a",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "67b568de94401796d77f64d2807253e9c8876ef3af79397dd25c3e129c3231b6",
+  "status": "admitted",
+  "target": "AllSequencesEqualLength",
+  "validated_span": {
+    "end": 23,
+    "start": 4,
+    "symbol": "AllSequencesEqualLength"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

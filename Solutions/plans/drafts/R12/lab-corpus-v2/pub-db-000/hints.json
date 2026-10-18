@@ -1,0 +1,8 @@
+{
+ "hints": [
+  "0 <= i <= a.Length",
+  "isSorted(a, 0, i)",
+  "forall lhs, rhs :: 0 <= lhs < i <= rhs < a.Length ==> a[lhs] <= a[rhs]",
+  "multiset(a[..]) == multiset(old(a[..]))"
+ ]
+}

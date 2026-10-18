@@ -1,0 +1,9 @@
+{
+ "hints": [
+  "0 <= i <= a.Length",
+  "forall x :: 0 <= x < i ==> min <= a[x]",
+  "min in a[..]",
+  "0 <= k <= a.Length",
+  "forall x :: 0 <= x < k ==> min < a[x]"
+ ]
+}

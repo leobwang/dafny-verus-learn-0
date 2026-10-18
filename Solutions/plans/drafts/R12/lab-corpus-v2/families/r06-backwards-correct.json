@@ -1,0 +1,36 @@
+{
+  "cluster": "r06-backwards-correct",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "BackwardsCorrect",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy::BackwardsCorrect (R06.A1d)",
+      "verus": "Solutions/verus/r/r06_induction/src/agent.rs::lemma_backwards_correct (R06.A1v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (Re, Matches, Backwards, BackwardsStr)"
+  ],
+  "helpers_included": [
+    "BackwardsSound, BackwardsInvolution, BackwardsStrInvolution, BackwardsStrAppend, StarOne, StarConcat, complete"
+  ],
+  "tasks": [
+    "r06-backwards-correct-d",
+    "r06-backwards-correct-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-backwards-correct-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-backwards-correct-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "Decomposition task: two call sites only, so the wrong-hint control equals the baseline."
+}

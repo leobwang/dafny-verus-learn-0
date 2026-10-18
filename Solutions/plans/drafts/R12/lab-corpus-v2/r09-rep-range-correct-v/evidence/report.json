@@ -1,0 +1,646 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "evidence": {
+    "audit": {
+      "document": {
+        "findings": [],
+        "lang": "verus",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs"
+      },
+      "passed": true
+    },
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-rep-range-correct-v/tasks/r09-rep-range-correct-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "r09_rep_range_correct_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V03",
+            "col": 10,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-rep-range-correct-v/tasks/r09-rep-range-correct-v.rs",
+            "line": 201,
+            "message": "postcondition not satisfied",
+            "severity": "error"
+          },
+          {
+            "code": "",
+            "col": 23,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-rep-range-correct-v/tasks/r09-rep-range-correct-v.rs",
+            "line": 214,
+            "message": "recommendation not met: cannot prove that there exists values that satisfy the condition of the choose expression",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 23,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-rep-range-correct-v/tasks/r09-rep-range-correct-v.rs",
+            "line": 207,
+            "message": "recommendation not met: cannot prove that there exists values that satisfy the condition of the choose expression",
+            "severity": "info"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_cat_assoc": "verified",
+          "lemma_cat_eps_left": "verified",
+          "lemma_cat_right_context_r09": "verified",
+          "lemma_copies_join_r09": "verified",
+          "lemma_copies_optional_r09": "verified",
+          "lemma_repetition_interval_r09": "failed",
+          "matches": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034612-5b6szsrq",
+        "stage": "verify",
+        "target": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-rep-range-correct-v/tasks/r09-rep-range-correct-v.rs",
+        "verdict": "failed",
+        "verified_count": 8
+      },
+      "passed": true
+    },
+    "empty-automation": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/runs/verus-emptybody-20261018-034701-6b_x38kz/variant-E0/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--output-json",
+          "--error-format=json",
+          "--time",
+          "--verify-root",
+          "--verify-function",
+          "lemma_repetition_interval_r09"
+        ],
+        "diagnostics": [
+          {
+            "code": "no-verify",
+            "col": 0,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+            "line": 199,
+            "message": "lemma_repetition_interval_r09: variant BV (seed 1) did not reach verification",
+            "severity": "warning"
+          },
+          {
+            "code": "no-verify",
+            "col": 0,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+            "line": 199,
+            "message": "lemma_repetition_interval_r09: variant BV (seed 2) did not reach verification",
+            "severity": "warning"
+          },
+          {
+            "code": "no-verify",
+            "col": 0,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+            "line": 199,
+            "message": "lemma_repetition_interval_r09: variant BV (seed 3) did not reach verification",
+            "severity": "warning"
+          }
+        ],
+        "exit_code": null,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "BV seed=1": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+          "BV seed=2": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+          "BV seed=3": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+          "E0 seed=1": "fails(error)",
+          "E0 seed=2": "fails(error)",
+          "E0 seed=3": "fails(error)",
+          "E0H seed=1": "fails(error)",
+          "E0H seed=2": "fails(error)",
+          "E0H seed=3": "fails(error)",
+          "E1 seed=1": "fails(error)",
+          "E1 seed=2": "fails(error)",
+          "E1 seed=3": "fails(error)",
+          "E2 seed=1": "fails(error)",
+          "E2 seed=2": "fails(error)",
+          "E2 seed=3": "fails(error)",
+          "EM seed=1": "fails(error)",
+          "NL seed=1": "fails(error)",
+          "NL seed=2": "fails(error)",
+          "NL seed=3": "fails(error)"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-emptybody-20261018-034701-6b_x38kz",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+        "verdict": "failed",
+        "verified_count": 0
+      },
+      "passed": true
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [
+                "lemma_copies_optional_r09"
+              ],
+              "kind": "calls",
+              "name": "c1"
+            },
+            {
+              "callee_bindings": [
+                "lemma_copies_join_r09"
+              ],
+              "kind": "calls",
+              "name": "c2"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h1"
+            },
+            {
+              "callee_bindings": [
+                "lemma_copies_join_r09"
+              ],
+              "kind": "calls",
+              "name": "c3"
+            },
+            {
+              "callee_bindings": [
+                "lemma_copies_optional_r09"
+              ],
+              "kind": "calls",
+              "name": "c4"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h2"
+            }
+          ],
+          "source_sha256": "d29a2085af27988532c0736dc9ffcb0d86fc9b8eed8ae1922849a7063cb81fcf",
+          "statement_sha256": "9c4bea4cb99efd29e6cce33bdf1f2fdcdb516df1fa2b0bf3cb1e8428799c7005"
+        },
+        "native_span": [
+          199,
+          218
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 218,
+          "start": 199,
+          "symbol": "lemma_repetition_interval_r09"
+        }
+      },
+      "passed": true
+    },
+    "reference-gate": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_cat_assoc": "verified",
+          "lemma_cat_eps_left": "verified",
+          "lemma_cat_right_context_r09": "verified",
+          "lemma_copies_join_r09": "verified",
+          "lemma_copies_optional_r09": "verified",
+          "lemma_repetition_interval_r09": "verified",
+          "matches": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034618-3zgr87oz",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 9
+      },
+      "passed": true
+    },
+    "seed-1": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_cat_assoc": "verified",
+          "lemma_cat_eps_left": "verified",
+          "lemma_cat_right_context_r09": "verified",
+          "lemma_copies_join_r09": "verified",
+          "lemma_copies_optional_r09": "verified",
+          "lemma_repetition_interval_r09": "verified",
+          "matches": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034633-jtth_m9c",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 9
+      },
+      "passed": true
+    },
+    "seed-2": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=2",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_cat_assoc": "verified",
+          "lemma_cat_eps_left": "verified",
+          "lemma_cat_right_context_r09": "verified",
+          "lemma_copies_join_r09": "verified",
+          "lemma_copies_optional_r09": "verified",
+          "lemma_repetition_interval_r09": "verified",
+          "matches": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034640-dhmem9gv",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 9
+      },
+      "passed": true
+    },
+    "seed-3": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=3",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_cat_assoc": "verified",
+          "lemma_cat_eps_left": "verified",
+          "lemma_cat_right_context_r09": "verified",
+          "lemma_copies_join_r09": "verified",
+          "lemma_copies_optional_r09": "verified",
+          "lemma_repetition_interval_r09": "verified",
+          "matches": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034645-j7a0qg3q",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 9
+      },
+      "passed": true
+    },
+    "wrong-hints": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "wrong",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "",
+            "col": 7,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+            "line": 199,
+            "message": "function body check: not all errors may have been reported; rerun with a higher value for --multiple-errors to find other potential errors in this function",
+            "severity": "info"
+          },
+          {
+            "code": "W-V04",
+            "col": 10,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+            "line": 216,
+            "message": "assertion failed",
+            "severity": "error"
+          },
+          {
+            "code": "W-V04",
+            "col": 10,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+            "line": 209,
+            "message": "assertion failed",
+            "severity": "error"
+          },
+          {
+            "code": "",
+            "col": 23,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+            "line": 214,
+            "message": "recommendation not met: cannot prove that there exists values that satisfy the condition of the choose expression",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 23,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+            "line": 207,
+            "message": "recommendation not met: cannot prove that there exists values that satisfy the condition of the choose expression",
+            "severity": "info"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_cat_assoc": "verified",
+          "lemma_cat_eps_left": "verified",
+          "lemma_cat_right_context_r09": "verified",
+          "lemma_copies_join_r09": "verified",
+          "lemma_copies_optional_r09": "verified",
+          "lemma_repetition_interval_r09": "failed",
+          "matches": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034709-rqd0mqr5",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/wrong.rs",
+        "verdict": "failed",
+        "verified_count": 8
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "af966ecea992e094fc371de302cf92459fe19c53a29c7a0ff510625a9f538617",
+  "id": "r09-rep-range-correct-v",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-rep-range-correct-v/reference.rs",
+  "reference_sha256": "a793e2e0690891dc7583a63e2c12c5a5b8617f702c7694118e6440a9e751017c",
+  "schema": 2,
+  "source_sha256": "d29a2085af27988532c0736dc9ffcb0d86fc9b8eed8ae1922849a7063cb81fcf",
+  "status": "admitted",
+  "target": "lemma_repetition_interval_r09",
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

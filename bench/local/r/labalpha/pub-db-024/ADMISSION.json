@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "081d8bb85bb6289f0a549ff53eeea3146889edc4cfa934941795920dca8af749",
+    "statement_sha256": "677604dd926158f2dbac62b84a7ac057a6a34338bbd3dbc7a45ea8053203c4cd"
+  },
+  "id": "pub-db-024",
+  "lang": "dafny",
+  "private_evidence_sha256": "7a4c966dad2945f0eb4b7a9ed2d40f5026b6decc1f8391870f78c2bbbae169cf",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    }
+  ],
+  "source_sha256": "58d72242da721f9605f915f649bd53fc18837211c275f8b0f1894897b7e157fb",
+  "status": "admitted",
+  "target": "Pot",
+  "validated_span": {
+    "end": 31,
+    "start": 17,
+    "symbol": "Pot"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

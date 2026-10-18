@@ -1,0 +1,35 @@
+{
+  "cluster": "r06-deriv-base",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "DerivBase",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::DerivBase (R06.W1d)",
+      "verus": "Solutions/verus/r/r06_induction/src/lib.rs::lemma_deriv_base (R06.W1v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (Re, Matches, Nullable) and R06's given Deriv"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r06-deriv-base-d",
+    "r06-deriv-base-v"
+  ],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r06-deriv-base-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-deriv-base-v",
+      "form": 1,
+      "result": "rejected: baseline-proof-fails",
+      "reason": "the form with its one site left true verifies: the Verus statement needs no hint (automatic); no form can change that"
+    }
+  ],
+  "notes": "Both forms moved to rejected/."
+}

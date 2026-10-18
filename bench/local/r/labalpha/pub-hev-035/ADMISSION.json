@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 16,
+  "frame": {
+    "code_sha256": "68d14eaac4f011f1cf8dd196d035a1d3150f6b7efb9dc8fe8611c30cc2ab96c0",
+    "statement_sha256": "5a98e03e44e8b7c991ce75ac4fbd9adc73583c7fd20c0f036ecfe5005c832118"
+  },
+  "id": "pub-hev-035",
+  "lang": "verus",
+  "private_evidence_sha256": "fd58b66fc597cb3fd0656e94712105789d4894a8f3ec99fe95f3008d2b6bf683",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "a4"
+    }
+  ],
+  "source_sha256": "954904664bcc0af3833b2c22ac7dbcdd8651dbccc26daf46f267c5c3e9c16f05",
+  "status": "admitted",
+  "target": "brazilian_factorial_impl",
+  "validated_span": {
+    "end": 138,
+    "start": 90,
+    "symbol": "brazilian_factorial_impl"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

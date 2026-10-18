@@ -1,0 +1,41 @@
+{
+  "cluster": "r11-residual-observe",
+  "source": {
+    "module": "R11",
+    "lemma": "ResidualObserveR11",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::ResidualObserveR11",
+      "verus": "Solutions/verus/r/r11_theory/src/lib.rs::residual_observe_r11"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1: Re, Matches/matches, Nullable/nullable",
+    "R11 ResidualR11 / residual_r11 (opaque)"
+  ],
+  "helpers_included": [
+    "NullableCorrect / lemma_nullable_correct (A1b, complete)"
+  ],
+  "tasks": [
+    "r11-residual-observe-d",
+    "r11-residual-observe-v"
+  ],
+  "status": "admitted",
+  "sites": {
+    "r11-residual-observe-d": 2,
+    "r11-residual-observe-v": 1
+  },
+  "attempts": [
+    {
+      "task": "r11-residual-observe-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r11-residual-observe-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "Thin obligation (one call plus a sequence identity); not called by another candidate (only by the PrefixMatchesR11 method), so its own family.",
+  "kind": "regex"
+}

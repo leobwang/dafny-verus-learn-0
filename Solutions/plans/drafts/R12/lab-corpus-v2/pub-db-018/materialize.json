@@ -1,0 +1,24 @@
+{
+ "target": "DivModIsUnique",
+ "sites": 1,
+ "kept_annotations": [
+  {
+   "line": 73,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "assert (n - m) / m == a - 1 && (n - m) % m == b by { DivModIsUnique(n - m, m, a - 1, b); }"
+  },
+  {
+   "line": 74,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "assert n / m == a && n % m == b by { DivModAddDenominator(n - m, m); }"
+  }
+ ],
+ "flags": {
+  "restored_outside_target_lines": [
+   22,
+   59
+  ],
+  "target_kind": "lemma",
+  "lemma_shaped": true
+ }
+}

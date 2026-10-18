@@ -1,0 +1,43 @@
+{
+  "cluster": "r10-normal-fixed",
+  "source": {
+    "module": "R10",
+    "lemma": "NormalFixedR10 with NormIdempotentR10 (which calls it)",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy::NormalFixedR10, NormIdempotentR10",
+      "verus": "Solutions/verus/r/r10_type_invariants/src/lib.rs::normal_fixed_r10, norm_idempotent_r10"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1: Re",
+    "RG_A4_Norm / rg_re_a4: Normal/is_norm, NormRe, MkAlt/MkCat/MkStar, Norm (+ Verus shape lemmas for the second form)"
+  ],
+  "helpers_included": [],
+  "tasks": [],
+  "status": "rejected",
+  "rejected_by": "max-auto-empty-fails (Dafny)",
+  "attempts": [
+    {
+      "task": "r10-normal-fixed-d",
+      "form": 1,
+      "result": "rejected: Dafny max-auto-empty-fails: the empty body verifies at maximal automation (auto-induction on; finding lever-needed) and fails only under the shipped --manual-lemma-induction; a property of the statement and definitions, so no other site granularity can admit it"
+    },
+    {
+      "task": "r10-normal-fixed-v",
+      "form": 1,
+      "result": "admitted (cluster incomplete)"
+    },
+    {
+      "task": "r10-norm-idempotent-d",
+      "form": 2,
+      "result": "rejected: same family, target NormIdempotentR10 with NormalFixedR10 provided: Dafny max-auto-empty-fails: the empty body verifies at maximal automation (auto-induction on; finding lever-needed) and fails only under the shipped --manual-lemma-induction; a property of the statement and definitions, so no other site granularity can admit it (maxauto strips the helper's {:induction false} too)"
+    },
+    {
+      "task": "r10-norm-idempotent-v",
+      "form": 2,
+      "result": "admitted (cluster incomplete)"
+    }
+  ],
+  "notes": "Forms and evidence kept under rejected/.",
+  "kind": "regex"
+}

@@ -1,0 +1,11 @@
+{
+ "hints": [
+  "sum == lst@[..i].map_values(|s: &str| s@.len()).fold_left(0, |x: int, y| x + y)",
+  "spec_sum(lens) == sum",
+  "lens.push(x as nat).drop_last() == lens",
+  "sum.checked_add(x).is_none()",
+  "total_str_len(lst@) > usize::MAX",
+  "lst@[..i + 1].map_values(|s: &str| s@.len()).drop_last() == lst@[..i].map_values( |s: &str| s@.len(), )",
+  "lst@ == lst@[..lst.len()]"
+ ]
+}

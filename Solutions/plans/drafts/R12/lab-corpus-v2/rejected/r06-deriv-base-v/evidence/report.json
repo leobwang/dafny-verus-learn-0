@@ -1,0 +1,111 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": false,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r06-deriv-base-v/tasks/r06-deriv-base-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "r06_deriv_base_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "deriv": "verified",
+          "lemma_deriv_base": "verified",
+          "matches": "verified",
+          "nullable": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-034702-ny4ssvdy",
+        "stage": "verify",
+        "target": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r06-deriv-base-v/tasks/r06-deriv-base-v.rs",
+        "verdict": "verified",
+        "verified_count": 4
+      },
+      "passed": false
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h1"
+            }
+          ],
+          "source_sha256": "d83e352f4c494d3ebc417bcdb040f5c35b0453e0105bb5552b5c462522c07fc3",
+          "statement_sha256": "49b5f2cb548dcbed3b10f0f5507e73be9c5355502885dec5d227cab53bdbc09d"
+        },
+        "native_span": [
+          70,
+          80
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 80,
+          "start": 70,
+          "symbol": "lemma_deriv_base"
+        }
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "633596cf998a0d4f0b1057300dfb1942da879b09cb015e5b6ad5d4053afeede3",
+  "id": "r06-deriv-base-v",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r06-deriv-base-v/reference.rs",
+  "reference_sha256": "dd01f70b5219286a542dcce142d27229c04c82d868eb1400ad085f5a5e6a8ebf",
+  "rejected_at": "baseline-proof-fails",
+  "schema": 2,
+  "source_sha256": "d83e352f4c494d3ebc417bcdb040f5c35b0453e0105bb5552b5c462522c07fc3",
+  "status": "rejected",
+  "target": "lemma_deriv_base"
+}

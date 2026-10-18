@@ -1,0 +1,93 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "3562154553fd6f127753bb82e87001030dcbd4dcdd3d800e4e58671961a8d085"
+  },
+  "id": "r06-deriv-correct-v",
+  "lang": "verus",
+  "private_evidence_sha256": "c2bbc3158952f79fb825aa4b95679696671dad9ecf4c06dbd5f2d533f570e428",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "calls",
+      "name": "c5"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "calls",
+      "name": "c6"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "calls",
+      "name": "c7"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    },
+    {
+      "kind": "calls",
+      "name": "c8"
+    },
+    {
+      "kind": "expr",
+      "name": "h6"
+    }
+  ],
+  "source_sha256": "700ed2e5b9366dea8e03c019a92b12d56f870969752d7bd414d2d3e3687ebb56",
+  "status": "admitted",
+  "target": "lemma_deriv_correct",
+  "validated_span": {
+    "end": 171,
+    "start": 93,
+    "symbol": "lemma_deriv_correct"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

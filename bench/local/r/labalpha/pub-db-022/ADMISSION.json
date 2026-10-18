@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "f14e565d651b2d02d7e3ebb3918c83f1fcf35106a313ca2fa7f49e02c6e57c6f",
+    "statement_sha256": "e5dfcd0161008d951d81308794fda680fb5645c9bdfb7801d72bd4d08f6ac2f2"
+  },
+  "id": "pub-db-022",
+  "lang": "dafny",
+  "private_evidence_sha256": "1481fbc084db359dcb95a7a9f8e92eee7b51a5d8721c7f70c66d103dd42af91d",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    }
+  ],
+  "source_sha256": "12b71108daaca05985ce5cd7b0472fb72186b5c79443c49074a8bfc36decfe4f",
+  "status": "admitted",
+  "target": "partition",
+  "validated_span": {
+    "end": 41,
+    "start": 10,
+    "symbol": "partition"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "487522f6b9e3bb985068cced91cc62d325b7e9f3db06f152cf8d162100cb1a46"
+  },
+  "id": "a1b-cat-assoc-v",
+  "lang": "verus",
+  "private_evidence_sha256": "dc3fc0284ee6126a9a447b422d164c3bac67ae9370a1761b4c36a3443c1e5f1d",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "395f198d27409026e961e808d7eb73de85b08ef7988de280cfc30e701defb864",
+  "status": "admitted",
+  "target": "lemma_cat_assoc",
+  "validated_span": {
+    "end": 82,
+    "start": 39,
+    "symbol": "lemma_cat_assoc"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

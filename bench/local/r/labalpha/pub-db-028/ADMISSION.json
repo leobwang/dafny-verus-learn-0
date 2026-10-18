@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "372c643d05f87aef425ef867370e2e20acc55213799b7078c9bf4d34ae02d1d2",
+    "statement_sha256": "87c3c88f03b71dbc66072d4a907498fa235cbd924ab2c9b7fa12af76c49f23bf"
+  },
+  "id": "pub-db-028",
+  "lang": "dafny",
+  "private_evidence_sha256": "eab2b92ce9d666b3cd69ea27468f78d9943a95a8afef1fb9d5e467e39baccf66",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    },
+    {
+      "kind": "expr",
+      "name": "i3"
+    }
+  ],
+  "source_sha256": "1bd57f229627166a384ebfa6661bfac1459bf7cddec470758e1ddfc0335dd8da",
+  "status": "admitted",
+  "target": "MaxArray",
+  "validated_span": {
+    "end": 21,
+    "start": 4,
+    "symbol": "MaxArray"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

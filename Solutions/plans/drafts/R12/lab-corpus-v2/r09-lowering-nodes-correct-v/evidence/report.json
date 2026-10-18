@@ -1,0 +1,876 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "evidence": {
+    "audit": {
+      "document": {
+        "findings": [],
+        "lang": "verus",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs"
+      },
+      "passed": true
+    },
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "r09_lowering_nodes_correct_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V03",
+            "col": 10,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+            "line": 280,
+            "message": "postcondition not satisfied",
+            "severity": "error"
+          },
+          {
+            "code": "W-V12",
+            "col": 5,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+            "line": 88,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 54,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+            "line": 88,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "W-V12",
+            "col": 3,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+            "line": 269,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 71,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+            "line": 269,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 3,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+            "line": 269,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "CLASS_MAX": "verified",
+          "MAX_BOUND": "verified",
+          "class_nodes_r09": "verified",
+          "class_re": "verified",
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_class_nodes_r09": "verified",
+          "lemma_copies_nodes_r09": "verified",
+          "lemma_lowering_nodes_r09": "failed",
+          "lemma_optional_nodes_r09": "verified",
+          "lemma_range_nodes_r09": "verified",
+          "lower": "verified",
+          "lowering_nodes_r09": "verified",
+          "node_count": "verified",
+          "range_re": "verified",
+          "wf": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035804-6_7n8igb",
+        "stage": "verify",
+        "target": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r09-lowering-nodes-correct-v/tasks/r09-lowering-nodes-correct-v.rs",
+        "verdict": "failed",
+        "verified_count": 19
+      },
+      "passed": true
+    },
+    "empty-automation": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/runs/verus-emptybody-20261018-035902-xtgsn4wd/variant-E0/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--output-json",
+          "--error-format=json",
+          "--time",
+          "--verify-root",
+          "--verify-function",
+          "lemma_lowering_nodes_r09"
+        ],
+        "diagnostics": [
+          {
+            "code": "no-verify",
+            "col": 0,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 278,
+            "message": "lemma_lowering_nodes_r09: variant BV (seed 1) did not reach verification",
+            "severity": "warning"
+          },
+          {
+            "code": "no-verify",
+            "col": 0,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 278,
+            "message": "lemma_lowering_nodes_r09: variant BV (seed 2) did not reach verification",
+            "severity": "warning"
+          },
+          {
+            "code": "no-verify",
+            "col": 0,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 278,
+            "message": "lemma_lowering_nodes_r09: variant BV (seed 3) did not reach verification",
+            "severity": "warning"
+          }
+        ],
+        "exit_code": null,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "BV seed=1": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+          "BV seed=2": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+          "BV seed=3": "no-verify(assert_by_compute exceeded maximum recursion depth)",
+          "E0 seed=1": "fails(error)",
+          "E0 seed=2": "fails(error)",
+          "E0 seed=3": "fails(error)",
+          "E0H seed=1": "fails(error)",
+          "E0H seed=2": "fails(error)",
+          "E0H seed=3": "fails(error)",
+          "E1 seed=1": "fails(error)",
+          "E1 seed=2": "fails(error)",
+          "E1 seed=3": "fails(error)",
+          "E2 seed=1": "fails(error)",
+          "E2 seed=2": "fails(error)",
+          "E2 seed=3": "fails(error)",
+          "EM seed=1": "fails(error)",
+          "NL seed=1": "fails(error)",
+          "NL seed=2": "fails(error)",
+          "NL seed=3": "fails(error)"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-emptybody-20261018-035902-xtgsn4wd",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+        "verdict": "failed",
+        "verified_count": 0
+      },
+      "passed": true
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "587a8577729b72bd5ae9039bc8f3e034356ddeae4697bb33e3138c14f869646f",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [
+                "lemma_class_nodes_r09"
+              ],
+              "kind": "calls",
+              "name": "c1"
+            },
+            {
+              "callee_bindings": [
+                "lemma_lowering_nodes_r09"
+              ],
+              "kind": "calls",
+              "name": "c2"
+            },
+            {
+              "callee_bindings": [
+                "lemma_lowering_nodes_r09"
+              ],
+              "kind": "calls",
+              "name": "c3"
+            },
+            {
+              "callee_bindings": [
+                "lemma_lowering_nodes_r09",
+                "lemma_copies_nodes_r09",
+                "lemma_optional_nodes_r09"
+              ],
+              "kind": "calls",
+              "name": "c4"
+            }
+          ],
+          "source_sha256": "b677b1041538f9b41df64c968ce614e118e46f8f3b21f9e214e0d4c1f17eef1c",
+          "statement_sha256": "bf07c9312da4a3c20854d17ea4c9f2b43afe79e3c327378ff1607ed03b034639"
+        },
+        "native_span": [
+          278,
+          299
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 299,
+          "start": 278,
+          "symbol": "lemma_lowering_nodes_r09"
+        }
+      },
+      "passed": true
+    },
+    "reference-gate": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 5,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 54,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "W-V12",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 71,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "CLASS_MAX": "verified",
+          "MAX_BOUND": "verified",
+          "class_nodes_r09": "verified",
+          "class_re": "verified",
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_class_nodes_r09": "verified",
+          "lemma_copies_nodes_r09": "verified",
+          "lemma_lowering_nodes_r09": "verified",
+          "lemma_optional_nodes_r09": "verified",
+          "lemma_range_nodes_r09": "verified",
+          "lower": "verified",
+          "lowering_nodes_r09": "verified",
+          "node_count": "verified",
+          "range_re": "verified",
+          "wf": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035818-n6zeg0va",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 20
+      },
+      "passed": true
+    },
+    "seed-1": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 5,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 54,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "W-V12",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 71,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "CLASS_MAX": "verified",
+          "MAX_BOUND": "verified",
+          "class_nodes_r09": "verified",
+          "class_re": "verified",
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_class_nodes_r09": "verified",
+          "lemma_copies_nodes_r09": "verified",
+          "lemma_lowering_nodes_r09": "verified",
+          "lemma_optional_nodes_r09": "verified",
+          "lemma_range_nodes_r09": "verified",
+          "lower": "verified",
+          "lowering_nodes_r09": "verified",
+          "node_count": "verified",
+          "range_re": "verified",
+          "wf": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035834-fjssop7e",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 20
+      },
+      "passed": true
+    },
+    "seed-2": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=2",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 5,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 54,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "W-V12",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 71,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "CLASS_MAX": "verified",
+          "MAX_BOUND": "verified",
+          "class_nodes_r09": "verified",
+          "class_re": "verified",
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_class_nodes_r09": "verified",
+          "lemma_copies_nodes_r09": "verified",
+          "lemma_lowering_nodes_r09": "verified",
+          "lemma_optional_nodes_r09": "verified",
+          "lemma_range_nodes_r09": "verified",
+          "lower": "verified",
+          "lowering_nodes_r09": "verified",
+          "node_count": "verified",
+          "range_re": "verified",
+          "wf": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035841-fax_v0td",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 20
+      },
+      "passed": true
+    },
+    "seed-3": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=3",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 5,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 54,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 88,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "W-V12",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 71,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+            "line": 269,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "CLASS_MAX": "verified",
+          "MAX_BOUND": "verified",
+          "class_nodes_r09": "verified",
+          "class_re": "verified",
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_class_nodes_r09": "verified",
+          "lemma_copies_nodes_r09": "verified",
+          "lemma_lowering_nodes_r09": "verified",
+          "lemma_optional_nodes_r09": "verified",
+          "lemma_range_nodes_r09": "verified",
+          "lower": "verified",
+          "lowering_nodes_r09": "verified",
+          "node_count": "verified",
+          "range_re": "verified",
+          "wf": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035850-qw9qyrjc",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 20
+      },
+      "passed": true
+    },
+    "wrong-hints": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "wrong",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V03",
+            "col": 10,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+            "line": 280,
+            "message": "postcondition not satisfied",
+            "severity": "error"
+          },
+          {
+            "code": "W-V12",
+            "col": 5,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+            "line": 88,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 54,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+            "line": 88,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "W-V12",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+            "line": 269,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 71,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+            "line": 269,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 3,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+            "line": 269,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "CLASS_MAX": "verified",
+          "MAX_BOUND": "verified",
+          "class_nodes_r09": "verified",
+          "class_re": "verified",
+          "copies": "verified",
+          "copies_up_to": "verified",
+          "lemma_class_nodes_r09": "verified",
+          "lemma_copies_nodes_r09": "verified",
+          "lemma_lowering_nodes_r09": "failed",
+          "lemma_optional_nodes_r09": "verified",
+          "lemma_range_nodes_r09": "verified",
+          "lower": "verified",
+          "lowering_nodes_r09": "verified",
+          "node_count": "verified",
+          "range_re": "verified",
+          "wf": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-035915-6bf_xavb",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/wrong.rs",
+        "verdict": "failed",
+        "verified_count": 19
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "4a3f18496b1b6704f0a19b264097cc6f746419b505799c940a41705947d30e88",
+  "id": "r09-lowering-nodes-correct-v",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r09-lowering-nodes-correct-v/reference.rs",
+  "reference_sha256": "ca0a9b9f47e355b6d12d764e61911c735072e010d1f66b28e598535d9a3c7f83",
+  "schema": 2,
+  "source_sha256": "b677b1041538f9b41df64c968ce614e118e46f8f3b21f9e214e0d4c1f17eef1c",
+  "status": "admitted",
+  "target": "lemma_lowering_nodes_r09",
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

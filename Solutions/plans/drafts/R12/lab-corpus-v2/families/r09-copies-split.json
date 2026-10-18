@@ -1,0 +1,41 @@
+{
+  "cluster": "r09-copies-split",
+  "kind": "regex",
+  "source": {
+    "module": "R09",
+    "lemma": "CopiesSplit",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::CopiesSplit (R09.W4d)",
+      "verus": "Solutions/verus/r/r09_effects/src/lib.rs::lemma_copies_join_r09 (R09.W4v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches), copied verbatim",
+    "RG_A3_Syntax / rg_re_a3 (Copies, CopiesUpTo / copies, copies_up_to)"
+  ],
+  "helpers_included": [
+    "CatEpsLeft / lemma_cat_eps_left (A1b), complete",
+    "CatAssoc / lemma_cat_assoc (A1b), complete",
+    "CatCongRight / lemma_cat_right_context_r09 (R09 reference helper), complete"
+  ],
+  "tasks": [
+    "r09-copies-split-d",
+    "r09-copies-split-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r09-copies-split-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 6
+    },
+    {
+      "task": "r09-copies-split-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 4
+    }
+  ],
+  "notes": "Recursion, the A1b unit/associativity facts and the right-congruence call are sites; the Dafny unfolding facts of Copies are expression sites; Verus is calls-only (wrong-hint control equals the baseline)."
+}

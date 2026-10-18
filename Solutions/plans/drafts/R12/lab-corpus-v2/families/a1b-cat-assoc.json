@@ -1,0 +1,47 @@
+{
+  "cluster": "a1b-cat-assoc",
+  "kind": "regex",
+  "source": {
+    "module": "A1b (as a task over A1 only)",
+    "lemma": "CatAssoc",
+    "reference": {
+      "dafny": "dafny/given/R/RG_A1b_Facts.dfy::CatAssoc",
+      "verus": "verus/given/rg_re_a1b/src/lib.rs::lemma_cat_assoc"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "a1b-cat-assoc-d",
+    "a1b-cat-assoc-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "a1b-cat-assoc-d",
+      "form": 1,
+      "result": "rejected: baseline-proof-fails",
+      "reason": "6 sites (u-bridges and final facts): the baseline timed out (inconclusive at the 30 s limit), not failed; evidence a1b-cat-assoc-d.1.report.json"
+    },
+    {
+      "task": "a1b-cat-assoc-d",
+      "form": 2,
+      "result": "rejected: baseline-proof-fails",
+      "reason": "2 sites (final facts only, all bridges kept): the baseline verifies; evidence a1b-cat-assoc-d.2.report.json"
+    },
+    {
+      "task": "a1b-cat-assoc-d",
+      "form": 3,
+      "result": "admitted",
+      "reason": "4 sites: the u-side bridges of both directions; the v-side bridges and final facts kept"
+    },
+    {
+      "task": "a1b-cat-assoc-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "V 2 sites (the final facts; the =~= bridges kept)."
+}

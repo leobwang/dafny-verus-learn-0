@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "d152a20d631a4049941fabf65c102cc1ed1802abfc5f051e3a4223b4b4c5b37a"
+  },
+  "id": "a1b-star-one-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "5c385e76ce8657367b46d3793cea5c0f64d60017e687bdc77f64ee5b975a0d58",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "9805b3def5ea1be1d785528fc2b0814892a49cd0771e41df24c0d29399dd0ebd",
+  "status": "admitted",
+  "target": "R12_LabCase.StarOne",
+  "validated_span": {
+    "end": 27,
+    "start": 20,
+    "symbol": "R12_LabCase.StarOne"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

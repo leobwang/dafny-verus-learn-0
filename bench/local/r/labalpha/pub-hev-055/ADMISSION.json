@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 16,
+  "frame": {
+    "code_sha256": "bd039504d99362a77a42e33c45842ddf74e040369303f89cb79c24551c891f64",
+    "statement_sha256": "770b50809c7e80b577ce3523915c4b53ae0a0b3fa4b39d832fdb6c629df1bc6c"
+  },
+  "id": "pub-hev-055",
+  "lang": "verus",
+  "private_evidence_sha256": "d4093b0d477962f6515ed395970e2122da687f3f7fcf4966b0cd176a7a2a37a2",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    }
+  ],
+  "source_sha256": "93005aacd51c97d7c7b5644427f46cfb327b5334463c00d157738f5c35816cdf",
+  "status": "admitted",
+  "target": "encode_shift",
+  "validated_span": {
+    "end": 80,
+    "start": 59,
+    "symbol": "encode_shift"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

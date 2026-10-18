@@ -1,0 +1,48 @@
+{
+  "cluster": "r06-deriv-correct",
+  "kind": "regex",
+  "source": {
+    "module": "R06",
+    "lemma": "DerivCorrect",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy::DerivCorrect (R06.H1d)",
+      "verus": "Solutions/verus/r/r06_induction/src/lib.rs::lemma_deriv_correct (R06.H1v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1, copied verbatim (Re, Matches, Nullable) and R06's given Deriv"
+  ],
+  "helpers_included": [
+    "NullableFact / lemma_nullable_fact = RG_A1b NullableCorrect, complete"
+  ],
+  "tasks": [
+    "r06-deriv-correct-d",
+    "r06-deriv-correct-v",
+    "r06-deriv-correct-b-d",
+    "r06-deriv-correct-b-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r06-deriv-correct-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-deriv-correct-v",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-deriv-correct-b-d",
+      "form": 1,
+      "result": "admitted"
+    },
+    {
+      "task": "r06-deriv-correct-b-v",
+      "form": 1,
+      "result": "admitted"
+    }
+  ],
+  "notes": "Two hint-site forms per language, tasks of one cluster: form A (D 18 sites: 6 call + 12 fact; V 14 sites: 8 call + 6 fact) and form B (the facts restored in the skeleton, call sites only: D 6, V 8). The reference calc with one step is flattened to its case analysis."
+}

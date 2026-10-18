@@ -1,0 +1,7 @@
+{
+ "hints": [
+  "0<=i<=v.Length",
+  "b ==> forall k::0<=k<i ==> v[k] == v[0]",
+  "!b ==> exists k:: 0<=k<v.Length && v[k]!=v[0]"
+ ]
+}
