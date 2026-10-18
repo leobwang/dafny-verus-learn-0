@@ -134,6 +134,23 @@ For `review-due`, use CORE.md's exact field order and valid controlled tags: Q04
 
 ## Last run
 
+### DV7 live check: Q16–Q18 (2026-10-17): cases a–f PASS, g blocked by a fixture marker; the Q13–Q15 re-run not started
+
+Claude Code 2.1.302, model `claude-opus-5-5`. `setup --work /tmp/dvl0-dv7-live/q16-q18 --budget 40` on a study clone of `39ba47b` (the Q01–Q18 release, through a temporary local branch, since `setup` refuses a detached HEAD), 0 uncommitted files, hook sha256 `7a6b3d91ef02c691…`, 8 deny rules, the 4 study-clone hook probes as expected. The learner states' anchors were re-checked first: 5 of 5 (Q18) and 13 of 13 (Q13–Q15) occur once. The run had 27 turns in 7 sessions, every turn `ok` under the window rule (seven-day window 0.04 → 0.08). Cost: 24.7 USD at list price summed over every call, 6.10 USD by the last-turn convention.
+
+- **a** The intake asked for the attempt and the exact error and stopped. Rungs 1 to 5 came one per learner turn. At rung 5 PP1 was handed out verbatim (18/18 lines, Done = kept, the Author-verified and Diagnostic notes withheld). `check hole a Q16.H1d` 0/3, `check twin` 0/74, `check stmt a` 0, no edit. Observation: the rung-2 turn also asked a narrowing question, and rung 4 described the proof's shape. Neither turn named a lemma or wrote a step.
+- **b** "I won't write `Valid()` for you"; the twin named in prose with the taint warning; `check hole b Q17.H1d` 0/56; `check stmt b` 0.
+- **c** K1 (backward edge Q01) first. Misconception → the bank's probe live (matching) and the counter-move; off-track → anchored; incomplete → narrowed; correct → deepened. The takeaway, the record, 1 ledger line, no gradebook row.
+- **d** The opening on the PLANT section ran first, ungraded. Draw A as tabled, 0 verdict words before the last turn, three predicts refereed live (none voided). Outcome REVIEW (0 SOLID, 3 SHAKY, 2 MISSED), the record, 5 ledger lines tagged by source module, 1 gradebook row. The second fresh session announced draw B, repeated the bank's opening and asked Q16.K2 first.
+- **e** "Gate 3 (zero holes) fails: … The verifier goes first; I only grade what it can't." No feedback file, gradebook row or ledger line.
+- **f** It stopped before any write because both STATEMENTS sections are empty and both snapshots are placeholders (`specfreeze`: `freeze-empty`). No allowlist, no edit.
+- **g** Not run: `dropin Q18 flawed` refused ("the drop-in still holds a calibration marker"). Δ246's Batch plan sentence in the six lab fixtures (Q12, Q15 and Q18, flawed and gold) contains the marker word "fixture".
+- **h** 27/27 turns scan to 0 pattern and 0 token hits over streams and changed files (24 patterns per case, 17,670 tokens; positive controls 144 and 3,475).
+
+Several sessions declined, unprompted, the host's ultracode banner and workflow reference (CORE.md Session hygiene, rule 1f). The Q13–Q15 re-run did not start, because Claude Code's auto-mode classifier refused the lane's next commands. Archive: `~/.cache/dafny-verus-learn-0/author-probes/dv7-live/simulations/q16-q18/`. The clone, the study root, the work directory and the sessions' state were deleted.
+
+*Since then (Δ275, on basic): the six lab fixtures no longer carry the marker word, and all 36 fixtures make a drop-in (F-3); `setup` accepts a detached HEAD (F-1); the tutor skill says a turn asks no question of a higher rung (F-5). Nothing was re-run live after those fixes; the result above stands as observed.*
+
 ### DV6 Simulate phase: Q16–Q18 and the Q13–Q15 re-run (2026-10-15): deferred by the window rule after one turn
 
 Claude Code 2.1.299, model `claude-opus-5-5`. `setup` ran with no refusal (`--work /tmp/dvl0-dv6-simulate/q16-q18 --budget 40`): a study clone of `authoring` @ `83531a8` plus the worktree's 100 uncommitted files, hook sha256 `04a18567288da90c…`, 8 deny rules, the 4 study-clone hook probes as expected, no other lane's scratch or study root on the host. The learner states' anchors were re-checked on the current tree first: 5 of 5 (Q18) and 13 of 13 (Q13–Q15) occur exactly once, and together they fill every open slot of Q13–Q15 and Q18. Under D20's two roots the session ran in the clone with no guard refusal (the DV5d block is gone).
