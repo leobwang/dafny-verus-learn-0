@@ -1,4 +1,6 @@
 /*! R03 — Modules and APIs (Reference Solution).
+Class ranges are u32 code-point pairs (D48): a range's view is the set of chars whose
+code lies in it, and the only conversion is `c as u32`.
 Standalone R. The local class implementation reuses the supplied range merge,
 not a later A2 import. This half has five holes; the Dafny half has five.
 Record P1d/P2v and P3dv/P4dv before running scenarios or reading outcomes.
@@ -14,20 +16,23 @@ use vstd::prelude::*;
 
 verus! {
 
-spec fn in_range(g: (char, char), c: char) -> bool {
-    g.0 <= c && c <= g.1
+/// `c`'s code lies in the inclusive range `g`.
+pub open spec fn in_range(g: (u32, u32), c: char) -> bool {
+    g.0 <= (c as u32) && (c as u32) <= g.1
 }
 
-spec fn in_ranges(rs: Seq<(char, char)>, c: char) -> bool {
+/// `c`'s code lies in one of the ranges.
+pub open spec fn in_ranges(rs: Seq<(u32, u32)>, c: char) -> bool {
     exists|i: int| 0 <= i < rs.len() && in_range(#[trigger] rs[i], c)
 }
 
-spec fn sorted_ranges(rs: Seq<(char, char)>) -> bool {
+/// Non-empty ranges, sorted and separated by at least one code.
+pub open spec fn separated(rs: Seq<(u32, u32)>) -> bool {
     &&& forall|i: int| 0 <= i < rs.len() ==> (#[trigger] rs[i]).0 <= rs[i].1
-    &&& forall|i: int, j: int| 0 <= i < j < rs.len() ==> (#[trigger] rs[i]).1 < (#[trigger] rs[j]).0
+    &&& forall|i: int, j: int| 0 <= i < j < rs.len() ==> (#[trigger] rs[i]).1 + 1 < (#[trigger] rs[j]).0
 }
 
-proof fn lemma_in_ranges_push(rs: Seq<(char, char)>, x: (char, char), c: char)
+proof fn lemma_in_ranges_push(rs: Seq<(u32, u32)>, x: (u32, u32), c: char)
     ensures
         in_ranges(rs.push(x), c) <==> (in_ranges(rs, c) || in_range(x, c)),
 {
@@ -47,7 +52,7 @@ proof fn lemma_in_ranges_push(rs: Seq<(char, char)>, x: (char, char), c: char)
     }
 }
 
-proof fn lemma_in_ranges_drop(rs: Seq<(char, char)>, i: int, c: char)
+proof fn lemma_in_ranges_drop(rs: Seq<(u32, u32)>, i: int, c: char)
     requires
         0 <= i < rs.len(),
     ensures
@@ -73,40 +78,41 @@ proof fn lemma_in_ranges_drop(rs: Seq<(char, char)>, i: int, c: char)
     }
 }
 
-spec fn cover(out: Seq<(char, char)>, placed: bool, clo: char, chi: char, rest: Seq<(char, char)>, c: char) -> bool {
-    in_ranges(out, c) || (!placed && clo <= c && c <= chi) || in_ranges(rest, c)
+spec fn cover(out: Seq<(u32, u32)>, placed: bool, clo: u32, chi: u32, rest: Seq<(u32, u32)>, c: char) -> bool {
+    in_ranges(out, c) || (!placed && clo <= (c as u32) && (c as u32) <= chi) || in_ranges(rest, c)
 }
 
-spec fn target(rs: Seq<(char, char)>, lo: char, hi: char, c: char) -> bool {
-    in_ranges(rs, c) || (lo <= c && c <= hi)
+spec fn target(rs: Seq<(u32, u32)>, lo: u32, hi: u32, c: char) -> bool {
+    in_ranges(rs, c) || (lo <= (c as u32) && (c as u32) <= hi)
 }
 
 /// One step of `class_insert`'s loop keeps the covered set (the three branches).
 proof fn lemma_insert_step(
-    rs: Seq<(char, char)>,
+    rs: Seq<(u32, u32)>,
     i: int,
-    lo: char,
-    hi: char,
-    out0: Seq<(char, char)>,
+    lo: u32,
+    hi: u32,
+    out0: Seq<(u32, u32)>,
     placed0: bool,
-    clo0: char,
-    chi0: char,
-    out1: Seq<(char, char)>,
+    clo0: u32,
+    chi0: u32,
+    out1: Seq<(u32, u32)>,
     placed1: bool,
-    clo1: char,
-    chi1: char,
+    clo1: u32,
+    chi1: u32,
 )
     requires
         0 <= i < rs.len(),
         forall|c: char|
             #![trigger target(rs, lo, hi, c)]
             cover(out0, placed0, clo0, chi0, rs.subrange(i, rs.len() as int), c) == target(rs, lo, hi, c),
-        (placed0 || rs[i].1 < clo0) ==> out1 == out0.push(rs[i]) && placed1 == placed0 && clo1 == clo0
-            && chi1 == chi0,
-        !(placed0 || rs[i].1 < clo0) && chi0 < rs[i].0 ==> out1 == out0.push((clo0, chi0)).push(rs[i])
+        (placed0 || rs[i].1 + 1 < clo0) ==> out1 == out0.push(rs[i]) && placed1 == placed0
+            && clo1 == clo0 && chi1 == chi0,
+        !(placed0 || rs[i].1 + 1 < clo0) && chi0 + 1 < rs[i].0 ==> out1 == out0.push((clo0, chi0)).push(rs[i])
             && placed1,
-        !(placed0 || rs[i].1 < clo0) && !(chi0 < rs[i].0) ==> out1 == out0 && placed1 == placed0 && clo1
-            == (if rs[i].0 < clo0 { rs[i].0 } else { clo0 }) && chi1 == (if chi0 < rs[i].1 { rs[i].1 } else { chi0 }),
+        !(placed0 || rs[i].1 + 1 < clo0) && !(chi0 + 1 < rs[i].0) ==> out1 == out0 && placed1 == placed0
+            && clo1 == (if rs[i].0 < clo0 { rs[i].0 } else { clo0 })
+            && chi1 == (if chi0 < rs[i].1 { rs[i].1 } else { chi0 }),
     ensures
         forall|c: char|
             #![trigger target(rs, lo, hi, c)]
@@ -116,9 +122,9 @@ proof fn lemma_insert_step(
         #![trigger target(rs, lo, hi, c)]
         cover(out1, placed1, clo1, chi1, rs.subrange(i + 1, rs.len() as int), c) == target(rs, lo, hi, c) by {
         lemma_in_ranges_drop(rs, i, c);
-        if placed0 || rs[i].1 < clo0 {
+        if placed0 || rs[i].1 + 1 < clo0 {
             lemma_in_ranges_push(out0, rs[i], c);
-        } else if chi0 < rs[i].0 {
+        } else if chi0 + 1 < rs[i].0 {
             lemma_in_ranges_push(out0, (clo0, chi0), c);
             lemma_in_ranges_push(out0.push((clo0, chi0)), rs[i], c);
         }
@@ -126,7 +132,7 @@ proof fn lemma_insert_step(
 }
 
 pub struct CharClass {
-    ranges: Vec<(char, char)>,
+    ranges: Vec<(u32, u32)>,
 }
 
 impl View for CharClass {
@@ -139,7 +145,7 @@ impl View for CharClass {
 
 impl CharClass {
     pub closed spec fn valid(&self) -> bool {
-        sorted_ranges(self.ranges@)
+        separated(self.ranges@)
     }
 
     /// The empty class.
@@ -162,7 +168,7 @@ impl CharClass {
             r.valid() == self.valid(),
     {
         let n = self.ranges.len();
-        let mut out: Vec<(char, char)> = Vec::new();
+        let mut out: Vec<(u32, u32)> = Vec::new();
         let mut k: usize = 0;
         while k < n
             invariant
@@ -180,11 +186,11 @@ impl CharClass {
         CharClass { ranges: out }
     }
 
-    /// Is `c` in one of the ranges from index `i` on? (R03.H1v)
+    /// Is `c` in one of the ranges from index `i` on?
     // item: R03.H1v
-// uses: view
-// pair: R03.H1d
-fn member_from(&self, c: char, i: usize) -> (b: bool)
+    // uses: view
+    // pair: R03.H1d
+    fn member_from(&self, c: char, i: usize) -> (b: bool)
         requires
             i <= self.ranges@.len(),
         ensures
@@ -195,7 +201,8 @@ fn member_from(&self, c: char, i: usize) -> (b: bool)
             false
         } else {
             let (lo, hi) = self.ranges[i];
-            (lo <= c && c <= hi) || self.member_from(c, i + 1)
+            let code = c as u32;
+            (lo <= code && code <= hi) || self.member_from(c, i + 1)
         }
     }
 
@@ -208,24 +215,25 @@ fn member_from(&self, c: char, i: usize) -> (b: bool)
     }
 
     // item: R03.W2v
-    /// Insert the range `lo..=hi`, merging the ranges it overlaps (R03.W2v, given).
-    pub fn class_insert(&self, lo: char, hi: char) -> (res: CharClass)
+    /// Insert the range `lo..=hi`, merging the ranges it overlaps or touches
+    /// (total: an empty range `hi < lo` adds nothing).
+    pub fn class_insert(&self, lo: u32, hi: u32) -> (res: CharClass)
         requires
             self.valid(),
         ensures
             res.valid(),
-            res@ == self@.union(ISet::new(|c: char| lo <= c && c <= hi)),
+            res@ == self@.union(ISet::new(|c: char| lo <= (c as u32) && (c as u32) <= hi)),
     {
         if hi < lo {
             let res = self.copy_class();
             proof {
-                assert(res@ =~= self@.union(ISet::new(|c: char| lo <= c && c <= hi)));
+                assert(res@ =~= self@.union(ISet::new(|c: char| lo <= (c as u32) && (c as u32) <= hi)));
             }
             return res;
         }
         let n = self.ranges.len();
         let ghost rs = self.ranges@;
-        let mut out: Vec<(char, char)> = Vec::new();
+        let mut out: Vec<(u32, u32)> = Vec::new();
         let mut clo = lo;
         let mut chi = hi;
         let mut placed = false;
@@ -240,13 +248,13 @@ fn member_from(&self, c: char, i: usize) -> (b: bool)
             invariant
                 n == rs.len(),
                 rs == self.ranges@,
-                sorted_ranges(rs),
+                separated(rs),
                 i <= n,
                 clo <= chi,
-                sorted_ranges(out@),
+                separated(out@),
                 forall|k: int, j: int|
-                    0 <= k < out@.len() && i <= j < n ==> (#[trigger] out@[k]).1 < (#[trigger] rs[j]).0,
-                !placed ==> forall|k: int| 0 <= k < out@.len() ==> (#[trigger] out@[k]).1 < clo,
+                    0 <= k < out@.len() && i <= j < n ==> (#[trigger] out@[k]).1 + 1 < (#[trigger] rs[j]).0,
+                !placed ==> forall|k: int| 0 <= k < out@.len() ==> (#[trigger] out@[k]).1 + 1 < clo,
                 forall|c: char|
                     #![trigger target(rs, lo, hi, c)]
                     cover(out@, placed, clo, chi, rs.subrange(i as int, n as int), c) == target(rs, lo, hi, c),
@@ -257,9 +265,9 @@ fn member_from(&self, c: char, i: usize) -> (b: bool)
             let ghost clo0 = clo;
             let ghost chi0 = chi;
             let ghost placed0 = placed;
-            if placed || b < clo {
+            if placed || (b < clo && clo - b > 1) {
                 out.push((a, b));
-            } else if chi < a {
+            } else if chi < a && a - chi > 1 {
                 out.push((clo, chi));
                 out.push((a, b));
                 placed = true;
@@ -283,7 +291,7 @@ fn member_from(&self, c: char, i: usize) -> (b: bool)
         }
         proof {
             assert forall|c: char|
-                in_ranges(out@, c) <==> (in_ranges(rs, c) || (lo <= c && c <= hi)) by {
+                in_ranges(out@, c) <==> (in_ranges(rs, c) || (lo <= (c as u32) && (c as u32) <= hi)) by {
                 if !placed {
                     lemma_in_ranges_push(out0, (clo, chi), c);
                 }
@@ -294,30 +302,38 @@ fn member_from(&self, c: char, i: usize) -> (b: bool)
         let res = CharClass { ranges: out };
         proof {
             assert forall|c: char|
-                res@.contains(c) <==> self@.union(ISet::new(|c: char| lo <= c && c <= hi)).contains(c)
+                res@.contains(c) <==> self@.union(ISet::new(|c: char| lo <= (c as u32) && (c as u32) <= hi)).contains(c)
                 by {
                 assert(res@.contains(c) == in_ranges(out@, c));
                 assert(self@.contains(c) == in_ranges(rs, c));
             }
-            assert(res@ =~= self@.union(ISet::new(|c: char| lo <= c && c <= hi)));
+            assert(res@ =~= self@.union(ISet::new(|c: char| lo <= (c as u32) && (c as u32) <= hi)));
         }
         res
     }
 
-    /// Construct the class described by one interval.
     // item: R03.H2v
-// uses: view, closed-spec, pub-visibility
-// pair: R03.H2d
-// triv: { Self::class_empty() }
-pub fn class_range(lo: char, hi: char) -> (r: CharClass)
-        ensures r.valid(), forall|c: char| r@.contains(c) <==> (lo <= c && c <= hi),
-{ Self::class_empty().class_insert(lo, hi) }
+    // uses: view, closed-spec, pub-visibility
+    // pair: R03.H2d
+    // triv: { Self::class_empty() }
+    /// The class of the one inclusive char interval `lo..=hi` (total: `hi < lo` gives
+    /// the empty class).
+    pub fn class_range(lo: char, hi: char) -> (r: CharClass)
+        ensures
+            r.valid(),
+            forall|c: char| r@.contains(c) <==> (lo <= c && c <= hi),
+    {
+        let e = Self::class_empty();
+        let r = e.class_insert(lo as u32, hi as u32);
+        r
+    }
 
-// item: R03.H3v
-// uses: view, closed-spec
-// pair: R03.H3d
-// triv: { Self::class_empty() }
-pub fn class_union(&self, other: &CharClass) -> (u: CharClass)
+    // item: R03.H3v
+    // uses: view, closed-spec
+    // pair: R03.H3d
+    // triv: { Self::class_empty() }
+    /// The union of two classes: every range of `other` inserted in turn.
+    pub fn class_union(&self, other: &CharClass) -> (u: CharClass)
         requires
             self.valid(),
             other.valid(),
@@ -366,41 +382,54 @@ pub fn class_union(&self, other: &CharClass) -> (u: CharClass)
 }
 
 } // verus!
-
 }
 
 pub mod client {
 use vstd::prelude::*;
 use super::char_class::CharClass;
+
 verus! {
+
 // item: R03.H4v
 // uses: pub-visibility
 // pair: R03.H4d
 // triv: { CharClass::class_empty() }
-
 pub fn union3(a: &CharClass, b: &CharClass, c: &CharClass) -> (u: CharClass)
-    requires a.valid(), b.valid(), c.valid(),
-    ensures u.valid(), u@ == a@.union(b@).union(c@),
-{ let t=a.class_union(b); t.class_union(c) }
+    requires
+        a.valid(),
+        b.valid(),
+        c.valid(),
+    ensures
+        u.valid(),
+        u@ == a@.union(b@).union(c@),
+{
+    let t = a.class_union(b);
+    t.class_union(c)
+}
 
 // Given model of the character set of a sequence, plus its append-one fact.
 pub open spec fn class_chars(s: Seq<char>) -> ISet<char> {
     ISet::new(|c: char| s.contains(c))
 }
+
 pub proof fn lemma_class_chars_push(s: Seq<char>, c: char)
-    ensures class_chars(s.push(c)) == class_chars(s).insert(c),
+    ensures
+        class_chars(s.push(c)) == class_chars(s).insert(c),
 {
-    assert forall|x: char| class_chars(s.push(c)).contains(x)
-        <==> class_chars(s).insert(c).contains(x) by {
+    assert forall|x: char| class_chars(s.push(c)).contains(x) <==> class_chars(s).insert(c).contains(x) by {
         if s.push(c).contains(x) {
-            let i=choose|i: int| 0 <= i < s.push(c).len() && s.push(c)[i] == x;
-            if i < s.len() { assert(s[i] == x); }
+            let i = choose|i: int| 0 <= i < s.push(c).len() && s.push(c)[i] == x;
+            if i < s.len() {
+                assert(s[i] == x);
+            }
         }
         if s.contains(x) {
-            let i=choose|i: int| 0 <= i < s.len() && s[i] == x;
+            let i = choose|i: int| 0 <= i < s.len() && s[i] == x;
             assert(s.push(c)[i] == x);
         }
-        if x == c { assert(s.push(c)[s.len() as int] == x); }
+        if x == c {
+            assert(s.push(c)[s.len() as int] == x);
+        }
     }
     assert(class_chars(s.push(c)) =~= class_chars(s).insert(c));
 }
@@ -409,73 +438,144 @@ pub proof fn lemma_class_chars_push(s: Seq<char>, c: char)
 // uses: view
 // pair: R03.H5d
 // triv: { CharClass::class_empty() }
-
 pub fn class_of_string(s: &Vec<char>) -> (r: CharClass)
-    ensures r.valid(), forall|c: char| r@.contains(c) <==> s@.contains(c),
+    ensures
+        r.valid(),
+        forall|c: char| r@.contains(c) <==> s@.contains(c),
 {
-    let mut u=CharClass::class_empty(); let mut i: usize=0;
-    proof { assert(class_chars(s@.subrange(0, 0)) =~= ISet::<char>::empty()); }
+    let mut u = CharClass::class_empty();
+    let mut i: usize = 0;
+    proof {
+        assert(class_chars(s@.subrange(0, 0)) =~= ISet::<char>::empty());
+    }
     while i < s.len()
-        invariant i <= s.len(), u.valid(),
+        invariant
+            i <= s.len(),
+            u.valid(),
             u@ == class_chars(s@.subrange(0, i as int)),
         decreases s.len() - i,
     {
-        let c=s[i]; let ghost pre=s@.subrange(0, i as int);
-        u=u.class_insert(c, c);
+        let c = s[i];
+        let ghost pre = s@.subrange(0, i as int);
+        u = u.class_insert(c as u32, c as u32);
         proof {
             assert(s@.subrange(0, i + 1) =~= pre.push(c));
             lemma_class_chars_push(pre, c);
-            assert(ISet::new(|x: char| c <= x && x <= c) =~= ISet::<char>::empty().insert(c));
+            assert(ISet::new(|x: char| (c as u32) <= (x as u32) && (x as u32) <= (c as u32)) =~= ISet::<char>::empty().insert(c));
             assert(u@ =~= class_chars(s@.subrange(0, i + 1)));
         }
-        i=i+1;
+        i = i + 1;
     }
-    proof { assert(s@.subrange(0, s.len() as int) =~= s@); }
+    proof {
+        assert(s@.subrange(0, s.len() as int) =~= s@);
+    }
     u
- }
+}
 
 // Reference checks (enabled):
 // reference-only: enabled shipped check
-fn interface_checks() { let x=CharClass::class_range('a', 'c'); let b=x.class_member('b'); assert(b); let mut cs=Vec::new(); cs.push('d'); assert(cs@[0] == 'd'); assert(cs@.contains('d')); let y=class_of_string(&cs); assert(y@.contains('d')); let u=x.class_union(&y); assert(u@.contains('d')); let d=u.class_member('d'); assert(d); }
+fn interface_checks() {
+    let x = CharClass::class_range('a', 'c');
+    let b = x.class_member('b');
+    assert(b);
+    let mut cs = Vec::new();
+    cs.push('d');
+    assert(cs@[0] == 'd');
+    assert(cs@.contains('d'));
+    let y = class_of_string(&cs);
+    assert(y@.contains('d'));
+    let u = x.class_union(&y);
+    assert(u@.contains('d'));
+    let d = u.class_member('d');
+    assert(d);
 }
+
+// The abstraction square: a range over the surrogate block is valid and harmless.
+// Two different representations, one view; a client can rely only on the view.
+fn surrogate_span_check() {
+    let e = CharClass::class_empty();
+    let low = e.class_insert(0xD7FF, 0xD7FF);
+    let split = low.class_insert(0xE000, 0xE000);
+    let span = e.class_insert(0xD7FF, 0xE000);
+    let in_split = split.class_member('\u{E000}');
+    let in_span = span.class_member('\u{E000}');
+    let a_in_span = span.class_member('a');
+    assert(in_split);
+    assert(in_span);
+    assert(!a_in_span);
+}
+
+} // verus!
 }
 
 pub mod span_api {
 use vstd::prelude::*;
+
+verus! {
+
 // item: R03.W1v
-pub struct SpanBox { lo: char, hi: char, }
+pub struct SpanBox {
+    lo: char,
+    hi: char,
+}
 
 // item: R03.C3v write:view
 impl View for SpanBox {
     type V = (char, char);
-    closed spec fn view(&self) -> (char, char) { (self.lo, self.hi) }
+
+    closed spec fn view(&self) -> (char, char) {
+        (self.lo, self.hi)
+    }
 }
+
 impl SpanBox {
     // item: R03.C4v write:closed-spec
-    pub closed spec fn valid(&self) -> bool { self.lo <= self.hi }
+    pub closed spec fn valid(&self) -> bool {
+        self.lo <= self.hi
+    }
 
     // item: R03.C5v write:pub-visibility
     pub fn make_span(lo: char, hi: char) -> (s: SpanBox)
-        requires lo <= hi,
-        ensures s.valid(), s@ == (lo, hi),
-    { SpanBox { lo, hi } }
+        requires
+            lo <= hi,
+        ensures
+            s.valid(),
+            s@ == (lo, hi),
+    {
+        SpanBox { lo, hi }
+    }
+
     pub fn span_has(&self, c: char) -> (b: bool)
-        ensures b == (self@.0 <= c && c <= self@.1),
-    { self.lo <= c && c <= self.hi }
+        ensures
+            b == (self@.0 <= c && c <= self@.1),
+    {
+        self.lo <= c && c <= self.hi
+    }
 }
 
 // item: R03.C7v recognise:opaque
 #[verifier::opaque]
-spec fn span_code(c: char) -> int { c as int }
+spec fn span_code(c: char) -> int {
+    c as int
 }
+
+} // verus!
+}
+
 pub mod span_client {
 use vstd::prelude::*;
 use super::span_api::SpanBox;
+
+verus! {
+
 pub fn span_contract_example() {
-    let s=SpanBox::make_span('a', 'd');
+    let s = SpanBox::make_span('a', 'd');
     assert(s.valid());
-    let b=s.span_has('c'); assert(b);
+    let b = s.span_has('c');
+    assert(b);
 }
+
+} // verus!
 }
 
 } // outer verified module declarations
