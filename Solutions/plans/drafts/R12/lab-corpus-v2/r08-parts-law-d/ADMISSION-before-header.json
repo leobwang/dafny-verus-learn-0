@@ -1,0 +1,66 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "90bfbef47b37c4d7d842e18a99f3a8d9f6985829ba570f04b623b3fafb78872f"
+  },
+  "id": "r08-parts-law-d",
+  "lang": "dafny",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "51f2c8d4bdf4a9a69e5bb3e5f929eb45e521119721588cb881f0d811752e5b8c",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    },
+    {
+      "kind": "expr",
+      "name": "h6"
+    }
+  ],
+  "source_sha256": "ea9ee60595d244022a677fea361036782953a065c697083ff9bb9ef08e1d4d26",
+  "status": "admitted",
+  "target": "R12_LabCase.PartsLaw",
+  "validated_span": {
+    "end": 78,
+    "start": 49,
+    "symbol": "R12_LabCase.PartsLaw"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

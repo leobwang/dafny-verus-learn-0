@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "059fb34e4406a868bd1712b57813622665066288334843e9eb6f55230259e5cc"
+  },
+  "id": "r06-star-unfold-v",
+  "lang": "verus",
+  "private_evidence_sha256": "c669f577b86f045bc5700ca1723e1b98dd33aeeabfa1ff27f4241786f675057d",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    }
+  ],
+  "source_sha256": "5cbe226aa7b5ed3fecfdb2284ea369843f50cec9c430b216ce4451e5bd1af114",
+  "status": "admitted",
+  "target": "lemma_star_unfold",
+  "validated_span": {
+    "end": 98,
+    "start": 73,
+    "symbol": "lemma_star_unfold"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

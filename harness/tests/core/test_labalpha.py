@@ -131,3 +131,14 @@ def test_the_regimes_wrap_the_engine_by_name(monkeypatch):
     monkeypatch.setattr(L, "ENGINE", "fvhtest_engine")
     pol = L.BestFirst(lambda p, s: "good", [1])
     assert isinstance(pol, EnginePolicy) and type(pol).__name__ == "LabAlphaEnginePolicy"
+
+
+def test_the_learner_header_stays_out_of_the_prompt():
+    src = "// [R12 header] DO NOT OPEN BEFORE R11 IS DONE.\n// [R12 header] more\n// R12_HINT_SITES: []\nlemma L() {}\n"
+    out = L.strip_header(src)
+    assert out == "//\n//\n// R12_HINT_SITES: []\nlemma L() {}\n" and out.count("\n") == src.count("\n")
+    assert L.strip_header("// a comment\nx\n") == "// a comment\nx\n"
+    seen = []
+    ask = L._capped_ask(lambda p, s: seen.append(json.loads(p)) or "x", 256)
+    ask(json.dumps({"source": src, "feedback": []}), 1)
+    assert "DO NOT OPEN" not in seen[0]["source"] and seen[0]["source"] == out

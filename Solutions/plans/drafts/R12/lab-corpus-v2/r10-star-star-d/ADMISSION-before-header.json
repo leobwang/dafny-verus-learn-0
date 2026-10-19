@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "be8b51358880727c07616608260200daebfa67b48c46fa25a09c04b4693e66b7"
+  },
+  "id": "r10-star-star-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "a099f9dee61afde7985bee04db770e8de7e36e4961da7d531b2e5efd1a32ecf0",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    }
+  ],
+  "source_sha256": "665cadfa0cc83c8f17d4b9764ea862fe54ee58668f72eb85f71b5c2cd7605cbf",
+  "status": "admitted",
+  "target": "R12_LabCase.StarStar",
+  "validated_span": {
+    "end": 57,
+    "start": 45,
+    "symbol": "R12_LabCase.StarStar"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

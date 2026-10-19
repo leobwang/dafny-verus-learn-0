@@ -33,6 +33,9 @@ ROOT = Path(__file__).resolve().parent.parent
 # Every file allowed to name the words, with its reason. A trailing "/" is a
 # directory prefix.
 ALLOWLIST = {
+    "bench/local/r/labalpha/pub-hev-075/tasks/pub-hev-075.rs": "a Lab alpha public task form "
+        "(HumanEval-Verus human_eval_064, byte-faithful): its counter variable is named ctr; "
+        "benchmark code, never a command",
     "scripts/mksandbox-run": "the one program that starts a container (DV4-PLAN §5)",
     "scripts/dvl/sandbox.py": "mksandbox-run's library: the docker argv and the access check",
     "scripts/contract_local.sh": "the local contract replay's front end (DV4-PLAN §6)",

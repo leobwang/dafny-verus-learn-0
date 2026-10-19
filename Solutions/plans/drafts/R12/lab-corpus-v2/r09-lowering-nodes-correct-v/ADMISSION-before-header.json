@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "587a8577729b72bd5ae9039bc8f3e034356ddeae4697bb33e3138c14f869646f",
+    "statement_sha256": "bf07c9312da4a3c20854d17ea4c9f2b43afe79e3c327378ff1607ed03b034639"
+  },
+  "id": "r09-lowering-nodes-correct-v",
+  "lang": "verus",
+  "private_evidence_sha256": "4f9da239fc3ee89372d2899a2559c9f94163c088c53bd15e828f9ba8c5c4314f",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    }
+  ],
+  "source_sha256": "b677b1041538f9b41df64c968ce614e118e46f8f3b21f9e214e0d4c1f17eef1c",
+  "status": "admitted",
+  "target": "lemma_lowering_nodes_r09",
+  "validated_span": {
+    "end": 299,
+    "start": 278,
+    "symbol": "lemma_lowering_nodes_r09"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

@@ -41,7 +41,7 @@ def write_root(root, layout=LAYOUT, mutate=None):
             src = hashlib.sha256(p.read_bytes()).hexdigest()
             adm = {'schema': 2, 'status': 'admitted', 'source_sha256': src, 'checks': dict(CHECKS)}
             row = dict(id=tid, cluster=cid, lang='dafny' if l == 'd' else 'verus', path=rel,
-                       source_sha256=src, statement='Neutral fixture; no native admission claim.',
+                       source_sha256=src, prompt_source_sha256=src, statement='Neutral fixture; no native admission claim.',
                        exposure='neutral fixture', admission=f'bench/local/r/labalpha/{tid}/ADMISSION.json')
             if mutate:
                 mutate(row, adm)
@@ -112,6 +112,7 @@ class PlanContract(unittest.TestCase):
             (dict(mutate=lambda row, adm: adm['checks'].update({'wrong-hints-fail': False})), 'seven native'),
             (dict(mutate=lambda row, adm: adm.update(schema=1)), 'not bound'),
             (dict(mutate=lambda row, adm: row.update(source_sha256='0' * 64)), 'stale task source'),
+            (dict(mutate=lambda row, adm: row.update(prompt_source_sha256='0' * 64)), 'prompt carries'),
             (dict(layout={'rx-a': ('regex', 'pilot', False, 'd')}), 'Dafny and its Verus'),
             (dict(layout={'pub-a': ('public', 'pilot', False, 'dv')}), 'cluster of its own'),
             (dict(layout={'rx-a': ('regex', 'pilot', True, 'dv')}), 'descriptive subset'),

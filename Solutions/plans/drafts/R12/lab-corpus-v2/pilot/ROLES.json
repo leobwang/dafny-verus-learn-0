@@ -1,17 +1,337 @@
 {
-  "r06-backwards-str-involution": {
-    "role": "pilot"
-  },
-  "a1b-nullable-correct": {
-    "role": "pilot"
-  },
-  "a1b-cat-assoc": {
-    "role": "pilot"
-  },
-  "pub-db-052": {
-    "role": "pilot"
-  },
-  "pub-hev-023": {
-    "role": "pilot"
-  }
+ "r06-backwards-str-involution": {
+  "role": "pilot"
+ },
+ "a1b-nullable-correct": {
+  "role": "pilot"
+ },
+ "a1b-cat-assoc": {
+  "role": "pilot"
+ },
+ "pub-db-052": {
+  "role": "pilot"
+ },
+ "pub-hev-023": {
+  "role": "pilot"
+ },
+ "a1b-cat-eps-left": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "a1b-cat-eps-right": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "a1b-star-concat": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "a1b-star-one": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-db-000": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-004": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-db-008": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-010": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-db-012": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-db-016": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-020": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-022": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-024": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-028": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-030": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-034": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-038": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-044": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-054": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-058": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-db-062": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-064": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-066": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-070": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-074": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-076": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-078": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-080": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-082": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-db-084": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-007": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-011": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-021": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-027": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-031": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-033": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-035": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-045": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-hev-047": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-055": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-061": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-hev-065": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-069": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-071": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-073": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "pub-hev-075": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-077": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-083": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-087": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "pub-hev-089": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r06-backwards-correct": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r06-backwards-sound": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r06-backwards-str-append": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r06-deriv-correct": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r06-derivs-append": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r06-star-unfold": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r06-star-unfold-refuted": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r08-alt-feed-law": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r08-alt-final-law": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r08-parts-law": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r08-ranges-class-law": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r09-class-nodes-correct": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r09-copies-split": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r09-copies-up-to-correct": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r09-literal-append": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r09-lowering-nodes-correct": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r09-rep-range-correct": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r10-mk-cat-correct": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r10-normal-fixed": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r10-star-star": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r11-certificate-length": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r11-check-sound": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r11-rename-transport": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r11-residual-observe": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r11-residual-step": {
+  "role": "confirmatory",
+  "descriptive": true
+ },
+ "r13-class-covers": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r13-nullable-derivs": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r14-cat-intro-v": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r14-deriv-size-v": {
+  "role": "confirmatory",
+  "descriptive": false
+ },
+ "r14-star-pow-v": {
+  "role": "confirmatory",
+  "descriptive": true
+ }
 }

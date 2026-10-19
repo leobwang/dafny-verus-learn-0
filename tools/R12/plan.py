@@ -104,6 +104,9 @@ def load_stratum(root, path):
             raise ValueError(tid + ': a task form lives at bench/local/r/labalpha/<id>/tasks/')
         if digest(src) != t.get('source_sha256'):
             raise ValueError(tid + ': stale task source')
+        from fvh.labalpha import strip_header
+        if hashlib.sha256(strip_header(src.read_text()).encode()).hexdigest() != t.get('prompt_source_sha256'):
+            raise ValueError(tid + ': the source as the prompt carries it (header stripped) is not the pinned one')
         for key in ('cluster', 'statement', 'exposure'):
             if not isinstance(t.get(key), str) or not t[key].strip():
                 raise ValueError(tid + ': cluster, statement and exposure required')

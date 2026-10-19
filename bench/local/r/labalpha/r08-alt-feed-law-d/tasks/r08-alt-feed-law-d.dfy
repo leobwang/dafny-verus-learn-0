@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"c1","identifiers":["st","c","w","Deriv"],"kind":"calls","callees":["AltFeedLaw","PartsLaw","DerivCorrect"]},{"name":"h1","identifiers":["Matches","head","i","w"]},{"name":"h2","identifiers":["Matches","tail","head","i","w"]},{"name":"h3","identifiers":["Matches","st","j","c","w"]},{"name":"h4","identifiers":["head","tail","k"]},{"name":"h5","identifiers":["Matches","st","i","c","w"]},{"name":"h6","identifiers":["head","tail","k"]}]
-// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.AltFeedLaw","start":184,"end":214}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.AltFeedLaw","start":187,"end":217}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1), copied verbatim.
   datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)

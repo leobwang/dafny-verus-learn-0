@@ -65,7 +65,11 @@ def task_row(root, tid, fam):
         exposure = ('course-authored lemma from the ' + s['module'] + ' reference, written 2026-10; SEALED in '
                     'Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id '
                     'and verdict only')
+    sys.path.insert(0, str(root / 'harness'))
+    from fvh.labalpha import strip_header
+    prompt_sha = hashlib.sha256(strip_header(src.read_text()).encode()).hexdigest()
     row = {'id': tid, 'cluster': fam['cluster'], 'lang': lang, 'path': rel, 'source_sha256': sha(src),
+           'prompt_source_sha256': prompt_sha,
             'statement': statement, 'exposure': exposure, 'admission': adm_rel, 'admission_sha256': sha(adm),
             'target': a['target'], 'sites': len(a.get('sites', []))}
     if fam.get('sealed'):

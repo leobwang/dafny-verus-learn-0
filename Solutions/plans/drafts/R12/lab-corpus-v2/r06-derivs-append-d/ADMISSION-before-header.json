@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "e4f8a6671f79092dc0b2e1c3ce68bb11965070b3de51fb776992fbc59015a7b1"
+  },
+  "id": "r06-derivs-append-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "ca0b9bb9e624f1e6dac5700f1754d43b7b5ac18416c67a859d6c392f7618ec83",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    }
+  ],
+  "source_sha256": "68f56d3743de9690bec78503bbd7c46eb3d715c4d86dc1a381db652251ce75df",
+  "status": "admitted",
+  "target": "R12_LabCase.DerivsAppend",
+  "validated_span": {
+    "end": 50,
+    "start": 39,
+    "symbol": "R12_LabCase.DerivsAppend"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

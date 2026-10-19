@@ -43,7 +43,7 @@
           "false",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034612-4nd7xe7e/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261019-013116-2d4dmxjg/tasks.csv"
         ],
         "count_unit": "tasks",
         "diagnostics": [
@@ -51,7 +51,7 @@
             "code": "W-D10",
             "col": 24,
             "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r10-mk-cat-correct-d/tasks/r10-mk-cat-correct-d.dfy",
-            "line": 71,
+            "line": 74,
             "message": "a postcondition could not be proved on this return path",
             "severity": "error"
           },
@@ -59,7 +59,7 @@
             "code": "W-D10",
             "col": 37,
             "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r10-mk-cat-correct-d/tasks/r10-mk-cat-correct-d.dfy",
-            "line": 66,
+            "line": 69,
             "message": "this is the postcondition that could not be proved",
             "severity": "related"
           }
@@ -107,6 +107,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -136,11 +137,11 @@
           "RG_A4_Norm.Normal": "verified",
           "RG_A4_Norm.StarOfEps": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034612-4nd7xe7e",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261019-013116-2d4dmxjg",
         "stage": "verify",
         "target": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/r10-mk-cat-correct-d/tasks/r10-mk-cat-correct-d.dfy",
         "verdict": "failed",
-        "verified_count": 67
+        "verified_count": 68
       },
       "passed": true
     },
@@ -153,7 +154,7 @@
           "3",
           "--mutations",
           "1",
-          "/tmp/dvl-test-1000/runs/dafny-eb-20261018-034630-2zufvhj6/src/reference.dfy",
+          "/tmp/dvl-test-1000/runs/dafny-eb-20261019-013134-o8i7unkz/src/reference.dfy",
           "--json-output",
           "--resource-limit",
           "5000000",
@@ -165,7 +166,7 @@
           "false",
           "--allow-warnings",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261018-034628-61yyk9d_/shipped-seed3/tasks.csv",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261019-013132-pprb4enq/shipped-seed3/tasks.csv",
           "--filter-symbol",
           "R12_LabCase.MkCatCorrect."
         ],
@@ -174,7 +175,7 @@
             "code": "W-D10",
             "col": 3,
             "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
-            "line": 67,
+            "line": 70,
             "message": "a postcondition could not be proved on this return path",
             "severity": "error"
           }
@@ -189,7 +190,7 @@
           "shipped:seed=2": "failed",
           "shipped:seed=3": "failed"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261018-034628-61yyk9d_",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261019-013132-pprb4enq",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
         "verdict": "failed",
@@ -219,17 +220,17 @@
               "name": "c2"
             }
           ],
-          "source_sha256": "9d57b5e658fddbc3553da38fa6e98a01c458ebccd6fc1b4fd57ed265a37b7331",
+          "source_sha256": "7f920ae2498f558b7548f0130e8b30b2a0b06c20cbf7bea534a7607fc8f59de2",
           "statement_sha256": "176419f63bab97b22eeaef53713c79e04cb8f09a4ae1036959cffca26de335aa"
         },
         "native_span": [
-          65,
-          74
+          68,
+          77
         ],
         "statement_equal": true,
         "validated_span": {
-          "end": 74,
-          "start": 65,
+          "end": 77,
+          "start": 68,
           "symbol": "R12_LabCase.MkCatCorrect"
         }
       },
@@ -260,7 +261,7 @@
           "false",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034615-y4h5l9l_/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261019-013119-5en2egc9/tasks.csv"
         ],
         "count_unit": "tasks",
         "diagnostics": [],
@@ -307,6 +308,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -336,11 +338,11 @@
           "RG_A4_Norm.Normal": "verified",
           "RG_A4_Norm.StarOfEps": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034615-y4h5l9l_",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261019-013119-5en2egc9",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
         "verdict": "verified",
-        "verified_count": 68
+        "verified_count": 69
       },
       "passed": true
     },
@@ -372,7 +374,7 @@
           "--allow-warnings",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034618-_kbtwp3f/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261019-013122-s192lla1/tasks.csv"
         ],
         "count_unit": "passed-tasks",
         "diagnostics": [],
@@ -419,6 +421,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -448,11 +451,11 @@
           "RG_A4_Norm.Normal": "verified",
           "RG_A4_Norm.StarOfEps": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034618-_kbtwp3f",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261019-013122-s192lla1",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
         "verdict": "verified",
-        "verified_count": 68
+        "verified_count": 69
       },
       "passed": true
     },
@@ -484,7 +487,7 @@
           "--allow-warnings",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034621-r6drfpo9/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261019-013125-xuqbxnw6/tasks.csv"
         ],
         "count_unit": "passed-tasks",
         "diagnostics": [],
@@ -531,6 +534,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -560,11 +564,11 @@
           "RG_A4_Norm.Normal": "verified",
           "RG_A4_Norm.StarOfEps": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034621-r6drfpo9",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261019-013125-xuqbxnw6",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
         "verdict": "verified",
-        "verified_count": 68
+        "verified_count": 69
       },
       "passed": true
     },
@@ -596,7 +600,7 @@
           "--allow-warnings",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034624-a1ng1_00/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261019-013128-7bm_jhek/tasks.csv"
         ],
         "count_unit": "passed-tasks",
         "diagnostics": [],
@@ -643,6 +647,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -672,11 +677,11 @@
           "RG_A4_Norm.Normal": "verified",
           "RG_A4_Norm.StarOfEps": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034624-a1ng1_00",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261019-013128-7bm_jhek",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
         "verdict": "verified",
-        "verified_count": 68
+        "verified_count": 69
       },
       "passed": true
     },
@@ -705,7 +710,7 @@
           "false",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034631-5lvn39xo/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261019-013135-qbzp4hob/tasks.csv"
         ],
         "count_unit": "tasks",
         "diagnostics": [
@@ -713,7 +718,7 @@
             "code": "W-D10",
             "col": 24,
             "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/wrong.dfy",
-            "line": 71,
+            "line": 74,
             "message": "a postcondition could not be proved on this return path",
             "severity": "error"
           },
@@ -721,7 +726,7 @@
             "code": "W-D10",
             "col": 37,
             "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/wrong.dfy",
-            "line": 66,
+            "line": 69,
             "message": "this is the postcondition that could not be proved",
             "severity": "related"
           }
@@ -769,6 +774,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -798,11 +804,11 @@
           "RG_A4_Norm.Normal": "verified",
           "RG_A4_Norm.StarOfEps": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034631-5lvn39xo",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261019-013135-qbzp4hob",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/wrong.dfy",
         "verdict": "failed",
-        "verified_count": 67
+        "verified_count": 68
       },
       "passed": true
     }
@@ -810,10 +816,11 @@
   "hints_sha256": "f1def026dbed9b98c3767eed79b3776474b6f797d504bc97f46a022949c4e068",
   "id": "r10-mk-cat-correct-d",
   "lang": "dafny",
+  "max_auto_reading": "maximal automation",
   "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r10-mk-cat-correct-d/reference.dfy",
-  "reference_sha256": "288ddb72646377160a2ef926f3861b884a028cb273f6f35a0686ad40b2a4257d",
+  "reference_sha256": "cb112ae1878583f1170a567742c0b96ede59c3ac4cb9c7077926fad71e0e90fe",
   "schema": 2,
-  "source_sha256": "9d57b5e658fddbc3553da38fa6e98a01c458ebccd6fc1b4fd57ed265a37b7331",
+  "source_sha256": "7f920ae2498f558b7548f0130e8b30b2a0b06c20cbf7bea534a7607fc8f59de2",
   "status": "admitted",
   "target": "R12_LabCase.MkCatCorrect",
   "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"

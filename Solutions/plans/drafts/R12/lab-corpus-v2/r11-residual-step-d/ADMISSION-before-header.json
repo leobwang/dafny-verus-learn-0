@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "b0e0d1540f33e84e225b4fdaccf7af39fd830f49dc537ea1e90c08efaba5bd38"
+  },
+  "id": "r11-residual-step-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "6fcb82ea17a883cf526414dc214f7fc32637b72e64e230426c52987f7e1cdfa6",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "662a0c95020a06e43a1c2f86952c5727eff1cecab565c5de1d394273e55ed4a4",
+  "status": "admitted",
+  "target": "R12_LabCase.ResidualStepR11",
+  "validated_span": {
+    "end": 139,
+    "start": 128,
+    "symbol": "R12_LabCase.ResidualStepR11"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

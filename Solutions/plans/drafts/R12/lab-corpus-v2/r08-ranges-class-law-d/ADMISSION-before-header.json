@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "a8578ad2dc3b33b66b91a215712856b17bd7ff201cc63b0bfce32d392c2b0564",
+    "statement_sha256": "0c93ee0bcb2651f158e7c72778aad5825610af7c1187d78c007f1613b6abf076"
+  },
+  "id": "r08-ranges-class-law-d",
+  "lang": "dafny",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: verified)",
+  "private_evidence_sha256": "45cc423406ae3497a54199bb3eb04342726dbb8a4b55c164f5b6023c80965563",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "7dd60682333eb0c54693befede7b525b87c9f5d0aab2c7c427a48c806d66214f",
+  "status": "admitted",
+  "target": "R12_LabCase.RangesClassLaw",
+  "validated_span": {
+    "end": 311,
+    "start": 295,
+    "symbol": "R12_LabCase.RangesClassLaw"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

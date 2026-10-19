@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"c1","identifiers":["ClassRanges","cc"],"kind":"calls","callees":["ClassNodesCorrectR09"]},{"name":"c2","identifiers":["a","b","len"],"kind":"calls","callees":["LoweringNodesCorrectR09"]},{"name":"c3","identifiers":["a","b","len"],"kind":"calls","callees":["LoweringNodesCorrectR09"]},{"name":"c4","identifiers":["a","len"],"kind":"calls","callees":["LoweringNodesCorrectR09"]},{"name":"c5","identifiers":["a","len"],"kind":"calls","callees":["LoweringNodesCorrectR09"]},{"name":"c6","identifiers":["a","len"],"kind":"calls","callees":["LoweringNodesCorrectR09"]},{"name":"c7","identifiers":["a","len"],"kind":"calls","callees":["LoweringNodesCorrectR09"]},{"name":"c8","identifiers":["a","len","n","m","Lower"],"kind":"calls","callees":["LoweringNodesCorrectR09","CopiesNodesR09","OptionalNodesR09"]}]
-// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.LoweringNodesCorrectR09","start":221,"end":245}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.LoweringNodesCorrectR09","start":224,"end":248}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1), copied verbatim.
   datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)

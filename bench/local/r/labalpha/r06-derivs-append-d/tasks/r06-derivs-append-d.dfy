@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"h1","identifiers":["u","v"]},{"name":"h2","identifiers":["u","v"]},{"name":"c1","identifiers":["Deriv","r","u","v"],"kind":"calls","callees":["DerivsAppend"]},{"name":"h3","identifiers":["u","v"]}]
-// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.DerivsAppend","start":39,"end":50}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.DerivsAppend","start":42,"end":53}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1) (Re, Nullable) and R06's given Deriv, Derivs, copied verbatim.
   datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)

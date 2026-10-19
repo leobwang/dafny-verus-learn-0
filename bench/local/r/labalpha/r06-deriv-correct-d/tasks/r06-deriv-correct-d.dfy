@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"c1","identifiers":["a","b","c","s"],"kind":"calls","callees":["DerivCorrect"]},{"name":"c2","identifiers":["a","b","c","s"],"kind":"calls","callees":["NullableFact","DerivCorrect"]},{"name":"h1","identifiers":["w"]},{"name":"h2","identifiers":["w","c","s","i"]},{"name":"h3","identifiers":["w","s","i"]},{"name":"c3","identifiers":["a","c","s","i"],"kind":"calls","callees":["DerivCorrect"]},{"name":"h4","identifiers":["Matches","Cat","Deriv","a","b","c","s"]},{"name":"c4","identifiers":["a","c","s","j"],"kind":"calls","callees":["DerivCorrect"]},{"name":"h5","identifiers":["w","c","s","j"]},{"name":"h6","identifiers":["w","s","j"]},{"name":"h7","identifiers":["Nullable","Matches","a","b","w"]},{"name":"h8","identifiers":["w"]},{"name":"h9","identifiers":["w","c","s","i"]},{"name":"h10","identifiers":["w","s","i"]},{"name":"c5","identifiers":["a","c","s","i"],"kind":"calls","callees":["DerivCorrect"]},{"name":"c6","identifiers":["a","c","s","j"],"kind":"calls","callees":["DerivCorrect"]},{"name":"h11","identifiers":["w","c","s","j"]},{"name":"h12","identifiers":["w","s","j"]}]
-// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.DerivCorrect","start":68,"end":120}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.DerivCorrect","start":71,"end":123}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1) (Re, Matches, Nullable) and R06's given Deriv, copied verbatim.
   datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)
