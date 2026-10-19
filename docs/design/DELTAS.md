@@ -4689,6 +4689,7 @@ DVR4 step 4 (plan §4.1–§4.2, D-E1 (a)). Objectives, items and minutes are PL
 - **Leak patterns and overlap.** 8 patterns re-cut with `# source:` lines, verifier OK over 2,682 public files; 0 public-answer windows for every R02 file. Finding: the Lab α forms `a1b-cat-eps-left-{d,v}` and `a1b-nullable-correct-{d,v}` (Δ291) hold R02's H4v/H1 skeletons in learner-visible files (R05's a1b forms likewise): DECISION (notes §4, 2).
 - **Written pair.** Rubric pins refreshed; `make -C paper paper` builds. Numerals spaced in all R02 learner text (scan clean).
 - **Study workflow** 15/15 on a disposable clone (7 first tries, strict OK, freeze, native tests, gates and audits of units and agent references).
+- **Focused author CI** (`scripts/ci.sh --author`, run `20261019T050431Z-1585423`, authoring @ `7279ba8`, clean tree, 3,701 s): verify-r-dafny PASS 455 s, verify-r-verus PASS 345 s, pins PASS 2,100 s; static FAIL 801 s on one step only, `check_single_route.py`, for two files this lane did not touch (`bench/local/r/labalpha/pub-hev-075/tasks/pub-hev-075.rs`, `harness/fvh/report.py`, both unchanged since `89268f4`: the Lab α lane's); every other static step passed (course map, its 404-test suite, hollow lint, specfreeze, chapter lint, avoid.sh, reference_lint). `scripts/firsttry.sh R02 --empty-body` on `7279ba8`: 10/10.
 
 ### Δ290 · Lab alpha harness: statistics, freeze, roles, the policy instrument and the three plans — adopted in R authoring (2026-10-18 UTC)
 
