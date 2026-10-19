@@ -139,7 +139,7 @@ The position is a scalar index into the input sequence, never a byte offset; §6
 module R09_SumDemo {
   import opened RG_A3_Syntax
 
-  method DigitAt(c: char, at: nat) returns (r: Res<nat>)
+  method BoundAtR09(c: char, at: nat) returns (r: Res<nat>)
     ensures r.Ok? ==> BoundChar(c) && r.value == BoundVal(c)
     ensures r.Err? ==> !BoundChar(c) && r.pos == at
   {
@@ -155,8 +155,8 @@ module R09_SumDemo {
     ensures r.Ok? ==> BoundChar(s[0]) && BoundChar(s[1]) && r.value == BoundVal(s[0]) + BoundVal(s[1])
     ensures r.Err? ==> (r.pos == 0 && !BoundChar(s[0])) || (r.pos == 1 && BoundChar(s[0]) && !BoundChar(s[1]))
   {
-    var x :- DigitAt(s[0], 0);
-    var y :- DigitAt(s[1], 1);
+    var x :- BoundAtR09(s[0], 0);
+    var y :- BoundAtR09(s[1], 1);
     r := Ok(x + y);
   }
 }
@@ -174,7 +174,7 @@ Two early exits, two error positions, each the callee's own. The same method wit
 module R09_SumByHandDemo {
   import opened RG_A3_Syntax
 
-  method DigitAt(c: char, at: nat) returns (r: Res<nat>)
+  method BoundAtR09(c: char, at: nat) returns (r: Res<nat>)
     ensures r.Ok? ==> BoundChar(c) && r.value == BoundVal(c)
     ensures r.Err? ==> !BoundChar(c) && r.pos == at
   {
@@ -191,12 +191,12 @@ module R09_SumByHandDemo {
     ensures r.Ok? ==> BoundChar(s[0]) && BoundChar(s[1]) && r.value == BoundVal(s[0]) + BoundVal(s[1])
     ensures r.Err? ==> (r.pos == 0 && !BoundChar(s[0])) || (r.pos == 1 && BoundChar(s[0]) && !BoundChar(s[1]))
   {
-    var x := DigitAt(s[0], 0);
+    var x := BoundAtR09(s[0], 0);
     if x.Err? {
       r := Err(0, x.msg);
       return;
     }
-    var y := DigitAt(s[1], 1);
+    var y := BoundAtR09(s[1], 1);
     if y.Err? {
       r := Err(0, y.msg);
       return;
@@ -222,7 +222,7 @@ use rg_re_a3::*;
 
 verus! {
 
-fn digit_at(c: char, at: usize) -> (r: Result<u32, PErr>)
+fn bound_at_r09(c: char, at: usize) -> (r: Result<u32, PErr>)
     ensures
         match r {
             Ok(n) => is_bound_char(c) && n == bound_value(c),
@@ -245,8 +245,8 @@ fn sum_of_two(s: &Vec<char>) -> (r: Result<u32, PErr>)
             Err(e) => (e.pos == 0 && !is_bound_char(s@[0])) || (e.pos == 1 && is_bound_char(s@[0]) && !is_bound_char(s@[1])),
         },
 {
-    let x = digit_at(s[0], 0)?;
-    let y = digit_at(s[1], 1)?;
+    let x = bound_at_r09(s[0], 0)?;
+    let y = bound_at_r09(s[1], 1)?;
     Ok(x + y)
 }
 
@@ -265,7 +265,7 @@ use rg_re_a3::*;
 
 verus! {
 
-fn digit_at(c: char, at: usize) -> (r: Result<u32, PErr>)
+fn bound_at_r09(c: char, at: usize) -> (r: Result<u32, PErr>)
     ensures
         match r {
             Ok(n) => is_bound_char(c) && n == bound_value(c),
@@ -289,13 +289,13 @@ fn sum_of_two_by_hand(s: &Vec<char>) -> (r: Result<u32, PErr>)
             Err(e) => (e.pos == 0 && !is_bound_char(s@[0])) || (e.pos == 1 && is_bound_char(s@[0]) && !is_bound_char(s@[1])),
         },
 {
-    let x = match digit_at(s[0], 0) {
+    let x = match bound_at_r09(s[0], 0) {
         Ok(n) => n,
         Err(e) => {
             return Err(PErr { pos: 0, kind: e.kind });
         },
     };
-    let y = match digit_at(s[1], 1) {
+    let y = match bound_at_r09(s[1], 1) {
         Ok(n) => n,
         Err(e) => {
             return Err(PErr { pos: 0, kind: e.kind });
@@ -373,7 +373,7 @@ A propagated failure is a return, so it owes every `ensures` clause. Here the po
 module R09_EarlyExitDemo {
   import opened RG_A3_Syntax
 
-  method DigitAt(c: char, at: nat) returns (r: Res<nat>)
+  method BoundAtR09(c: char, at: nat) returns (r: Res<nat>)
     ensures r.Ok? ==> BoundChar(c) && r.value == BoundVal(c)
     ensures r.Err? ==> !BoundChar(c) && r.pos == at
   {
@@ -385,11 +385,11 @@ module R09_EarlyExitDemo {
   }
 
   // A promise about every failure, broken only on the path through :-.
-  method FirstDigitTagged(s: seq<char>) returns (r: Res<nat>)
+  method FirstBoundTaggedR09(s: seq<char>) returns (r: Res<nat>)
     requires |s| >= 1
     ensures r.Err? ==> r.msg == "first digit"
   {
-    var x :- DigitAt(s[0], 0);
+    var x :- BoundAtR09(s[0], 0);
     r := Ok(x);
   }
 }
@@ -409,7 +409,7 @@ use rg_re_a3::*;
 
 verus! {
 
-fn digit_at(c: char, at: usize) -> (r: Result<u32, PErr>)
+fn bound_at_r09(c: char, at: usize) -> (r: Result<u32, PErr>)
     ensures
         match r {
             Ok(n) => is_bound_char(c) && n == bound_value(c),
@@ -424,13 +424,13 @@ fn digit_at(c: char, at: usize) -> (r: Result<u32, PErr>)
 }
 
 // A promise about every failure, broken only on the path through ?.
-fn first_digit_tagged(s: &Vec<char>) -> (r: Result<u32, PErr>)
+fn first_bound_tagged_r09(s: &Vec<char>) -> (r: Result<u32, PErr>)
     requires
         s.len() >= 1,
     ensures
         r is Err ==> r->Err_0.kind == ErrKind::BoundsOrder,
 {
-    let x = digit_at(s[0], 0)?;
+    let x = bound_at_r09(s[0], 0)?;
     Ok(x)
 }
 
@@ -589,11 +589,11 @@ Read every stateful contract in this module through that picture: two outcomes, 
 
 ```dafny
 module R09_FrameDemo {
-  class Tally {
+  class MeterR09 {
     var count: nat
   }
 
-  method Bump(t: Tally)
+  method AdvanceMeterR09(t: MeterR09)
     ensures t.count == old(t.count) + 1
   {
     t.count := t.count + 1;
@@ -612,11 +612,11 @@ With it, the same body verifies; the postcondition, not the clause, says what ch
 
 ```dafny
 module R09_FrameGivenDemo {
-  class Tally {
+  class MeterR09 {
     var count: nat
   }
 
-  method Bump(t: Tally)
+  method AdvanceMeterR09(t: MeterR09)
     modifies t
     ensures t.count == old(t.count) + 1
   {
@@ -638,11 +638,11 @@ use vstd::prelude::*;
 
 verus! {
 
-pub struct Tally {
+pub struct MeterR09 {
     pub count: u64,
 }
 
-fn bump(t: &Tally) {
+fn advance_meter_r09(t: &MeterR09) {
     t.count = t.count + 1;
 }
 
@@ -661,11 +661,11 @@ use vstd::prelude::*;
 
 verus! {
 
-pub struct Tally {
+pub struct MeterR09 {
     pub count: u64,
 }
 
-fn bump(t: &mut Tally)
+fn advance_meter_r09(t: &mut MeterR09)
     requires
         old(t).count < 100,
     ensures
@@ -1069,11 +1069,11 @@ function ClassInsert(cc: CharClass, g: CRange): (res: CharClass)
 The last `ensures` is the *bound clause*: a listing below `b` stays below `b` after inserting a range that ends below `b`. Nothing else relates the inserted range to the bound, so a proof that a class stays lowered must state `ClassBelow` of the old class and then read the new listing's facts through the accessor lemma. Without them:
 
 ```dafny
-module R09_DigitsClassDemo {
+module R09_NumeralClassDemo {
   import opened RG_A2_Deriv
   import opened RG_A3_Syntax
 
-  method DigitsClass() returns (cc: CharClass)
+  method NumeralClassR09() returns (cc: CharClass)
     ensures ClassValid(cc) && ClassLowered(cc)
   {
     var e := ClassEmpty();
@@ -1095,11 +1095,11 @@ dafny/given/R/RG_A3_Syntax.dfy:48:5: related: this proposition could not be prov
 With them:
 
 ```dafny
-module R09_DigitsClassFactsDemo {
+module R09_NumeralClassFactsDemo {
   import opened RG_A2_Deriv
   import opened RG_A3_Syntax
 
-  method DigitsClass() returns (cc: CharClass)
+  method NumeralClassR09() returns (cc: CharClass)
     ensures ClassValid(cc) && ClassLowered(cc)
   {
     var e := ClassEmpty();
@@ -1123,7 +1123,7 @@ use rg_re_a3::*;
 
 verus! {
 
-fn digits_class() -> (cc: CharClass)
+fn numeral_class_r09() -> (cc: CharClass)
     ensures
         cc.valid() && class_valid(cc.ranges_spec()),
 {

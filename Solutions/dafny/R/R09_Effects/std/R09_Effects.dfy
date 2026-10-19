@@ -87,6 +87,7 @@ module R09_Cursor {
   // Hint(1): an early return through `:-` is a return: every postcondition holds on it.
   // Hint(2): W1's error position is the `pos` argument you pass; keep the old position in a local.
   // Reference checks (enabled):
+  // reference-only: enabled shipped check
   method ReadBoundCursorCheck()
   {
     var cur := new EffectCursorR09(['4', '}'], 0);

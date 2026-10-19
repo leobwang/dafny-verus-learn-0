@@ -89,6 +89,7 @@ fn read_bound_cursor_r09(cur: &mut EffectCursorR09) -> (res: Result<u32, PErr>)
 // Hint(1): `?` returns the error at once: every `ensures` clause, the cursor's included, must hold there.
 // Hint(2): read the character and the old position into locals before you write `cur.position`.
 // Reference checks (enabled):
+// reference-only: enabled shipped check
 fn read_bound_cursor_check() {
     let mut text: Vec<char> = Vec::new();
     text.push('4');
