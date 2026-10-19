@@ -2,9 +2,15 @@
 // What is the executable i32 quotient? The compiled test observes the actual value.
 // Answer form: numeral
 use vstd::prelude::*;
+
 verus! {
-fn quotient_value() -> i32 { -7i32 / 2 }
+
+fn quotient_value() -> i32 {
+    -7i32 / 2
 }
+
+} // verus!
+
 #[test]
 fn quotient_check() {
     let q = quotient_value();

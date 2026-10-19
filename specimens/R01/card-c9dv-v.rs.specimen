@@ -1,3 +1,11 @@
 // after: R01.P6v
 use vstd::prelude::*;
-verus! { fn division() { let q: i32 = -7i32 / 2; assert(q == -4); } }
+
+verus! {
+
+fn division() {
+    let q: i32 = -7i32 / 2;
+    assert(q == -4);
+}
+
+} // verus!

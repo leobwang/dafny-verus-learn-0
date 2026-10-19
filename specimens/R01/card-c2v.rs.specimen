@@ -1,2 +1,9 @@
 use vstd::prelude::*;
-verus! { proof fn every_char(c: char) { assert(c == 'x'); } }
+
+verus! {
+
+proof fn every_char(c: char) {
+    assert(c == 'x');
+}
+
+} // verus!

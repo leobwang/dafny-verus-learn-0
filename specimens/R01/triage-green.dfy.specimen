@@ -1,1 +1,7 @@
-module R01_TriageGreen { method Echo(c: char) returns (r: char) ensures r == c { r := c; } }
+module R01_TriageGreen {
+  method Echo(c: char) returns (r: char)
+    ensures r == c
+  {
+    r := c;
+  }
+}

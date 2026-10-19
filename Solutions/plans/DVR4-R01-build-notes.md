@@ -1,0 +1,70 @@
+# DVR4 step 5 — R01 at the R module bar (author-only)
+
+Binding inputs: `Solutions/plans/DVR4-repair-plan.md` §2 (R01's row: **keep** + registry rows + Draw A predict), §2.1 (the four results), §2.2 (the line budget), §4.2 (the R module bar), §5 step 5, §7 (D58: R02 accepted as the exemplar); PLAN §3 R01 (Why, Core payload, Diagrams, Written track, Exercises, Agentic role, Whispers) and PLAN §6.1's 276-minute record; the exemplar `docs/R02_Datatypes.md`, its core files, bank and `Solutions/plans/DVR4-R02-build-notes.md`. Earlier R01 evidence: `Solutions/plans/DVR1-build-notes.md`, `Solutions/plans/R-author-notes.md` §2. Scratch and run logs: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p1/r01/` (never `/tmp/dvl0-dv*`).
+
+## 1. Objective-to-exercise map (written before any change, 2026-10-19)
+
+PLAN §3's objectives for R01, where the learner meets each, the item that checks it, and the evidence that keeps the item real. Minutes are PLAN §6.1's (test-out 10 = 5 + 5; holes 24 = 6 × 4); none is narrowed. "Line budget" is plan §2.2's counter (proof lines of the reference body: non-blank lines inside the hole region, closing braces not counted). R01's verdict is **keep**: §2.2's redesign rule binds rebuilt items, and none of R01's is rebuilt; the sizes are recorded so the exec and annotation items can be read like R02's H5 (D59).
+
+| objective (PLAN §3 R01) | chapter section that teaches it | items that use it | checked item | minutes D/V | reference lines (D · V) | why not trivial (to be confirmed by the four results) |
+|---|---|---|---|---|---|---|
+| the hole contract: every hole form the course counts, where each tool reports it, what the gate does | §0 (shipped pins), §1.2 (the gate), §5 (the hole contract, the census of forms) | T1 (two forms per language) | **T1d/T1v** census (`CountCharPair`, `CountFirstTwo` / `lemma_count_char_pair`, `count_first_two`; closed book) | 5 / 5 | 4 proof lines + exec · 4 + exec | the empty lemma body fails (the two-character count needs two unfoldings); the exec body `n := 0` / `0` fails (TRIV, `census-exec.log`); the commented census check fails without both |
+| `ensures`; `int` against bounded integers (`newtype U32` · `u32`); intermediate overflow | §2.1 (C1), §4.1 (P1's scenarios) | C1d/C1v, W1 | **H1d/H1v** `Midpoint` / `midpoint` | 4 / 4 | exec, 1 implementation line · exec, 1 | exec (TRIV): `m := lo` and `m := 0` fail the exact-average clause; the naive `(lo + hi) / 2` fails the bound obligation (P1's lesson, so the item is the repair of the predicted failure) |
+| `assert`; calling a lemma; a first recursive lemma over strings; `decreases` | §3.1 (C2), §3.2 (C3, W2), §3.3 (the recursive call as hypothesis, the printed lever) | C2, C3, W2 | **H2d/H2v** `CountCharAppend` / `lemma_count_char_append` | 4 / 4 | 6 · 6 (minimal to measure) | Dafny ships `{:induction false}` (R01 is on default induction: the empty body is expected to verify without it, so the lever is printed and named); Verus never inducts |
+| `requires`: the precondition a naive mean needs; callers as witnesses of permitted use | §2.2 (W1, a violating caller), §4.1 | C4dv, W1 | **H3d/H3v** `MeanOfTwo` / `mean_of_two` (annotation hole, `requires` open, Δ160) | 4 / 4 | 1 annotation line · 1 | the region gate (RGN): the twin without its `requires` fails; a too-strong `requires` fails a given live caller (`MeanEdge`); Verus E0 is not the test (the given body verifies once any adequate clause is overlaid: pure annotation routing, DVR1) |
+| compiling and running verified code (`scripts/vcheck --test`); a run proves nothing about inputs it did not see | §1.3, §4.3 (P2's scenarios) | C4dv recognise | P2dv (verdict), P5d, P6v (values) | — | — | — |
+| what each verdict licenses (`verified`, `failed`, `inconclusive`, an error at a stage) | §7 (triage), §8 | — | the TRIAGE drill (advisory, 12 min) | — | — | — |
+| the false-friends card (`calc`, `assert`, `forall`, `old`, `decreases`, `==>`) | §6 | C8dv | paper/viva only | — | — | — |
+| Rosetta: `requires`, `decreases`, `function`/`spec fn`, `forall` | §2.2, §3.3, §2.1, §3.1 | C4dv–C7dv | RECOGNISE only | — | — | — |
+| rung 1 repairer; the three doors; contract R-v0 by hand | §11 (CONTRACT, dashboard) | — | A1d/A1v (4 planted bugs each) | agent 15 + doors 10 + R-v0 20 | — | four independent diagnostics per file (pinned) |
+
+**Constructs a reference needs, and where each is taught before its hole (bar criterion 11).** `ensures` with a conjunction and `as int` casts (C1, H1's statement, §2.1, §4.1); bounded subtraction justified by `lo <= hi` (§4.1, a pinned failing and verified pair on fresh names); a slice fact `(s + t)[1..] == s[1..] + t` / `drop_first` with `=~=` (W2, §3.2, a pinned pair on a fresh lemma); a recursive lemma call as the hypothesis and the `{:induction false}` lever (§3.3, fresh lemma); `requires` with a mathematical sum (§2.2, §4.1).
+
+**File order (bar criterion 9).** The prediction block; T1 (closed book, before reading); W1–W2; the WRITE cards C1–C3 and the Rosetta cards C4–C7; the holes H1–H3, each after every card its `uses:` names (H1 `ensures` after C1; H2 `assert`, `lemma-call` after C2–C3; H3 `requires` after C4); C8dv and C9dv last (PLAN §6.1: "Final section").
+
+**Hole prompts and hints (criteria 7–8).** Each H item gets `**Hn.** <task>. <guiding question>` and `Hint(1)`, `Hint(2)`; the second names the given fact or construct (the subtraction's guard, the slice fact, the recursive call, the live caller), never the answer.
+
+**Chapter plan (criteria 1–6).** Rewritten to R02's standard: every run source above its pinned output, ≥ 6 Dafny and ≥ 6 Rust source blocks, exactly PLAN §3's three diagrams (the three loops per tool with their latencies; the hole contract; the verdict ladder), every prediction answered by a pinned capture (P2's `--test` runs, P3/P4's obligation runs and P5/P6's observed values were not captured before).
+
+**Bank (criterion 13).** Rewritten at the Q06 schema: 12 questions (the plan's floor for R01 is 8; 12 keeps two disjoint six-question draws), each draw with at least one live predict (§2's finding: Draw A had none), two parallel problems with *Isolates* and *Diagnostic*.
+
+## 2. Probes (2026-10-19, `probes/`, `chapter/`)
+
+- TRIV (exec items): H1d `m := lo`, `m := hi`, `m := 0` fail the exact-average or interval clause; the naive `(lo + hi) / 2` fails at the newtype constraint. H1v `lo`, `0` fail the postcondition; the naive body fails the overflow check. T1's exec halves: `n := 0` (Dafny) and `0` (Verus) fail the postcondition (`probes/out.json`).
+- H2d's minimal proof is the reference itself: dropping the slice fact, the empty-case fact, or both, fails (`h2d-a`, `h2d-b`, `h2d-c`). 6 proof lines in each language.
+- `{:axiom}` (found while building §5 and by the bank sub-lane's K5/K8): a Dafny `{:axiom}` bodyless lemma is not a counted hole and `vcheck --gate` passes a file that uses it to prove `1 == 0`; only `vaudit` reports it (`audit-axiom`, `axiom-attribute`). Verus `admit()` is a counted hole. This is the course's design (Δ3 G1: the audit is half of *done*); the chapter (§5) now teaches it with a pinned pair, and the planted-table row "a hole the tool does not count is not done" points at it.
+- Three false-friend Verus demos and one Dafny demo did not show their row before this pass (they were never pinned): row 1's `calc!` failed at parse (the macro was not imported); row 3's `forall` over `char` failed at trigger inference in both languages; row 4's `*x` in a postcondition was refused at resolve (Verus now asks for `*final(x)`). Each was rewritten to fail on the row's own point (`chapter/c81v*.rs`, `c83*.{dfy,rs}`, `c84v.rs`).
+- The agent CONTRACT's audit baselines `expected/R01_AgentRepair.audit` and `expected/r01_hello_agent.audit` (PLAN §6.1) were never written, so the acceptance line `vaudit --compare` could not pass; written now from the shipped files (0 findings each; the repaired twins also hold none).
+
+## 3. As built (2026-10-19)
+
+**Files.** Both exercise files keep the order prediction block, T1, W1–W2, C1–C7, holes, C8–C9; a `Holes` banner precedes H1. Every H item has a `**Hn.**` prompt with a guiding question and `Hint(1)`/`Hint(2)` (the prompts do not reveal P1: an earlier draft cited "P1's scenario" and was neutralised). H1d/H1v reference bodies are marked `@impl-begin/@impl-end`. Twins, learner files, agents and all 32 specimens are one statement per line; commented checks are multi-line blocks under `Uncomment as you go:`. New specimens `chapter-p5-d.dfy.specimen` (`// after: R01.P5d`), `chapter-p6-v.rs.specimen` (`// after: R01.P6v`), `chapter-test-d.dfy.specimen`, `chapter-test-v.rs.specimen`. Toy names that collided with Q under `avoid.sh` were renamed (C3's `short`/`client`/`establish` to `short_word`/`short_client`/`establish_short`; chapter `Twice`→`Twofold`, `Gap`→`GapBetween`).
+
+**Admission evidence (the four results, plan §2.1).** References: `vcheck --ref --brittleness` stable on seeds 1–3 for both core twins (Dafny 22, Verus 17 verified) and both agent twins (`logs/brittle-*.log`). `firsttry.sh R01 --empty-body` 8/8 (`logs/empty-body-1.log`; final run after commit in `logs/empty-body-final.log`): every empty body fails in every run (shipped configuration, maximal automation, seeds), and each region gate (T1d, T1v, H2d, H2v, H3d, H3v) fails too; H3v is routed as a pure contract annotation (TRIV on the completed contract, RGN on the missing clause). `specfreeze --pin`/`--check R01` 0 findings (91 statements, 40 files); `--lint-hollow` OK (39 files); `reference_lint` 0; `vcheck --shipped R01` 0; counts re-pinned unchanged (22/17).
+
+| item | minutes | reference lines (§2.2 counter) | (1) seeds 1–3 | (2) empty body, shipped | (3) maximal automation | (4) TRIV | row |
+|---|---|---|---|---|---|---|---|
+| T1d | 5 | 4 proof + exec `CountFirstTwo` | stable | fails; region gate fails | fails | `n := 0` fails | admitted |
+| T1v | 5 | 4 proof + exec `count_first_two` | stable | fails; region gate fails | fails (E0/E0H/E1) | `0` fails | admitted |
+| H1d | 4 | exec (1 implementation line) | stable | fails | fails | `lo`, `hi`, `0` fail | admitted (exec: D59's reading) |
+| H1v | 4 | exec (1 implementation line) | stable | fails | fails | `lo`, `0` fail | admitted (exec: D59's reading) |
+| H2d | 4 | 6 (minimal 6) | stable | fails; region gate fails | fails: default induction does not supply the slice fact (no lever-needed line) | n/a | admitted |
+| H2v | 4 | 6 | stable | fails; region gate fails | fails | n/a | admitted |
+| H3d | 4 | 1 annotation line | stable | fails; region gate fails | fails | n/a (body given) | admitted (annotation: RGN) |
+| H3v | 4 | 1 annotation line | stable | fails; region gate fails | fails | TRIV on the completed contract | admitted (annotation: RGN) |
+
+Minutes reconcile: test-out 10 (T1d 5 + T1v 5) and holes 24 (6 × 4) = PLAN §6.1's lines; `[module.admissible]` holds the 8 rows (34 minutes). H2d keeps its printed `{:induction false}` (the statement as shipped; the empty body fails without it too, so no fallback is named).
+
+**Overlap.** `bin/overlap.py R01 8`: no answer region shares an 8-token window with an R01 specimen, chapter block or bank probe beyond its own statement (T1v's 18 shared windows are its `ensures` clause, in the learner file); H2d shares 8 windows with Q04's `card-c2d` (a generic `(s + t)[1..]` slice fact, cross-track, no full pattern match). Public-answer calibration: 0 windows over 41 shipped files. Leak patterns re-cut (the two Midpoint patterns no longer matched their re-laid-out twins; now anchored on R01's exact-average clause): 8 OK over 2,689 public files.
+
+**Chapter.** Rewritten: 7,489 lint words (from 5,725); 34 Dafny and 30 Rust source blocks (from 1 and 1); 71 pinned fences (from 14); exactly PLAN §3's three diagrams (the loops with their latencies, measured in `logs/latency.txt`; the hole contract; the verdict ladder; the old prediction-flow, contract-boundary and dashboard diagrams were not in the record); every run source directly above its pinned output; every prediction answered by a capture after its box (P2's `--test` runs, P3/P4's obligation runs and P5/P6's observed values are new). `chapter_lint` 0; `pins.py --chapter R01` 71/71; `pins.py --ci --module R01` 82 pins 0 problems; `--ref` 6 checks 0.
+
+**Bank.** Rewritten by the bank sub-lane at the Q06 schema: 12 questions (2 reconstruct, 4 predict, 2 why, 2 connect, 2 transfer), 1,461 lines, 12 `**Reread**` lines citing the new chapter's headings (all resolve), two disjoint draws each with two live predicts (A: K3, K7 — the plan §2 finding was that Draw A had none; B: K2, K4), two parallel problems (`Squeeze`/`SqueezeAppend` for H2; `HalfUp` over a `Word` newtype for H1/H3) with author-verified shipped/empty/reference runs; probes captured on the pins (`r01/bank/outputs.json`); no generic branch lines; glued-numeral scan clean.
+
+**Written pair.** Unchanged problems; rubric pins refreshed (4 stale twin pins); `make -C paper paper` builds.
+
+**Study workflow** (`bin/wf.py R01`, disposable clone under `r01/workflow/`, removed after): firsttry `--check` records 8 first tries (6 predictions, 2 code test-outs), strict OK, freeze 0, the check unit's native test, both units' gates and audits, both agent references' gates and audits: 12/12. (`test-core` was a harness misdetection: R01's units hold no test; the first run's strict failure was the harness skipping the specimen twins, `workflow-run1/`.)
+
+## 4. DECISION NEEDED
+
+**1 · R01's exec and annotation holes under the plan's line counter (non-blocking).** H1d/H1v are exec items (1 implementation line each, 0 proof lines) and H3d/H3v are one-clause annotation holes; both pass all four results (TRIV, RGN). R01's verdict is **keep** (plan §2), and §2.2's redesign rule binds rebuilt items only. Options: (a) record them as R01 exceptions under D59's reading (an exec item is measured by TRIV and its implementation lines; an annotation item by the region gate), as built; (b) treat §2.2 as binding on every module and redesign them (changes PLAN §6.1's items). **Recommend (a).**

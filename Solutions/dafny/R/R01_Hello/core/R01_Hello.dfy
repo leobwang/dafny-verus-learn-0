@@ -53,7 +53,13 @@ module R01_Hello {
   }
   // Reference checks (enabled):
   // reference-only: enabled shipped check
-  method CensusCheck() { CountCharPair('a', 'b', 'a'); assert ['a', 'b'][..2] == ['a', 'b']; var n := CountFirstTwo(['a', 'b'], 'a'); assert n == 1; }
+  method CensusCheck()
+  {
+    CountCharPair('a', 'b', 'a');
+    assert ['a', 'b'][..2] == ['a', 'b'];
+    var n := CountFirstTwo(['a', 'b'], 'a');
+    assert n == 1;
+  }
 
   // item: R01.W1d
   /** A method exports its postcondition to callers. The precondition makes the last
@@ -84,13 +90,17 @@ module R01_Hello {
   // EXPECT: card-c1d.dfy.specimen fails; read only after predictions are recorded.
   method KeepChar(c: char) returns (r: char)
     ensures r == c
-  { r := c; }
+  {
+    r := c;
+  }
 
   // item: R01.C2d write:assert
   // EXPECT: card-c2d.dfy.specimen fails.
   lemma EmptyPrefix(s: seq<char>)
     ensures [] + s == s
-  { assert [] + s == s; }
+  {
+    assert [] + s == s;
+  }
 
   // item: R01.C3d write:lemma-call
   // EXPECT: card-c3d.dfy.specimen fails.
@@ -112,26 +122,44 @@ module R01_Hello {
   //          forall|i: int| 0 <= i < s.len() ==> s[i] == c
   // These formulas have a bounded domain and describe every position in a sequence.
 
+  // ===========================================================================
+  // Holes
+  // ===========================================================================
+
   // item: R01.H1d
   // uses: ensures
   // pair: R01.H1v
-  /** Implement the mathematical midpoint of two ordered bounded values. Preserve both
-      the interval guarantee and the exact-average guarantee. */
+  /** **H1.** Implement the midpoint of two ordered bounded values, keeping both
+      the interval clause and the exact-average clause. Which operations does
+      your body perform on `U32` values, and what must be true of each result
+      for every call the precondition admits? */
   method Midpoint(lo: U32, hi: U32) returns (m: U32)
     requires lo <= hi
     ensures lo <= m <= hi && m as int == (lo as int + hi as int) / 2
   {
+    // @impl-begin R01.H1d
     m := lo + (hi - lo) / 2;
+    // @impl-end R01.H1d
   }
+  // Hint(1): every intermediate value of the body must be a U32, not only the result.
+  // Hint(2): the precondition `lo <= hi` is the one given fact the body can spend:
+  //    which subtraction does it make legal?
   // Reference checks (enabled):
   // reference-only: enabled shipped check
-  method MidpointCheck() { var m := Midpoint(0xFFFF_FFFE, 0xFFFF_FFFF); assert m == 0xFFFF_FFFE; }
+  method MidpointCheck()
+  {
+    var m := Midpoint(0xFFFF_FFFE, 0xFFFF_FFFF);
+    assert m == 0xFFFF_FFFE;
+  }
 
   // item: R01.H2d
   // uses: assert, lemma-call
   // pair: R01.H2v
-  /** A character's count in a concatenation is the sum of its counts in the two parts.
-      Write the induction yourself; the lemma's automatic induction is disabled. */
+  /** **H2.** A character's count in a concatenation is the sum of its counts in
+      the two parts. Prove it by recursion on `s`, the way W2 recurses (the lever
+      `{:induction false}` keeps Dafny from finding the recursive call for you).
+      What is `s + t` once its first element is dropped, and which call of this
+      lemma then supplies the rest of the sum? */
   lemma {:induction false} CountCharAppend(s: seq<char>, t: seq<char>, c: char)
     ensures CountChar(s + t, c) == CountChar(s, c) + CountChar(t, c)
     decreases |s|
@@ -145,15 +173,23 @@ module R01_Hello {
     }
     // @hole-end R01.H2d
   }
+  // Hint(1): split on whether `s` is empty; CountChar's definition does the same.
+  // Hint(2): a call of this lemma on a shorter `s` is the hypothesis (W2's call);
+  //    the verifier also needs the slice fact that connects `s + t` to that call.
   // Reference checks (enabled):
   // reference-only: enabled shipped check
-  lemma AppendCheck() { CountCharAppend(['x'], ['y', 'x'], 'x'); }
+  lemma AppendCheck()
+  {
+    CountCharAppend(['x'], ['y', 'x'], 'x');
+  }
 
   // item: R01.H3d
   // uses: requires
   // pair: R01.H3v
-  /** Keep the body and the mathematical result statement. Supply a requires clause
-      that makes the body verify while preserving all THREE supplied callers below. */
+  /** **H3.** Keep the body and the result clause; write the `requires` clause
+      that makes `(a + b) / 2` verify while all three given callers below still
+      verify. Which operation of the body owes a range fact, and which caller
+      rejects a clause that bounds each argument on its own? */
   method MeanOfTwo(a: U32, b: U32) returns (m: U32)
     // @hole-begin R01.H3d
     requires a as int + b as int < 0x1_0000_0000
@@ -162,9 +198,24 @@ module R01_Hello {
   {
     m := (a + b) / 2;
   }
-  method MeanZero() { var m := MeanOfTwo(0, 0); assert m == 0; }
-  method MeanSmall() { var m := MeanOfTwo(4, 6); assert m == 5; }
-  method MeanEdge() { var m := MeanOfTwo(0x7FFF_FFFF, 0x8000_0000); assert m == 0x7FFF_FFFF; }
+  // Hint(1): the failing obligation is the addition's; read its diagnostic first.
+  // Hint(2): run the three callers after each candidate clause: `MeanEdge`
+  //    rejects any clause that is stronger than the addition needs.
+  method MeanZero()
+  {
+    var m := MeanOfTwo(0, 0);
+    assert m == 0;
+  }
+  method MeanSmall()
+  {
+    var m := MeanOfTwo(4, 6);
+    assert m == 5;
+  }
+  method MeanEdge()
+  {
+    var m := MeanOfTwo(0x7FFF_FFFF, 0x8000_0000);
+    assert m == 0x7FFF_FFFF;
+  }
 
   // item: R01.C8dv diverge:false-friends
   // Final cards: calc / assert / forall / old / decreases / ==>. Six paired demos
@@ -173,9 +224,13 @@ module R01_Hello {
   // Integer division: read the paired demo only after R01.P5d and R01.P6v are recorded.
 
   /* TRIAGE — before reading the chapter's debrief, classify each of the five captured
-     cases in §6 by verdict and stage. State what the result licenses and what it does
+     cases in §7 by verdict and stage. State what the result licenses and what it does
      not. Write your own lines here; never infer zero holes from a green verdict.
-     case 1: ...  case 2: ...  case 3: ...  case 4: ...  case 5: ...
+     case 1: ...
+     case 2: ...
+     case 3: ...
+     case 4: ...
+     case 5: ...
 
      CALIBRATION
      Estimate / actual / correction, in your words: ...
