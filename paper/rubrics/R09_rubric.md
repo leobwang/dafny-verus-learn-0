@@ -5,11 +5,11 @@ Local fixture builds do not replace deferred D45 live grading or actor runs.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R09_solutions.tex  sha256 c39e59f14c3b1e6a660cbc3603643daf289ca357192fe575c5d81fc51afe3b7d
-paper/R09_problems.tex  sha256 14880166e310ef246313e9699ea0c704f4d4274a444fb33ac52e202bbe3cbee9
-Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy  sha256 76b8ec524fd5e7c976f15e4ee20cd3b22486b0c560724fa6db9a232e5fea5166
-Solutions/verus/r/r09_effects/src/lib.rs  sha256 522fbf9df3e5b91caff4467a85ed92172be1e607e47452586c0c5ba3c88d08c2
-Solutions/dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy  sha256 e9c3698e85765f38f3b7c291fc9fe32f6092695ce87b55ab6a34e0e24726e8fd
-Solutions/verus/r/r09_effects/src/agent.rs  sha256 2d9d71007e5a9410d23a5066ea59072f8b46fac8b9f9aae4955fcf3a9d51ce19
+paper/R09_problems.tex  sha256 ec3d49c6f06e0493bf3ffe497e1e3408e97aeab928afb764bbf2ac88b2bc8189
+Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy  sha256 fb19287d39c0deb679742246ea2f619e8fd9d46c07e5f75aedfc9c3e5b1cd0d3
+Solutions/verus/r/r09_effects/src/lib.rs  sha256 66b768a4128d57173b33d61767ed8bbefb7cd42f3f8b75d1524d693ad3c8381f
+Solutions/dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy  sha256 a35e2b9458cc3ab6d5ba12063c669bd0d1219b813c756e2ecc7b14796359f550
+Solutions/verus/r/r09_effects/src/agent.rs  sha256 8fb4ecab6e292bf40785240598cdf7f61a77f47325da4f8ad06fa4146b5f106b
 
 ## Verifier anchors
 
@@ -18,7 +18,7 @@ Solutions/verus/r/r09_effects/src/agent.rs  sha256 2d9d71007e5a9410d23a5066ea590
   compare complete AST/spans, actual class intervals and exact failure indices.
 - **Probe C:** retain the original contract and native source failure, then run
   complete gate/audit and source-snapshot comparison on a delivered repair.
-- **Probe D:** instantiate cap0, an exact cap, full bounded input, oversized
+- **Probe D:** instantiate a cap of 0, an exact cap, full bounded input, oversized
   positive counts and unused oversized operands under zero copies.
 - **Probe F:** distinguish mirror-relative implications, finite differential
   observations, a general grammar theorem and live actor results explicitly.
@@ -28,13 +28,13 @@ Solutions/verus/r/r09_effects/src/agent.rs  sha256 2d9d71007e5a9410d23a5066ea590
 ### card-fidelity
 
 - **CF.a:** grade all eight fields separately; the minimum is the card score.
-  Empty fields score1; source-bounded accurate paraphrases score4.
+  Empty fields score 1; source-bounded accurate paraphrases score 4.
 - **CF.b:** identify equivalence-based symbolic Coq repair and the configure,
   transform, decompile stages. Kernel-checked terms differ from suggested
   scripts and from discovery of the intended type equivalence.
-- **CF.c:** preserve all14examples/8classes and category denominators. The
+- **CF.c:** preserve all 14 examples and 8 classes and category denominators. The
   evaluation is qualitative without timing data; invented speedups, agent
-  success rates, variance or common budgets score at most2 with quoted lines.
+  success rates, variance or common budgets score at most 2 with quoted lines.
 - **CF.d:** distinguish checked outputs from a mechanized implementation
   correctness proof; the excerpt has no such proof. State unavailable build
   manifests and scope beyond equivalence-expressible changes as unavailable.
@@ -51,10 +51,10 @@ Solutions/verus/r/r09_effects/src/agent.rs  sha256 2d9d71007e5a9410d23a5066ea590
   resolve, verify, resource exhaustion and runtime failures distinct.
 - **F.c:** derive fixed/optional/outer costs and the exact total. Establish
   guard-before-evaluation, complete rejection meaning and zero-copy bypass.
-  Confusing logical tree nodes with peak memory scores at most2.
+  Confusing logical tree nodes with peak memory scores at most 2.
 - **F.d:** literal success/meaning rules out always-error; finite agreement is
   finite evidence. Claiming a general grammar theorem or live actor outcome
-  from author checks scores at most2 with Probe F and the unsupported lines.
+  from author checks scores at most 2 with Probe F and the unsupported lines.
 
 ## Code, native effects and port
 
@@ -71,8 +71,8 @@ first tries. Bench card eight is course-derived and previously exposed.
 
 ## Calibration fixtures
 
-Gold expects4 in both dimensions. Flawed B1 invents automatic coverage/timing
+Gold expects 4 in both dimensions. Flawed B1 invents automatic coverage/timing
 and B2 conflates mirror implications with full semantics, scalar/byte units,
 safe failure with completeness, bounded evaluation with mathematical products,
-zero-copy behavior, finite tests and actor outcomes. Both score at most2 with
+zero-copy behavior, finite tests and actor outcomes. Both score at most 2 with
 quoted learner/source evidence. These are expected grades, not live sessions.

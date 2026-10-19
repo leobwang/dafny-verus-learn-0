@@ -1,20 +1,35 @@
 // after: R09.P3dv
 module R09_ProductFity {
- newtype FitU32R09 = x:int | 0<=x<0x100000000
- lemma ProductOrderCardR09(a:int,b:int,d:int)
-  requires a<=b && d>=0
-  ensures a*d<=b*d
- {}
- lemma {:isolate_assertions} QuotientGuardCardR09(width:int,cap:int,times:int)
-  requires 0<=width && 0<=cap && times>0
-  ensures (width<=cap/times) <==> width*times<=cap
- {
-  var q:=cap/times;var r:=cap%times;
-  assert cap==q*times+r && 0<=r<times;
-  if width<=q {ProductOrderCardR09(width,q,times);}
-  else {assert width>=q+1;ProductOrderCardR09(q+1,width,times);assert (q+1)*times==q*times+times;}
- }
- method ProductFitsR09(width:FitU32R09,times:FitU32R09,cap:FitU32R09) returns (fits:bool)
-  ensures fits == ((width as int)*(times as int)<=cap as int)
- {if times>0 {QuotientGuardCardR09(width as int,cap as int,times as int);} fits:=times==0 || width<=cap/times;}
+  newtype FitU32R09 = x: int | 0 <= x < 0x100000000
+
+  lemma ProductOrderCardR09(a: int, b: int, d: int)
+    requires a <= b && d >= 0
+    ensures a * d <= b * d
+  {
+  }
+
+  lemma {:isolate_assertions} QuotientGuardCardR09(width: int, cap: int, times: int)
+    requires 0 <= width && 0 <= cap && times > 0
+    ensures (width <= cap / times) <==> width * times <= cap
+  {
+    var q := cap / times;
+    var r := cap % times;
+    assert cap == q * times + r && 0 <= r < times;
+    if width <= q {
+      ProductOrderCardR09(width, q, times);
+    } else {
+      assert width >= q + 1;
+      ProductOrderCardR09(q + 1, width, times);
+      assert (q + 1) * times == q * times + times;
+    }
+  }
+
+  method ProductFitsR09(width: FitU32R09, times: FitU32R09, cap: FitU32R09) returns (fits: bool)
+    ensures fits == ((width as int) * (times as int) <= cap as int)
+  {
+    if times > 0 {
+      QuotientGuardCardR09(width as int, cap as int, times as int);
+    }
+    fits := times == 0 || width <= cap / times;
+  }
 }

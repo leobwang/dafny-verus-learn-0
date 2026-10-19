@@ -1,8 +1,14 @@
 // Reference Solution.
 // after: R09.P5dv
 use vstd::prelude::*;
+
 verus! {
-fn preserve_position_r09(input:Result<u32,usize>)->(out:Result<u32,usize>)
- ensures out==input,
- {input}
+
+fn preserve_position_r09(input: Result<u32, usize>) -> (out: Result<u32, usize>)
+    ensures
+        out == input,
+{
+    input
 }
+
+} // verus!

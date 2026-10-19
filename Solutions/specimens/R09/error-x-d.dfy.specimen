@@ -1,8 +1,11 @@
 // Reference Solution.
 // after: R09.P5dv
 module R09_ErrorAdapterx {
- datatype PositionedR09 = ValueR09(value:nat) | ErrorR09(at:nat)
- method PreservePositionR09(input:PositionedR09) returns (out:PositionedR09)
-  ensures out==input
- {out:=input;}
+  datatype PositionedR09 = ValueR09(value: nat) | ErrorR09(at: nat)
+
+  method PreservePositionR09(input: PositionedR09) returns (out: PositionedR09)
+    ensures out == input
+  {
+    out := input;
+  }
 }
