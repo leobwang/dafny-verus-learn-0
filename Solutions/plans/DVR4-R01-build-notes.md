@@ -68,3 +68,7 @@ Minutes reconcile: test-out 10 (T1d 5 + T1v 5) and holes 24 (6 × 4) = PLAN §6.
 ## 4. DECISION NEEDED
 
 **1 · R01's exec and annotation holes under the plan's line counter (non-blocking).** H1d/H1v are exec items (1 implementation line each, 0 proof lines) and H3d/H3v are one-clause annotation holes; both pass all four results (TRIV, RGN). R01's verdict is **keep** (plan §2), and §2.2's redesign rule binds rebuilt items only. Options: (a) record them as R01 exceptions under D59's reading (an exec item is measured by TRIV and its implementation lines; an annotation item by the region gate), as built; (b) treat §2.2 as binding on every module and redesign them (changes PLAN §6.1's items). **Recommend (a).**
+
+## 5. Focused author CI (2026-10-19)
+
+Run `20261019T073341Z-2948899` on `cda3a7f` (`scripts/ci.sh --author --job static --job verify-r-dafny --job verify-r-verus --job pins`, clean tree, 3,854 s, under a 16 GiB scope): verify-r-dafny PASS 458 s, verify-r-verus PASS 345 s, pins PASS 2,239 s; static FAIL 812 s at one step only, `check_single_route.py`, for `bench/local/r/labalpha/pub-hev-075/tasks/pub-hev-075.rs` and `harness/fvh/report.py` (the Lab α lane's files, the same failure as R02's run, untouched here); every other static step passed (course map and its 404 tests, hollow lint, specfreeze, chapter lint over 31 chapters, avoid.sh, reference_lint). Final `scripts/firsttry.sh R01 --empty-body` on `cda3a7f`: 8/8 (`logs/empty-body-final.log`).
