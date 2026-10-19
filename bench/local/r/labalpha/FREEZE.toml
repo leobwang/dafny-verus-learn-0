@@ -27,9 +27,11 @@ confirmatory_clusters = ["a1b-cat-eps-left", "a1b-cat-eps-right", "a1b-star-conc
 descriptive_clusters = ["a1b-star-one", "pub-db-004", "pub-db-010", "pub-db-012", "pub-db-058", "pub-hev-045", "pub-hev-061", "pub-hev-073", "pub-hev-089", "r06-backwards-sound", "r06-deriv-correct", "r06-star-unfold", "r08-alt-final-law", "r08-parts-law", "r09-copies-split", "r09-copies-up-to-correct", "r10-mk-cat-correct", "r10-normal-fixed", "r11-residual-step", "r14-star-pow-v"]
 power_sim_cell = "labalpha_power_sim.py cell 4:1,2:33,1:46 3 BASE 0.15 TAU 1000 30000 20261017 (one 4-task, 33 two-task and 46 one-task clusters, r = 3, ICC 0.15): MDE at 80 % power = 0.0911 (base 0.35, tau 0.5), 0.1011 (0.35, 1.0), 0.0793 (0.60, 0.5), 0.0961 (0.60, 1.0) AUC points"
 power_sim_cell_output_sha256 = "77e63aa629b0a4c3d4d2792a9631218acc19f81717d9c70fa89aa8b948b9d285"
+pilot_runs = "pilot: plan bench/local/r/labalpha/plans/pilot/pilot.toml (sha256 091dd1b1...), 96 runs, 273 calls, on the forms without the R11 header (Δ292); re-pilot on the fixed instructions: plan bench/local/r/labalpha/plans/repilot/pilot.toml (sha256 ecf9e95b...), 96 runs, 232 calls, the same form bytes (Δ294); both excluded from the confirmatory sample"
+ceiling_rule = "the re-pilot's best-raw arm solved 15 of 24 runs at call 1 (0.625, Wilson 95 % [0.43, 0.79]) against plan section 3.6's 0.60 revise threshold, best 13 of 24 (0.54); the two public pilot clusters solve every run at call 1 in both arms; regex pilot clusters 10/18 and 8/18. Recorded, not acted on here: a DECISION item of Δ295"
 pilot_clusters = ["a1b-cat-assoc", "a1b-nullable-correct", "pub-db-052", "pub-hev-023", "r06-backwards-str-involution"]
 pilot_draw = "Solutions/plans/drafts/R12/lab-corpus-v2/pilot/PILOT_DRAW.md (sha256 a72d025c685c59c8864f8f4c224af72655999b060ece5260dcfc982cc935abf7), seed R12-labalpha-pilot-20261018"
 power_sim = "Solutions/plans/labalpha_power_sim.py"
 power_sim_sha256 = "45d06f0b672e1e1da110d41f73c526272e14a5d23bef63bb9baa29320271b816"
 stratum = "bench/local/r/labalpha/STRATUM.toml"
-stratum_sha256 = "41f4e301ec677194d4d490a3501125e50e6b523a35f25d7676b7756233b0de26"
+stratum_sha256 = "f4a88f97a736dac442e64e8e6f819a7ba5b4c1234673f45b61edbf66db394ab6"
