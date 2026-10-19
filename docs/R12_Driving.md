@@ -603,6 +603,14 @@ sensitivity line and the truncation rate per arm come from the logs. The
 pilot's clusters, drawn by a pre-registered seed and run before the freeze, check
 the ceilings and the instrumentation and never enter the confirmatory sample.
 
+The confirmatory and descriptive runs are yours. The course author runs the
+model only on the pilot's excluded clusters, to check the apparatus; no author
+run, smoke test included, ever touches a confirmatory or descriptive cluster. Your
+batches open only after `/grade-paper R12` scores your pre-registration at least 3
+on every method dimension, inside R12's ceiling of 80 GPU-hours (at about 72
+GPU-seconds per call, measured on this corpus); when the ceiling is reached the
+batch pauses and resumes later, and never re-issues a scored attempt.
+
 What you register (the written pair's pre-registration) is this fixed primary
 contrast, by the freeze's hash, plus your own descriptive analyses: the four
 curves with bands, where they appear to cross (read off the bands, never

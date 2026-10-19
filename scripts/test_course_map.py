@@ -723,6 +723,9 @@ case("model engine without budget",
 case("budget keys", setf("Q05", "budget", "{ claude_calls = 0 }"), 1, "budget must hold exactly")
 case("GPU hours over the per-lab cap", setf("Q12", "budget", '{ claude_calls = 180, claude_runs = 0, qwen_calls = 4320, qwen_runs = 0, gpu_hours = 11 }'), 1,
      "budget.gpu_hours = 11 exceeds the per-lab cap of 10")
+case("R12's D56 ceiling of 80 GPU-h is its own cap",
+     setf("R12", "budget", "{ claude_calls = 110, claude_runs = 10, qwen_calls = 10700, qwen_runs = 1070, "
+          "gpu_hours = 81 }"), 1, "budget.gpu_hours = 81 exceeds the per-lab cap of 80 (design §3; the user's D56)")
 case("GPU hours over the course cap",
      setf("Q15", "budget", "{ claude_calls = 80, claude_runs = 0, qwen_calls = 1200, qwen_runs = 0, "
           "gpu_hours = 4 }"), 1, "gpu_hours sum to 46 over the registry, above the course cap of 45")

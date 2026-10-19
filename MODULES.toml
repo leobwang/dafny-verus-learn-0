@@ -121,7 +121,7 @@
 #                     §3: ≤ 10 GPU-h per lab) and ≤ 45 summed over the registry
 #                     (design §11.3: the six labs' Qwen work in ≤ 45 GPU-h; Q07's
 #                     replay hour comes out of the same pool). The lab caps scale
-#                     with planned Qwen work: Q12, R12 10 (4,400 / 4,800 calls);
+#                     with planned Qwen work: Q12 10 (4,400 calls), R12 80 (10,700 calls: the user's D50 and D56, DELTAS Δ295);
 #                     Q15, R15 3 (1,200 / 960 calls); Q18, R16 9 (36 agent runs
 #                     each) [A: design §11; DELTAS Δ176]
 #   admissible        item id → { admitted, minutes, fallback } (design §7.5): a
@@ -2346,7 +2346,7 @@ write_d = []
 write_v = []
 recognise_d = []
 recognise_v = []
-budget = { claude_calls = 110, claude_runs = 10, qwen_calls = 4800, qwen_runs = 480, gpu_hours = 10 }
+budget = { claude_calls = 110, claude_runs = 10, qwen_calls = 10700, qwen_runs = 1070, gpu_hours = 80 }
 admissible = { "R12.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R12.H1d" = { admitted = true, minutes = 10, fallback = "" }, "R12.H2d" = { admitted = true, minutes = 10, fallback = "" }, "R12.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R12.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R12.H2v" = { admitted = true, minutes = 10, fallback = "" }, "R12.H1py" = { admitted = true, minutes = 40, fallback = "" }, "R12.H2py" = { admitted = true, minutes = 40, fallback = "" }, "R12.H3py" = { admitted = true, minutes = 20, fallback = "" }, "R12.H4py" = { admitted = true, minutes = 90, fallback = "" }, "R12.H5py" = { admitted = true, minutes = 60, fallback = "" } }
 imports = { "dafny/checks/R12_checks.dfy" = "std", "dafny/R/R12_Driving/std/R12_Driving.dfy" = "std", "verus/r/r12_driving/src/lib.rs" = "all", "harness/r/fvh_r/engine.py" = "py-fvh", "tools/R12/profiler.py" = "py-std" }
 concept_items = {}
