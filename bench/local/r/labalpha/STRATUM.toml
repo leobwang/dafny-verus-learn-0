@@ -26,13 +26,12 @@ sealed_slot = "R08 (rebuilt), R13- and R14-derived regex families: a later step,
 # not admitted: r09-optional-nodes (rejected)
 # not admitted: r09-repetition-cost (rejected)
 # not admitted: r10-mk-alt-correct (rejected)
-# not admitted: r10-normal-fixed (rejected)
 # not admitted: r10-replace-right (rejected)
-# not admitted: r11-certificate-length (rejected)
-# not admitted: r11-check-sound (rejected)
 # not admitted: r11-direct-complete (rejected)
 # not admitted: r11-residual-start (rejected)
 # not admitted: r11-uniform-step (rejected)
+# not admitted: r13-derivs-cat (rejected)
+# not admitted: r14-battery-loop (rejected)
 
 [[cluster]]
 id = "a1b-cat-assoc"
@@ -723,6 +722,38 @@ descriptive = false
 tasks = ["r06-star-unfold-d", "r06-star-unfold-v"]
 
 [[cluster]]
+id = "r08-alt-feed-law"
+kind = "regex"
+source = "R08 AltFeedLaw (Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_AltSetEngine.AltFeedLaw (R08.H3d); Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_alt_feed_law (R08.H3v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r08-alt-feed-law-d", "r08-alt-feed-law-v"]
+
+[[cluster]]
+id = "r08-alt-final-law"
+kind = "regex"
+source = "R08 AltFinalLaw (Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_AltSetEngine.AltFinalLaw (R08.H4d); Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_alt_final_law (R08.H4v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r08-alt-final-law-d", "r08-alt-final-law-v"]
+
+[[cluster]]
+id = "r08-parts-law"
+kind = "regex"
+source = "R08 PartsLaw (Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_AltSetEngine.PartsLaw (R08.H2d); Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_parts_law (R08.H2v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r08-parts-law-d", "r08-parts-law-v"]
+
+[[cluster]]
+id = "r08-ranges-class-law"
+kind = "regex"
+source = "R08 RangesClassLaw (Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_RangeStarEngine.RangesClassLaw (R08.H1d); Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_ranges_set_law (R08.H1v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r08-ranges-class-law-d", "r08-ranges-class-law-v"]
+
+[[cluster]]
 id = "r09-class-nodes-correct"
 kind = "regex"
 source = "R09 RangeNodesCorrectR09 / ClassNodesCorrectR09 (target ClassNodesCorrectR09) (Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy::ClassNodesCorrectR09; Solutions/verus/r/r09_effects/src/lib.rs::lemma_class_nodes_r09)"
@@ -779,12 +810,36 @@ descriptive = false
 tasks = ["r10-mk-cat-correct-d", "r10-mk-cat-correct-v"]
 
 [[cluster]]
+id = "r10-normal-fixed"
+kind = "regex"
+source = "R10 NormalFixedR10 with NormIdempotentR10 (which calls it) (Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy::NormalFixedR10, NormIdempotentR10; Solutions/verus/r/r10_type_invariants/src/lib.rs::normal_fixed_r10, norm_idempotent_r10)"
+role = "unassigned"
+descriptive = false
+tasks = ["r10-normal-fixed-d", "r10-normal-fixed-v"]
+
+[[cluster]]
 id = "r10-star-star"
 kind = "regex"
 source = "R10 StarStar (family of MkStarCorrect, which calls it with StarOfEps) (Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy::StarStar; Solutions/verus/r/r10_type_invariants/src/agent.rs::lemma_star_star_r10_ref (renamed lemma_star_star_r10))"
 role = "unassigned"
 descriptive = false
 tasks = ["r10-star-star-d", "r10-star-star-v"]
+
+[[cluster]]
+id = "r11-certificate-length"
+kind = "regex"
+source = "R11 CertificateLengthR11 (Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy::CertificateLengthR11 (R11.X1d); Solutions/verus/r/r11_theory/src/exit.rs::certificate_length_r11 (R11.X1v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r11-certificate-length-d", "r11-certificate-length-v"]
+
+[[cluster]]
+id = "r11-check-sound"
+kind = "regex"
+source = "R11 CheckSoundR11 (Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::CheckSoundR11 (R11.H2d); Solutions/verus/r/r11_theory/src/lib.rs::sound_word_r11 (R11.H2v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r11-check-sound-d", "r11-check-sound-v"]
 
 [[cluster]]
 id = "r11-rename-transport"
@@ -809,6 +864,46 @@ source = "R11 ResidualStepR11 (Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::
 role = "unassigned"
 descriptive = false
 tasks = ["r11-residual-step-d", "r11-residual-step-v"]
+
+[[cluster]]
+id = "r13-class-covers"
+kind = "regex"
+source = "R13 ClassCoversR13 (Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::ClassCoversR13 (R13.H2d); Solutions/verus/r/r13_pipelines/src/lib.rs::class_covers_r13 (R13.H2v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r13-class-covers-d", "r13-class-covers-v"]
+
+[[cluster]]
+id = "r13-nullable-derivs"
+kind = "regex"
+source = "R13 NullableDerivsR13 (Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::NullableDerivsR13 (R13.H3d); Solutions/verus/r/r13_pipelines/src/lib.rs::lemma_nullable_derivs_r13 (R13.H3v))"
+role = "unassigned"
+descriptive = false
+tasks = ["r13-nullable-derivs-d", "r13-nullable-derivs-v"]
+
+[[cluster]]
+id = "r14-cat-intro-v"
+kind = "regex"
+source = "R14 CatIntroV (Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::CatIntroV; Solutions/verus/r/r14_smt/src/lib.rs::lemma_cat_intro_v)"
+role = "unassigned"
+descriptive = false
+tasks = ["r14-cat-intro-v-d", "r14-cat-intro-v-v"]
+
+[[cluster]]
+id = "r14-deriv-size-v"
+kind = "regex"
+source = "R14 DerivSizeV (Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::DerivSizeV; Solutions/verus/r/r14_smt/src/lib.rs::lemma_deriv_size_v)"
+role = "unassigned"
+descriptive = false
+tasks = ["r14-deriv-size-v-d", "r14-deriv-size-v-v"]
+
+[[cluster]]
+id = "r14-star-pow-v"
+kind = "regex"
+source = "R14 StarPowV (Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::StarPowV; Solutions/verus/r/r14_smt/src/lib.rs::lemma_star_pow_v)"
+role = "unassigned"
+descriptive = false
+tasks = ["r14-star-pow-v-d", "r14-star-pow-v-v"]
 
 [[task]]
 id = "a1b-cat-assoc-d"
@@ -2137,6 +2232,110 @@ target = "lemma_star_unfold"
 sites = 4
 
 [[task]]
+id = "r08-alt-feed-law-d"
+cluster = "r08-alt-feed-law"
+lang = "dafny"
+path = "bench/local/r/labalpha/r08-alt-feed-law-d/tasks/r08-alt-feed-law-d.dfy"
+source_sha256 = "0705140e0efe38e98feebc0830a841579449234a553bf3fb4be7b4d9ba74fc6d"
+statement = "Complete the proof of the target lemma R12_LabCase.AltFeedLaw (R08 AltFeedLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-alt-feed-law-d/ADMISSION.json"
+admission_sha256 = "02375d929e2ae3a3627da30f3549d595101cf1e8f452e5a28b69331e465ae5ef"
+target = "R12_LabCase.AltFeedLaw"
+sites = 7
+
+[[task]]
+id = "r08-alt-feed-law-v"
+cluster = "r08-alt-feed-law"
+lang = "verus"
+path = "bench/local/r/labalpha/r08-alt-feed-law-v/tasks/r08-alt-feed-law-v.rs"
+source_sha256 = "2179e1340d022cfdbde16ce4aaebbf409ff07cddfe4820f76cbd029c754a4a3f"
+statement = "Complete the proof of the target lemma lemma_alt_feed_law (R08 AltFeedLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-alt-feed-law-v/ADMISSION.json"
+admission_sha256 = "9d3fde0f4adcc288a544a5200e437ed0c72cb03846185033504c10460d125635"
+target = "lemma_alt_feed_law"
+sites = 7
+
+[[task]]
+id = "r08-alt-final-law-d"
+cluster = "r08-alt-final-law"
+lang = "dafny"
+path = "bench/local/r/labalpha/r08-alt-final-law-d/tasks/r08-alt-final-law-d.dfy"
+source_sha256 = "fd45fcd2a88272ea27e39e30a827e666f33386289c4aac1b3fccc537c55f6f70"
+statement = "Complete the proof of the target lemma R12_LabCase.AltFinalLaw (R08 AltFinalLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-alt-final-law-d/ADMISSION.json"
+admission_sha256 = "e0d8716844442df6c813c8114300a7e4ad2400ad26be1d4ac5465d51e0e85c94"
+target = "R12_LabCase.AltFinalLaw"
+sites = 2
+
+[[task]]
+id = "r08-alt-final-law-v"
+cluster = "r08-alt-final-law"
+lang = "verus"
+path = "bench/local/r/labalpha/r08-alt-final-law-v/tasks/r08-alt-final-law-v.rs"
+source_sha256 = "bc10b2230162eaee4472c3a018c8551920e3b6da3ec3e0d2711ef062ffa6b657"
+statement = "Complete the proof of the target lemma lemma_alt_final_law (R08 AltFinalLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-alt-final-law-v/ADMISSION.json"
+admission_sha256 = "f2ed7bfa28e4e8d2ec44ed526588c56fd6b5be2e58213f177dca864c5bb9945d"
+target = "lemma_alt_final_law"
+sites = 2
+
+[[task]]
+id = "r08-parts-law-d"
+cluster = "r08-parts-law"
+lang = "dafny"
+path = "bench/local/r/labalpha/r08-parts-law-d/tasks/r08-parts-law-d.dfy"
+source_sha256 = "ea9ee60595d244022a677fea361036782953a065c697083ff9bb9ef08e1d4d26"
+statement = "Complete the proof of the target lemma R12_LabCase.PartsLaw (R08 PartsLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-parts-law-d/ADMISSION.json"
+admission_sha256 = "8fa592b6a678921e9eef26b26fb98b2d0f37d9dabe01e480bc8417def4e0b031"
+target = "R12_LabCase.PartsLaw"
+sites = 7
+
+[[task]]
+id = "r08-parts-law-v"
+cluster = "r08-parts-law"
+lang = "verus"
+path = "bench/local/r/labalpha/r08-parts-law-v/tasks/r08-parts-law-v.rs"
+source_sha256 = "b2941e4e6aad74ad3021f482cefdd33098c8365e29aafe1a551912ce5c2ff81b"
+statement = "Complete the proof of the target lemma lemma_parts_law (R08 PartsLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-parts-law-v/ADMISSION.json"
+admission_sha256 = "42c41f09385b0063b81eb1ecb7bd3ad895a8df06bfddc7f7b03c218f6a5000e0"
+target = "lemma_parts_law"
+sites = 6
+
+[[task]]
+id = "r08-ranges-class-law-d"
+cluster = "r08-ranges-class-law"
+lang = "dafny"
+path = "bench/local/r/labalpha/r08-ranges-class-law-d/tasks/r08-ranges-class-law-d.dfy"
+source_sha256 = "7dd60682333eb0c54693befede7b525b87c9f5d0aab2c7c427a48c806d66214f"
+statement = "Complete the proof of the target lemma R12_LabCase.RangesClassLaw (R08 RangesClassLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-ranges-class-law-d/ADMISSION.json"
+admission_sha256 = "00f3cca6beb715d592a809efd4b8d85d88f0cf27d545fac8e8d0d25b8047756e"
+target = "R12_LabCase.RangesClassLaw"
+sites = 3
+
+[[task]]
+id = "r08-ranges-class-law-v"
+cluster = "r08-ranges-class-law"
+lang = "verus"
+path = "bench/local/r/labalpha/r08-ranges-class-law-v/tasks/r08-ranges-class-law-v.rs"
+source_sha256 = "da910f1bee172911b65fcb5defbbae0b6b7472661460a21e7fd8d9a47186e8aa"
+statement = "Complete the proof of the target lemma lemma_ranges_set_law (R08 RangesClassLaw) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R08 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r08-ranges-class-law-v/ADMISSION.json"
+admission_sha256 = "3c0157780d0cb80fef8edfb455b9ad779f6fad6041415bd98ad894519dbb2d29"
+target = "lemma_ranges_set_law"
+sites = 3
+
+[[task]]
 id = "r09-class-nodes-correct-d"
 cluster = "r09-class-nodes-correct"
 lang = "dafny"
@@ -2319,6 +2518,32 @@ target = "lemma_mk_cat_r10"
 sites = 4
 
 [[task]]
+id = "r10-normal-fixed-d"
+cluster = "r10-normal-fixed"
+lang = "dafny"
+path = "bench/local/r/labalpha/r10-normal-fixed-d/tasks/r10-normal-fixed-d.dfy"
+source_sha256 = "63978cf32474abb8ad36139cd530bbfab0d8ea3797b4b3776bb89db7504e2876"
+statement = "Complete the proof of the target lemma R12_LabCase.NormalFixedR10 (R10 NormalFixedR10 with NormIdempotentR10 (which calls it)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R10 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r10-normal-fixed-d/ADMISSION.json"
+admission_sha256 = "8885b679ae3a15a1291a49a958915ead3c16348c4387d8952cf1ce0bede5fe83"
+target = "R12_LabCase.NormalFixedR10"
+sites = 3
+
+[[task]]
+id = "r10-normal-fixed-v"
+cluster = "r10-normal-fixed"
+lang = "verus"
+path = "bench/local/r/labalpha/r10-normal-fixed-v/tasks/r10-normal-fixed-v.rs"
+source_sha256 = "23515495e6624f11168b69e3a0f87b83933d0c68c1522af41813c43fcdb773ad"
+statement = "Complete the proof of the target lemma normal_fixed_r10 (R10 NormalFixedR10 with NormIdempotentR10 (which calls it)) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R10 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r10-normal-fixed-v/ADMISSION.json"
+admission_sha256 = "5c90352a5ca80e04f5cf49a505a2f3123468e25acec02950655952a92d3c4dde"
+target = "normal_fixed_r10"
+sites = 3
+
+[[task]]
 id = "r10-star-star-d"
 cluster = "r10-star-star"
 lang = "dafny"
@@ -2343,6 +2568,58 @@ admission = "bench/local/r/labalpha/r10-star-star-v/ADMISSION.json"
 admission_sha256 = "4b7d96a0def01d6bd45ab8b80bce3354712d2533c17679075416bc496ae6a27b"
 target = "lemma_star_star_r10"
 sites = 3
+
+[[task]]
+id = "r11-certificate-length-d"
+cluster = "r11-certificate-length"
+lang = "dafny"
+path = "bench/local/r/labalpha/r11-certificate-length-d/tasks/r11-certificate-length-d.dfy"
+source_sha256 = "480e67e8aff82a3d412a8781fbc229941e96f00bc0c8576e3c1b97aa401d1faf"
+statement = "Complete the proof of the target lemma R12_LabCase.CertificateLengthR11 (R11 CertificateLengthR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-certificate-length-d/ADMISSION.json"
+admission_sha256 = "182516638f9703b21e782c169695eea0f94d3a8b2a58fa61fbcae2b5ff515e77"
+target = "R12_LabCase.CertificateLengthR11"
+sites = 4
+
+[[task]]
+id = "r11-certificate-length-v"
+cluster = "r11-certificate-length"
+lang = "verus"
+path = "bench/local/r/labalpha/r11-certificate-length-v/tasks/r11-certificate-length-v.rs"
+source_sha256 = "a70a8f61e20cce3e74cc0c429dec9f2febae84659add995d6f64bd88dab2fe6a"
+statement = "Complete the proof of the target lemma certificate_length_r11 (R11 CertificateLengthR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-certificate-length-v/ADMISSION.json"
+admission_sha256 = "55cc102e2be84083da0ea3abcb3ac17ba87a8aca62394db208c69a1d08ad98a3"
+target = "certificate_length_r11"
+sites = 4
+
+[[task]]
+id = "r11-check-sound-d"
+cluster = "r11-check-sound"
+lang = "dafny"
+path = "bench/local/r/labalpha/r11-check-sound-d/tasks/r11-check-sound-d.dfy"
+source_sha256 = "4d397ca8cae2b5a7f9f2fb3f687f68e92cb3058af78e8bd0e0e1c22847b7738b"
+statement = "Complete the proof of the target lemma R12_LabCase.CheckSoundR11 (R11 CheckSoundR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-check-sound-d/ADMISSION.json"
+admission_sha256 = "6f3cb2ad5a309e1173ff873686e6a38501fce2623c94d4ff0c342e2e9ddb821d"
+target = "R12_LabCase.CheckSoundR11"
+sites = 4
+
+[[task]]
+id = "r11-check-sound-v"
+cluster = "r11-check-sound"
+lang = "verus"
+path = "bench/local/r/labalpha/r11-check-sound-v/tasks/r11-check-sound-v.rs"
+source_sha256 = "d271d00768f5224debf54b4b4043147619356d6c8e562483ac536d6131703d90"
+statement = "Complete the proof of the target lemma sound_word_r11 (R11 CheckSoundR11) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R11 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark"
+admission = "bench/local/r/labalpha/r11-check-sound-v/ADMISSION.json"
+admission_sha256 = "fa62c94e34848f60b20d361e4697d3085b13bad52e7d5175840ae0d5431f2d22"
+target = "sound_word_r11"
+sites = 4
 
 [[task]]
 id = "r11-rename-transport-d"
@@ -2421,3 +2698,143 @@ admission = "bench/local/r/labalpha/r11-residual-step-v/ADMISSION.json"
 admission_sha256 = "93193947c2dd78816b9af29f0b71eecde0f1e9ef82839a5c767856da5b21142f"
 target = "residual_step_r11"
 sites = 1
+
+[[task]]
+id = "r13-class-covers-d"
+cluster = "r13-class-covers"
+lang = "dafny"
+path = "bench/local/r/labalpha/r13-class-covers-d/tasks/r13-class-covers-d.dfy"
+source_sha256 = "b82fee3de858234756441cb9c693996649d271ce09a6262858bf6d245861f1c6"
+statement = "Complete the proof of the target lemma R12_LabCase.ClassCoversR13 (R13 ClassCoversR13) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R13 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r13-class-covers-d/ADMISSION.json"
+admission_sha256 = "bc75bc9eb64e92fa8df0bc0adcb1428725e32ad75086aba16d5343d67518b073"
+target = "R12_LabCase.ClassCoversR13"
+sites = 2
+sealed = true
+
+[[task]]
+id = "r13-class-covers-v"
+cluster = "r13-class-covers"
+lang = "verus"
+path = "bench/local/r/labalpha/r13-class-covers-v/tasks/r13-class-covers-v.rs"
+source_sha256 = "d7d6e7724141259bd831cc3c42429f81654cdf4b3059fcb7d81df9521984d332"
+statement = "Complete the proof of the target lemma class_covers_r13 (R13 ClassCoversR13) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R13 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r13-class-covers-v/ADMISSION.json"
+admission_sha256 = "74b9e96b44f8115ceacf87e351818505804db76cacdfa3ee9c8c09392d2ba049"
+target = "class_covers_r13"
+sites = 2
+sealed = true
+
+[[task]]
+id = "r13-nullable-derivs-d"
+cluster = "r13-nullable-derivs"
+lang = "dafny"
+path = "bench/local/r/labalpha/r13-nullable-derivs-d/tasks/r13-nullable-derivs-d.dfy"
+source_sha256 = "38e579dc6bbde0428a2674dd6b4c9ea4f9a5e5baff19ed66125bcf19f53990d7"
+statement = "Complete the proof of the target lemma R12_LabCase.NullableDerivsR13 (R13 NullableDerivsR13) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R13 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r13-nullable-derivs-d/ADMISSION.json"
+admission_sha256 = "dd410a1ad9a7d08952358f18b51ea7a8f25e444792cebec7be29069c664b748e"
+target = "R12_LabCase.NullableDerivsR13"
+sites = 3
+sealed = true
+
+[[task]]
+id = "r13-nullable-derivs-v"
+cluster = "r13-nullable-derivs"
+lang = "verus"
+path = "bench/local/r/labalpha/r13-nullable-derivs-v/tasks/r13-nullable-derivs-v.rs"
+source_sha256 = "11ef3c2a32ea438435e3b749a14fb62bc109cb1b1617677ad5c96f94b6649034"
+statement = "Complete the proof of the target lemma lemma_nullable_derivs_r13 (R13 NullableDerivsR13) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R13 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r13-nullable-derivs-v/ADMISSION.json"
+admission_sha256 = "6933a759b18e6d1bdfba889190c3ca3d32bc798c38ad65905fd831ea21ed291c"
+target = "lemma_nullable_derivs_r13"
+sites = 2
+sealed = true
+
+[[task]]
+id = "r14-cat-intro-v-d"
+cluster = "r14-cat-intro-v"
+lang = "dafny"
+path = "bench/local/r/labalpha/r14-cat-intro-v-d/tasks/r14-cat-intro-v-d.dfy"
+source_sha256 = "d08816f0e7310fa4210f4ef7d35e069d0814b33efd2f9d090a9a32f9b1d96545"
+statement = "Complete the proof of the target lemma R12_LabCase.CatIntroV (R14 CatIntroV) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R14 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r14-cat-intro-v-d/ADMISSION.json"
+admission_sha256 = "05930e78d0196dca05dc2ec332f918fc65d928cdeb0ff475e72fcc1eba90956f"
+target = "R12_LabCase.CatIntroV"
+sites = 2
+sealed = true
+
+[[task]]
+id = "r14-cat-intro-v-v"
+cluster = "r14-cat-intro-v"
+lang = "verus"
+path = "bench/local/r/labalpha/r14-cat-intro-v-v/tasks/r14-cat-intro-v-v.rs"
+source_sha256 = "bbe7910509ef0caebda22a83a2198fd7ce98f0929a582be5e93a5c05acf4db3f"
+statement = "Complete the proof of the target lemma lemma_cat_intro_v (R14 CatIntroV) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R14 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r14-cat-intro-v-v/ADMISSION.json"
+admission_sha256 = "5a945c1f98c9b954b1d5551ecfc97445764d55b04ef748c4ec61887d3aa49f38"
+target = "lemma_cat_intro_v"
+sites = 1
+sealed = true
+
+[[task]]
+id = "r14-deriv-size-v-d"
+cluster = "r14-deriv-size-v"
+lang = "dafny"
+path = "bench/local/r/labalpha/r14-deriv-size-v-d/tasks/r14-deriv-size-v-d.dfy"
+source_sha256 = "6f54dfa22ebca5ec1a919f5527fc56909a12d29247892fd62456f9f9189f85b0"
+statement = "Complete the proof of the target lemma R12_LabCase.DerivSizeV (R14 DerivSizeV) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R14 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r14-deriv-size-v-d/ADMISSION.json"
+admission_sha256 = "3ca5b0d842207bd2947d8da6ae87f007eb5b1abcc7b83dfa1fe35171e5eea166"
+target = "R12_LabCase.DerivSizeV"
+sites = 3
+sealed = true
+
+[[task]]
+id = "r14-deriv-size-v-v"
+cluster = "r14-deriv-size-v"
+lang = "verus"
+path = "bench/local/r/labalpha/r14-deriv-size-v-v/tasks/r14-deriv-size-v-v.rs"
+source_sha256 = "812b3407ced6b76aae1da92378dd3cf8924d5b44ae95d215f99250ed5e0d8cd8"
+statement = "Complete the proof of the target lemma lemma_deriv_size_v (R14 DerivSizeV) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R14 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r14-deriv-size-v-v/ADMISSION.json"
+admission_sha256 = "211060fa7082527e8b9a302c07c6d2a79b39bde7170f1afd9945ba4ff41a7116"
+target = "lemma_deriv_size_v"
+sites = 3
+sealed = true
+
+[[task]]
+id = "r14-star-pow-v-d"
+cluster = "r14-star-pow-v"
+lang = "dafny"
+path = "bench/local/r/labalpha/r14-star-pow-v-d/tasks/r14-star-pow-v-d.dfy"
+source_sha256 = "a3a8cf76cc9540bb91910c24f37c8497a34ecef21266f0984db79d567d51829c"
+statement = "Complete the proof of the target lemma R12_LabCase.StarPowV (R14 StarPowV) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R14 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r14-star-pow-v-d/ADMISSION.json"
+admission_sha256 = "679b8d177f1ad5b545c7399aef7ac0c08398b98f05feecba3a6b0476809e5e47"
+target = "R12_LabCase.StarPowV"
+sites = 3
+sealed = true
+
+[[task]]
+id = "r14-star-pow-v-v"
+cluster = "r14-star-pow-v"
+lang = "verus"
+path = "bench/local/r/labalpha/r14-star-pow-v-v/tasks/r14-star-pow-v-v.rs"
+source_sha256 = "241eb3d58c410272c18176164f4bd2a03138b6dfd68670c9198ba20b67809bc3"
+statement = "Complete the proof of the target lemma lemma_star_pow_v (R14 StarPowV) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+exposure = "course-authored lemma from the R14 reference, written 2026-10; SEALED in Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id and verdict only"
+admission = "bench/local/r/labalpha/r14-star-pow-v-v/ADMISSION.json"
+admission_sha256 = "0201931cb7cf8c26cb8ca236911e4c4813b91c17b3071d851a686002f3aae2a5"
+target = "lemma_star_pow_v"
+sites = 2
+sealed = true

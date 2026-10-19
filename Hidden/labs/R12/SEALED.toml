@@ -1,0 +1,79 @@
+# Hidden/labs/R12/SEALED.toml: the pins of Lab alpha's sealed R13/R14-derived tasks
+# (Solutions/plans/drafts/R12/lab-corpus-v2/seal_sealed.py; plan section 3.5, D-L3 (a)).
+schema = 1
+lab = "R12"
+archive = "Hidden/labs/R12/tasks.tar.age"
+archive_sha256 = "9624bbd0abd6e6611c0189a2a43d9d1c4f8104a2ee1f687190d63fa09afdb43b"
+recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
+files = 21
+manifest_sha256 = "86833fc870226868c35e4c590c112b7c52f7984201cc10e82ae240091f733f0a"
+
+[[task]]
+id = "r13-class-covers-d"
+cluster = "r13-class-covers"
+source_sha256 = "b82fee3de858234756441cb9c693996649d271ce09a6262858bf6d245861f1c6"
+admission_sha256 = "bc75bc9eb64e92fa8df0bc0adcb1428725e32ad75086aba16d5343d67518b073"
+file = "r13-class-covers-d.dfy"
+
+[[task]]
+id = "r13-class-covers-v"
+cluster = "r13-class-covers"
+source_sha256 = "d7d6e7724141259bd831cc3c42429f81654cdf4b3059fcb7d81df9521984d332"
+admission_sha256 = "74b9e96b44f8115ceacf87e351818505804db76cacdfa3ee9c8c09392d2ba049"
+file = "r13-class-covers-v.rs"
+
+[[task]]
+id = "r13-nullable-derivs-d"
+cluster = "r13-nullable-derivs"
+source_sha256 = "38e579dc6bbde0428a2674dd6b4c9ea4f9a5e5baff19ed66125bcf19f53990d7"
+admission_sha256 = "dd410a1ad9a7d08952358f18b51ea7a8f25e444792cebec7be29069c664b748e"
+file = "r13-nullable-derivs-d.dfy"
+
+[[task]]
+id = "r13-nullable-derivs-v"
+cluster = "r13-nullable-derivs"
+source_sha256 = "11ef3c2a32ea438435e3b749a14fb62bc109cb1b1617677ad5c96f94b6649034"
+admission_sha256 = "6933a759b18e6d1bdfba889190c3ca3d32bc798c38ad65905fd831ea21ed291c"
+file = "r13-nullable-derivs-v.rs"
+
+[[task]]
+id = "r14-cat-intro-v-d"
+cluster = "r14-cat-intro-v"
+source_sha256 = "d08816f0e7310fa4210f4ef7d35e069d0814b33efd2f9d090a9a32f9b1d96545"
+admission_sha256 = "05930e78d0196dca05dc2ec332f918fc65d928cdeb0ff475e72fcc1eba90956f"
+file = "r14-cat-intro-v-d.dfy"
+
+[[task]]
+id = "r14-cat-intro-v-v"
+cluster = "r14-cat-intro-v"
+source_sha256 = "bbe7910509ef0caebda22a83a2198fd7ce98f0929a582be5e93a5c05acf4db3f"
+admission_sha256 = "5a945c1f98c9b954b1d5551ecfc97445764d55b04ef748c4ec61887d3aa49f38"
+file = "r14-cat-intro-v-v.rs"
+
+[[task]]
+id = "r14-deriv-size-v-d"
+cluster = "r14-deriv-size-v"
+source_sha256 = "6f54dfa22ebca5ec1a919f5527fc56909a12d29247892fd62456f9f9189f85b0"
+admission_sha256 = "3ca5b0d842207bd2947d8da6ae87f007eb5b1abcc7b83dfa1fe35171e5eea166"
+file = "r14-deriv-size-v-d.dfy"
+
+[[task]]
+id = "r14-deriv-size-v-v"
+cluster = "r14-deriv-size-v"
+source_sha256 = "812b3407ced6b76aae1da92378dd3cf8924d5b44ae95d215f99250ed5e0d8cd8"
+admission_sha256 = "211060fa7082527e8b9a302c07c6d2a79b39bde7170f1afd9945ba4ff41a7116"
+file = "r14-deriv-size-v-v.rs"
+
+[[task]]
+id = "r14-star-pow-v-d"
+cluster = "r14-star-pow-v"
+source_sha256 = "a3a8cf76cc9540bb91910c24f37c8497a34ecef21266f0984db79d567d51829c"
+admission_sha256 = "679b8d177f1ad5b545c7399aef7ac0c08398b98f05feecba3a6b0476809e5e47"
+file = "r14-star-pow-v-d.dfy"
+
+[[task]]
+id = "r14-star-pow-v-v"
+cluster = "r14-star-pow-v"
+source_sha256 = "241eb3d58c410272c18176164f4bd2a03138b6dfd68670c9198ba20b67809bc3"
+admission_sha256 = "0201931cb7cf8c26cb8ca236911e4c4813b91c17b3071d851a686002f3aae2a5"
+file = "r14-star-pow-v-v.rs"

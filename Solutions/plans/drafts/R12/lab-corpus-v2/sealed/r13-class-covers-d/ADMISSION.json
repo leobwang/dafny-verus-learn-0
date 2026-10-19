@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "146aa8887bfdedefbaf528c723837b4c78d90896e6e627f0212bf798af3e8e50",
+    "statement_sha256": "b3265b81bc9f12a3b1e31987e66a1f26e4b6c45e99f5acf86bc4247c23fdb054"
+  },
+  "id": "r13-class-covers-d",
+  "lang": "dafny",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "a9b815e73309a827af78b5296afa12aad56c672b04550ada061f70405f61ab9a",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "b82fee3de858234756441cb9c693996649d271ce09a6262858bf6d245861f1c6",
+  "status": "admitted",
+  "target": "R12_LabCase.ClassCoversR13",
+  "validated_span": {
+    "end": 295,
+    "start": 281,
+    "symbol": "R12_LabCase.ClassCoversR13"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

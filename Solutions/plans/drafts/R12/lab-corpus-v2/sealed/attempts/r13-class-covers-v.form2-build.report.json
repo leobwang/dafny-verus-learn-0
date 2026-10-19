@@ -1,0 +1,135 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": false,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "r13_class_covers_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "E0425",
+            "col": 9,
+            "file": "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+            "line": 34,
+            "message": "cannot find function `separated` in this scope",
+            "severity": "error"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); 1 lint finding(s); exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [
+          {
+            "file": "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+            "kind": "outside-verus",
+            "line": 5,
+            "message": "code outside verus! is never verified (V9, \u03949)"
+          }
+        ],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {},
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-232855-o7tntru6",
+        "stage": "resolve",
+        "target": "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+        "verdict": "failed",
+        "verified_count": 0
+      },
+      "passed": false
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "19d65428bebed88b024a7b32aedecf1a2ebb8c059024f0d9eeeee78ef4eb3a30",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h1"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h2"
+            }
+          ],
+          "source_sha256": "1dd24abe4bfd0304d5508562126e199ecdabdbd6de6711e4add389f85645f4e1",
+          "statement_sha256": "a0b0570b084058ea4d35ec5175b23d785f1a69f2a0c49e5a01df55f5645f6693"
+        },
+        "native_span": [
+          73,
+          90
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 90,
+          "start": 73,
+          "symbol": "class_covers_r13"
+        }
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "8d34d252453cd8997d4630f77156f92cb0140718a3c2d7a57674a2a4f596f902",
+  "id": "r13-class-covers-v",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+  "reference_sha256": "294f797b9019a007b59b744e369da490b6c5c45d3041bbada29f18c94282f081",
+  "rejected_at": "baseline-proof-fails",
+  "schema": 2,
+  "source_sha256": "1dd24abe4bfd0304d5508562126e199ecdabdbd6de6711e4add389f85645f4e1",
+  "status": "rejected",
+  "target": "class_covers_r13"
+}

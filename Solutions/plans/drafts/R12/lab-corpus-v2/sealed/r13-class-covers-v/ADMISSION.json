@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "e76bc525858d6f87e32cf5f3b0bc62b2b787869bd6a8bcefcdff510fc3315218",
+    "statement_sha256": "d170a7c26085519ea97313638ab58bbb7b9540bf8b8c0a934899dc07d8c6ed51"
+  },
+  "id": "r13-class-covers-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "9d13ea92ef95075bf0393eca3427ca7f65c8e1ceeb95f4dff05b05418dea121b",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "d7d6e7724141259bd831cc3c42429f81654cdf4b3059fcb7d81df9521984d332",
+  "status": "admitted",
+  "target": "class_covers_r13",
+  "validated_span": {
+    "end": 94,
+    "start": 77,
+    "symbol": "class_covers_r13"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

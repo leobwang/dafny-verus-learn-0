@@ -39,6 +39,9 @@ def task_row(root, tid, fam):
     rel = f'bench/local/r/labalpha/{tid}/tasks/{tid}{ext}'
     adm_rel = f'bench/local/r/labalpha/{tid}/ADMISSION.json'
     src, adm = root / rel, root / adm_rel
+    if fam.get('sealed'):          # R13/R14-derived: the author's copy; the stratum names the
+        src = HERE / 'sealed' / tid / 'tasks' / f'{tid}{ext}'      # unseal target paths
+        adm = HERE / 'sealed' / tid / 'ADMISSION.json'
     a = json.loads(adm.read_text())
     ok = (a.get('schema') == 2 and a.get('status') == 'admitted' and a.get('source_sha256') == sha(src)
           and set(a.get('checks', {})) == set(CHECKS) and all(v is True for v in a['checks'].values()))
@@ -58,9 +61,16 @@ def task_row(root, tid, fam):
         exposure = ('public benchmark task (' + s.get('set', '') + ', ' + s.get('licence', '') + '); treat as '
                     'possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)'
                     + ('; licence flag: ' + s['flag'] if s.get('flag') else ''))
-    return {'id': tid, 'cluster': fam['cluster'], 'lang': lang, 'path': rel, 'source_sha256': sha(src),
+    if fam.get('sealed'):
+        exposure = ('course-authored lemma from the ' + s['module'] + ' reference, written 2026-10; SEALED in '
+                    'Hidden/labs/R12/tasks.tar.age (plan section 3.5, D-L3 (a)): a learner at R12 sees its id '
+                    'and verdict only')
+    row = {'id': tid, 'cluster': fam['cluster'], 'lang': lang, 'path': rel, 'source_sha256': sha(src),
             'statement': statement, 'exposure': exposure, 'admission': adm_rel, 'admission_sha256': sha(adm),
             'target': a['target'], 'sites': len(a.get('sites', []))}
+    if fam.get('sealed'):
+        row['sealed'] = True
+    return row
 
 
 def main():
@@ -72,6 +82,7 @@ def main():
     root = args.root.resolve()
     roles = json.loads(args.roles.read_text()) if args.roles else {}
     fams = [json.loads(p.read_text()) for p in sorted((HERE / 'families').glob('*.json'))]
+    fams += [dict(json.loads(p.read_text()), sealed=True) for p in sorted((HERE / 'sealed' / 'families').glob('*.json'))]
     pools = root / 'bench/public/POOLS.toml'
     head = ['# bench/local/r/labalpha/STRATUM.toml: Lab alpha\'s stratum, schema 2 (DVR4 plan sections 3.5, 3.8).',
             '# Built by the author tool Solutions/plans/drafts/R12/lab-corpus-v2/build_stratum.py from the admitted',

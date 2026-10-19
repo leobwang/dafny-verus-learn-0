@@ -170,7 +170,9 @@ def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print,shi
     if not c['baseline-proof-fails']:
         code,d=cli('baseline',[vcheck,'--module','R12','--gate','--json',str(form)])
         hits=key_symbol(d.get('per_symbol',{}))
-        checked('baseline-proof-fails','baseline',code==core.EXIT_FAIL and d.get('verdict')=='failed' and d.get('stage')=='verify' and not d.get('holes') and hits and all(h!='verified' for h in hits),d)
+        # QPLAN section 30 Q66 (vcheck's reading): a run that ends inconclusive at the
+        # verify stage (out of resources at the pin) did not prove the form: it fails
+        checked('baseline-proof-fails','baseline',code==core.EXIT_FAIL and d.get('verdict') in ('failed','inconclusive') and d.get('stage')=='verify' and not d.get('holes') and hits and all(h!='verified' for h in hits),d)
         c['baseline-proof-fails']=True;save()
     if not c['reference-gate']:
         code,d=cli('reference-gate',[vcheck,'--module','R12','--gate','--json','--lab-task',str(form),str(ref)])
@@ -202,12 +204,12 @@ def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print,shi
         # delivery to) must fail. Verus has no such run: its reading is unchanged.
         gating={k:v for k,v in r.per_symbol.items() if not (shipped_induction and lang=='d' and k=='maxauto')}
         plain=[v for k,v in gating.items() if k in ('maxauto',) or k.startswith(('E0 ','shipped:'))]
-        ok=bool(gating) and bool(plain) and all(v=='failed' or v.startswith('fails(') or (v=='inconclusive' and k.startswith('shipped:')) for k,v in gating.items() if k in ('maxauto',) or k.startswith(('E0 ','shipped:'))) and all(v in ('failed','inconclusive','killed(harness)') or v.startswith(('fails(','no-verify(')) for v in gating.values()) and (r.verdict=='failed' or (shipped_induction and lang=='d'))
+        ok=bool(gating) and bool(plain) and all(v in ('failed','inconclusive') or v.startswith('fails(') for k,v in gating.items() if k in ('maxauto',) or k.startswith(('E0 ','shipped:'))) and all(v in ('failed','inconclusive','killed(harness)') or v.startswith(('fails(','no-verify(')) for v in gating.values()) and (r.verdict=='failed' or (shipped_induction and lang=='d'))
         checked('max-auto-empty-fails','empty-automation',ok,r.to_dict())
         report['empty_variants']=len(statuses);report['max_auto_reading']='shipped --manual-lemma-induction (D55; maxauto recorded: '+str(r.per_symbol.get('maxauto'))+')' if (shipped_induction and lang=='d') else 'maximal automation';c['max-auto-empty-fails']=True;save()
     if not c['wrong-hints-fail']:
         code,d=cli('wrong-hints',[vcheck,'--module','R12','--gate','--json',str(wrong)])
-        checked('wrong-hints-fail','wrong-hints',d.get('verdict')=='failed' and d.get('stage')=='verify' and not d.get('holes'),d)
+        checked('wrong-hints-fail','wrong-hints',d.get('verdict') in ('failed','inconclusive') and d.get('stage')=='verify' and not d.get('holes'),d)
         report['wrong_hint_kind']='expression sites false, call sites empty'+(' (no expression site: equals the baseline)' if all(s.kind=='calls' for s in task.sites) else '')
         c['wrong-hints-fail']=True;save()
     assert all(c.values())

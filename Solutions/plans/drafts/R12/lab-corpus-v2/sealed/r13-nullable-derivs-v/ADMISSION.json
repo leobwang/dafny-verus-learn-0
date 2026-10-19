@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "235f90f283ba8a706f1ee5172cef54e0040009fef08e3f8f36761c011ede12bb"
+  },
+  "id": "r13-nullable-derivs-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "4aa67d2996fb1fddea6619fd6b00a3e1813776c231f1fb8ce3c4e9315b615489",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    }
+  ],
+  "source_sha256": "11ef3c2a32ea438435e3b749a14fb62bc109cb1b1617677ad5c96f94b6649034",
+  "status": "admitted",
+  "target": "lemma_nullable_derivs_r13",
+  "validated_span": {
+    "end": 201,
+    "start": 189,
+    "symbol": "lemma_nullable_derivs_r13"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

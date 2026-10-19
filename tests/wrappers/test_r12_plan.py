@@ -122,6 +122,20 @@ class PlanContract(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, msg):
                     module.load_stratum(Path(t), write_root(Path(t), **kw))
 
+    def test_a_sealed_task_counts_but_no_plan_runs_it_until_unsealed(self):
+        def seal(row, adm):
+            if row['id'].startswith('rx-d'):
+                row['sealed'] = True
+        path = write_root(self.root, mutate=seal)
+        for tid in ('rx-d-d', 'rx-d-v'):
+            (self.root / (f'bench/local/r/labalpha/{tid}/tasks/{tid}' + ('.dfy' if tid.endswith('d') else '.rs'))).unlink()
+        _, clusters, tasks = module.load_stratum(self.root, path)
+        self.assertFalse(tasks['rx-d-d']['unsealed'])
+        plans, _, _ = module.build_plans(clusters, tasks, seed=1, roles=('pilot',))
+        self.assertIn('pilot', plans)
+        with self.assertRaisesRegex(ValueError, 'still sealed'):
+            module.build_plans(clusters, tasks, seed=1, roles=('confirmatory',))
+
     def test_the_toy_stratum_is_apparatus_smoke_never_data(self):
         with self.assertRaisesRegex(ValueError, 'schema 2'):
             module.load_stratum(ROOT, ROOT / 'bench/local/r/labalpha-smoke/STRATUM.toml')

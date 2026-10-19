@@ -1,0 +1,133 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": false,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr4-labalpha/sealed-work/r14-battery-loop-v/tasks/r14-battery-loop-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "r14_battery_loop_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V05",
+            "col": 1,
+            "file": "/tmp/dvl0-dvr4-labalpha/sealed-work/r14-battery-loop-v/tasks/r14-battery-loop-v.rs",
+            "line": 106,
+            "message": "function body check: Resource limit (rlimit) exceeded; consider rerunning with --profile for more details",
+            "severity": "error"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "battery_cell_r14": "failed",
+          "deriv": "verified",
+          "lemma_cat_intro_v": "verified",
+          "matches_v": "verified",
+          "node_count": "verified",
+          "nullable": "verified",
+          "power_word": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-231013-mrj0gvx_",
+        "stage": "verify",
+        "target": "/tmp/dvl0-dvr4-labalpha/sealed-work/r14-battery-loop-v/tasks/r14-battery-loop-v.rs",
+        "verdict": "inconclusive",
+        "verified_count": 6
+      },
+      "passed": false
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [
+                "lemma_cat_intro_v"
+              ],
+              "kind": "calls",
+              "name": "c1"
+            }
+          ],
+          "source_sha256": "098329638daf8583e7ef5194fcde46873d50a8adf39ed1e35bb7bb40b4780800",
+          "statement_sha256": "20e932ce0e6a54e5d5efd8c9441fdd2def8a89f15e4ecc9ec4cf70eadd2d7c46"
+        },
+        "native_span": [
+          106,
+          117
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 117,
+          "start": 106,
+          "symbol": "battery_cell_r14"
+        }
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "a216443f6cd8f079e37eb5ed30d9c641e9f5a2fe23038a8808f45622ddf86b15",
+  "id": "r14-battery-loop-v",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r14-battery-loop-v/reference.rs",
+  "reference_sha256": "81945b73f1b14020c900c890a12e8940b28b2d0ac96e6d7c1ad4c486e0ca5e99",
+  "rejected_at": "baseline-proof-fails",
+  "schema": 2,
+  "source_sha256": "098329638daf8583e7ef5194fcde46873d50a8adf39ed1e35bb7bb40b4780800",
+  "status": "rejected",
+  "target": "battery_cell_r14"
+}

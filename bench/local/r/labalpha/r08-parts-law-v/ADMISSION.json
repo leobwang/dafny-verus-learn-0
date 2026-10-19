@@ -1,0 +1,62 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "ffa5bf6b894e6ff1e35a5e1914e06a7d8cd019340317db10d29e73305650ad07"
+  },
+  "id": "r08-parts-law-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "57a908f3fb421743f66d3a3692ce50e7cb8c5692bf0793bd7672a3690ad7f704",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    }
+  ],
+  "source_sha256": "b2941e4e6aad74ad3021f482cefdd33098c8365e29aafe1a551912ce5c2ff81b",
+  "status": "admitted",
+  "target": "lemma_parts_law",
+  "validated_span": {
+    "end": 106,
+    "start": 70,
+    "symbol": "lemma_parts_law"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}
