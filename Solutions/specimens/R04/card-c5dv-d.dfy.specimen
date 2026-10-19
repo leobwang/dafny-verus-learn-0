@@ -3,5 +3,8 @@
 module R04_Pos {
   method RuntimePositive(x: int) returns (y: int)
     ensures y > 0
-  { expect x > 0; y := x; } // planted: R04.P5d
+  {
+    expect x > 0;  // planted: R04.P5d
+    y := x;
+  }
 }

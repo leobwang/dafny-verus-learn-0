@@ -6,6 +6,6 @@ verdict: failed
 stage: verify
 verified: 0
 holes: 0
-card-c1d.dfy.specimen:2:25: warning: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section on quantifier instantiation rules in the reference manual.
-card-c1d.dfy.specimen:2:49: error: a postcondition could not be proved on this return path
-card-c1d.dfy.specimen:2:25: related: this is the postcondition that could not be proved
+card-c1d.dfy.specimen:3:13: warning: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section on quantifier instantiation rules in the reference manual.
+card-c1d.dfy.specimen:4:3: error: a postcondition could not be proved on this return path
+card-c1d.dfy.specimen:3:13: related: this is the postcondition that could not be proved

@@ -1,4 +1,12 @@
 // after: R04.P1d
 // after: R04.P5d
 use vstd::prelude::*;
-verus! { proof fn claimed_positive(x: int) { assume(x > 0); assert(x > 0); } } // planted: R04.P5d
+
+verus! {
+
+proof fn claimed_positive(x: int) {
+    assume(x > 0);  // planted: R04.P5d
+    assert(x > 0);
+}
+
+} // verus!

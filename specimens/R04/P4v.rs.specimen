@@ -125,11 +125,33 @@ pub fn copy_re(r: &Re) -> (out: Re)
 } // verus!
 
 verus! {
-pub open spec fn occurs(r: Re,s: Seq<char>) -> bool {
-    exists|i: int,j: int| 0 <= i <= j <= s.len() && matches(r,#[trigger] s.subrange(i,j))
+
+pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
+    exists|i: int, j: int| 0 <= i <= j <= s.len() && matches(r, #[trigger] s.subrange(i, j))
 }
-proof fn case_a() ensures occurs(Re::Star(Box::new(Re::Chr('a'))),seq!['b']), { } // [a]
-proof fn case_b(s: Seq<char>) ensures occurs(Re::Eps,s), { } // [b]
-proof fn case_c() ensures !occurs(Re::Chr('a'),seq!['b']), { } // [c]
-proof fn case_d() ensures occurs(Re::Chr('b'),seq!['a','b']), { } // [d]
+
+proof fn case_a()
+    ensures
+        occurs(Re::Star(Box::new(Re::Chr('a'))), seq!['b']),  // [a]
+{
 }
+
+proof fn case_b(s: Seq<char>)
+    ensures
+        occurs(Re::Eps, s),  // [b]
+{
+}
+
+proof fn case_c()
+    ensures
+        !occurs(Re::Chr('a'), seq!['b']),  // [c]
+{
+}
+
+proof fn case_d()
+    ensures
+        occurs(Re::Chr('b'), seq!['a', 'b']),  // [d]
+{
+}
+
+} // verus!

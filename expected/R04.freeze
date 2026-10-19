@@ -44,11 +44,11 @@ path = "specimens/R04/P3d.dfy.specimen"
 lang = "d"
 open_bodies = []
 [file.statements]
-"R04_P3.A" = "0f06d9101804ee49568ea0337e452b85212cef07d8e339ad0fe09fbcc04aa27c"
-"R04_P3.B" = "d6f4e23b23160ecd399df56208ed8d80322521c2482509d349a415346c381f81"
-"R04_P3.D" = "a9a1edc2c92ebd16e96268e4e00fda7a57a4f16a538e188e5b26328a90158382"
+"R04_P3.BOccursInAB" = "ea89ba4edb8326d00ace67903aca4ae58741cb6ad61019c1cdc63f652b5e5da2"
+"R04_P3.EpsOccursEverywhere" = "58bb906b620963740120145197db114eab51d5d1bf72d5d177b0339abff54d19"
 "R04_P3.NoAInB" = "b52fd6797cef0284f9d77befb73950dd2ed0ab506ebbf59375aa41205535380f"
 "R04_P3.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
+"R04_P3.StarOccursInB" = "380cf98c2bb5407be0354cd8540cf7c0eb8901ae504285e8b6b825e022c0a0e0"
 "RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
 "RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
 "RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
@@ -160,14 +160,50 @@ open_bodies = []
 "R04_Pos.RuntimePositive" = "9e7ee64f5780705384ec4788f65a4f289a7ca15756153cd765f4162695a94e7f"
 
 [[file]]
+path = "specimens/R04/chapter-p2-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R04_P2Forced.ForcedA" = "1d6de31e14da17ed5256c2da90203eefbd8f655ff26631b1234373cf2e417243"
+"R04_P2Forced.ForcedB" = "3439ef1e3a0a6846fa41240f29f057751f0e12a39103ad92fdb03e2676be9949"
+"R04_P2Forced.ForcedC" = "a602ea6d6964bdf1d04aee0e3a22a0588339eff09b323caabe725bb61393e6d4"
+"R04_P2Forced.ForcedD" = "93427bc0e12f47c10a62eb80469c36af51fbd080a895eb063e4d187a271552df"
+"R04_P2Forced.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+
+[[file]]
+path = "specimens/R04/chapter-p2-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"Re" = "3dbed32e76b0c4ddaf8588eb6d31d925b39ed2613a523df438ac2d59b53b8d13"
+"backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
+"backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
+"copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
+"forced_a" = "1a955b318b47c25ea43185a30b8f6142842c6cf854d6c4aea114539770313a37"
+"forced_b" = "9ab69f98b0b7e5043f6f99f14aa61f6e79d6d5ddb749d4159b70972530a2e6c7"
+"forced_c" = "8d6d22473023b536571184fd0acdea9108cb1f110452c355448f995cc4be423c"
+"forced_d" = "1934100b77eaf519205707c642ce945182ca626dd01edfecedb1460c8394fae8"
+"is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
+"matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
+"node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
+"nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+"occurs" = "25f5fc372fabb37ce7c690a9e57130349f4958d8e75be32b516bb2d13bc3b65c"
+
+[[file]]
 path = "specimens/R04/chapter-p6-d.dfy.specimen"
 lang = "d"
 open_bodies = []
 [file.statements]
-"R04_P6.FindNonea" = "1851bcd9aeb43f9383915742a1ed50868be7b97bb80bc8d0f10ca0285a42c18b"
-"R04_P6.FindNoneb" = "a1a542b19b1519b0508c202fbf71c4a5a8583b3dd9bd0653e59ebbd253a06ad1"
-"R04_P6.FindNonec" = "fcdc8dcc239240eadaab346c3b4f5829e394656ec2329faf8516af65e0a072ea"
-"R04_P6.FindNoned" = "a4756a387c0c2132d58b74dd0afdaaef5dcfce79a8c244c2aef8074193de5214"
+"R04_P6.FindNoneA" = "fa54f9e0ea11eb43c0b54c13ffcae00cb2d621be049b19306a67ca1b714dcc80"
+"R04_P6.FindNoneB" = "2f8a6fe72d86da209c90af54efffc443ba78284ae54202a6b3ca75837c174fe3"
+"R04_P6.FindNoneC" = "2ba756d8b09a5b87b1559b2d9c2982d1e6aa3a773b279c61d123818bec88d642"
+"R04_P6.FindNoneD" = "ad19d3f2306b4cc983200c5927598f29d39b10661d8a5b7eb7fe105cea6a2282"
 "R04_P6.Occurs" = "a730ccf3bc46223b43e7ce1ed7882f6be3801e5d2e82b510002a2ef896e5bc41"
 "RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
 "RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"

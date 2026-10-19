@@ -70,17 +70,33 @@ module RG_A1_Re {
 
 module R04_P6 {
   import opened RG_A1_Re
-  ghost predicate Occurs(r: Re,s: seq<char>) { exists i,j :: 0 <= i <= j <= |s| && Matches(r,s[i..j]) }
-  method FindNonea(r: Re,s: seq<char>) returns (b: bool)
-    ensures b <==> Occurs(r,s)
-  { b := false; }
-  method FindNoneb(r: Re,s: seq<char>) returns (b: bool)
-    ensures b <==> Matches(r,s)
-  { b := false; }
-  method FindNonec(r: Re,s: seq<char>) returns (b: bool)
-    ensures b ==> Occurs(r,s)
-  { b := false; }
-  method FindNoned(r: Re,s: seq<char>) returns (b: bool)
-    ensures b <==> exists i :: 0 <= i <= |s| && Matches(r,s[i..])
-  { b := false; }
+
+  ghost predicate Occurs(r: Re, s: seq<char>)
+  {
+    exists i, j :: 0 <= i <= j <= |s| && Matches(r, s[i..j])
+  }
+
+  method FindNoneA(r: Re, s: seq<char>) returns (b: bool)
+    ensures b <==> Occurs(r, s)  // [a]
+  {
+    b := false;
+  }
+
+  method FindNoneB(r: Re, s: seq<char>) returns (b: bool)
+    ensures b <==> Matches(r, s)  // [b]
+  {
+    b := false;
+  }
+
+  method FindNoneC(r: Re, s: seq<char>) returns (b: bool)
+    ensures b ==> Occurs(r, s)  // [c]
+  {
+    b := false;
+  }
+
+  method FindNoneD(r: Re, s: seq<char>) returns (b: bool)
+    ensures b <==> exists i :: 0 <= i <= |s| && Matches(r, s[i..])  // [d]
+  {
+    b := false;
+  }
 }
