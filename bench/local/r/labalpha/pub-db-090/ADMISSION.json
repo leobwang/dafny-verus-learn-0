@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "f7723944ec234b909a8532f659e5268543341bbf7803a756633243807e969c2c",
+    "statement_sha256": "2efd3383ce43dc188db7186580cc70becfe6fdf368a1b5975e37bdb1a7f891f5"
+  },
+  "id": "pub-db-090",
+  "lang": "dafny",
+  "private_evidence_sha256": "7370c1d9b729b8fa2832d7e29af988c1e1a47bf7a5683e75c998617c6e370803",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    }
+  ],
+  "source_sha256": "d761dedcdc6b635650ac4b1a530a8bad03d774e802e4a436c1d6037bc0a06a17",
+  "status": "admitted",
+  "target": "Quotient",
+  "validated_span": {
+    "end": 18,
+    "start": 4,
+    "symbol": "Quotient"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

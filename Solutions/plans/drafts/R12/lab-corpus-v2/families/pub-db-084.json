@@ -1,0 +1,37 @@
+{
+  "checks": {
+    "C0": "pass: Apache-2.0 (set licence)",
+    "C1": "pass: target Fatorial, 2 sites, 0 annotations kept as provided",
+    "C2": "n/a (dafnybench has no prose prompt)",
+    "C3": "pass",
+    "C4": "pass",
+    "C5": "pass",
+    "C6": "pass",
+    "C7": "pass: static frame control (statement table, models, executable skeleton); no Claude judging (D45)"
+  },
+  "cluster": "pub-db-084",
+  "contamination": "possibly seen: a public 2023-2025 repository task; the perturbation probe is deferred (WALK.md)",
+  "flags": {
+    "c0_flag": "per-file upstream licence not recorded",
+    "lemma_shaped": true,
+    "restored_outside_target_lines": [],
+    "target_kind": "method"
+  },
+  "humaneval_id": null,
+  "kind": "public",
+  "lang": "dafny",
+  "licence": "pass: Apache-2.0 (set licence)",
+  "licence_flag": "per-file upstream licence not recorded",
+  "pool_sha256": "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4",
+  "set": "dafnybench",
+  "set_sha256": "0c1a4218c81f2dfd97ec22f0c87253fc3e7faa5b66cd1acc949cb3891494d6b6",
+  "sites": 2,
+  "status": "admitted",
+  "target": "Fatorial",
+  "tasks": [
+    "pub-db-084"
+  ],
+  "upstream_answer_sha256": "93bbf804cfd15b46bba5e17bd295bddf85d109edbe53f8e4064169bbb48bbb0d",
+  "upstream_task": "bench/public/dafnybench/answers/Metodos_Formais_tmp_tmpql2hwcsh_Invariantes_fatorial2.dfy",
+  "walk_position": 84
+}

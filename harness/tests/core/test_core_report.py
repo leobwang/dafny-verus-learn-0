@@ -284,6 +284,7 @@ def test_labalpha_tables_from_the_logs(tmp_path):
     assert best["failed_nodes"] == 1 and raw["failed_nodes"] == 1
     assert raw["feedback_truncation_rate"] == pytest.approx(4 / 26)
     assert raw["gpu_s"] == pytest.approx(1.5 * 26)
+    assert raw["length_cut_rate"] == 0.0 and best["gate_refusals"] == 0
     assert best["curve"][0] == pytest.approx((0.5 + 0.0 + 0.0) / 3)    # S(1) per cluster: c1 1/2
     p = t.primary
     assert p["clusters"] == 3 and p["theta"] == pytest.approx((0.85 + 0.9 + 0.0) / 3)

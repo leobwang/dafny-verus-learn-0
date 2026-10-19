@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "f2f486cb18aeda9ca8a24d4249647d6d5d3b33508dd6134567de6dad2031b2be",
+    "statement_sha256": "d1d63bf1fb6a8588d6a3f7203903269a0d2643cbda769c94ca506d7427b1fe67"
+  },
+  "id": "pub-db-076",
+  "lang": "dafny",
+  "private_evidence_sha256": "0aee929c48b59427a831ab58d1df41c65c118a84636b4f85dc781de9f3babb69",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    }
+  ],
+  "source_sha256": "34e997c049f4b0c76b2343d9b7c79a76a9141c3f8b7bf61b76ebfd8d210004b2",
+  "status": "admitted",
+  "target": "Eval",
+  "validated_span": {
+    "end": 18,
+    "start": 4,
+    "symbol": "Eval"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

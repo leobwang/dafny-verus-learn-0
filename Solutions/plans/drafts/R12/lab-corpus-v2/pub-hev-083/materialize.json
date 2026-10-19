@@ -1,0 +1,15 @@
+{
+ "target": "rolling_max",
+ "sites": 3,
+ "kept_annotations": [
+  {
+   "offset": 1024,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "numbers@[..pos + 1].drop_last() =~= numbers@[..pos]"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

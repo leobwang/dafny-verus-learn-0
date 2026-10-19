@@ -1,0 +1,177 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": false,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/dafny-4.11.0/dafny/dafny",
+          "verify",
+          "/tmp/dvl0-dvr4-labalpha/l4state/pub-db-086/pub-db-086.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A1_Re.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A1b_Facts.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A2_Deriv.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A2_MatcherStatement.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A3_Syntax.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A4_Norm.dfy",
+          "--json-output",
+          "--resource-limit",
+          "5000000",
+          "--cores",
+          "2",
+          "--solver-path",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1",
+          "--allow-axioms",
+          "false",
+          "--allow-warnings",
+          "false",
+          "--manual-lemma-induction",
+          "--log-format",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-045450-s9td4e__/tasks.csv"
+        ],
+        "count_unit": "tasks",
+        "diagnostics": [],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "dafny",
+        "per_symbol": {
+          "RG_A1_Re.Backwards": "verified",
+          "RG_A1_Re.BackwardsStr": "verified",
+          "RG_A1_Re.Matches": "verified",
+          "RG_A1_Re.NodeCount": "verified",
+          "RG_A1_Re.Nullable": "verified",
+          "RG_A1b_Facts.CatAssoc": "verified",
+          "RG_A1b_Facts.CatEpsLeft": "verified",
+          "RG_A1b_Facts.CatEpsRight": "verified",
+          "RG_A1b_Facts.NullableCorrect": "verified",
+          "RG_A1b_Facts.StarConcat": "verified",
+          "RG_A1b_Facts.StarOne": "verified",
+          "RG_A2_Deriv.ClassBelow": "verified",
+          "RG_A2_Deriv.ClassEmpty": "verified",
+          "RG_A2_Deriv.ClassInsert": "verified",
+          "RG_A2_Deriv.ClassMember": "verified",
+          "RG_A2_Deriv.ClassOfString": "verified",
+          "RG_A2_Deriv.ClassRange": "verified",
+          "RG_A2_Deriv.ClassRangesFacts": "verified",
+          "RG_A2_Deriv.ClassRank": "verified",
+          "RG_A2_Deriv.ClassUnion": "verified",
+          "RG_A2_Deriv.Code": "verified",
+          "RG_A2_Deriv.ContainsCons": "verified",
+          "RG_A2_Deriv.Cp": "verified",
+          "RG_A2_Deriv.Deriv": "verified",
+          "RG_A2_Deriv.DerivCorrect": "verified",
+          "RG_A2_Deriv.DerivMatch": "verified",
+          "RG_A2_Deriv.InsertRanges": "verified",
+          "RG_A2_Deriv.InsertRangesBelow": "verified",
+          "RG_A2_Deriv.RangesContain": "verified",
+          "RG_A2_Deriv.RangesValid": "verified",
+          "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A3_Syntax.BoundVal": "verified",
+          "RG_A3_Syntax.ClassToRe": "verified",
+          "RG_A3_Syntax.Copies": "verified",
+          "RG_A3_Syntax.CopiesUpTo": "verified",
+          "RG_A3_Syntax.CountedAt": "verified",
+          "RG_A3_Syntax.Lower": "verified",
+          "RG_A3_Syntax.MaxBound": "verified",
+          "RG_A3_Syntax.NoSpecialFrom": "verified",
+          "RG_A3_Syntax.RangeRe": "verified",
+          "RG_A3_Syntax.RangesLowered": "verified",
+          "RG_A3_Syntax.RangesToRe": "verified",
+          "RG_A3_Syntax.RepRange": "verified",
+          "RG_A3_Syntax.Res.Extract": "verified",
+          "RG_A3_Syntax.Res.PropagateFailure": "verified",
+          "RG_A3_Syntax.SimpleClassBody": "verified",
+          "RG_A3_Syntax.Stop": "verified",
+          "RG_A3_Syntax.WF": "verified",
+          "RG_A4_Norm.CatCong": "verified",
+          "RG_A4_Norm.CatCongRight": "verified",
+          "RG_A4_Norm.CheckDeriv": "verified",
+          "RG_A4_Norm.MkAlt": "verified",
+          "RG_A4_Norm.MkCat": "verified",
+          "RG_A4_Norm.MkStar": "verified",
+          "RG_A4_Norm.NDeriv": "verified",
+          "RG_A4_Norm.Norm": "verified",
+          "RG_A4_Norm.NormRe": "verified",
+          "RG_A4_Norm.Normal": "verified",
+          "RG_A4_Norm.StarOfEps": "verified",
+          "mergesort": "verified",
+          "mezclar": "verified",
+          "ordenar_mergesort": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-045450-s9td4e__",
+        "stage": "verify",
+        "target": "/tmp/dvl0-dvr4-labalpha/l4state/pub-db-086/pub-db-086.dfy",
+        "verdict": "verified",
+        "verified_count": 66
+      },
+      "passed": false
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "335a3e13bd1c4dc2600ec04bb7e4f8333316cb98fa860e5cde2624195997368f",
+          "lang": "dafny",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i1"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i2"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i3"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i4"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i5"
+            }
+          ],
+          "source_sha256": "d5e0e91bb796be202d6ad36f1d1433e0a33161520d58b2c2b02c8990b2f27b80",
+          "statement_sha256": "cad2c55671889bfc4a8e611a7fa6ba42fd79b0620fd549f69b62a395b14a9505"
+        },
+        "native_span": [
+          45,
+          158
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 158,
+          "start": 45,
+          "symbol": "mezclar"
+        }
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "c0cd4477d97545b8cf847306bb384bf72516081e0c640de9299306419218f793",
+  "id": "pub-db-086",
+  "lang": "dafny",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-086/reference.dfy",
+  "reference_sha256": "28ed9d03fcd716540b056640e5e075265500fb8c482cefaa6a3c659f875adbe4",
+  "rejected_at": "baseline-proof-fails",
+  "schema": 2,
+  "source_sha256": "d5e0e91bb796be202d6ad36f1d1433e0a33161520d58b2c2b02c8990b2f27b80",
+  "status": "rejected",
+  "target": "mezclar"
+}

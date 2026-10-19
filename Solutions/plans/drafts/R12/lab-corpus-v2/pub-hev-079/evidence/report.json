@@ -1,0 +1,267 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": false,
+    "reference-three-seeds": false,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-079/pub-hev-079.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "pub_hev_079",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "",
+            "col": 1,
+            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-079/pub-hev-079.rs",
+            "line": 39,
+            "message": "function body check: not all errors may have been reported; rerun with a higher value for --multiple-errors to find other potential errors in this function",
+            "severity": "info"
+          },
+          {
+            "code": "W-V03",
+            "col": 9,
+            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-079/pub-hev-079.rs",
+            "line": 41,
+            "message": "postcondition not satisfied",
+            "severity": "error"
+          },
+          {
+            "code": "W-V03",
+            "col": 9,
+            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-079/pub-hev-079.rs",
+            "line": 42,
+            "message": "postcondition not satisfied",
+            "severity": "error"
+          },
+          {
+            "code": "",
+            "col": 39,
+            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-079/pub-hev-079.rs",
+            "line": 86,
+            "message": "recommendation not met: cannot prove that there exists values that satisfy the condition of the choose expression",
+            "severity": "info"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "generate_integers": "failed",
+          "max": "verified",
+          "min": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-045644-j84z92ld",
+        "stage": "verify",
+        "target": "/tmp/dvl0-dvr4-labalpha/l4state/pub-hev-079/pub-hev-079.rs",
+        "verdict": "failed",
+        "verified_count": 2
+      },
+      "passed": true
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "b78cc2fc9f87519ae30c4167efaf87071b016ce6164ed488e755010bdc3cbdab",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i1"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i2"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i3"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i4"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i5"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "i6"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a7"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a8"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a9"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "a10"
+            }
+          ],
+          "source_sha256": "4cd047c7388c0ad0bbe6437bb818681d30a95b81e944e8b2bcefd1cea559804f",
+          "statement_sha256": "f603a95e6066cf665037c2fb33136d29544392d9f9fb4d6dd8a6ad69e2e8ef55"
+        },
+        "native_span": [
+          39,
+          95
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 95,
+          "start": 39,
+          "symbol": "generate_integers"
+        }
+      },
+      "passed": true
+    },
+    "reference-gate": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-pub-hev-079/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-hev-079/reference.rs",
+            "line": 67,
+            "message": "expected `,`",
+            "severity": "error"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; verified 0 < the unit's minimum 1 (none pinned: at least 1, \u039411); exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {},
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-045649-_hpelswe",
+        "stage": "parse",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-hev-079/reference.rs",
+        "verdict": "failed",
+        "verified_count": 0
+      },
+      "passed": false
+    }
+  },
+  "hints_sha256": "92be7194704b49cf56fd87c877cb2315b2d80287a0f0096adb5316ebc03909d7",
+  "id": "pub-hev-079",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-hev-079/reference.rs",
+  "reference_sha256": "17bd41ecde5edd8bb1cd7a725c2350b122a8dafed36884b8983c2fa6076a6294",
+  "rejected_at": "reference-gate",
+  "schema": 2,
+  "source_sha256": "4cd047c7388c0ad0bbe6437bb818681d30a95b81e944e8b2bcefd1cea559804f",
+  "status": "rejected",
+  "target": "generate_integers"
+}

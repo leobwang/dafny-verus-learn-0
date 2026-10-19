@@ -56,7 +56,8 @@ DV5 confirmed it: the analysis tables are the learner's).
       truncated:interrupted); per arm the share of runs solved at call 1 and never
       solved, S(b) for b = 1..B with cluster-bootstrap bands, the calls' tokens,
       GPU-seconds and wall clock, the feedback's bytes and the equal cap's
-      truncation rate, the gate's num_predict cut rate; per cluster and arm the
+      truncation rate, the share of replies cut at the output cap (output tokens
+      >= length_cap, opencode's min(num_predict, 32000)); per cluster and arm the
       AUC; and, for the primary arms, the paired sign-flip test of the cluster
       differences (fvh.stats.permutation_test), their bootstrap interval and the
       worst-case sensitivity for excluded runs (0 in the first arm, 1 in the
@@ -504,7 +505,7 @@ def _task_clusters(root, module):
     return out
 
 
-def _run_row(d, meta, clusters, budget_):
+def _run_row(d, meta, clusters, budget_, length_cap=32000):
     calls = _jsonl(d / "calls.jsonl")
     outcome = meta.outcome
     if outcome == "verified":
@@ -519,8 +520,10 @@ def _run_row(d, meta, clusters, budget_):
             "repeat": meta.repeat, "outcome": outcome, "class": cls,
             "first_success": t if (t is not None and t >= 1) else None,
             "cluster": clusters.get(meta.task_id), "calls": len(calls),
-            "prompt_tokens": sum(int(g.get("prompt_tokens") or 0) for g in gates)
-            if gates else 0,
+            # the gate's token counts in a call record are the run's running totals
+            # (fvh.batch.RecordingTransport); its GPU-seconds are per call
+            "prompt_tokens": max((int(g.get("prompt_tokens") or 0) for g in gates), default=0),
+            "gate_output_tokens": max((int(g.get("output_tokens") or 0) for g in gates), default=0),
             "gpu_s": round(sum(float(g.get("gpu_s") or 0.0) for g in gates), 3),
             "wall_s": round(sum(float(c.get("wall_s") or 0.0) for c in calls), 3),
             "client_out": sum(int((c.get("client_usage") or {}).get("output_tokens") or 0)
@@ -528,7 +531,11 @@ def _run_row(d, meta, clusters, budget_):
             "feedback_calls": len(fb),
             "feedback_bytes": sum(int(c["feedback_bytes"]) for c in fb),
             "feedback_truncated": sum(1 for c in fb if c.get("feedback_truncated")),
-            "num_predict_cut": sum(1 for g in gates if g.get("capped")),
+            "gate_refusals": sum(1 for g in gates if g.get("capped")),
+            # a reply that reached the output cap (opencode sends max_tokens =
+            # min(num_predict, 32000)) was cut there: the num_predict truncation
+            "length_cut": sum(1 for c in calls if int((c.get("client_usage") or {})
+                                                      .get("output_tokens") or 0) >= length_cap),
             "call_errors": sum(1 for c in calls if c.get("error")),
             # model calls that produced no candidate: the replies the hint grammar
             # rejected (fvh.labalpha's failed nodes) and calls that ended in an error
@@ -546,7 +553,7 @@ def _candidates(d):
 
 def labalpha(root, module: str, *, budget: int = 10, primary=("best", "best-raw"),
              n_permutations: int = 10_000, n_resamples: int = 10_000, seed: int = 20261018,
-             confidence: float = 0.95, rejudged=None) -> LabAlpha:
+             confidence: float = 0.95, rejudged=None, length_cap: int = 32000) -> LabAlpha:
     """Lab alpha's tables (module docstring). Deterministic: the same logs and seed give
     the same tables."""
     root = Path(root)
@@ -558,7 +565,7 @@ def labalpha(root, module: str, *, budget: int = 10, primary=("best", "best-raw"
         except ValueError as e:
             out.findings.append(f"unreadable run: {e}")
             continue
-        row = _run_row(d, meta, clusters, budget)
+        row = _run_row(d, meta, clusters, budget, length_cap)
         if row["cluster"] is None:
             out.findings.append(f"run {meta.run_id}: task {meta.task_id} has no R12_CLUSTER line "
                                 "in the module's batch plans")
@@ -606,8 +613,8 @@ def labalpha(root, module: str, *, budget: int = 10, primary=("best", "best-raw"
             "feedback_bytes_mean": (sum(r["feedback_bytes"] for r in rs) / fbc) if fbc else None,
             "feedback_truncation_rate": (sum(r["feedback_truncated"] for r in rs) / fbc)
             if fbc else None,
-            "num_predict_cut_rate": (sum(r["num_predict_cut"] for r in rs) / calls)
-            if calls else None,
+            "length_cut_rate": (sum(r["length_cut"] for r in rs) / calls) if calls else None,
+            "gate_refusals": sum(r["gate_refusals"] for r in rs),
             "outcomes": dict(sorted(_count_by(rs, "outcome").items()))}
     a, b = primary
     both = sorted(c for c, v in out.clusters.items() if a in v and b in v)
@@ -650,7 +657,7 @@ def format_labalpha(t: LabAlpha) -> str:
     lines = [f"# {t.module} Lab alpha tables (from the logs; B = {t.budget})", "",
              "| arm | runs | excluded | clusters | solved at call 1 | never solved | solved by B "
              "| AUC (mean over clusters) | calls | failed nodes | GPU-s | wall s | feedback B/call "
-             "| cap truncation | num_predict cut |",
+             "| cap truncation | output-cap cut |",
              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for arm, s_ in t.arms.items():
         lines.append(f"| {arm} | {s_['runs']} | {s_['excluded']} | {s_['clusters']} | "
@@ -658,7 +665,7 @@ def format_labalpha(t: LabAlpha) -> str:
                      f"{_f(s_['solved_by_B'])} | {_f(s_['auc_mean_over_clusters'])} | "
                      f"{s_['calls']} | {s_['failed_nodes']} | {_f(s_['gpu_s'], 1)} | "
                      f"{_f(s_['wall_s'], 1)} | {_f(s_['feedback_bytes_mean'], 0)} | "
-                     f"{_f(s_['feedback_truncation_rate'])} | {_f(s_['num_predict_cut_rate'])} |")
+                     f"{_f(s_['feedback_truncation_rate'])} | {_f(s_['length_cut_rate'])} |")
     lines += ["", "## S(b) per arm (mean over clusters, cluster-bootstrap band)", "",
               "| arm | " + " | ".join(f"b={b}" for b in range(1, t.budget + 1)) + " |",
               "|---|" + "---|" * t.budget]

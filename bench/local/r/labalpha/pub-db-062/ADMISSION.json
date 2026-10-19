@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "4bd9f76edb6c718372a43d72f1a315de50e68ccd665b4616b1c80ce5bd846783",
+    "statement_sha256": "73748457dadb5fa8d7bad86b162312638a99485738820f0cc905795e00c3e338"
+  },
+  "id": "pub-db-062",
+  "lang": "dafny",
+  "private_evidence_sha256": "f92163963ad069bccc4f424ac8482d3e327ec0fe34efb5f7c6fe81ca315b439f",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "i2"
+    }
+  ],
+  "source_sha256": "da1363996bf5818872c732b17f9361ef8f95b32940a36cd5efaac8dc1e760613",
+  "status": "admitted",
+  "target": "peasantMult",
+  "validated_span": {
+    "end": 54,
+    "start": 27,
+    "symbol": "peasantMult"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

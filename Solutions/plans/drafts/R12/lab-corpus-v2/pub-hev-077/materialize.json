@@ -1,0 +1,15 @@
+{
+ "target": "parse_nested_parens",
+ "sites": 8,
+ "kept_annotations": [
+  {
+   "offset": 2204,
+   "why": "not expressible in the frozen hint grammar",
+   "text": "all_depths@.map_values(|d| d as int) =~= Seq::<int>::empty()"
+  }
+ ],
+ "flags": {
+  "dropped_triggers": 0,
+  "lemma_shaped": true
+ }
+}

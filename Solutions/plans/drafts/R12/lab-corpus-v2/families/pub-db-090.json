@@ -1,0 +1,37 @@
+{
+  "checks": {
+    "C0": "pass: Apache-2.0 (set licence)",
+    "C1": "pass: target Quotient, 1 sites, 0 annotations kept as provided",
+    "C2": "n/a (dafnybench has no prose prompt)",
+    "C3": "pass",
+    "C4": "pass",
+    "C5": "pass",
+    "C6": "pass",
+    "C7": "pass: static frame control (statement table, models, executable skeleton); no Claude judging (D45)"
+  },
+  "cluster": "pub-db-090",
+  "contamination": "possibly seen: a public 2023-2025 repository task; the perturbation probe is deferred (WALK.md)",
+  "flags": {
+    "c0_flag": "per-file upstream licence not recorded",
+    "lemma_shaped": true,
+    "restored_outside_target_lines": [],
+    "target_kind": "method"
+  },
+  "humaneval_id": null,
+  "kind": "public",
+  "lang": "dafny",
+  "licence": "pass: Apache-2.0 (set licence)",
+  "licence_flag": "per-file upstream licence not recorded",
+  "pool_sha256": "18cefeb571ec51b43522a5f6d4f4f45ea37c47d3d6f8612e98f3b0916c3864b4",
+  "set": "dafnybench",
+  "set_sha256": "0c1a4218c81f2dfd97ec22f0c87253fc3e7faa5b66cd1acc949cb3891494d6b6",
+  "sites": 1,
+  "status": "admitted",
+  "target": "Quotient",
+  "tasks": [
+    "pub-db-090"
+  ],
+  "upstream_answer_sha256": "9a3e0e5071b3a434d06e497ca63631c7dcf51d1b3fc531690e1d28851fc41a22",
+  "upstream_task": "bench/public/dafnybench/answers/Clover_quotient.dfy",
+  "walk_position": 90
+}

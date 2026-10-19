@@ -1,0 +1,93 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 16,
+  "frame": {
+    "code_sha256": "bd6e3ac97bc8b08dc2f4892ccf04033109e48536f31ba3a05861735b6fe0962b",
+    "statement_sha256": "7acb001ed3ea78dc9ed4794b244760e286525d470d3944cbb121424d76becf82"
+  },
+  "id": "pub-hev-061",
+  "lang": "verus",
+  "private_evidence_sha256": "a34aab5b825c929bf2aff93bbb8028132fccad0ec8f4c70eb7e20bfc4eb21f34",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "i1"
+    },
+    {
+      "kind": "expr",
+      "name": "a2"
+    },
+    {
+      "kind": "expr",
+      "name": "a3"
+    },
+    {
+      "kind": "expr",
+      "name": "i4"
+    },
+    {
+      "kind": "expr",
+      "name": "i5"
+    },
+    {
+      "kind": "expr",
+      "name": "i6"
+    },
+    {
+      "kind": "expr",
+      "name": "i7"
+    },
+    {
+      "kind": "expr",
+      "name": "i8"
+    },
+    {
+      "kind": "expr",
+      "name": "a9"
+    },
+    {
+      "kind": "expr",
+      "name": "a10"
+    },
+    {
+      "kind": "expr",
+      "name": "a11"
+    },
+    {
+      "kind": "expr",
+      "name": "a12"
+    },
+    {
+      "kind": "expr",
+      "name": "a13"
+    },
+    {
+      "kind": "expr",
+      "name": "a14"
+    }
+  ],
+  "source_sha256": "52af162ef03980eb4cad7d308c41cabcdc26a6a91fd2e7cdb78ccb4e8f06c82e",
+  "status": "admitted",
+  "target": "filter_by_prefix",
+  "validated_span": {
+    "end": 66,
+    "start": 19,
+    "symbol": "filter_by_prefix"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}
