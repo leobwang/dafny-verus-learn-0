@@ -11,6 +11,11 @@ attempt using scripts/firsttry.sh R02 --check before running their scenarios.
 Five typed holes ship in this language, ten across the pair. T1 starts empty
 and has a commented use-site check: it is a separate code test-out.
 
+File order: the test-out, the prediction block, the worked examples (W1, W2),
+the cards (C1 to C5), the given VoidSpec, the holes (H1 to H5) and H5's given
+client, then the final divergence card (C7). Each hole comes after the cards
+its `uses:` line names; chapter §2 teaches the witness extraction H4v needs.
+
 Done: every unit gates with zero tool-counted holes, vaudit is clean,
 specfreeze --check R02 passes, and firsttry's strict report is OK. Preserve
 given contracts and implementations. /tutor R02 is available after an attempt.
@@ -50,6 +55,10 @@ module R02_Datatypes {
       to decreases r. Predict verification. Same answer form as P3dv. */
   // CHECK P4dv
 
+  // ===========================================================================
+  // Worked examples
+  // ===========================================================================
+
   // item: R02.W1d
   /** Name the split of a concrete concatenation rather than hoping a solver
       invents the witness. The slice facts connect that witness to the goal. */
@@ -64,6 +73,9 @@ module R02_Datatypes {
   }
 
   // item: R02.W2d
+  /** A recursive method over the datatype, tied to its spec function by its
+      postcondition. Each recursive call returns a value with the same
+      contract for a child; the branch combines the two. */
   function StarCountSpec(r: Re): nat
     decreases r
   {
@@ -73,15 +85,70 @@ module R02_Datatypes {
     case Star(a) => 1 + StarCountSpec(a)
     case _ => 0
   }
+
   method StarCount(r: Re) returns (n: nat)
     ensures n == StarCountSpec(r)
     decreases r
   {
     match r
-    case Alt(a, b) => var x := StarCount(a); var y := StarCount(b); n := x + y;
-    case Cat(a, b) => var x := StarCount(a); var y := StarCount(b); n := x + y;
-    case Star(a) => var x := StarCount(a); n := 1 + x;
-    case _ => n := 0;
+    case Alt(a, b) =>
+      var x := StarCount(a);
+      var y := StarCount(b);
+      n := x + y;
+    case Cat(a, b) =>
+      var x := StarCount(a);
+      var y := StarCount(b);
+      n := x + y;
+    case Star(a) =>
+      var x := StarCount(a);
+      n := 1 + x;
+    case _ =>
+      n := 0;
+  }
+
+  // ===========================================================================
+  // Cards
+  // ===========================================================================
+
+  // item: R02.C1d write:datatype-match
+  // EXPECT: card-c1d.dfy.specimen is rejected: its match omits constructors.
+  function RegexOuterTag(r: Re): nat
+  {
+    match r
+    case Empty => 0
+    case Eps => 1
+    case Chr(_) => 2
+    case Alt(_, _) => 3
+    case Cat(_, _) => 4
+    case Star(_) => 5
+  }
+
+  // item: R02.C2d write:decreases
+  // EXPECT: card-c2d.dfy.specimen fails to establish a strict decrease.
+  function OuterStars(r: Re): nat
+    decreases r
+  {
+    match r
+    case Star(a) => 1 + OuterStars(a)
+    case _ => 0
+  }
+
+  // item: R02.C3d write:exists-witness
+  // EXPECT: card-c3d.dfy.specimen fails: its precondition promises no '#'.
+  lemma MarkedPosition(s: seq<char>, i: int)
+    requires 0 <= i < |s| && s[i] == '#'
+    ensures exists k :: 0 <= k < |s| && s[k] == '#'
+  {
+    assert 0 <= i < |s| && s[i] == '#';
+  }
+
+  // item: R02.C4dv recognise:test
+  // Dafny @Test methods are verified; Rust #[test] functions outside verus!
+  // are native tests. A finite sample and a universal contract are different evidence.
+  @Test
+  method RegexSampleTest()
+  {
+    expect !Nullable(Chr('z'));
   }
 
   // Given structural specification for H5. It means no string is matched.
@@ -97,10 +164,24 @@ module R02_Datatypes {
     case Star(_) => false
   }
 
-// item: R02.H1d
-// uses: datatype-match, exists-witness
-// pair: R02.H1v
-lemma NullableCorrect(r: Re)
+  // item: R02.C5dv recognise:ghost
+  // VoidSpec above is a ghost predicate; the paired void_spec is a spec fn.
+  // Keep specification evaluation separate from a compiled executable.
+
+  // ===========================================================================
+  // Holes
+  // ===========================================================================
+
+  // item: R02.H1d
+  // uses: datatype-match, exists-witness
+  // pair: R02.H1v
+  /** **H1.** The structural test `Nullable` agrees with the semantics on the
+      empty string. Prove it by structural induction: a call of this lemma on
+      a child is that child's hypothesis (the lever `{:induction false}` keeps
+      Dafny from finding the calls for you). Which constructors need their
+      children's hypotheses, and which split of the empty string does `Cat`
+      need? */
+  lemma {:induction false} NullableCorrect(r: Re)
     ensures Nullable(r) <==> Matches(r, [])
     decreases r
   {
@@ -116,16 +197,23 @@ lemma NullableCorrect(r: Re)
       NullableCorrect(a);
       NullableCorrect(b);
       var e: seq<char> := [];
-      assert e[..0] == e && e[0..] == e;
+      assert e[..0] == e;
+      assert e[0..] == e;
     case Star(_) =>
-
     // @hole-end R02.H1d
-}
+  }
+  // Hint(1): match on r; the leaves and Star follow from the two definitions alone.
+  // Hint(2): the empty string has exactly one split; name its two slices as
+  //    sequences, the way W1 names the split of ['a', 'b'].
 
-// item: R02.H2d
-// uses: datatype-match
-// pair: R02.H2v
-lemma {:induction false} NodeCountBackwards(r: Re)
+  // item: R02.H2d
+  // uses: datatype-match
+  // pair: R02.H2v
+  /** **H2.** Reading a regex backwards keeps its node count, and every regex
+      has at least one node. Which cases of `Backwards` rebuild a node with
+      recursive children, and what must be known about those children before
+      the counts can be compared? */
+  lemma {:induction false} NodeCountBackwards(r: Re)
     ensures NodeCount(r) >= 1 && NodeCount(Backwards(r)) == NodeCount(r)
     decreases r
   {
@@ -142,14 +230,19 @@ lemma {:induction false} NodeCountBackwards(r: Re)
       NodeCountBackwards(b);
     case Star(a) =>
       NodeCountBackwards(a);
-
     // @hole-end R02.H2d
-}
+  }
+  // Hint(1): one case per constructor; a leaf is its own backwards form.
+  // Hint(2): `Cat` swaps its children under `Backwards`; a sum does not care
+  //    about the order once each child's fact is in scope.
 
-// item: R02.H3d
-// uses: datatype-match
-// pair: R02.H3v
-lemma {:induction false} NullableBackwards(r: Re)
+  // item: R02.H3d
+  // uses: datatype-match
+  // pair: R02.H3v
+  /** **H3.** Reading a regex backwards keeps its nullability. In which case
+      does `Backwards` reorder the children, and why does `Nullable` not
+      notice the order? */
+  lemma {:induction false} NullableBackwards(r: Re)
     ensures Nullable(Backwards(r)) == Nullable(r)
     decreases r
   {
@@ -164,78 +257,75 @@ lemma {:induction false} NullableBackwards(r: Re)
     case Cat(a, b) =>
       NullableBackwards(a);
       NullableBackwards(b);
-    case Star(a) =>
-      NullableBackwards(a);
-
+    case Star(_) =>
     // @hole-end R02.H3d
-}
+  }
+  // Hint(1): the skeleton of H2 works here too.
+  // Hint(2): `Nullable` of a `Cat` is a conjunction of the children's values.
 
-// item: R02.H4d
-// uses: exists-witness
-// pair: R02.H4v
-lemma CatEpsLeft(r: Re, s: seq<char>)
+  // item: R02.H4d
+  // uses: exists-witness
+  // pair: R02.H4v
+  /** **H4.** Putting `Eps` in front changes no language. Each direction is
+      about the existential over split points in `Matches`' `Cat` case: which
+      split proves `Matches(Cat(Eps, r), s)` from `Matches(r, s)`, and what
+      does `Eps` force about any split of a match of `Cat(Eps, r)`? */
+  lemma CatEpsLeft(r: Re, s: seq<char>)
     ensures Matches(Cat(Eps, r), s) <==> Matches(r, s)
   {
     // @hole-begin R02.H4d
     if Matches(r, s) {
-      assert s[..0] == [] && s[0..] == s;
+      assert s[..0] == [];
+      assert s[0..] == s;
     }
-
     // @hole-end R02.H4d
-}
+  }
+  // Hint(1): `Eps` matches one string only, so it can take only one prefix.
+  // Hint(2): name that split by its slices, as W1 does; one of them is the empty sequence.
 
-// item: R02.H5d
-// uses: datatype-match, decreases
-// pair: R02.H5v
-method IsVoid(r: Re) returns (b: bool)
+  // item: R02.H5d
+  // uses: datatype-match, decreases
+  // pair: R02.H5v
+  /** **H5.** Implement `IsVoid`, an executable emptiness test: it returns
+      `VoidSpec(r)`, computed by recursion over the tree (`VoidSpec` is ghost,
+      so the method cannot call it). Which constructors are void on their own,
+      and how do `Alt` and `Cat` combine their children's answers? */
+  method IsVoid(r: Re) returns (b: bool)
     ensures b == VoidSpec(r)
     decreases r
   {
     // @impl-begin R02.H5d
     match r
-    case Empty => b := true;
-    case Eps => b := false;
-    case Chr(_) => b := false;
-    case Alt(a, c) => var x := IsVoid(a); var y := IsVoid(c); b := x && y;
-    case Cat(a, c) => var x := IsVoid(a); var y := IsVoid(c); b := x || y;
-    case Star(_) => b := false;
-
+    case Empty =>
+      b := true;
+    case Eps =>
+      b := false;
+    case Chr(_) =>
+      b := false;
+    case Alt(a, c) =>
+      var x := IsVoid(a);
+      var y := IsVoid(c);
+      b := x && y;
+    case Cat(a, c) =>
+      var x := IsVoid(a);
+      var y := IsVoid(c);
+      b := x || y;
+    case Star(_) =>
+      b := false;
     // @impl-end R02.H5d
-}
-
-  // item: R02.C1d write:datatype-match
-  // EXPECT: card-c1d.dfy.specimen is rejected: its match omits constructors.
-  function RegexOuterTag(r: Re): nat {
-    match r
-    case Empty => 0
-    case Eps => 1
-    case Chr(_) => 2
-    case Alt(_, _) => 3
-    case Cat(_, _) => 4
-    case Star(_) => 5
   }
+  // Hint(1): W2's `StarCount` has the shape: one recursive call per child, each bound to a local.
+  // Hint(2): the given `VoidSpec` is the table to implement, one constructor at a time.
 
-  // item: R02.C2d write:decreases
-  // EXPECT: card-c2d.dfy.specimen fails to establish a strict decrease.
-  function OuterStars(r: Re): nat
-    decreases r
-  { match r case Star(a) => 1 + OuterStars(a) case _ => 0 }
-
-  // item: R02.C3d write:exists-witness
-  // EXPECT: card-c3d.dfy.specimen fails: its precondition promises no '#'.
-  lemma MarkedPosition(s: seq<char>, i: int)
-    requires 0 <= i < |s| && s[i] == '#'
-    ensures exists k :: 0 <= k < |s| && s[k] == '#'
-  { assert 0 <= i < |s| && s[i] == '#'; }
-
-  // item: R02.C4dv recognise:test
-  // Dafny @Test methods are verified; Rust #[test] functions outside verus!
-  // are native tests. A finite sample and a universal contract are different evidence.
-  @Test method RegexSampleTest() { expect !Nullable(Chr('z')); }
-
-  // item: R02.C5dv recognise:ghost
-  // VoidSpec above is a ghost predicate; the paired void_spec is a spec fn.
-  // Keep specification evaluation separate from a compiled executable.
+  // Given (not an item): H5's use-site check. It verifies against IsVoid's
+  // contract now and must keep verifying once your body replaces the hole.
+  method IsVoidClient()
+  {
+    var dead := IsVoid(Cat(Chr('a'), Empty));
+    assert dead;
+    var live := IsVoid(Star(Empty));
+    assert !live;
+  }
 
   // item: R02.C7dv diverge:r02-c7
   // FINAL CARD: match on a value vs a borrowed tree containing Box values.

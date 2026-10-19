@@ -7,10 +7,10 @@ D45, never a passing result inferred from a compiled fixture.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R02_solutions.tex  sha256 e91c45c5f62d36f35cc94d5a6b9bec70512f9f6d43dbd72208652fc9e7af4fe8
 paper/R02_problems.tex  sha256 8ca94d096236ce9547818cf05c14000e2d7922f66d581e88ea0812edd5bc6f11
-Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy  sha256 8e9dbac522c32d673483d32f1c7c0c413f0518233a35805949e1aa3900504329
-Solutions/verus/r/r02_datatypes/src/lib.rs  sha256 8697e5bb78e17a2adc8417cd8f8484a3988adef3909f2697fbd559c93bf21bbb
-Solutions/dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy  sha256 a80bf308936b06f8b520fa9e8b555df55d59eae3fcde231d3c143a3dfd64c10e
-Solutions/verus/r/r02_datatypes/src/agent.rs  sha256 b5bac2f5035138f8c8a9fbea6900ff50382a44dcb558cbb10ab69261e3b2fcd9
+Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy  sha256 22728f237910ca6a7d1df2a67a82966fe5ad9fc3f75e57dfcc1e057628e55d02
+Solutions/verus/r/r02_datatypes/src/lib.rs  sha256 54dc0eec83fc8a16a76554a63a7fb79e907647ec30ed2da81966d36ab30ea7b3
+Solutions/dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy  sha256 e21cac8de7bc5cbf84281b6e38450a062b49cdd39fe359cc97018d74d36b3abc
+Solutions/verus/r/r02_datatypes/src/agent.rs  sha256 98eb739656ae6cf3f8775a6b7ca344851ddbb3f3670ae1c3c010a1f0af54b5db
 
 ## Verifier anchors
 

@@ -69,5 +69,9 @@ module RG_A1_Re {
 
 module R02_MatchDemo {
   import opened RG_A1_Re
-  function RegexTag(r: Re): nat { match r case Empty => 0 }
+  function RegexTag(r: Re): nat
+  {
+    match r
+    case Empty => 0
+  }
 }

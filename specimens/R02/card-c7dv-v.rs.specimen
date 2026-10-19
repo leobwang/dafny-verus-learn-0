@@ -127,5 +127,14 @@ pub fn copy_re(r: &Re) -> (out: Re)
 } // verus!
 
 verus! {
-fn child(r: &Re) { match r { Re::Star(a) => { let value: Re = a; }, _ => {}, } }
+
+fn child(r: &Re) {
+    match r {
+        Re::Star(a) => {
+            let value: Re = a;
+        },
+        _ => {},
+    }
 }
+
+} // verus!

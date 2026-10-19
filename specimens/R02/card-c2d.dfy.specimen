@@ -69,5 +69,9 @@ module RG_A1_Re {
 
 module R02_DecreasesDemo {
   import opened RG_A1_Re
-  function VisitRegex(r: Re): nat decreases r { VisitRegex(r) }
+  function VisitRegex(r: Re): nat
+    decreases r
+  {
+    VisitRegex(r)
+  }
 }
