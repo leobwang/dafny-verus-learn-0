@@ -1,14 +1,25 @@
 use vstd::prelude::*;
+
 verus! {
-tracked struct LeafPermitR10 {ghost label:char}
+
+tracked struct LeafPermitR10 {
+    ghost label: char,
+}
+
 // item: R10.C3v write:tracked
 // WRITE: construct and consume tracked evidence in proof mode.
-proof fn consume_leaf_r10(tracked permit:LeafPermitR10,c:char)
- requires permit.label==c,
- {}
-fn leaf_permit_r10(c:char)->char {
- let tracked permit=LeafPermitR10 {label:'!'};
- proof {consume_leaf_r10(permit,c);}
- c
+proof fn consume_leaf_r10(tracked permit: LeafPermitR10, c: char)
+    requires
+        permit.label == c,
+{
 }
+
+fn leaf_permit_r10(c: char) -> char {
+    let tracked permit = LeafPermitR10 { label: '!' };
+    proof {
+        consume_leaf_r10(permit, c);
+    }
+    c
 }
+
+} // verus!

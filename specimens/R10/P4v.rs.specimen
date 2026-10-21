@@ -1,39 +1,40 @@
-/*! R10 — Invariants in types. Frozen A1–A4 interfaces.
-The packet carries a normal regex with erased node-count evidence.
-H1 accepts precisely normal inputs; H2 rebuilds packet evidence; H3 proves
-normal fixed points; H4 supplies compiled normalization for the ghost model.
-Shape, exact normalization, and language preservation are separate promises.
-Commit predictions before enabling checks. Original statements stay frozen.
-*/
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a4::*;
+
 verus! {
-pub tracked struct NormalEvidenceR10 {pub ghost pattern:Re}
-pub struct NormPacketR10 {repr:NormRe,weight:Ghost<nat>,evidence:Tracked<NormalEvidenceR10>}
+
+pub tracked struct NormalEvidenceR10 {
+    pub ghost pattern: Re,
+}
+
+pub struct NormPacketR10 {
+    repr: NormRe,
+    weight: Ghost<nat>,
+    evidence: Tracked<NormalEvidenceR10>,
+}
+
 impl NormPacketR10 {
- #[verifier::type_invariant]
- spec fn coherent(&self)->bool {
-  is_norm(self.repr.re()) && self.weight@==node_count(self.repr.re()) && self.evidence@.pattern==self.repr.re()
- }
- pub closed spec fn re(self)->Re {self.repr.re()}
- pub fn pattern_ref_r10(&self)->(out:&Re)
-  ensures *out==self.re(),is_norm(*out),
- {proof {use_type_invariant(self);} self.repr.pattern_ref_r10()}
- pub fn into_pattern_r10(self)->(out:Re)
-  ensures out==self.re(),is_norm(out),
- {proof {use_type_invariant(&self);} self.repr.into_pattern_r10()}
+    #[verifier::type_invariant]
+    spec fn coherent(&self) -> bool {
+        is_norm(self.repr.re()) && self.weight@ == node_count(self.repr.re()) && self.evidence@.pattern == self.repr.re()
+    }
+
+    pub closed spec fn re(self) -> Re {
+        self.repr.re()
+    }
 }
 
 // item: R10.P4v obligation
 // Commit exactly the unprovable labelled assertions under this packet invariant.
 // SLOT: FAILS ???
-fn packet_claims_r10(p:&NormPacketR10) {
- proof {
-  use_type_invariant(p);
-  assert(is_norm(p.re())); // [a]
-  assert(p.weight@==node_count(p.re())); // [b]
-  assert(p.weight@==0); // [c]
- }
+fn packet_claims_r10(p: &NormPacketR10) {
+    proof {
+        use_type_invariant(p);
+        assert(is_norm(p.re())); // [a]
+        assert(p.weight@ == node_count(p.re())); // [b]
+        assert(p.weight@ == 0); // [c]
+    }
 }
-}
+
+} // verus!

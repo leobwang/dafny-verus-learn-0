@@ -14,14 +14,14 @@ module = "R11"
 [[unit]]
 path = "dafny/R/R11_Theory/std"
 lang = "dafny"
-reference_verified = 78
+reference_verified = 80
 min_verified = 12
 symbols = ["R11_Kernel.CheckCertificateR11", "R11_Kernel.CheckSoundR11", "R11_Kernel.DirectCompleteR11", "R11_Kernel.PackEvidenceR11", "R11_Search.SearchCatR11", "R11_Search.SearchR11", "R11_Search.SearchStarR11", "R11_Streaming.PrefixMatchesR11", "R11_Streaming.ResidualObserveR11", "R11_Streaming.ResidualStartR11", "R11_Streaming.ResidualStepR11", "R11_WpReview.WpIndexStepR11"]
 
 [[unit]]
 path = "verus/r/r11_theory"
 lang = "verus"
-reference_verified = 19
+reference_verified = 20
 min_verified = 16
 symbols = ["append_node_r11", "check_certificate_r11", "consume_sound_r11", "direct_evidence_r11", "empty_arena_r11", "link_first_r11", "prefix_matches_r11", "residual_observe_r11", "residual_start_r11", "residual_step_r11", "search_cat_r11", "search_r11", "search_star_r11", "slice_split_r11", "targets_monotone_r11", "wp_index_step_r11"]
 

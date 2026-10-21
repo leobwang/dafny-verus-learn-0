@@ -1,13 +1,20 @@
 use vstd::prelude::*;
+
 verus! {
-tracked struct TicketR11 {pub ghost value:int}
+
+tracked struct TicketR11 {
+    pub ghost value: int,
+}
+
 // item: R11.C1v write:tracked
 // WRITE: move the tracked input exactly once, preserving its proof payload.
-proof fn handoff_r11(tracked input:TicketR11)->(tracked out:TicketR11)
- ensures out.value==input.value,
+proof fn handoff_r11(tracked input: TicketR11) -> (tracked out: TicketR11)
+    ensures
+        out.value == input.value,
 {
- let tracked first=input;
- let tracked second=input;
- second
+    let tracked first = input;
+    let tracked second = input;
+    second
 }
-}
+
+} // verus!

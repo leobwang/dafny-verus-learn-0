@@ -5,15 +5,15 @@ evidence. Native author controls do not replace deferred live calibration.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R10_solutions.tex  sha256 5396d7621d1bc96e1f3bdbd5860b035ba72d701ee52b9f64ddc855710c955f74
-paper/R10_problems.tex  sha256 f14405fb4b3fbe752af471c515f444ead1278439920eb98bdcf58c3f9731e77a
-Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy  sha256 48f6f947d1b0009281104f7e3428bde009f833c06860780ef94dd726b23b2701
-Solutions/verus/r/r10_type_invariants/src/lib.rs  sha256 d9dca59ef4f869137af19256a22c59d321550292b85e8883a6052b3d543c73bf
-Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy  sha256 f4539ead6c35cab05e01cd0e94553e0d194336e456ae86a0c71a3743db059c14
-Solutions/verus/r/r10_type_invariants/src/agent.rs  sha256 fad479cf1eab4f9d746a9440f3e259c416695f1551df8974b58373905ce0731c
+paper/R10_problems.tex  sha256 3e918f050cfa9c6443481fc121d6d172cbaa80c61542a3b9d9a0feb27ee5aa73
+Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy  sha256 84788ab6e6b565969369fd0603f8b923d7d0c965284a055b12e41667c761d10e
+Solutions/verus/r/r10_type_invariants/src/lib.rs  sha256 19feaf3e6bbbf3258980ba3dc61a237ddb4f09ba4f1607834d8292ab6142515c
+Solutions/dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy  sha256 8299b80af2d8e35db2febac3c3e1141c1cb9b0ae9861b1cc7fc29f82f17bd54f
+Solutions/verus/r/r10_type_invariants/src/agent.rs  sha256 d98f488f6e1aa7e4c9ec26478b114d309a2862047f5f20ab6f33b00b99654254
 
 ## Verifier anchors
 
-- **Probe A:** pin the local03.5 excerpt range/hash; re-pin on source drift.
+- **Probe A:** pin the local 03.5 excerpt range/hash; re-pin on source drift.
 - **Probe B:** inspect actual packet construction/client obligations and
   retained compiled builder bodies; separate observer traversals from caches.
 - **Probe C:** apply proposed clauses to arbitrary normal inputs/results.
@@ -27,12 +27,12 @@ Solutions/verus/r/r10_type_invariants/src/agent.rs  sha256 fad479cf1eab4f9d746a9
 
 ### card-fidelity
 
-- **CF.a:** grade all eight fields; the card score is their minimum. Empty1,
-  accurate source-bounded paraphrase4; unsupported facts need quoted evidence.
+- **CF.a:** grade all eight fields; the card score is their minimum. Empty 1,
+  accurate source-bounded paraphrase 4; unsupported facts need quoted evidence.
 - **CF.b:** Java/JML/OpenJML, conversational feedback and weighted mutations.
   Actual behavior and accepted annotations do not establish intended strength.
-- **CF.c:** preserve179/265,100/120,total279/385;59.97percent is a separate
-  estimator. State baseline/ablation denominators,10round stopping budget,
+- **CF.c:** preserve 179/265, 100/120, total 279/385; 59.97 percent is a separate
+  estimator. State baseline/ablation denominators, 10-round stopping budget,
   four-shot model/temperature and the four exact mutation weights.
 - **CF.d:** weak/dropped clauses, buggy behavior, tiny programs, one model,
   possible contamination and incomplete verifier. No invented run variance,
@@ -63,6 +63,6 @@ implementation. Keep ninth bench card course-derived and previously exposed.
 
 ## Calibration fixtures
 
-Gold expects4 in both dimensions; flawed expects≤2 with exact learner/source
+Gold expects 4 in both dimensions; flawed expects ≤ 2 with exact learner/source
 quotes and relevant probes. Those are fixture expectations, not measured grades
 or sessions. D45 live actor and grading validation remains deferred debt.

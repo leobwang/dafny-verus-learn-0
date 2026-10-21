@@ -1,9 +1,22 @@
 // Reference Solution.
+/*! R10 flagship: human statement design, then contractor proof bodies.
+Before actor work, write original-domain contracts for all three constructors,
+record nonvacuous input/output examples, and snapshot those statements.
+The provided output type promises normal shape. Design and justify the
+additional language promise yourself. The actor may edit only bodies and
+reference-only helpers in its delivery; it must preserve your snapshot.
+*/
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a1b::*;
 use rg_re_a4::*;
+
 verus! {
+
+// Your statements: add requires and ensures clauses to each constructor below,
+// and snapshot the file under research/R10/ before any contractor edit. The
+// contractor may add private proof helpers here and write the bodies.
+
 // reference-only
 pub proof fn lemma_star_star_r10_ref(x: Re, s: Seq<char>)
     ensures
@@ -88,42 +101,51 @@ pub proof fn lemma_mk_star_r10_ref(a: Re, s: Seq<char>)
     }
 }
 // item: R10.A1v
-fn build_alt_r10(a:NormRe,b:NormRe)->(out:NormRe)
- ensures equiv(out.re(),Re::Alt(Box::new(a.re()),Box::new(b.re()))),
+fn build_alt_r10(a: NormRe, b: NormRe) -> (out: NormRe)
+    ensures
+        equiv(out.re(), Re::Alt(Box::new(a.re()), Box::new(b.re()))),
 {
- let ar=a.into_pattern_r10();
- let br=b.into_pattern_r10();
- proof {
-  lemma_alt_shape_r10(ar,br);
-  assert forall|s:Seq<char>| #[trigger] matches(mk_alt(ar,br),s)==matches(Re::Alt(Box::new(ar),Box::new(br)),s) by {lemma_mk_alt_r10_ref(ar,br,s);}
- }
- let raw=mk_alt_exec(ar,br);
- NormRe::from_normal_r10(raw)
+    let ar = a.into_pattern_r10();
+    let br = b.into_pattern_r10();
+    proof {
+        lemma_alt_shape_r10(ar, br);
+        assert forall|s: Seq<char>| #[trigger] matches(mk_alt(ar, br), s) == matches(Re::Alt(Box::new(ar), Box::new(br)), s) by {
+            lemma_mk_alt_r10_ref(ar, br, s);
+        }
+    }
+    let raw = mk_alt_exec(ar, br);
+    NormRe::from_normal_r10(raw)
 }
 
-fn build_cat_r10(a:NormRe,b:NormRe)->(out:NormRe)
- ensures equiv(out.re(),Re::Cat(Box::new(a.re()),Box::new(b.re()))),
+fn build_cat_r10(a: NormRe, b: NormRe) -> (out: NormRe)
+    ensures
+        equiv(out.re(), Re::Cat(Box::new(a.re()), Box::new(b.re()))),
 {
- let ar=a.into_pattern_r10();
- let br=b.into_pattern_r10();
- proof {
-  lemma_cat_shape_r10(ar,br);
-  assert forall|s:Seq<char>| #[trigger] matches(mk_cat(ar,br),s)==matches(Re::Cat(Box::new(ar),Box::new(br)),s) by {lemma_mk_cat_r10_ref(ar,br,s);}
- }
- let raw=mk_cat_exec(ar,br);
- NormRe::from_normal_r10(raw)
+    let ar = a.into_pattern_r10();
+    let br = b.into_pattern_r10();
+    proof {
+        lemma_cat_shape_r10(ar, br);
+        assert forall|s: Seq<char>| #[trigger] matches(mk_cat(ar, br), s) == matches(Re::Cat(Box::new(ar), Box::new(br)), s) by {
+            lemma_mk_cat_r10_ref(ar, br, s);
+        }
+    }
+    let raw = mk_cat_exec(ar, br);
+    NormRe::from_normal_r10(raw)
 }
 
-fn build_star_r10(a:NormRe)->(out:NormRe)
- ensures equiv(out.re(),Re::Star(Box::new(a.re()))),
+fn build_star_r10(a: NormRe) -> (out: NormRe)
+    ensures
+        equiv(out.re(), Re::Star(Box::new(a.re()))),
 {
- let ar=a.into_pattern_r10();
- 
- proof {
-  lemma_star_shape_r10(ar);
-  assert forall|s:Seq<char>| #[trigger] matches(mk_star(ar),s)==matches(Re::Star(Box::new(ar)),s) by {lemma_mk_star_r10_ref(ar,s);}
- }
- let raw=mk_star_exec(ar);
- NormRe::from_normal_r10(raw)
+    let ar = a.into_pattern_r10();
+    proof {
+        lemma_star_shape_r10(ar);
+        assert forall|s: Seq<char>| #[trigger] matches(mk_star(ar), s) == matches(Re::Star(Box::new(ar)), s) by {
+            lemma_mk_star_r10_ref(ar, s);
+        }
+    }
+    let raw = mk_star_exec(ar);
+    NormRe::from_normal_r10(raw)
 }
-}
+
+} // verus!

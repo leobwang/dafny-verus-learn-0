@@ -1,26 +1,44 @@
 // after: R09.P3dv
 use vstd::prelude::*;
-use vstd::arithmetic::div_mod::{lemma_fundamental_div_mod,lemma_mod_bound};
+use vstd::arithmetic::div_mod::{lemma_fundamental_div_mod, lemma_mod_bound};
 use vstd::arithmetic::mul::lemma_mul_is_commutative;
+
 verus! {
-proof fn quotient_product_guard_r09(b:int,q:int,r:int,d:int)
- requires d>0,0<=r<d,
- ensures (b<=q)==(b*d<=q*d+r),
+
+proof fn quotient_product_guard_r09(b: int, q: int, r: int, d: int)
+    requires
+        d > 0,
+        0 <= r < d,
+    ensures
+        (b <= q) == (b * d <= q * d + r),
 {
- assert((b<=q)==(b*d<=q*d+r)) by (nonlinear_arith)
-  requires d>0,0<=r<d;
-}
-proof fn division_budget_guard_r09(base:int,space:int,copies:int)
- requires base>=0,space>=0,copies>0,
- ensures (base<=space/copies)==(base*copies<=space),
-{
- lemma_fundamental_div_mod(space,copies);
- lemma_mod_bound(space,copies);
- quotient_product_guard_r09(base,space/copies,space%copies,copies);
- lemma_mul_is_commutative(copies,space/copies);
+    assert((b <= q) == (b * d <= q * d + r)) by (nonlinear_arith)
+        requires
+            d > 0,
+            0 <= r < d,
+    ;
 }
 
-fn product_fits_r09(width:u32,times:u32,cap:u32)->(fits:bool)
- ensures fits == ((width as int)*(times as int)<=cap as int),
- {let product:u32=width*times;product<=cap}
+proof fn division_budget_guard_r09(base: int, space: int, copies: int)
+    requires
+        base >= 0,
+        space >= 0,
+        copies > 0,
+    ensures
+        (base <= space / copies) == (base * copies <= space),
+{
+    lemma_fundamental_div_mod(space, copies);
+    lemma_mod_bound(space, copies);
+    quotient_product_guard_r09(base, space / copies, space % copies, copies);
+    lemma_mul_is_commutative(copies, space / copies);
 }
+
+fn product_fits_r09(width: u32, times: u32, cap: u32) -> (fits: bool)
+    ensures
+        fits == ((width as int) * (times as int) <= cap as int),
+{
+    let product: u32 = width * times;
+    product <= cap
+}
+
+} // verus!

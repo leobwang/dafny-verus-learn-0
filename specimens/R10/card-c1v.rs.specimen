@@ -1,11 +1,23 @@
 use vstd::prelude::*;
+
 verus! {
-struct MarkedLeafR10 {c:char,marked:Ghost<bool>}
-impl MarkedLeafR10 {
- #[verifier::type_invariant]
- spec fn coherent(&self)->bool {self.marked@}
+
+struct MarkedLeafR10 {
+    c: char,
+    marked: Ghost<bool>,
 }
+
+impl MarkedLeafR10 {
+    #[verifier::type_invariant]
+    spec fn coherent(&self) -> bool {
+        self.marked@
+    }
+}
+
 // item: R10.C1v write:type-invariant
 // WRITE: constructing the object must establish its representation invariant.
-fn leaf_boundary_r10(c:char)->MarkedLeafR10 {MarkedLeafR10 {c,marked:Ghost(false)}}
+fn leaf_boundary_r10(c: char) -> MarkedLeafR10 {
+    MarkedLeafR10 { c, marked: Ghost(false) }
 }
+
+} // verus!

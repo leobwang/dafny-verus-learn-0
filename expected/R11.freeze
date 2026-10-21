@@ -23,6 +23,7 @@ lang = "d"
 open_bodies = []
 frozen_levers = ["R11_Kernel.CheckSoundR11 {:induction false}", "R11_Kernel.DirectCompleteR11 {:induction false}"]
 [file.statements]
+"R11_Clients.CertificateSampleTest" = "b88b22ca9a48a1daf4380e4e8a315ac069770a7d34de71ba9c0626cbaf3fb829"
 "R11_Kernel.CheckCertificateR11" = "7d6675fc43b55cab7dad3a3957b28bfd9e281ace1789033c172378efd72b30a6"
 "R11_Kernel.CheckSoundR11" = "29bf963e8c0d8ebc9ed6ca66f518338c0a1a477938d37d51fd8097b59493d562"
 "R11_Kernel.DirectCompleteR11" = "119144df84b508ebaaca14d234a4170904e2489e203e26956e35931e3067b54c"
@@ -113,6 +114,15 @@ open_bodies = []
 "observe_changed_rule_r11" = "9d4eccbfdbea77f71e0ac53ff5cd81ad70d8d50a1586b557966079f557b1939a"
 
 [[file]]
+path = "specimens/R11/chapter-p1-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R11_P1Observed.AbsoluteMiddleR11" = "b9516a01106b02fa446062bdc8bdf43d73d0b132f343972a9bf8574ac1a083e0"
+"R11_P1Observed.Derivation" = "ea55e63031557bf16ce910040bdf4152ad64e4260544f9efabe58f49fda99ffa"
+"R11_P1Observed.RelativeMiddleObserved" = "8f4cb1c83383fd478ea8fee3d4005bf3cb859047d459f94482f156927f6edfa2"
+
+[[file]]
 path = "specimens/R11/complete-producer-d.dfy.specimen"
 lang = "d"
 open_bodies = []
@@ -166,6 +176,7 @@ frozen_levers = ["R11_Checkpoint.CertificateLengthR11 {:induction false}"]
 [file.statements]
 "R11_Checkpoint.CertificateLengthR11" = "a43f71f35c4aa69f2dcc602849e31e8776e533fd70777a90380da1c809983f26"
 "R11_Checkpoint.CharacterLeavesR11" = "46211814e046f48a4c7ca7ceb5aacc6ba2fd87519c51312987c30e66e8f15723"
+"R11_Checkpoint.RepeatCertificateClientR11" = "1e59bca24d6dbb2b33edefd180a7f2de823ca3c2d6aef73e8f66a0cafe3c00e6"
 "R11_Checkpoint.RepeatCertificateR11" = "23985266d00cbc032cd0818bc5ba237b9545d30b6b13962e1cb3d9a6e7997713"
 "R11_Checkpoint.UniformStepR11" = "b980da3615c2d3f83e137b01b1df1142744e764fac7e97850952899ac4fad383"
 "R11_Checkpoint.UniformWordR11" = "10029c1ed008fc50ff42e5b0689c4430633ff0ec9260fb77a4bd8b27c62406b6"
@@ -179,6 +190,7 @@ open_bodies = []
 [file.statements]
 "certificate_length_r11" = "6e4625cd993811344fec861c895a89c94e9efad3681772a3e0f5a8aa0ba2559a"
 "character_leaves_r11" = "b5e75019cedc686d58e15678d7ecbfa9c129b222c47a0f665e2edcabf4d80645"
+"repeat_certificate_client_r11" = "a18d9855759cfb3793aa7a461d102d6326743a9ffff5426fda8dc0faf8c51e1d"
 "repeat_certificate_r11" = "f192b0c6da2f768d90fdea7af41546d609410724137fe4d3aa94ca6bec451b0f"
 "uniform_step_r11" = "0dd8a78bff5637ad09eea08472009df856bb7c6588ef1767c884dff876ba7375"
 "uniform_word_r11" = "85dbfb70c02f13b3f1a05f979f79a07fb1c77cbb23bccde2ffea841963dc2816"

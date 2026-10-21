@@ -1,8 +1,11 @@
 module R09_PropagationCard {
- import opened RG_A3_Syntax
- // item: R09.C1d write:error-propagation
- // WRITE: propagate the original failure using :-, then wrap the successful payload.
- method PropagateCardR09(input:Res<nat>) returns (out:Res<nat>)
-  ensures out==input
- {out:=Ok(0);}
+  import opened RG_A3_Syntax
+
+  // item: R09.C1d write:error-propagation
+  // WRITE: propagate the original failure using :-, then wrap the successful payload.
+  method PropagateCardR09(input: Res<nat>) returns (out: Res<nat>)
+    ensures out == input
+  {
+    out := Ok(0);
+  }
 }

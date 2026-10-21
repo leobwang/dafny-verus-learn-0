@@ -1,8 +1,11 @@
 // after: R10.P5dv
 module R10_SpectrumProbe {
- import opened RG_A1_Re
- import opened RG_A4_Norm
- method ProduceR10() returns (out:NormRe)
-  ensures EquivalentReR10(out,Chr('q'))
- {out:=Empty;}
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  method ProduceR10() returns (out: NormRe)
+    ensures EquivalentReR10(out, Chr('q'))
+  {
+    out := Empty;
+  }
 }

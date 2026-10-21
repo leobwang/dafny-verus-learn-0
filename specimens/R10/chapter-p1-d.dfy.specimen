@@ -1,0 +1,48 @@
+// after: R10.P1d
+// A specimen runs alone, so the A1 and A4 definitions it needs are copied here verbatim.
+module R10_P1Observed {
+  datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)
+
+  function NodeCount(r: Re): nat
+    decreases r
+  {
+    match r
+    case Empty => 1
+    case Eps => 1
+    case Chr(_) => 1
+    case Alt(a, b) => 1 + NodeCount(a) + NodeCount(b)
+    case Cat(a, b) => 1 + NodeCount(a) + NodeCount(b)
+    case Star(a) => 1 + NodeCount(a)
+  }
+
+  predicate Normal(r: Re)
+    decreases r
+  {
+    match r
+    case Empty => true
+    case Eps => true
+    case Chr(_) => true
+    case Alt(a, b) => a != Empty && b != Empty && a != b && Normal(a) && Normal(b)
+    case Cat(a, b) => a != Empty && b != Empty && a != Eps && b != Eps && Normal(a) && Normal(b)
+    case Star(a) => a != Empty && a != Eps && !a.Star? && Normal(a)
+  }
+
+  type NormRe = r: Re | Normal(r) witness Empty
+
+  function MkCat(a: NormRe, b: NormRe): NormRe
+  {
+    if a == Empty || b == Empty then Empty
+    else if a == Eps then b
+    else if b == Eps then a
+    else Cat(a, b)
+  }
+
+  // P1's expression, run as compiled code.
+  @Test
+  method SmartCountObserved()
+  {
+    var result := MkCat(Eps, Chr('k'));
+    var value := NodeCount(result);
+    expect value == 1;
+  }
+}
