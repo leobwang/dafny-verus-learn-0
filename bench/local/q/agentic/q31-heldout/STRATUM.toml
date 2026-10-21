@@ -1,0 +1,93 @@
+# bench/local/q/agentic/q31-heldout/STRATUM.toml — Q31's held-out stratum (QPLAN §33.4; DELTAS
+# Δ409). Learner-visible: the cards' ids, languages and sources, the counts and the pins only.
+# The task forms are SEALED in `archive` (age, to the grader's recipient) and unsealed once,
+# after your frozen gate and bench are committed, by `python -m fvh unseal Q31 --part heldout`
+# (single use, QPLAN §31.3). The reference deliveries are sealed apart in `refs_archive`; no
+# course tool but the grader reads them. No held-out task has been run through a model.
+#
+# Composition under D76's fallback (b) (Δ405): 60 tasks, 36 course-local and 24 public (the
+# public cards, drawn from DafnyBench under D76's exclusion with their spare cards, are added
+# in a later turn). Admission as q31-dev's header says, run by the author on the archive copy.
+schema = 1
+module = "Q31"
+lab = "Q31"
+stratum = "q31-heldout"
+part = "heldout"
+role = "held-out"
+sealed = true
+target = { total = 60, course_local = 36, public = 24 }
+archive = "Hidden/Agentic/Q31/heldout.tar.age"
+archive_sha256 = "9b615e658a579c21217b4f82a1988affa83aeb8940f932515efa0185e023f1f7"
+recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
+files = 6
+manifest_sha256 = "61a88a75d477068e30e61347f4642c6ef400b804ae049d598c4822c14c483d35"
+refs_archive = "Hidden/Agentic/Q31/heldout-refs.tar.age"
+refs_sha256 = "5622ab330f40c7f6b1aba17e8fd6b90c54dfd0f35360366c90637c0c74f5917f"
+refs_files = 6
+refs_manifest_sha256 = "725d5adf8ab51f68b4f9a8469459ce0e7a31b12f9318514fe8f6d5f1f9537434"
+
+[[card]]
+id = "cl-d101-q31h"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q31/cl-d101-q31h/tasks/cl-d101-q31h.dfy"
+form_sha256 = "784f26df1e6d46d357c3ff63b48d261155e7d323e4a76fa22dba7bcdc32ee78d"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "4e9dc002823e37d1da36527183bb80bccb3bf204a2331cc5276f225e5bc04f0d"
+
+[[card]]
+id = "cl-d103-q31h"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q31/cl-d103-q31h/tasks/cl-d103-q31h.dfy"
+form_sha256 = "ab0ea2935263c382f7331cd2b0381edc7c047412678b4e9f87b7789817190d95"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "f10904edebca5c55efb95f979fab62de5d213a084345a163e4613e14b090983c"
+
+[[card]]
+id = "cl-d104-q31h"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q31/cl-d104-q31h/tasks/cl-d104-q31h.dfy"
+form_sha256 = "46d7146723942ceb1f61e4a2a69955867d887de0ecfe21b2f151f6ea8ebd7a9e"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "c2552f37ef9656878773f2c0bd89cad8fd04bb255c78678f05c8e74f04d39d64"
+
+[[card]]
+id = "cl-v101-q31h"
+lang = "verus"
+source = "course-local"
+form = "labs/Q31/cl-v101-q31h/tasks/cl-v101-q31h.rs"
+form_sha256 = "d551f379f767c608048607a3c154486ab8fa0094b79ee6a2becf244daea9f9ed"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "511662307d73395f7b3227a1021b7468a103f0442c998aeae73101b865522bc3"
+
+[[card]]
+id = "cl-v102-q31h"
+lang = "verus"
+source = "course-local"
+form = "labs/Q31/cl-v102-q31h/tasks/cl-v102-q31h.rs"
+form_sha256 = "e514ab7b157a7cce5f86aa3288df94d3e1aee153dca82a487fa3883c33f26da0"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "94b09bba373091f153b46c7e5d4061d2c1f50777c388e676d3e3e926cb12ca33"
+
+[[card]]
+id = "cl-v103-q31h"
+lang = "verus"
+source = "course-local"
+form = "labs/Q31/cl-v103-q31h/tasks/cl-v103-q31h.rs"
+form_sha256 = "e625baf6707d7b0563f45245a754456bd215dbd6e967e2b547d58a0396f1eebf"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "4e42e023529721d58f8b5c8d701550306fe3efbc3601bcce3baaad99855985ec"
