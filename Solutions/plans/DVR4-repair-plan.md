@@ -500,3 +500,10 @@ The orchestrator's acceptance of the step-3 lane's readings (each recorded as bu
 - **R06 and DD0070 (Δ291–Δ292):** the four shared windows with vericoding's `DD0070.dfy` are one generic loop idiom in R06's provided worked example `AllSame`; it is recorded as such, DD0070 is excluded from the public walk (WALK.md Amendment 2), and R06's text is not reworded.
 
 The step-2 choices of §7's last paragraph (Δ274's three open questions, each option (a): A2's extra contract clauses kept, R09 H2's minutes as recorded until the step-5 rerun, R07's agent tasks over range listings kept) stand and are restated in Δ282.
+
+### Decisions taken on 2026-10-19 and 2026-10-20 (Δ302)
+
+The user's:
+- **D58 (2026-10-19):** R02, as built in Δ283, is accepted as the DVR4 exemplar; step 5's systemic passes bring R01 and R04–R14 to its standard (lanes P1 and P2).
+- **D59 (2026-10-19):** on the R02 build notes' DECISION 1, re-pose Dafny's H4d off `CatEpsLeft` so that its smallest proof is at least 3 lines by §2.2's counter, Verus's H4 unchanged, with a note in A1b's header; record H5 (`IsVoid` / `is_void`) as an R02 exception: an exec item, measured by TRIV and its implementation lines, since the counter does not count exec code. The re-pose D59 named, `Cat(r, Chr(c))` on `s + [c]`, measured a 1-line smallest proof (DVR4 step 5, P1's probes) and was not built.
+- **D60 (2026-10-20):** pose Dafny's H4d on `Matches(Cat(Cat(r, Chr(c)), Chr(d)), s + [c, d]) <==> Matches(r, s)` (`CatTwoChrs`), measure its smallest proof at admission (it must be at least 3 lines), move the bank's PP2 to a fresh shape, keep H4d's 5 minutes unless the measurement says otherwise; Verus's H4 unchanged; the A1b header note.

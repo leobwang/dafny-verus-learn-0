@@ -60,8 +60,8 @@ vcheck: dafny/R/R02_Datatypes/core [dafny, learner loop]: verified — 15 verifi
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:174:25: hole bodyless-method R02.H1d
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:188:31: hole bodyless-method R02.H2d
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:201:36: hole bodyless-method R02.H3d
-dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:214:37: hole bodyless-method R02.H4d
-dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:229:5: hole assume R02.H5d
+dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:217:62: hole bodyless-method R02.H4d
+dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:235:5: hole assume R02.H5d
 ```
 
 <!-- pin: shipped-v -->
@@ -615,7 +615,7 @@ $ scripts/vcheck --module R02 take.dfy
 vcheck: take.dfy [dafny, learner loop]: verified — 7 verified, 0 holes, 0 errors
 ```
 
-H4 asks for both directions of a `Cat` fact: one introduces the existential (§2.2), the other eliminates it (this section). Expect the two languages' proofs to differ in exactly this place.
+H4 asks for both directions of a `Cat` fact: one introduces the existential (§2.2), the other eliminates it (this section). The two languages pose different statements here, on purpose. Verus's H4 is `Cat(Eps, r)`: its converse needs `choose` to take the split out, which is the move this section teaches. Dafny's solver closes the same `Eps` statement from a single slice fact, so the elimination would never be yours; Dafny's H4 is therefore a two-character append, `Cat(Cat(r, Chr(c)), Chr(d))` on `s + [c, d]`, where two splits must be named, one inside the other, before either direction goes through.
 
 ### 2.4 Two structural predicates: nullable and void
 
@@ -1205,8 +1205,8 @@ vcheck: dafny/R/R02_Datatypes/core [dafny, gate]: failed — 15 verified, 5 hole
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:174:25: hole bodyless-method R02.H1d
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:188:31: hole bodyless-method R02.H2d
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:201:36: hole bodyless-method R02.H3d
-dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:214:37: hole bodyless-method R02.H4d
-dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:229:5: hole assume R02.H5d
+dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:217:62: hole bodyless-method R02.H4d
+dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:235:5: hole assume R02.H5d
 dafny/R/R02_Datatypes/core: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
 ```
 
@@ -1230,8 +1230,8 @@ $ scripts/vaudit dafny/R/R02_Datatypes/core
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:173: audit-bodyless-ghost — NullableCorrect: Ghost declaration has no body and has an ensures clause
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:187: audit-bodyless-ghost — NodeCountBackwards: Ghost declaration has no body and has an ensures clause
 dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:200: audit-bodyless-ghost — NullableBackwards: Ghost declaration has no body and has an ensures clause
-dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:213: audit-bodyless-ghost — CatEpsLeft: Ghost declaration has no body and has an ensures clause
-dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:229: audit-assume — IsVoid: Definition has `assume` statement in body
+dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:216: audit-bodyless-ghost — CatTwoChrs: Ghost declaration has no body and has an ensures clause
+dafny/R/R02_Datatypes/core/R02_Datatypes.dfy:235: audit-assume — IsVoid: Definition has `assume` statement in body
 vaudit: dafny/R/R02_Datatypes/core [dafny, learner]: 5 finding(s)
 ```
 
@@ -1288,7 +1288,7 @@ The hand work is five paired holes, H1–H5, after the worked examples and cards
 | H1 | `NullableCorrect` · `lemma_nullable_correct`: `Nullable(r) <==> Matches(r, [])` | 5 / 7 | `match`, a split of `[]` |
 | H2 | `NodeCountBackwards` · `lemma_node_count_backwards`: at least one node, and `Backwards` keeps the count | 5 / 7 | `match`, hypotheses |
 | H3 | `NullableBackwards` · `lemma_nullable_backwards`: `Backwards` keeps nullability | 5 / 7 | `match`, hypotheses |
-| H4 | `CatEpsLeft` · `lemma_cat_eps_left`: `Cat(Eps, r)` matches what `r` matches | 5 / 7 | introduce and eliminate a split |
+| H4 | `CatTwoChrs` · `lemma_cat_eps_left`: Dafny, `Cat(Cat(r, Chr(c)), Chr(d))` on `s + [c, d]` matches what `r` matches on `s`; Verus, `Cat(Eps, r)` matches what `r` matches | 5 / 7 | introduce and eliminate a split (two nested splits in Dafny) |
 | H5 | `IsVoid` · `is_void`: compute `VoidSpec` / `void_spec` executably | 5 / 7 | `match`, recursion, `decreases` |
 
 Each hole's doc comment states the task and asks one guiding question; two hints follow it in the file. **The hint dial:** read the question, try, run the learner loop, and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the fact or construct to use, never the answer; `/tutor R02` comes after both. H5 has a given client (`IsVoidClient`, `is_void_client`) that asserts two results through the contract: it verifies now, and must still verify with your body. In Verus H5 you also remove `external_body` and write the measure (§4.3).
