@@ -16,7 +16,7 @@
   "id": "r11-check-sound-v",
   "lang": "verus",
   "max_auto_reading": "maximal automation",
-  "private_evidence_sha256": "6a0cd2b81b9a0377b2ead5cf9f337915aa5a6df56ad670762999bc31ab12f0bc",
+  "private_evidence_sha256": "2068f9fd02d20f8823756437c56e407da900d6110838fe268c804b7e06f695b6",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -42,7 +42,7 @@
       "name": "c4"
     }
   ],
-  "source_sha256": "3cc956c7db61e49e3e0e0aad943df546b6cdbf6bc70c7241b42611bcc0fce944",
+  "source_sha256": "f778d7b7666b5431c7b03a5374c107de3310f521f9a9fab7819813ed60588859",
   "status": "admitted",
   "target": "sound_word_r11",
   "validated_span": {
@@ -50,5 +50,5 @@
     "start": 61,
     "symbol": "sound_word_r11"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0 (no expression site: equals the baseline)"
 }

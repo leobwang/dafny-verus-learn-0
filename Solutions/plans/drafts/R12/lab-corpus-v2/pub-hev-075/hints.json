@@ -1,8 +1,1 @@
-{
- "hints": [
-  "len > 0",
-  "ctr == vowels(s@[..i]).len()",
-  "ctr <= i <= s@.len() == len <= u32::MAX",
-  "ctr < u32::MAX || is_vowel(s@.last())"
- ]
-}
+{"hints": ["len > 0", "ctr == vowels(s@[..i]).len()", "ctr <= i <= s@.len() == len <= u32::MAX", "ctr < u32::MAX || is_vowel(s@.last())"]}

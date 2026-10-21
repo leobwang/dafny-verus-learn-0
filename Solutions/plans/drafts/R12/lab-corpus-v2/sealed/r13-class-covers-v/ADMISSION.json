@@ -16,7 +16,7 @@
   "id": "r13-class-covers-v",
   "lang": "verus",
   "max_auto_reading": "maximal automation",
-  "private_evidence_sha256": "9d13ea92ef95075bf0393eca3427ca7f65c8e1ceeb95f4dff05b05418dea121b",
+  "private_evidence_sha256": "36bc346ac38fee77de54b86df13e213b02265d719ef551e097ceacbc6eda1180",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -32,9 +32,13 @@
     {
       "kind": "expr",
       "name": "h2"
+    },
+    {
+      "kind": "decreases",
+      "name": "d1"
     }
   ],
-  "source_sha256": "d7d6e7724141259bd831cc3c42429f81654cdf4b3059fcb7d81df9521984d332",
+  "source_sha256": "8b80247a979f6d7075e53d2f89cb7cd5bfe213d2db851e0707e39578ee2bed29",
   "status": "admitted",
   "target": "class_covers_r13",
   "validated_span": {
@@ -42,5 +46,5 @@
     "start": 77,
     "symbol": "class_covers_r13"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

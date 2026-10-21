@@ -15,7 +15,8 @@
   },
   "id": "pub-db-080",
   "lang": "dafny",
-  "private_evidence_sha256": "d7cef01211a044ee02bd34877234dd6f750f667a49fc3a03e4c1dc4d2c5031da",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
+  "private_evidence_sha256": "c620acbf3da06b3f4cbed48da583310bb43214433bc2b0b51955eeeb50ca1e34",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -24,6 +25,10 @@
     3
   ],
   "sites": [
+    {
+      "kind": "decreases",
+      "name": "d1"
+    },
     {
       "kind": "expr",
       "name": "i1"
@@ -49,7 +54,7 @@
       "name": "a6"
     }
   ],
-  "source_sha256": "92c44dfb3cd0fc08bf21d725d4447b20a6b097e92d4a98646a079d06a19c98d3",
+  "source_sha256": "72663ec2e81c466c764bb2893682c600963ad991eefffc6cda9bcf01b786ebbb",
   "status": "admitted",
   "target": "FindPositionOfElement",
   "validated_span": {
@@ -57,5 +62,5 @@
     "start": 4,
     "symbol": "FindPositionOfElement"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

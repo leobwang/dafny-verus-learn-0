@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i2","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i3","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i4","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i5","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i6","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i7","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i8","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]},{"name":"i9","identifiers":["A","BubbleSort","N","array","i","j","m","multiset","n","old","sorted","sorted_between"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"},{"name":"i4"},{"name":"i5"},{"name":"i6"},{"name":"i7"},{"name":"i8"},{"name":"i9"},{"name":"d2","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"BubbleSort","start":21,"end":55}]
 // R12 public task: dafnybench Dafny-programs_tmp_tmpnso9eu7u_Algorithms + sorting_bubble-sort.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 /*
@@ -29,7 +29,7 @@ method BubbleSort(A:array<int>)
         invariant /*R12_HINT:i1*/ true
         invariant /*R12_HINT:i2*/ true
         invariant /*R12_HINT:i3*/ true
-        decreases i
+        decreases /*R12_DECREASES:d1*/ (0 as int)
     {
         print A[..], "\n";
         var j := 0;
@@ -40,7 +40,7 @@ method BubbleSort(A:array<int>)
             invariant /*R12_HINT:i7*/ true
             invariant /*R12_HINT:i8*/ true
             invariant /*R12_HINT:i9*/ true
-            decreases i - j
+            decreases /*R12_DECREASES:d2*/ (0 as int)
         {
             if A[j] > A[j+1]
             {

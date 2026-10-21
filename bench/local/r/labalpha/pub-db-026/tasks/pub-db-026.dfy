@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Busca","Length","T","a","array","i","r","x"]},{"name":"i2","identifiers":["Busca","Length","T","a","array","i","r","x"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"}]
 // R12_SOURCE_SPANS: [{"symbol":"Busca","start":4,"end":20}]
 // R12 public task: dafnybench t1_MF_tmp_tmpi_sqie4j_exemplos_colecoes_arrays_ex5.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method Busca<T(==)>(a:array<T>, x:T) returns (r:int)

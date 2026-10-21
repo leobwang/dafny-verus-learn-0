@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"h1","identifiers":["s"]},{"name":"c1","identifiers":["a","s"],"kind":"calls","callees":["BackwardsSound"]},{"name":"c2","identifiers":["b","s"],"kind":"calls","callees":["BackwardsSound"]},{"name":"c3","identifiers":["a","b","s","i"],"kind":"calls","callees":["BackwardsSound"]},{"name":"h2","identifiers":["s","i"]},{"name":"c4","identifiers":["s","i"],"kind":"calls","callees":["BackwardsStrAppend"]},{"name":"h3","identifiers":["w","j","BackwardsStr","s","i"]},{"name":"c5","identifiers":["a","s","i","Star","Backwards","BackwardsStr"],"kind":"calls","callees":["BackwardsSound","StarOne","StarConcat"]},{"name":"h4","identifiers":["s","i"]},{"name":"c6","identifiers":["s","i"],"kind":"calls","callees":["BackwardsStrAppend"]}]
+// R12_HINT_SITES: [{"name":"h1"},{"name":"c1","kind":"calls","callees":["BackwardsSound"]},{"name":"c2","kind":"calls","callees":["BackwardsSound"]},{"name":"c3","kind":"calls","callees":["BackwardsSound"]},{"name":"h2"},{"name":"c4","kind":"calls","callees":["BackwardsStrAppend"]},{"name":"h3"},{"name":"c5","kind":"calls","callees":["BackwardsSound","StarOne","StarConcat"]},{"name":"h4"},{"name":"c6","kind":"calls","callees":["BackwardsStrAppend"]}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.BackwardsSound","start":85,"end":116}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1) (Re, Matches, Backwards, BackwardsStr), copied verbatim.

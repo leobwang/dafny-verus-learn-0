@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["FindEvenNumbers","IsEven","Length","arr","array","evenList","i","in","k","seq"]},{"name":"i2","identifiers":["FindEvenNumbers","IsEven","Length","arr","array","evenList","i","in","k","seq"]},{"name":"i3","identifiers":["FindEvenNumbers","IsEven","Length","arr","array","evenList","i","in","k","seq"]},{"name":"i4","identifiers":["FindEvenNumbers","IsEven","Length","arr","array","evenList","i","in","k","seq"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"}]
 // R12_SOURCE_SPANS: [{"symbol":"FindEvenNumbers","start":9,"end":27}]
 // R12 public task: dafnybench dafny-synthesis_task_id_629.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 predicate IsEven(n: int)

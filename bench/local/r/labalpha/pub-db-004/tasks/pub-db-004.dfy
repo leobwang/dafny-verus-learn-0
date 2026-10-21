@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","LinearSearch","a","array","key","len","n","uint32"]}]
+// R12_HINT_SITES: [{"name":"i1"}]
 // R12_SOURCE_SPANS: [{"symbol":"LinearSearch","start":27,"end":41}]
 // R12 public task: dafnybench ironsync-osdi2023_tmp_tmpx80antoe_linear-dafny_Test_c++_arrays.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 // RUN: %dafny /compile:3 /spillTargetCode:2 /compileTarget:cpp "%s" > "%t"

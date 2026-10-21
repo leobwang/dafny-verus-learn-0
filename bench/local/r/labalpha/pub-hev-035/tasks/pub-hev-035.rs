@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["MAX","None","Option","Some","bf","brazilian_factorial","brazilian_factorial_impl","end","fact_i","factorial","match","n","ret","special_fact","start","u64"]},{"name":"i2","identifiers":["MAX","None","Option","Some","bf","brazilian_factorial","brazilian_factorial_impl","end","fact_i","factorial","match","n","ret","special_fact","start","u64"]},{"name":"i3","identifiers":["MAX","None","Option","Some","bf","brazilian_factorial","brazilian_factorial_impl","end","fact_i","factorial","match","n","ret","special_fact","start","u64"]},{"name":"a4","identifiers":["MAX","None","Option","Some","bf","brazilian_factorial","brazilian_factorial_impl","end","fact_i","factorial","match","n","ret","special_fact","start","u64"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"},{"name":"a4"}]
 // R12_SOURCE_SPANS: [{"symbol":"brazilian_factorial_impl","start":90,"end":138}]
 // R12 public task: humaneval-verus human_eval_139.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -111,7 +111,7 @@ pub fn brazilian_factorial_impl(n: u64) -> (ret: Option<u64>)
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
             /*R12_HINT:i3*/ true,
-        decreases (end - start),
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         assert(brazilian_factorial(start as nat) <= brazilian_factorial(8nat)) by {
             lemma_brazilian_fib_monotonic(start as nat, 8nat)

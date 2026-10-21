@@ -1,7 +1,1 @@
-{
- "hints": [
-  "0 <= i <= s.Length",
-  "forall x :: i <= x < s.Length ==> s[x] == old(s[x])",
-  "forall x :: 0 <= x < i ==> s[x] == 2 * old(s[x])"
- ]
-}
+{"hints": ["0 <= i <= s.Length", "forall x :: i <= x < s.Length ==> s[x] == old(s[x])", "forall x :: 0 <= x < i ==> s[x] == 2 * old(s[x])"]}

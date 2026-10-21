@@ -16,7 +16,7 @@
   "id": "r11-certificate-length-v",
   "lang": "verus",
   "max_auto_reading": "maximal automation",
-  "private_evidence_sha256": "15e3f6914e0899692592876628ca80ab6f23a639e1a881ec58201ff22b4bc935",
+  "private_evidence_sha256": "a084adeb957fb46b737526f67ac4fc2a9c4bd0d737909b51a68cde0c5e80c609",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -42,7 +42,7 @@
       "name": "c4"
     }
   ],
-  "source_sha256": "26448540f60f9bbbd42280c0f95ad8eda92b0980afd81dbd49d2942209403293",
+  "source_sha256": "3036b7c47916fd6b7c883271476c28aae591f873291a089526925b85a089984e",
   "status": "admitted",
   "target": "certificate_length_r11",
   "validated_span": {
@@ -50,5 +50,5 @@
     "start": 53,
     "symbol": "certificate_length_r11"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0 (no expression site: equals the baseline)"
 }

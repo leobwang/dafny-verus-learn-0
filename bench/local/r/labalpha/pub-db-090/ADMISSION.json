@@ -15,7 +15,8 @@
   },
   "id": "pub-db-090",
   "lang": "dafny",
-  "private_evidence_sha256": "7370c1d9b729b8fa2832d7e29af988c1e1a47bf7a5683e75c998617c6e370803",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
+  "private_evidence_sha256": "dad77e5ba9c08a2d3826b0c30c9d994a7ada766b018c19d6681f1bf6209ed29f",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -27,9 +28,13 @@
     {
       "kind": "expr",
       "name": "i1"
+    },
+    {
+      "kind": "decreases",
+      "name": "d1"
     }
   ],
-  "source_sha256": "d761dedcdc6b635650ac4b1a530a8bad03d774e802e4a436c1d6037bc0a06a17",
+  "source_sha256": "56c8aafdc6299ab906c8e3c6ae84e09acee84fdfa1b758f541b963ec901fd141",
   "status": "admitted",
   "target": "Quotient",
   "validated_span": {
@@ -37,5 +42,5 @@
     "start": 4,
     "symbol": "Quotient"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

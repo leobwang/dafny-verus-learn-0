@@ -1,13 +1,1 @@
-{
- "hints": [
-  "multiset(A[..]) == multiset(old(A[..]))",
-  "sorted_between(A, i, N-1)",
-  "forall n, m :: 0 <= n <= i < m < N ==> A[n] <= A[m]",
-  "0 < i < N",
-  "0 <= j <= i",
-  "multiset(A[..]) == multiset(old(A[..]))",
-  "sorted_between(A, i, N-1)",
-  "forall n, m :: 0 <= n <= i < m < N ==> A[n] <= A[m]",
-  "forall n :: 0 <= n <= j ==> A[n] <= A[j]"
- ]
-}
+{"hints": ["multiset(A[..]) == multiset(old(A[..]))", "sorted_between(A, i, N-1)", "forall n, m :: 0 <= n <= i < m < N ==> A[n] <= A[m]", "i", "0 < i < N", "0 <= j <= i", "multiset(A[..]) == multiset(old(A[..]))", "sorted_between(A, i, N-1)", "forall n, m :: 0 <= n <= i < m < N ==> A[n] <= A[m]", "forall n :: 0 <= n <= j ==> A[n] <= A[j]", "i - j"]}

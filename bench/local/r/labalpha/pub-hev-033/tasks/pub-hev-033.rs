@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["MAX","None","Option","Some","Vec","char","current_string","how_many_times","how_many_times_impl","k","len","match","opt_k","string","substring","u32","u64"]},{"name":"i2","identifiers":["MAX","None","Option","Some","Vec","char","current_string","how_many_times","how_many_times_impl","k","len","match","opt_k","string","substring","u32","u64"]},{"name":"i3","identifiers":["MAX","None","Option","Some","Vec","char","current_string","how_many_times","how_many_times_impl","k","len","match","opt_k","string","substring","u32","u64"]},{"name":"a4","identifiers":["MAX","None","Option","Some","Vec","char","current_string","how_many_times","how_many_times_impl","k","len","match","opt_k","string","substring","u32","u64"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"},{"name":"a4"}]
 // R12_SOURCE_SPANS: [{"symbol":"how_many_times_impl","start":102,"end":134}]
 // R12 public task: humaneval-verus human_eval_018.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -115,7 +115,7 @@ fn how_many_times_impl(string: Vec<char>, substring: Vec<char>) -> (opt_k: Optio
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
             /*R12_HINT:i3*/ true,
-        decreases current_string.len(),
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         if (is_prefix(substring.clone(), current_string.clone())) {
             if (k >= u32::MAX as u64) {

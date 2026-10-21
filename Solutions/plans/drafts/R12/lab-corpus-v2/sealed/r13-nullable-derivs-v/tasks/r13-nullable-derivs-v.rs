@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"c1","identifiers":["r"],"kind":"calls","callees":["lemma_nullable_correct"]},{"name":"c2","identifiers":["r","u","deriv","drop_first"],"kind":"calls","callees":["lemma_nullable_derivs_r13","lemma_deriv_correct"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["lemma_nullable_correct"]},{"name":"c2","kind":"calls","callees":["lemma_nullable_derivs_r13","lemma_deriv_correct"]}]
 // R12_SOURCE_SPANS: [{"symbol":"lemma_nullable_derivs_r13","start":189,"end":201}]
 use vstd::prelude::*;
 

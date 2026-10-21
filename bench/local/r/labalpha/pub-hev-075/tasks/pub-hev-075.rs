@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"a1","identifiers":["MAX","Y","c","ctr","else","i","if","is_vowel","last","len","ret","s","str","u32","vowels","vowels_count","y"]},{"name":"i2","identifiers":["MAX","Y","c","ctr","else","i","if","is_vowel","last","len","ret","s","str","u32","vowels","vowels_count","y"]},{"name":"i3","identifiers":["MAX","Y","c","ctr","else","i","if","is_vowel","last","len","ret","s","str","u32","vowels","vowels_count","y"]},{"name":"i4","identifiers":["MAX","Y","c","ctr","else","i","if","is_vowel","last","len","ret","s","str","u32","vowels","vowels_count","y"]}]
+// R12_HINT_SITES: [{"name":"a1"},{"name":"i2"},{"name":"i3"},{"name":"i4"}]
 // R12_SOURCE_SPANS: [{"symbol":"vowels_count","start":24,"end":64}]
 // R12 public task: humaneval-verus human_eval_064.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

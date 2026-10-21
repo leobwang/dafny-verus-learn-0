@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"h1","identifiers":["k","s"]},{"name":"h2","identifiers":["A2","InClass","cc","s","i","k"]}]
+// R12_HINT_SITES: [{"name":"h1"},{"name":"h2"}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.ClassCoversR13","start":281,"end":295}]
 // Provided layer: the class half of RG_A2_Deriv (layer A2), copied verbatim as its own
 // module with the layer's export (the representation stays hidden from the task).

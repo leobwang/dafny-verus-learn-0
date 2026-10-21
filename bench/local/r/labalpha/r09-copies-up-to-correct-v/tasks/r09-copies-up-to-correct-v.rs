@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"c1","identifiers":["r","jm","s","subrange","i","len","as","int"],"kind":"calls","callees":["lemma_copies_optional_r09"]},{"name":"h1","identifiers":["copies","r","k","Re","Cat","Box","new"]},{"name":"h2","identifiers":["matches","copies","r","k","s"]},{"name":"h3","identifiers":["matches","copies","r","s"]},{"name":"h4","identifiers":["copies","r","k","km","Re","Cat","Box","new"]},{"name":"c2","identifiers":["r","jm","s","subrange","i","len","as","int"],"kind":"calls","callees":["lemma_copies_optional_r09"]},{"name":"h5","identifiers":["matches","Re","Cat","Box","new","r","u","s"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["lemma_copies_optional_r09"]},{"name":"h1"},{"name":"h2"},{"name":"h3"},{"name":"h4"},{"name":"c2","kind":"calls","callees":["lemma_copies_optional_r09"]},{"name":"h5"}]
 // R12_SOURCE_SPANS: [{"symbol":"lemma_copies_optional_r09","start":63,"end":100}]
 use vstd::prelude::*;
 

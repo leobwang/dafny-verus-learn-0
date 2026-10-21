@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"c1","identifiers":["a","b","c","node_count"],"kind":"calls","callees":["lemma_deriv_size_v","lemma_square_growth"]},{"name":"c2","identifiers":["a","b","c","node_count"],"kind":"calls","callees":["lemma_deriv_size_v","lemma_square_growth"]},{"name":"c3","identifiers":["a","c","node_count"],"kind":"calls","callees":["lemma_deriv_size_v","lemma_square_growth"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["lemma_deriv_size_v","lemma_square_growth"]},{"name":"c2","kind":"calls","callees":["lemma_deriv_size_v","lemma_square_growth"]},{"name":"c3","kind":"calls","callees":["lemma_deriv_size_v","lemma_square_growth"]}]
 // R12_SOURCE_SPANS: [{"symbol":"lemma_deriv_size_v","start":103,"end":121}]
 use vstd::prelude::*;
 

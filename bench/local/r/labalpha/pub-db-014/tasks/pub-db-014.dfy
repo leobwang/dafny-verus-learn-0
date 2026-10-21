@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","allEqual","array","b","i","k","mallEqual5","v"]},{"name":"i2","identifiers":["Length","allEqual","array","b","i","k","mallEqual5","v"]},{"name":"i3","identifiers":["Length","allEqual","array","b","i","k","mallEqual5","v"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"mallEqual5","start":126,"end":141}]
 // R12 public task: dafnybench Dafny-Exercises_tmp_tmpjm75muf__Session4Exercises_ExerciseAllEqual.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 predicate allEqual(s:seq<int>)
@@ -132,7 +132,7 @@ ensures b==allEqual(v[0..v.Length])
 	    invariant /*R12_HINT:i1*/ true
       invariant /*R12_HINT:i2*/ true
       invariant /*R12_HINT:i3*/ true
-    	decreases v.Length - i - (if b then 0 else 1)//
+    	decreases /*R12_DECREASES:d1*/ (0 as int)
 	  { 
        if (v[i] != v[0]) { b := false; }
        else { i := i+1;}

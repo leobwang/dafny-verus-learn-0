@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Interleave","i","k","r","s1","s2","s3","seq"]},{"name":"i2","identifiers":["Interleave","i","k","r","s1","s2","s3","seq"]},{"name":"i3","identifiers":["Interleave","i","k","r","s1","s2","s3","seq"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"Interleave","start":4,"end":17}]
 // R12 public task: dafnybench dafny-synthesis_task_id_578.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method Interleave(s1: seq<int>, s2: seq<int>, s3: seq<int>) returns (r: seq<int>)

@@ -15,7 +15,8 @@
   },
   "id": "pub-db-062",
   "lang": "dafny",
-  "private_evidence_sha256": "f92163963ad069bccc4f424ac8482d3e327ec0fe34efb5f7c6fe81ca315b439f",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
+  "private_evidence_sha256": "cb676bced210d823a50dec9e4d9122b6aa63b6bc68ca5622ae052e16a7d0c780",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -25,6 +26,10 @@
   ],
   "sites": [
     {
+      "kind": "decreases",
+      "name": "d1"
+    },
+    {
       "kind": "expr",
       "name": "i1"
     },
@@ -33,7 +38,7 @@
       "name": "i2"
     }
   ],
-  "source_sha256": "da1363996bf5818872c732b17f9361ef8f95b32940a36cd5efaac8dc1e760613",
+  "source_sha256": "c2a230102627073a35c9fd38f52937e85ad1ce866178bff3feccfa7497fa11eb",
   "status": "admitted",
   "target": "peasantMult",
   "validated_span": {
@@ -41,5 +46,5 @@
     "start": 27,
     "symbol": "peasantMult"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

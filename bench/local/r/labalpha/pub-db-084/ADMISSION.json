@@ -15,7 +15,8 @@
   },
   "id": "pub-db-084",
   "lang": "dafny",
-  "private_evidence_sha256": "5ec7be8238de93d4181133955bb825a7323b7730d1f901fdb23255d71a773048",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
+  "private_evidence_sha256": "3cec2deb377018f59c736fc5b8a2af534c6d52a799a3b00f80bd7c0d4249bb1b",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -25,6 +26,10 @@
   ],
   "sites": [
     {
+      "kind": "decreases",
+      "name": "d1"
+    },
+    {
       "kind": "expr",
       "name": "i1"
     },
@@ -33,7 +38,7 @@
       "name": "i2"
     }
   ],
-  "source_sha256": "21a2ed5f0a38db077b38819537cb05fd2f3bcac7280610fa17877ce100ba39c9",
+  "source_sha256": "41d8e5907b57df602f05b62bc3997b641dd8c68bc81490f46c912ba582ac0096",
   "status": "admitted",
   "target": "Fatorial",
   "validated_span": {
@@ -41,5 +46,5 @@
     "start": 9,
     "symbol": "Fatorial"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

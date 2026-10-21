@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","char","happy","happy_spec","i","is_happy","j","s","three_distinct_spec"]}]
+// R12_HINT_SITES: [{"name":"i1"}]
 // R12_SOURCE_SPANS: [{"symbol":"is_happy","start":36,"end":52}]
 // R12 public task: humaneval-verus human_eval_080.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

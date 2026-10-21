@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","char","i","n","next","number_to_char","output","single_digit_number_to_char","string_seq","string_sequence","string_sequence_impl","u8"]},{"name":"i2","identifiers":["Vec","char","i","n","next","number_to_char","output","single_digit_number_to_char","string_seq","string_sequence","string_sequence_impl","u8"]},{"name":"a3","identifiers":["Vec","char","i","n","next","number_to_char","output","single_digit_number_to_char","string_seq","string_sequence","string_sequence_impl","u8"]},{"name":"a4","identifiers":["Vec","char","i","n","next","number_to_char","output","single_digit_number_to_char","string_seq","string_sequence","string_sequence_impl","u8"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"d1","kind":"decreases"},{"name":"a3"},{"name":"a4"}]
 // R12_SOURCE_SPANS: [{"symbol":"string_sequence_impl","start":148,"end":171}]
 // R12 public task: humaneval-verus human_eval_015.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -155,7 +155,7 @@ fn string_sequence_impl(n: u8) -> (string_seq: Vec<char>)
         invariant
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
-        decreases i,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         let mut next = number_to_char_impl(i);
         next.append(&mut output);

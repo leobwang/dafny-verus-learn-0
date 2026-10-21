@@ -16,7 +16,7 @@
   "id": "r11-residual-step-v",
   "lang": "verus",
   "max_auto_reading": "maximal automation",
-  "private_evidence_sha256": "759db2b030489a66912fc4ead889433b4754f88f6a7c24fc7fdfdf1a6ab92bca",
+  "private_evidence_sha256": "d433b37768971e5d4321fb2d288960064e36b36ce7baf95a79f9875425cc3d37",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -30,7 +30,7 @@
       "name": "c1"
     }
   ],
-  "source_sha256": "0a3305065da0985eae7351f3e7b21f84381a43c5b233cc2d4666f49d17a75e67",
+  "source_sha256": "cf264136420b106e5ac9a1bcec9610e1be9969eb6f2384630808f98f73178453",
   "status": "admitted",
   "target": "residual_step_r11",
   "validated_span": {
@@ -38,5 +38,5 @@
     "start": 187,
     "symbol": "residual_step_r11"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0 (no expression site: equals the baseline)"
 }

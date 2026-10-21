@@ -1,8 +1,1 @@
-{
- "hints": [
-  "n >= i >= 0",
-  "string_sequence(n as nat) == string_sequence(i as nat) + output@",
-  "string_sequence((n) as nat) == string_sequence((i) as nat) + output@",
-  "string_sequence(n as nat) == output@"
- ]
-}
+{"hints": ["n >= i >= 0", "string_sequence(n as nat) == string_sequence(i as nat) + output@", "i", "string_sequence((n) as nat) == string_sequence((i) as nat) + output@", "string_sequence(n as nat) == output@"]}

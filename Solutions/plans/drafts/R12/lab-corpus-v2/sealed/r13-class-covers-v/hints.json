@@ -1,1 +1,1 @@
-{"hints": ["k <= s.len()", "forall|i: int| 0 <= i < k ==> cc@.contains(s@[i])"]}
+{"hints": ["k <= s.len()", "forall|i: int| 0 <= i < k ==> cc@.contains(s@[i])", "s.len() - k"]}

@@ -1,6 +1,1 @@
-{
- "hints": [
-  "0 <= i <= |lst|",
-  "result <==> forall k :: 0 <= k < i ==> (IsEven(k) ==> IsEven(lst[k]))"
- ]
-}
+{"hints": ["0 <= i <= |lst|", "result <==> forall k :: 0 <= k < i ==> (IsEven(k) ==> IsEven(lst[k]))"]}

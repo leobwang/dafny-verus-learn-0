@@ -1,8 +1,1 @@
-{
- "hints": [
-  "str@[..0int].filter(|x: char| !is_vowel_spec(x)) == Seq::<char>::empty()",
-  "str_without_vowels@ == str@[..index].filter(|x: char| !is_vowel_spec(x))",
-  "str@[..index + 1].drop_last() == str@[..index]",
-  "str@ == str@[..str_length]"
- ]
-}
+{"hints": ["str@[..0int].filter(|x: char| !is_vowel_spec(x)) == Seq::<char>::empty()", "str_without_vowels@ == str@[..index].filter(|x: char| !is_vowel_spec(x))", "str@[..index + 1].drop_last() == str@[..index]", "str@ == str@[..str_length]"]}

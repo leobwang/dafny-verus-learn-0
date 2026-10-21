@@ -1,10 +1,1 @@
-{
- "hints": [
-  "0 <= index <= text.len()",
-  "count_uppercase_sum(text@[..index]) == sum",
-  "u64::MIN * index <= sum <= u64::MAX * index",
-  "text@[..index - 1] == text@[..index].drop_last()",
-  "index == text@.len()",
-  "text@ == text@[..index]"
- ]
-}
+{"hints": ["0 <= index <= text.len()", "count_uppercase_sum(text@[..index]) == sum", "u64::MIN * index <= sum <= u64::MAX * index", "text@.len() - index", "text@[..index - 1] == text@[..index].drop_last()", "index == text@.len()", "text@ == text@[..index]"]}

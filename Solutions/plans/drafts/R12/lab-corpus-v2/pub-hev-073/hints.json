@@ -1,14 +1,1 @@
-{
- "hints": [
-  "odd_count <= i <= lst1.len() <= i32::MAX",
-  "odd_count == count_odd(lst1@[..i].map_values(|x| x as int))",
-  "l_p_1 == l_1 + last",
-  "even_count <= i <= lst2.len() <= i32::MAX",
-  "even_count == count_even(lst2@[..i].map_values(|x| x as int))",
-  "l_p_1 == l_1 + last",
-  "lst2@[..lst2.len()] == lst2@",
-  "lst1@[..lst1.len()] == lst1@",
-  "count_even(lst2@.map_values(|x| x as int)) >= count_odd( lst1@.map_values(|x| x as int), )",
-  "!(count_even(lst2@.map_values(|x| x as int)) >= count_odd( lst1@.map_values(|x| x as int), ))"
- ]
-}
+{"hints": ["odd_count <= i <= lst1.len() <= i32::MAX", "odd_count == count_odd(lst1@[..i].map_values(|x| x as int))", "l_p_1 == l_1 + last", "even_count <= i <= lst2.len() <= i32::MAX", "even_count == count_even(lst2@[..i].map_values(|x| x as int))", "l_p_1 == l_1 + last", "lst2@[..lst2.len()] == lst2@", "lst1@[..lst1.len()] == lst1@", "count_even(lst2@.map_values(|x| x as int)) >= count_odd( lst1@.map_values(|x| x as int), )", "!(count_even(lst2@.map_values(|x| x as int)) >= count_odd( lst1@.map_values(|x| x as int), ))"]}

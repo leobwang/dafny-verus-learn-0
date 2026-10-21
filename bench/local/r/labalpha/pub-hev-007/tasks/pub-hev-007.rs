@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["is_prime","is_prime_so_far","is_prime_spec","k","n","res","spec_find_largest_prime","spec_find_largest_prime_so_far","spec_sum_digits","u32"]},{"name":"i2","identifiers":["is_prime","is_prime_so_far","is_prime_spec","k","n","res","spec_find_largest_prime","spec_find_largest_prime_so_far","spec_sum_digits","u32"]},{"name":"a3","identifiers":["is_prime","is_prime_so_far","is_prime_spec","k","n","res","spec_find_largest_prime","spec_find_largest_prime_so_far","spec_sum_digits","u32"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"d1","kind":"decreases"},{"name":"a3"}]
 // R12_SOURCE_SPANS: [{"symbol":"is_prime","start":26,"end":48}]
 // R12 public task: humaneval-verus human_eval_094.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -37,7 +37,7 @@ fn is_prime(n: u32) -> (res: bool)
         invariant
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
-        decreases n - k,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         assert(/*R12_HINT:a3*/ true);
 

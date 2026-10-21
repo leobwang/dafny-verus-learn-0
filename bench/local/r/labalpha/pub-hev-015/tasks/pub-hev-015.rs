@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","char","flip_case","flip_case_spec","flipped_case","i","index","is_lower_case","is_upper_case","len","shift_minus_32_spec","shift_plus_32_spec","str"]},{"name":"i2","identifiers":["Vec","char","flip_case","flip_case_spec","flipped_case","i","index","is_lower_case","is_upper_case","len","shift_minus_32_spec","shift_plus_32_spec","str"]},{"name":"a3","identifiers":["Vec","char","flip_case","flip_case_spec","flipped_case","i","index","is_lower_case","is_upper_case","len","shift_minus_32_spec","shift_plus_32_spec","str"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"a3"}]
 // R12_SOURCE_SPANS: [{"symbol":"flip_case","start":43,"end":66}]
 // R12 public task: humaneval-verus human_eval_027.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

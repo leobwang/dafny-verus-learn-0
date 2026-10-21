@@ -1,18 +1,1 @@
-{
- "hints": [
-  "row_sorted_asc(coords@)",
-  "row_col_sorted_desc(coords@)",
-  "coords_sound(lst.deep_view(), x, coords@)",
-  "coords_complete_until_row(lst.deep_view(), x, coords@, i)",
-  "coords_distinct(coords@)",
-  "0 <= i < lst.len()",
-  "n == lst[i as int].len()",
-  "row_sorted_asc(coords@)",
-  "row_col_sorted_desc(coords@)",
-  "coords_sound(lst.deep_view(), x, coords@)",
-  "coords_complete_until_row(lst.deep_view(), x, coords@, i)",
-  "coords_complete_for_row_until_col(lst.deep_view(), x, coords@, i, (n - j) as usize)",
-  "coords_distinct(coords@)",
-  "coords[coords.len() - 1] == (i, (n - j - 1) as usize)"
- ]
-}
+{"hints": ["row_sorted_asc(coords@)", "row_col_sorted_desc(coords@)", "coords_sound(lst.deep_view(), x, coords@)", "coords_complete_until_row(lst.deep_view(), x, coords@, i)", "coords_distinct(coords@)", "0 <= i < lst.len()", "n == lst[i as int].len()", "row_sorted_asc(coords@)", "row_col_sorted_desc(coords@)", "coords_sound(lst.deep_view(), x, coords@)", "coords_complete_until_row(lst.deep_view(), x, coords@, i)", "coords_complete_for_row_until_col(lst.deep_view(), x, coords@, i, (n - j) as usize)", "coords_distinct(coords@)", "coords[coords.len() - 1] == (i, (n - j - 1) as usize)"]}

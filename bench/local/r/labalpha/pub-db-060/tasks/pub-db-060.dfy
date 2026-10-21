@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","array","b","i","mpositive3","positive","v"]},{"name":"i2","identifiers":["Length","array","b","i","mpositive3","positive","v"]},{"name":"i3","identifiers":["Length","array","b","i","mpositive3","positive","v"]}]
+// R12_HINT_SITES: [{"name":"d1","kind":"decreases"},{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"mpositive3","start":27,"end":40}]
 // R12 public task: dafnybench Dafny-Exercises_tmp_tmpjm75muf__Session2Exercises_ExercisePositive.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 predicate positive(s:seq<int>)
@@ -29,7 +29,7 @@ ensures b==positive(v[0..v.Length])
 {
     var i:=0; b:=true;
     while(i<v.Length && b)
-        decreases v.Length - i 
+        decreases /*R12_DECREASES:d1*/ (0 as int)
         invariant /*R12_HINT:i1*/ true
         invariant /*R12_HINT:i2*/ true
         invariant /*R12_HINT:i3*/ true

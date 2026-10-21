@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"h1","identifiers":["u","s","k"]},{"name":"h2","identifiers":["u","s","k","i"]},{"name":"h3","identifiers":["u","s","k"]},{"name":"h4","identifiers":["u","s","k","j"]}]
+// R12_HINT_SITES: [{"name":"h1"},{"name":"h2"},{"name":"h3"},{"name":"h4"}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.CatAssoc","start":23,"end":48}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1: Re, Matches), copied verbatim.
