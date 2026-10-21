@@ -53,7 +53,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R09 | `R09.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-19 (DVR4 step 5, lane P2: re-cut with `# source:` lines from the one-statement-per-line twins; the verifier over R09, 2,583 public files; the Lab α forms `bench/local/r/labalpha/r09-rep-range-correct-{d,v}` hold H4's witness skeleton without any pattern line: reported for decision) | 8 OK |
 
-| R10 | `R10.txt`: 8 (H1d/v–H4d/v) | 2026-10-17 (construction candidate; exact final scan in protected notes) | 8 local controls; live sessions deferred |
+| R10 | `R10.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-20 (DVR4 step 5, lane P2: re-cut with `# source:` lines from the one-statement-per-line twins; the verifier over R10, 2,594 public files) | 8 OK |
 
 | R11 | `R11.txt`: 8 (H1d–H4d,H1v–H3v,H8v) | 2026-10-17 (construction candidate; exact scan in protected notes) | 8 local controls; live sessions deferred |
 

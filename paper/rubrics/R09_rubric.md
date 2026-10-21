@@ -6,8 +6,8 @@ Local fixture builds do not replace deferred D45 live grading or actor runs.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R09_solutions.tex  sha256 c39e59f14c3b1e6a660cbc3603643daf289ca357192fe575c5d81fc51afe3b7d
 paper/R09_problems.tex  sha256 ec3d49c6f06e0493bf3ffe497e1e3408e97aeab928afb764bbf2ac88b2bc8189
-Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy  sha256 fb19287d39c0deb679742246ea2f619e8fd9d46c07e5f75aedfc9c3e5b1cd0d3
-Solutions/verus/r/r09_effects/src/lib.rs  sha256 66b768a4128d57173b33d61767ed8bbefb7cd42f3f8b75d1524d693ad3c8381f
+Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy  sha256 310ce74663371ff76cc7b52b17f4559f82cfd20f80ed03b7e233b4c5ec6b21a6
+Solutions/verus/r/r09_effects/src/lib.rs  sha256 b4fee48fb923ff8dd60a833a4bc76facf9886cdba31bce444b65fa0f3aa37fa9
 Solutions/dafny/R/R09_Effects/agent/R09_AgentRefactor.dfy  sha256 a35e2b9458cc3ab6d5ba12063c669bd0d1219b813c756e2ecc7b14796359f550
 Solutions/verus/r/r09_effects/src/agent.rs  sha256 8fb4ecab6e292bf40785240598cdf7f61a77f47325da4f8ad06fa4146b5f106b
 

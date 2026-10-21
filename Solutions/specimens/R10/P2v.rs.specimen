@@ -2,10 +2,13 @@
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a4::*;
+
 verus! {
+
 // item: R10.P2v value
 // Answer form: bool literal.
 proof fn nested_normal_value_r10() {
- assert(is_norm(Re::Star(Box::new(Re::Alt(Box::new(Re::Empty),Box::new(Re::Chr('m')))))) == false) by (compute_only);
+    assert(is_norm(Re::Star(Box::new(Re::Alt(Box::new(Re::Empty), Box::new(Re::Chr('m')))))) == false) by (compute_only);
 }
-}
+
+} // verus!

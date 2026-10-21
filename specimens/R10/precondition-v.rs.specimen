@@ -2,9 +2,12 @@
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a4::*;
+
 verus! {
+
 fn observe_r10() {
- let raw=Re::Alt(Box::new(Re::Empty),Box::new(Re::Chr('q')));
- let result=NormRe::from_normal_r10(raw);
+    let raw = Re::Alt(Box::new(Re::Empty), Box::new(Re::Chr('q')));
+    let result = NormRe::from_normal_r10(raw);
 }
-}
+
+} // verus!

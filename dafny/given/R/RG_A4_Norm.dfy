@@ -1,7 +1,7 @@
-/*! A4 normal-form definitions (PROVIDED, frozen). R10–R15.
-Shape is distinct from language preservation. No semantic smart-constructor,
-normalizer or certificate-correctness answer is supplied. Certificate split
-indices are relative to their current word in both languages.
+/*! A4 normal-form definitions (PROVIDED, frozen). R10–R15. Do not open this file before
+R02, R03, R05 and R06 are done: it imports A1b and A2, which re-supply their answers.
+Shape is distinct from language preservation; no semantic smart-constructor, normalizer
+or certificate-correctness answer is supplied. Certificate splits are word-relative.
 */
 module RG_A4_Norm {
  import opened RG_A1_Re
