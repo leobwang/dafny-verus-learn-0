@@ -1610,10 +1610,11 @@ def check_isolation(root, good):
             track, layer, mid = g[0], g[1], None
         else:
             mm = re.match(r"(?:dafny/([QR])/([QR]\d\d)_|verus/([qr])/([qr]\d\d)_|harness/([qr])/"
-                          r"|dafny/checks/(([QR])\d\d)_)", rel)
-            track = (mm.group(1) or mm.group(3) or mm.group(5) or mm.group(7)).upper() if mm else None
-            mid = (mm.group(2) or (mm.group(4) or "").upper() or mm.group(6) or owner.get(rel)) \
-                if mm else None
+                          r"|dafny/checks/(([QR])\d\d)_|agents/(q\d\d)_)", rel)
+            track = (mm.group(1) or mm.group(3) or mm.group(5) or mm.group(7)
+                     or ("q" if mm.group(8) else "")).upper() if mm else None
+            mid = (mm.group(2) or (mm.group(4) or "").upper() or mm.group(6)
+                   or (mm.group(8) or "").upper() or owner.get(rel)) if mm else None
             layer = gu.expected_layer(mid) if mid else ""
         if track == "Q":
             n_q += 1

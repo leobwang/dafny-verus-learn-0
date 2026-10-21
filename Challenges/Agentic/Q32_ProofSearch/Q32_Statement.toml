@@ -1,0 +1,27 @@
+# Q32_Statement.toml: the frozen statement manifest of Q32 — Proof-search agent (QPLAN §31.0;
+# DELTAS Δ402, Δ403). Guard rule 2f freezes it by its name; once the module leaves planned
+# the registry's `statements` pins its sha256 beside the statement files', and
+# scripts/challenge_gate.sh Q32 reads it (dvl.challenge). W2 fixes the interface; the
+# statement files, [min_verified] and [[against]] arrive with W3's witness tasks.
+schema = 1
+module = "Q32"
+trust = "research/TRUST.md"
+solver_swap = true
+cv_gates = false
+distinction = "grader"
+
+[interface."agents/q32_proof_search/agent.py"]
+"Agent" = "bb48700d896815a39a8ef227872f345bc65eeee71c500cfe7d4571fb645c0676"
+"Agent.__init__" = "0cbbc816e91436f91d9fdcfb735b5b964766d38b1e9cd12f5c8d6d0dfae40548"
+"Agent.propose" = "efacb9b280acc406eb23159a0f0da2dfeb0dd24c4f0898896fb61e65d4c0cee7"
+"Index" = "dd1a8fa565ccf42520994965b359158232474a479b9997feee7a974f0791e7d3"
+"TypedEdit" = "b218773371fa325752ef1f735815fbd8c88efae7a34044a01034a1235cfd33f5"
+"build_index" = "105da77c1d652419c7f88289cbf225f735aa6b5a56f159957da0d50803a2d6a9"
+"compile_edit" = "e215cf6a531e03ccbaa778b7b4e7b353916a19c1f063c6fea2450384b39da5a2"
+"dedup_key" = "2896110d164a399bfbff6a25fbbc27ded0dd0d6a48ee26045db01bad03290432"
+"value" = "51f1ddc1b13ab50452f0121bc623b1652b03d8d7975ae7edfb95aa3bac29c4e2"
+
+[reach]
+deny_names = []
+deny_modules = ["Std.Arithmetic.LittleEndianNat"]
+require = []

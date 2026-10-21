@@ -1760,7 +1760,7 @@ chapter = "docs/Q31_GateBench.md"
 exercises = ["Challenges/Agentic/Q31_GateBench/Q31_GateBench.dfy", "Challenges/Agentic/Q31_GateBench/q31_gate_bench/src/lib.rs"]
 exits = []
 agentic = []
-harness = ["agents/q31_gate_bench/bench.py"]
+harness = ["agents/q31_gate_bench/gate.py", "agents/q31_gate_bench/bench.py", "agents/q31_gate_bench/baselines.py"]
 bank = ".claude/skills/instructor/banks/defense_agentic.md"
 paper = false
 rubric = ""
@@ -1783,7 +1783,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "agents/q31_gate_bench/gate.py" = "py-agents", "agents/q31_gate_bench/bench.py" = "py-agents", "agents/q31_gate_bench/baselines.py" = "py-agents" }
 concept_items = {}
 
 [[module]]
@@ -1823,7 +1823,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "agents/q32_proof_search/agent.py" = "py-agents" }
 concept_items = {}
 
 [[module]]
@@ -1863,7 +1863,7 @@ recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = {}
-imports = {}
+imports = { "agents/q33_statement_problem/pipeline.py" = "py-agents" }
 concept_items = {}
 
 

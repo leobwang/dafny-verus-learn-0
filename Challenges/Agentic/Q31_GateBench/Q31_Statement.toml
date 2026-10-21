@@ -1,0 +1,43 @@
+# Q31_Statement.toml: the frozen statement manifest of Q31 — Gate & bench (QPLAN §31.0;
+# DELTAS Δ402, Δ403). Guard rule 2f freezes it by its name; once the module leaves planned
+# the registry's `statements` pins its sha256 beside the statement files', and
+# scripts/challenge_gate.sh Q31 reads it (dvl.challenge). W2 fixes the interface; the
+# statement files, [min_verified] and [[against]] arrive with W3's witness tasks.
+schema = 1
+module = "Q31"
+trust = "research/TRUST.md"
+solver_swap = true
+cv_gates = false
+distinction = "grader"
+
+[interface."agents/q31_gate_bench/gate.py"]
+"AgreementReport" = "1d46fb56278058a99d05391a88d191349a3a98414eea5db1e4c4f75d52191c70"
+"TaskTarget" = "04bec696a52b6c9df572df36ff35b112cb076fce1daa99709ac13071e2bafac7"
+"agreement_report" = "ac88b7b00c66158115dbad93242c2f427b0bfb0aee0b1bf6dbc8fa670d7c3155"
+"gate_crate" = "1a144f9911e526d68497917a4f40542eda4f94181f2e8f70523e3398dc4a65a4"
+"gate_task" = "f4d7b6aabb59da4f55c5c317a1a579bfb5fd75b97188a275980257e3bc1a82c7"
+"lever_findings" = "269284b79177bd13e33ac505d503d65894058d2d1bad12c1ac4e43fcb6e73f29"
+"reach_findings" = "c45778fbbfc28abcfaab33209a3d3ece36fb14f4114d46f80929029886177441"
+"run_record_findings" = "96484bef5d48ad51f8420c218b05c70faaf060a18f731ba69ba259d53e868657"
+"solver_spread" = "f6daa47b0254d22ec1c2e720acbbf9c85e34ebca7229757eb73ac9ffc951ca56"
+"statement_identity" = "ff5792de96f602a862c706d6c9c5c5be239a25e069d2ee47c78f6e9d7197592c"
+
+[interface."agents/q31_gate_bench/bench.py"]
+"Curve" = "a36367d5fa0532f50ae8f29574ab70b62813db01613bc2c58b80eb5b90f1f47d"
+"PairedReport" = "f5f960581e63f218fba80ede03ffd8c047caf22ba024c852cecbc4c17a3424eb"
+"RunRow" = "9c15204d191d25ad40a8a521fce861d35243c5b12ca1c436669441ae031f0657"
+"Table" = "56ff9f7806af82f866725a1354cc0c0aed306021fa5b0fc9524f6fab3a0d334d"
+"cost_curve" = "5cc84b5f9e5d12cb46779e49fd324c88052fa1c182551b52f217038910298928"
+"load_runs" = "8facab437c66ddacc4e587d19c9097bcec176f57c1f31f70659bdf87c62be83e"
+"paired_report" = "499f1d1ebf4e8703fc1218832417c289c517098c6f8b78608376927b5d690450"
+"pass_at_k_table" = "cf91154766f032f0aa3034841871f2585266b1d16aa5bdef70d639c29904795b"
+"render" = "8f287f28c393713ce6d4ec0c597d9590a244029fa62ab2efbe62c9ddd1c59e0e"
+
+[interface."agents/q31_gate_bench/baselines.py"]
+"one_shot_render" = "561bd87765665ea86d2b3203034d439049d6bbfd1cbf47d6206e53a15a6b5b34"
+"scripted" = "bc63ede06b52d3e1bec54760957ba8ea13ef08e9aa0d1855485f5207ec21976c"
+
+[reach]
+deny_names = []
+deny_modules = ["Std.Arithmetic.LittleEndianNat"]
+require = []
