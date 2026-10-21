@@ -85,6 +85,39 @@ maxauto_fails = false
 admission_sha256 = "919eea0419ff93908f5aaa5ba76f5df45c2bf81bd4ab5d90781abe4aa3e2d892"
 
 [[card]]
+id = "cl-d7-doubled-at"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d7-doubled-at/tasks/cl-d7-doubled-at.dfy"
+form_sha256 = "a087ea7da74a77fdd2c781e90ae7a773f11bac00390d7c8d6b416ac2d23f3deb"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "058d847c7412a8e563dc82ecf9fb73594d09fee23343298a81fb5856a5d2473d"
+
+[[card]]
+id = "cl-d8-insert-length"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d8-insert-length/tasks/cl-d8-insert-length.dfy"
+form_sha256 = "69dce8c8a12faa6da8eb77439a849135dc37f6eddfa9f1eedbbf009fb89e4ba4"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "cd9c787eac610de5add95bdc4b72449259dd60ae4dcd36e0ccaf2dc3a45ab06f"
+
+[[card]]
+id = "cl-d9-twos-pos"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d9-twos-pos/tasks/cl-d9-twos-pos.dfy"
+form_sha256 = "4a63f8dd617b28b55089efde49f7558b7d204c350dca4f2d1e4b9e81b05d0365"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "be73cb64fe50e287a4b569ea6efa41c4d55c3985bf12e2af3635936261b7848a"
+
+[[card]]
 id = "cl-v1-sum-push"
 lang = "verus"
 source = "course-local"
@@ -149,3 +182,36 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "5e4796e3bf95d09a0a6689ce02920bc0c20d18c9fdcdd0458736866af17561d0"
+
+[[card]]
+id = "cl-v7-dbl-len"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v7-dbl-len/tasks/cl-v7-dbl-len.rs"
+form_sha256 = "80f670d5ce94651e17112f3713f301ef88ec4f3fd2444ea9d97de0511a7a2a03"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "c5363ee86a7d904eb8046654b240693e3af418249e7da9669c4c358793351ac1"
+
+[[card]]
+id = "cl-v8-ins-len"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v8-ins-len/tasks/cl-v8-ins-len.rs"
+form_sha256 = "2ec94fb795f853087ceaaae4f2f39d4b7b10b657825ba33c2d21f206baa71bf6"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "1eb5fda58fde31e439d19601b15ddb17efe4bd48bd6894ef73b633402f1a299e"
+
+[[card]]
+id = "cl-v9-twos-pos"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v9-twos-pos/tasks/cl-v9-twos-pos.rs"
+form_sha256 = "30564db36683d2fb508bf966745b0e7daa806555c9c48cba978222c918d5cef3"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "1c4249fec69974d0dc0ed1ad0a4e82d02e660416eb5ce61bd8951a53ac7d42c7"
