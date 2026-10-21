@@ -12,7 +12,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 AGENTIC = ROOT / "bench" / "local" / "q" / "agentic"
-TARGETS = {"q31-dev": (40, 24, 16), "q32-dev": (50, 30, 20)}   # D76 fallback (b), Δ405
+TARGETS = {"q31-dev": (40, 24, 16), "q32-dev": (50, 30, 20),   # D76 fallback (b), Δ405
+           "q31-heldout": (60, 36, 24)}
 CARD = re.compile(r"(cl|pd|pv)-[dv]\d+-[a-z0-9-]+")
 
 
@@ -42,11 +43,36 @@ class Strata(unittest.TestCase):
                     self.assertNotIn(c["id"], seen, "a card id is unique across strata")
                     seen.add(c["id"])
                     self.assertTrue(c["admitted"])
+                    self.assertRegex(c["admission_sha256"], r"^[0-9a-f]{64}$")
+                    self.assertRegex(c["form_sha256"], r"^[0-9a-f]{64}$")
+                    if d.get("sealed"):
+                        # a sealed card names its form inside the archive; nothing is on disk
+                        self.assertTrue(c["form"].startswith(f"labs/{d['lab']}/{c['id']}/tasks/"))
+                        self.assertFalse((ROOT / c["form"]).exists())
+                        self.assertEqual(c["lang"], "dafny" if c["form"].endswith(".dfy") else "verus")
+                        continue
                     form = ROOT / c["form"]
                     self.assertTrue(form.is_file(), c["form"])
                     self.assertEqual(hashlib.sha256(form.read_bytes()).hexdigest(), c["form_sha256"])
-                    self.assertRegex(c["admission_sha256"], r"^[0-9a-f]{64}$")
                     self.assertEqual(c["lang"], "dafny" if form.suffix == ".dfy" else "verus")
+
+    def test_a_sealed_stratum_pins_its_archives(self):
+        for st in strata():
+            d = tomllib.loads(st.read_text(encoding="utf-8"))
+            if not d.get("sealed"):
+                continue
+            with self.subTest(stratum=st.parent.name):
+                self.assertEqual(sorted(p.name for p in st.parent.iterdir()), ["STRATUM.toml"])
+                self.assertTrue(d["archive"].startswith("Hidden/") and d["refs_archive"].startswith("Hidden/"))
+                for key, pin in (("archive", "archive_sha256"), ("refs_archive", "refs_sha256")):
+                    if d[pin] == "PENDING":
+                        continue
+                    arc = ROOT / d[key]
+                    self.assertTrue(arc.is_file(), d[key])
+                    self.assertEqual(hashlib.sha256(arc.read_bytes()).hexdigest(), d[pin])
+                    self.assertFalse(arc.read_bytes().startswith(b"labs/"), "an archive is never plaintext")
+                if d["archive_sha256"] != "PENDING":
+                    self.assertEqual(d["files"], 1 * len(d.get("card", [])))
 
     def test_no_answer_in_the_learner_tree(self):
         for st in strata():

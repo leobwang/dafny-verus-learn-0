@@ -151,7 +151,9 @@ def sealed_strata(root, module) -> list:
     root = Path(root)
     track = "q" if module.startswith("Q") else "r"
     out = []
-    for p in sorted((root / "bench" / "local" / track).glob("*/STRATUM.toml")):
+    base = root / "bench" / "local" / track
+    # a lab's strata sit one level down; topic (e)'s under agentic/ (QPLAN §33.4, Δ409)
+    for p in sorted([*base.glob("*/STRATUM.toml"), *base.glob("agentic/*/STRATUM.toml")]):
         try:
             data = tomllib.loads(p.read_text(encoding="utf-8"))
         except (OSError, ValueError):

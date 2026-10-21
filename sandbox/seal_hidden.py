@@ -6,6 +6,12 @@ session (it names the sealed archive).
 
     python3 sandbox/seal_hidden.py <LAB> --src DIR [--dry-run]
     python3 sandbox/seal_hidden.py <LAB> --src DIR --stratum bench/local/q/<s> [--dry-run]
+    python3 sandbox/seal_hidden.py <LAB> --src DIR --tasks bench/local/q/agentic/<s> [--dry-run]
+
+With --tasks (topic (e)'s sealed task parts, DELTAS Δ409), the tree is the stratum's task
+forms (labs/<LAB>/<card>/tasks/<file>, the layout fvh.statements.unseal reads): it is
+sealed to the stratum's recipient into the path its STRATUM.toml names as `archive`, and
+archive_sha256, files and manifest_sha256 are written back into that STRATUM.toml.
 
 With --stratum, the tree is a sealed stratum's reference deliveries (labs/<LAB>/refs/
 <card>/<path>; Lab 3's, DV6 fix round): it is sealed to the stratum's own recipient into
@@ -119,11 +125,16 @@ def update_pins(lab, digest, count, man_sha):
     tomllib.loads(TRUTH.read_text(encoding="utf-8"))
 
 
-def update_stratum_pins(stratum_toml, digest, count, man_sha):
-    """Rewrite a stratum's refs_sha256, refs_files and refs_manifest_sha256 lines."""
+def update_stratum_pins(stratum_toml, digest, count, man_sha, prefix="refs_"):
+    """Rewrite a stratum's refs_sha256, refs_files and refs_manifest_sha256 lines (with
+    prefix "" and the archive's key name: archive_sha256, files, manifest_sha256)."""
     lines = stratum_toml.read_text(encoding="utf-8").splitlines(keepends=True)
-    vals = {"refs_sha256": f'"{digest}"', "refs_files": str(count),
-            "refs_manifest_sha256": f'"{man_sha}"'}
+    if prefix:
+        vals = {"refs_sha256": f'"{digest}"', "refs_files": str(count),
+                "refs_manifest_sha256": f'"{man_sha}"'}
+    else:
+        vals = {"archive_sha256": f'"{digest}"', "files": str(count),
+                "manifest_sha256": f'"{man_sha}"'}
     for i, x in enumerate(lines):
         if x.lstrip().startswith("["):
             break                       # top-level keys only
@@ -143,12 +154,20 @@ def main(argv=None):
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--stratum", help="seal a sealed stratum's reference deliveries (its "
                                       "STRATUM.toml's refs_archive)")
+    ap.add_argument("--tasks", help="seal a topic (e) stratum's task forms (its STRATUM.toml's "
+                                    "archive)")
     a = ap.parse_args(argv)
+    if a.stratum and a.tasks:
+        say("refused: --stratum or --tasks, not both", err=True)
+        return 2
     why = sandbox.author_gate(ROOT)
     if why:
         say(f"refused: author-only ({why})", err=True)
         return 3
     stoml = None
+    key = "refs_archive"
+    if a.tasks:
+        a.stratum, key = a.tasks, "archive"
     if a.stratum:
         stoml = ROOT / a.stratum / "STRATUM.toml"
         try:
@@ -156,12 +175,12 @@ def main(argv=None):
         except (OSError, ValueError):
             say(f"refused: {a.stratum}/STRATUM.toml cannot be read", err=True)
             return 3
-        if (meta.get("lab") or meta.get("module")) != a.lab or not meta.get("refs_archive"):
-            say(f"refused: {a.stratum}/STRATUM.toml names no lab {a.lab} with a refs_archive",
+        if (meta.get("lab") or meta.get("module")) != a.lab or not meta.get(key):
+            say(f"refused: {a.stratum}/STRATUM.toml names no lab {a.lab} with a {key}",
                 err=True)
             return 3
         any_pin = next(iter(sandbox.truth_pins(ROOT).values()), None) or {}
-        pin = {"archive": meta["refs_archive"], "recipient": meta.get("recipient"),
+        pin = {"archive": meta[key], "recipient": meta.get("recipient"),
                "age_sha256": any_pin.get("age_sha256")}
         if not pin["recipient"] or not pin["age_sha256"]:
             say("refused: the stratum's recipient or the pinned age's sha256 is missing", err=True)
@@ -198,7 +217,8 @@ def main(argv=None):
     tmp.replace(out)
     digest = sha(out.read_bytes())
     if stoml is not None:
-        update_stratum_pins(stoml, digest, len(files) - 1, man_sha)
+        update_stratum_pins(stoml, digest, len(files) - 1, man_sha,
+                            prefix="" if key == "archive" else "refs_")
         where = stoml.relative_to(ROOT).as_posix()
     else:
         update_pins(a.lab, digest, len(files) - 1, man_sha)

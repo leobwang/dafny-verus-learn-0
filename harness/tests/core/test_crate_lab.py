@@ -577,3 +577,10 @@ def test_the_single_use_ledger_is_chained(root, tmp_path):
     lp.write_text(lines[0].replace('"files":3', '"files":4') + "\n" + lines[1] + "\n")
     with pytest.raises(statements.StatementsRefused, match="chain is broken"):
         statements.unseal_ledger(root)
+
+
+def test_a_topic_e_stratum_under_agentic_is_found(root):
+    d = root / "bench" / "local" / "q" / "agentic" / "q31-heldout"
+    d.mkdir(parents=True)
+    (d / "STRATUM.toml").write_text('schema = 1\nmodule = "Q98"\narchive = "Hidden/x.tar.age"\n')
+    assert d / "STRATUM.toml" in statements.sealed_strata(root, "Q98")
