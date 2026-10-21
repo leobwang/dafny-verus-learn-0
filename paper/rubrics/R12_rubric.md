@@ -5,11 +5,11 @@ not favorable results. A prospective calibration fixture cannot unlock a batch.
 D45 live work and unavailable containers remain recorded skips, never passes.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
-paper/solutions/R12_solutions.tex  sha256 bbc1ed910cdda559914285ba2bafe66e998a15758012355eaf95304c5e2d651a
-paper/R12_problems.tex  sha256 b304d28e8797d7d528c83cce44b84361ad2a9f6f5f61ef498054af24ebfcd8ae
+paper/solutions/R12_solutions.tex  sha256 7562ddd41cd0986ee91b15aba6980dc858e4542618977ac4258373a2db589b39
+paper/R12_problems.tex  sha256 9e1edad9fad29f5efdd8617e7b3ed2bce32f1dead734b1c0f740e45cff46b958
 Solutions/dafny/R/R12_Driving/std/R12_Driving.dfy  sha256 f3e694f3554bbc627414284bb3c9d05a59e6292868542c9e84c4a19a93a7ae96
 Solutions/verus/r/r12_driving/src/lib.rs  sha256 a42fe3dc981b3b92960f05fb46be468facb6b05a9e8492cc165f15404f5353e1
-Solutions/harness/r/fvh_r/engine.py  sha256 609b38656306280ad9786261ad3b3c04191eaae9fb2e11ea9a79dfefb508a8a5
+Solutions/harness/r/fvh_r/engine.py  sha256 9d5fe7aaa8439d6f3f684ebb809eae481f9c5aad5fd3945e3dba6be15c8f2835
 Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317bead68da9eeecadb241f4d15
 
 ## Verifier anchors
