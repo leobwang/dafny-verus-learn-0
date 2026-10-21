@@ -15,16 +15,22 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
 ## Verifier anchors
 
 - **Probe H:** hash exactly the unique PREREG-BEGIN through PREREG-END block.
-  Recompute the actual plan bytes and compare its single plan-sha256 binding.
-  Require the newest genuine prereg row with the same hash and every method
-  dimension≥3. A prereg-fixture row or gold fixture is never an unlock.
-- **Probe B:** recompute40×4×3=480runs,480×10=4800calls,1200calls per Qwen arm;
-  Claude10×10+≤10sentinels≤110calls. Check pilots/public slices within the
-  registered totals, and each arm's tokens/GPU/wall cost within10GPU-hours.
-  Baseline verification is no model call; malformed generation is one node.
-- **Probe M:** run fvh.stats.mde_two_proportions at the registration's actual
-  algorithm-cluster n, baseline, pairing and family-adjusted alpha. Repeats do not
-  create independent tasks. Reproduce Holm and bootstrap from the same logs.
+  Recompute the actual plan bytes and compare its single plan-sha256 binding,
+  and recompute bench/local/r/labalpha/FREEZE.toml's sha256 against the block's
+  single freeze-sha256 line (fvh refuses a lab plan whose registration names
+  another frame). Require the newest genuine prereg row with the same hash and
+  every method dimension ≥ 3. A prereg-fixture row or gold fixture is never an
+  unlock.
+- **Probe B:** recompute each plan's calls as tasks × arms × 3 repeats × 10
+  node calls from the plan and the frame (confirmatory: the frame's
+  confirmatory tasks × the two primary arms; descriptive: the frame's
+  descriptive tasks × the other two regimes) and check the sum, with any Claude
+  calls and sentinels, against R12's ceiling (10,700 Qwen calls, 80 GPU-hours)
+  at a measured cost per call. Baseline verification is no model call; a failed
+  node is one call.
+- **Probe M:** run fvh.stats.mde_paired_clusters_sim with the cluster sizes of the
+  stratum's confirmatory clusters and the frame's power_sim_cell arguments; the
+  registration's pasted call and output must equal it and the frame's values.
 - **Probe F:** tools/R12/admit_forms.py checks actual native model/header and
   executable skeleton identity, with each call bound to a local proof callee.
   Its native mode checks a zero-hole proof-stage failing baseline and clean
@@ -37,84 +43,89 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
   success in the pinned container from its original task. Missing apparatus
   leaves the claim deferred; never move agent execution onto the host.
 
-## B1 — pre-registration
+## B1 — pre-registration (inside the course-fixed frame, D51, D62)
+
+The frame (bench/local/r/labalpha/FREEZE.toml) fixes the contrast, estimand,
+test, budget axis, aggregation, missing-result rule, resource accounting,
+corpus, composition and K. Score what the learner writes; a registration that
+changes or re-chooses a frame field, or names no frame, is held on the
+dimension that field belongs to.
 
 ### hypothesis-precision
 
-- **HP.a:** name primary localized-minus-raw best-first contrasts, budget points,
-  secondary regime comparisons, direction, refutation and unresolved crossings.
-- **HP.b:** define cumulative success from the full original-task gate and exact
-  algorithm-cluster paired estimator. Score0, missing diagnostics or empty obligations
-  cannot mean accepted. Native source/model/code/context bindings stay explicit.
-- **HP.c:** state80%prediction intervals before data and all stopping rules.
-  Stop on fixed cap, success or exhausted frontier, never an arm's early lead.
+- **HP.a:** the claim restates, in the learner's words, what the fixed contrast
+  can show on this corpus, an expected direction with a reason, and the result
+  that would refute it; crossings of the descriptive curves are never claimed.
+- **HP.b:** an 80% prediction interval for theta is written before any data,
+  on the AUC scale, and consistent with the MDE the learner reproduced.
+- **HP.c:** the stopping rule is complete: a run stops at success, the node
+  cap or an exhausted frontier; a batch pauses at R12's 80 GPU-hour ceiling and
+  resumes; the study stops at the frame's fixed N, never at an arm's early lead.
 
 ### budget-parity
 
-- **BP.a:** one fixed parametric engine, independent10/1/fifo, repair1/10/lifo,
-  best3/10/best and the identical best config with raw feedback. Each budget
-  point is a prefix of one ten-node run; no prefix-specific tuning or reruns.
-- **BP.b:** malformed samples count nodes/width; failed calls remain metered.
-  Distinguish ten model generations from initial baseline and closure turns.
-- **BP.c:** every product and per-arm cost recomputes. Pin a measured throughput
-  assumption;7.5GPU-seconds/call is a ceiling calculation, not observed speed.
-  An infeasible plan stays locked/deferred or is amended and re-graded.
-- **BP.d:** pilots and the unused public slice are not extra free calls. A
-  changed or separately executed plan needs its own exact binding and grade.
+- **BP.a:** the learner explains why the four arms are one engine at fixed
+  (width, depth, priority), why each budget point is a prefix of one run, and
+  why a failed node consumes its call and its parent's slot.
+- **BP.b:** the plans' arithmetic recomputes (Probe B) against the ceiling with
+  a measured cost per call (about 72 GPU-seconds on this corpus) and a
+  truncation sensitivity line; an infeasible plan stays locked or is amended
+  and re-graded.
+- **BP.c:** each executed plan has its own binding and grade; no pilot or
+  extra arm is free.
 
 ### variance
 
-- **VA.a:** the20paired-language algorithm clusters are the uncertainty units; keep all repeats/budgets/arms
-  paired inside a task. Register repeated runs and actual request seeds;
-  Claude repeated runs are not controllable seeds.
-- **VA.b:** use fvh.stats for paired permutation tests, Holm over the registered
-  family and bootstrap intervals. State resampling counts/seeds. Pointwise
-  intervals cannot be described as simultaneous bands without a valid method.
-- **VA.c:** MDE matches Probe M at independent n=20algorithm clusters and adjusted alpha. Name
-  approximation/correlation limits and report uncertainty around crossings. At
-  n20/baseline0.5/alpha0.05÷40/pairedTrue the frozen call returns infinity;
-  a truthful exploratory/underpowered disclosure is required. No finite value
-  or post-hoc multiplicity reduction is accepted as a repair.
+- **VA.a:** the justification of the fixed test is correct: clusters are the
+  unit (repeats and budget points stay inside a cluster), one paired sign-flip
+  test replaces per-budget tests so no multiplicity correction is needed, the
+  interval is a whole-cluster bootstrap, and one test cannot locate crossings.
+- **VA.b:** the MDE reproduction equals Probe M to the digits printed; the
+  learner says which effects the design cannot detect and why more repeats
+  barely move the bound (effect heterogeneity and the number of clusters
+  dominate).
+- **VA.c:** the learner's descriptive analyses use fvh.stats (bands from
+  cluster_bootstrap_ci) and call pointwise bands pointwise.
 
 ### contamination
 
-- **CT.a:**40admitted local forms,20per language, exact hashes and provenance;
-  previously seen course-derived goals remain disclosed as such.
-- **CT.b:** public slice is from an unused pinned pool and possibly seen by the
-  models; record draw exclusions, source commits and any novelty/perturbation
-  audit. No claim of unseen tasks follows from fresh filenames or authorship.
+- **CT.a:** the regex and public strata are kept apart; the regex forms are
+  course-derived (written after the pinned model's release, still previously
+  exposed to the learner), the public ones possibly seen; the sealed R13/R14
+  clusters are outside every plan.
+- **CT.b:** draw exclusions, the walk's record and the deferred perturbation
+  probe are cited by path, not re-derived; no unseen claim follows from fresh
+  filenames.
 
 ### cheat-audit
 
-- **CA.a:** original model/spec/code/levers preserved; renderer and independent
-  source-frame guard are separate. Approve only local proof callees at proof
-  sites. No model-returned verdict or tool flag controls acceptance.
-- **CA.b:** localized signals use only candidate-native documents and trusted
-  spans, never hidden references. Unknown paths remain unlocalized; unavailable
-  phase/count/score remains unavailable. Frozen provenance and container rules
-  bind every accepted candidate and final re-judgement.
-- **CA.c:** infra failures, malformed, killed, truncated and deferred attempts
-  follow frozen accounting; truncation sensitivity is disclosed. No favorable
-  retrying or fabricated grade/event unlocks. Administrative skips stay unrun.
+- **CA.a:** the cheat surface names changed statements or levers, empty or
+  unknown scores, malformed replies, host fallback and re-issued scored
+  attempts, each with the gate that stops it (the lab gate's lever check, the
+  source-frame guard, the full gate, container provenance, the ledger).
+- **CA.b:** every accepted candidate is re-judged in the container; the
+  learner's own engine cannot mark success.
 
 ### disclosure
 
-- **DI.a:** small-scale model substitution, one hardware/solver pin, task exposure,
-  Claude subject/grader and missing live apparatus are explicit limitations.
-- **DI.b:** final prompt/task/engine/adapter/config hashes, generation settings,
-  seeds, intervals, plan digest and current measured cost are actually filled
-  before grading. A prospective exemplar with missing material stays locked.
+- **DI.a:** freeze-sha256 and each plan-sha256 are actual, single and match
+  (Probe H); seeds, settings and measured costs are filled before grading.
+- **DI.b:** limitations are explicit: one model and hardware pin, the corpus,
+  prompts and B = 10, Claude as subject and grader, the token-axis line as the
+  only separation of localization from a shorter prompt. Frame fields are cited,
+  not re-stated as the learner's own design choices.
 
 ## B2 — report; dimension: reproducibility
 
-- **RP.a:** one command regenerates all curves, language strata, paired effects,
-  corrected tests, intervals, costs and truncation rates from immutable logs.
+- **RP.a:** one command regenerates theta, its interval and test, the
+  sensitivity line, the four curves with bands, the strata and language views,
+  costs and truncation rates from immutable logs (fvh report R12 --labalpha).
 - **RP.b:** original-task container re-judgement, audit/frame/freeze evidence for
-  every claimed success;20transcript moments with actual artifact references.
-- **RP.c:** list every deviation, score prediction intervals and retain all
+  every claimed success; 20 transcript moments with actual artifact references.
+- **RP.c:** list every deviation, score the prediction interval and retain all
   registered unrun/deferred ids. Software replay does not supply a live result.
-- **RP.d:** small Claude subset is descriptive; uncertainty does not become a
-  significant crossing through post-hoc budget or family selection.
+- **RP.d:** the small Claude subset is descriptive; no crossing becomes a
+  tested finding through post-hoc budget or family selection.
 
 ## B3–B4 — paper cards; dimension: card-fidelity
 
@@ -145,6 +156,6 @@ The toolwright's profiler keeps exact symbol/repeat/failed-result scope and
 unavailable resources, immutable document snapshots and CLI/model frame hashes.
 Keep two disjoint six-question viva draws and two paired PP subjects.
 
-Gold is an author method exemplar, expected4where populated; actual unlock still
-requires every final artifact. Flawed is expected≤2from quoted contradictions
+Gold is an author method exemplar, expected 4 where populated; actual unlock still
+requires every final artifact. Flawed is expected ≤ 2 from quoted contradictions
 and the probes above. Expected fixture scores are not measured grading sessions.
