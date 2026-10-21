@@ -1,0 +1,63 @@
+# bench/local/q/agentic/q31-dev/STRATUM.toml — Q31's open dev stratum (QPLAN §33.4; DELTAS Δ408).
+# Learner-visible; the task forms are course-authored and shipped, the answers are not here.
+# Composition under D76's fallback (b) (Δ405): 40 tasks, 24 course-local and 16 public; this
+# file grows as the author admits tasks (the running count is `cards` below against `target`).
+#
+# A card is admitted only with every result of Solutions/tools/agentic/admit_task.py: the
+# answer passes `scripts/vcheck --gate` (0 holes) and `scripts/vaudit` (0 findings) and the
+# lab gate on this form; the form fails `scripts/vcheck --gate` at the verify stage; the
+# answer is stable over seeds 1-3 (Dafny: every bundled Z3, solver diversity, not
+# independent checking). `maxauto_fails` (Dafny) says whether the form still fails with its
+# `{:induction false}` removed. `admission_sha256` pins the author's evidence record.
+# Course-local tasks are posed nowhere else in the course and written after the models'
+# release (the contamination control); none is a stripped form of a Q01-Q18 item.
+schema = 1
+module = "Q31"
+stratum = "q31-dev"
+role = "dev"
+sealed = false
+target = { total = 40, course_local = 24, public = 16 }
+
+[[card]]
+id = "cl-d1-sum-append"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d1-sum-append/tasks/cl-d1-sum-append.dfy"
+form_sha256 = "62d64e15dd1cb40b045ad48b286c89ae1efb3be70b5ce37a6a474054f770352b"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "d87819d7bbb05022c124f048fd3622dab13e87cb039aa6d06f92d09cbe336662"
+
+[[card]]
+id = "cl-d2-max-in"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d2-max-in/tasks/cl-d2-max-in.dfy"
+form_sha256 = "996571c9a5d9050a66d095a1bf68b480a43dc04f1ad54dad01e2f689210dcc9b"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "f3085f79e5b6c0bc360239fb348c8c2e92c56597c3f9cc80a29fe8e7c5be0ff8"
+
+[[card]]
+id = "cl-v1-sum-push"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v1-sum-push/tasks/cl-v1-sum-push.rs"
+form_sha256 = "9aec128b66a621bdd735806116c0b47aead19ae176c3524dce12b5b7c682a82e"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "69b477ba300f9b4ffa6e1cae87acc4454ec145e513ac2612120d5366b8e4b2be"
+
+[[card]]
+id = "cl-v2-count-le"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v2-count-le/tasks/cl-v2-count-le.rs"
+form_sha256 = "18f854f22672858c067790d2935c9750baa2017407b4bcb3715a44a5fb059567"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "ad7905046a6cd14dbf842383073f51d5401782ef88fdcf78e997b3556da931d7"
