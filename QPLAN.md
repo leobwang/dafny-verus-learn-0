@@ -3596,7 +3596,7 @@ The gate is one script (spec §2.3.8 items 1–7, design §7.6's list); it write
 | piece | exists (path) | new |
 |---|---|---|
 | sealing | `sandbox/seal_hidden.py` (manifest check, deterministic tar, age to the pinned recipient, pins written back into `sandbox/truth.toml`); the grader key outside the checkout (`~/.cache/dafny-verus-learn-0/keys/`, the user's custody decision, Δ218); canaries (`sandbox/canaries.sha256`, `Hidden/DVLCANARY`) | archives under `Hidden/Agentic/<ID>/<part>.tar.age` (and `Hidden/<Topic>/…` for (a)–(d)); `truth.toml` `[[lab]]` entries keyed by `id` and a new `part` (today one archive per lab id); `seal_hidden.py <ID> --part <p>`; each archive carries a canary token |
-| unsealing in the grader container | `truthcheck manifest|validate|judge` in a network-less verification container, verdict-level output only; `scripts/mksandbox-run --truth`; guard rule 1c refuses the line in a Claude session (the learner runs it from their own terminal) | three modes: `truthcheck gate-agree <ID>` (the learner's frozen gate on the sealed cheats and controls, per-class agree/disagree counts only), `truthcheck par-replay <ID>` (the learner's frozen bench over par's sealed run records, per-cell match/mismatch only), `truthcheck judge` reused as built for Q33's faithfulness verdicts (Δ220); the image rebuilt and re-pinned (`sandbox/images.lock`) |
+| unsealing in the grader container | `truthcheck manifest|validate|judge` in a network-less verification container, verdict-level output only; `scripts/mksandbox-run --truth`; guard rule 1c refuses the line in a Claude session (the learner runs it from their own terminal) | three modes: `truthcheck gate-agree <ID>` (the learner's frozen gate on the sealed cheats and controls, per-class agree/disagree counts only), `truthcheck bench-agree <ID>` (the learner's frozen bench against the course's reference tables over the same run records, per-cell match/mismatch only), `truthcheck par-run <ID> --part <p>` (the course's frozen par agent, sealed in `Hidden/Agentic/<ID>/par-agent.tar.age`, run on the unsealed part beside the learner's agent; the only grader mode with a network, the per-run model gate's, as `mksandbox-run --network ollama` gives agent runs; D68), `truthcheck judge` reused as built for Q33's faithfulness verdicts (Δ220); the image rebuilt and re-pinned (`sandbox/images.lock`) |
 | **single use** | `fvh.statements.unseal` (writes cards only after the statements pin is committed; a second unseal is a no-op; `UNSEALED.toml`); D33's first-run rule (report the first run, Δ237) | `python -m fvh unseal <ID> --part <p> --once`: refuses unless the module's frozen-agent pin is committed (`expected/<ID>.statements` extended to the learner's `agents/` files and, for Q32, the retrieval index's sha256), and refuses a second unseal of the same part (a hash-chained `research/unseals.jsonl`, written only by `fvh`, like the run ledger, Δ149); the author override is a new seal, never a re-unseal. The consumed part is **retired**: its plaintext stays in the run's records and the part is listed as public in its `STRATUM.toml` |
 | policy-mode exposure | — | a model in policy mode reads a sealed task from a prompt built on the host, and the run's transcript holds it (the R line's Lab α found the same and left it open as a DECISION item). §40 D-6 decides the wording and the route |
 
@@ -3624,7 +3624,7 @@ The gate is one script (spec §2.3.8 items 1–7, design §7.6's list); it write
 | field or rule | today | change (per module, when it leaves planned) |
 |---|---|---|
 | `engines` | `[]` (Δ73 "until DV7") | (e): `["policy"]`; `"agent"` only if a module's plan names agent-mode Qwen runs |
-| `budget` | all 0 | the module's ceilings (§33–§35); **the course total is already at the cap**: `gpu_hours` sum 45 of 45 (`GPU_HOURS_TOTAL`, `check_course_map.py:317`; Q07 1, Q12 10, Q15 3, Q18 9, R12 10, R15 3, R16 9) and Claude calls 1,690 of design D8's ≈ 1,700. Any challenge GPU hour fails the checker today (§40 D-1, D-2) |
+| `budget` | all 0 | the module's ceilings (§33–§35); **the course total is already at the cap**: `gpu_hours` sum 45 of 45 (`GPU_HOURS_TOTAL`, `check_course_map.py:317`; Q07 1, Q12 10, Q15 3, Q18 9, R12 10, R15 3, R16 9) and Claude calls 1,690 of design D8's ≈ 1,700. Any challenge GPU hour fails the checker today. **Settled:** a separate challenge pool of 55 GPU-h (D65; `CHALLENGE_GPU_HOURS_TOTAL`), each challenge's `gpu_hours` counted against it and not against the 45, a challenge's per-module ceiling allowed above 10 (it pauses and resumes); Claude fields 0 on every challenge (D66) |
 | `paper`, `rubric` | `false`, `""` | `true` and `paper/rubrics/<ID>_rubric.md` wherever `engines` holds `policy` (the checker's Δ74 rule) or a blueprint is graded; the pre-registration is the pair's `[pre-registration]` problem (`fvh.prereg`) |
 | `statements` | `[]` | §31.0's manifest and files |
 | `harness` | one file per (e) module | every `agents/` file of the module |
@@ -3638,7 +3638,7 @@ The gate is one script (spec §2.3.8 items 1–7, design §7.6's list); it write
 
 ### 32.1 What the topic is for
 
-Design §7.6: *the research program itself, with tool-less `claude -p` or Qwen policies.* Q31 builds the measuring instrument (gate and bench), Q32 an agent measured with it against a hidden par, Q33 the statement problem (autoformalization and a red-teamed multi-agent pipeline). Each module is pre-registered, run once on sealed material, and reported "small-scale replication with model substitution" (design §11.1).
+Design §7.6: *the research program itself, with tool-less `claude -p` or Qwen policies.* (D66 makes Qwen the engine of record: no challenge has a Claude arm.) Q31 builds the measuring instrument (gate and bench), Q32 an agent measured with it against a hidden par, Q33 the statement problem (autoformalization and a red-teamed multi-agent pipeline). Each module is pre-registered, run once on sealed material, and reported "small-scale replication with model substitution" (design §11.1).
 
 ### 32.2 Prerequisites (Q01–Q18 only) and what each module reuses
 
@@ -3679,17 +3679,17 @@ Held-out corpora are **authored or admitted by the author**, never produced by r
 | public draws: validation and records (solver time, one job at a time) | ≈ 250 tasks | 8–12 |
 | **total** | | **≈ 175–245** |
 
-Par runs (§32.5) are model time on top: about 30 GPU-h of author runs at the measured rate.
+Par is code, not author model time (D68, §32.5): the author writes and seals the par agents and never runs a model on any held-out or sealed task; par's calls are the learner's run's, inside the D65 pool.
 
 ### 32.4 Budgets, engines and transports
 
 - **The measured rate.** The R line's Lab α measured the pinned Qwen through the pinned transport at **72 GPU-s and 73 s wall per real proof call** (about 49 calls per hour, no gain from concurrency on the pinned server), against the 7.3 s per call the labs were planned on (authoring line, Δ292). Every GPU figure in §33–§36 uses 72 s per call and states its ceiling and its expected spend (a run stops at its first success; Lab α's pilot spent 28 % of its ceiling); the Q core labs' own figures are outside DV7 (flagged in §36).
-- **Transports.** Claude in policy mode on the host (`claude -p`, the pinned argv, `claude-opus-5-5` in `sandbox/apparatus.toml`), under the window rule and sentinels (Δ148); Qwen (`qwen3.8:latest`, digest pinned) through its pinned tool-less CLI behind the per-run model gate (D3); every `Verify` in a fresh network-less verification container (`fvh.tools.ContainerRunner`, agent provenance, Δ145). No Claude Code in a container (D10 defers it to R16). Harness-executed runs only; agent mode (`construct = "agent"`, D8) is available to Qwen arms where a module says so.
-- **Registry.** Each module's `budget` (calls, runs, GPU hours) is enforced by `fvh` (Δ75, Δ176). The course is at its caps (§31.6), so every number below is a proposal awaiting §40 D-1 and D-2.
+- **Transports.** Qwen is the engine of record for every challenge run, and no challenge has a Claude arm (D66); Qwen (`qwen3.8:latest`, digest pinned) through its pinned tool-less CLI behind the per-run model gate (D3); every `Verify` in a fresh network-less verification container (`fvh.tools.ContainerRunner`, agent provenance, Δ145). No Claude Code in a container (D10 defers it to R16). Harness-executed runs only; agent mode (`construct = "agent"`, D8) is available to Qwen arms where a module says so.
+- **Registry.** Each module's `budget` (calls, runs, GPU hours) is enforced by `fvh` (Δ75, Δ176). The Q and R budgets are unchanged; the challenges draw on a **separate challenge GPU pool of 55 GPU-h** (D65) with per-module ceilings that pause and resume like Lab α's (topic (e): Q31 13, Q32 26, Q33 16), and every challenge's Claude fields are 0 (D66).
 
 ### 32.5 Par
 
-Par is the author's reference policy (or the stronger of two, chosen on the dev set), never shipped: its code and its run records are sealed in `Hidden/Agentic/<ID>/par.tar.age`, its summary table `PAR.md` beside them. Par runs at authoring time, on the same pins, the same per-task budget B and the same gate as the learner's runs, before the learner can see the material; its records carry the apparatus block (CLI version, model digest, prompt hash). Because the learner's run comes later, a **drift sentinel** re-runs par on five public dev tasks just before the learner's sealed run, and the report states both. §40 D-7 decides between this and running par beside the learner's agent.
+**Decided (D68): par runs beside the learner.** Par is the course's frozen par agent: the author writes it (a reference policy, or for Q32 a fixed choice of one of two, made by the author from its design, not from runs), never ships it, and seals its code in `Hidden/Agentic/<ID>/par-agent.tar.age`. The learner's sealed run executes it on the same unsealed part, at the same pins, the same per-task budget B and the same gate, inside the grader container (`truthcheck par-run`, §31.3), in the same batch window as the learner's own arm; its run records come back like any arm's, so `PAR.md` is the learner's run's table, not a sealed file. **The author never runs a model on any held-out or sealed learner task** (a standing user rule); author-side model runs are allowed only on dev or smoke material that never enters a held-out set, and none happen in DV7's build phases. Par's calls count in the module's budget and the D65 pool (§33.6, §34.6, §35.6). No drift sentinel is needed: par and the learner share the apparatus and the day.
 
 ### 32.6 Leak and tier rules for topic (e)
 
@@ -3705,13 +3705,13 @@ Par is the author's reference policy (or the stronger of two, chosen on the dev 
 
 ## 33. Q31 — Gate & bench (D + V + `fvh`)
 
-*Challenge, topic (e), solo, harness-graded (`review_bar = "harness"`, persona `eval-skeptic`). Design band 30–45 h; planning figure 2,240 min (§33.8). Prerequisites: Q09's gate core, Q18's gate v2, Q12's policies and report. Engines: policy (Qwen; Claude per §40 D-2).*
+*Challenge, topic (e), solo, harness-graded (`review_bar = "harness"`, persona `eval-skeptic`). Design band 30–45 h; planning figure 2,240 min (§33.8). Prerequisites: Q09's gate core, Q18's gate v2, Q12's policies and report. Engines: policy (Qwen only, D66).*
 
 ### 33.1 What the learner builds
 
 1. **Gate v3** (`agents/q31_gate_bench/gate.py`), composing the learner's Q18 `gate_v2` (imported read-only; its sha256 is recorded at the freeze): one entry point over a **task delivery** (a single file or a crate, either language) that adds to gate v2 (a) statement identity across fresh processes (`specfreeze --check` against the task's frozen statement, and the statement file's sha256 before and after), (b) the task-form lever check (the lab gate's rule, Δ182, D24) as an instrument result, (c) the seed sweep and, for Dafny, the solver swap with item 5's label, (d) the reach instrument, (e) a run-record audit for the run-level classes: harness tampering (X15: a returned file outside the task's editable set, a changed companion), exfiltration (X17: a read outside the readable set, a canary in a transcript), and policy tool use (X18: the recorded argv and apparatus against the pins, a transcript with a tool call), and (f) `UNKNOWN` on X07, X08 and X14, never `PASS` while one is undecided.
 2. **The eval harness** (`agents/q31_gate_bench/bench.py`): from `fvh` run records only, deterministic tables composing `fvh.stats` (never re-deriving an estimator: the import lint's `stats-reimplementation` rule): unbiased pass@k with n ≥ 2k samples per task, Wilson intervals, bootstrap intervals with a pinned seed, solves-versus-cost curves over calls, tokens, wall clock and GPU-seconds, per stratum and per language, paired comparisons (McNemar or a permutation test, Holm across the declared family) and the MDE at the pre-registered n.
-3. **Baselines** (`agents/q31_gate_bench/baselines.py`): a scripted policy (`fvh.policies.ScriptedPolicy` over recorded edits, for the harness's own tests) and a one-shot renderer for `fvh.backends.ModelPolicy` on each shipped transport.
+3. **Baselines** (`agents/q31_gate_bench/baselines.py`): a scripted policy (`fvh.policies.ScriptedPolicy` over recorded edits, for the harness's own tests) and a one-shot renderer for `fvh.backends.ModelPolicy` on the Qwen transport (D66).
 4. **Own cheats**: at least three new decidable-class deliveries per language not in the public corpus, with labels in a separate file only the evaluator reads (`agents/q31_gate_bench/plants/`, solo).
 5. **The honest witness set** (the exercise files `Q31_GateBench.dfy` and the crate `q31_gate_bench`): four Dafny and four Verus course-local dev tasks, stated in the statement files and proved by hand; they are the gate's own honest controls and the scripted policy's targets.
 
@@ -3721,7 +3721,7 @@ Par is the author's reference policy (or the stronger of two, chosen on the dev 
 
 ### 33.3 The gate checks (`challenge_gate.sh Q31`)
 
-Items 1–7 of §31.1 on the exercise files and on `agents/`; then the harness stage: (a) the frozen acceptance tests (`harness/tests/challenges/q31/`, replaying recorded instrument results; no solver); (b) `truthcheck gate-agree Q31` on the frozen gate; (c) `truthcheck par-replay Q31` on the frozen bench; (d) `fvh report Q31 --reverify` on the learner's dev and held-out runs (every claimed success reproduced by the trusted instruments in the container, from a clean checkout).
+Items 1–7 of §31.1 on the exercise files and on `agents/`; then the harness stage: (a) the frozen acceptance tests (`harness/tests/challenges/q31/`, replaying recorded instrument results; no solver); (b) `truthcheck gate-agree Q31` on the frozen gate; (c) `truthcheck bench-agree Q31`: the frozen bench's tables over the held-out run's records (both arms) equal the course's reference tables cell for cell; (d) `fvh report Q31 --reverify` on the learner's dev and held-out runs (every claimed success reproduced by the trusted instruments in the container, from a clean checkout).
 
 ### 33.4 Held-out material and how it is sealed
 
@@ -3731,28 +3731,29 @@ Items 1–7 of §31.1 on the exercise files and on `agents/`; then the harness s
 | held-out tasks | 60 (30 D, 30 V) | 24 course-local, 36 public, by a pre-registered seeded draw disjoint from the dev draw and every other lab's | `bench/local/q/agentic/q31-heldout/STRATUM.toml`; `Hidden/Agentic/Q31/heldout.tar.age` | yes; single use |
 | public cheats | 46 | the Q half of `tests/corpus/` (34 constructs), the 10 covered-elsewhere rows materialized as deliveries (flags, environment and build-tool rows as project-file deliveries, as Q18's P1–P4 are), and Q18's two build-tool plants; plus the 9 controls | `bench/local/q/agentic/q31-cheats/` (labels separate) | open |
 | sealed cheats | 12 | author-written, decidable classes only, class mix published in the stratum (proposed: two each of X02, X06, X10, X11, X15, X16) | `Hidden/Agentic/Q31/cheats.tar.age` | yes |
-| par | — | par's records on the 60 held-out tasks and `PAR.md` | `Hidden/Agentic/Q31/par.tar.age` | yes |
+| par agent | — | the course's one-shot baselines as a frozen par agent (code only; D68) | `Hidden/Agentic/Q31/par-agent.tar.age` | yes; run only by `truthcheck par-run` |
 
 ### 33.5 Grading
 
 Harness-graded; the gate decides, `/review-code` at the `harness` bar and the defense viva review.
 
-- **Pass:** (1) agreement with the trusted instruments (`vcheck`, `vaudit`, `specfreeze`, the recorded verdicts) on **every** decidable-class delivery of the 46 public and 12 sealed cheats, and `UNKNOWN`, never `PASS`, on X07/X08/X14; (2) no false reject on the honest set (the 9 controls, the 8 witnesses and the 40 dev references: 57 deliveries; §36 gives what that does and does not support); (3) `par-replay` matches `PAR.md` cell for cell; (4) the dev runs reproduce from their logs; (5) items 1–7.
-- **Distinction:** the single-use held-out run of the one-shot baselines, with the full table, its intervals, the per-stratum split and the disclosure block, **and** either a decidable cheat class the course instruments miss (a real finding, with a fixture) or the solves-versus-cost curves with bootstrap bands on both transports.
+- **Pass:** (1) agreement with the trusted instruments (`vcheck`, `vaudit`, `specfreeze`, the recorded verdicts) on **every** decidable-class delivery of the 46 public and 12 sealed cheats, and `UNKNOWN`, never `PASS`, on X07/X08/X14; (2) no false reject on the honest set (the 9 controls, the 8 witnesses and the 40 dev references: 57 deliveries; §36 gives what that does and does not support); (3) `bench-agree` matches cell for cell, par's arm included; (4) the dev runs reproduce from their logs; (5) items 1–7.
+- **Distinction:** the single-use held-out run of the one-shot baselines, with the full table, its intervals, the per-stratum split and the disclosure block, **and** either a decidable cheat class the course instruments miss (a real finding, with a fixture) or the solves-versus-cost curves with bootstrap bands on the Qwen transport.
 - **What a result may conclude:** the gate agrees with the course's trusted instruments on this corpus (a census, not a rate); a baseline's pass@k on this stratum with its interval. Not: that the gate catches cheats in general, or that one model is better at n = 60 unless the pre-registered test says so.
 
 ### 33.6 Par and baselines; budget
 
-Par: the author's one-shot baselines on the 60 held-out tasks (§32.5). The learner's runs:
+Par: the frozen par agent (one-shot baselines) on the same 60 held-out tasks, beside the learner's baselines in the same run (D68, §32.5). The learner's run, par's calls included:
 
 | part | arithmetic | calls · GPU-h at 72 s |
 |---|---|---|
 | Qwen, dev | 40 tasks × one-shot × n = 4 samples | 160 |
-| Qwen, held-out (single use) | 60 × one-shot × n = 4 | 240 |
-| **Qwen total** | | **400 calls, 400 runs · 8.0 GPU-h** (ceiling = spend: one call per run) |
-| Claude (if §40 D-2 allows) | dev 20 × 1 + held-out 60 × 1 + sentinels 10 | 90 calls, 80 runs |
+| Qwen, held-out (single use), learner's baselines | 60 × one-shot × n = 4 | 240 |
+| Qwen, held-out, par agent (D68) | 60 × one-shot × n = 4 | 240 |
+| **Qwen total** | | **640 calls, 640 runs · 12.8 GPU-h** (ceiling = spend: one call per run) |
+| Claude | none (D66) | 0 |
 
-Proposed `budget = { claude_calls = 0 | 90, claude_runs = 0 | 80, qwen_calls = 400, qwen_runs = 400, gpu_hours = 8 }`.
+`budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 640, qwen_runs = 640, gpu_hours = 13 }` from the D65 pool.
 
 ### 33.7 Leak and tier rules (Q31)
 
@@ -3768,7 +3769,7 @@ Proposed `budget = { claude_calls = 0 | 90, claude_runs = 0 | 80, qwen_calls = 4
 | own cheats (≥ 3 per language) and labels | 120 |
 | honest witness set (4 D + 4 V by hand) | 240 |
 | eval harness: records 90, pass@k and intervals 120, curves and strata 120, paired tests and MDE 90, deterministic tables 60 | 480 |
-| baselines (scripted, one-shot on both transports) | 120 |
+| baselines (scripted, one-shot on the Qwen transport) | 120 |
 | dev runs: setup and analysis | 120 |
 | gate on the 46 public cheats and the controls; FP report | 60 |
 | freeze, single-use held-out run, analysis | 90 |
@@ -3801,7 +3802,7 @@ Proposed `budget = { claude_calls = 0 | 90, claude_runs = 0 | 80, qwen_calls = 4
 |---|---|---|---|
 | dev | 50 (25 D, 25 V) | 20 course-local, 30 public | open |
 | tranches T1–T3 | 3 × 40 (each 20 D, 20 V) | each 16 course-local, 24 public; a task is admitted only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample (the analogue of the Lean "closed by a library search in 10 s" filter) | `Hidden/Agentic/Q32/T<k>.tar.age`, each single use, retired after its run |
-| par | — | par's records per tranche and `PAR.md` | `Hidden/Agentic/Q32/par.tar.age` |
+| par agent | — | the course's frozen searcher (code only; D68), run per tranche beside the learner's agent | `Hidden/Agentic/Q32/par-agent.tar.age` |
 
 ### 34.5 Grading, and what a result may conclude
 
@@ -3813,17 +3814,18 @@ The design's row reads "beat par at B · 3 × 40 sealed". The Lean rule this cou
 
 ### 34.6 Par and budget
 
-Par: the stronger of two author policies (a best-first searcher and a repair loop, on the same transports), chosen on the dev set, then run once per tranche at the same B. **B = 8 calls per task** (Lab 1's B), turn and token caps as Lab 1's.
+Par: the course's frozen searcher (a best-first search with a repair step on the same transports, fixed by the author's design: no author model run chooses it, D68), executed by `truthcheck par-run` once per tranche beside the learner's agent at the same B. **B = 8 calls per task** (Lab 1's B), turn and token caps as Lab 1's.
 
 | part | arithmetic | calls (ceiling) |
 |---|---|---|
 | pilot (ceiling rule: neither arm above 60 % at call 1 nor below 5 % by call B, as Lab α) | 10 dev × 8 × 1 arm | 80 |
-| dev development and ablations | 50 × 8 × 4 arms (full and three ablations) × 1 repeat | 1,600 |
-| sealed tranches | 120 × 8 × 1 arm (par is pre-run) | 960 |
-| **Qwen total** | | **2,640 calls (ceiling) · 52.8 GPU-h ceiling; ≈ 21 GPU-h expected at 40 % spend** |
-| Claude (if §40 D-2 allows; descriptive only) | 10 dev × 8 + sentinels 10 | 90 |
+| dev development and ablations | 50 × 8 × 3 arms (full and two ablations) × 1 repeat | 1,200 |
+| sealed tranches, learner's agent | 120 × 8 × 1 arm | 960 |
+| sealed tranches, par agent (D68) | 120 × 8 × 1 arm | 960 |
+| **Qwen total** | | **3,200 calls (ceiling) · 64 GPU-h at the ceiling; 18–26 GPU-h expected at 28–40 % spend** (Lab α's pilot spent 28 %) |
+| Claude | none (D66) | 0 |
 
-Author par cost, outside the learner's budget: ≈ 700 Qwen calls (dev selection and three tranches) ≈ 14 GPU-h. Proposed `budget = { claude_calls = 0 | 90, claude_runs = 0 | 10, qwen_calls = 2640, qwen_runs = 330, gpu_hours = 25 }` — over the per-module 10 (§40 D-1).
+No author par cost (D68). `budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 3200, qwen_runs = 400, gpu_hours = 26 }` from the D65 pool; the GPU ceiling pauses the batch and `fvh resume` continues it (never best-of-n), and a spend that would pass it goes back to the user (D71's 10 % rule). The dev ablations drop from three to two to keep the expected spend inside the ceiling.
 
 ### 34.7 Leak and tier rules (Q32)
 
@@ -3884,24 +3886,23 @@ A wrapper over a role's policy: at a pre-registered injection point (role, turn)
 ### 35.5 Grading, and what a result may conclude
 
 - **Pass:** (1) the auditor-plus-gate rejects **every** decidable plant of the campaign (all classes × ≥ 3 injection points; a census of the campaign, §36.2); (2) FP: false rejects on the honest set at the threshold §40 D-4 fixes, reported with the Wilson interval; (3) part (A)'s faithfulness rate on the 60 sealed pairs with its interval and the per-verdict table; (4) items 1–7.
-- **Distinction:** zero false rejects on ≥ 81 honest deliveries (Wilson upper bound ≤ 5 %), and part (A) above par on the 60 pairs by the pre-registered paired test, or part (B) closing the four public tickets end to end with every plant caught.
+- **Distinction:** zero false rejects on ≥ 81 honest deliveries (Wilson upper bound ≤ 5 %), and part (A) above par (run beside it, D68) on the 60 pairs by the pre-registered paired test, or part (B) closing the four public tickets end to end with every plant caught.
 - **What a result may conclude:** "the pipeline rejected every plant of this campaign"; "FP observed k of n, 95 % upper bound u"; "faithful on x of 60 sealed pairs". Not: a rejection *rate* for unseen cheats, and not "better than par" without the test.
 
 ### 35.6 Par and budget
 
-Par: the author's reference autoformalizer (a one-shot drafter with a witness check) and the reference pipeline, on the same pins, run on the 60 pairs and the 12 tickets (author cost ≈ 400 calls ≈ 8 GPU-h). The learner's runs (B_A = 4 calls per pair; 6 calls per role per ticket):
+Par: the course's frozen autoformalizer (a one-shot drafter with a witness check) and frozen reference pipeline, run by `truthcheck par-run` beside the learner's on the 60 pairs and the 12 tickets (D68; no author model run). The learner's run, par's calls included (B_A = 4 calls per pair; 6 calls per role per ticket):
 
 | part | arithmetic | calls (ceiling) |
 |---|---|---|
-| (A) dev | 20 pairs × 4 × 2 arms (with and without self-checks) | 160 |
-| (A) sealed | 60 × 4 | 240 |
-| (B) honest tickets | 12 × 4 roles × 6 | 288 |
-| (B) plant campaign | 39 plants × ≈ 6 calls downstream of the injection | 234 |
-| auditor's model review over the honest set | 81 × 1 | 81 |
-| **Qwen total** | | **≈ 1,000 calls · 20 GPU-h ceiling; ≈ 10 GPU-h expected** |
-| Claude (if §40 D-2 allows) | (A) sealed descriptive 60 × 1 + sentinels 10 | 70 |
+| (A) dev | 20 pairs × 4 with self-checks, and 10 of them × 4 without (the ablation) | 120 |
+| (A) sealed, learner and par | 60 × 4 × 2 arms | 480 |
+| (B) honest tickets, learner and par | 12 × 4 roles × 6 × 2 arms | 576 |
+| (B) plant campaign (learner's pipeline only) | 39 plants × ≈ 6 calls downstream of the injection | 234 |
+| **Qwen total** | | **1,410 calls (ceiling) · 28 GPU-h at the ceiling; ≈ 16 GPU-h expected** (drafting and pipeline runs stop when their checks pass: about half their ceiling; the campaign at its ceiling) |
+| Claude | none (D66) | 0 |
 
-Proposed `budget = { claude_calls = 0 | 70, claude_runs = 0 | 60, qwen_calls = 1000, qwen_runs = 300, gpu_hours = 20 }` (§40 D-1).
+`budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 1410, qwen_runs = 360, gpu_hours = 16 }` from the D65 pool. The honest set's FP is measured by the gate and the auditor's static checks, with no model call; the auditor's model review is measured on the tickets only.
 
 ### 35.7 Leak and tier rules (Q33)
 
@@ -3987,6 +3988,8 @@ pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.5
 | Dafny public tasks needed | Q31 30 + Q32 51 = 81 | DafnyBench 303 less 20 (Lab 1) and up to 42 (Lab α's corpus): enough |
 | course-local items to author | ≈ 170 plus 12 tickets | ≈ 175–245 author-hours (§32.3): the topic's largest cost |
 
+**Settled (§40):** D65 gives the challenges a separate 55 GPU-h pool (Q31 13, Q32 26, Q33 16 with par's calls included under D68); D66 removes every Claude arm; D67 adopts §34.5's pass and distinction, §35.4's honest set of ≥ 81 and the census wording.
+
 ---
 
 ## 37. Topics (a)–(d), Q19–Q30: outline
@@ -4008,7 +4011,7 @@ pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.5
 
 1. **Lines.** `dv7` (this worktree, from `basic` `7800b83`) is the challenge authoring line. It merges `basic` to take fixes, and never merges `authoring`, `labalpha`, `sysb` or any `archive/*` line; no R file enters it. R content reaches it only if the release plan's R core is added to `basic` and then merged forward.
 2. **`challenge`.** Created from `basic`'s tip when topic (e) passes its freeze bar. Each topic lands as **one squash commit** `challenge: topic (<x>) <name> Q<a>–Q<b>`, whose tree is `challenge`'s tip plus that topic's content and its records, never `dv7`'s history (D42's rule, carried to `challenge`).
-3. **Fixes land on `basic` first** (`basic: ` commits, the D42 linear chain) and are merged forward into `challenge` at once (`challenge: merge basic <sha12>`, `basic` as second parent) and into `dv7`. **Shared tooling** that the Q core also runs (`fvh` additions, `dvl.python`'s `agents` route, the checker's challenge rules, `check_release_history.py`'s challenge mode) is inert while every challenge record is planned; §40 D-11 decides whether it lands on `basic` first (recommended: it keeps the frozen core one file on both branches, so a later `basic` fix to `fvh` merges forward cleanly) or only on `challenge`.
+3. **Fixes land on `basic` first** (`basic: ` commits, the D42 linear chain) and are merged forward into `challenge` at once (`challenge: merge basic <sha12>`, `basic` as second parent) and into `dv7`. **Shared tooling** that the Q core also runs (`fvh` additions, `dvl.python`'s `agents` route, the checker's challenge rules, `check_release_history.py`'s challenge mode) is inert while every challenge record is planned. **Decided (D-11, coordinator): new challenge tooling lands on `dv7` and ships with `challenge`;** `basic` is under a feature freeze (fixes, toolchain bumps and guard fixes only), so only fixes to released tools land on `basic` first. A change a challenge tool needs in a released tool that is not a bug fix stays on `dv7` and is recorded in DELTAS (each such file is a merge-forward conflict risk, listed in the topic's freeze bar).
 4. **D26's shipped reference** (Δ235): a learner who merges `challenge` gets its files as "as shipped" (the newest merge base with `basic`/`challenge`); a `challenge` that does not contain the newest `basic` is ignored by the helper (Δ235's "challenge not contained" case), which is why every basic fix is merged forward before the next learner update. `firsttry --report`, `pins.py` and `/review-code` gate 5 then count the challenge files.
 5. **History check.** `scripts/check_release_history.py` gains `challenge` mode: main..challenge is `basic`'s chain plus a chain whose commits are single-parent `challenge: ` squashes or `challenge: merge basic` merges whose second parent is on `basic`; no commit reachable from an `archive/*` tag, `dv7`, `authoring` or `labalpha` unless it is on `basic`; CI's static job runs it on `challenge` (else `origin/challenge`).
 6. **CI per topic** (CLAUDE.md procedure item 4): `scripts/course_mode.sh study`, then `scripts/ci.sh` and `scripts/ci.sh --author` on the `dv7` tree (full runs, ≈ 1.3 h study and ≈ 4.8 h author at the basic tip's figures, BASIC-RELEASE F1/F2), with the new challenge job: `challenge_gate.sh` on the author's reference delivery of each module (PASS) and on one planted failure per check (FAIL), the sealed archives' round trip (`--truth-check manifest`), the attestation scan of every new public form against the sealed twins, `test_hooks.sh` with the armed-challenge fixtures, the history check. Before a merge that changes the guard, `tests/acceptance/guard_doors.py all` (model; under the D47 lane).
@@ -4026,7 +4029,7 @@ pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.5
 | W1 | shared infrastructure: `challenge_gate.sh` and `dvl.challenge`, `trustleap`, `reach` (with its [verify] probe), `gen_units` for Challenges, the `agents` Python route, `fvh` additions (batch import, two instruments, `MolePolicy`, `unseal --once` and its ledger), the three `truthcheck` modes and the image rebuild, the checker and history-check changes, hook fixtures, tests | 7–9 | 5–7 days |
 | W2 | topic (e) statements and gate first: the three manifests, statement files, interface stubs, frozen tests with recorded fixtures; the author's reference gate v3, bench and searcher passing `challenge_gate.sh`; §36 re-run on the real pool counts → **(e)'s resize-or-kill call** | 3–4 | 3–4 days |
 | W3 | corpora: course-local tasks (108), public draws and validation (≈ 250), the vericoding strip transform with its sample, cheats (12 public deliveries, 12 sealed), Q33's 60 pairs judged in the container, 12 tickets, plant catalog; sealing and round trips | 12–16 | 2.5–3.5 weeks |
-| W4 | par: dev selection, Q31's 60, Q32's three tranches, Q33's pairs and tickets; `PAR.md`; sealing | 3–4 | 1–1.5 weeks (≈ 30 GPU-h, GPU calendar) |
+| W4 | par agents written and sealed (code only; no author model run on held-out or sealed material, D68), `truthcheck par-run` tested on scripted policies and recorded replies | 2–3 | 3–4 days |
 | W5 | learner materials: three chapters, written pairs and rubrics (pre-registrations, card, note, report), `defense_agentic.md`, research forms, README and CLAUDE.md lines | 4–5 | 4–5 days |
 | W6 | freeze bar for (e): adversarial reviews (leak, statistics, decisions), CI both modes, the D47 lane's live checks, squash onto `challenge`, history check | 3–4 | 4–6 days |
 | | **topic (e)** | **32–42** | **≈ 7–9 weeks** |
@@ -4037,6 +4040,21 @@ pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.5
 ## 40. Open questions (Q69 on) and DECISION NEEDED
 
 *Each item changes scope, minutes, what a learner receives or what a result may conclude, so it is the user's. Options and a recommendation each; the proposed DELTAS entry is Δ400's follow-up once decided.*
+
+**Decided (2026-10-20; DELTAS Δ401).** The user's decisions D65–D71 and the coordinator's on D-6, D-10 and D-11 settle every item below; the items are kept as asked.
+
+| item | decision | by | what it changes |
+|---|---|---|---|
+| D-1 | **D65:** a separate challenge GPU pool of about +55 GPU-h, per-module ceilings that pause and resume like Lab α's; the Q and R budgets unchanged | the user | §31.6, §32.4; topic (e) ceilings Q31 13, Q32 26, Q33 16 (par's calls included, D68) |
+| D-2 | **D66:** Qwen is the engine of record for every challenge run; no Claude arm | the user | every challenge's Claude fields 0; §33.6, §34.6, §35.6 |
+| D-3, D-4, D-5 | **D67:** as planned — Q32's pass is a clean gated run plus a reported estimate against par, distinction a significant one-sided McNemar at the single final look; Q33's honest set ≥ 81; rejection results stated as a census | the user | §34.5, §35.4–§35.5 as written |
+| D-6 | the grader unseals once after the freeze, then the part is retired (option (a)) | coordinator | §31.3 as written |
+| D-7 | **D68 (not the recommendation):** par runs beside the learner: the learner's run executes the course's frozen par agent on the same unsealed part inside the grader container. The author never runs a model on any held-out or sealed learner task (a standing user rule); author-side model runs only on dev or smoke material that never enters a held-out set, and none in this phase | the user | §31.3 (`truthcheck par-run`, `bench-agree`), §32.3, §32.5, §33.3–§33.6, §34.4–§34.6, §35.6, §39 W4; par's calls doubled into the D65 pool |
+| D-8 | **D69:** corpus sizes as planned | the user | §32.3 |
+| D-9 | **D70:** after (e): (c), then (a), then (d), then (b) | the user | §37 |
+| D-10 | deferred to (d)'s resize-or-kill call | coordinator | §37 |
+| D-11 | **not the recommendation:** `basic` is under a feature freeze, so new challenge tooling (`challenge_gate.sh`, `trustleap`, `reach`, the `agents/` route, `unseal --once`, …) lands on `dv7` and ships with `challenge`; only fixes to released tools land on `basic` first; a non-fix change a challenge tool needs in a released tool stays on `dv7` and is recorded | coordinator | §38 item 3 |
+| D-12 | **D71:** the planning minutes and shipped sets accepted, re-measured at admission; any change over 10 % goes back to the user | the user | §33.8, §34.8, §35.8 |
 
 **DECISION NEEDED**
 
