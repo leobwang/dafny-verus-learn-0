@@ -138,5 +138,58 @@ class ReleaseHistory(unittest.TestCase):
         self.assertEqual(p.returncode, 1, (p.stdout, p.stderr))
 
 
+
+class ChallengeHistory(unittest.TestCase):
+    """The challenge mode (D26; QPLAN §38 item 5; Δ402): squashes and merges of basic only."""
+
+    git = ReleaseHistory.git
+    commit = ReleaseHistory.commit
+    squash_on_main = ReleaseHistory.squash_on_main
+
+    def setUp(self):
+        ReleaseHistory.setUp(self)
+        self.squash_on_main()
+        self.git("checkout", "-qb", "dv7", "basic")
+        self.commit("dv7: build topic e", "topic e draft", name="topic.txt")
+        self.dv7_tree = self.git("rev-parse", "HEAD^{tree}")
+        self.git("checkout", "-qb", "challenge", "basic")
+
+    def squash(self, subject="challenge: topic (e) agentic Q31–Q33"):
+        sha = self.git("commit-tree", self.dv7_tree, "-p", "HEAD", "-m", subject)
+        self.git("reset", "-q", "--hard", sha)
+        return sha
+
+    def cproblems(self):
+        return release.challenge_problems(self.root, "challenge", "basic", "main")
+
+    def fix_basic(self):
+        self.git("checkout", "-q", "basic")
+        self.commit("basic: a fix", "fixed")
+        self.git("checkout", "-q", "challenge")
+
+    def test_a_topic_squash_and_a_merged_fix_pass(self):
+        self.squash()
+        self.assertEqual(self.cproblems(), [])
+        self.fix_basic()
+        got = self.cproblems()
+        self.assertTrue(any("does not contain basic's tip" in p for p in got), got)
+        self.git("merge", "-q", "--no-ff", "-m", "challenge: merge basic (a fix)", "basic")
+        self.assertEqual(self.cproblems(), [])
+
+    def test_authoring_history_and_bad_subjects_fail(self):
+        self.git("merge", "-q", "--no-ff", "-m", "challenge: merge basic", "dv7")
+        got = self.cproblems()
+        self.assertTrue(any("not on basic" in p for p in got), got)
+        self.assertTrue(any("authoring or archived history" in p for p in got), got)
+        self.git("reset", "-q", "--hard", "basic")
+        self.squash("topic (e) without the prefix")
+        self.assertTrue(any("does not start with" in p for p in self.cproblems()))
+
+    def test_a_merge_with_another_subject_fails(self):
+        self.squash()
+        self.fix_basic()
+        self.git("merge", "-q", "--no-ff", "-m", "merge basic", "basic")
+        self.assertTrue(any("is a merge whose subject" in p for p in self.cproblems()))
+
 if __name__ == "__main__":
     unittest.main()

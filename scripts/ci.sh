@@ -871,6 +871,15 @@ job_static() {
     else
       loud "no basic or no main branch in this checkout: the release-history check did not run"
     fi
+    # D26 / Δ402: the challenge branch, once it exists: squashes and merges of basic only.
+    local rel_chal
+    if [ -n "${rel_base:-}" ] && [ -n "${rel_cand:-}" ] && rel_chal="$(release_ref challenge)"; then
+      step "challenge history (check_release_history.py --challenge)" python3 -B \
+        "$SCRIPTS/check_release_history.py" --root "$ROOT" --base "$rel_base" --basic "$rel_cand" \
+        --challenge "$rel_chal"
+    else
+      loud "no challenge branch in this checkout: the challenge-history check did not run"
+    fi
   else
     loud "not a git checkout: the ledger-anchor .gitignore and release-history checks did not run"
   fi
