@@ -288,7 +288,7 @@ pub proof fn lemma_eps_only_empty()
 }
 ```
 
-Nothing about the chosen `s` is special: the proof must work for whatever value satisfies the range, which is what makes the conclusion universal. The WRITE card C1's demos claim universals that do not hold:
+Nothing about the chosen `s` is special: the proof must work for whatever value satisfies the range, which is what makes the conclusion universal. The card C1 (a RECOGNISE card in R04: no R04 hole requires a `forall` statement or `assert forall` of you except Verus's H2) has demos that claim universals that do not hold:
 
 ```dafny
 module R04_ForallDemo {

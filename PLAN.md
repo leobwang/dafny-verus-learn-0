@@ -921,8 +921,7 @@ Header counts: **12 holes**, **2 test-out items** (holes), **6 predictions**.
 
 #### Constructs (registry)
 
-- `write_d = write_v = ["forall-intro", "exists-elim"]` — 2 paired units, 4 slugs.
-- `recognise_d = ["expect"]`, `recognise_v = ["assume"]`.
+- `write_d = write_v = ["exists-elim"]`; `recognise_d = ["expect", "forall-intro"]`, `recognise_v = ["assume", "forall-intro"]` (Δ303 addendum, 2026-10-21: after D64 only Verus's H2 needs `forall` introduction, so it is RECOGNISE in R04; it was `write` with 2 paired units, 4 slugs).
 - Checked uses (≥ 2 per language): forall-intro d H2d, H3d · v H2v, H3v; exists-elim d T1d, H2d, H3d · v T1v, H2v, H3v.
 
 #### Agentic file (rung 6: audited prover)

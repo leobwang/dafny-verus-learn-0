@@ -84,7 +84,7 @@ module R04_Specs {
   // Cards
   // ===========================================================================
 
-  // item: R04.C1d write:forall-intro
+  // item: R04.C1d recognise:forall-intro
   // EpsOnlyEmpty's forall statement proves an arbitrary qualifying s.
   // EXPECT: card-c1d.dfy.specimen fails: its claim does not hold for every s.
   // item: R04.C2d write:exists-elim
@@ -124,7 +124,7 @@ module R04_Specs {
   //    chapter §2.3 names the slices of its witness.
 
   // item: R04.H2d
-  // uses: forall-intro, exists-elim
+  // uses: exists-elim
   // pair: R04.H2v
   /** **H2.** A negative claim: `Star(Cat(Chr('a'), Chr('b')))` does not match
       "aba". One failed split proves nothing about the others: which first
