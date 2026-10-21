@@ -93,7 +93,7 @@ tasks = ["pub-db-000"]
 id = "pub-db-002"
 kind = "public"
 source = "dafnybench bench/public/dafnybench/answers/Clover_double_array_elements.dfy (Apache-2.0 (set licence))"
-role = "unassigned"
+role = "confirmatory"
 descriptive = false
 tasks = ["pub-db-002"]
 
@@ -245,7 +245,7 @@ tasks = ["pub-db-040"]
 id = "pub-db-042"
 kind = "public"
 source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_2.dfy (Apache-2.0 (set licence))"
-role = "unassigned"
+role = "confirmatory"
 descriptive = false
 tasks = ["pub-db-042"]
 
@@ -261,7 +261,7 @@ tasks = ["pub-db-044"]
 id = "pub-db-048"
 kind = "public"
 source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_578.dfy (Apache-2.0 (set licence))"
-role = "unassigned"
+role = "confirmatory"
 descriptive = false
 tasks = ["pub-db-048"]
 
@@ -269,7 +269,7 @@ tasks = ["pub-db-048"]
 id = "pub-db-050"
 kind = "public"
 source = "dafnybench bench/public/dafnybench/answers/dafny-synthesis_task_id_307.dfy (Apache-2.0 (set licence))"
-role = "unassigned"
+role = "confirmatory"
 descriptive = false
 tasks = ["pub-db-050"]
 
@@ -421,7 +421,7 @@ tasks = ["pub-db-090"]
 id = "pub-hev-005"
 kind = "public"
 source = "humaneval-verus bench/public/humaneval-verus/answers/human_eval_001.rs (MIT (set licence; HumanEval prompts MIT))"
-role = "unassigned"
+role = "confirmatory"
 descriptive = false
 tasks = ["pub-hev-005"]
 
@@ -854,7 +854,7 @@ id = "r11-residual-observe"
 kind = "regex"
 source = "R11 ResidualObserveR11 (Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy::ResidualObserveR11; Solutions/verus/r/r11_theory/src/lib.rs::residual_observe_r11)"
 role = "confirmatory"
-descriptive = false
+descriptive = true
 tasks = ["r11-residual-observe-d", "r11-residual-observe-v"]
 
 [[cluster]]
@@ -869,7 +869,7 @@ tasks = ["r11-residual-step-d", "r11-residual-step-v"]
 id = "r13-class-covers"
 kind = "regex"
 source = "R13 ClassCoversR13 (Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::ClassCoversR13 (R13.H2d); Solutions/verus/r/r13_pipelines/src/lib.rs::class_covers_r13 (R13.H2v))"
-role = "confirmatory"
+role = "unassigned"
 descriptive = false
 tasks = ["r13-class-covers-d", "r13-class-covers-v"]
 
@@ -877,7 +877,7 @@ tasks = ["r13-class-covers-d", "r13-class-covers-v"]
 id = "r13-nullable-derivs"
 kind = "regex"
 source = "R13 NullableDerivsR13 (Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::NullableDerivsR13 (R13.H3d); Solutions/verus/r/r13_pipelines/src/lib.rs::lemma_nullable_derivs_r13 (R13.H3v))"
-role = "confirmatory"
+role = "unassigned"
 descriptive = false
 tasks = ["r13-nullable-derivs-d", "r13-nullable-derivs-v"]
 
@@ -885,7 +885,7 @@ tasks = ["r13-nullable-derivs-d", "r13-nullable-derivs-v"]
 id = "r14-cat-intro-v"
 kind = "regex"
 source = "R14 CatIntroV (Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::CatIntroV; Solutions/verus/r/r14_smt/src/lib.rs::lemma_cat_intro_v)"
-role = "confirmatory"
+role = "unassigned"
 descriptive = false
 tasks = ["r14-cat-intro-v-d", "r14-cat-intro-v-v"]
 
@@ -893,7 +893,7 @@ tasks = ["r14-cat-intro-v-d", "r14-cat-intro-v-v"]
 id = "r14-deriv-size-v"
 kind = "regex"
 source = "R14 DerivSizeV (Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::DerivSizeV; Solutions/verus/r/r14_smt/src/lib.rs::lemma_deriv_size_v)"
-role = "confirmatory"
+role = "unassigned"
 descriptive = false
 tasks = ["r14-deriv-size-v-d", "r14-deriv-size-v-v"]
 
@@ -901,8 +901,8 @@ tasks = ["r14-deriv-size-v-d", "r14-deriv-size-v-v"]
 id = "r14-star-pow-v"
 kind = "regex"
 source = "R14 StarPowV (Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::StarPowV; Solutions/verus/r/r14_smt/src/lib.rs::lemma_star_pow_v)"
-role = "confirmatory"
-descriptive = true
+role = "unassigned"
+descriptive = false
 tasks = ["r14-star-pow-v-d", "r14-star-pow-v-v"]
 
 [[task]]
