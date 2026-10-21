@@ -30,6 +30,39 @@ maxauto_fails = true
 admission_sha256 = "d87819d7bbb05022c124f048fd3622dab13e87cb039aa6d06f92d09cbe336662"
 
 [[card]]
+id = "cl-d10-zip-length"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d10-zip-length/tasks/cl-d10-zip-length.dfy"
+form_sha256 = "ed1d27f66512ab53ade46ac08bc05fb47ec42c18e2cf95dc4cca14ecefb8e397"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "75bd720069eda9d99bbdceeb9e385ba23c65e968bccb526cbec8611713350a01"
+
+[[card]]
+id = "cl-d11-uniform-ends"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d11-uniform-ends/tasks/cl-d11-uniform-ends.dfy"
+form_sha256 = "0132896934cad4afa1ba5da8b685cee103d7c25f31fc3b1377c251b492fb1b3e"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "0661b04d302b9a8e3c9a2e54317213290c1736ea559fbf1f2dcaa7725bba3f95"
+
+[[card]]
+id = "cl-d12-evens-le"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d12-evens-le/tasks/cl-d12-evens-le.dfy"
+form_sha256 = "f99d691ad8a258ab349bdf5aee934be27c098b5db71461e83403ca08d0246f49"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "cd6f92f0c1878e0307ec1e4841ac82a1a8464f3db07e234fe378cba191fdb2bf"
+
+[[card]]
 id = "cl-d2-max-in"
 lang = "dafny"
 source = "course-local"
@@ -127,6 +160,39 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "69b477ba300f9b4ffa6e1cae87acc4454ec145e513ac2612120d5366b8e4b2be"
+
+[[card]]
+id = "cl-v10-zip-len"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v10-zip-len/tasks/cl-v10-zip-len.rs"
+form_sha256 = "472a2792483990549a0ae98e9379d93aa6e40c6abf077f7f86e9a87588a45475"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "e51c7135e02c17460e577ca92adcbf25be2fe86d8ace2feb8c6b77f8dd660d3d"
+
+[[card]]
+id = "cl-v11-uniform-ends"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v11-uniform-ends/tasks/cl-v11-uniform-ends.rs"
+form_sha256 = "95dff3dcc03a510c7674d00782f3cfbe3317c02ba8e551a14f7d09249eb31679"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "665d8919406f8395d4e6f17b9de886d3505f0be95a2e91046791c38af50ac455"
+
+[[card]]
+id = "cl-v12-evens-le"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v12-evens-le/tasks/cl-v12-evens-le.rs"
+form_sha256 = "716e8269a9cfce51933bf533102e9c53b717bb9f975080e8d20c3fa47f007b3f"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "95f08490aef151eb53816a4ca706cc7e6e6e952b6883d2817e98b783d5dc7b12"
 
 [[card]]
 id = "cl-v2-count-le"
