@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "2129797cdfaab2cc76dd15cc3c777de275598ff763a9104aeac5af2e6d873b03"
+  },
+  "id": "a1b-nullable-correct-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "d0846aecf627d3703fc754bf762928ceda677c18b78e13c3d162a3dc8f5300d5",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "e34a9bc52cfff9b6511cd674c0b78ee28238b9797a771b40fe2c4cd5ba935216",
+  "status": "admitted",
+  "target": "R12_LabCase.NullableCorrect",
+  "validated_span": {
+    "end": 47,
+    "start": 32,
+    "symbol": "R12_LabCase.NullableCorrect"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

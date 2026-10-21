@@ -1,0 +1,54 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "27bfb1ff302da236f37c6eff0dd0d61e08ad9aa575e3bb701f107e45e9251493",
+    "statement_sha256": "2726fdcc0ddd541fcc8067ad3dee50e3dfe5da57555fbc82687556be2a35e442"
+  },
+  "id": "r11-check-sound-d",
+  "lang": "dafny",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: verified)",
+  "private_evidence_sha256": "f836b0c38f135b9a9b0be1293683000cd0394387ca0bf7a9c9a8663eeb78785c",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    }
+  ],
+  "source_sha256": "67c0d012f491ae0625feab303f182a6d9c82cbba65f7e16126d8873e3a04d46b",
+  "status": "admitted",
+  "target": "R12_LabCase.CheckSoundR11",
+  "validated_span": {
+    "end": 66,
+    "start": 49,
+    "symbol": "R12_LabCase.CheckSoundR11"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

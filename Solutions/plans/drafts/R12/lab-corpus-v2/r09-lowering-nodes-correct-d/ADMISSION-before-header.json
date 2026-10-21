@@ -1,0 +1,69 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "49edad7fc0ac8e242dfd163bf7734c0484e047990889d0f39e129e8c323d241e",
+    "statement_sha256": "4bae1ac02bef10a073a2220a60677fa299055ee4267af6f56e79040608601016"
+  },
+  "id": "r09-lowering-nodes-correct-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "728a4238d7d68422240886ea9066bbd4acefeaebdbbdc1b88878186d82681fc6",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "calls",
+      "name": "c5"
+    },
+    {
+      "kind": "calls",
+      "name": "c6"
+    },
+    {
+      "kind": "calls",
+      "name": "c7"
+    },
+    {
+      "kind": "calls",
+      "name": "c8"
+    }
+  ],
+  "source_sha256": "c3de7bca1064369d56fba2a75502bc62054cdc8e86d1606e49595fcc59c49894",
+  "status": "admitted",
+  "target": "R12_LabCase.LoweringNodesCorrectR09",
+  "validated_span": {
+    "end": 245,
+    "start": 221,
+    "symbol": "R12_LabCase.LoweringNodesCorrectR09"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

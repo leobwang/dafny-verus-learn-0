@@ -1,0 +1,42 @@
+{
+  "cluster": "r08-alt-feed-law",
+  "kind": "regex",
+  "source": {
+    "module": "R08",
+    "lemma": "AltFeedLaw",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_AltSetEngine.AltFeedLaw (R08.H3d)",
+      "verus": "Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_alt_feed_law (R08.H3v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches, Nullable/nullable), copied verbatim",
+    "RG_A2_Deriv / rg_re_a2 (Deriv/deriv), copied verbatim",
+    "R08 alternative-set engine givens (Parts, AnyMatches, FeedAll, the opaque AltRes), copied verbatim"
+  ],
+  "helpers_included": [
+    "NullableCorrect / lemma_nullable_correct (A1b), complete",
+    "DerivCorrect / lemma_deriv_correct (A2), complete",
+    "PartsLaw / lemma_parts_law (R08.H2), complete"
+  ],
+  "tasks": [
+    "r08-alt-feed-law-d",
+    "r08-alt-feed-law-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r08-alt-feed-law-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 7
+    },
+    {
+      "task": "r08-alt-feed-law-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 7
+    }
+  ],
+  "notes": "The reveal of the opaque model stays in the skeleton; one calls site holds the recursion, PartsLaw and DerivCorrect; six expression sites move the witness indices across head + tail and st[0] / st[1..]."
+}

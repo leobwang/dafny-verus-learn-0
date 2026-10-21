@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "ddbed42aa47512994a91b788ae021135d5b953aeffe61bd9bb85ef09ca805f9f"
+  },
+  "id": "a1b-star-concat-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "1163a2d91dd9a11237e1055105511354d35f083b656d2815004e0b6d3119cdb7",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    }
+  ],
+  "source_sha256": "832b5258a77e418af860794b2316830c2d53b6e526c407a67b75a590d0a7052c",
+  "status": "admitted",
+  "target": "R12_LabCase.StarConcat",
+  "validated_span": {
+    "end": 33,
+    "start": 20,
+    "symbol": "R12_LabCase.StarConcat"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

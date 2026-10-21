@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"c1","identifiers":["a","b","c","s"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"c2","identifiers":["a"],"kind":"calls","callees":["lemma_nullable_fact"]},{"name":"c3","identifiers":["b","c","s"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"c4","identifiers":["a","c","s","i","subrange"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"h1","identifiers":["matches","da","s","i","subrange"]},{"name":"h2","identifiers":["matches","cat","s"]},{"name":"c5","identifiers":["a","c","s","j","subrange"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"h3","identifiers":["matches","a","w","j","subrange"]},{"name":"c6","identifiers":["b","c","s"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"h4","identifiers":["matches","a","w","subrange"]},{"name":"c7","identifiers":["a","c","s","i","subrange"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"h5","identifiers":["matches","da","s","i","subrange"]},{"name":"c8","identifiers":["a","c","s","j","subrange"],"kind":"calls","callees":["lemma_deriv_correct"]},{"name":"h6","identifiers":["matches","a","w","j","subrange"]}]
-// R12_SOURCE_SPANS: [{"symbol":"lemma_deriv_correct","start":93,"end":171}]
+// R12_SOURCE_SPANS: [{"symbol":"lemma_deriv_correct","start":96,"end":174}]
 use vstd::prelude::*;
 
 verus! {

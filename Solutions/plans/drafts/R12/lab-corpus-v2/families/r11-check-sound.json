@@ -8,8 +8,11 @@
       "verus": "Solutions/verus/r/r11_theory/src/lib.rs::sound_word_r11 (R11.H2v)"
     }
   },
-  "tasks": [],
-  "status": "rejected",
+  "tasks": [
+    "r11-check-sound-d",
+    "r11-check-sound-v"
+  ],
+  "status": "admitted",
   "rejected_by": "max-auto-empty-fails (Dafny)",
   "attempts": [
     {
@@ -21,8 +24,13 @@
       "task": "r11-check-sound-v",
       "form": 1,
       "result": "admitted (cluster incomplete)"
+    },
+    {
+      "task": "r11-check-sound-d/-v",
+      "result": "admitted under D55 (the user, 2026-10-18: for Lab alpha tasks only, max-auto-empty-fails is read under the units' shipped --manual-lemma-induction; the maxauto run is recorded, not gating; the lab gate still refuses lever changes); both tasks re-admitted from scratch with admit_forms.py --shipped-induction",
+      "sites": null
     }
   ],
-  "notes": "Forms and evidence kept under rejected/.",
+  "notes": "Forms and evidence kept under rejected/. D55: admitted; the Dafny maxauto run (auto-induction on) still verifies the empty body and is recorded in ADMISSION.json max_auto_reading.",
   "kind": "regex"
 }

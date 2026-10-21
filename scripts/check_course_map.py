@@ -315,6 +315,10 @@ DAFNY_OUTPUT_DIR = re.compile(r".+-(py|go|java|cs|js|cpp)")
 MODULE_SUFFIXES = (".py", ".pyi", ".pyc", ".pyd", ".so", ".rs", ".dfy", ".doo", ".specimen")
 CARD_ID = re.compile(r"\d\d\.\d{1,2}")
 GPU_HOURS_PER_MODULE = 10   # design §3: ≤ 10 GPU-h per lab [A]
+# Per-module exceptions the user decided: R12's Lab α ceiling of 80 GPU-h (D56, 2026-10-18;
+# DELTAS Δ295, superseding Δ176's 10) after the throughput probe measured 72 GPU-s per call.
+# An excepted module counts toward GPU_HOURS_TOTAL at the per-lab cap only.
+GPU_HOURS_EXCEPTIONS = {"R12": 80}
 GPU_HOURS_TOTAL = 45        # design §11.3: the six labs' Qwen work in ≤ 45 GPU-h [A]
 # The spoiler-guard's solo (2s) and frozen (2f) path patterns this registry must
 # feed (.claude/hooks/spoiler-guard.sh, class_of): R16's trust-report, Q's gate,
@@ -732,9 +736,11 @@ def check_model_fields(m):
             err("budget is non-zero exactly when engines holds policy or agent"
                 + (" (it spends, but no engine runs a model)" if spends else
                    " (a model engine needs its budget)"))
-        if b["gpu_hours"] > GPU_HOURS_PER_MODULE:
+        cap = GPU_HOURS_EXCEPTIONS.get(mid, GPU_HOURS_PER_MODULE)
+        if b["gpu_hours"] > cap:
             err(f"budget.gpu_hours = {b['gpu_hours']} exceeds the per-lab cap of "
-                f"{GPU_HOURS_PER_MODULE} (design §3)")
+                f"{cap} (design §3" + ("; the user's D56" if mid in GPU_HOURS_EXCEPTIONS else "")
+                + ")")
     st = m["statements"]
     if is_core_module(mid) and st and mid not in PROVIDED_STATEMENTS:
         err("statements are the frozen statement files of Q19–Q33; must be []")
@@ -1170,7 +1176,8 @@ def check_registry(root, data, modules, good):
             errs.append(f"tier {tier} (Q{lo:02d}–Q{hi:02d}): from the moderate tier on the "
                         "modules take the families in order: A (S1–S5), B (S6–S8), C (S9–S13)")
 
-    gpu = sum(m["budget"]["gpu_hours"] for m in good)
+    gpu = sum(min(m["budget"]["gpu_hours"], GPU_HOURS_PER_MODULE) if m["id"] in GPU_HOURS_EXCEPTIONS
+              else m["budget"]["gpu_hours"] for m in good)
     if gpu > GPU_HOURS_TOTAL:
         errs.append(f"budget: gpu_hours sum to {gpu} over the registry, above the course cap of "
                     f"{GPU_HOURS_TOTAL} (design §11.3: the six labs' Qwen work in ≤ "

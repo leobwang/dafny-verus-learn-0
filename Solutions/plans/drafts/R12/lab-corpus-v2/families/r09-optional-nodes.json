@@ -31,6 +31,10 @@
       "form": 1,
       "result": "not run",
       "reason": "the cluster needs both languages and the Dafny twin cannot be admitted; form kept under rejected/r09-optional-nodes-v/"
+    },
+    {
+      "task": "r09-optional-nodes-d",
+      "result": "rejected under D55 too: the Dafny empty body verifies in every run, maxauto and the shipped seeds 1-3 (--manual-lemma-induction); the Verus form (built by L2, statement verbatim) passed all seven controls, but a cluster needs both languages; evidence kept under rejected/<task>/private/evidence-d55"
     }
   ],
   "notes": "Dafny's baseline (if k > 0 {} with the site empty) fails while the plain empty body verifies; vcheck's empty-body reading decides."

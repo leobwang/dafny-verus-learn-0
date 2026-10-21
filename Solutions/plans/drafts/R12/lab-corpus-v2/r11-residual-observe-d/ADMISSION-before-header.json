@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "12c90b7f3aa58a1ef188fac4fd9c2882590911766fb3f870d3de8ff2c04e92a0"
+  },
+  "id": "r11-residual-observe-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "eb6a8fbee330b6eb5ac08e81097b5c8866cc818bf44abee7d95a710c0bd8a89f",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "003da653510f37fb481147a8db21bb9bc59260cd293900caf27edaede6d625d9",
+  "status": "admitted",
+  "target": "R12_LabCase.ResidualObserveR11",
+  "validated_span": {
+    "end": 64,
+    "start": 57,
+    "symbol": "R12_LabCase.ResidualObserveR11"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "90f416cfffcbbf99b73de5219fd2e33aa6b2f6876e1c961cd38793ad96561046"
+  },
+  "id": "r09-rep-range-correct-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "d215e30246f4b5a41f1db52b6ce8d0b9ccd71067993ffa7905a7918dee994775",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "60de009a9459da105fb2bf00ce4675d743cc837f501c196b98cb9a1c1db01d7d",
+  "status": "admitted",
+  "target": "R12_LabCase.RepRangeCorrect",
+  "validated_span": {
+    "end": 174,
+    "start": 156,
+    "symbol": "R12_LabCase.RepRangeCorrect"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

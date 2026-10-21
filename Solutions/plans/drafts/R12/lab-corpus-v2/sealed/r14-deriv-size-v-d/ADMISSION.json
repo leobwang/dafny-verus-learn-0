@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "fb57e3777af26e092060793a9f3a7d647ffe086013c892e0fe55fbd269c97feb"
+  },
+  "id": "r14-deriv-size-v-d",
+  "lang": "dafny",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: inconclusive)",
+  "private_evidence_sha256": "772dbeb5097ee5a06e9dc0688a9b6bf9f2678a31b08f2b6d61b3eee7cca8947f",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    }
+  ],
+  "source_sha256": "6f54dfa22ebca5ec1a919f5527fc56909a12d29247892fd62456f9f9189f85b0",
+  "status": "admitted",
+  "target": "R12_LabCase.DerivSizeV",
+  "validated_span": {
+    "end": 88,
+    "start": 75,
+    "symbol": "R12_LabCase.DerivSizeV"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

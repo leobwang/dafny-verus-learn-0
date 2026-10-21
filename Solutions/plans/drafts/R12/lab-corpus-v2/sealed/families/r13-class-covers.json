@@ -1,0 +1,50 @@
+{
+  "cluster": "r13-class-covers",
+  "kind": "regex",
+  "source": {
+    "module": "R13",
+    "lemma": "ClassCoversR13",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::ClassCoversR13 (R13.H2d)",
+      "verus": "Solutions/verus/r/r13_pipelines/src/lib.rs::class_covers_r13 (R13.H2v)"
+    }
+  },
+  "layer_definitions": [
+    "Dafny: the class half of RG_A2_Deriv, copied verbatim as module R12_A2 with the layer export",
+    "Verus: the membership part of rg_re_a2::char_class (in_range, in_ranges, separated, CharClass with its closed view and valid, member_from, class_member), copied verbatim into module r12_a2 inside verus!"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r13-class-covers-d",
+    "r13-class-covers-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r13-class-covers-d",
+      "form": 1,
+      "result": "rejected",
+      "reason": "reference-gate: the A2 layer import fails the lab gate's file-alone audit"
+    },
+    {
+      "task": "r13-class-covers-d",
+      "form": 2,
+      "result": "admitted",
+      "sites": 2
+    },
+    {
+      "task": "r13-class-covers-v",
+      "form": 1,
+      "result": "rejected",
+      "reason": "audit-clean: use rg_re_a2 does not resolve in the file-alone --no-cheating audit"
+    },
+    {
+      "task": "r13-class-covers-v",
+      "form": 2,
+      "result": "rejected (build errors fixed inside the same design: a missing verbatim spec separated, then a module outside verus! flagged by the lint), then admitted",
+      "sites": 2
+    }
+  ],
+  "notes": "SEALED. Both forms: the two loop invariants are expression sites; the executable loop and the class API are fixed.",
+  "sealed": true
+}

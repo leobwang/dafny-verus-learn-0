@@ -5,13 +5,6 @@ course forms. These tools never locate a reference completion. Commit the five
 predictions before observing their answers. Native commands use the course's
 pinned toolchain and memory/process caps.
 
-`python3 tools/R12/check_clients.py` gates the actual Dafny and Verus implementations,
-then compiles66finite checks per language:63Boolean arrays of lengths0–5 and
-three remaining-budget cases. Dafny source is embedded in the root because an
-include does not verify included implementations. This can detect concrete code
-defects; it is not a universal proof or a judge of model-produced native results.
-Unfinished learner sources are refused before compilation.
-
 `python3 tools/R12/admit_forms.py FORM... --native` checks each explicit `.dfy` or
 `.rs` task form. Its committed `R12_HINT_SITES` JSON lists one site per source line.
 An `expr` site replaces `/*R12_HINT:name*/ true` with a bounded expression using

@@ -1,0 +1,1 @@
+{"hints": ["lemma_alt_feed_law(m.drop_first(), c, w); lemma_parts_law(deriv(m[0], c), w); lemma_deriv_correct(m[0], c, w)", "matches(head[i], w)", "matches(tail[i - head.len()], w)", "matches(m[j + 1], seq![c] + w)", "(head + tail)[k] == head[k]", "matches(m.drop_first()[i - 1], seq![c] + w)", "(head + tail)[head.len() + k] == tail[k]"]}

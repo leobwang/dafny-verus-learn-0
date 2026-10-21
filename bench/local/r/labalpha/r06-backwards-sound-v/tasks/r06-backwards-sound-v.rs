@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"h1","identifiers":["backwards_str","s","subrange","len","seq"]},{"name":"c1","identifiers":["a","s"],"kind":"calls","callees":["lemma_backwards_sound"]},{"name":"c2","identifiers":["b","s"],"kind":"calls","callees":["lemma_backwards_sound"]},{"name":"c3","identifiers":["a","b","u","v"],"kind":"calls","callees":["lemma_backwards_sound"]},{"name":"c4","identifiers":["u","v"],"kind":"calls","callees":["lemma_backwards_str_append"]},{"name":"c5","identifiers":["a","r","u","v","backwards","backwards_str"],"kind":"calls","callees":["lemma_backwards_sound","lemma_star_one","lemma_star_concat"]},{"name":"c6","identifiers":["u","v"],"kind":"calls","callees":["lemma_backwards_str_append"]}]
-// R12_SOURCE_SPANS: [{"symbol":"lemma_backwards_sound","start":120,"end":164}]
+// R12_SOURCE_SPANS: [{"symbol":"lemma_backwards_sound","start":123,"end":167}]
 use vstd::prelude::*;
 
 verus! {

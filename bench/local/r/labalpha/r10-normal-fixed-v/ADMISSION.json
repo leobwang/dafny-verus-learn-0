@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "78a37ada2d10fc19a9f9a2f42dfbe0887e83e78d9014cdd1537d5240240a6b76"
+  },
+  "id": "r10-normal-fixed-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "474266158293434b5069b8fda1a87f0fd4da2fedd70ce8154fa28b4689fa9f36",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    }
+  ],
+  "source_sha256": "317fcfa1f1ace2bc17b00336ecd0bb102d6fcb2df24124dddfe03e6f479436d3",
+  "status": "admitted",
+  "target": "normal_fixed_r10",
+  "validated_span": {
+    "end": 98,
+    "start": 80,
+    "symbol": "normal_fixed_r10"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

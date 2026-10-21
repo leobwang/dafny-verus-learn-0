@@ -89,6 +89,14 @@ def load_stratum(root, path):
             raise ValueError('unique lowercase task id required')
         if t.get('lang') not in ('dafny', 'verus'):
             raise ValueError(tid + ': lang is dafny or verus')
+        if t.get('sealed') is True and not (root / str(t.get('path', ''))).is_file():
+            # a sealed task (R13/R14-derived, plan section 3.5 D-L3 (a)): its form and its
+            # admission are in the sealed archive; only its id, cluster and hashes are here
+            for key in ('cluster', 'source_sha256', 'admission_sha256'):
+                if not isinstance(t.get(key), str) or not t[key]:
+                    raise ValueError(tid + ': a sealed task names its cluster and hashes')
+            tasks[tid] = dict(t, unsealed=False)
+            continue
         src = course_path(root, t.get('path'))
         if src.suffix != ('.dfy' if t['lang'] == 'dafny' else '.rs'):
             raise ValueError(tid + ': task language/suffix mismatch')
@@ -96,6 +104,9 @@ def load_stratum(root, path):
             raise ValueError(tid + ': a task form lives at bench/local/r/labalpha/<id>/tasks/')
         if digest(src) != t.get('source_sha256'):
             raise ValueError(tid + ': stale task source')
+        from fvh.labalpha import strip_header
+        if hashlib.sha256(strip_header(src.read_text()).encode()).hexdigest() != t.get('prompt_source_sha256'):
+            raise ValueError(tid + ': the source as the prompt carries it (header stripped) is not the pinned one')
         for key in ('cluster', 'statement', 'exposure'):
             if not isinstance(t.get(key), str) or not t[key].strip():
                 raise ValueError(tid + ': cluster, statement and exposure required')
@@ -108,7 +119,7 @@ def load_stratum(root, path):
         checks = ev.get('checks')
         if not isinstance(checks, dict) or set(checks) != set(CHECKS) or any(v is not True for v in checks.values()):
             raise ValueError(tid + ': all seven native admission controls must precede plan construction')
-        tasks[tid] = dict(t)
+        tasks[tid] = dict(t, unsealed=True)
     clusters = {}
     for c in data.get('cluster', []):
         cid = c.get('id')
@@ -185,6 +196,9 @@ def build_plans(clusters, tasks, *, seed, roles=('pilot', 'confirmatory', 'descr
         rows = role_tasks(clusters, tasks, pick[role])
         if not rows:
             raise ValueError('no ' + role + ' cluster in the stratum')
+        sealed = [t['id'] for t in rows if not t.get('unsealed', True)]
+        if sealed:
+            raise ValueError(role + ' plan: task(s) still sealed (unseal them first): ' + ', '.join(sealed))
         lab = role != 'pilot'
         plans[role] = render_plan(rows, family=QWEN, seed=seed + i, repeats=REPEATS, arms=arms[role],
                                   role=role, lab=lab, freeze=freeze if lab else '')

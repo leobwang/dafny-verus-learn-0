@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "2188346dc4e73f14c327e640bbccaddb72ccf050a242b289cab3750815293d67"
+  },
+  "id": "r14-deriv-size-v-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "76cce4f03e68d568eaa7e315b86df7588b85f6346e2d9c5613bcd5fca7ff6338",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    }
+  ],
+  "source_sha256": "812b3407ced6b76aae1da92378dd3cf8924d5b44ae95d215f99250ed5e0d8cd8",
+  "status": "admitted",
+  "target": "lemma_deriv_size_v",
+  "validated_span": {
+    "end": 121,
+    "start": 103,
+    "symbol": "lemma_deriv_size_v"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

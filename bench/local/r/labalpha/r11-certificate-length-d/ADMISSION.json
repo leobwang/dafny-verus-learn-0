@@ -1,0 +1,54 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "27bfb1ff302da236f37c6eff0dd0d61e08ad9aa575e3bb701f107e45e9251493",
+    "statement_sha256": "370ad8e34c867f53fc783625491069482e19ae9763132c58d64c4dd95cd8ad48"
+  },
+  "id": "r11-certificate-length-d",
+  "lang": "dafny",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: verified)",
+  "private_evidence_sha256": "980752d0fbe9710a97612e92e55383648d1fde1fd93401696a8bf0376087d6ef",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    }
+  ],
+  "source_sha256": "f93c82e8e9be4f34dd3b70cce387e53a20e1647611d35001be3f8af52b90c1d8",
+  "status": "admitted",
+  "target": "R12_LabCase.CertificateLengthR11",
+  "validated_span": {
+    "end": 64,
+    "start": 49,
+    "symbol": "R12_LabCase.CertificateLengthR11"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

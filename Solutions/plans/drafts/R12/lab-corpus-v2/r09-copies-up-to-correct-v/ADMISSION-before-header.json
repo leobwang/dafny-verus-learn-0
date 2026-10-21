@@ -1,0 +1,65 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "5832752b3f847bc1b4b5fc66f7c9290aa89124f41b310bea67bd507a4855943d"
+  },
+  "id": "r09-copies-up-to-correct-v",
+  "lang": "verus",
+  "private_evidence_sha256": "5a4fff490e3b077038967b264b081f74c95c037e945a761107fc8e94795eb18c",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    }
+  ],
+  "source_sha256": "e14a711a3f7867acedfe731718bf02e70afb9e1664cdc8db8f2c82e4f028ff26",
+  "status": "admitted",
+  "target": "lemma_copies_optional_r09",
+  "validated_span": {
+    "end": 97,
+    "start": 60,
+    "symbol": "lemma_copies_optional_r09"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

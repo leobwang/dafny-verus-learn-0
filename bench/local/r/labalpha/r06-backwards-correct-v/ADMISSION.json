@@ -15,7 +15,8 @@
   },
   "id": "r06-backwards-correct-v",
   "lang": "verus",
-  "private_evidence_sha256": "459f82bc13381f0385a1d1e0ef2c5a06e25ed8be4da5a2ac66d21d63fccbb5a5",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "18712a93924f553e19a0605cdaf37cd56a52e796037fb5904aa941c28b22ca6c",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -33,12 +34,12 @@
       "name": "c2"
     }
   ],
-  "source_sha256": "37e71b309b7ad08fd56be1f8e290c747f287737f17980550d629689f700c3d77",
+  "source_sha256": "5d045a55a09f393a84ffb2f22a7be5d8055acc85a29072914e3572459b283e2a",
   "status": "admitted",
   "target": "lemma_backwards_correct",
   "validated_span": {
-    "end": 206,
-    "start": 197,
+    "end": 209,
+    "start": 200,
     "symbol": "lemma_backwards_correct"
   },
   "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"

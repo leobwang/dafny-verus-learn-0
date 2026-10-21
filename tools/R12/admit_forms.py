@@ -125,7 +125,7 @@ def target_span(core,path,lang,text,symbol):
     return text[:src.toks[token].start].count('\n')+1,text[:src.toks[d.body[1]].start].count('\n')+1
 
 
-def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print):
+def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print,shipped_induction=False):
     """The seven controls (module docstring); returns the public summary."""
     form=Path(form).resolve();evidence=Path(evidence).resolve();evidence.mkdir(parents=True,exist_ok=True)
     lang='d' if form.suffix=='.dfy' else 'v' if form.suffix=='.rs' else None
@@ -170,7 +170,9 @@ def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print):
     if not c['baseline-proof-fails']:
         code,d=cli('baseline',[vcheck,'--module','R12','--gate','--json',str(form)])
         hits=key_symbol(d.get('per_symbol',{}))
-        checked('baseline-proof-fails','baseline',code==core.EXIT_FAIL and d.get('verdict')=='failed' and d.get('stage')=='verify' and not d.get('holes') and hits and all(h!='verified' for h in hits),d)
+        # QPLAN section 30 Q66 (vcheck's reading): a run that ends inconclusive at the
+        # verify stage (out of resources at the pin) did not prove the form: it fails
+        checked('baseline-proof-fails','baseline',code==core.EXIT_FAIL and d.get('verdict') in ('failed','inconclusive') and d.get('stage')=='verify' and not d.get('holes') and hits and all(h!='verified' for h in hits),d)
         c['baseline-proof-fails']=True;save()
     if not c['reference-gate']:
         code,d=cli('reference-gate',[vcheck,'--module','R12','--gate','--json','--lab-task',str(form),str(ref)])
@@ -196,13 +198,18 @@ def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print):
         # Delta 58); a memory kill is never a verdict. The plain empty body must reach
         # verification and fail.
         if any(v=='killed(memory)' for v in statuses):raise RuntimeError('empty-automation: a variant was killed(memory): no verdict')
-        plain=[v for k,v in r.per_symbol.items() if k in ('maxauto',) or k.startswith('E0 ')]
-        ok=r.verdict=='failed' and bool(statuses) and bool(plain) and all(v=='failed' or v.startswith('fails(') for v in plain) and all(v in ('failed','inconclusive','killed(harness)') or v.startswith(('fails(','no-verify(')) for v in statuses)
+        # D55 (Lab alpha tasks only): with shipped_induction, Dafny's maxauto run (automatic
+        # induction turned back on) is recorded but does not gate; every shipped run (the
+        # units' --manual-lemma-induction, the setting the lab gate's lever check holds a
+        # delivery to) must fail. Verus has no such run: its reading is unchanged.
+        gating={k:v for k,v in r.per_symbol.items() if not (shipped_induction and lang=='d' and k=='maxauto')}
+        plain=[v for k,v in gating.items() if k in ('maxauto',) or k.startswith(('E0 ','shipped:'))]
+        ok=bool(gating) and bool(plain) and all(v in ('failed','inconclusive') or v.startswith('fails(') for k,v in gating.items() if k in ('maxauto',) or k.startswith(('E0 ','shipped:'))) and all(v in ('failed','inconclusive','killed(harness)') or v.startswith(('fails(','no-verify(')) for v in gating.values()) and (r.verdict=='failed' or (shipped_induction and lang=='d'))
         checked('max-auto-empty-fails','empty-automation',ok,r.to_dict())
-        report['empty_variants']=len(statuses);c['max-auto-empty-fails']=True;save()
+        report['empty_variants']=len(statuses);report['max_auto_reading']='shipped --manual-lemma-induction (D55; maxauto recorded: '+str(r.per_symbol.get('maxauto'))+')' if (shipped_induction and lang=='d') else 'maximal automation';c['max-auto-empty-fails']=True;save()
     if not c['wrong-hints-fail']:
         code,d=cli('wrong-hints',[vcheck,'--module','R12','--gate','--json',str(wrong)])
-        checked('wrong-hints-fail','wrong-hints',d.get('verdict')=='failed' and d.get('stage')=='verify' and not d.get('holes'),d)
+        checked('wrong-hints-fail','wrong-hints',d.get('verdict') in ('failed','inconclusive') and d.get('stage')=='verify' and not d.get('holes'),d)
         report['wrong_hint_kind']='expression sites false, call sites empty'+(' (no expression site: equals the baseline)' if all(s.kind=='calls' for s in task.sites) else '')
         c['wrong-hints-fail']=True;save()
     assert all(c.values())
@@ -211,7 +218,7 @@ def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print):
     summary={'schema':2,'id':form.stem,'lang':native,'target':symbol,'status':'admitted','source_sha256':report['source_sha256'],
              'checks':dict(c),'sites':[dict(name=s.name,kind=s.kind) for s in task.sites],'validated_span':spans[0],
              'frame':{'statement_sha256':frame['native_form']['statement_sha256'],'code_sha256':frame['native_form']['code_sha256']},
-             'seeds':list(SEEDS),'empty_variants':report['empty_variants'],'wrong_hint_kind':report['wrong_hint_kind'],
+             'seeds':list(SEEDS),'empty_variants':report['empty_variants'],'max_auto_reading':report.get('max_auto_reading','maximal automation'),'wrong_hint_kind':report['wrong_hint_kind'],
              'private_evidence_sha256':sha(state),'scope':'author native task-validity controls; no learner grade or live run'}
     if admission:Path(admission).write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
     log(form.name+': admitted')
@@ -227,6 +234,7 @@ def main():
     ap.add_argument('--admit',type=Path,metavar='HINTS.json',help='author mode: the reference hint data of the one FORM')
     ap.add_argument('--evidence',type=Path,help='with --admit: the private evidence directory')
     ap.add_argument('--admission',type=Path,help='with --admit: write the public ADMISSION.json here')
+    ap.add_argument('--shipped-induction',action='store_true',help="with --admit (D55, Lab alpha tasks only): read max-auto-empty-fails for Dafny under the units' shipped --manual-lemma-induction; the maxauto run is recorded, not gating")
     args=ap.parse_args()
     sys.path.insert(0,str(root/'tests/wrappers'));import test_tools_common as common
     core=common.load_script('vcheck')
@@ -235,7 +243,7 @@ def main():
     from fvh_r.engine import source_task
     if args.admit:
         if len(args.forms)!=1 or args.evidence is None:ap.error('--admit takes one FORM and --evidence')
-        try:admit(root,core,engine,args.forms[0],args.admit,args.evidence,args.admission);return 0
+        try:admit(root,core,engine,args.forms[0],args.admit,args.evidence,args.admission,shipped_induction=args.shipped_induction);return 0
         except (OSError,ValueError,TypeError,KeyError) as e:print(args.forms[0].name+': rejected: '+str(e),file=sys.stderr);return 1
         except RuntimeError as e:print(args.forms[0].name+': '+str(e),file=sys.stderr);return 3
     out=args.out or Path(tempfile.mkdtemp(prefix='dvl0-r12-forms-'));out.mkdir(parents=True,exist_ok=True)

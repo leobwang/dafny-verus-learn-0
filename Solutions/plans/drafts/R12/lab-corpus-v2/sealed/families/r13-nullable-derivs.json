@@ -1,0 +1,42 @@
+{
+  "cluster": "r13-nullable-derivs",
+  "kind": "regex",
+  "source": {
+    "module": "R13",
+    "lemma": "NullableDerivsR13",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::NullableDerivsR13 (R13.H3d)",
+      "verus": "Solutions/verus/r/r13_pipelines/src/lib.rs::lemma_nullable_derivs_r13 (R13.H3v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches, Nullable/nullable), copied verbatim",
+    "RG_A2_Deriv / rg_re_a2 (Deriv/deriv), copied verbatim",
+    "R13 given Derivs/derivs, copied verbatim"
+  ],
+  "helpers_included": [
+    "NullableCorrect / lemma_nullable_correct (A1b), complete",
+    "DerivCorrect / lemma_deriv_correct (A2), complete"
+  ],
+  "tasks": [
+    "r13-nullable-derivs-d",
+    "r13-nullable-derivs-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r13-nullable-derivs-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 3
+    },
+    {
+      "task": "r13-nullable-derivs-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 2
+    }
+  ],
+  "notes": "SEALED (plan 3.5, D-L3 (a)): forms only under this sealed directory. Verus keeps its two =~= bridges in the skeleton (calls-only form; the wrong-hint control equals the baseline).",
+  "sealed": true
+}

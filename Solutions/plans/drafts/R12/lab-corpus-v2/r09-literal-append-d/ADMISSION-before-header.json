@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "1d4d3ba5d40f778eb39fa1c7f80c9f958fadaeae792abfa4b0793aa339974419"
+  },
+  "id": "r09-literal-append-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "0fb785ffdf5795c43913ae75324f459f44296625e9dffbd596ce519bf4a5ff06",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "02d57c5dc6e42ec856e5d5c3372207821a3ec99957496c6b4c7c1eb886b22e4e",
+  "status": "admitted",
+  "target": "R12_LabCase.LiteralAppendR09",
+  "validated_span": {
+    "end": 26,
+    "start": 20,
+    "symbol": "R12_LabCase.LiteralAppendR09"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

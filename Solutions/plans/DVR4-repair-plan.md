@@ -439,7 +439,7 @@ Every solver job runs under `systemd-run --user --scope -p MemoryMax=<lane> -p M
 | 6 | **accumulated compatibility CI**: one run over R01–R14, layers A1–A4, Q isolation, avoid.sh, course map, leak verifier, all pins | one green run; failures fixed and the whole run repeated | 0.5 session + CI time | CI lane |
 | 7 | **R15, R16**: A5 reconciliation (§2.2 of PLAN), designs §2.7–2.8, Lab β/γ pre-registration designs on the §3 pattern, jump-threading spike | as step 3 | R15 4, R16 6 sessions | 1–2 native |
 | 8 | **R03 kit** per §1: chapter, bank, paper, predictions, agent, pins; A2's "provisional" label removed once R03 and R06 pass | §1.5 item 2; focused CI; inclusion in a repeat of step 6 | 3 sessions | 1 native |
-| 9 | Lab α confirmatory run (after R12's acceptance and the freeze) | prereg hash committed; grade ≥ 3 on every method dimension | ≈ 20 GPU-h | GPU + 6 Verus workers |
+| 9 | **The learner's** Lab α confirmatory and descriptive runs (PLAN §R12: the learner's own lab work), after R12's acceptance and the course freeze; not an author step: the author never runs a confirmatory or descriptive cluster with a model, smoke tests included (the author's model runs end at the pilot and its re-pilot on the excluded pilot clusters) | the learner's prereg hash (plan-sha256, freeze-sha256) graded ≥ 3 on every method dimension; R12's ceiling 80 GPU-h (D56), a batch that reaches it pauses and resumes | ≤ 80 GPU-h (≈ 72 GPU-s per call measured, Δ292) | GPU + the learner's Verus workers |
 
 ---
 

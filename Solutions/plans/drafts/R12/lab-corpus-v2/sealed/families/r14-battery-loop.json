@@ -1,0 +1,41 @@
+{
+  "cluster": "r14-battery-loop",
+  "kind": "regex",
+  "sealed": true,
+  "source": {
+    "module": "R14",
+    "lemma": "tools/R14/battery.json loop-d BatteryCellR14",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::tools/R14/battery.json loop-d BatteryCellR14",
+      "verus": "Solutions/verus/r/r14_smt/src/lib.rs::loop-v battery_cell_r14"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Nullable, NodeCount) and RG_A2_Deriv / rg_re_a2 (Deriv), copied verbatim",
+    "R14's own MatchesV / matches_v (stated triggers) and PowerWord / power_word, verbatim"
+  ],
+  "helpers_included": [
+    "CatIntroV / lemma_cat_intro_v, complete"
+  ],
+  "tasks": [
+    "r14-battery-loop-d",
+    "r14-battery-loop-v"
+  ],
+  "status": "rejected",
+  "attempts": [
+    {
+      "task": "r14-battery-loop-d",
+      "form": 1,
+      "result": "admitted (all seven)",
+      "sites": 1
+    },
+    {
+      "task": "r14-battery-loop-v",
+      "form": 1,
+      "result": "rejected at baseline-proof-fails: with the site empty the matching-loop hypothesis exhausts the rlimit (verdict inconclusive, not failed); the cell has no other granularity (its one move is the lemma call)",
+      "sites": 1
+    }
+  ],
+  "notes": "A cluster needs both languages: rejected. The other battery cells are not expressible or not regex obligations: split and star need char literals in the hint (the token grammar has none), nl, bv and iso are arithmetic/bit-vector/polynomial cells.",
+  "visibility": "sealed (plan 3.5, D-L3 (a)): forms and evidence only under Solutions/ and the sealed archive; never in a learner-visible path before the learner's R14 first tries"
+}

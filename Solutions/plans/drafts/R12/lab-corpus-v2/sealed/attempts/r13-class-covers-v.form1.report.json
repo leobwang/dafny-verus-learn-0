@@ -1,0 +1,475 @@
+{
+  "checks": {
+    "audit-clean": false,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": false,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": false
+  },
+  "evidence": {
+    "audit": {
+      "document": {
+        "findings": [
+          {
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "kind": "audit-incomplete",
+            "line": 0,
+            "message": "the --no-cheating run of reference did not complete (failed, stage resolve); raw output in /tmp/dvl-test-1000/runs/verus-audit-20261018-232519-lza13n_l"
+          }
+        ],
+        "lang": "verus",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs"
+      },
+      "passed": false
+    },
+    "baseline": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "r13_class_covers_v",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V03",
+            "col": 9,
+            "file": "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+            "line": 17,
+            "message": "postcondition not satisfied",
+            "severity": "error"
+          },
+          {
+            "code": "gate",
+            "col": 0,
+            "file": "",
+            "line": 0,
+            "message": "gate: 'success' is false, not true; exit 1",
+            "severity": "error"
+          }
+        ],
+        "exit_code": 1,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "class_covers_r13": "failed"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-232450-ctyylxn0",
+        "stage": "verify",
+        "target": "/tmp/dvl0-dvr4-labalpha/sealed-work/r13-class-covers-v/tasks/r13-class-covers-v.rs",
+        "verdict": "failed",
+        "verified_count": 1
+      },
+      "passed": true
+    },
+    "frame": {
+      "document": {
+        "code_equal": true,
+        "native_form": {
+          "code_sha256": "9dccb15b46592e6c264f7c89e735ad7bc489be7bc5113c369ec2d0cd8fdab905",
+          "lang": "verus",
+          "sites": [
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h1"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "expr",
+              "name": "h2"
+            }
+          ],
+          "source_sha256": "c3451672bab2f91bf07fc8fe31827b3a6bb90f7cd1de957b794d18ab44931e5b",
+          "statement_sha256": "26ad1cd129048c85c354115a89e2c2720857dc8782f992e3706742d42aafdd22"
+        },
+        "native_span": [
+          15,
+          32
+        ],
+        "statement_equal": true,
+        "validated_span": {
+          "end": 32,
+          "start": 15,
+          "symbol": "class_covers_r13"
+        }
+      },
+      "passed": true
+    },
+    "reference-gate": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 57,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "class_covers_r13": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-232455-gnrpow13",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 2
+      },
+      "passed": true
+    },
+    "seed-1": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=1",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 57,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "class_covers_r13": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-232506-0d7z4bq4",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 2
+      },
+      "passed": true
+    },
+    "seed-2": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=2",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 57,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "class_covers_r13": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-232510-1bidjwrl",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 2
+      },
+      "passed": true
+    },
+    "seed-3": {
+      "document": {
+        "cmd": [
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus",
+          "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+          "--crate-type=lib",
+          "--crate-name",
+          "reference",
+          "--rlimit",
+          "2",
+          "--num-threads",
+          "1",
+          "--smt-option",
+          "smt.random_seed=3",
+          "--import",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/rg_re_a1.vir",
+          "--extern",
+          "rg_re_a1=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/librg_re_a1.rlib",
+          "--import",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/rg_re_a1b.vir",
+          "--extern",
+          "rg_re_a1b=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/librg_re_a1b.rlib",
+          "--import",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/rg_re_a2.vir",
+          "--extern",
+          "rg_re_a2=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/librg_re_a2.rlib",
+          "--import",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/rg_re_a3.vir",
+          "--extern",
+          "rg_re_a3=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/librg_re_a3.rlib",
+          "--import",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/rg_re_a4.vir",
+          "--extern",
+          "rg_re_a4=/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps/librg_re_a4.rlib",
+          "-L",
+          "/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n/deps",
+          "--no-cheating",
+          "--output-json",
+          "--error-format=json",
+          "--time"
+        ],
+        "count_unit": "verified",
+        "diagnostics": [
+          {
+            "code": "W-V12",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "automatically chose triggers for this expression:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 57,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "  trigger 1 of 1:",
+            "severity": "info"
+          },
+          {
+            "code": "",
+            "col": 13,
+            "file": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+            "line": 23,
+            "message": "Verus printed one or more automatically chosen quantifier triggers\nbecause it had low confidence in the chosen triggers.\nTo suppress these messages, do one of the following:\n  (1) manually annotate a single desired trigger using #[trigger]\n      (example: forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)),\n  (2) manually annotate multiple desired triggers using #![trigger ...]\n      (example: forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)),\n  (3) accept the automatically chosen trigger using #![auto]\n      (example: forall|i: int, j: int| #![auto] f(i) && g(i) && h(j))\n  (4) use the --triggers-mode silent command-line option to suppress all printing of triggers.\n(Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;\nthe theorem prover instantiates a quantifier whenever some expression matches the\npattern specified by one of the quantifier's triggers.)",
+            "severity": "info"
+          }
+        ],
+        "exit_code": 0,
+        "findings": [],
+        "holes": [],
+        "lang": "verus",
+        "per_symbol": {
+          "class_covers_r13": "verified"
+        },
+        "raw_dir": "/tmp/dvl-test-1000/runs/verus-verify-20261018-232515-l85g601n",
+        "stage": "verify",
+        "target": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+        "verdict": "verified",
+        "verified_count": 2
+      },
+      "passed": true
+    }
+  },
+  "hints_sha256": "8d34d252453cd8997d4630f77156f92cb0140718a3c2d7a57674a2a4f596f902",
+  "id": "r13-class-covers-v",
+  "lang": "verus",
+  "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-r13-class-covers-v/reference.rs",
+  "reference_sha256": "d852c199220ca2a0ac38a88ece4ac9828ff11453d8f24938e138bcb112c99e3a",
+  "rejected_at": "audit-clean",
+  "schema": 2,
+  "source_sha256": "c3451672bab2f91bf07fc8fe31827b3a6bb90f7cd1de957b794d18ab44931e5b",
+  "status": "rejected",
+  "target": "class_covers_r13"
+}

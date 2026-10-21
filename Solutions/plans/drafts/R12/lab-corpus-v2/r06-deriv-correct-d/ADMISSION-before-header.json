@@ -1,0 +1,109 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "928939e8e05ca6d47a398284760a9b41c56a632f5ecd4fd49840f6d40bb9f4a1"
+  },
+  "id": "r06-deriv-correct-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "fbd678af00d36754018abfc2288acc25c4a17be0c0f4307244ea152089b1ce63",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    },
+    {
+      "kind": "expr",
+      "name": "h6"
+    },
+    {
+      "kind": "expr",
+      "name": "h7"
+    },
+    {
+      "kind": "expr",
+      "name": "h8"
+    },
+    {
+      "kind": "expr",
+      "name": "h9"
+    },
+    {
+      "kind": "expr",
+      "name": "h10"
+    },
+    {
+      "kind": "calls",
+      "name": "c5"
+    },
+    {
+      "kind": "calls",
+      "name": "c6"
+    },
+    {
+      "kind": "expr",
+      "name": "h11"
+    },
+    {
+      "kind": "expr",
+      "name": "h12"
+    }
+  ],
+  "source_sha256": "8abf1f05ec8037c67a4b1b8b62d814fab565e9be5504d986e7df28bacc27a5e2",
+  "status": "admitted",
+  "target": "R12_LabCase.DerivCorrect",
+  "validated_span": {
+    "end": 120,
+    "start": 68,
+    "symbol": "R12_LabCase.DerivCorrect"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

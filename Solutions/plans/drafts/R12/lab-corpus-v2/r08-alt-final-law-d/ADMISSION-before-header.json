@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "b5cb64b834691cc12badbcbbfa808b1597763dc56223b0dc2c4b49d3818eff5b"
+  },
+  "id": "r08-alt-final-law-d",
+  "lang": "dafny",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "4d921bb18f0124b81fe6400602ee550f9221f25d524ccfe3cd5d38f50fcf14d3",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "fd45fcd2a88272ea27e39e30a827e666f33386289c4aac1b3fccc537c55f6f70",
+  "status": "admitted",
+  "target": "R12_LabCase.AltFinalLaw",
+  "validated_span": {
+    "end": 82,
+    "start": 73,
+    "symbol": "R12_LabCase.AltFinalLaw"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

@@ -1,0 +1,19 @@
+{
+  "cluster": "r13-derivs-cat",
+  "kind": "regex",
+  "source": {
+    "module": "R13",
+    "lemma": "DerivsCatR13",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy::DerivsCatR13 (R13.H1d)",
+      "verus": "Solutions/verus/r/r13_pipelines/src/lib.rs::lemma_derivs_cat_r13 (R13.H1v)"
+    }
+  },
+  "layer_definitions": [],
+  "helpers_included": [],
+  "tasks": [],
+  "status": "rejected",
+  "attempts": [],
+  "notes": "Not built: DerivsCatR13 states and proves the same obligation as R06 DerivsAppend (Derivs(r, u + v) == Derivs(Derivs(r, u), v), the same induction), already admitted as cluster r06-derivs-append; a second cluster would count one obligation twice.",
+  "sealed": true
+}

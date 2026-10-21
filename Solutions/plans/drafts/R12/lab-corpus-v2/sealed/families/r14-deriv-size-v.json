@@ -1,0 +1,41 @@
+{
+  "cluster": "r14-deriv-size-v",
+  "kind": "regex",
+  "sealed": true,
+  "source": {
+    "module": "R14",
+    "lemma": "DerivSizeV",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::DerivSizeV",
+      "verus": "Solutions/verus/r/r14_smt/src/lib.rs::lemma_deriv_size_v"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Nullable, NodeCount) and RG_A2_Deriv / rg_re_a2 (Deriv), copied verbatim",
+    "R14's own MatchesV / matches_v (stated triggers) and PowerWord / power_word, verbatim"
+  ],
+  "helpers_included": [
+    "SquareGrowth / lemma_square_growth (R14 reference helper), complete; Verus keeps by (nonlinear_arith) inside it"
+  ],
+  "tasks": [
+    "r14-deriv-size-v-d",
+    "r14-deriv-size-v-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r14-deriv-size-v-d",
+      "form": 1,
+      "result": "rejected at max-auto-empty-fails under the maximal-automation reading: the maxauto run is inconclusive (out of resources; vcheck itself counts that as failing, QPLAN Q66, but the admission tool requires failed); then admitted under D55 (--shipped-induction): shipped seeds 1-3 fail, maxauto recorded inconclusive",
+      "sites": 3
+    },
+    {
+      "task": "r14-deriv-size-v-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 3
+    }
+  ],
+  "notes": "One call site per recursive case (the two hypotheses and the product inequality); Verus keeps reveal_with_fuel(node_count, 3) in the Cat case as the reference ships it.",
+  "visibility": "sealed (plan 3.5, D-L3 (a)): forms and evidence only under Solutions/ and the sealed archive; never in a learner-visible path before the learner's R14 first tries"
+}

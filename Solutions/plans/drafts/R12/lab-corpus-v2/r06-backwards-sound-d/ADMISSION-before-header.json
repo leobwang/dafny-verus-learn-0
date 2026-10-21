@@ -1,0 +1,77 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "dec872c760dbc1c951c4c85e71cd1e30c111d2c7a8f417a16f24bed4acbbecfc"
+  },
+  "id": "r06-backwards-sound-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "1deb6a5a6afb0c3869198e6ac0f4c417653896fb1989ac0989f628097e329d66",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "calls",
+      "name": "c5"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "calls",
+      "name": "c6"
+    }
+  ],
+  "source_sha256": "f32f43a2de3dca7a04a46529a5d3817a510342a807c684c915fb9459501aa4b6",
+  "status": "admitted",
+  "target": "R12_LabCase.BackwardsSound",
+  "validated_span": {
+    "end": 113,
+    "start": 82,
+    "symbol": "R12_LabCase.BackwardsSound"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

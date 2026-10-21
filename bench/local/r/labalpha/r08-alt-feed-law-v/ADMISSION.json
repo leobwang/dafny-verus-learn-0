@@ -1,0 +1,66 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "84dde3cfe94b85032ef1aa92704821b910bef7d54adc10fefc0a4ab24cd67819"
+  },
+  "id": "r08-alt-feed-law-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "520e10bb0f23ba3a87df12969016f30c898ddc4ece59c68832cc1daa750e4178",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    },
+    {
+      "kind": "expr",
+      "name": "h6"
+    }
+  ],
+  "source_sha256": "205fc6b23a4e75e9d0114c0dbbc5301683c83dee0fdb1ad14a03c908395b4edf",
+  "status": "admitted",
+  "target": "lemma_alt_feed_law",
+  "validated_span": {
+    "end": 291,
+    "start": 254,
+    "symbol": "lemma_alt_feed_law"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}
