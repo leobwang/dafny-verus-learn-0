@@ -272,3 +272,33 @@ at `3f083c2` (study) and `7ce6e87` (author) were stopped before they
 finished, to run both modes on the final tree. The live checks
 themselves (F3–F6) are recorded in §1 and §5 (Δ276); nothing was re-run
 live after this lane's fixes.
+
+## 15. The grader fix round on Basic (2026-10-21; Δ501, Δ502)
+
+The DV7 live re-run (Δ501; §5's third table and F3–F6) found grader and
+harness defects, which Δ502 fixes on basic without a model:
+
+| # | fix | where |
+|---|---|---|
+| D-1 | `/grade-paper`'s probes live only under `DVL_SCRATCH/grade-paper/<ID>/`, outside the checkout, and are deleted before the session ends; the feedback quotes verdicts and values, never probe source; a probe never proves a general lemma an exercise asks for. The harness checks it (`calibrate.probe_checks`) | `.claude/skills/grade-paper/SKILL.md`, `CORE.md`, CLAUDE.md, `calibrate.py`, `skill_sims.py` |
+| D-2 | one ledger line per distinct margin note ≤ 2, with an example | SKILL.md |
+| D-3 | an unanswered problem scores 1 with its gradebook row | SKILL.md |
+| D-4 | the stream scan applies the leak README's Rule 2 exemption to what a session read | `calibrate.py`, `skill_sims.py` |
+| D-5 | two of Q06's EXPECTED lines anchor where their findings point | the Q06 flawed calibration fixture (header only) |
+| O-3 | no leak token is cut from a host path | `guard_doors.py`, `calibrate.py` |
+| records | Δ277 renumbered Δ500 to match authoring's `cf3d4cb`; basic's entries take Δ501 upward | DELTAS and the seven files Δ502 lists |
+
+Nothing was re-run live. Still owed: `calibrate.py all` (all 78
+sessions), simulations set 1 case g, the capstone under the final contract,
+and the Q01, Q09 and Q18 gold `/contract` transcripts.
+
+**Full CI on the fixed tip `2ea7a64` (clean tree; each run under
+`systemd-run --user --scope -p MemoryMax=24G -p MemorySwapMax=0`, after
+`free -g` showed 91–92 GiB available):**
+
+- `scripts/ci.sh --author`: `ci.sh: PASS — 14 passed, 0 failed, 0 skipped, 0 absent, in 17593 s (author run; basic @ 2ea7a64, clean tree)`, logs `build/ci/20261021T150104Z-3969184/`.
+- `scripts/ci.sh`: `ci.sh: PASS — 12 passed, 0 failed, 2 skipped, 0 absent, in 4885 s (study run; basic @ 2ea7a64, clean tree)`, logs `build/ci/20261021T195440Z-2563859/`; the two skips are the author-only empty-body and rubric jobs.
+
+The commit that adds this section changes only this file and the
+calibration README; its quick CI (static and hook-test, both modes) is
+in its commit message.

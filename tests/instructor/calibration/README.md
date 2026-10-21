@@ -59,7 +59,7 @@ The archive (`~/.cache/dafny-verus-learn-0/author-probes/dv2b2/calibration/`, re
 - `env.json`, with the clone head, the copied files and their hashes, the hook hash, the deny list, the detector sizes, the controls and the cleanup record;
 - `calls.log`;
 - `cases/<case>/{summary.json,cmd.txt,prompt.txt,meta.json}`;
-- `cases/<case>/emitted/`, the grader's own feedback, gradebook, ledger and probe files, which an author needs to dispute a finding.
+- `cases/<case>/emitted/`, the grader's own feedback, gradebook and ledger, which an author needs to dispute a finding (and its probe files, for runs before Δ502; since then the probes live outside the checkout and the session deletes them, so the raw stream alone holds them, and it is not archived).
 
 `summary.json` keeps each tool call's input, with long text hashed, its refusal text verbatim, and the final reply only when the case had zero leak hits. Raw streams are never archived, and nothing here may be committed.
 
