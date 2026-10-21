@@ -67,6 +67,9 @@ class PairedReport:
 
 
 # item: Q31.H9py S13
+
+
+# triv: return []
 def load_runs(root, module: str, *, arms: Sequence[str] = (),
               strata: Mapping[str, str] | None = None) -> list[RunRow]:
     """**H9py.** The scored attempts of research/runs/<module>/ (fvh.runlog: run.json;
@@ -88,6 +91,9 @@ def load_runs(root, module: str, *, arms: Sequence[str] = (),
 
 
 # item: Q31.H10py S13
+
+
+# triv: return Table({}, {})
 def pass_at_k_table(rows: Sequence[RunRow], ks: Sequence[int]) -> Table:
     """**H10py.** Unbiased pass@k per (arm, stratum, lang, k): for each task the
     estimator stats.pass_at_k(n, c, k) over its n samples (rows) with c solved, averaged
@@ -117,6 +123,9 @@ def pass_at_k_table(rows: Sequence[RunRow], ks: Sequence[int]) -> Table:
 
 
 # item: Q31.H11py S13
+
+
+# triv: return Curve(axis, {})
 def cost_curve(rows: Sequence[RunRow], axis: str, budgets: Sequence[float]) -> Curve:
     """**H11py.** Solves versus cost on one axis (one of AXES; another raises
     ValueError): for each arm and each budget b (in the given order), the share of the
@@ -138,6 +147,9 @@ def cost_curve(rows: Sequence[RunRow], axis: str, budgets: Sequence[float]) -> C
 
 
 # item: Q31.H12py S13
+
+
+# triv: return PairedReport(a, b, 0, (0, 0), 1.0, False, 1.0)
 def paired_report(rows: Sequence[RunRow], a: str, b: str, *, family: Sequence[float] = (),
                   alpha: float = 0.05) -> PairedReport:
     """**H12py.** Arms a and b on their common tasks, each task's lowest repeat:
@@ -166,6 +178,9 @@ def paired_report(rows: Sequence[RunRow], a: str, b: str, *, family: Sequence[fl
 
 
 # item: Q31.H13py S13
+
+
+# triv: return ""
 def render(tables: Sequence[object]) -> str:
     """**H13py.** The deterministic text: one line per Table key ("pass", arm,
     stratum, lang, k, estimate, lo, hi), per Curve point ("curve", axis, arm, b, share, lo,

@@ -79,6 +79,9 @@ class Index:
 
 
 # item: Q32.H1py S9
+
+
+# triv: return protocol.Edit(path=edit.path, old="", new=file_text)
 def compile_edit(edit: TypedEdit, file_text: str) -> protocol.Edit:
     """**H1py.** The fvh Edit that applies a typed edit: old = the anchor line with its
     newline, new = the same followed by the edit's text and a newline. ValueError when
@@ -99,6 +102,9 @@ def compile_edit(edit: TypedEdit, file_text: str) -> protocol.Edit:
 
 
 # item: Q32.H2py S9
+
+
+# triv: return None
 def typed_diff(parent: str, child: str) -> TypedEdit | None:
     """**H2py.** The one typed edit that turns parent into child (child = parent with
     one or more consecutive lines inserted after one existing line, the inserted lines'
@@ -121,6 +127,9 @@ def typed_diff(parent: str, child: str) -> TypedEdit | None:
 
 
 # item: Q32.H3py S9
+
+
+# triv: return ""
 def dedup_key(state: protocol.State) -> str:
     """**H3py.** The search state's identity: the sha256 of the canonical JSON of the
     work copy's file hashes (state.files) and the sorted set of the last verification's
@@ -136,6 +145,9 @@ def dedup_key(state: protocol.State) -> str:
 
 
 # item: Q32.H4py S9
+
+
+# triv: return 0.0
 def value(state: protocol.State) -> float:
     """**H4py.** The heuristic value of a state, in [0, 1]: 1.0 for a verified last
     verification (verdict "verified", no hole), else 1 / (2 + e + h) with e the error
@@ -144,6 +156,9 @@ def value(state: protocol.State) -> float:
 
 
 # item: Q32.H5py S9
+
+
+# triv: return Index((), "")
 def build_index(root, sources: Sequence[str] = INDEX_SOURCES) -> Index:
     """**H5py.** The index over `sources` (each one of INDEX_SOURCES, else ValueError):
     every .dfy lemma, function, predicate and method and every .rs fn under them, as
@@ -182,6 +197,8 @@ class Agent:
     the best one with one model call for a one-typed-edit child."""
 
     # item: Q32.H6py S9
+
+    # triv: pass
     def __init__(self, ask, seeds: Sequence[int], *, index: Index | None = None):
         """**H6py.** Keep ask, the seeds (the n-th call uses seeds[n]) and the index."""
         self.ask, self.seeds, self.index = ask, list(seeds), index
@@ -192,6 +209,8 @@ class Agent:
         self.order = 0
 
     # item: Q32.H7py S9
+
+    # triv: return [protocol.Stop(reason="give-up")]
     def propose(self, state, ctx, budget) -> list:
         """**H7py.** One step:
           1. the last verification verified: [Stop("done")];

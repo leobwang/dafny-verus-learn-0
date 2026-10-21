@@ -105,6 +105,8 @@ class AgreementReport:
 # =============================================================================
 
 # item: Q31.H1py S12
+
+# triv: return gate_v2.gate_crate(target, run=run)
 def gate_crate(target: CrateTarget, *, run=None) -> GateResult:
     """**H1py.** Gate v3 on a crate-scale delivery: gate v2's verdict
     (gate_v2.gate_crate) and then, on a v2 PASS, solver_spread and reach_findings;
@@ -128,6 +130,9 @@ def gate_crate(target: CrateTarget, *, run=None) -> GateResult:
 
 
 # item: Q31.H2py S12
+
+
+# triv: return gate_crate(target.crate, run=run)
 def gate_task(target: TaskTarget, *, run=None, run_dir=None) -> GateResult:
     """**H2py.** Gate v3 on a benchmark delivery: gate_crate on target.crate, plus
     statement_identity, lever_findings and, when run_dir names the fvh run that made
@@ -145,6 +150,9 @@ def gate_task(target: TaskTarget, *, run=None, run_dir=None) -> GateResult:
 
 
 # item: Q31.H3py S12
+
+
+# triv: return []
 def statement_identity(target: TaskTarget, *, run=None) -> list[Finding]:
     """**H3py.** The task's frozen statement, unchanged, checked in a fresh process
     by the specfreeze --check instrument; [] when the task has no statement."""
@@ -165,6 +173,9 @@ def statement_identity(target: TaskTarget, *, run=None) -> list[Finding]:
 
 
 # item: Q31.H4py S12
+
+
+# triv: return []
 def lever_findings(target: TaskTarget, *, root=None) -> list[Finding]:
     """**H4py.** A verification lever, option or project file the delivery adds
     to (or drops from) its task form."""
@@ -188,6 +199,9 @@ def lever_findings(target: TaskTarget, *, root=None) -> list[Finding]:
 
 
 # item: Q31.H5py S12
+
+
+# triv: return Spread((), None, True)
 def solver_spread(target: CrateTarget, *, run=None) -> Spread:
     """**H5py.** The seed sweep, and for Dafny the bundled solvers too
     (instruments seed-rerun and solver-swap); every row must verify. Never call it
@@ -206,6 +220,9 @@ def solver_spread(target: CrateTarget, *, run=None) -> Spread:
 
 
 # item: Q31.H6py S12
+
+
+# triv: return []
 def reach_findings(target: CrateTarget, *, run=None) -> list[Finding]:
     """**H6py.** The reach instrument's findings (denied names and modules,
     required roots, reference reach)."""
@@ -221,6 +238,9 @@ def reach_findings(target: CrateTarget, *, run=None) -> list[Finding]:
 
 
 # item: Q31.H7py S12
+
+
+# triv: return []
 def run_record_findings(run_dir) -> list[Finding]:
     """**H7py.** The run-level classes from an fvh run's records: X15 (a returned
     file outside the editable set, a changed companion), X17 (a read outside the
@@ -257,6 +277,9 @@ def run_record_findings(run_dir) -> list[Finding]:
 
 
 # item: Q31.H8py S12
+
+
+# triv: return AgreementReport({}, {}, 0, 0, 0, 0, (0.0, 1.0))
 def agreement_report(results: Sequence[GateResult], labels: Mapping[str, Label],
                      trusted: Mapping[str, str]) -> AgreementReport:
     """**H8py.** The evaluator, the one function that reads labels: compares each

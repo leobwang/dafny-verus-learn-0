@@ -18,6 +18,9 @@ REPLY_RULE = ('Reply with one JSON object and nothing else: {"actions": [{"kind"
 
 
 # item: Q31.H14py S9
+
+
+# triv: return policies.ScriptedPolicy([])
 def scripted(edits: Sequence[protocol.Edit]) -> policies.ScriptedPolicy:
     """**H14py.** A ScriptedPolicy of two proposals: step 0 applies `edits` and runs
     Verify(); step 1 stops with Stop("done"). (The scripted baseline exists for the
@@ -27,6 +30,9 @@ def scripted(edits: Sequence[protocol.Edit]) -> policies.ScriptedPolicy:
 
 
 # item: Q31.H15py S9
+
+
+# triv: return ""
 def one_shot_render(state: protocol.State, ctx: protocol.Context, budget: protocol.Budget) -> str:
     """**H15py.** The one-shot prompt, as text: ctx.material["instructions"], then
     "Statement:" and ctx.statement, then the target's shipped text

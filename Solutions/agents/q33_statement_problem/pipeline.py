@@ -75,6 +75,9 @@ class AuditVerdict:
 
 
 # item: Q33.H1py S12
+
+
+# triv: return Draft("", "", {}, True)
 def autoformalize(prose: str, lang: str, signature: str, *, ask: Callable, budget: int) -> Draft:
     """**H1py.** Part A's drafter. Call ask(prompt, n) for n = 0, 1, … up to `budget`
     calls (the prompt holds the prose, the language and the signature); keep the first
@@ -99,6 +102,9 @@ def autoformalize(prose: str, lang: str, signature: str, *, ask: Callable, budge
 
 
 # item: Q33.H2py S12
+
+
+# triv: return {}
 def self_checks(draft: Draft, lang: str, *, run: Callable) -> Mapping[str, bool]:
     """**H2py.** run(check, draft) -> bool for each check of SELF_CHECKS, in order; a
     check that raises counts False; an abstaining draft gets every check False without
@@ -115,6 +121,9 @@ def self_checks(draft: Draft, lang: str, *, run: Callable) -> Mapping[str, bool]
 
 
 # item: Q33.H3py S12
+
+
+# triv: return []
 def run_pipeline(ticket: Ticket, *, policies: Mapping[str, Callable], run: Callable) -> Sequence[Handoff]:
     """**H3py.** Part B: policies[role](ticket, handoffs so far) -> Handoff for the first
     three roles in ROLES order; a handoff with a file outside ticket.allowlists[role]
@@ -134,6 +143,9 @@ def run_pipeline(ticket: Ticket, *, policies: Mapping[str, Callable], run: Calla
 
 
 # item: Q33.H4py S12
+
+
+# triv: return AuditVerdict("PASS", ())
 def audit(handoffs: Sequence[Handoff], ticket: Ticket, *, run: Callable) -> AuditVerdict:
     """**H4py.** run(check, handoffs, ticket) -> (ok, reason) for each of AUDIT_CHECKS,
     in order; ok is True, False or None (undecided). FAIL with the reasons of every False
