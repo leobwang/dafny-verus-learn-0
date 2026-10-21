@@ -1,4 +1,4 @@
-"""Δ277: `scripts/get_toolchain.sh claude [--check]`, the course's own copy of the pinned
+"""Δ500: `scripts/get_toolchain.sh claude [--check]`, the course's own copy of the pinned
 Claude Code version file, on a throwaway HOME with an invented version file.
 
 The pin is the apparatus file's [backend.claude] (FVH_APPARATUS names a test one). The

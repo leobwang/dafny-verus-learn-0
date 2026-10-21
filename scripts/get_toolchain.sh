@@ -4,7 +4,7 @@
 #
 #   scripts/get_toolchain.sh dafny|verus|claude [--check]
 #
-# `claude` (Δ277) differs from the two verifiers: nothing is downloaded. The
+# `claude` (Δ500) differs from the two verifiers: nothing is downloaded. The
 # pin is sandbox/apparatus.toml's [backend.claude] (version, binary, sha256;
 # FVH_APPARATUS names another apparatus file, as for fvh), never a constant
 # here. Claude Code's auto-updater deletes old version files from
@@ -337,7 +337,7 @@ install_tool() {
   log "installed $final"
 }
 
-# ------------------------------------------------------- claude (Δ277) ----
+# ------------------------------------------------------- claude (Δ500) ----
 
 # The updater's directory and the course's store, both relative to HOME. The
 # apparatus file's [backend.claude] binary must be "~/$CLAUDE_STORE_REL/<version>".

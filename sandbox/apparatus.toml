@@ -39,7 +39,7 @@ max_age_s = 18000        # one five-hour window
 [backend.claude]
 # Claude Code 2.1.306, the version file itself (never the `claude` link), so an
 # auto-update cannot change the apparatus under a batch (author notes §1.7).
-# The binary is the course's own copy of the version file (Δ277): the updater
+# The binary is the course's own copy of the version file (Δ500): the updater
 # deletes old files from ~/.local/share/claude/versions/ (it deleted 2.1.296),
 # so `scripts/get_toolchain.sh claude` copies the pinned one into the course's
 # store, checks this sha256, and `--check` verifies it; the store keeps every
