@@ -163,6 +163,10 @@ def render_plan(task_rows, *, family, seed, repeats, arms, role, lab, freeze):
     if freeze:
         s += 'freeze = ' + q(freeze) + '\n'
     s += 'seed = ' + str(seed) + '\nrepeats = ' + str(repeats) + '\nattempts = 1\nmax_reissue = 3\nlever_check = true\n'
+    names = [name for name, _ in arms]
+    groups = [list(g) for g in (PRIMARY, DESCRIPTIVE) if all(n in names for n in g)]
+    if groups:   # primary pairs first, adjacent per task and repeat; descriptive after (Δ298)
+        s += 'interleave = ' + q(groups) + '\n'
     s += 'tasks = ' + q([t['id'] for t in task_rows]) + '\n'
     s += 'system = ' + q((ROOT / 'tools/R12/lab_system.md').read_text()) + '\ninstructions = ' + q((ROOT / 'tools/R12/lab_instructions.md').read_text()) + '\n'
     for t in task_rows:

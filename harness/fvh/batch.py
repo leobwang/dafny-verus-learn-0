@@ -253,7 +253,8 @@ AGENT_MAX_TURNS = 200           # dvl.sandbox's [agent] turns bound
 AGENT_MIN_WALL_S = 120          # a session needs this much of the wall clock to start
 PLAN_KEYS = {"lab", "seed", "tasks", "repeats", "attempts", "max_reissue", "system",
              "system_file", "instructions", "instructions_file", "statement", "lever_check",
-             "task", "arm", "statements", "gate", "gate_sha256", "role", "freeze"}
+             "task", "arm", "statements", "gate", "gate_sha256", "role", "freeze",
+             "interleave"}
 ARM_KEYS = {"name", "family", "rounds", "policy", "construct", "turns", "wall_s", "gpu_s",
             "tokens", "acceptance", "lab_code", "feedback"}
 TASK_KEYS = {"path", "statement", "min_verified", "symbols"}
@@ -349,6 +350,7 @@ class Plan:
     task_pins: dict = field(default_factory=dict)   # id -> (min_verified, symbols)
     role: str = ""              # a schema-2 stratum's plan role (fvh.prereg.check_roles)
     freeze: str = ""            # the freeze file of a confirmatory/descriptive plan
+    interleave: tuple = ()      # arm-name groups run adjacent per task and repeat (Δ298)
 
     def __hash__(self):
         return hash(self.sha256)
@@ -361,7 +363,8 @@ class Plan:
 
     def items(self) -> list:
         return budget.enumerate_plan([a.arm() for a in self.arms], list(self.order),
-                                     repeats=self.repeats, attempts=self.attempts)
+                                     repeats=self.repeats, attempts=self.attempts,
+                                     interleave=self.interleave)
 
     def arm(self, name) -> ArmPlan:
         for a in self.arms:
@@ -577,6 +580,15 @@ def load_plan(path, root) -> Plan:
         raise BatchError(f"{path}: freeze is a course path")
     if frz:
         _course_text(root, frz, "freeze")
+    inter = data.get("interleave", [])
+    if not isinstance(inter, list) or not all(
+            isinstance(g, list) and g and all(isinstance(n, str) for n in g) for g in inter):
+        raise BatchError(f"{path}: interleave is a list of arm-name groups")
+    if role == "confirmatory" and {"best", "best-raw"} <= {a.name for a in arms} \
+            and ["best", "best-raw"] not in inter:
+        raise BatchError(f"{path}: a confirmatory plan interleaves its two primary arms "
+                         "(interleave = [[\"best\", \"best-raw\"]]): a pause at the GPU "
+                         "ceiling must leave whole pairs (Δ298)")
     plan = Plan(path=path, sha256=hashlib.sha256(raw).hexdigest(), text=raw.decode("utf-8"),
                 lab=lab, seed=seed, tasks=tasks, order=tuple(order), arms=tuple(arms),
                 repeats=_int(data.get("repeats", 1), "repeats", 1),
@@ -584,7 +596,7 @@ def load_plan(path, root) -> Plan:
                 system=text_of("system"), instructions=text_of("instructions"),
                 statement=statement, lever_check=lever, task_statements=task_statements,
                 statements=tuple(stm), gate=gate, gate_sha256=gate_sha, task_pins=task_pins,
-                role=role, freeze=frz)
+                role=role, freeze=frz, interleave=tuple(tuple(g) for g in inter))
     try:
         items = plan.items()
     except (ValueError, budget.BudgetError) as e:

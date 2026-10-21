@@ -92,6 +92,28 @@ class PlanContract(unittest.TestCase):
             for t in plan.tasks:
                 self.assertRegex(plan.task_statements[t], r'^R12_TASK_SHA256: [0-9a-f]{64}\nR12_CLUSTER: ')
 
+    def test_the_primary_arms_run_in_adjacent_pairs_and_the_descriptive_arms_after(self):
+        # Δ298: a pause at the GPU ceiling leaves whole best/best-raw pairs.
+        plans, _, _ = self.plans()
+        for name in ('pilot', 'confirmatory', 'descriptive'):
+            p = self.root / (name + '.toml')
+            p.write_text(plans[name])
+            ids = [i.id for i in batch.load_plan(p, self.root).items()]
+            arms = [i.split('/')[0] for i in ids]
+            if name == 'descriptive':
+                self.assertEqual(arms[:2], ['independent', 'repair'])
+                continue
+            primary = [i for i in ids if i.split('/')[0] in ('best', 'best-raw')]
+            self.assertEqual(ids[:len(primary)], primary)      # every primary run first
+            for a, b in zip(primary[::2], primary[1::2]):        # then pairs: same task, repeat
+                self.assertEqual((a.split('/')[0], b.split('/')[0]), ('best', 'best-raw'))
+                self.assertEqual(a.split('/')[1:], b.split('/')[1:])
+        text = plans['confirmatory'].replace('interleave = [["best", "best-raw"]]\n', '')
+        p = self.root / 'confirmatory-arm-major.toml'
+        p.write_text(text)
+        with self.assertRaisesRegex(batch.BatchError, 'interleaves its two primary arms'):
+            batch.load_plan(p, self.root)
+
     def test_the_batch_role_rules_accept_the_pilot_and_hold_the_rest_to_the_freeze(self):
         plans, _, _ = self.plans()
         for name, ok in (('pilot', True), ('confirmatory', False), ('descriptive', False)):
