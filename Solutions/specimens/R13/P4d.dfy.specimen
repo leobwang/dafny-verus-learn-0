@@ -4,6 +4,13 @@
 // CHECK P4d
 // after: R13.P4d
 module R13_RuntimeD {
- lemma ProvedBoundR13() ensures 8>3 {}
- method {:test} CheckRuntimeR13() {expect 8<3;}
+  lemma ProvedBoundR13()
+    ensures 8 > 3
+  {
+  }
+
+  method {:test} CheckRuntimeR13()
+  {
+    expect 8 < 3;
+  }
 }

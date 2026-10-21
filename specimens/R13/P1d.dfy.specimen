@@ -3,5 +3,8 @@
 // SLOT: CHECK P1d
 // after: R13.P1d
 module R13_EarlyD {
- lemma ReadForeignR13() {assert AbsentStageTokenR13;}
+  lemma ReadForeignR13()
+  {
+    assert AbsentStageTokenR13;
+  }
 }

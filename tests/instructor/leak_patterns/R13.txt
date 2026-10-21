@@ -1,4 +1,5 @@
-# R13 withheld hole answers (T1, H1–H3, both languages); no prediction answers.
+# R13 withheld hole answers (T1, H1–H3, both languages), re-cut from the one-statement-per-line
+# twins (DVR4 step 5, lane P2); no prediction answers.
 # from Solutions/dafny/R/R13_Pipelines/std/R13_Pipelines.dfy
 # source: b := A2.DerivMatch(r, s); (R13.T1d)
 # verified: solutions=1 public=0
@@ -13,9 +14,9 @@ if\s*!A2\.ClassMember\(cc,\s*s\[k\]\)
 # verified: solutions=1 public=0
 NullableDerivsR13\(A2\.Deriv\(r,\s*u\[0\]\),\s*u\[1\.\.\]\);
 # from Solutions/verus/r/r13_pipelines/src/lib.rs
-# source: deriv_match(r, s) (R13.T1v)
+# source: deriv_match(r, s) on a line of its own, the body's result (R13.T1v)
 # verified: solutions=1 public=0
-\{\s*deriv_match\(r,\s*s\)\s*\}
+\n\s*deriv_match\(r,\s*s\)\s*\n
 # source: lemma_derivs_cat_r13(deriv(r, u[0]), u.drop_first(), v); (R13.H1v)
 # verified: solutions=1 public=0
 lemma_derivs_cat_r13\(deriv\(r,\s*u\[0\]\),\s*u\.drop_first\(\),\s*v\);

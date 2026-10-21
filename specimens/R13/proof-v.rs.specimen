@@ -1,3 +1,12 @@
 // after: R13.P3dv
 use vstd::prelude::*;
-verus! {pub proof fn require_evidence_r13(n:int) ensures n==19, {}}
+
+verus! {
+
+pub proof fn require_evidence_r13(n: int)
+    ensures
+        n == 19,
+{
+}
+
+} // verus!

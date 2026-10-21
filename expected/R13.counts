@@ -14,14 +14,14 @@ module = "R13"
 [[unit]]
 path = "dafny/R/R13_Pipelines/std"
 lang = "dafny"
-reference_verified = 68
+reference_verified = 70
 min_verified = 5
 symbols = ["R13_Repairs.AcceptsR13", "R13_Repairs.ClassCoversR13", "R13_Repairs.Derivs", "R13_Repairs.DerivsCatR13", "R13_Repairs.NullableDerivsR13"]
 
 [[unit]]
 path = "verus/r/r13_pipelines"
 lang = "verus"
-reference_verified = 6
+reference_verified = 7
 min_verified = 5
 symbols = ["accepts_r13", "class_covers_r13", "derivs", "lemma_derivs_cat_r13", "lemma_nullable_derivs_r13"]
 

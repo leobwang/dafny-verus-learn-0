@@ -1,45 +1,59 @@
-// item: R13.P3dv verdict
-// Predict exact proof verdict/stage in each language.
-// SLOT: CHECK P3dv
-// item: R13.P6dv verdict
-// Selected then full scope, exact D/V verdict and stage pairs.
-// SLOT: CHECK P6dv
 /*!
 # R13 — Pipelines and trust (Exercises)
 
-Imports: the given regex spine A1–A4 (`RG_A1_Re`, `RG_A1b_Facts`, `RG_A2_Deriv`, …);
-nothing else: no earlier exercise file.
+Standalone R track. Import only the frozen layers A1 to A4; no earlier learner
+file is needed. The paired exercise is verus/r/r13_pipelines/src/lib.rs.
 
-Each item below comes with a fake delivery, shown and run in the chapter (§8): a
+Fill the six predictions in slots/R13.slots first (switched on by the two
+CHECK lines of the prediction block below and by the specimens' own slots), and
+record them with scripts/firsttry.sh R13 --check before running any subject.
+Then attempt T1 closed book. Four typed holes ship in this language.
+
+Each item comes with a fake delivery, shown and run in the chapter (§8): a
 version of the same task that some instrument reports as fine (a learner-loop
 summary, a gate that does not read statements) while it is not. For each item:
 1. Run the fake delivery's instruments, name the stage or the instrument that
-   exposes it, and write that attribution in `research/r13_forensics.md`.
+   exposes it, and write that attribution in research/r13_forensics.md.
 2. Then replace the hole with the honest proof. The statement stays as shipped.
 
-Done = `scripts/vcheck --gate dafny/R/R13_Pipelines/std` prints only the summary
-line and exits 0, `scripts/vaudit dafny/R/R13_Pipelines/std` reports no finding,
-`scripts/specfreeze --check R13` reports none, AND
-`scripts/firsttry.sh R13 --report --strict` exits 0.
+File order: the prediction block, the test-out (T1), then H1 (derivatives of a
+concatenation), H2 (a class loop) and H3 (nullable derivatives), and a given
+compiled use-site test of T1 and H2.
 
-This file ships with exactly 4 holes: T1 (closed-book test-out) and H1–H3.
+Done: scripts/vcheck --gate dafny/R/R13_Pipelines/std exits 0 with zero holes,
+scripts/vaudit dafny/R/R13_Pipelines/std reports no finding,
+scripts/specfreeze --check R13 reports none, and
+scripts/firsttry.sh R13 --report --strict exits 0.
 */
+
+// =============================================================================
+// Prediction block: do not run the subjects until these slots are recorded
+// =============================================================================
+
+// item: R13.P3dv verdict
+/** proof-d and proof-v each promise a fixed integer for an arbitrary input
+    without a supporting precondition. Predict both verdict and stage pairs.
+    Answer form: D:<verdict>,<stage> V:<verdict>,<stage>. */
+// SLOT: CHECK P3dv
+// item: R13.P6dv verdict
+/** selection-d and selection-v hold a clean declaration and an unsupported
+    one. Predict the selected run, then the full run, in each language.
+    Answer form: D:<selected>;<full> V:<selected>;<full>, each <verdict>,<stage>. */
+// SLOT: CHECK P6dv
+
 module R13_Repairs {
+  // specfreeze: frozen-imports
   import opened RG_A1_Re
   import B = RG_A1b_Facts
   import A2 = RG_A2_Deriv
-  // specfreeze: frozen-imports
 
-  // Given: the derivative by every character of u, in order.
-  function Derivs(r: Re, u: seq<char>): Re
-    decreases |u|
-  {
-    if u == [] then r else Derivs(A2.Deriv(r, u[0]), u[1..])
-  }
+  // ===========================================================================
+  // Test-out (closed book)
+  // ===========================================================================
 
   // item: R13.T1d
   // pair: R13.T1v
-  /** **T1.** (closed book) An executable matcher with the regex semantics as its
+  /** **T1.** Closed book: an executable matcher with the regex semantics as its
       contract. `Matches` is ghost: what may a compiled method call instead, and
       which layer supplies a compiled matcher with this postcondition? */
   method AcceptsR13(r: Re, s: seq<char>) returns (b: bool)
@@ -47,10 +61,25 @@ module R13_Repairs {
   {
     assume false;
   }
-  // Hint(1): the chapter's fake delivery for T1 (§8) shows the call that
-  //          does not compile, and the stage that stops it.
+  // Hint(1): the chapter's fake delivery for T1 (§8) shows the call that does not compile, and the stage that stops it.
   // Hint(2): A2 re-supplies the derivative matcher.
+  // Uncomment as you go:
+  // method AcceptsCheckR13()
+  // {
+  //   var b := AcceptsR13(Chr('a'), ['a']);
+  //   assert b;
+  // }
 
+  // ===========================================================================
+  // The repairs
+  // ===========================================================================
+
+  // Given: the derivative by every character of u, in order.
+  function Derivs(r: Re, u: seq<char>): Re
+    decreases |u|
+  {
+    if u == [] then r else Derivs(A2.Deriv(r, u[0]), u[1..])
+  }
 
   // item: R13.H1d
   // pair: R13.H1v
@@ -61,11 +90,8 @@ module R13_Repairs {
   lemma {:induction false} DerivsCatR13(r: Re, u: seq<char>, v: seq<char>)
     ensures Derivs(r, u + v) == Derivs(Derivs(r, u), v)
     decreases |u|
-  // Hint(1): induction on |u| (the lemma has {:induction false}); the base
-  //          case needs `[] + v == v`.
-  // Hint(2): state `(u + v)[0] == u[0]` and `(u + v)[1..] == u[1..] + v`, then
-  //          call the lemma on the derivative by u[0].
-
+  // Hint(1): induction on |u| (the lemma has {:induction false}); the base case needs `[] + v == v`.
+  // Hint(2): state what `(u + v)[0]` and `(u + v)[1..]` are, then call the lemma on the derivative by u[0].
 
   // item: R13.H2d
   // pair: R13.H2v
@@ -80,7 +106,6 @@ module R13_Repairs {
   // Hint(1): a `while` loop with an invariant over the prefix `s[..k]`.
   // Hint(2): A2.ClassMember is executable and promises A2.InClass.
 
-
   // item: R13.H3d
   // pair: R13.H3v
   /** **H3.** A word matches exactly when its derivatives end in a nullable
@@ -91,6 +116,30 @@ module R13_Repairs {
     ensures Nullable(Derivs(r, u)) <==> Matches(r, u)
     decreases |u|
   // Hint(1): induction on |u|; the base case is RG_A1b_Facts.NullableCorrect.
-  // Hint(2): A2.DerivCorrect on (r, u[0], u[1..]), and `[u[0]] + u[1..] == u`.
+  // Hint(2): A2.DerivCorrect on (r, u[0], u[1..]), and the word rebuilt from its first character and the rest.
+}
 
+// =============================================================================
+// Given (not an item): the compiled use-site check
+// =============================================================================
+
+module R13_Clients {
+  import opened RG_A1_Re
+  import A2 = RG_A2_Deriv
+  import opened R13_Repairs
+
+  // Given (not an item): the compiled use-site check of T1 and H2. It runs your
+  // method bodies; `scripts/vcheck --test` executes it once they are done.
+  @Test
+  method RepairSampleTest()
+  {
+    var yes := AcceptsR13(Cat(Chr('a'), Star(Chr('b'))), ['a', 'b', 'b']);
+    expect yes;
+    var no := AcceptsR13(Cat(Chr('a'), Star(Chr('b'))), ['b']);
+    expect !no;
+    var inside := ClassCoversR13(A2.ClassRange('a', 'f'), ['c', 'a', 'f']);
+    expect inside;
+    var outside := ClassCoversR13(A2.ClassRange('a', 'f'), ['c', 'z']);
+    expect !outside;
+  }
 }

@@ -1,6 +1,18 @@
 // after: R13.P6dv
 use vstd::prelude::*;
+
 verus! {
- pub proof fn clean_declaration_r13() ensures 11<12, {}
- pub proof fn unfinished_declaration_r13(n:int) ensures n==11, {}
+
+pub proof fn clean_declaration_r13()
+    ensures
+        11 < 12,
+{
 }
+
+pub proof fn unfinished_declaration_r13(n: int)
+    ensures
+        n == 11,
+{
+}
+
+} // verus!

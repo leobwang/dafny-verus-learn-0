@@ -6,10 +6,10 @@ Local author evidence does not discharge deferred live actor or grading work.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R11_solutions.tex  sha256 43b82965322cd7e6f4b60bbb298aef9418fff0bb6502a4b5b5f8fb643db6ea27
 paper/R11_problems.tex  sha256 9792e62810a7891e75653d84c97959b93ffd44037328e937d42ba2acbcba8eaa
-Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy  sha256 4966a65b7b66c01a75a524f1c5c15295612e017c44a237133114228c360f752c
-Solutions/verus/r/r11_theory/src/lib.rs  sha256 6b9e8083de8bbed18a790a520c274fa5892a373f13c3b1c4afcb910ff5c20668
-Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy  sha256 fe17574444286f03fb7e655f8c6e5a5a639acddf1df9a6059042030fdb429100
-Solutions/verus/r/r11_theory/src/exit.rs  sha256 bd6e34c6eea9da70d4b07223495dc5d0e656bfcf8d905e82da56c2f9ab73d34a
+Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy  sha256 7e61c8a80162dbcd67ab1dc986d1b6d626607e5a944c9d334ec2033a823bd0d6
+Solutions/verus/r/r11_theory/src/lib.rs  sha256 e3a6496441e8ba46406042bac39b249e432000bdf2b15643cb762fff49d56b21
+Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy  sha256 1b5a386e904da41e7b2f789e354b1a6e6801467a267593017009df50ee534e6d
+Solutions/verus/r/r11_theory/src/exit.rs  sha256 e183651dc570ccb0cef7e637855cedcecbb081eb5ba7629493e9215aeb53f0fd
 Solutions/dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy  sha256 c72636a198e5f4c60f3c5808b374bbe67c3108597b506e082ec62a0d25688e3c
 Solutions/verus/r/r11_theory/src/agent.rs  sha256 42cb2453159bb2ee52259c23641ced012c56128f140177a327b7c14c55c5c108
 
