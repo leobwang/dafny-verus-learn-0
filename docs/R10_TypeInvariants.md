@@ -20,7 +20,7 @@ The module is standalone. It imports the frozen layers A1 to A4 and no earlier l
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 5 | 60 | 30 | 8 | 15 | 110 | 30 | 40 | 20 | 30 | 20 | 30 | 10 | **408** |
 
-The hole minutes are 55 in each language: H1 8 (Verus 10), H2 12, H3 15, H4 20 (Verus 18). R10 has no closed-book test-out; its first tries are the five predictions.
+The hole minutes are 55 in each language: H1 8 (Verus 10), H2 12, H3 10, H4 25 (Verus 23). R10 has no closed-book test-out; its first tries are the five predictions.
 
 **Predictions.** Commit the five answers below before running their scenarios or opening the specimens' expected outputs, the bank or the rubric. The value slots are in `dafny/checks/R10_checks.dfy` (P1) and `specimens/R10/P2v.rs.specimen` (P2), the obligation slot in `specimens/R10/P4v.rs.specimen` (P4), and the two verdicts in `slots/R10.slots`, switched on by the two `CHECK` lines of the Dafny file's prediction block (P3, P5). Respect each printed answer form; then run `scripts/firsttry.sh R10 --check` and keep its receipts.
 
@@ -1170,8 +1170,8 @@ The hand work is four paired holes, H1 to H4, after the prediction block and the
 |---|---|---|---|
 | H1 | `TryPacketR10` · `try_packet_r10`: exactly the normal inputs, packed with their count | 8 / 10 | subset type or type invariant, by-method, ghost, tracked |
 | H2 | `CatPacketR10` · `cat_packet_r10`: concatenate packets, rebuild the erased count | 12 / 12 | the same, `MkCat`'s branches |
-| H3 | `NormalFixedR10` · `normal_fixed_r10`: a normal regex is a fixed point of `Norm` | 15 / 15 | structural induction |
-| H4 | `NormalizePacketR10` · `normalize_packet_r10`: the compiled normalizer equals the model | 20 / 18 | by-method, recursion, H1 and H2 |
+| H3 | `NormalFixedR10` · `normal_fixed_r10`: a normal regex is a fixed point of `Norm` | 10 / 10 | structural induction |
+| H4 | `NormalizePacketR10` · `normalize_packet_r10`: the compiled normalizer equals the model | 25 / 23 | by-method, recursion, H1 and H2 |
 
 Each hole's doc comment states the task and asks one guiding question; two hints follow it. **The hint dial:** read the question, try, run the learner loop, and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the given fact or construct, never the answer; `/tutor R10` comes after both. In Verus you also remove each exec item's `external_body`.
 
