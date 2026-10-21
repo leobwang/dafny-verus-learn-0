@@ -13,7 +13,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 AGENTIC = ROOT / "bench" / "local" / "q" / "agentic"
 TARGETS = {"q31-dev": (40, 24, 16), "q32-dev": (50, 30, 20),   # D76 fallback (b), Δ405
-           "q31-heldout": (60, 36, 24)}
+           "q31-heldout": (60, 36, 24), "q32-t1": (40, 24, 16), "q32-t2": (40, 24, 16),
+           "q32-t3": (40, 24, 16)}
 CARD = re.compile(r"(cl|pd|pv)-[dv]\d+-[a-z0-9-]+")
 
 
