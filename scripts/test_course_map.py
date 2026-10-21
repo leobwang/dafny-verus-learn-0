@@ -717,6 +717,25 @@ case("GPU hours over the per-lab cap", setf("Q12", "budget", '{ claude_calls = 1
 case("GPU hours over the course cap",
      setf("Q15", "budget", "{ claude_calls = 80, claude_runs = 0, qwen_calls = 1200, qwen_runs = 0, "
           "gpu_hours = 4 }"), 1, "gpu_hours sum to 46 over the registry, above the course cap of 45")
+def _challenge(mid, budget, text=BASE):
+    """A planned challenge record that runs Qwen policies (QPLAN §31.6; Δ402)."""
+    t = setf(mid, "engines", '["policy"]', text)
+    t = setf(mid, "paper", "true", t)
+    t = setf(mid, "rubric", f'"paper/rubrics/{mid}_rubric.md"', t)
+    return setf(mid, "budget", budget, t)
+
+
+case("a challenge's ceiling may pass 10 inside the pool (D65)",
+     _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 3200, qwen_runs = 400, "
+                "gpu_hours = 26 }"), 0, "course map OK")
+case("a challenge has no Claude arm (D66)",
+     _challenge("Q31", "{ claude_calls = 90, claude_runs = 0, qwen_calls = 640, qwen_runs = 640, "
+                "gpu_hours = 13 }"), 1, "a challenge has no Claude arm")
+case("the challenge pool is separate and capped (D65)",
+     _challenge("Q33", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 1410, qwen_runs = 360, "
+                "gpu_hours = 30 }", _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, "
+                "qwen_calls = 3200, qwen_runs = 400, gpu_hours = 26 }")), 1,
+     "the challenges' gpu_hours sum to 56, above their separate pool of 55")
 case("negative budget",
      setf("Q12", "budget", "{ claude_calls = -1, claude_runs = 0, qwen_calls = 4320, qwen_runs = 0, "
           "gpu_hours = 10 }"), 1, "budget values are non-negative integers")
@@ -1166,6 +1185,15 @@ def with_import(mid, path, tier, text=BASE):
     imports = {**(rec.get("imports") or {}), path: tier}
     return setf(mid, "imports", "{ " + ", ".join(f'"{k}" = "{v}"' for k, v in imports.items())
                 + " }", text)
+
+
+case("an agents/ file is py-agents (QPLAN §31.4)",
+     with_import("Q31", "agents/q31_gate_bench/bench.py", "py-fvh"), 1,
+     "an agents/ file is py-agents and only an agents/ file is")
+case("py-agents is for agents/ files only",
+     with_import("Q31", "agents/q31_gate_bench/bench.py", "py-agents",
+                 with_import("Q18", "harness/q/fvh_q/gate/gate_v2.py", "py-agents")), 1,
+     "'harness/q/fvh_q/gate/gate_v2.py' has tier py-agents")
 
 
 def _counted_on_disk(*rels):

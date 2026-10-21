@@ -128,6 +128,11 @@ MODES = ("learner", "reference")
 HARNESS = "harness"
 REF_DIR = "Solutions"
 LEARNER_FILE = re.compile(r"harness/(q|r)/fvh_(q|r)/(?P<rest>.+)\.py")
+# A challenge module's solo Python (QPLAN §31.4, DELTAS Δ402): agents/q<NN>_<name>/…,
+# NN in 19..33; its frozen tests live under harness/tests/challenges/<package>/.
+AGENT_DIR = "agents"
+AGENT_FILE = re.compile(r"agents/(?P<pkg>q(?P<num>19|2[0-9]|3[0-3])_[a-z0-9_]+)/(?P<rest>.+)\.py")
+AGENT_PKG = re.compile(r"q(19|2[0-9]|3[0-3])_[a-z0-9_]+")
 TRIV_LINE = re.compile(r"^\s*#\s*triv:\s?(.*)$")
 STATS_NAMES = ("pass_at_k", "wilson_interval", "bootstrap_ci", "mcnemar", "permutation_test",
                "holm", "mde_two_proportions")
@@ -228,10 +233,30 @@ def holes(target, *, root=None):
 
 def _track(rel):
     m = LEARNER_FILE.fullmatch(rel or "")
-    return m.group(1) if m and m.group(1) == m.group(2) else None
+    if m and m.group(1) == m.group(2):
+        return m.group(1)
+    return "q" if AGENT_FILE.fullmatch(rel or "") else None
 
 
-def _import_findings(path, tree, track):
+def agent_packages_allowed(num):
+    """The `agents` package numbers a challenge module q<num> may import: its own
+    and the earlier modules' of its topic (Q19-Q21, Q22-Q24, ..., three each;
+    QPLAN §31.4 item 1, the py-agents tier)."""
+    first = 19 + 3 * ((int(num) - 19) // 3)
+    return {f"{n:02d}" for n in range(first, int(num) + 1)}
+
+
+def _agent_heads(rel):
+    """For an agents/ file, a predicate on an import head: an allowed agents
+    package of its topic. None for any other file."""
+    m = AGENT_FILE.fullmatch(rel or "")
+    if not m:
+        return None
+    ok = agent_packages_allowed(m.group("num"))
+    return lambda head: bool(AGENT_PKG.fullmatch(head)) and head[1:3] in ok
+
+
+def _import_findings(path, tree, track, agent_heads=None):
     out = []
     own = {"fvh"} | ({f"fvh_{track}"} if track else set())
     std = set(sys.stdlib_module_names) | {"__future__"}
@@ -240,8 +265,10 @@ def _import_findings(path, tree, track):
         if head.lower().startswith("solutions"):
             out.append(Finding(str(path), line, "reference-import",
                                f"imports {head}: learner code never reaches the reference"))
-        elif head not in std and head not in own:
+        elif head not in std and head not in own and not (agent_heads and agent_heads(head)):
             allowed = "the standard library, fvh" + (f" and fvh_{track}" if track else "")
+            if agent_heads:
+                allowed += " and the agents packages of this module and its topic's earlier modules"
             out.append(Finding(str(path), line, "import-outside-tier",
                                f"imports {head}; a learner Python file imports {allowed} only"))
 
@@ -302,7 +329,7 @@ def lint(paths, mode="learner", *, root=None):
         rel = _rel(p, r)
         if rel and rel.startswith(REF_DIR + "/"):
             rel = rel[len(REF_DIR) + 1:]
-        out += _import_findings(p, tree, _track(rel))
+        out += _import_findings(p, tree, _track(rel), _agent_heads(rel))
         if mode == "reference":
             out += [Finding(str(p), h.line, "hole", f"{h.item}: a hole in a reference file")
                     for h in core.count_holes(text)]
@@ -369,9 +396,10 @@ def acceptance_tests(target, *, root=None):
     r = course_root(p, root)
     rel = _rel(p, r)
     m = LEARNER_FILE.fullmatch(rel or "")
-    if not m or m.group(1) != m.group(2):
-        raise Refused(f"{rel or p}: not a learner harness file (harness/q/fvh_q/… or "
-                      "harness/r/fvh_r/…)")
+    a = AGENT_FILE.fullmatch(rel or "")
+    if (not m or m.group(1) != m.group(2)) and not a:
+        raise Refused(f"{rel or p}: not a learner harness file (harness/q/fvh_q/…, "
+                      "harness/r/fvh_r/… or agents/q<NN>_<name>/…)")
     import check_course_map as ccm
     data, err = ccm.load_registry(r)
     if err:
@@ -381,8 +409,13 @@ def acceptance_tests(target, *, root=None):
     if not owners:
         raise Refused(f"{rel}: no module lists it in `harness` (MODULES.toml), so it has no "
                       "acceptance tests")
-    rest = Path(m.group("rest"))
-    test_rel = Path(HARNESS) / "tests" / m.group(1) / rest.parent / f"test_{rest.name}.py"
+    if a:
+        rest = Path(a.group("rest"))
+        test_rel = (Path(HARNESS) / "tests" / "challenges" / a.group("pkg") / rest.parent
+                    / f"test_{rest.name}.py")
+    else:
+        rest = Path(m.group("rest"))
+        test_rel = Path(HARNESS) / "tests" / m.group(1) / rest.parent / f"test_{rest.name}.py"
     if not (r / test_rel).is_file():
         raise Refused(f"{rel}: its acceptance tests {test_rel.as_posix()} do not exist "
                       f"({owners[0]})")
@@ -605,29 +638,39 @@ def check(target, gate=False, *, root=None):
 # =====================================================================================
 
 def learner_of_twin(twin, root):
-    """(learner path, path under harness/) of a twin Solutions/harness/<rest>."""
+    """(learner path, its path from the course root) of a twin
+    Solutions/harness/<rest> or Solutions/agents/<rest> (a challenge's
+    author-only twin, QPLAN §31.4)."""
     rel = _rel(twin, root)
-    prefix = f"{REF_DIR}/{HARNESS}/"
-    if rel is None or not rel.startswith(prefix):
-        raise Refused(f"{twin}: not a twin under {prefix}")
-    inner = rel[len(prefix):]
-    learner = Path(root) / HARNESS / inner
+    for top in (HARNESS, AGENT_DIR):
+        prefix = f"{REF_DIR}/{top}/"
+        if rel is not None and rel.startswith(prefix):
+            inner = f"{top}/{rel[len(prefix):]}"
+            break
+    else:
+        raise Refused(f"{twin}: not a twin under {REF_DIR}/{HARNESS}/ or {REF_DIR}/{AGENT_DIR}/")
+    learner = Path(root) / inner
     if not learner.is_file():
-        raise Refused(f"{rel}: its learner file {HARNESS}/{inner} does not exist")
+        raise Refused(f"{rel}: its learner file {inner} does not exist")
     return learner, inner
 
 
 def _overlay(root, inner, text):
-    """A scratch copy of harness/ with `text` at harness/<inner>, and of
-    tests/corpus/ when the root has it: a frozen test that reads the cheat
-    corpus through fvh.corpus's default root (Q09's gate core) then runs in
-    the overlay as it does in place, instead of skipping (DV3b kits, Δ167)."""
+    """A scratch copy of harness/ (and of agents/ when the root has it) with
+    `text` at <inner> (a path from the course root), and of tests/corpus/
+    when the root has it: a frozen test that reads the cheat corpus through
+    fvh.corpus's default root (Q09's gate core) then runs in the overlay as
+    it does in place, instead of skipping (DV3b kits, Δ167)."""
     s = common.scratch_dir("python-overlay")
     shutil.copytree(Path(root) / HARNESS, s / HARNESS, ignore=COPY_IGNORE, symlinks=True)
+    agents = Path(root) / AGENT_DIR
+    if agents.is_dir():
+        shutil.copytree(agents, s / AGENT_DIR, ignore=COPY_IGNORE, symlinks=True)
     corpus = Path(root) / "tests" / "corpus"
     if corpus.is_dir():
         shutil.copytree(corpus, s / "tests" / "corpus", ignore=COPY_IGNORE, symlinks=True)
-    (s / HARNESS / inner).write_text(text, encoding="utf-8")
+    (s / inner).parent.mkdir(parents=True, exist_ok=True)
+    (s / inner).write_text(text, encoding="utf-8")
     return s
 
 
@@ -805,7 +848,7 @@ def learner_files(root=None, armed=False, ids=False):
             raise Refused(f"the module registry is unusable: {err}")
         pairs = [(m.get("id"), p) for m in data.get("module", []) if isinstance(m, dict)
                  and m.get("status") != "planned" for p in (m.get("harness") or [])
-                 if isinstance(p, str) and LEARNER_FILE.fullmatch(p)]
+                 if isinstance(p, str) and (LEARNER_FILE.fullmatch(p) or AGENT_FILE.fullmatch(p))]
         return list(dict.fromkeys(i if ids else p for i, p in pairs))
     out = []
     for t in ("q", "r"):
@@ -814,6 +857,12 @@ def learner_files(root=None, armed=False, ids=False):
             out += [p.relative_to(r).as_posix() for p in d.rglob("*.py")
                     if p.is_file() and p.name != "__init__.py"
                     and not {"__pycache__", ".venv"} & set(p.parts)]
+    d = r / AGENT_DIR
+    if d.is_dir():
+        out += [rel for rel in (q.relative_to(r).as_posix() for q in d.rglob("*.py")
+                                if q.is_file() and q.name != "__init__.py"
+                                and not {"__pycache__", ".venv"} & set(q.parts))
+                if AGENT_FILE.fullmatch(rel)]
     return sorted(out)
 
 

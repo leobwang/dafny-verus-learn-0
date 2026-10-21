@@ -315,6 +315,9 @@ MODULE_SUFFIXES = (".py", ".pyi", ".pyc", ".pyd", ".so", ".rs", ".dfy", ".doo", 
 CARD_ID = re.compile(r"\d\d\.\d{1,2}")
 GPU_HOURS_PER_MODULE = 10   # design §3: ≤ 10 GPU-h per lab [A]
 GPU_HOURS_TOTAL = 45        # design §11.3: the six labs' Qwen work in ≤ 45 GPU-h [A]
+# The challenges' separate pool (the user's D65, DELTAS Δ401/Δ402): Q19–Q33 draw on it,
+# never on the 45 above; a challenge's ceiling may pass 10 (it pauses and resumes).
+CHALLENGE_GPU_HOURS_TOTAL = 55
 # The spoiler-guard's solo (2s) and frozen (2f) path patterns this registry must
 # feed (.claude/hooks/spoiler-guard.sh, class_of): R16's trust-report, Q's gate,
 # and challenge statements. Matched from the start of a repo-relative path. The
@@ -342,7 +345,7 @@ PAPER_ITEM = re.compile(r"^%\s*item:\s*([QR]\d\d\.B[1-9]\d*)\s*$", re.M)
 # std and alloc are always allowed. Python: which top-level packages.
 DAFNY_TIERS = ("core", "std", "std-all")
 VERUS_TIERS = ("prelude", "seq_lib", "arithmetic", "all")
-PYTHON_TIERS = ("py-std", "py-fvh")
+PYTHON_TIERS = ("py-std", "py-fvh", "py-agents")
 TIERS_BY_LANG = {"d": DAFNY_TIERS, "v": VERUS_TIERS, "py": PYTHON_TIERS}
 # `calc!` is a root-level macro of vstd (`use vstd::calc;`, defined in
 # vstd::calc_macro): proof syntax, not a library lemma, so the prelude tier
@@ -729,9 +732,16 @@ def check_model_fields(m):
             err("budget is non-zero exactly when engines holds policy or agent"
                 + (" (it spends, but no engine runs a model)" if spends else
                    " (a model engine needs its budget)"))
-        if b["gpu_hours"] > GPU_HOURS_PER_MODULE:
+        if is_core_module(mid) and b["gpu_hours"] > GPU_HOURS_PER_MODULE:
             err(f"budget.gpu_hours = {b['gpu_hours']} exceeds the per-lab cap of "
                 f"{GPU_HOURS_PER_MODULE} (design §3)")
+        if not is_core_module(mid):
+            if b["gpu_hours"] > CHALLENGE_GPU_HOURS_TOTAL:
+                err(f"budget.gpu_hours = {b['gpu_hours']} exceeds the whole challenge pool of "
+                    f"{CHALLENGE_GPU_HOURS_TOTAL} (D65)")
+            if b["claude_calls"] or b["claude_runs"]:
+                err("a challenge has no Claude arm: Qwen is the engine of record for every "
+                    "challenge run (the user's D66), so claude_calls and claude_runs are 0")
     st = m["statements"]
     if is_core_module(mid) and st:
         err("statements are the frozen statement files of Q19–Q33; must be []")
@@ -752,6 +762,13 @@ def check_model_fields(m):
             err(f"statements[{i}]: a shipped module pins its statement (no PENDING)")
     if not is_core_module(mid) and m["status"] != "planned" and not st:
         err("a challenge past planned lists its frozen statement files")
+    if not is_core_module(mid) and m["status"] != "planned" and st:
+        man = [s_["path"] for s_ in st if isinstance(s_, dict) and isinstance(s_.get("path"), str)
+               and re.fullmatch(rf"Challenges/[A-Za-z]+/{mid}_[A-Za-z0-9]+/{mid}_Statement\.toml",
+                                s_["path"])]
+        if len(man) != 1:
+            err(f"statements: a challenge past planned lists exactly one manifest "
+                f"Challenges/<Topic>/{mid}_<Name>/{mid}_Statement.toml (QPLAN §31.0)")
     for k, v in m["admissible"].items():
         im = ci.ITEM_ID.fullmatch(k)
         if not im or im.group(1) != mid:
@@ -1019,6 +1036,13 @@ def in_listed(p, listed):
     return p in listed or any(x.endswith("/") and p.startswith(x) for x in listed)
 
 
+def agent_packages_allowed(n):
+    """The agents package numbers a challenge q<n> may import: its own and its
+    topic's earlier modules' (the py-agents tier, QPLAN §31.4; dvl.python's copy)."""
+    first = 19 + 3 * ((int(n) - 19) // 3)
+    return {f"{k:02d}" for k in range(first, int(n) + 1)}
+
+
 def check_imports_table(m):
     errs = []
     mid = m["id"]
@@ -1051,6 +1075,9 @@ def check_imports_table(m):
                 err(f"imports: '{p}' sits in a core unit; its tier is core")
             if d and d.group(1) == "std" and tier == "core":
                 err(f"imports: '{p}' sits in a std unit; its tier is std or std-all")
+        if lang == "py" and (p.startswith("agents/") != (tier == "py-agents")):
+            err(f"imports: '{p}' has tier {tier}; an agents/ file is py-agents and only an "
+                "agents/ file is (QPLAN §31.4)")
         if early and not g and tier not in ("core", "prelude", "py-std", "py-fvh"):
             err(f"imports: '{p}' has tier {tier}; the library enters at Q04 / R07 (OD8), so "
                 f"{mid}'s files stay core (Dafny) and prelude (Verus)")
@@ -1158,7 +1185,11 @@ def check_registry(root, data, modules, good):
             errs.append(f"tier {tier} (Q{lo:02d}–Q{hi:02d}): from the moderate tier on the "
                         "modules take the families in order: A (S1–S5), B (S6–S8), C (S9–S13)")
 
-    gpu = sum(m["budget"]["gpu_hours"] for m in good)
+    gpu = sum(m["budget"]["gpu_hours"] for m in good if is_core_module(m["id"]))
+    cgpu = sum(m["budget"]["gpu_hours"] for m in good if not is_core_module(m["id"]))
+    if cgpu > CHALLENGE_GPU_HOURS_TOTAL:
+        errs.append(f"budget: the challenges' gpu_hours sum to {cgpu}, above their separate "
+                    f"pool of {CHALLENGE_GPU_HOURS_TOTAL} (the user's D65)")
     if gpu > GPU_HOURS_TOTAL:
         errs.append(f"budget: gpu_hours sum to {gpu} over the registry, above the course cap of "
                     f"{GPU_HOURS_TOTAL} (design §11.3: the six labs' Qwen work in ≤ "
@@ -1409,7 +1440,7 @@ def course_files(root):
                     "dafny/given/Q/*.dfy",
                     "dafny/given/R/*.dfy", "verus/q/*/src/**/*.rs", "verus/r/*/src/**/*.rs",
                     "verus/given/*/src/**/*.rs", "harness/q/fvh_q/**/*.py",
-                    "harness/r/fvh_r/**/*.py"):
+                    "harness/r/fvh_r/**/*.py", "agents/q[1-3][0-9]_*/**/*.py"):
         out += [p.relative_to(root).as_posix() for p in root.glob(pattern) if p.is_file()]
     return sorted(set(out))
 
@@ -1510,7 +1541,13 @@ def check_import_tiers(root, good):
                     continue
                 if name in ("fvh_q", "fvh_r", "solutions", "Solutions"):
                     continue  # course-internal: the isolation group judges these
-                if tier == "py-fvh" and name == "fvh":
+                if tier in ("py-fvh", "py-agents") and name == "fvh":
+                    continue
+                if tier == "py-agents" and name == "fvh_q":
+                    continue
+                am = re.fullmatch(r"agents/q(\d\d)_[a-z0-9_]+/.+", p)
+                if tier == "py-agents" and am and re.fullmatch(r"q(\d\d)_[a-z0-9_]+", name) and \
+                        name[1:3] in agent_packages_allowed(am.group(1)):
                     continue
                 errs.append(f"{p}:{line}: imports {name} but its tier is {tier} "
                             f"({'stdlib only' if tier == 'py-std' else 'stdlib, fvh and fvh_' + track.lower()})")

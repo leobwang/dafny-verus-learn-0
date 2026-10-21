@@ -1918,7 +1918,7 @@ class PythonOverlay(unittest.TestCase):
         try:
             (root / "harness" / "q").mkdir(parents=True)
             (root / "harness" / "q" / "a.py").write_text("x = 1\n")
-            s = PY._overlay(root, "q/a.py", "x = 2\n")
+            s = PY._overlay(root, "harness/q/a.py", "x = 2\n")
             try:
                 self.assertEqual((s / "harness" / "q" / "a.py").read_text(), "x = 2\n")
                 self.assertFalse((s / "tests").exists())
@@ -1926,7 +1926,7 @@ class PythonOverlay(unittest.TestCase):
                 shutil.rmtree(s, ignore_errors=True)
             (root / "tests" / "corpus" / "dafny" / "D-1").mkdir(parents=True)
             (root / "tests" / "corpus" / "dafny" / "D-1" / "manifest.toml").write_text("k = 1\n")
-            s = PY._overlay(root, "q/a.py", "x = 3\n")
+            s = PY._overlay(root, "harness/q/a.py", "x = 3\n")
             try:
                 got = s / "tests" / "corpus" / "dafny" / "D-1" / "manifest.toml"
                 self.assertEqual(got.read_text(), "k = 1\n")

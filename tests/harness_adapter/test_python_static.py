@@ -238,6 +238,69 @@ class Acceptance(RootCase):
         self.assertEqual(P.check(self.root / "MODULES.toml", root=self.root).verdict, "refused")
 
 
+class Agents(RootCase):
+    """The challenge route (QPLAN §31.4, Δ402): agents/q<NN>_<name>/… files are
+    learner Python of track q, with frozen tests under harness/tests/challenges/
+    and the py-agents import rule (own and earlier same-topic packages)."""
+
+    def add_agent(self, rel="agents/q31_gate_bench/bench.py", mid="Q31"):
+        reg = (self.root / "MODULES.toml").read_text(encoding="utf-8")
+        reg += f'\n[[module]]\nid = "{mid}"\nstatus = "authoring"\nharness = ["{rel}"]\n'
+        self.write("MODULES.toml", reg)
+        return self.write(rel, "x = 1\n")
+
+    def test_the_test_map(self):
+        p = self.add_agent()
+        with self.assertRaisesRegex(P.Refused, "do not exist"):
+            P.acceptance_tests(p, root=self.root)
+        self.write("harness/tests/challenges/q31_gate_bench/test_bench.py", "def test_x():\n    pass\n")
+        self.assertEqual(P.acceptance_tests(p, root=self.root),
+                         [Path("harness/tests/challenges/q31_gate_bench/test_bench.py")])
+
+    def test_outside_the_challenge_range_is_refused(self):
+        for rel in ("agents/q18_gate/x.py", "agents/q34_x/y.py", "agents/x.py", "agents/Q31_x/y.py"):
+            p = self.write(rel, "x = 1\n")
+            with self.assertRaises(P.Refused, msg=rel):
+                P.acceptance_tests(p, root=self.root)
+
+    def test_the_import_rule(self):
+        def kinds(text, rel):
+            p = self.write(rel, text)
+            return [f.kind for f in P.lint([p], root=self.root)]
+        q32 = "agents/q32_proof_search/agent.py"
+        self.assertEqual(kinds("import fvh_q\nfrom fvh import stats\nimport q31_gate_bench\n"
+                               "from q32_proof_search import util\n", q32), [])
+        # a later module, another topic, the other track, a third-party package
+        self.assertEqual(kinds("import q33_statement_problem\nimport q28_vc_gen\nimport fvh_r\n"
+                               "import numpy\n", q32), ["import-outside-tier"] * 4)
+        self.assertEqual(kinds("import q31_gate_bench\n", "agents/q19_sorting/x.py"),
+                         ["import-outside-tier"])
+        self.assertEqual(P.agent_packages_allowed("33"), {"31", "32", "33"})
+        self.assertEqual(P.agent_packages_allowed("19"), {"19"})
+
+    def test_the_file_lists(self):
+        self.add_agent()
+        self.write("agents/q31_gate_bench/__init__.py", "")
+        self.write("agents/stray.py", "x = 1\n")
+        self.assertIn("agents/q31_gate_bench/bench.py", P.learner_files(self.root))
+        self.assertNotIn("agents/stray.py", P.learner_files(self.root))
+        self.assertNotIn("agents/q31_gate_bench/__init__.py", P.learner_files(self.root))
+        self.assertIn("agents/q31_gate_bench/bench.py", P.learner_files(self.root, armed=True))
+
+    def test_twins_and_the_overlay(self):
+        self.add_agent()
+        twin = self.write("Solutions/agents/q31_gate_bench/bench.py", "x = 2\n")
+        learner, inner = P.learner_of_twin(twin.resolve(), self.root.resolve())
+        self.assertEqual(inner, "agents/q31_gate_bench/bench.py")
+        s = P._overlay(self.root, inner, "x = 3\n")
+        try:
+            self.assertEqual((s / inner).read_text(), "x = 3\n")
+            self.assertTrue((s / "harness").is_dir())
+        finally:
+            import shutil
+            shutil.rmtree(s, ignore_errors=True)
+
+
 class Files(RootCase):
     def test_on_disk_and_armed(self):
         self.write("harness/q/fvh_q/sub/more.py", "x = 1\n")

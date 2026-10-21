@@ -31,5 +31,5 @@ python-preference = "only-system"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = [".", "q", "r"]
+pythonpath = [".", "q", "r", "../agents"]
 addopts = "-p no:cacheprovider"
