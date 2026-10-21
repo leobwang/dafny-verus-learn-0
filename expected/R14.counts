@@ -21,9 +21,9 @@ symbols = ["R14_Mechanics.CatIntroV", "R14_Mechanics.DerivSizeV", "R14_Mechanics
 [[unit]]
 path = "verus/r/r14_smt"
 lang = "verus"
-reference_verified = 8
-min_verified = 5
-symbols = ["lemma_cat_intro_v", "lemma_deriv_size_v", "lemma_star_pow_v", "matches_v", "power_word"]
+reference_verified = 9
+min_verified = 6
+symbols = ["lemma_cat_intro_v", "lemma_deriv_cat_count_v", "lemma_deriv_size_v", "lemma_star_pow_v", "matches_v", "power_word"]
 
 [[file]]
 path = "dafny/R/R14_Smt/std/R14_Smt.dfy"

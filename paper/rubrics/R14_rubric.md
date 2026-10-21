@@ -6,8 +6,8 @@ model grading and contractor sessions remain D45 debt.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R14_solutions.tex  sha256 89c13097f2c154a4a0cc46799a27e8621dde3d8cec1317051aa677abb780ca01
 paper/R14_problems.tex  sha256 78c46d3881aa11ab4fecdf76f801b76aab0ee2fc59614f44f081d4974350070e
-Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy  sha256 558de5dcd1b5f730b9eae509dd9ce0e849c1d31ce9684bfcbf8b9755d01a8127
-Solutions/verus/r/r14_smt/src/lib.rs  sha256 7a2ecd0b29983f220a07379c0362b484e053cb5e8d5214a9c08263c310242c15
+Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy  sha256 463582d4431938120083524e3c243c0518336da4c8b88b2e962b1efbac1fc642
+Solutions/verus/r/r14_smt/src/lib.rs  sha256 7dceb5887bfc475c5fed5496ffcd5eb03102ec098891aa4c30523c3de5b967d6
 Solutions/tools/R14/trigscan.py  sha256 7d4055fcd43163672f8504573bbbc99b1e4595ef9dc57c7cc0af53f637a847d5
 
 ## Verifier anchors
@@ -66,7 +66,7 @@ preserve the shipped statements (`scripts/specfreeze --check R14`). H1 is `CatIn
 (the slice equations that make the left part's match a trigger term), H2 `StarPowV` (an
 induction whose step names the first chunk's slice), H3 `DerivSizeV` (a structural
 induction ending in product inequalities; in Verus `by (nonlinear_arith)` in a helper and
-`reveal_with_fuel(node_count, 3)` in the Cat case). Under the production bar, look for:
+the given `lemma_deriv_cat_count_v` in the Cat case: fuel is RECOGNISE, D57). Under the production bar, look for:
 the trigger term stated rather than a lemma that restates the goal; no lever added
 (`{:induction}`, `{:fuel}` on a hole's lemma, resource attributes); nonlinear queries whose
 `requires` lists exactly what they need. The toolsmith's delivery implements only

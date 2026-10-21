@@ -84,7 +84,6 @@ module R14_Mechanics {
   // Hint(2): the trigger needs a term `s[..i]` for the right `i`; an equation
   //          between sequences can introduce one.
 
-
   // item: R14.H2d
   // uses: trigger
   // pair: R14.H2v

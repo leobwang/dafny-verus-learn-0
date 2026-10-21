@@ -1,5 +1,6 @@
+// Reference Solution.
 /*!
-# R14 — SMT mechanics (Reference Solution)
+# R14 — SMT mechanics (Exercises)
 
 Imports: the given regex spine A1 (`RG_A1_Re`: the `Re` datatype and `NodeCount`),
 A1b and A2 (`RG_A2_Deriv`: `Deriv`); nothing else: no earlier exercise file.
@@ -74,55 +75,67 @@ module R14_Mechanics {
   // uses: trigger
   // pair: R14.H1v
   /** **H1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`.
-
-      Reference: the Cat existential is triggered by `MatchesV(a, s[..i])`.
-      With `s = u + v`, stating `s[..|u|] == u` and `s[|u|..] == v` puts the
-      split's terms in the solver's equivalence classes: `MatchesV(a, u)` is now
-      a `MatchesV(a, s[..|u|])` term, which instantiates the existential at
-      `i = |u|`. Without the two equations no term matches the trigger. */
+      The Cat existential in MatchesV is triggered by `MatchesV(a, s[..i])`.
+      You know `MatchesV(a, u)`: which equation makes that a term of the
+      trigger's shape for `s = u + v`? */
   lemma CatIntroV(a: Re, b: Re, u: seq<char>, v: seq<char>)
     requires MatchesV(a, u) && MatchesV(b, v)
     ensures MatchesV(Cat(a, b), u + v)
   {
+    // @hole-begin R14.H1d
     var s := u + v;
     assert s[..|u|] == u;
     assert s[|u|..] == v;
+    // @hole-end R14.H1d
   }
+  // Hint(1): the proof is about terms, not about cases: no induction.
+  // Hint(2): the trigger needs a term `s[..i]` for the right `i`; an equation
+  //          between sequences can introduce one.
 
   // item: R14.H2d
   // uses: trigger
   // pair: R14.H2v
-  /** **H2.** Every power of `c` matches `Star(Chr(c))`.
-
-      Reference: induction on `n`. The first chunk is `[c]`, the rest is
-      `PowerWord(c, n - 1)`, which the induction hypothesis matches; the Star case's
-      trigger needs the term `MatchesV(Chr(c), s[..1])`, so the proof states it.
-      Fuel cannot replace the induction: it unfolds `MatchesV` a fixed number of
-      times, which covers one `n`, never every `n`. */
+  /** **H2.** Every power of `c` matches `Star(Chr(c))`. Why can `{:fuel}`
+      prove this for `n = 3` but not for every `n`, and which term must the
+      Star case's trigger see once you have the induction hypothesis? */
   lemma {:induction false} StarPowV(c: char, n: nat)
     ensures MatchesV(Star(Chr(c)), PowerWord(c, n))
   {
+    // @hole-begin R14.H2d
     if n > 0 {
       StarPowV(c, n - 1);
       var s := PowerWord(c, n);
       assert s[..1] == [c] && s[1..] == PowerWord(c, n - 1);
       assert MatchesV(Chr(c), s[..1]);
     }
+    // @hole-end R14.H2d
+  }
+  // Hint(1): induction on n (the lemma has {:induction false}).
+  // Hint(2): the first chunk of `PowerWord(c, n)` is `[c]`: the Star case must see
+  //          it as a term `s[..1]`, together with a match of that chunk.
+
+
+  // reference-only
+  lemma SquareGrowth(x: nat, y: nat)
+    ensures 2 + 2 * x * x + y + 2 * y * y <= 2 * (1 + x + y) * (1 + x + y)
+    ensures 2 + 2 * x * x + x <= 2 * (1 + x) * (1 + x)
+  {
+    assert 2 * (1 + x + y) * (1 + x + y) == 2 + 4 * x + 4 * y + 2 * x * x + 4 * x * y + 2 * y * y;
+    assert 2 * (1 + x) * (1 + x) == 2 + 4 * x + 2 * x * x;
+    assert x * y >= 0;
   }
 
   // item: R14.H3d
   // uses: nonlinear-arith
   // pair: R14.H3v
   /** **H3.** A derivative is at most twice the square of its regex's size.
-
-      Reference: structural induction. In the Alt, Cat and Star cases the
-      induction hypotheses bound each derivative by `2 x^2`, and what is left is
-      a product inequality, `2a^2 + b + 2b^2 + 2 <= 2(1 + a + b)^2` in the
-      nullable Cat case. The solver does not expand squares of unknowns; the
-      proof states each expansion as an assertion about the products. */
+      The induction is structural; what is left in the Alt, Cat and Star
+      cases is an inequality between products of the subterms' sizes. Which
+      inequality, and how do you get the solver to expand a square? */
   lemma {:induction false} DerivSizeV(r: Re, c: char)
     ensures NodeCount(A2.Deriv(r, c)) <= 2 * NodeCount(r) * NodeCount(r)
   {
+    // @hole-begin R14.H3d
     match r
     case Empty =>
     case Eps =>
@@ -138,15 +151,10 @@ module R14_Mechanics {
     case Star(a) =>
       DerivSizeV(a, c);
       SquareGrowth(NodeCount(a), 0);
+    // @hole-end R14.H3d
   }
+  // Hint(1): one induction call per subterm, then one arithmetic fact per
+  //          case; a helper lemma over two naturals can hold all of them.
+  // Hint(2): assert the expanded form of `2 * (1 + x + y) * (1 + x + y)`.
 
-  // reference-only: the learner's own helper, the product inequality every case needs.
-  lemma SquareGrowth(x: nat, y: nat)
-    ensures 2 + 2 * x * x + y + 2 * y * y <= 2 * (1 + x + y) * (1 + x + y)
-    ensures 2 + 2 * x * x + x <= 2 * (1 + x) * (1 + x)
-  {
-    assert 2 * (1 + x + y) * (1 + x + y) == 2 + 4 * x + 4 * y + 2 * x * x + 4 * x * y + 2 * y * y;
-    assert 2 * (1 + x) * (1 + x) == 2 + 4 * x + 2 * x * x;
-    assert x * y >= 0;
-  }
 }

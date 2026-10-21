@@ -65,7 +65,7 @@ pub proof fn lemma_cat_intro_v(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
     ensures
         matches_v(Re::Cat(Box::new(a), Box::new(b)), u + v),
 {
-    #[verifier::proof_note("R14.H1v")] assume(false);  // HOLE: replace this line
+    #[verifier::proof_note("R14.H1v")] assume(false);
 }
 // Hint(1): no induction: the proof is about which terms exist.
 // Hint(2): the trigger needs a term `s.subrange(0, i)` for the right `i`; an extensional
@@ -82,29 +82,40 @@ pub proof fn lemma_star_pow_v(c: char, n: nat)
         matches_v(Re::Star(Box::new(Re::Chr(c))), power_word(c, n)),
     decreases n,
 {
-    #[verifier::proof_note("R14.H2v")] assume(false);  // HOLE: replace this line
+    #[verifier::proof_note("R14.H2v")] assume(false);
 }
 // Hint(1): induction on `n` with a recursive call on `(n - 1) as nat`.
 // Hint(2): the first chunk of `power_word(c, n)` is `seq![c]`: the Star case must see it as a
 //          term `s.subrange(0, 1)`, together with a match of that chunk.
 
+/// Given: the size of a Cat's derivative. RECOGNISE (fuel): `node_count` opens one level
+/// per use by default; this lemma opens it three levels deep, through the Alt and the Cat
+/// of the nullable case.
+pub proof fn lemma_deriv_cat_count_v(a: Re, b: Re, c: char)
+    ensures
+        nullable(a) ==> node_count(deriv(Re::Cat(Box::new(a), Box::new(b)), c)) == 2 + node_count(deriv(a, c)) + node_count(b) + node_count(deriv(b, c)),
+        !nullable(a) ==> node_count(deriv(Re::Cat(Box::new(a), Box::new(b)), c)) == 1 + node_count(deriv(a, c)) + node_count(b),
+{
+    // did: unfold node_count through the Alt and the Cat of the nullable case
+    reveal_with_fuel(node_count, 3);
+}
+
 // item: R14.H3v
-// uses: nonlinear-arith, fuel
+// uses: nonlinear-arith
 // pair: R14.H3d
 /// **H3.** A derivative is at most twice the square of its regex's size. The induction is
 /// structural; what is left in the Alt, Cat and Star cases is an inequality between
 /// products of the subterms' sizes, and Verus's default arithmetic does not multiply
-/// unknowns. Which prover proves it, and how deep must `node_count` unfold?
+/// unknowns. Which prover proves it, and which given fact sizes a nullable Cat's derivative?
 pub proof fn lemma_deriv_size_v(r: Re, c: char)
     ensures
         node_count(deriv(r, c)) <= 2 * node_count(r) * node_count(r),
     decreases r,
 {
-    #[verifier::proof_note("R14.H3v")] assume(false);  // HOLE: replace this line
+    #[verifier::proof_note("R14.H3v")] assume(false);
 }
 // Hint(1): one recursive call per subterm, then a helper proof fn over two naturals that
 //          states the product inequalities `by (nonlinear_arith)`.
-// Hint(2): in the Cat case `node_count` must unfold through an Alt and a Cat:
-//          `reveal_with_fuel(node_count, 3)`.
+// Hint(2): in the Cat case, the given `lemma_deriv_cat_count_v` states the derivative's size.
 
 } // verus!
