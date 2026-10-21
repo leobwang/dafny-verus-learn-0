@@ -2,8 +2,17 @@
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a4::*;
+
 verus! {
-fn produce_r11(r:&Re,s:&Vec<char>)->(out:Option<Derivation>)
- ensures match out {Some(d)=>valid_word_r10(d,*r,s@),None=>!matches(*r,s@)},
- {None}
+
+fn produce_r11(r: &Re, s: &Vec<char>) -> (out: Option<Derivation>)
+    ensures
+        match out {
+            Some(d) => valid_word_r10(d, *r, s@),
+            None => !matches(*r, s@),
+        },
+{
+    None
 }
+
+} // verus!

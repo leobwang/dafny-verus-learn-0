@@ -5,17 +5,17 @@ Local author evidence does not discharge deferred live actor or grading work.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R11_solutions.tex  sha256 43b82965322cd7e6f4b60bbb298aef9418fff0bb6502a4b5b5f8fb643db6ea27
-paper/R11_problems.tex  sha256 805bd311e3821c28dd91fe41af46ff2f2c0e0e6934ee20a89a4245c925b2730e
-Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy  sha256 cc4e5d72d740eb97e49851c76e09166c4511d74db916887b990310a31de82b98
-Solutions/verus/r/r11_theory/src/lib.rs  sha256 fbbd5017654a516454cbfc391525e3695e7997eb8b872c585234909e95cd7f19
-Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy  sha256 3b3bc5e1157f3790187d6ff23c89c43c170041973c7afb1861f4dbd9fdd69b22
-Solutions/verus/r/r11_theory/src/exit.rs  sha256 a4aa3b8b131edb214370477d4ed3f01db2dd23bf306b1620d0aab977984e7ab4
-Solutions/dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy  sha256 c253fa5f13a79249cac9fcf93f8dd449d20af997940a97b1af5e8b415e44b695
-Solutions/verus/r/r11_theory/src/agent.rs  sha256 d83e7b4b2e55c9015b56ec9c9bb8211d22fbdec59ee62a30f754ee1a8d344cc3
+paper/R11_problems.tex  sha256 9792e62810a7891e75653d84c97959b93ffd44037328e937d42ba2acbcba8eaa
+Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy  sha256 4966a65b7b66c01a75a524f1c5c15295612e017c44a237133114228c360f752c
+Solutions/verus/r/r11_theory/src/lib.rs  sha256 6b9e8083de8bbed18a790a520c274fa5892a373f13c3b1c4afcb910ff5c20668
+Solutions/dafny/R/R11_Theory/exit/R11_Checkpoint.dfy  sha256 fe17574444286f03fb7e655f8c6e5a5a639acddf1df9a6059042030fdb429100
+Solutions/verus/r/r11_theory/src/exit.rs  sha256 bd6e34c6eea9da70d4b07223495dc5d0e656bfcf8d905e82da56c2f9ab73d34a
+Solutions/dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy  sha256 c72636a198e5f4c60f3c5808b374bbe67c3108597b506e082ec62a0d25688e3c
+Solutions/verus/r/r11_theory/src/agent.rs  sha256 42cb2453159bb2ee52259c23641ced012c56128f140177a327b7c14c55c5c108
 
 ## Verifier anchors
 
-- **Probe A:** pin exact local12.10 lines5446–5478 and their hash; re-pin drift.
+- **Probe A:** pin exact local 12.10 lines 5446–5478 and their hash; re-pin drift.
 - **Probe B:** inspect the full checker, all constructors, relative splits and
   bounds before offset addition. Test concrete wrong-tail and invalid bounds.
 - **Probe C:** distinguish checker agreement, soundness, direct completeness
@@ -29,13 +29,13 @@ Solutions/verus/r/r11_theory/src/agent.rs  sha256 d83e7b4b2e55c9015b56ec9c9bb821
 
 ### card-fidelity
 
-- **CF.a:** score eight fields separately; minimum is the card score. Empty1,
-  accurate source-bounded answer4; unsupported claims need source evidence.
+- **CF.a:** score eight fields separately; minimum is the card score. Empty 1,
+  accurate source-bounded answer 4; unsupported claims need source evidence.
 - **CF.b:** independent replay via addDecl; abstract terms, typing, translation
   and one-sided monadic Hoare logic. Shared Expr/compiler permit correlation.
-- **CF.c:** three package denominators and1.21/1.40/1.32 replay ratios; one
+- **CF.c:** three package denominators and 1.21/1.40/1.32 replay ratios; one
   hardware setup, no invented repeated-run variance or common actor budget.
-- **CF.d:** fuel1000/four entry points, proved weakening/substitution/regularity,
+- **CF.d:** fuel 1000/four entry points, proved weakening/substitution/regularity,
   open unique typing/inversion/strengthening, partial correctness, unsound axiom,
   unsupported reduceBool and missing consistency proof. Overflow bug is concrete
   evidence of one defect, not evidence that every defect has been eliminated.
@@ -56,11 +56,11 @@ Solutions/verus/r/r11_theory/src/agent.rs  sha256 d83e7b4b2e55c9015b56ec9c9bb821
 
 ## Code and oral review
 
-Require7H solutions in Dafny,9in Verus, T1 each, zero-hole gates, audits and
+Require 7 H solutions in Dafny, 9 in Verus, T1 each, zero-hole gates, audits and
 fixed statements. H2d/X1d explicitly disable automatic induction; their max-auto
 empty bodies verify. Preserve that printed lever instead of claiming automation
 cannot solve them. V H2/H3 each use tracked evidence in the actual solution.
-The independent closed-book checkpoint has2items each language:≥3/4 with≥1per
+The independent closed-book checkpoint has 2 items each language: ≥ 3/4 with ≥ 1 per
 language. Do not open it while preparing general hand/search solutions. Require
 exactly five prediction commitments, fresh source-bound native viva
 predictions, two disjoint six-question draws and the tenth course-derived bench
@@ -69,6 +69,6 @@ separately. No PointsTo fallback equivalence or live session claim is authorized
 
 ## Calibration fixtures
 
-Gold expects4in both dimensions; flawed expects≤2using exact fixture/source
+Gold expects 4 in both dimensions; flawed expects ≤ 2 using exact fixture/source
 quotes and appropriate probes. Expected scores are not measured sessions.
 The recorded D45 deferral remains explicit debt.

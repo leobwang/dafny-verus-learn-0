@@ -1,0 +1,28 @@
+// after: R11.P1d
+// A specimen runs alone, so the A4 datatype it needs is copied here verbatim.
+module R11_P1Observed {
+  datatype Derivation =
+    | DEps
+    | DChr
+    | DAltL(d: Derivation)
+    | DAltR(d: Derivation)
+    | DCat(k: nat, d1: Derivation, d2: Derivation)
+    | DStarNil
+    | DStarCons(k: nat, d1: Derivation, d2: Derivation)
+
+  method AbsoluteMiddleR11(start: nat, d: Derivation) returns (mid: nat)
+    requires d.DCat?
+    ensures mid == start + d.k
+  {
+    mid := start + d.k;
+  }
+
+  // P1's expression, run as compiled code.
+  @Test
+  method RelativeMiddleObserved()
+  {
+    var certificate := DCat(2, DCat(1, DChr, DChr), DChr);
+    var middle := AbsoluteMiddleR11(4, certificate);
+    expect middle == 6;
+  }
+}

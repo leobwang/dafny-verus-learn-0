@@ -1,33 +1,37 @@
-# R11 frozen answer tripwires; protected author controls.
+# R11 withheld answers: one statement sequence of each of eight holes (the certificate kernel
+# H1d, H3d, H2v; the streaming matcher H4d; the search H6d, H5v, H7v; the arena H9v), re-cut from
+# the one-statement-per-line twins (DVR4 step 5, lane P2); no prediction answer.
+
 # from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
-# source: var b:=false;if a {b:=CheckCertificateR11(r.b,s[k..],right);} (R11.H1d)
+# source: var a := CheckCertificateR11(r.r, s[..k], left); (R11.H1d)
 # verified: solutions=1 public=0
-var\s+b:=false;if\s+a\s+\{b:=CheckCertificateR11\(r\.b,s\[k\.\.\],right\);\}
-# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
-# source: CheckSoundR11(r.a, s[..k], d1); (R11.H2d)
+var\s+a\s*:\s*=\s*CheckCertificateR11\s*\(\s*r\s*\.\s*r\s*,\s*s\s*\[\s*\.\s*\.\s*k\s*\]\s*,\s*left\s*\)\s*;
+
+# source: var d2 := DirectCompleteR11(r, s[k..]); d := DStarCons(k, d1, d2); (R11.H3d)
 # verified: solutions=1 public=0
-CheckSoundR11\(r\.a,\s+s\[\.\.k\],\s+d1\);
-# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
-# source: var k :| 0 < k <= |s| && Matches(a, s[..k]) && Matches(Star(a), s[k..]); (R11.H3d)
+var\s+d2\s*:\s*=\s*DirectCompleteR11\s*\(\s*r\s*,\s*s\s*\[\s*k\s*\.\s*\.\s*\]\s*\)\s*;\s*d\s*:\s*=\s*DStarCons\s*\(\s*k\s*,\s*d1\s*,\s*d2\s*\)\s*;
+
+# source: ResidualStepR11(r, current, s[..i], c); assert s[..i] + [c] == s[..i + 1]; (R11.H4d)
 # verified: solutions=1 public=0
-var\s+k\s+:\|\s+0\s+<\s+k\s+<=\s+\|s\|\s+\&\&\s+Matches\(a,\s+s\[\.\.k\]\)\s+\&\&\s+Matches\(Star\(a\),\s+s\[k\.\.\]\);
-# from Solutions/dafny/R/R11_Theory/std/R11_Theory.dfy
-# source: invariant forall j |0<=j<i :: trace[j]==Matches(r,s[..j+1]) (R11.H4d)
+ResidualStepR11\s*\(\s*r\s*,\s*current\s*,\s*s\s*\[\s*\.\s*\.\s*i\s*\]\s*,\s*c\s*\)\s*;\s*assert\s+s\s*\[\s*\.\s*\.\s*i\s*\]\s*\+\s*\[\s*c\s*\]\s*=\s*=\s*s\s*\[\s*\.\s*\.\s*i\s*\+\s*1\s*\]\s*;
+
+# source: right := SearchR11(b, s[k..]); (R11.H6d)
 # verified: solutions=1 public=0
-invariant\s+forall\s+j\s+\|0<=j<i\s+::\s+trace\[j\]==Matches\(r,s\[\.\.j\+1\]\)
+right\s*:\s*=\s*SearchR11\s*\(\s*b\s*,\s*s\s*\[\s*k\s*\.\s*\.\s*\]\s*\)\s*;
+
 # from Solutions/verus/r/r11_theory/src/lib.rs
-# source: check_certificate_r11(left,a,s,lo,mid) && check_certificate_r11(right,b,s,mid,hi) (R11.H1v)
+# source: sound_word_r11(owned.tree, owned.pattern, owned.word); (R11.H2v)
 # verified: solutions=1 public=0
-check_certificate_r11\(left,a,s,lo,mid\)\s+\&\&\s+check_certificate_r11\(right,b,s,mid,hi\)
-# from Solutions/verus/r/r11_theory/src/lib.rs
-# source: let tracked owned=evidence;sound_word_r11(owned.tree,owned.pattern,owned.word);} (R11.H2v)
+sound_word_r11\s*\(\s*owned\s*\.\s*tree\s*,\s*owned\s*\.\s*pattern\s*,\s*owned\s*\.\s*word\s*\)\s*;
+
+# source: Re::Cat(a, b) => search_cat_r11(a, b, s, lo, hi), (R11.H5v)
 # verified: solutions=1 public=0
-let\s+tracked\s+owned=evidence;sound_word_r11\(owned\.tree,owned\.pattern,owned\.word\);\}
-# from Solutions/verus/r/r11_theory/src/lib.rs
-# source: let ghost tree=choose|d:Derivation| #[trigger] valid_word_r10(d,r,s); (R11.H3v)
+Re\s*:\s*:\s*Cat\s*\(\s*a\s*,\s*b\s*\)\s*=\s*>\s*search_cat_r11\s*\(\s*a\s*,\s*b\s*,\s*s\s*,\s*lo\s*,\s*hi\s*\)\s*,
+
+# source: match search_r11(&parent, s, mid, hi) { (R11.H7v)
 # verified: solutions=1 public=0
-let\s+ghost\s+tree=choose\|d:Derivation\|\s+\#\[trigger\]\s+valid_word_r10\(d,r,s\);
-# from Solutions/verus/r/r11_theory/src/lib.rs
-# source: assert forall|i:int| 0<=i<arena.nodes@.len() implies targets_valid_r11(#[trigger] arena.nodes@[i],arena.nodes@.len() as int) by { (R11.H8v)
+match\s+search_r11\s*\(\s*\&\s*parent\s*,\s*s\s*,\s*mid\s*,\s*hi\s*\)\s*\{
+
+# source: arena.nodes.set(index, ArenaNodeR11 { label, first: Some(target), second }); (R11.H9v)
 # verified: solutions=1 public=0
-assert\s+forall\|i:int\|\s+0<=i<arena\.nodes@\.len\(\)\s+implies\s+targets_valid_r11\(\#\[trigger\]\s+arena\.nodes@\[i\],arena\.nodes@\.len\(\)\s+as\s+int\)\s+by\s+\{
+arena\s*\.\s*nodes\s*\.\s*set\s*\(\s*index\s*,\s*ArenaNodeR11\s*\{\s*label\s*,\s*first\s*:\s*Some\s*\(\s*target\s*\)\s*,\s*second\s*\}\s*\)\s*;

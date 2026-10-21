@@ -1,15 +1,19 @@
 // Reference Solution.
 use vstd::prelude::*;
+
 verus! {
+
 // item: R11.P4v obligation
 // Select failing labelled VCs for arbitrary original i and len.
 // FAILS c
-fn labelled_step_r11(i:usize,len:usize)
- requires i<len,
+fn labelled_step_r11(i: usize, len: usize)
+    requires
+        i < len,
 {
- let next=i+1;
- assert(next<=len); // [a]
- assert(i<next); // [b]
- assert(next<len); // [c]
+    let next = i + 1;
+    assert(next <= len); // [a]
+    assert(i < next); // [b]
+    assert(next < len); // [c]
 }
-}
+
+} // verus!
