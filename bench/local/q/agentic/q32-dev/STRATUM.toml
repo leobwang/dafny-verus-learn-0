@@ -1,0 +1,124 @@
+# bench/local/q/agentic/q32-dev/STRATUM.toml — Q32's open dev stratum (QPLAN §34.4; DELTAS Δ408).
+# Learner-visible; the task forms are course-authored and shipped, the answers are not here.
+# Composition under D76's fallback (b) (Δ405): 50 tasks, 30 course-local and 20 public; this
+# file grows as the author admits tasks (the running count is `cards` below against `target`).
+# The tasks are proof-search tasks: many ship their code and statement and need the proof
+# added (loop invariants, assertions, lemma calls), the moves Q32's typed edits make.
+#
+# Admission and the rest of the conventions: q31-dev/STRATUM.toml's header.
+schema = 1
+module = "Q32"
+stratum = "q32-dev"
+role = "dev"
+sealed = false
+target = { total = 50, course_local = 30, public = 20 }
+
+[[card]]
+id = "cl-d13-twice-sum"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d13-twice-sum/tasks/cl-d13-twice-sum.dfy"
+form_sha256 = "da8b8882ab19ce24e3601706ab5ee1ddf7eb9c35a2eb90657bba561c66b73018"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "98d23024a454fbc7853d36403c073e418a7e0cf6bf12956f3f078197c3891397"
+
+[[card]]
+id = "cl-d14-find-first"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d14-find-first/tasks/cl-d14-find-first.dfy"
+form_sha256 = "b1e54a3f1b770eee713de165f4c415e31efb288e27775e52b8deb44319433080"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "978af3779191e79020d09002cc5039da74a4533e44c78dd503b86bd331ddd4e7"
+
+[[card]]
+id = "cl-d15-max-elem"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d15-max-elem/tasks/cl-d15-max-elem.dfy"
+form_sha256 = "81817c51214546921288d54510181b16514ad8623250bf763cc34593fc816cb2"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "70eb74d2c31cc1052d9c5939f42160f6a62e4b15b23691eb6f877c29f52301e2"
+
+[[card]]
+id = "cl-d16-count-loop"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d16-count-loop/tasks/cl-d16-count-loop.dfy"
+form_sha256 = "612b16cf2e2366bd8acd2160c666d9b45b98c4dfba204a9ad7896ac446c05551"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "7eb1dab64040e7c947655368f404e91840b25321446489c1457c659139d8c838"
+
+[[card]]
+id = "cl-d17-all-positive"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d17-all-positive/tasks/cl-d17-all-positive.dfy"
+form_sha256 = "528d5c0e3e38db931a447ce58aaa885c5ff5ae467e5ebc9bb32cbef785c4cfef"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "939284babd807e235a26edfb133a726d86102388aac8b3621f940d3c6593e0a0"
+
+[[card]]
+id = "cl-v13-count-up"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v13-count-up/tasks/cl-v13-count-up.rs"
+form_sha256 = "52de34f637ad9d086b267f5fb7f9aa5187d8f592fb4b1e5062b488b730c1a567"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "f9abae7799fcaa6a576c774a63f1ca44f12348993c697ac84d6c858df1294965"
+
+[[card]]
+id = "cl-v14-find-index"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v14-find-index/tasks/cl-v14-find-index.rs"
+form_sha256 = "54437a2f4bfb1a1698119ab4b9a445fdae12d10b57543e0acf23f7c8454c5e6a"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "4d503e0b73d90b15e0c52b12b1602f8060f8102e1266467e6a7ac94746cf2a5b"
+
+[[card]]
+id = "cl-v15-max-of"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v15-max-of/tasks/cl-v15-max-of.rs"
+form_sha256 = "00249980e252883ce988a3a38198a13a5265ed1825a8d2105d4d418b0472c000"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "5da30c5aa4293d2535cdf7711bd46eed6000b1c237d5e22470d43760adc40a70"
+
+[[card]]
+id = "cl-v16-all-pos"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v16-all-pos/tasks/cl-v16-all-pos.rs"
+form_sha256 = "2776897e80b3bd9e5e5c60ae2afb3c10d6ce014b3b8c27d67004f330d19449b1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "e3c2be297696190313e6dacfe5c4e798eda8b5feb2941e99aa6ba2d42e33ce22"
+
+[[card]]
+id = "cl-v17-fill-zero"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v17-fill-zero/tasks/cl-v17-fill-zero.rs"
+form_sha256 = "6bbafe9ad3b29bdbd3f930c92b7c95c8de88dade18e9aca53b604fa5f5d44a33"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "fd6073138bd41c993208e0c5ccd2a44546884979b9490d5a9b2813d13d4d2e2f"
