@@ -298,6 +298,7 @@
 | 406 | DV7 W2's remainder as built: the reference twins of Q31's gate v3, bench and baselines and of Q32's searcher, their frozen tests and Q31's recorded fixtures; the reference check's overlay of earlier twins; `harness/tests/challenges` a course tree | adopted (DV7 W2, 2026-10-21) | DV7's W2 lane |
 | 407 | Q33's pipeline: exact contracts, reference twin and frozen tests; W3's order under D80 (W1b waits for the container redesign) | adopted (DV7 W2/W3, 2026-10-21) | DV7's lanes |
 | 408 | DV7 W3 begins: the course-local task format and admission, the q31-dev stratum's first batch, the running count | adopted (DV7 W3, 2026-10-21); the count grows in place | DV7's W3 lane |
+| 409 | Sealing topic (e) task parts (`seal_hidden.py --tasks`, `fvh unseal` under agentic/); Q31's held-out course-local stratum, 36 tasks, authored and admitted in the author archive and sealed | adopted (DV7 W3, 2026-10-21) | DV7's W3 lane |
 
 ## A. Holes and hole counting
 
@@ -3983,3 +3984,27 @@
 - **Running count** (course-local, against D76/Δ405's 162; updated in place, 2026-10-21): **q31-dev 24 / 24** (12 Dafny, 12 Verus; five batches): induction lemmas over sequences and naturals, Dafny targets shipped `{:induction false}`. **q32-dev 30 / 30** (15 Dafny, 15 Verus; three batches): proof-search tasks that ship their code and statement and need the proof added. Most need loop invariants, a few need assertions or a final extensional-equality assert, and three are lemma-call tasks over a given proved lemma. Four first drafts failed admission and were fixed before admission: two sortedness checks whose quantifier ranges needed `k + 1 < |a|`, a missing base-case proof, and an unfolding assert. Every definition and target name was checked against the learner tree and its twins; five collisions were renamed (Double, Zeros, dbl, uniform, and Q08's RevRev). q31 held-out 0 / 36 and the q32 tranches 0 / 72 wait for the sealing turn. **Total 54 / 162.** No model was called.
 - **Checkpoint CI (2026-10-21):** the full author run `scripts/ci.sh --author` on `9c1cda6` (clean tree, study mode, 12 GB outer scope, one Verus worker): 13 of 14 jobs passed in 17,601 s (static, hook-test, verify-q-dafny, verify-q-verus, verify-r-dafny and verify-r-verus, pins, empty-body, corpus, wrappers, coexist, paper, rubric). The harness job failed only in its Python TRIV step: the `agents/` twins carried no `# triv:` bodies. `bbed2d7` adds them, and all 26 holes are admitted. The author harness job then passed on `bbed2d7` (91 s). Logs: `author-probes/dv7-build/ci-author*/`.
 - **Owner:** DV7's W3 lane.
+
+### Δ409 · Q31's held-out course-local tasks sealed (36 / 36), and the sealing support they needed — adopted (DV7 W3, 2026-10-21)
+- **Tooling.**
+  - `sandbox/seal_hidden.py --tasks bench/local/q/agentic/<s>` seals a stratum's task forms into the `archive` its STRATUM.toml names, and writes `archive_sha256`, `files` and `manifest_sha256` back. The `--stratum` refs mode is unchanged and seals the reference deliveries into `refs_archive`. Both use the pinned age and the stratum's recipient. The seal only encrypts: the grader's key was never read, copied or logged.
+  - `fvh.statements.sealed_strata` also reads `bench/local/q/agentic/*/STRATUM.toml`.
+  - `tests/bench/test_agentic_strata.py` reads sealed strata: no plaintext on disk, both archives age-encrypted and pinned, one sealed file per card.
+  - `tests/sandbox/test_seal_hidden_static.py` covers the manifest check, the deterministic tar and both pin modes.
+- **The stratum.** `bench/local/q/agentic/q31-heldout/STRATUM.toml` is learner-visible: module and lab Q31, part `heldout`, `sealed = true`, target 60 = 36 course-local + 24 public. It holds the archives' pins and one card per task, giving the opaque id, the language, the form's path inside the archive, its sha256 and the sha256 of its admission record. The sealed files are `Hidden/Agentic/Q31/heldout.tar.age` (the forms) and `Hidden/Agentic/Q31/heldout-refs.tar.age` (the references). Ids are opaque (`cl-d1NN-q31h`, `cl-v1NN-q31h`), and each form's header names only its target.
+- **Authoring.**
+  - The 36 tasks (18 Dafny, 18 Verus) were written only in the author archive (`author-probes/dv7-build/sealed-src/q31-heldout/`, mode 0700), together with the id-to-slug map and the list of names used.
+  - Their themes differ from the dev strata's: Boolean formulas, expression and tree mirroring, decimal digits, run-length codes, merging, flattening, unary numbers, binary search, weaving, queue views, counting and filtering, and loops over sequences and vectors.
+  - Admission is Δ408's, run on the archive copy. vcheck's raw outputs and temporary files went to the archive (`DVL_SCRATCH`, `TMPDIR`), one solver job at a time, under an 8 GB scope with one Verus worker.
+  - Every definition and target name was checked against the whole course, the dev strata and their answers included, and against every earlier sealed task. Six collisions were renamed.
+  - Two drafts whose forms already verified as shipped (nothing left to prove) were dropped and replaced.
+- **Checks after sealing.**
+  - No held-out name occurs anywhere in dv7's history (git log -p 7800b83..HEAD).
+  - On the unreleased R line, two names occur with other meanings: `Flatten` (the Dafny standard library's sequence flatten, in R07) and `Flip` (a sequence reversal named in a Q13 bank revision on `authoring`). Each held-out task defines its own, different object; recorded for when the R core reaches basic.
+  - No held-out task was run through a model.
+- **Not done here.**
+  - The archive round trip in the grader container waits for W1b (D80), so these archives have not yet been decrypted by the grader's check.
+  - No canary token is inside the archives yet.
+  - The 24 public held-out cards (D76's draw) and the q32 tranches come later.
+- **Running count (course-local):** q31-dev 24 / 24, q32-dev 30 / 30, **q31 held-out 36 / 36**, q32 tranches 0 / 72. **Total 90 / 162.**
+- **Owner:** DV7's W3 lane; W1b for the round trip.
