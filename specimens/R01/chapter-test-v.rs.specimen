@@ -1,0 +1,17 @@
+use vstd::prelude::*;
+
+verus! {
+
+fn twofold(x: u32) -> (y: u64)
+    ensures
+        y == 2 * x,
+{
+    2 * (x as u64)
+}
+
+} // verus!
+
+#[test]
+fn twofold_of_three() {
+    assert_eq!(twofold(3), 6);
+}

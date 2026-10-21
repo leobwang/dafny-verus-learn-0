@@ -1,1 +1,7 @@
-module R01_C1D { method Keep(c: char) returns (r: char) ensures r == c { r := '?'; } }
+module R01_C1D {
+  method Keep(c: char) returns (r: char)
+    ensures r == c
+  {
+    r := '?';
+  }
+}

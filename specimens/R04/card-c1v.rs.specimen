@@ -1,6 +1,11 @@
 use vstd::prelude::*;
+
 verus! {
+
 proof fn arbitrary_entries(a: Seq<int>)
-    ensures forall|i: int| 0 <= i < a.len() ==> #[trigger] a[i] >= 0,
-{ }
+    ensures
+        forall|i: int| 0 <= i < a.len() ==> #[trigger] a[i] >= 0,
+{
 }
+
+} // verus!

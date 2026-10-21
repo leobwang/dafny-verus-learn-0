@@ -1,7 +1,21 @@
 use vstd::prelude::*;
+
 verus! {
+
 #[verifier::opaque]
-spec fn short(s: Seq<char>) -> bool { s.len() < 4 }
-proof fn establish() ensures short(seq!['z']), { reveal(short); }
-proof fn client() { assert(short(seq!['z'])); }
+spec fn short_word(s: Seq<char>) -> bool {
+    s.len() < 4
 }
+
+proof fn establish_short()
+    ensures
+        short_word(seq!['z']),
+{
+    reveal(short_word);
+}
+
+proof fn short_client() {
+    assert(short_word(seq!['z']));
+}
+
+} // verus!

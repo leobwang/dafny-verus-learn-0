@@ -1,1 +1,6 @@
-module R01_C2D { lemma EveryChar(c: char) { assert c == 'x'; } }
+module R01_C2D {
+  lemma EveryChar(c: char)
+  {
+    assert c == 'x';
+  }
+}

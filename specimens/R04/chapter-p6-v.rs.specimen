@@ -123,19 +123,37 @@ pub fn copy_re(r: &Re) -> (out: Re)
 } // verus!
 
 verus! {
-pub open spec fn occurs(r: Re,s: Seq<char>) -> bool {
-    exists|i: int,j: int| 0 <= i <= j <= s.len() && matches(r,#[trigger] s.subrange(i,j))
+
+pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
+    exists|i: int, j: int| 0 <= i <= j <= s.len() && matches(r, #[trigger] s.subrange(i, j))
 }
-fn find_none_a(r: &Re,s: &Vec<char>) -> (b: bool)
-    ensures b <==> occurs(*r,s@),
-{ false }
-fn find_none_b(r: &Re,s: &Vec<char>) -> (b: bool)
-    ensures b <==> matches(*r,s@),
-{ false }
-fn find_none_c(r: &Re,s: &Vec<char>) -> (b: bool)
-    ensures b ==> occurs(*r,s@),
-{ false }
-fn find_none_d(r: &Re,s: &Vec<char>) -> (b: bool)
-    ensures b <==> exists|i: int| 0 <= i <= s@.len() && matches(*r,#[trigger] s@.subrange(i,s@.len() as int)),
-{ false }
+
+fn find_none_a(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b <==> occurs(*r, s@),  // [a]
+{
+    false
 }
+
+fn find_none_b(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b <==> matches(*r, s@),  // [b]
+{
+    false
+}
+
+fn find_none_c(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b ==> occurs(*r, s@),  // [c]
+{
+    false
+}
+
+fn find_none_d(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b <==> exists|i: int| 0 <= i <= s@.len() && matches(*r, #[trigger] s@.subrange(i, s@.len() as int)),  // [d]
+{
+    false
+}
+
+} // verus!

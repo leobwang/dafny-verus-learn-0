@@ -127,18 +127,18 @@ path = "specimens/R01/card-c3d.dfy.specimen"
 lang = "d"
 open_bodies = []
 [file.statements]
-"R01_C3D.Client" = "a84ac7bac3a421bdc3201c520720ffd94cd00ada41ad3d8bd4acc2f9fbcf49c0"
-"R01_C3D.Establish" = "6f0802dba71e5e54dd4959dbf9f2110424a91de9e9091a185957c9fa04792e68"
-"R01_C3D.Short" = "188f3a0cd090d614b6eca874e31a1cc4e4cbb4f2c093748f746937ac31b9bfcf"
+"R01_C3D.EstablishShort" = "0fdea1f4e654029b52f5b7aaf81d3d1587bf2fd37f879a20eb4d8b0e07d20beb"
+"R01_C3D.ShortClient" = "e33ef9e6310aefc8832a30be005c5c0b36dad90f426b36a2354d786a7216b917"
+"R01_C3D.ShortWord" = "fbee5d7db53521f05dea3be50880176d9b40feae48e118b825ad0efcab01878d"
 
 [[file]]
 path = "specimens/R01/card-c3v.rs.specimen"
 lang = "v"
 open_bodies = []
 [file.statements]
-"client" = "28125a3d17e1f53c6db80a49a980093286f69294d3b8aa47f0797d7c02b46cba"
-"establish" = "23afa7aa7844ef659fffefcc41cd0ee1ced81f820d02a9f016fde769f3dae754"
-"short" = "c91a4bc14bbda4fa9e963b903baa74da63b85d2ff180682aa78bb902a221b0a2"
+"establish_short" = "6f9ade610eeb1f02ba55f10c0950b9fff319412d2d5965b62c3108e82de105b9"
+"short_client" = "dd600a1ff18201a3a4ba02a4864b43f9ab4ee09258d22c1c05a83f3b8b61751d"
+"short_word" = "c9f5a083beec2b98f8f8f7e52efd973bfe75473da1f182ce51cec11119bc052c"
 
 [[file]]
 path = "specimens/R01/card-c8dv-1-d.dfy.specimen"
@@ -173,14 +173,14 @@ path = "specimens/R01/card-c8dv-3-d.dfy.specimen"
 lang = "d"
 open_bodies = []
 [file.statements]
-"R01_FalseFriend3.AllChars" = "25db3d367313cedc0ee096cd042d30847cabb5e62ea7a14cf6e3ec8b216122ea"
+"R01_FalseFriend3.AllX" = "5a37ea9d117295d4ab025aefcd7e4a68ccbcaa8fb10ab2b107bcb62080f41a70"
 
 [[file]]
 path = "specimens/R01/card-c8dv-3-v.rs.specimen"
 lang = "v"
 open_bodies = []
 [file.statements]
-"all_chars" = "6080f9cbf17f4e52d2fb601b9cd31a549953bd5432d8a207639ce2799af2840a"
+"all_x" = "e611e471218d18a5975ac038c7ae881fa1e776dfc00c32ce2990c8b6d8a5bd58"
 
 [[file]]
 path = "specimens/R01/card-c8dv-4-d.dfy.specimen"
@@ -194,7 +194,7 @@ path = "specimens/R01/card-c8dv-4-v.rs.specimen"
 lang = "v"
 open_bodies = []
 [file.statements]
-"char_cell_advance_demo" = "02987b5edcf8b2eec6ed90d5411685eb760ff621f7a74bad81c454ff306863f6"
+"char_cell_advance_demo" = "8fe5e0d4a32eee722dbfb6eec6ac4f8376bb77ac2b79a26f5aac8c8f7edc29e7"
 
 [[file]]
 path = "specimens/R01/card-c8dv-5-d.dfy.specimen"
@@ -274,6 +274,35 @@ lang = "v"
 open_bodies = []
 [file.statements]
 "halve_even" = "9a4735f82934bcc698867d7ece3e989812ad32c4c4bc9d10f38d994d74dd5df0"
+
+[[file]]
+path = "specimens/R01/chapter-p5-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_P5Observed.QuotientObserved" = "b2bd23b768a495c3fdb071eee33df45eb27bb045957ca57eecf95488bc799bd9"
+
+[[file]]
+path = "specimens/R01/chapter-p6-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"quotient_value" = "b607e7ec548edfce6e6789f5681d869313695db185841bd108bdd7bde1eb0604"
+
+[[file]]
+path = "specimens/R01/chapter-test-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R01_ChTwofoldTest.Twofold" = "376854896c09a82e7783bb8e95d195eeaa520f5068e9f6aa0b33dfe1a19a0e11"
+"R01_ChTwofoldTest.TwofoldOfThree" = "430ea5e08a979dbe731df35dbc49adab65373c6fc95efda424d2a236d3e9e6d1"
+
+[[file]]
+path = "specimens/R01/chapter-test-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"twofold" = "3ef7d4eba96eb91c2fb3ba9ebd97db73ac18b0eb9c74c5299aaf101f981a838e"
 
 [[file]]
 path = "specimens/R01/triage-green.dfy.specimen"

@@ -1,1 +1,9 @@
-module R01_FalseFriend3 { lemma AllChars() { forall c: char ensures c == 'x' { } } }
+module R01_FalseFriend3 {
+  lemma AllX(s: seq<char>)
+  {
+    forall i | 0 <= i < |s|
+      ensures s[i] == 'x'
+    {
+    }
+  }
+}

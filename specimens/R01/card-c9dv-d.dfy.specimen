@@ -1,2 +1,7 @@
 // after: R01.P5d
-module R01_DivisionD { lemma Division() { assert (-7) / 2 == -3; } }
+module R01_DivisionD {
+  lemma Division()
+  {
+    assert (-7) / 2 == -3;
+  }
+}

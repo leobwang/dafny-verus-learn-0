@@ -1,29 +1,30 @@
-# R04 withheld hand-answer tripwires; author-only.
+# R04 withheld hand-answer tripwires; author-only. Re-cut 2026-10-19 (DVR4 step 5)
+# from the one-statement-per-line twins; no prediction answer.
 
 # from Solutions/dafny/R/R04_Specs/core/R04_Specs.dfy
 # source: var s := "abb"; (R04.H1d)
 # verified: solutions=1 public=0
 var\s+s\s*:=\s*"abb"\s*;
-# source: forall i | 0 <= i <= |s| ensures !Matches(Chr('a'),s[..i]) { (R04.H2d)
+# source: ensures !Matches(Chr('a'), s[..i]) (R04.H2d, the forall over prefixes of "ba")
 # verified: solutions=1 public=0
-forall\s+i\s*\|\s*0\s*<=\s*i\s*<=\s*\|s\|\s+ensures\s+!Matches\(Chr\(\x27a\x27\),s\[\.\.i\]\)
-# source: { exists i :: 0 <= i <= |s| && Matches(r,s[..i]) } (R04.H4d)
+forall\s+i\s*\|\s*0\s*<=\s*i\s*<=\s*\|s\|\s+ensures\s+!Matches\(Chr\(\x27a\x27\),\s*s\[\.\.i\]\)
+# source: exists i :: 0 <= i <= |s| && Matches(r, s[..i]) (R04.H4d)
 # verified: solutions=1 public=0
-exists\s+i\s*::\s*0\s*<=\s*i\s*<=\s*\|s\|\s*&&\s*Matches\(r,s\[\.\.i\]\)
-# source: { var r := Chr('a'); var s := "a"; assert s[0..1] == "a"; assert Occurs(r,s); } (R04.H5d)
+exists\s+i\s*::\s*0\s*<=\s*i\s*<=\s*\|s\|\s*&&\s*Matches\(r,\s*s\[\.\.i\]\)
+# source: var r := Chr('a'); var s := "a"; assert s[0..1] == "a"; assert Occurs(r, s); (R04.H5d)
 # verified: solutions=1 public=0
-var\s+r\s*:=\s*Chr\(\x27a\x27\);\s*var\s+s\s*:=\s*"a";\s*assert\s+s\[0\.\.1\]\s*==\s*"a";\s*assert\s+Occurs\(r,s\)
+var\s+r\s*:=\s*Chr\(\x27a\x27\);\s*var\s+s\s*:=\s*"a";\s*assert\s+s\[0\.\.1\]\s*==\s*"a";\s*assert\s+Occurs\(r,\s*s\)
 
 # from Solutions/verus/r/r04_specs/src/lib.rs
-# source: let u=seq!['b']; let t=seq!['b','b']; let s=seq!['a','b','b']; (R04.H1v)
+# source: let u = seq!['b']; let t = seq!['b', 'b']; (R04.H1v)
 # verified: solutions=1 public=0
-let\s+u\s*=\s*seq!\[\x27b\x27\];\s*let\s+t\s*=\s*seq!\[\x27b\x27,\x27b\x27\]
-# source: assert forall|i: int| 0 <= i <= s.len() implies !matches(a,#[trigger] s.subrange(0,i)) by { (R04.H2v)
+let\s+u\s*=\s*seq!\[\x27b\x27\];\s*let\s+t\s*=\s*seq!\[\x27b\x27,\s*\x27b\x27\]
+# source: implies !matches(a, #[trigger] s.subrange(0, i)) by { if i == 1 { assert(s.subrange(0, i)[0] == 'b'); (R04.H2v)
 # verified: solutions=1 public=0
-assert\s+forall\|i:\s*int\|\s*0\s*<=\s*i\s*<=\s*s\.len\(\)\s+implies\s*!matches\(a,\s*#\[trigger\]\s*s\.subrange\(0,i\)\)
-# source: exists|i: int| 0 <= i <= s.len() && matches(r,#[trigger] s.subrange(0,i)) (R04.H4v)
+implies\s*!matches\(a,\s*#\[trigger\]\s*s\.subrange\(0,\s*i\)\)\s*by\s*\{\s*if\s+i\s*==\s*1\s*\{\s*assert\(s\.subrange\(0,\s*i\)\[0\]\s*==\s*\x27b\x27\);
+# source: exists|i: int| 0 <= i <= s.len() && matches(r, #[trigger] s.subrange(0, i)) (R04.H4v)
 # verified: solutions=1 public=0
-exists\|i:\s*int\|\s*0\s*<=\s*i\s*<=\s*s\.len\(\)\s*&&\s*matches\(r,\s*#\[trigger\]\s*s\.subrange\(0,i\)\)
-# source: let r=Re::Chr('a'); let s=seq!['a']; (R04.H5v)
+exists\|i:\s*int\|\s*0\s*<=\s*i\s*<=\s*s\.len\(\)\s*&&\s*matches\(r,\s*#\[trigger\]\s*s\.subrange\(0,\s*i\)\)
+# source: let r = Re::Chr('a'); let s = seq!['a']; ... assert(occurs(r, s)); assert(!nullable(r)); (R04.H5v)
 # verified: solutions=1 public=0
-let\s+r\s*=\s*Re::Chr\(\x27a\x27\);\s*let\s+s\s*=\s*seq!\[\x27a\x27\];[\s\S]*?assert\(occurs\(r,s\)\);\s*assert\(!nullable\(r\)\)
+let\s+r\s*=\s*Re::Chr\(\x27a\x27\);\s*let\s+s\s*=\s*seq!\[\x27a\x27\];[\s\S]*?assert\(occurs\(r,\s*s\)\);\s*assert\(!nullable\(r\)\)

@@ -6,10 +6,10 @@ Live Claude calibration remains deferred under D45, never inferred from fixtures
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R04_solutions.tex  sha256 b127738a067eabab1145e8d8deb47c26be3a28d4a8d49697886b46198dce13d1
 paper/R04_problems.tex  sha256 8fae72e62f40249183849101e7e734d9caf5eec528e10ee0031abc76794c6a6a
-Solutions/dafny/R/R04_Specs/core/R04_Specs.dfy  sha256 6834dd2babf0f25ef7be4ed73c4110605caadd52d5fce8bdeef927b6e72d0d4f
-Solutions/verus/r/r04_specs/src/lib.rs  sha256 b9ec1e1fc26812949f49dbb710117bf619922657f1698bdc7f0f440578f17ea3
-Solutions/dafny/R/R04_Specs/agent/R04_AgentProver.dfy  sha256 c690b0df7026172fe614ad4832e26075b871f312369cbade8df64a10a12bcb39
-Solutions/verus/r/r04_specs/src/agent.rs  sha256 e0d1755ad872795a81c2a33f9bfdfe654a8e64da2863a9e8beb399393acfe84b
+Solutions/dafny/R/R04_Specs/core/R04_Specs.dfy  sha256 f6845d40f662b34cafd593d5658fe6719de4012ad49594a523d94664dc8a9822
+Solutions/verus/r/r04_specs/src/lib.rs  sha256 4756764e5a53eecdbccaa906361141f480aab120a261818fec1bc6d6a31bce70
+Solutions/dafny/R/R04_Specs/agent/R04_AgentProver.dfy  sha256 5ad5a8e672ebaeb2df0562512a7fbbe260f9f8cbe3ac8efe4a5bc30365869e5f
+Solutions/verus/r/r04_specs/src/agent.rs  sha256 3ac9af287ae1b39b68c1d8a3cf00f50203f661c171fb67a362e88949eb588264
 
 ## Verifier anchors
 

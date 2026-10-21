@@ -1,3 +1,6 @@
 module R04_ForallDemo {
-  lemma Claim() ensures forall x: int :: x >= 0 { }
+  lemma Claim()
+    ensures forall x: int :: x >= 0
+  {
+  }
 }

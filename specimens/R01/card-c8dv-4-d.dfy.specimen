@@ -1,1 +1,9 @@
-module R01_FalseFriend4 { method CharCellAdvanceDemo(a: array<int>) requires a.Length > 0 modifies a ensures a[0] == old(a[0]) + 1 { a[0] := a[0] + 2; } }
+module R01_FalseFriend4 {
+  method CharCellAdvanceDemo(a: array<int>)
+    requires a.Length > 0
+    modifies a
+    ensures a[0] == old(a[0]) + 1
+  {
+    a[0] := a[0] + 2;
+  }
+}

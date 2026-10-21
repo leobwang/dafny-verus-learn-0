@@ -16,28 +16,29 @@ a statement cannot hold. The learner audits the report and delivery afterward.
 */
 module R04_AgentProver {
   import opened RG_A1_Re
-  ghost predicate Occurs(r: Re,s: seq<char>) {
-    exists i,j :: 0 <= i <= j <= |s| && Matches(r,s[i..j])
+  ghost predicate Occurs(r: Re, s: seq<char>)
+  {
+    exists i, j :: 0 <= i <= j <= |s| && Matches(r, s[i..j])
   }
   // item: R04.A1d
   // Intent: a witnessed occurrence survives appending more input.
-  lemma OccursAppend(r: Re,s: seq<char>,t: seq<char>)
-    requires Occurs(r,s)
-    ensures Occurs(r,s+t)
+  lemma OccursAppend(r: Re, s: seq<char>, t: seq<char>)
+    requires Occurs(r, s)
+    ensures Occurs(r, s + t)
 
   // Intent: a whole-string match is an occurrence covering the whole input.
-  lemma MatchIsOccurrence(r: Re,s: seq<char>)
-    requires Matches(r,s)
-    ensures Occurs(r,s)
+  lemma MatchIsOccurrence(r: Re, s: seq<char>)
+    requires Matches(r, s)
+    ensures Occurs(r, s)
 
   // Intent claimed by this delivery: concatenation order is irrelevant to occurrence.
   // planted: R04.A1d
-  lemma OccursCatSwap(a: Re,b: Re,s: seq<char>)
-    requires Occurs(Cat(a,b),s)
-    ensures Occurs(Cat(b,a),s)
+  lemma OccursCatSwap(a: Re, b: Re, s: seq<char>)
+    requires Occurs(Cat(a, b), s)
+    ensures Occurs(Cat(b, a), s)
 
 
-  /* AUDIT DEBRIEF — learner-owned,30 min after the contractor stops.
+  /* AUDIT DEBRIEF — learner-owned, 30 min after the contractor stops.
      Diff against the snapshot. Which statements did the contractor report
      proved, unproved or refuted? Check the actual gate scope and hole count
      for each claimed proof, then inspect the assumptions and counterexample.

@@ -1,10 +1,20 @@
 // after: R01.P2dv
 use vstd::prelude::*;
+
 verus! {
+
 fn halve_even(n: u32) -> (m: u32)
-    requires n % 2 == 0,
-    ensures 2 * m == n,
-{ n / 2 }
+    requires
+        n % 2 == 0,
+    ensures
+        2 * m == n,
+{
+    n / 2
 }
+
+} // verus!
+
 #[test]
-fn odd_test() { assert_eq!(2 * halve_even(7), 7); }
+fn odd_test() {
+    assert_eq!(2 * halve_even(7), 7);
+}

@@ -1,0 +1,15 @@
+// after: R01.P6v
+use vstd::prelude::*;
+
+verus! {
+
+fn quotient_value() -> i32 {
+    -7i32 / 2
+}
+
+} // verus!
+
+#[test]
+fn quotient_observed() {
+    assert_eq!(quotient_value(), -3);
+}

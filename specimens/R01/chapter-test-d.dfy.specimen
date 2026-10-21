@@ -1,0 +1,14 @@
+module R01_ChTwofoldTest {
+  method Twofold(x: int) returns (y: int)
+    ensures y == x + x
+  {
+    y := 2 * x;
+  }
+
+  @Test
+  method TwofoldOfThree()
+  {
+    var y := Twofold(3);
+    expect y == 6;
+  }
+}

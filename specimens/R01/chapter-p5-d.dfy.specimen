@@ -1,0 +1,8 @@
+// after: R01.P5d
+module R01_P5Observed {
+  @Test
+  method QuotientObserved()
+  {
+    expect (-7) / 2 == -4;
+  }
+}
