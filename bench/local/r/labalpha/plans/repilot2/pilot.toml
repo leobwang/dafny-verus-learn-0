@@ -1,0 +1,82 @@
+# Generated Lab alpha pilot plan (tools/R12/plan.py); creating it does not unlock execution.
+role = "pilot"
+seed = 20261018
+repeats = 3
+attempts = 1
+max_reissue = 3
+lever_check = true
+tasks = ["a1b-cat-assoc-d", "a1b-cat-assoc-v", "a1b-nullable-correct-d", "a1b-nullable-correct-v", "pub-db-052", "pub-hev-023", "r06-backwards-str-involution-d", "r06-backwards-str-involution-v"]
+system = "You propose bounded proof annotation data for an original fixed verification task.\nUse the provided action schema, with one whole-file edit whose new text is a JSON\nstring of the form {\"hints\":[one expression or approved proof-call list per site]}.\nThe harness decodes this as data and renders the original task; you never supply\nsource code, a native Result, wrapper flags or an acceptance claim. Preserve the\noriginal task domain, provided definitions, executable code, imports and levers.\nYour reply is exactly one JSON object and nothing else, with no prose before or\nafter it: {\"actions\":[{\"type\":\"edit\",\"path\":\"<the task path>\",\"old\":\"\",\"new\":\"{\\\"hints\\\":[...]}\"}]}\n"
+instructions = "Read the exact task statement, original source and hint-site manifest. Return one\nhint for every site in the manifest's order. Every hint is one JSON string: an\nexpression site's hint is one expression; a decreases site's hint is one\ntermination measure (an expression); a call site's hint is one string of calls\nto its approved local proof callees separated by semicolons, such as\n\"F(a); G(b)\", never a JSON list. Any name in scope may appear in a hint; a name\nthat does not resolve makes the candidate fail verification.\nDo not add declarations, attributes, assumptions, imports, comments, strings,\nnewlines or control flow. Feedback concerns the named earlier candidate only.\nAn empty diagnostic list or score 0 is not proof acceptance. The trusted native\nfull gate determines success.\n"
+
+[task."a1b-cat-assoc-d"]
+path = "bench/local/r/labalpha/a1b-cat-assoc-d/tasks/a1b-cat-assoc-d.dfy"
+statement = "R12_TASK_SHA256: b407911f305a935a93bada4e692e61f46b57adf893792dad7562544f1174aafa\nR12_CLUSTER: a1b-cat-assoc\nR12_EXPOSURE: course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark\nComplete the proof of the target lemma R12_LabCase.CatAssoc (A1b (as a task over A1 only) CatAssoc) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+
+[task."a1b-cat-assoc-v"]
+path = "bench/local/r/labalpha/a1b-cat-assoc-v/tasks/a1b-cat-assoc-v.rs"
+statement = "R12_TASK_SHA256: 551c79ee859b8955381d3f2b3fff6653c5448c4628439db66a1429e1ba35fa93\nR12_CLUSTER: a1b-cat-assoc\nR12_EXPOSURE: course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark\nComplete the proof of the target lemma lemma_cat_assoc (A1b (as a task over A1 only) CatAssoc) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+
+[task."a1b-nullable-correct-d"]
+path = "bench/local/r/labalpha/a1b-nullable-correct-d/tasks/a1b-nullable-correct-d.dfy"
+statement = "R12_TASK_SHA256: 4d14ee6a2eb7b8afda0278d5dfd391adba4516d837b55469aa05742fa4f0469b\nR12_CLUSTER: a1b-nullable-correct\nR12_EXPOSURE: course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark\nComplete the proof of the target lemma R12_LabCase.NullableCorrect (A1b (as a task over A1 only) NullableCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+
+[task."a1b-nullable-correct-v"]
+path = "bench/local/r/labalpha/a1b-nullable-correct-v/tasks/a1b-nullable-correct-v.rs"
+statement = "R12_TASK_SHA256: 0dfea411fccb365b99990eeee29ab5927a115c066860a8072bda9b5e53174b30\nR12_CLUSTER: a1b-nullable-correct\nR12_EXPOSURE: course-authored lemma from the A1b (as a task over A1 only) reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark\nComplete the proof of the target lemma lemma_nullable_correct (A1b (as a task over A1 only) NullableCorrect) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+
+[task."pub-db-052"]
+path = "bench/local/r/labalpha/pub-db-052/tasks/pub-db-052.dfy"
+statement = "R12_TASK_SHA256: 8d7632d7eed59c81f0bb168414f5eedaa8aece6694003b969f3974b297ea754d\nR12_CLUSTER: pub-db-052\nR12_EXPOSURE: public benchmark task (dafnybench, Apache-2.0 (set licence)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen); licence flag: per-file upstream licence not recorded\nComplete the verification of the target FindEvenNumbers (public task bench/public/dafnybench/answers/dafny-synthesis_task_id_629.dfy) by filling every hint site; the specification and the code are fixed."
+
+[task."pub-hev-023"]
+path = "bench/local/r/labalpha/pub-hev-023/tasks/pub-hev-023.rs"
+statement = "R12_TASK_SHA256: 2868bc2d3a919e84a902c4ae98a888a7bff054e0e01afa83014f2ef5d83044b8\nR12_CLUSTER: pub-hev-023\nR12_EXPOSURE: public benchmark task (humaneval-verus, MIT (set licence; HumanEval prompts MIT)); treat as possibly seen in 2023-2025 public repositories (contamination flag: possibly-seen)\nComplete the verification of the target is_prime_2 (public task bench/public/humaneval-verus/answers/human_eval_127.rs) by filling every hint site; the specification and the code are fixed."
+
+[task."r06-backwards-str-involution-d"]
+path = "bench/local/r/labalpha/r06-backwards-str-involution-d/tasks/r06-backwards-str-involution-d.dfy"
+statement = "R12_TASK_SHA256: 5c1d4f50c705333476141314cc416ef0d475bfd765515b40c16df90fc260df47\nR12_CLUSTER: r06-backwards-str-involution\nR12_EXPOSURE: course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark\nComplete the proof of the target lemma R12_LabCase.BackwardsStrInvolution (R06 BackwardsStrInvolution) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+
+[task."r06-backwards-str-involution-v"]
+path = "bench/local/r/labalpha/r06-backwards-str-involution-v/tasks/r06-backwards-str-involution-v.rs"
+statement = "R12_TASK_SHA256: 55dd6a1e326b7782fbdfe0bcf3581ed37a0d459e8333fac6e84b5a0ddaa41822\nR12_CLUSTER: r06-backwards-str-involution\nR12_EXPOSURE: course-authored lemma from the R06 reference, written 2026-10, after the pinned model's release; course-derived, not an independent unseen benchmark\nComplete the proof of the target lemma lemma_backwards_str_involution (R06 BackwardsStrInvolution) by filling every hint site; the provided definitions, helper lemmas and the statement are fixed."
+
+[[arm]]
+name = "independent"
+family = "qwen"
+rounds = 10
+turns = 12
+policy = "fvh.labalpha:Independent"
+construct = "seeded"
+lab_code = "preserve"
+acceptance = "verify"
+
+[[arm]]
+name = "repair"
+family = "qwen"
+rounds = 10
+turns = 12
+policy = "fvh.labalpha:Repair"
+construct = "seeded"
+lab_code = "preserve"
+acceptance = "verify"
+
+[[arm]]
+name = "best"
+family = "qwen"
+rounds = 10
+turns = 12
+policy = "fvh.labalpha:BestFirst"
+construct = "seeded"
+lab_code = "preserve"
+acceptance = "verify"
+
+[[arm]]
+name = "best-raw"
+family = "qwen"
+rounds = 10
+turns = 12
+policy = "fvh.labalpha:BestFirstRaw"
+construct = "seeded"
+lab_code = "preserve"
+acceptance = "verify"
