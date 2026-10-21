@@ -30,8 +30,7 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
   Its native mode checks a zero-hole proof-stage failing baseline and clean
   audit. It does not establish completion, three-seed robustness or live success.
 - **Probe S:** compare snapshots before actor edits, full gates, audits and
-  specfreeze. tools/R12/check_clients.py gates actual source before compiling
-  finite observations. Profiler isolation and finite tests are not full gates.
+  specfreeze. Profiler isolation and finite tests are not full gates.
 - **Probe C:** pin local06.10 lines2635–2673 and01.12 lines429–456 exactly as B3/B4.
   Re-pin changed source before grading; use only that excerpt for card claims.
 - **Probe R:** execute the report's Reproduce command and re-judge every claimed

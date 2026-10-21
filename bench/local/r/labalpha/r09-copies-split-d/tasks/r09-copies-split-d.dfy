@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"c1","identifiers":["Copies","r","b","s"],"kind":"calls","callees":["CatEpsLeft"]},{"name":"h1","identifiers":["Copies","Cat","r","a","b"]},{"name":"h2","identifiers":["Copies","Cat","r","a"]},{"name":"c2","identifiers":["Copies","r","a","b","s"],"kind":"calls","callees":["CatAssoc"]},{"name":"c3","identifiers":["r","a","b","t"],"kind":"calls","callees":["CopiesSplit"]},{"name":"c4","identifiers":["r","x","y","s"],"kind":"calls","callees":["CatCongRight"]}]
-// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.CopiesSplit","start":86,"end":102}]
+// R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.CopiesSplit","start":89,"end":105}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1), copied verbatim.
   datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)

@@ -1,0 +1,23 @@
+{
+  "claude_subset": null,
+  "claude_subset_seed": null,
+  "inputs": {
+    "harness/fvh/labalpha.py": "76cd755849daab90a6b573ee75eac89eb1115ec5b760cd4639392105f1441cad",
+    "harness/r/fvh_r/engine.py": "d622fcf73801ed990bf3a880124c5eca1f023808343c863d679149866da3d477",
+    "tools/R12/lab_instructions.md": "ead225853a4d396bcba98f0ab47b5274e25f77cb880479b6cb6924e87df73113",
+    "tools/R12/lab_system.md": "731b2057aa4092d5606d1c0b583ecce13646c4f3b4c7e77731c4eca981549dc9",
+    "tools/R12/plan.py": "1e0811be6f48e2c6c3aa81e4dbf200b4d3a545c7cde3b3206d381cecdd6ad308"
+  },
+  "plans": {
+    "pilot": {
+      "clusters": 5,
+      "generation_calls": 960,
+      "plan_sha256": "ecf9e95b3d9af733de8310b72620543907d6efaf39bd1eb251f6882f75a2e310",
+      "runs": 96,
+      "tasks": 8
+    }
+  },
+  "scope": "reviewable locked plans; no run, grade or budget event",
+  "seed": 20261018,
+  "stratum_sha256": "97fc110738a0d7b4363e6266c6b30f4f4f226156118302aa763cd64288fb2ae4"
+}

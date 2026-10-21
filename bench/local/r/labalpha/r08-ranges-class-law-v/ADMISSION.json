@@ -1,0 +1,50 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "c0986b88cd84fd350e42e7724d8e89f93de7524ae5814e53560623df0b13f460",
+    "statement_sha256": "3a55258d871fae378a9bbfedb579cc5b06c489150023c6323cfa6157c9f79a46"
+  },
+  "id": "r08-ranges-class-law-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "b704bbaf87b1a0e001ec29b0f6f721bf905fd3c2ad7947bac19999ed52b71712",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    }
+  ],
+  "source_sha256": "dd354d344777b372f0e7aa7b02f0cc36f92a84642a6f369a185456f333dcec51",
+  "status": "admitted",
+  "target": "lemma_ranges_set_law",
+  "validated_span": {
+    "end": 47,
+    "start": 28,
+    "symbol": "lemma_ranges_set_law"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

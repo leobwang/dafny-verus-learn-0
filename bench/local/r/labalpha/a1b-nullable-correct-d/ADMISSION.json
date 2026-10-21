@@ -15,7 +15,8 @@
   },
   "id": "a1b-nullable-correct-d",
   "lang": "dafny",
-  "private_evidence_sha256": "d0846aecf627d3703fc754bf762928ceda677c18b78e13c3d162a3dc8f5300d5",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "383a1b7ed0d5eedfd457c639221ed6a74834792a50007f786310982af0224a9e",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -37,12 +38,12 @@
       "name": "h1"
     }
   ],
-  "source_sha256": "e34a9bc52cfff9b6511cd674c0b78ee28238b9797a771b40fe2c4cd5ba935216",
+  "source_sha256": "4b3eecb7154b609b9b37563b099d7e4700a18192b7e620d0a0a0f98fd921cd2f",
   "status": "admitted",
   "target": "R12_LabCase.NullableCorrect",
   "validated_span": {
-    "end": 47,
-    "start": 32,
+    "end": 50,
+    "start": 35,
     "symbol": "R12_LabCase.NullableCorrect"
   },
   "wrong_hint_kind": "expression sites false, call sites empty"

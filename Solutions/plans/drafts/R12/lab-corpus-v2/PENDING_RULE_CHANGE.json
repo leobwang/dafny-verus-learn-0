@@ -63,7 +63,8 @@
      }
     }
    ],
-   "if_approved": "Dafny form passes the six other controls and its maxauto run is the only failing one; the Verus form passed all seven: re-run only max-auto-empty-fails under the new reading"
+   "if_approved": "Dafny form passes the six other controls and its maxauto run is the only failing one; the Verus form passed all seven: re-run only max-auto-empty-fails under the new reading",
+   "outcome_D55": "admitted under D55 (both tasks re-admitted from scratch; Verus all seven as before, Dafny shipped seeds 1-3 fail, maxauto recorded verified)"
   },
   {
    "cluster": "r11-check-sound",
@@ -127,7 +128,8 @@
      }
     }
    ],
-   "if_approved": "Dafny form passes the six other controls and its maxauto run is the only failing one; the Verus form passed all seven: re-run only max-auto-empty-fails under the new reading"
+   "if_approved": "Dafny form passes the six other controls and its maxauto run is the only failing one; the Verus form passed all seven: re-run only max-auto-empty-fails under the new reading",
+   "outcome_D55": "admitted under D55 (both tasks re-admitted from scratch; Verus all seven as before, Dafny shipped seeds 1-3 fail, maxauto recorded verified)"
   },
   {
    "cluster": "r11-certificate-length",
@@ -191,7 +193,8 @@
      }
     }
    ],
-   "if_approved": "Dafny form passes the six other controls and its maxauto run is the only failing one; the Verus form passed all seven: re-run only max-auto-empty-fails under the new reading"
+   "if_approved": "Dafny form passes the six other controls and its maxauto run is the only failing one; the Verus form passed all seven: re-run only max-auto-empty-fails under the new reading",
+   "outcome_D55": "admitted under D55 (both tasks re-admitted from scratch; Verus all seven as before, Dafny shipped seeds 1-3 fail, maxauto recorded verified)"
   },
   {
    "cluster": "r09-copies-nodes",
@@ -232,7 +235,8 @@
      }
     }
    ],
-   "if_approved": "Dafny form fails only maxauto; the Verus form was never admitted (the cluster could not enter): build and admit it first"
+   "if_approved": "Dafny form fails only maxauto; the Verus form was never admitted (the cluster could not enter): build and admit it first",
+   "outcome_D55": "still rejected: the Dafny empty body verifies under the shipped setting as well (seeds 1-3); the Verus form passes all seven controls"
   },
   {
    "cluster": "r09-optional-nodes",
@@ -273,7 +277,9 @@
      }
     }
    ],
-   "if_approved": "Dafny form fails only maxauto; the Verus form was never admitted (the cluster could not enter): build and admit it first"
+   "if_approved": "Dafny form fails only maxauto; the Verus form was never admitted (the cluster could not enter): build and admit it first",
+   "outcome_D55": "still rejected: the Dafny empty body verifies under the shipped setting as well (seeds 1-3); the Verus form passes all seven controls"
   }
- ]
+ ],
+ "decision": "D55 (the user, 2026-10-18): for Lab alpha tasks only, read under the shipped --manual-lemma-induction"
 }

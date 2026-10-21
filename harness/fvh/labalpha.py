@@ -27,7 +27,14 @@ engine policy's. The wrappers are imported by name in a plan
 by name (ENGINE) when built, so the course's (or, in the learner's run, the
 learner's) engine is the one wrapped.
 
+  - the learner header stays out of the prompt: a task form's lines that begin with
+    HEADER_PREFIX (the "do not open before R11 is done" notice of the later-tier
+    overlap, DELTAS Δ294) are sent as bare `//` lines in the request's `source`, so
+    the model sees the same line numbers as the verifier's diagnostics but not the
+    notice; the stratum pins the stripped bytes (prompt_source_sha256).
+
   cap_feedback(feedback, cap_tokens=FEEDBACK_CAP_TOKENS) -> (value, accounting)
+  strip_header(text) -> str               the source as the prompt carries it
   message_accounting(message) -> dict     what fvh.batch logs per call
   Independent, Repair, BestFirst, BestFirstRaw   the wrapped regimes
 
@@ -38,13 +45,22 @@ import importlib
 import json
 import math
 
-__all__ = ["BYTES_PER_TOKEN", "BestFirst", "BestFirstRaw", "FEEDBACK_CAP_TOKENS", "Independent",
-           "MARKER", "Repair", "cap_feedback", "message_accounting", "wrap"]
+__all__ = ["BYTES_PER_TOKEN", "BestFirst", "BestFirstRaw", "FEEDBACK_CAP_TOKENS", "HEADER_PREFIX",
+           "Independent", "MARKER", "Repair", "cap_feedback", "message_accounting", "strip_header",
+           "wrap"]
 
 FEEDBACK_CAP_TOKENS = 2048
 BYTES_PER_TOKEN = 4
 MARKER = "\n...[R12 feedback cap: {elided} bytes elided]...\n"
 _MARKER_HEAD = "...[R12 feedback cap: "
+HEADER_PREFIX = "// [R12 header]"
+
+
+def strip_header(text: str) -> str:
+    """The task source as a request carries it: every line that begins with HEADER_PREFIX
+    becomes a bare `//` line (same line count, the notice's words gone)."""
+    return "\n".join("//" if line.startswith(HEADER_PREFIX) else line
+                     for line in text.split("\n"))
 
 
 def _canonical(feedback) -> str:
@@ -107,8 +123,11 @@ def _capped_ask(ask, cap_tokens):
             obj = json.loads(prompt)
         except ValueError:
             return ask(prompt, seed)
-        if isinstance(obj, dict) and "feedback" in obj:
-            obj["feedback"], _ = cap_feedback(obj["feedback"], cap_tokens)
+        if isinstance(obj, dict) and ("feedback" in obj or "source" in obj):
+            if "feedback" in obj:
+                obj["feedback"], _ = cap_feedback(obj["feedback"], cap_tokens)
+            if isinstance(obj.get("source"), str):
+                obj["source"] = strip_header(obj["source"])
             prompt = json.dumps(obj, ensure_ascii=False)
         return ask(prompt, seed)
     return capped

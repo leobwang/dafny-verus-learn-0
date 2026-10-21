@@ -159,7 +159,6 @@ pub proof fn lemma_witness_not_ba()
 //    forall fact contradicts it.
 
 // item: R04.H3v
-// uses: forall-intro, exists-elim
 // pair: R04.H3d
 /// **H3.** Anchoring: `Chr('a')` does not match the whole string "ba",
 /// although 'a' occurs in it, and `Cat(Star(Chr('b')), Chr('a'))` does. Which

@@ -57,7 +57,7 @@ DV5 confirmed it: the analysis tables are the learner's).
       solved, S(b) for b = 1..B with cluster-bootstrap bands, the calls' tokens,
       GPU-seconds and wall clock, the feedback's bytes and the equal cap's
       truncation rate, the share of replies cut at the output cap (output tokens
-      >= length_cap, opencode's min(num_predict, 32000)); per cluster and arm the
+      >= length_cap, the Qwen transport's min(num_predict, 32000)); per cluster and arm the
       AUC; and, for the primary arms, the paired sign-flip test of the cluster
       differences (fvh.stats.permutation_test), their bootstrap interval and the
       worst-case sensitivity for excluded runs (0 in the first arm, 1 in the
@@ -532,7 +532,7 @@ def _run_row(d, meta, clusters, budget_, length_cap=32000):
             "feedback_bytes": sum(int(c["feedback_bytes"]) for c in fb),
             "feedback_truncated": sum(1 for c in fb if c.get("feedback_truncated")),
             "gate_refusals": sum(1 for g in gates if g.get("capped")),
-            # a reply that reached the output cap (opencode sends max_tokens =
+            # a reply that reached the output cap (the Qwen transport sends max_tokens =
             # min(num_predict, 32000)) was cut there: the num_predict truncation
             "length_cut": sum(1 for c in calls if int((c.get("client_usage") or {})
                                                       .get("output_tokens") or 0) >= length_cap),

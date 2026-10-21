@@ -1,0 +1,45 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "8c4eaa19c0522ea4b6111b8d4889c293bc7a4ff72681a5df7b865011d765a277"
+  },
+  "id": "r06-backwards-str-append-v",
+  "lang": "verus",
+  "private_evidence_sha256": "02c2928f053187de864d1f7c65bec7f9bf991b167d8f8d84891b6f490ede15a4",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c1"
+    }
+  ],
+  "source_sha256": "20752265e8f10d863ab048b7cc03010c953fdc5bb4bf371289ea06dd5d168f72",
+  "status": "admitted",
+  "target": "lemma_backwards_str_append",
+  "validated_span": {
+    "end": 41,
+    "start": 29,
+    "symbol": "lemma_backwards_str_append"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

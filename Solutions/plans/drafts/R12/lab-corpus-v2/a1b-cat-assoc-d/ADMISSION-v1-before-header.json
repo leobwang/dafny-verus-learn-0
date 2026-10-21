@@ -1,0 +1,53 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "291944e6399ba2a3be95c5d25b295b8b1fe6e8820d6d63980d8cc12303d24bf3"
+  },
+  "id": "a1b-cat-assoc-d",
+  "lang": "dafny",
+  "private_evidence_sha256": "8c72809fae1a55d27a6ad8d273666830644598fcb5f656c9ec5ae0891d69636e",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    }
+  ],
+  "source_sha256": "e2aaf1dcec863e700f7e091f7e404ecb66b1a9c9fe62018a2c0cd63cd2480df1",
+  "status": "admitted",
+  "target": "R12_LabCase.CatAssoc",
+  "validated_span": {
+    "end": 45,
+    "start": 20,
+    "symbol": "R12_LabCase.CatAssoc"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

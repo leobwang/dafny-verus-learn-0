@@ -11,9 +11,9 @@ cmd = ["scripts/vcheck", "dafny/R/R04_Specs/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "e53f4cee42209beb887c960f3805508f5d944796bc196857e6a6afb1261c0b2a"
+body = "f04b2a13d2dc7ebe7e1b847d9c6fcb2e51f273b4696d305b959777bb511909c9"
 [entry.pinned.inputs]
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "70fbbb9e1cf3d8682e108e5f0ad96825100f609e37dec8a25dba4101e3a05582"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "516901c6cc16328955874fe14775aeb1ce13e0c0d339811afc28aca3a92ef8db"
 "dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
 
 [[entry]]
@@ -22,11 +22,11 @@ cmd = ["scripts/vcheck", "verus/r/r04_specs"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "046609bad6132d6314d95bb3cc85903f1ba4cec2db16fe3644dfc6637bf3d891"
+body = "741f8fb2377bd152c0cd50717a1c30c1a5e408672030f81b0bf48ffa27744b64"
 [entry.pinned.inputs]
 "verus/r/r04_specs/Cargo.toml" = "4059a5ceabdcc13cc1ac0a9f9bad1758c7a28699bd1391cfb6e0474eec202d97"
 "verus/r/r04_specs/src/agent.rs" = "a364f1efc3a57355a3fc084e26707b287dc4f07c97252849b8b94b6057819b52"
-"verus/r/r04_specs/src/lib.rs" = "0d8bc2b967defb9d5dd07eb75b94db3042de2e5e06cfa41563adf993a71876d3"
+"verus/r/r04_specs/src/lib.rs" = "f1b2795480a00816b193ad86a5db54d284d1cf63824da628a0962bf32335ab59"
 
 [[entry]]
 id = "occurs-d"
@@ -469,9 +469,9 @@ cmd = ["scripts/vcheck", "--gate", "dafny/R/R04_Specs/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "2e6fce03c80c2c304a0d26948e7e8b5cdf4dce3c59b3b98505482c8522f59abf"
+body = "352bd6887fcbff1a755bfdf9b6380e4f317ce8877b3fdf85c037008089c6a241"
 [entry.pinned.inputs]
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "70fbbb9e1cf3d8682e108e5f0ad96825100f609e37dec8a25dba4101e3a05582"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "516901c6cc16328955874fe14775aeb1ce13e0c0d339811afc28aca3a92ef8db"
 "dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
 
 [[entry]]
@@ -480,11 +480,11 @@ cmd = ["scripts/vcheck", "--gate", "verus/r/r04_specs"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "161d4e39eea02f557a15abf35d9da386d5aed89e3a0ddb67b05564cb228bf7c0"
+body = "a9aad83cd8dc2f15b0ff471f7885398848f06dab884a9a62537a97dc34fa08c1"
 [entry.pinned.inputs]
 "verus/r/r04_specs/Cargo.toml" = "4059a5ceabdcc13cc1ac0a9f9bad1758c7a28699bd1391cfb6e0474eec202d97"
 "verus/r/r04_specs/src/agent.rs" = "a364f1efc3a57355a3fc084e26707b287dc4f07c97252849b8b94b6057819b52"
-"verus/r/r04_specs/src/lib.rs" = "0d8bc2b967defb9d5dd07eb75b94db3042de2e5e06cfa41563adf993a71876d3"
+"verus/r/r04_specs/src/lib.rs" = "f1b2795480a00816b193ad86a5db54d284d1cf63824da628a0962bf32335ab59"
 
 [[entry]]
 id = "audit-d"
@@ -492,9 +492,9 @@ cmd = ["scripts/vaudit", "dafny/R/R04_Specs/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "736f608a2d61d1c6fd05146cdfe2d8a39aa59c831d5cfb69b95976f0c21fe374"
+body = "ffcd02160473be5779d65f347845cf30c2fd4513806b51e09f28faa14d6042d7"
 [entry.pinned.inputs]
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "70fbbb9e1cf3d8682e108e5f0ad96825100f609e37dec8a25dba4101e3a05582"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "516901c6cc16328955874fe14775aeb1ce13e0c0d339811afc28aca3a92ef8db"
 "dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
 
 [[entry]]
@@ -503,11 +503,11 @@ cmd = ["scripts/vaudit", "verus/r/r04_specs"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "69593e9fcf509f1b8b5ac6e0afbddf95134a748c8ac45aa4c6fc354bc60881ad"
+body = "26b2b372ab08e79a077d910ecd3d6e559c644bcc5a4a4a14727ad41e4d955162"
 [entry.pinned.inputs]
 "verus/r/r04_specs/Cargo.toml" = "4059a5ceabdcc13cc1ac0a9f9bad1758c7a28699bd1391cfb6e0474eec202d97"
 "verus/r/r04_specs/src/agent.rs" = "a364f1efc3a57355a3fc084e26707b287dc4f07c97252849b8b94b6057819b52"
-"verus/r/r04_specs/src/lib.rs" = "0d8bc2b967defb9d5dd07eb75b94db3042de2e5e06cfa41563adf993a71876d3"
+"verus/r/r04_specs/src/lib.rs" = "f1b2795480a00816b193ad86a5db54d284d1cf63824da628a0962bf32335ab59"
 
 [[entry]]
 id = "freeze"
@@ -518,7 +518,7 @@ drop = ["^raw output: "]
 body = "4964d23b8093c9d7d2dcab1f98ea4474ecbfe2a5838486be803447fd7a02546b"
 [entry.pinned.inputs]
 "dafny/R/R04_Specs/agent/R04_AgentProver.dfy" = "3bf199f792a189935918453efa79ed7fde3ff3159958f0008e1a0bcccbe4d70e"
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "70fbbb9e1cf3d8682e108e5f0ad96825100f609e37dec8a25dba4101e3a05582"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "516901c6cc16328955874fe14775aeb1ce13e0c0d339811afc28aca3a92ef8db"
 "instructor/calib/R04.tsv" = "absent"
 "slots/R04.slots" = "c4a84a04ab171b887f3e736bc2695a2590c10625c76f40042ac30d8972d378c2"
 "specimens/R04/P3d.dfy.specimen" = "d8a729081931510f3bf3e4ffd6480ecb898e1aeb93f888a11389b5778733e827"
@@ -540,7 +540,7 @@ body = "4964d23b8093c9d7d2dcab1f98ea4474ecbfe2a5838486be803447fd7a02546b"
 "specimens/R04/chapter-p6-d.dfy.specimen" = "edeafef2a6f95a4a234d5b837abbf2d5f4acccb983f91b5a8afed01992c1ae65"
 "specimens/R04/chapter-p6-v.rs.specimen" = "52fdf5e12509e706415d670f5553c70f9bc985308b5dc65f4d1d45583137a63b"
 "verus/r/r04_specs/src/agent.rs" = "a364f1efc3a57355a3fc084e26707b287dc4f07c97252849b8b94b6057819b52"
-"verus/r/r04_specs/src/lib.rs" = "0d8bc2b967defb9d5dd07eb75b94db3042de2e5e06cfa41563adf993a71876d3"
+"verus/r/r04_specs/src/lib.rs" = "f1b2795480a00816b193ad86a5db54d284d1cf63824da628a0962bf32335ab59"
 
 [[entry]]
 id = "agent-d"

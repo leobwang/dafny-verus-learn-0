@@ -1,0 +1,65 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "6709a6f1c96a00d25f9e1a4cbbdbc3d9bc2dacdbe204e53a335e30591d4128ee"
+  },
+  "id": "r06-backwards-sound-v",
+  "lang": "verus",
+  "private_evidence_sha256": "c915e356f8f75599710a4da5c49ed156a885bf38df411332bef93480553f604f",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "calls",
+      "name": "c2"
+    },
+    {
+      "kind": "calls",
+      "name": "c3"
+    },
+    {
+      "kind": "calls",
+      "name": "c4"
+    },
+    {
+      "kind": "calls",
+      "name": "c5"
+    },
+    {
+      "kind": "calls",
+      "name": "c6"
+    }
+  ],
+  "source_sha256": "dc79d750245b9b936760772d75589d9dafde87a217fa2b87f99561b12d8ce59f",
+  "status": "admitted",
+  "target": "lemma_backwards_sound",
+  "validated_span": {
+    "end": 164,
+    "start": 120,
+    "symbol": "lemma_backwards_sound"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

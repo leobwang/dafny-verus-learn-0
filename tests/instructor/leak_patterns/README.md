@@ -14,6 +14,7 @@ Reference-class, like `Solutions/` and `paper/solutions/`: the canonical deny ru
 - **Rule 1:** a pattern matches its own `# from` file. A pattern that matches nothing is a disarmed tripwire.
 - **Rule 2:** a pattern matches nothing public: the problems file, the chapter, the learner files, the given layers, the bank, the rubric, and (this verifier is stricter than the spec) every other learner-visible file of the checkout, except the third-party benchmark sets that `scripts/get_bench.sh` installs under `bench/public/` (gitignored and not course text: DV5's leak scan judges them, DELTAS Δ152). When a pattern over-matches, tighten it rightwards into the withheld part; never delete it. **Exemption** (the orchestrator's QPLAN §6 Q15 decision, DV3a): a given layer of a tier above the pattern's module, that is, a layer of the module's own track whose number is above the module's registry `layer` (L3 for a Q02 or Q03 pattern), may match it. Later layers re-supply earlier targets by design (QPLAN §8.1 rule 1; Δ90), so a lower-tier answer there is public from that tier on, and the instructor contract keeps every layer above the record's `layer` closed (`CORE.md`). The verifier lists such matches as `exempt:` lines and does not count them in `pub`. A leak check of an instructor session for module M applies only the patterns of modules at M's tier or higher (`tests/instructor/calibration/calibrate.py`).
 - **Declared later-tier overlap** (the user's decision D23, 2026-10-13; DV5d's Δ224 item 3), beside the exemption above and of the same reading (a later tier's files may show what an earlier tier asks for; the instructor contract keeps them closed to a session of the earlier module): Q18.H1v's shipped `cast_out` (`verus/q/q18_practice_iiic/src/lib.rs`, a learner file of the hard tier's last module) is a complete top-down loop whose shipped invariant, and the delivered proof block the item hands the learner, state the domain of the invariant Q16.H2v asks the learner to find. It is a structural overlap with no answer line (DV5c's tier-disjointness sweep, `Solutions/plans/DV5c-gaps-notes.md` §4), so no pattern matches it and the verifier lists nothing for it; it is not an exemption a pattern may use. Q18 follows Q16 in the track, and the learner norms keep later modules' files closed until a module's predictions are committed (`README.md`'s *Predictions first*; Q18's file header repeats it). The record is in the Q18 code notes (§17); the item does not change. A new overlap of this kind is the user's to declare here, never a pattern's to absorb.
+- **Declared later-tier overlap** (the coordinator's decisions, option (a), 2026-10-19; DELTAS Δ294), of the same reading as D23's: Lab α's learner-visible corpus, `bench/local/r/labalpha/` (R12's lab, the task forms of the regex clusters), restates lemmas of R02–R11 and of layer A1b with parts of their proofs: the a1b-* forms show parts of the answers to R02's holes (H1's case split of NullableCorrect, H4v's `choose` skeleton of CatEpsLeft) and to R05's band-1 facts as A1b does; others include A1b's facts as complete helpers, or state an earlier hole's answer as their own statement (r06-star-unfold's precondition is R06.H4's repair). Every such form begins with the notice "DO NOT OPEN BEFORE R11 IS DONE" (lines prefixed `// [R12 header]`, which `fvh.labalpha` keeps out of the model's prompt); R12 follows R02–R11 in the track, and the instructor contract keeps the corpus closed to a session of an earlier module. The verifier lists matches of R02–R11 patterns there as `declared:` lines (its `DECLARED` table). The sealed R13/R14-derived forms are not in the tree. The record is in the Lab α corpus notes (`Solutions/plans/drafts/R12/lab-corpus-v2/NOTES.md`); it is not an exemption a pattern may use.
 - Re-run the verifier whenever a reference file, a chapter, a bank, a rubric or a learner file of the module changes: a pattern goes stale by the same mechanism as a rubric pin.
 
 ## Modules
@@ -116,6 +117,16 @@ def above_layer(rel, m):
     return order.index(layer) > (order.index(own) if own else -1)
 
 cache = {}
+# The declared later-tier overlaps whose files a pattern does match (listed in the bullets
+# above; D23's matches none): Lab alpha's learner-visible corpus restates R02-R11 and A1b, so
+# those modules' patterns may match it (the coordinator's option (a), DELTAS Δ294).
+DECLARED = (("bench/local/r/labalpha/", tuple(f"R{k:02d}" for k in range(2, 12))),)
+
+
+def declared_overlap(rel, mid):
+    return any(rel.startswith(prefix) and mid in mods for prefix, mods in DECLARED)
+
+
 def text(path):
     if path not in cache:
         try:
@@ -160,7 +171,8 @@ for mid in ids:
         nc = 1 if chap.is_file() and rx.search(text(chap)) else 0
         hits = [p for p in public if p not in (prob, chap) and rx.search(text(p))]
         exempt = [p for p in hits if above_layer(p.relative_to(ROOT).as_posix(), m)]
-        others = [p for p in hits if p not in exempt]
+        declared = [p for p in hits if p not in exempt and declared_overlap(p.relative_to(ROOT).as_posix(), mid)]
+        others = [p for p in hits if p not in exempt and p not in declared]
         ok = sol == 1 and np_ == 0 and nc == 0 and not others
         bad += not ok
         print(f"{'OK' if ok else 'FAIL'} sol={sol} prob={np_} chap={nc} pub={len(others)} {line}")
@@ -169,6 +181,9 @@ for mid in ids:
         for p in exempt:
             print(f"     exempt: {p.relative_to(ROOT).as_posix()} (a given layer above "
                   f"{mid}'s layer {m.get('layer') or 'none'}, rule 2)")
+        for p in declared:
+            print(f"     declared: {p.relative_to(ROOT).as_posix()} (a declared later-tier overlap, "
+                  f"listed above)")
     if not 3 <= n <= 8:
         print(f"FAIL {mid}: {n} patterns; a module has 3 to 8")
         bad += 1

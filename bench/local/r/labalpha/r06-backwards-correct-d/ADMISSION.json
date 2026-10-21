@@ -15,7 +15,8 @@
   },
   "id": "r06-backwards-correct-d",
   "lang": "dafny",
-  "private_evidence_sha256": "023e2caef1d7cf9ffe1348586c26e3c379ab17ed00b9ec5cc77be8d28887b9c5",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "0eb5828b3a3bf9eaed9c4b07a76f7ee35c56ccd35232b4d223022950894437ea",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -33,12 +34,12 @@
       "name": "c2"
     }
   ],
-  "source_sha256": "78fbc10cd0e97d2f20903e0a8afbf47d5c6ddfeb001b8765e3f78d2664221f96",
+  "source_sha256": "1d328953fa5ab6d1a5db6d747682e5f4c298ca8229097c620c96b64202f484b3",
   "status": "admitted",
   "target": "R12_LabCase.BackwardsCorrect",
   "validated_span": {
-    "end": 163,
-    "start": 154,
+    "end": 166,
+    "start": 157,
     "symbol": "R12_LabCase.BackwardsCorrect"
   },
   "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"

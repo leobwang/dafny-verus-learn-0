@@ -1,0 +1,42 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "4ec4d5937f43c85af98981904a60302548ecd35dea1c7baebb7f497b20f1698c"
+  },
+  "id": "r14-battery-loop-d",
+  "lang": "dafny",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "612f093ac5e3d0635f39189d85fdfed6bc69a7ff78b85891746e5fd9fd6ac966",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    }
+  ],
+  "source_sha256": "f20163b7016b0e0bdebc2108720dda4f12815f5750daa4238d3b9f636193cfb9",
+  "status": "admitted",
+  "target": "R12_LabCase.BatteryCellR14",
+  "validated_span": {
+    "end": 81,
+    "start": 75,
+    "symbol": "R12_LabCase.BatteryCellR14"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+}

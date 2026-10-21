@@ -1,0 +1,49 @@
+{
+  "cluster": "r08-ranges-class-law",
+  "kind": "regex",
+  "source": {
+    "module": "R08",
+    "lemma": "RangesClassLaw",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_RangeStarEngine.RangesClassLaw (R08.H1d)",
+      "verus": "Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_ranges_set_law (R08.H1v)"
+    }
+  },
+  "layer_definitions": [
+    "Dafny: the class half of RG_A2_Deriv (layer A2), copied verbatim as module R12_A2 with the layer export (representation hidden); R08 range-star givens InSomeRange and RangesClass",
+    "Verus: R08 range-star givens in_char_ranges and ranges_set (ISet; the Verus reference law is over the set, not the class)"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r08-ranges-class-law-d",
+    "r08-ranges-class-law-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r08-ranges-class-law-d",
+      "form": 1,
+      "result": "rejected",
+      "reason": "reference-gate: form 1 imported the A2 layer (import A2 = RG_A2_Deriv); the lab gate audits the file alone and Dafny audit reports module RG_A2_Deriv does not exist"
+    },
+    {
+      "task": "r08-ranges-class-law-d",
+      "form": 2,
+      "result": "rejected",
+      "reason": "max-auto-empty-fails under maximal automation: the empty body verifies with automatic induction on (shipped seeds 1-3 fail)"
+    },
+    {
+      "task": "r08-ranges-class-law-d",
+      "form": 2,
+      "result": "admitted under D55 (the units' shipped --manual-lemma-induction reading, admit_forms --shipped-induction; maxauto recorded verified)",
+      "sites": 3
+    },
+    {
+      "task": "r08-ranges-class-law-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 3
+    }
+  ],
+  "notes": "Form 2 copies the A2 class half verbatim as its own module (the lab gate audits a file alone, so no layer import). Under D55 the Dafny form is admitted with its maxauto result recorded."
+}

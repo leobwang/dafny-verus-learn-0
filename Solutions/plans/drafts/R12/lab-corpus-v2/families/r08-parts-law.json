@@ -1,0 +1,37 @@
+{
+  "cluster": "r08-parts-law",
+  "kind": "regex",
+  "source": {
+    "module": "R08",
+    "lemma": "PartsLaw",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy::R08_AltSetEngine.PartsLaw (R08.H2d)",
+      "verus": "Solutions/verus/r/r08_abstraction/src/lib.rs::lemma_parts_law (R08.H2v)"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Matches/matches, Nullable/nullable), copied verbatim",
+    "R08 alternative-set engine givens (Parts/parts, AnyMatches/any_matches), copied verbatim"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r08-parts-law-d",
+    "r08-parts-law-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r08-parts-law-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 7
+    },
+    {
+      "task": "r08-parts-law-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 6
+    }
+  ],
+  "notes": "Recursion and the witness-index facts are sites; the Verus singleton bridge parts(r) =~= seq![r] stays in the skeleton (no =~= in the hint grammar)."
+}

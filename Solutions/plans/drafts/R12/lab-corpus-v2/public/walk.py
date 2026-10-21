@@ -2,7 +2,7 @@
 
   walk.py prepare    C0-C3 (static) and materialization for the first 160 walk members
   walk.py admit N    the admission tool on the prepared members, N at a time (each job takes
-                     a solver slot through /tmp/dvl0-dvr4-labalpha/slot.sh)
+                     a solver slot through /home/leobwang/.cache/dafny-verus-learn-0/author-probes/dvr4-step3/labalpha/scratch/slot.sh)
   walk.py select     the walk in order: the first 45 members passing every check (C3's
                      dynamic part, distinctness from earlier accepted members, applied here);
                      writes C0-C7.jsonl, installs the taken forms under bench/local/r/labalpha
@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 V2 = HERE.parent
 ROOT = HERE.parents[5]
 ORDER = json.loads((HERE / ("ORDER2.json" if (HERE / "ORDER2.json").exists() else "ORDER.json")).read_text())  # Amendment 2
-STATE = Path("/tmp/dvl0-dvr4-labalpha/l4state")
+STATE = Path("/home/leobwang/.cache/dafny-verus-learn-0/author-probes/dvr4-step3/labalpha/scratch/l4state")
 LIMIT_WALK, LIMIT_TAKE = 220, 70  # Amendment 2: 70 not counting the pilot clusters
 PILOT = {"pub-db-052", "pub-hev-023"}  # role pilot (the Lab alpha lane); never reinstalled here
 KEEP_BELOW = 60  # positions walked before Amendment 2: their materialization and results stay
@@ -145,7 +145,7 @@ def admit_one(row):
     ev.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(work / "hints.json", ev / "hints.json")
     shutil.copyfile(work / "materialize.json", ev / "materialize.json")
-    cmd = ["/tmp/dvl0-dvr4-labalpha/slot.sh", LANG[set_], sys.executable, "-B", "tools/R12/admit_forms.py",
+    cmd = ["/home/leobwang/.cache/dafny-verus-learn-0/author-probes/dvr4-step3/labalpha/scratch/slot.sh", LANG[set_], sys.executable, "-B", "tools/R12/admit_forms.py",
            str(form), "--admit", str(ev / "hints.json"), "--evidence", str(ev / "evidence"),
            "--admission", str(work / "ADMISSION.json")]
     import time

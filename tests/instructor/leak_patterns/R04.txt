@@ -5,16 +5,15 @@
 # source: var s := "abb"; (R04.H1d)
 # verified: solutions=1 public=0
 var\s+s\s*:=\s*"abb"\s*;
-# source: ensures !Matches(Chr('a'), s[..i]) (R04.H2d, the forall over prefixes of "ba")
+# source: assert !Matches(Star(Cat(Chr('a'), Chr('b'))), "a"); assert !Matches(Cat(Chr('a'), Chr('b')), "aba"); (R04.H2d, D64)
 # verified: solutions=1 public=0
-forall\s+i\s*\|\s*0\s*<=\s*i\s*<=\s*\|s\|\s+ensures\s+!Matches\(Chr\(\x27a\x27\),\s*s\[\.\.i\]\)
+assert\s+!Matches\(Star\(Cat\(Chr\(\x27a\x27\),\s*Chr\(\x27b\x27\)\)\),\s*"a"\);\s*assert\s+!Matches\(Cat\(Chr\(\x27a\x27\),\s*Chr\(\x27b\x27\)\),\s*"aba"\);
 # source: exists i :: 0 <= i <= |s| && Matches(r, s[..i]) (R04.H4d)
 # verified: solutions=1 public=0
 exists\s+i\s*::\s*0\s*<=\s*i\s*<=\s*\|s\|\s*&&\s*Matches\(r,\s*s\[\.\.i\]\)
-# source: var r := Chr('a'); var s := "a"; assert s[0..1] == "a"; assert Occurs(r, s); (R04.H5d)
+# source: var s := "xab"; assert s[1..3] == "ab"; (R04.H5d, D64)
 # verified: solutions=1 public=0
-var\s+r\s*:=\s*Chr\(\x27a\x27\);\s*var\s+s\s*:=\s*"a";\s*assert\s+s\[0\.\.1\]\s*==\s*"a";\s*assert\s+Occurs\(r,\s*s\)
-
+var\s+s\s*:=\s*"xab";\s*assert\s+s\[1\.\.3\]\s*==\s*"ab";
 # from Solutions/verus/r/r04_specs/src/lib.rs
 # source: let u = seq!['b']; let t = seq!['b', 'b']; (R04.H1v)
 # verified: solutions=1 public=0

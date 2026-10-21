@@ -15,7 +15,8 @@
   },
   "id": "r06-deriv-correct-b-d",
   "lang": "dafny",
-  "private_evidence_sha256": "e500217d3329473e913d8d62dfe11900df076b5ddcb1c9cf559c56d5ae51bb6b",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "8dbd963ede157fd6d6a665300731ed9778ae8f658ab75072c0007dca545b5a12",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -49,12 +50,12 @@
       "name": "c6"
     }
   ],
-  "source_sha256": "7a3fb093908fd9561258ab470f4e1c13b2ec2062837cf315a3f9b7963f042337",
+  "source_sha256": "9795aff400f95ac4330c7115332a70ba68ea568cb506f8a17c2100a8af016efd",
   "status": "admitted",
   "target": "R12_LabCase.DerivCorrect",
   "validated_span": {
-    "end": 121,
-    "start": 69,
+    "end": 124,
+    "start": 72,
     "symbol": "R12_LabCase.DerivCorrect"
   },
   "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"

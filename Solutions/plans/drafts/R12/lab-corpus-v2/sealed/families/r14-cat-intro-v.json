@@ -1,0 +1,39 @@
+{
+  "cluster": "r14-cat-intro-v",
+  "kind": "regex",
+  "sealed": true,
+  "source": {
+    "module": "R14",
+    "lemma": "CatIntroV",
+    "reference": {
+      "dafny": "Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy::CatIntroV",
+      "verus": "Solutions/verus/r/r14_smt/src/lib.rs::lemma_cat_intro_v"
+    }
+  },
+  "layer_definitions": [
+    "RG_A1_Re / rg_re_a1 (Re, Nullable, NodeCount) and RG_A2_Deriv / rg_re_a2 (Deriv), copied verbatim",
+    "R14's own MatchesV / matches_v (stated triggers) and PowerWord / power_word, verbatim"
+  ],
+  "helpers_included": [],
+  "tasks": [
+    "r14-cat-intro-v-d",
+    "r14-cat-intro-v-v"
+  ],
+  "status": "admitted",
+  "attempts": [
+    {
+      "task": "r14-cat-intro-v-d",
+      "form": 1,
+      "result": "admitted",
+      "sites": 2
+    },
+    {
+      "task": "r14-cat-intro-v-v",
+      "form": 1,
+      "result": "admitted",
+      "sites": 1
+    }
+  ],
+  "notes": "Dafny: the two split equations are the expression sites (the trigger terms). Verus: the hint grammar has no =~=, so the two extensional halves are a provided lemma lemma_split_at and the site is its call.",
+  "visibility": "sealed (plan 3.5, D-L3 (a)): forms and evidence only under Solutions/ and the sealed archive; never in a learner-visible path before the learner's R14 first tries"
+}

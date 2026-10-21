@@ -399,7 +399,7 @@ Every lab has a pre-registration problem in its written pair; a run unlocks only
 
 | lab | module | question | you build | minutes | data [A] | statistics |
 |---|---|---|---|---|---|---|
-| **α** | R12 | where do the three regimes' success-vs-budget curves cross, and does obligation-localized feedback beat raw verifier text? | a hint-site environment over frozen specs and **one parametric engine** whose (width, depth, priority) settings give all three regimes at equal node budget (`engine.py`) | environment 60, engine 90, pre-registration 40, `/grade-paper` 10, setup 25, analysis 75, transcript audit 20, `--post` 10, report 50, calib 10 = **390** | 40 `bench/local/r` tasks (20 per language) + an unused public slice | paired permutation tests per budget point with Holm; clustered bootstrap bands; re-judged by `vcheck --gate`/`vaudit`/`specfreeze` |
+| **α** | R12 | does obligation-localized feedback raise best-first search's budget-weighted success (per-cluster AUC over B = 10 node calls) compared with raw verifier text, at equal node budget? (the course-fixed primary, D49/D51; the other regimes descriptive) | a hint-site environment over frozen specs and **one parametric engine** whose (width, depth, priority) settings give all regimes at equal node budget (`engine.py`) | environment 60, engine 90, pre-registration 40, `/grade-paper` 10, setup 25, analysis 75, transcript audit 20, `--post` 10, report 50, calib 10 = **390** | 80 confirmatory clusters (D54): every admitted regex cluster from R06–R11, A1b and the sealed R08/R13/R14 families, filled to 80 by a seeded draw of public clusters; 5 pilot clusters excluded | one paired sign-flip test on the cluster differences (no Holm), cluster-bootstrap interval; descriptive curves with bands; re-judged by `vcheck --gate`/`vaudit`/the frame check (Δ290–Δ293) |
 | **β** | R15 | do two independent oracles agree, with each other and with hidden verdicts, and how often is "verified" also "faithful", D vs V? | `spectest` (soundness on reference I/O, completeness against mutated outputs) and `roundtrip` (spec → NL → spec, equivalence verified both ways) | spectest 75, roundtrip 65, pre-registration 35, `/grade-paper` 10, setup 20, analysis 60, card contamination audit 30, `--post` 10, report 45, calib 10 = **360** | 24 R cards × 4 specification variants, verdicts in `Hidden/labs/R15/` | confusion matrix, κ, verified-but-unfaithful rate |
 | **γ** | R16 | what fraction of naive-grader successes (exit code, `cargo build`/`test`, a "verified" substring, one seed, `--allow-warnings`) survive your gate, by cheat class? | `rexc trust-report` from R13's forensics, R15's ladder and the R half of the corpus | pre-registration + budget 30, `/grade-paper` 10, gate 90, naive graders 20, setup 20, analysis 50, report 40, calib 10 = **270** | every α/β success + 12 crate tasks (8 possible, 4 impossible) | inflation per class with CIs |
 
@@ -407,7 +407,7 @@ Every lab has a pre-registration problem in its written pair; a run unlocks only
 
 | lab | part | arithmetic | runs · calls |
 |---|---|---|---|
-| α | Qwen arms | 40 tasks × 1 attempt × B = 10 node calls × 4 arms (the three regimes on obligation-localized feedback, plus best-first on raw verifier text) × 3 repeats | 480 runs · 4,800 calls (≈ 9.7 GPU-h) |
+| α | Qwen arms (the learner's runs) | confirmatory: the 80 clusters' tasks × 2 primary arms × 3 repeats × B = 10; descriptive: a seeded 20-cluster subset × the 2 other regimes × 3 × 10 (D50, D54) | ≤ 10,700 calls in all, under 80 GPU-h (D56; ≈ 72 GPU-s per call measured, Δ292; runs stop at their first success) |
 | α | Claude arm | 10 tasks (5 per language, seeded subset) × 10 × 1 arm (best-first, obligation feedback) × 1 | 10 runs · 100 calls |
 | α | Claude sentinels | Δ148 | ≤ 10 calls |
 | β | Qwen deliveries | 24 cards × 1 attempt × 4 rounds (verifier feedback only) × 1 arm × 8 repeats | 192 runs · 768 calls |
@@ -418,13 +418,13 @@ Every lab has a pre-registration problem in its written pair; a run unlocks only
 | γ | Claude sentinels | Δ148 | ≤ 10 calls |
 | γ | Qwen (agent mode, opencode in a per-run container) | 12 tasks × 1 × ≤ 40 turns × 1 arm × 3 repeats | 36 runs · ≤ 1,440 calls (≈ 15 min per run [A] → 9 GPU-h) |
 
-Lab α's budget points 1–10 are read as prefixes of each run: each regime's (width, depth, priority) settings are fixed independently of the budget, so the first *b* calls of a run are that regime's run at budget *b* (pre-registered; a regime whose settings depend on the budget runs once per budget point instead). Lab β's Qwen GPU is ≈ 960 × 7.3 s ≈ 2 GPU-h. Pre-registered fallbacks if step 3d's throughput is lower: α two repeats (3,200 calls), β four delivery repeats, γ two Qwen repeats.
+Lab α's budget points 1–10 are read as prefixes of each run: each regime's (width, depth, priority) settings are fixed independently of the budget, so the first *b* calls of a run are that regime's run at budget *b* (pre-registered; a regime whose settings depend on the budget runs once per budget point instead). Lab β's Qwen GPU is ≈ 960 × 7.3 s ≈ 2 GPU-h. Pre-registered fallbacks if step 3d's throughput is lower: β four delivery repeats, γ two Qwen repeats. Lab α's ceiling was set from step 3d's measurement instead (the user's D56: 80 GPU-h; a batch that reaches it pauses and resumes, never re-issuing a scored attempt; Δ295).
 
 **Registry budgets** (Δ73, Δ75; `fvh` enforces them). DV1a's values left R12's and R15's run counts and R16's call counts at 0, budgeted no sentinel, and put Lab α at 5,120 Qwen calls (≈ 10.4 GPU-h at the assumption above, over Δ75's 10). Proposed, through the records entry that carries QPLAN §30 Q55:
 
 | module | `claude_calls` | `claude_runs` | `qwen_calls` | `qwen_runs` | `gpu_hours` |
 |---|---|---|---|---|---|
-| R12 | 110 | 10 | 4800 | 480 | 10 |
+| R12 | 110 | 10 | 10700 | 1070 | 80 |
 | R15 | 90 | 20 | 960 | 288 | 3 |
 | R16 | 610 | 24 | 1440 | 36 | 9 |
 

@@ -1,5 +1,8 @@
+// [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
+// [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
+// [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
 // R12_HINT_SITES: [{"name":"c1","identifiers":["copies","r","b","s"],"kind":"calls","callees":["lemma_cat_eps_left"]},{"name":"c2","identifiers":["copies","r","aa","b","s"],"kind":"calls","callees":["lemma_cat_assoc"]},{"name":"c3","identifiers":["r","aa","b","t"],"kind":"calls","callees":["lemma_copies_join_r09"]},{"name":"c4","identifiers":["r","x","y","s"],"kind":"calls","callees":["lemma_cat_right_context_r09"]}]
-// R12_SOURCE_SPANS: [{"symbol":"lemma_copies_join_r09","start":142,"end":157}]
+// R12_SOURCE_SPANS: [{"symbol":"lemma_copies_join_r09","start":145,"end":160}]
 use vstd::prelude::*;
 
 verus! {

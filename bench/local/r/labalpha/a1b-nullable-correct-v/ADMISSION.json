@@ -15,7 +15,8 @@
   },
   "id": "a1b-nullable-correct-v",
   "lang": "verus",
-  "private_evidence_sha256": "c02056191756c461f9d3e7aad6408b6279c948a3de166157269c7591029190dc",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "3faf16f3bb363b3ad524e0c7449442f0b8f2dfe1f8de7cdcdcbd99225aab620a",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -33,12 +34,12 @@
       "name": "c2"
     }
   ],
-  "source_sha256": "5dacab1f3c6ff29d0ca97ff54bfbead5d1f9b936df9db55ff875c79b8887e79f",
+  "source_sha256": "2f94e68d4a07f7c5fbf2807cd1923602e012afb82c337576074ff6b12d02a30b",
   "status": "admitted",
   "target": "lemma_nullable_correct",
   "validated_span": {
-    "end": 68,
-    "start": 52,
+    "end": 71,
+    "start": 55,
     "symbol": "lemma_nullable_correct"
   },
   "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"

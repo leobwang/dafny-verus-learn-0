@@ -1,0 +1,66 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 4,
+  "frame": {
+    "code_sha256": "59b4f8f901eecb79c1cde81529fc2d80e82e6c240fec82c3698c94164734a462",
+    "statement_sha256": "fb80023716b079f7bc3f095a0da68f2083584ec309d00c8b00d9b96862679e4b"
+  },
+  "id": "r08-alt-feed-law-d",
+  "lang": "dafny",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "69e2cee339908900c25fb62e98ad6603b6d51ca11e79e4c1d7d8fda46b470020",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    },
+    {
+      "kind": "expr",
+      "name": "h2"
+    },
+    {
+      "kind": "expr",
+      "name": "h3"
+    },
+    {
+      "kind": "expr",
+      "name": "h4"
+    },
+    {
+      "kind": "expr",
+      "name": "h5"
+    },
+    {
+      "kind": "expr",
+      "name": "h6"
+    }
+  ],
+  "source_sha256": "0705140e0efe38e98feebc0830a841579449234a553bf3fb4be7b4d9ba74fc6d",
+  "status": "admitted",
+  "target": "R12_LabCase.AltFeedLaw",
+  "validated_span": {
+    "end": 214,
+    "start": 184,
+    "symbol": "R12_LabCase.AltFeedLaw"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}

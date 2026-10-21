@@ -1,0 +1,46 @@
+{
+  "checks": {
+    "audit-clean": true,
+    "baseline-proof-fails": true,
+    "max-auto-empty-fails": true,
+    "original-model-code-frame": true,
+    "reference-gate": true,
+    "reference-three-seeds": true,
+    "wrong-hints-fail": true
+  },
+  "empty_variants": 19,
+  "frame": {
+    "code_sha256": "f8d56c1e9b5b5c4d9799d5c1edd93cb2240181616646abfed68e5a53c4c02339",
+    "statement_sha256": "d7befd01a81f64af531fcd0fb1b5c961c4f053d9dcdc59d8d3eba18a3608e231"
+  },
+  "id": "r08-alt-final-law-v",
+  "lang": "verus",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "2b2e775bc0664f6cda7d32e3e0ea207ae1fa1be60d28730095caf518ecaafc2e",
+  "schema": 2,
+  "scope": "author native task-validity controls; no learner grade or live run",
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "sites": [
+    {
+      "kind": "calls",
+      "name": "c1"
+    },
+    {
+      "kind": "expr",
+      "name": "h1"
+    }
+  ],
+  "source_sha256": "95bc89eb91c751d2fed0f4548d3bdc9ddbeafdb18c011b13a1c495e3d8192324",
+  "status": "admitted",
+  "target": "lemma_alt_final_law",
+  "validated_span": {
+    "end": 105,
+    "start": 95,
+    "symbol": "lemma_alt_final_law"
+  },
+  "wrong_hint_kind": "expression sites false, call sites empty"
+}
