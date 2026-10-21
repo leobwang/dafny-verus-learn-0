@@ -13,7 +13,8 @@ files). The default <out> for the Q half is harness/tests/q/fixtures/q09; the
 R half needs --out. A relative --out is taken from the course root, and --out
 must lie inside it.
 
-Which instruments: every instrument of INSTRUMENTS (or of --instrument) whose
+Which instruments: every instrument of CORE_INSTRUMENTS (or of --instrument, which may
+also name the challenge instruments solver-swap and reach, Δ402) whose
 inputs exist for the delivery: the target, and the companion file or crate the
 instrument names (tests/corpus/README.md's table). The recorder reads the
 deliveries only, never a label: what it records does not depend on a
@@ -164,7 +165,7 @@ def main(argv=None, *, root=None, runner=None) -> int:
               file=sys.stderr)
         return EXIT_FAIL
     wanted = [i for i in R.INSTRUMENTS if i in a.instrument] if a.instrument else \
-        list(R.INSTRUMENTS)
+        list(R.CORE_INSTRUMENTS)
 
     plan = []
     for fx in chosen:

@@ -524,3 +524,56 @@ def test_the_claude_transport_remembers_its_snapshot_tokens(tmp_path):
     tr._tokens = set()
     tr._remember_token(dst)
     assert tr.secret_values() == (tok,)
+
+
+# --- single use (the challenge tier: QPLAN §31.3, D-6, Δ402) ------------------------------
+
+def _part(root, part):
+    sp = root / "bench" / "local" / "q" / "lab9" / "STRATUM.toml"
+    sp.write_text(sp.read_text().replace('schema = 1\n', f'schema = 1\npart = "{part}"\n', 1))
+
+
+def test_a_single_use_part_is_unsealed_once_outside_the_tree(root, tmp_path):
+    age, key = _seal(root, ["c1"])
+    _part(root, "T1")
+    commit_statements(root)
+    with pytest.raises(statements.StatementsRefused, match="--part, --into"):
+        statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True)
+    with pytest.raises(statements.StatementsRefused, match="outside the course tree"):
+        statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True,
+                          into=root / "scratch")
+    with pytest.raises(statements.StatementsRefused, match='part = "T2"'):
+        statements.unseal(root, "Q98", age=age, identity=key, part="T2", once=True,
+                          into=tmp_path / "out")
+    out = tmp_path / "out"
+    got = statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True, into=out)
+    assert got["strata"][0]["written"] == 3
+    assert (out / "c1" / "tasks" / "src" / "lib.rs").read_text() == STUB_RS
+    assert not (root / CRATE.format(t="c1")).exists()          # nothing in the tree
+    assert not (root / "bench" / "local" / "q" / "lab9" / "UNSEALED.toml").exists()
+    led = statements.unseal_ledger(root)
+    assert [(e["seq"], e["module"], e["part"], e["files"]) for e in led] == [(1, "Q98", "T1", 3)]
+    assert led[0]["prev"] == statements.GENESIS
+    with pytest.raises(statements.StatementsRefused, match="unsealed once already"):
+        statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True,
+                          into=tmp_path / "again")
+    assert not (tmp_path / "again").exists()
+
+
+def test_the_single_use_ledger_is_chained(root, tmp_path):
+    age, key = _seal(root, ["c1"])
+    _part(root, "T1")
+    commit_statements(root)
+    statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True,
+                      into=tmp_path / "o1")
+    age, key = _seal(root, ["c2"])                           # a new seal: a new archive sha
+    _part(root, "T1")
+    statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True,
+                      into=tmp_path / "o2")
+    led = statements.unseal_ledger(root)
+    assert [e["seq"] for e in led] == [1, 2]
+    lp = root / statements.LEDGER
+    lines = lp.read_text().splitlines()
+    lp.write_text(lines[0].replace('"files":3', '"files":4') + "\n" + lines[1] + "\n")
+    with pytest.raises(statements.StatementsRefused, match="chain is broken"):
+        statements.unseal_ledger(root)

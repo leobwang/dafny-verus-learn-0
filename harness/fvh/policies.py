@@ -14,6 +14,16 @@
                   recording raises ReplayEnd, so the executor reproduces the
                   recorded outcome. `fvh report` re-derives outcomes with it.
 
+  MolePolicy(inner, plants, *, label_sink=None)
+                  the red-team wrapper of Q33's pipeline (QPLAN §35.3, DELTAS
+                  Δ402): at each planted step it returns the plant's actions
+                  instead of the inner policy's proposal (the inner policy is
+                  not asked at that step), and passes every other step
+                  through. `plants` maps a step to (plant_id, actions); the
+                  plant id never enters a proposal: it goes only to
+                  `injected` and to `label_sink(step, plant_id)` (the label
+                  file the evaluator alone reads)
+
 None of them calls a model. The model policies (fvh.backends.ModelPolicy) and
 the learner's policies (Q12's harness/q/fvh_q/policies.py) follow the same
 protocol.
@@ -32,7 +42,7 @@ from typing import Protocol, runtime_checkable
 
 from fvh import protocol
 
-__all__ = ["MockPolicy", "Policy", "ReplayDiverged", "ReplayEnd", "ReplayPolicy",
+__all__ = ["MockPolicy", "MolePolicy", "Policy", "ReplayDiverged", "ReplayEnd", "ReplayPolicy",
            "ScriptExhausted", "ScriptedPolicy", "load_actions"]
 
 
@@ -132,3 +142,34 @@ class ReplayPolicy:
         if "malformed" in rec:
             raise protocol.Malformed(f"recorded at step {n}: {rec['malformed']}")
         return protocol.parse_proposal({"actions": rec["actions"]}, max_actions=ctx.max_actions)
+
+
+class MolePolicy:
+    """Plants at pre-registered steps, the inner policy elsewhere (module docstring)."""
+
+    def __init__(self, inner, plants, *, label_sink=None):
+        if not isinstance(inner, Policy):
+            raise TypeError("MolePolicy wraps a policy (an object with propose)")
+        self.inner = inner
+        self.plants = {}
+        for step, plant in dict(plants).items():
+            if not isinstance(step, int) or isinstance(step, bool) or step < 0:
+                raise TypeError("a plant's step is a non-negative int")
+            if not (isinstance(plant, tuple) and len(plant) == 2 and isinstance(plant[0], str)
+                    and plant[0]):
+                raise TypeError("a plant is (plant_id, actions)")
+            self.plants[step] = (plant[0], tuple(_actions(plant[1])))
+        if label_sink is not None and not callable(label_sink):
+            raise TypeError("label_sink is a function of (step, plant_id)")
+        self.label_sink = label_sink
+        self.injected = []
+
+    def propose(self, state, ctx, budget) -> list:
+        plant = self.plants.get(state.step)
+        if plant is None:
+            return self.inner.propose(state, ctx, budget)
+        pid, acts = plant
+        self.injected.append((state.step, pid))
+        if self.label_sink is not None:
+            self.label_sink(state.step, pid)
+        return list(acts)

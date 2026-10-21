@@ -80,6 +80,23 @@ class Files(unittest.TestCase):
             self.assertTrue(any("include form" in g for g in got))
             self.assertEqual(len(got), 2)
 
+    def test_a_crate_directory_and_json(self):
+        with tempfile.TemporaryDirectory(prefix="dvl-reach-") as d:
+            c = Path(d) / "crate"
+            (c / "src").mkdir(parents=True)
+            (c / "Cargo.toml").write_text('[package]\nname = "c"\n')
+            (c / "src" / "lib.rs").write_text("verus! { fn heapsort() {} }\n")
+            (c / "src" / "more.rs").write_text("use vstd::arithmetic::mul::*;\n")
+            m = Path(d) / "reach.toml"
+            m.write_text('[reach]\ndeny_modules = ["vstd::arithmetic::mul"]\nrequire = ["heapsort"]\n')
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                self.assertEqual(R.main(["--json", "--manifest", str(m), "--root", d, "crate"]), 1)
+            import json
+            doc = json.loads(buf.getvalue())
+            self.assertEqual(doc["findings"], ["crate/src/more.rs:1: reaches the denied module "
+                                               "vstd::arithmetic::mul"])
+
     def test_manifest(self):
         with tempfile.TemporaryDirectory(prefix="dvl-reach-") as d:
             m = Path(d) / "Q31_Statement.toml"

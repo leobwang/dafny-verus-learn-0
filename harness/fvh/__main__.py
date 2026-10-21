@@ -37,7 +37,10 @@ Run from harness/ (`uv run --offline --frozen --directory harness python -m fvh 
       the apparatus facts as JSON; --check compares the host with the pins,
       and, when the apparatus pins a Qwen backend and models are enabled, the
       live model server (version, digests, the unit's settings).
-  unseal <ID> [--dry-run]
+  unseal <ID> [--dry-run] [--part P] [--once --into DIR]
+      a challenge module (Q19-Q33) is always --once: one part, written to DIR
+      outside the course tree, at most once (research/unseals.jsonl, the
+      hash-chained single-use ledger; QPLAN §31.3, DELTAS Δ402); otherwise
       the module's sealed lab tasks (fvh.statements; QPLAN §28.6, §30 Q64):
       refused until every statement file expected/<ID>.statements names is
       committed with content other than its shipped form; then each sealed
@@ -312,8 +315,10 @@ def cmd_unseal(a, root):
     rec = _module(root, a.module)
     if rec.get("status") == "planned":
         raise Refusal(f"{rec['id']} is planned: not authored yet")
+    once = a.once or rec.get("tier") == "challenge"     # a challenge part is single use (D-6)
     try:
-        got = statements.unseal(root, rec["id"], dry_run=a.dry_run)
+        got = statements.unseal(root, rec["id"], dry_run=a.dry_run, part=a.part, once=once,
+                                into=a.into)
     except statements.StatementsRefused as e:
         raise Refusal(str(e)) from None
     for path, sha in sorted(got["statements"].items()):
@@ -389,6 +394,9 @@ def main(argv=None) -> int:
     p = sub.add_parser("unseal", allow_abbrev=False)
     p.add_argument("module")
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--part")
+    p.add_argument("--once", action="store_true")
+    p.add_argument("--into")
     p = sub.add_parser("contract-local", allow_abbrev=False)
     p.add_argument("module")
     p.add_argument("--file")

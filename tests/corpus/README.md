@@ -117,6 +117,8 @@ and only through the course wrappers. `<dir>` is the fixture directory and
 | `witness` | `scripts/vcheck --gate <dir>/witness.dfy` | `scripts/vcheck --gate <dir>/witness` | exit 1: no concrete call meets the requires |
 | `swap-to-false` | `scripts/vcheck --gate <dir>/swap.dfy` | `scripts/vcheck --gate <dir>/swapped` | **exit 0**: the conclusion replaced by `false` still verifies, so the context is vacuous |
 | `seed-rerun` | `scripts/vcheck --brittleness <target>` | the same | exit 1 |
+| `solver-swap` | `scripts/vcheck --brittleness --solvers <target>` | (none: one solver) | exit 1: a seed or a bundled solver does not verify (solver diversity, not independent checking) |
+| `reach` | `scripts/dvl/reach.py --manifest <dir>/reach.toml <target>` | `scripts/dvl/reach.py --manifest <target>/reach.toml <target>` | exit 1: a denied name or module, a missing required root, or reach into a reference tree (the challenge tier, Δ402) |
 | `json-completeness` | (none) | the plain run's `--output-json` `verification-results` | `success` is not true, `is-verifying-entire-crate` is not true, or `verified` < 1 |
 | `lint` | (none) | (none) | not runnable on its own: the lint runs inside `vaudit` and `vcheck --gate`, so record its rule ids under those tools |
 

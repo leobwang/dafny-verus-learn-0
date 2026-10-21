@@ -147,7 +147,7 @@ def runner_mod():
 
 def test_instruments_are_the_corpus_readme_names(runner_mod):
     assert INSTRUMENTS == ("vcheck --gate", "vaudit", "specfreeze --check", "witness",
-                           "swap-to-false", "seed-rerun")
+                           "swap-to-false", "seed-rerun", "solver-swap", "reach")
     not_runnable = {"lint", "json-completeness"}       # README: read elsewhere, never run
     assert INSTRUMENTS == tuple(t for t in runner_mod.TOOLS if t not in not_runnable)
     readme = (ROOT / "tests" / "corpus" / "README.md").read_text(encoding="utf-8")
@@ -159,7 +159,7 @@ def test_instruments_are_the_corpus_readme_names(runner_mod):
 def test_slugs_are_file_safe_and_distinct():
     slugs = [tools.slug(i) for i in INSTRUMENTS]
     assert slugs == ["vcheck-gate", "vaudit", "specfreeze-check", "witness", "swap-to-false",
-                     "seed-rerun"]
+                     "seed-rerun", "solver-swap", "reach"]
     with pytest.raises(ValueError):
         tools.slug("lint")
 
@@ -727,3 +727,18 @@ def test_no_gate_logic_ships_in_the_instruments():
         text = f.read_text(encoding="utf-8")
         for word in ("flagged", "GRADER_ONLY", "xclass", "classify"):
             assert word not in text, (f.name, word)
+
+
+def test_the_challenge_instruments(tmp_path):
+    """solver-swap and reach (QPLAN §31.4 item 5, Δ402): Dafny-only solver swap; reach
+    reads the target's reach.toml companion."""
+    assert tools.command("solver-swap", "d/a.dfy") == ["scripts/vcheck", "--brittleness",
+                                                       "--solvers", "d/a.dfy"]
+    with pytest.raises(ValueError, match="one solver"):
+        tools.command("solver-swap", "c/crate", lang="verus")
+    assert tools.command("reach", "d/a.dfy") == ["scripts/dvl/reach.py", "--manifest",
+                                                 "d/reach.toml", "d/a.dfy"]
+    assert tools.command("reach", "c/crate", lang="verus") == [
+        "scripts/dvl/reach.py", "--manifest", "c/crate/reach.toml", "c/crate"]
+    h = HostRunner(root=tmp_path)
+    assert h.argv("reach", "d/a.dfy")[:2] == ["scripts/dvl/reach.py", "--json"]

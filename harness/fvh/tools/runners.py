@@ -16,6 +16,11 @@ names an instrument and a target, never an argv or an option.
   swap-to-false       Dafny: scripts/vcheck --gate <dir>/swap.dfy
                       Verus: scripts/vcheck --gate <t>/swapped
   seed-rerun          scripts/vcheck --brittleness <t>
+  solver-swap         Dafny: scripts/vcheck --brittleness --solvers <t> (every seed under
+                      each bundled Z3; Verus has one solver, so it has no solver-swap)
+  reach               Dafny: scripts/dvl/reach.py --manifest <dir>/reach.toml <t>
+                      Verus: scripts/dvl/reach.py --manifest <t>/reach.toml <t>
+                      (the challenge tier's two instruments, QPLAN §31.4 item 5, Δ402)
 
 <t> is the target (a .dfy file, or a Verus crate directory) and <dir> the Dafny
 target's directory. `command()` returns these argvs; a runner adds `--json`
@@ -113,8 +118,10 @@ __all__ = ["FIXTURES", "INSTRUMENTS", "KILLS", "NoRecording", "PROVENANCES", "Pr
 
 ROOT = Path(__file__).resolve().parents[3]
 
-INSTRUMENTS = ("vcheck --gate", "vaudit", "specfreeze --check", "witness", "swap-to-false",
-               "seed-rerun")
+CORE_INSTRUMENTS = ("vcheck --gate", "vaudit", "specfreeze --check", "witness", "swap-to-false",
+                    "seed-rerun")
+CHALLENGE_INSTRUMENTS = ("solver-swap", "reach")     # recorded only when named (Δ402)
+INSTRUMENTS = CORE_INSTRUMENTS + CHALLENGE_INSTRUMENTS
 PROVENANCES = ("course", "learner", "agent")          # in order of rising distrust
 KILLS = ("memory", "wall-clock")
 RUNNERS = ("host", "container", "replay")
@@ -125,7 +132,7 @@ SCHEMA = 1
 
 _RANK = {p: i for i, p in enumerate(PROVENANCES)}
 _JSON = {"vcheck --gate": True, "vaudit": True, "specfreeze --check": False, "witness": True,
-         "swap-to-false": True, "seed-rerun": True}
+         "swap-to-false": True, "seed-rerun": True, "solver-swap": True, "reach": True}
 COURSE_TREES = ("tests/corpus", "harness/tests/q/fixtures")
 AGENT_TREES = ("research",)
 GIVEN_TREES = ("dafny/given", "verus/given")
@@ -196,6 +203,17 @@ def command(instrument: str, target, *, lang: str | None = None) -> list[str]:
         return ["scripts/vaudit", t]
     if instrument == "seed-rerun":
         return ["scripts/vcheck", "--brittleness", t]
+    if instrument == "solver-swap":
+        if lang != "dafny":
+            raise ValueError("solver-swap is Dafny's: Verus has one solver (VERSIONS.md §1.2)")
+        return ["scripts/vcheck", "--brittleness", "--solvers", t]
+    if instrument == "reach":
+        if lang == "dafny":
+            d = posixpath.dirname(t)
+            return ["scripts/dvl/reach.py", "--manifest",
+                    posixpath.join(d, "reach.toml") if d else "reach.toml", t]
+        if lang == "verus" and not t.endswith(".rs"):
+            return ["scripts/dvl/reach.py", "--manifest", f"{t}/reach.toml", t]
     if lang == "dafny":
         d = posixpath.dirname(t)
 

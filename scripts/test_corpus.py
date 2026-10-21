@@ -97,7 +97,7 @@ HALVES = ("Q", "R")
 KINDS = ("construct", "control", "covered-elsewhere")
 OUTCOMES = ("flagged", "clean", "unknown")
 TOOLS = ("vcheck --gate", "vaudit", "specfreeze --check", "lint", "witness", "swap-to-false",
-         "json-completeness", "seed-rerun")
+         "json-completeness", "seed-rerun", "solver-swap", "reach")
 # Spec §5.6: the grader-only classes. A gate must answer UNKNOWN on them, never
 # PASS (design §11.2, gate v2); vcheck has no UNKNOWN verdict, so this runner
 # reads a gate pass on such a fixture as `unknown`, never as `clean`.
@@ -274,6 +274,11 @@ def command(fx, tool):
         if dafny:
             return ["scripts/specfreeze", "--against", f"{d}/frozen.dfy", t]
         return ["scripts/specfreeze", "--against", f"{d}/frozen.rs", f"{t}/src/lib.rs"]
+    if tool == "solver-swap" and dafny:
+        return ["scripts/vcheck", "--brittleness", "--solvers", t]
+    if tool == "reach":
+        m = f"{posixpath.dirname(t)}/reach.toml" if dafny else f"{t}/reach.toml"
+        return ["scripts/dvl/reach.py", "--manifest", m, t]
     if tool == "json-completeness" and not dafny:
         return None
     raise ValueError(f"no runner command for {tool!r} in {fx.lang}")

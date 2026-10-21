@@ -1504,3 +1504,40 @@ def test_the_live_routes_early_returns_carry_the_gates_counts(root, monkeypatch,
         seg = la.run_segment(spec(k))
         assert (seg.code, seg.ended_by, seg.calls, seg.gpu_s, seg.output_tokens) == \
             (1, ended, 5, 40.0, 9)
+
+
+# --- a challenge's agents/ packages (QPLAN §31.4, Δ402) -----------------------------------
+
+def test_a_challenge_plan_imports_its_own_agents_policy_only(tmp_path):
+    import uuid
+    from fvh import batch as B
+    pkg = f"q32_probe_{uuid.uuid4().hex[:8]}"
+    d = tmp_path / "agents" / pkg
+    d.mkdir(parents=True)
+    (d / "__init__.py").write_text("")
+    (d / "agent.py").write_text("class Agent:\n    pass\n")
+    obj, src = B._import_policy(tmp_path, f"{pkg}.agent:Agent", "Q32")
+    assert obj.__name__ == "Agent" and src == d / "agent.py"
+    for module in ("Q31", "Q12", None):
+        with pytest.raises(B.BatchError, match="its own module"):
+            B._import_policy(tmp_path, f"{pkg}.agent:Agent", module)
+
+
+def test_a_challenge_gate_comes_from_its_topic(tmp_path):
+    import uuid
+    from fvh import batch as B
+    pkg = f"q31_probe_{uuid.uuid4().hex[:8]}"
+    d = tmp_path / "agents" / pkg
+    d.mkdir(parents=True)
+    (d / "__init__.py").write_text("")
+    (d / "gate.py").write_text("def gate_crate(t, run=None):\n    pass\nclass CrateTarget: pass\n"
+                               "class Pins: pass\ndef render(v):\n    return ''\n")
+    (d / "half.py").write_text("def gate_crate(t, run=None):\n    pass\n")
+    assert B._import_gate(tmp_path, f"agents/{pkg}/gate.py", "Q32").gate_crate
+    assert B._import_gate(tmp_path, f"agents/{pkg}/gate.py", "Q31").render
+    with pytest.raises(B.BatchError, match="topic"):
+        B._import_gate(tmp_path, f"agents/{pkg}/gate.py", "Q28")     # another topic
+    with pytest.raises(B.BatchError, match="topic"):
+        B._import_gate(tmp_path, f"agents/{pkg}/gate.py", "Q18")     # a core module
+    with pytest.raises(B.BatchError, match="has no CrateTarget"):
+        B._import_gate(tmp_path, f"agents/{pkg}/half.py", "Q31")

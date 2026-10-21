@@ -60,7 +60,9 @@ The plan (TOML; `python -m fvh run <ID> --plan PLAN.toml`):
     family = <a fvh.budget family>  the Claude or the Qwen family
     rounds = <model calls per attempt>
     policy = "<module>:<name>"    the arm's policy class or renderer, imported
-                                  from harness/ (fvh, fvh_q, fvh_r); "fvh:smoke"
+                                  from harness/ (fvh, fvh_q, fvh_r), or in a
+                                  challenge module's plan from its own agents/
+                                  package (q<NN>_<name>; Δ402); "fvh:smoke"
                                   is fvh.backends.smoke_render
     construct = "sampler" | "seeded" | "model" | "agent"
                                   sampler: cls(ask, seed); seeded: cls(ask,
@@ -609,10 +611,42 @@ def _in_sealed_stratum(root, rel) -> bool:
         return False
 
 
-def _import_gate(root, rel):
+_AGENT_PKG = re.compile(r"q(19|2[0-9]|3[0-3])_[a-z0-9_]+")
+
+
+def _agent_numbers(module):
+    """The agents package numbers a challenge module's plan may import: its own and its
+    topic's earlier modules' (QPLAN §31.4; dvl.python's py-agents rule). Empty for a
+    core module, whose plans import from harness/ only."""
+    m = re.fullmatch(r"Q(\d\d)", str(module or ""))
+    if not m or not 19 <= int(m.group(1)) <= 33:
+        return set()
+    n = int(m.group(1))
+    first = 19 + 3 * ((n - 19) // 3)
+    return {f"{k:02d}" for k in range(first, n + 1)}
+
+
+def _import_gate(root, rel, module=None):
     """The acceptance tool's module (the plan's gate), imported from harness/ by its
-    dotted name (harness/q/fvh_q/gate/gate_v2.py -> fvh_q.gate.gate_v2)."""
+    dotted name (harness/q/fvh_q/gate/gate_v2.py -> fvh_q.gate.gate_v2), or, for a
+    challenge's plan, from agents/ (agents/q31_gate_bench/gate.py -> q31_gate_bench.gate,
+    a package of the plan's module or its topic's earlier ones; Δ402)."""
     parts = PurePosixPath(rel).with_suffix("").parts
+    if len(parts) >= 3 and parts[0] == "agents":
+        if not _AGENT_PKG.fullmatch(parts[1]) or parts[1][1:3] not in _agent_numbers(module):
+            raise BatchError(f"gate {rel}: an agents/ gate belongs to this module or its topic's "
+                             "earlier modules")
+        base = str(Path(root) / "agents")
+        if base not in sys.path:
+            sys.path.insert(0, base)
+        try:
+            mod = importlib.import_module(".".join(parts[1:]))
+        except Exception as e:                        # the learner's file: any failure refuses
+            raise BatchError(f"gate {rel} cannot be imported: {type(e).__name__}: {e}") from None
+        for name in ("gate_crate", "CrateTarget", "Pins", "render"):
+            if not hasattr(mod, name):
+                raise BatchError(f"gate {rel} has no {name}")
+        return mod
     if len(parts) < 3 or parts[0] != "harness" or parts[1] not in ("q", "r"):
         raise BatchError(f"gate {rel}: a learner gate lives under harness/q/ or harness/r/")
     base = str(Path(root) / "harness" / parts[1])
@@ -628,10 +662,20 @@ def _import_gate(root, rel):
     return mod
 
 
-def _import_policy(root, spec):
+def _import_policy(root, spec, module=None):
     mod_name, attr = spec.split(":", 1)
     if spec == "fvh:smoke":
         return backends.smoke_render, Path(backends.__file__)
+    head = mod_name.split(".")[0]
+    if _AGENT_PKG.fullmatch(head):
+        # a challenge's own agent (QPLAN §31.4 item 4): the plan's module's package only
+        own = re.fullmatch(r"Q(\d\d)", str(module or ""))
+        if not own or head[1:3] != own.group(1):
+            raise BatchError(f"policy {spec}: an agents/ policy runs only in its own module's "
+                             "plans")
+        d = Path(root) / "agents"
+        if str(d) not in sys.path:
+            sys.path.insert(0, str(d))
     for d in (Path(root) / "harness", Path(root) / "harness" / "q", Path(root) / "harness" / "r"):
         if str(d) not in sys.path:
             sys.path.append(str(d))
@@ -790,7 +834,7 @@ class Batch:
         """Check, plan, anchor; keep the plan's copy and its note (returns the ids)."""
         for arm in self.plan.arms:                    # an arm that cannot be built refuses
             if not arm.agent:                         # the batch before anything is written
-                _import_policy(self.root, arm.policy)
+                _import_policy(self.root, arm.policy, self.module)
         self.preflight_agents()
         if self.plan.lab:
             try:
@@ -858,7 +902,7 @@ class Batch:
             raise BatchError(f"gate {self.plan.gate} is not the pre-registered one (sha256 "
                              f"{have[:16]}… here, {self.plan.gate_sha256[:16]}… in the plan)")
         if self._gate_mod is None:
-            self._gate_mod = _import_gate(self.root, self.plan.gate)
+            self._gate_mod = _import_gate(self.root, self.plan.gate, self.module)
         return self._gate_mod
 
     def _acceptance(self, task, target, runner):
@@ -1005,7 +1049,7 @@ class Batch:
                                               else None))
 
     def _policy(self, arm, tr, target, meter, seeds, prompts):
-        obj, src = _import_policy(self.root, arm.policy)
+        obj, src = _import_policy(self.root, arm.policy, self.module)
         key = str(src)
         if key not in self._sources:
             self._sources[key] = apparatus.file_sha256(src)

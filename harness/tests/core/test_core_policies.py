@@ -88,3 +88,37 @@ def test_replay_reproduces_a_malformed_reply(tmp_path):
 def test_replay_refuses_a_bad_recording(tmp_path, recs):
     with pytest.raises(ValueError):
         policies.ReplayPolicy(write_actions(tmp_path, recs))
+
+
+def test_the_mole_plants_at_its_steps_and_passes_the_rest_through():
+    asked = []
+
+    def inner_fn(s, c, b):
+        asked.append(s.step)
+        return [P.Verify()]
+    plant = (P.Edit("a.dfy", "", "lemma {:axiom} L()"), P.Stop("done"))
+    labels = []
+    m = policies.MolePolicy(policies.MockPolicy(inner_fn), {1: ("X03-a", plant)},
+                            label_sink=lambda step, pid: labels.append((step, pid)))
+    assert isinstance(m, policies.Policy)
+    assert m.propose(state(0), ctx(), P.Budget()) == [P.Verify()]
+    assert m.propose(state(1), ctx(), P.Budget()) == list(plant)
+    assert m.propose(state(2), ctx(), P.Budget()) == [P.Verify()]
+    assert asked == [0, 2]                         # the inner policy is not asked at a plant
+    assert m.injected == [(1, "X03-a")] and labels == [(1, "X03-a")]
+    # the plant id never enters a proposal
+    assert "X03-a" not in json.dumps(P.proposal_to_json(m.propose(state(1), ctx(), P.Budget())))
+
+
+def test_the_mole_checks_its_plants():
+    inner = policies.ScriptedPolicy([[P.Verify()]])
+    with pytest.raises(TypeError):
+        policies.MolePolicy(object(), {})
+    with pytest.raises(TypeError):
+        policies.MolePolicy(inner, {-1: ("p", [P.Verify()])})
+    with pytest.raises(TypeError):
+        policies.MolePolicy(inner, {0: ("", [P.Verify()])})
+    with pytest.raises(TypeError):
+        policies.MolePolicy(inner, {0: ("p", ["not an action"])})
+    with pytest.raises(TypeError):
+        policies.MolePolicy(inner, {}, label_sink=3)

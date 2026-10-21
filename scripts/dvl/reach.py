@@ -35,7 +35,9 @@ is QPLAN §40 Q69.
   scan(files, policy, root) -> list[str]        findings, [] = clean
   load_policy(manifest_path) -> dict            the [reach] table (empty lists if absent)
 
-CLI: python3 scripts/dvl/reach.py --manifest M.toml [--root R] FILE...
+CLI: python3 scripts/dvl/reach.py [--json] --manifest M.toml [--root R] FILE|DIR...
+(a directory, a Verus crate, is read as its Cargo.toml and every .rs file under it;
+--json prints {"findings": [...], "files": n}, the form fvh.tools' `reach` reads)
 Exit 0 clean · 1 findings · 2 usage · 3 an unreadable manifest. Standard library only.
 """
 
@@ -153,9 +155,16 @@ def scan_text(text, lang, rel, policy):
 def scan(files, policy, root=None):
     root = Path(root or ".").resolve()
     out, defs = [], set()
+    expanded = []
     for raw in files:
         p = Path(raw)
         p = p if p.is_absolute() else root / p
+        if p.is_dir():
+            expanded += ([p / "Cargo.toml"] if (p / "Cargo.toml").is_file() else []) + \
+                sorted(q for q in p.rglob("*.rs") if "target" not in q.relative_to(p).parts)
+        else:
+            expanded.append(p)
+    for p in expanded:
         try:
             rel = p.resolve().relative_to(root).as_posix()
         except ValueError:
@@ -176,6 +185,7 @@ def scan(files, policy, root=None):
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="dvl/reach.py", allow_abbrev=False)
     ap.add_argument("--manifest", required=True)
+    ap.add_argument("--json", action="store_true")
     ap.add_argument("--root", default=".")
     ap.add_argument("files", nargs="+")
     a = ap.parse_args(argv)
@@ -185,6 +195,10 @@ def main(argv=None) -> int:
         print(f"reach: {e}", file=sys.stderr)
         return 3
     found = scan(a.files, policy, a.root)
+    if a.json:
+        import json
+        print(json.dumps({"findings": found, "files": len(a.files)}))
+        return 1 if found else 0
     for f in found:
         print(f)
     print(f"reach: {len(found)} finding(s)")

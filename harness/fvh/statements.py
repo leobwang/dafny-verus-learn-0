@@ -31,7 +31,20 @@ manifest's sha256 and the file count.
   read_pins(root, module) -> list[(path, shipped sha256)]   [] when none
   check(root, module) -> dict[path, committed sha256]       or StatementsRefused
   sealed_strata(root, module) -> list[Path]                 the STRATUM.toml files
-  unseal(root, module, *, dry_run=False, age=None, identity=None) -> dict
+  unseal(root, module, *, dry_run=False, age=None, identity=None, part=None,
+         once=False, into=None) -> dict
+  unseal_ledger(root) -> list[dict]                         research/unseals.jsonl, checked
+
+Single use (the challenge tier: QPLAN §31.3, the coordinator's D-6, DELTAS Δ402).
+With `part`, only the strata whose STRATUM.toml names `part = "<part>"` are unsealed.
+With `once`, a part is unsealed at most once: the hash-chained ledger
+research/unseals.jsonl (one canonical JSON object per line, "prev" the sha256 of the
+line before, GENESIS first; written only here) must hold no earlier entry for the
+same module, part and archive_sha256, or the unseal is refused; the entry it appends
+marks the part consumed and retired (its plaintext is in the run's records; a new
+seal is the author's only override). With `into` (a directory outside the course
+tree, required with `once`), the cards are written there and not into the stratum
+directory, and no UNSEALED.toml is written (the ledger is the record).
 
 Refusals (StatementsRefused, exit 3 at the command line) name the file and the
 reason; nothing is written before every check passes. Frozen (guard rule 2f),
@@ -41,6 +54,7 @@ standard library only.
 import datetime
 import hashlib
 import io
+import json
 import os
 import re
 import subprocess
@@ -48,9 +62,12 @@ import tarfile
 import tomllib
 from pathlib import Path, PurePosixPath
 
-__all__ = ["PIN_DIR", "StatementsRefused", "check", "read_pins", "sealed_strata", "unseal"]
+__all__ = ["LEDGER", "PIN_DIR", "StatementsRefused", "check", "read_pins", "sealed_strata",
+           "unseal", "unseal_ledger"]
 
 PIN_DIR = "expected"
+LEDGER = "research/unseals.jsonl"
+GENESIS = "0" * 64
 TRUTH_FILE = "sandbox/truth.toml"
 AGE = "~/.local/bin/age"
 MAX_PLAIN = 64 << 20
@@ -201,7 +218,32 @@ def _manifest(files: dict) -> tuple:
     return listed, _sha(man)
 
 
-def unseal(root, module, *, dry_run=False, age=None, identity=None) -> dict:
+def _canon(obj):
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def unseal_ledger(root) -> list:
+    """The single-use ledger's entries, its chain checked (StatementsRefused if broken)."""
+    p = Path(root) / LEDGER
+    if not p.is_file():
+        return []
+    out, prev = [], GENESIS
+    for n, line in enumerate(p.read_text(encoding="utf-8").split("\n"), 1):
+        if not line:
+            continue
+        try:
+            e = json.loads(line)
+        except json.JSONDecodeError:
+            raise StatementsRefused(f"{LEDGER}:{n}: not a JSON line") from None
+        if e.get("prev") != prev or e.get("seq") != len(out) + 1 or _canon(e) != line:
+            raise StatementsRefused(f"{LEDGER}:{n}: the hash chain is broken")
+        out.append(e)
+        prev = _sha(line.encode("utf-8"))
+    return out
+
+
+def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, once=False,
+           into=None) -> dict:
     """Unseal the module's sealed strata into the tree (module docstring).
 
     `age` = (path, sha256) and `identity` (a path) replace the pinned binary and
@@ -209,11 +251,27 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None) -> dict:
     "strata": [{"stratum", "archive_sha256", "manifest_sha256", "files", "written",
     "kept"}]}; with dry_run every check runs and nothing is written."""
     root = Path(root)
+    if once and (into is None or part is None):
+        raise StatementsRefused("a single-use unseal names its part and a directory outside "
+                                "the course tree (--part, --into)")
+    if into is not None:
+        into = Path(into).resolve()
+        try:
+            into.relative_to(root.resolve())
+        except ValueError:
+            pass
+        else:
+            raise StatementsRefused(f"{into}: a single-use part is written outside the course tree")
+    ledger = unseal_ledger(root) if once else []
     committed = check(root, module)
     strata = sealed_strata(root, module)
+    if part is not None:
+        strata = [sp for sp in strata
+                  if tomllib.loads(sp.read_text(encoding="utf-8")).get("part") == part]
     if not strata:
         raise StatementsRefused(f"{module} has no sealed stratum (a STRATUM.toml with "
-                                f"module = \"{module}\" and an archive)")
+                                f"module = \"{module}\" and an archive"
+                                + (f", part = \"{part}\"" if part is not None else "") + ")")
     plans = []
     for sp in strata:
         meta = tomllib.loads(sp.read_text(encoding="utf-8"))
@@ -226,6 +284,12 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None) -> dict:
         if _sha(data) != meta.get("archive_sha256"):
             raise StatementsRefused(f"{rel_sp}: {meta['archive']} does not match its "
                                     "archive_sha256")
+        for e in ledger:
+            if (e.get("module"), e.get("part"), e.get("archive_sha256")) == \
+                    (module, part, meta.get("archive_sha256")):
+                raise StatementsRefused(f"{rel_sp}: part {part!r} was unsealed once already "
+                                        f"({e.get('date')}, {LEDGER} seq {e.get('seq')}): a part "
+                                        "is single use, and only a new seal replaces it")
         pin = _truth_pin(root, meta.get("recipient"))
         if age is None:
             if pin is None:
@@ -261,11 +325,12 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None) -> dict:
                     or not _CARD.fullmatch(parts[0])):
                 raise StatementsRefused(f"{rel_sp}: the archive holds a file that is not a "
                                         "listed card's task file")
-            dest = sp.parent / rel
+            dest = (into / rel) if into is not None else sp.parent / rel
+            shown = dest if into is not None else dest.relative_to(root)
             if dest.is_symlink() or (dest.exists() and not dest.is_file()):
-                raise StatementsRefused(f"{dest.relative_to(root)} is in the way")
+                raise StatementsRefused(f"{shown} is in the way")
             if dest.is_file() and dest.read_bytes() != files[rel]:
-                raise StatementsRefused(f"{dest.relative_to(root)} exists and differs from the "
+                raise StatementsRefused(f"{shown} exists and differs from the "
                                         "sealed task: nothing is overwritten")
             writes.append((dest, files[rel]))
         plans.append((sp, meta, _sha(data), man_sha, writes))
@@ -284,7 +349,19 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None) -> dict:
         rec = {"stratum": sp.relative_to(root).as_posix(), "archive_sha256": arc_sha,
                "manifest_sha256": man_sha, "files": len(writes), "written": written,
                "kept": kept}
-        if not dry_run:
+        if not dry_run and once:
+            prev = (_sha(_canon(ledger[-1]).encode("utf-8")) if ledger else GENESIS)
+            entry = {"seq": len(ledger) + 1, "prev": prev,
+                     "date": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+                     "module": module, "part": part, "stratum": sp.relative_to(root).as_posix(),
+                     "archive_sha256": arc_sha, "manifest_sha256": man_sha, "files": len(writes),
+                     "statements": dict(sorted(committed.items()))}
+            lp = root / LEDGER
+            lp.parent.mkdir(parents=True, exist_ok=True)
+            with open(lp, "a", encoding="utf-8") as f:
+                f.write(_canon(entry) + "\n")
+            ledger.append(entry)
+        elif not dry_run and into is None:
             lines = ["# UNSEALED.toml: written by `python -m fvh unseal` (fvh.statements); a "
                      "record, never read back.",
                      f'date = "{datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}"',
