@@ -123,7 +123,7 @@ class PlanContract(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, msg):
                     module.load_stratum(Path(t), write_root(Path(t), **kw))
 
-    def test_a_sealed_task_counts_but_no_plan_runs_it_until_unsealed(self):
+    def test_a_sealed_task_counts_but_never_enters_a_learner_plan(self):
         def seal(row, adm):
             if row['id'].startswith('rx-d'):
                 row['sealed'] = True
@@ -134,7 +134,12 @@ class PlanContract(unittest.TestCase):
         self.assertFalse(tasks['rx-d-d']['unsealed'])
         plans, _, _ = module.build_plans(clusters, tasks, seed=1, roles=('pilot',))
         self.assertIn('pilot', plans)
-        with self.assertRaisesRegex(ValueError, 'still sealed'):
+        with self.assertRaisesRegex(ValueError, 'never enter a learner plan'):
+            module.build_plans(clusters, tasks, seed=1, roles=('confirmatory',))
+        # unsealed or not: a sealed task with its form present is refused just the same
+        path = write_root(self.root, mutate=seal)
+        _, clusters, tasks = module.load_stratum(self.root, path)
+        with self.assertRaisesRegex(ValueError, 'never enter a learner plan'):
             module.build_plans(clusters, tasks, seed=1, roles=('confirmatory',))
 
     def test_the_toy_stratum_is_apparatus_smoke_never_data(self):

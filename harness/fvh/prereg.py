@@ -51,7 +51,9 @@ PreregRefused (FreezeRefused).
   load_freeze(root, rel) -> dict         a complete, consistent freeze, or FreezeRefused
   freeze_fields(path) -> [str]           the freeze-sha256 values the block names
   check_roles(root, module, plan)        a plan's role against its stratum and freeze:
-                                         the freeze (or None), or FreezeRefused
+                                         the freeze (or None), or FreezeRefused; a
+                                         cluster with a sealed task (`sealed = true`)
+                                         never enters a plan (the user's D61)
 
 Frozen (guard rule 2f), standard library only.
 """
@@ -235,6 +237,7 @@ def stratum_clusters(path) -> dict:
         raise FreezeRefused(f"{p}: unreadable stratum ({type(e).__name__})") from None
     if data.get("schema") != 2:
         raise FreezeRefused(f"{p}: not a schema-2 stratum")
+    sealed_tasks = {t.get("id") for t in data.get("task", []) if t.get("sealed") is True}
     out = {}
     for c in data.get("cluster", []):
         cid, role, tasks = c.get("id"), c.get("role"), c.get("tasks")
@@ -248,7 +251,8 @@ def stratum_clusters(path) -> dict:
         if not isinstance(desc, bool) or (desc and role != "confirmatory"):
             raise FreezeRefused(f"{p}: cluster {cid}: only a confirmatory cluster is in the "
                                 "descriptive subset")
-        out[cid] = {"role": role, "descriptive": desc, "tasks": list(tasks)}
+        out[cid] = {"role": role, "descriptive": desc, "tasks": list(tasks),
+                    "sealed": any(t in sealed_tasks for t in tasks)}
     seen = {}
     for cid, c in out.items():
         for t in c["tasks"]:
@@ -388,6 +392,9 @@ def check_roles(root, module: str, plan):
                 raise FreezeRefused(f"paper/{module}_answers.tex: the pre-registration must name "
                                     f"the freeze it registers, `{FREEZE_FIELD} "
                                     f"{freeze['sha256']}` (and no other)")
+    for cid, c in clusters.items():
+        if c["sealed"]:
+            allowed.discard(cid)           # a sealed cluster never enters a plan (D61)
     stray = []
     for t, (rel, _) in plan.tasks.items():
         cid = next((task_cluster[x] for x in task_cluster
