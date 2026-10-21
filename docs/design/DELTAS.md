@@ -299,6 +299,7 @@
 | 407 | Q33's pipeline: exact contracts, reference twin and frozen tests; W3's order under D80 (W1b waits for the container redesign) | adopted (DV7 W2/W3, 2026-10-21) | DV7's lanes |
 | 408 | DV7 W3 begins: the course-local task format and admission, the q31-dev stratum's first batch, the running count | adopted (DV7 W3, 2026-10-21); the count grows in place | DV7's W3 lane |
 | 409 | Sealing topic (e) task parts (`seal_hidden.py --tasks`, `fvh unseal` under agentic/); Q31's held-out course-local stratum, 36 tasks, authored and admitted in the author archive and sealed | adopted (DV7 W3, 2026-10-21) | DV7's W3 lane |
+| 410 | Q32's sealed tranches: T1 (24 course-local tasks) and T2's first half (12), authored and admitted in the author archive, sealed with one canary per tranche | adopted (DV7 W3, 2026-10-21); the count grows in place | DV7's W3 lane |
 
 ## A. Holes and hole counting
 
@@ -4017,4 +4018,20 @@
   - The archive round trip in the grader container waits for W1b (D80), so these archives have not yet been decrypted by the grader's check.
   - The 24 public held-out cards (D76's draw) and the q32 tranches come later.
 - **Running count (course-local):** q31-dev 24 / 24, q32-dev 30 / 30, **q31 held-out 36 / 36**, q32 tranches 0 / 72. **Total 90 / 162.**
+- **Owner:** DV7's W3 lane; W1b for the round trip.
+
+### Δ410 · Q32's sealed tranches, first chunk: T1 24 / 24 and T2 12 / 24 — adopted (DV7 W3, 2026-10-21)
+- **The order (the coordinator):** the q32 tranches' 72 course-local tasks, sealed under Δ409's rules, reported in two chunks of 36; 8 GB, one solver job at a time.
+- **The strata.** `bench/local/q/agentic/q32-t1/STRATUM.toml` and `q32-t2/STRATUM.toml` are learner-visible: module and lab Q32, parts `T1` and `T2`, `sealed = true`, each with target 40 = 24 course-local + 16 public. Each holds its archives' pins and one card per task. The sealed files are `Hidden/Agentic/Q32/T<n>.tar.age` (the forms) and `T<n>-refs.tar.age` (the references). Ids are opaque (`cl-d1NN-q32t<n>`, `cl-v1NN-q32t<n>`). `fvh unseal Q32 --part T<n>` opens a tranche once, after the learner's agent and index are frozen.
+- **Authoring.** Δ409's method throughout:
+  - The tasks were written only in the author archive (`sealed-src/q32-t<n>/`, mode 0700).
+  - Admission was run on the archive copy, with scratch in the archive, one job at a time, under an 8 GB scope with one Verus worker.
+  - The name check was the widened one: the HEAD tree, the refs `authoring`, `sysb` and `labalpha`, and every sealed stratum. Collisions were renamed before admission (four names the R line already uses: `Countdown`, `countdown`, `splits` and `buds`; the sealed replacements are not named here).
+  - The tasks are proof-search tasks that ship their code and statement. Most need loop invariants. Some need a prefix or extensionality assert. Some are `{:induction false}` lemmas over datatypes and sequences.
+  - Themes: pair sums, countdowns, scaling and offsetting, the first adjacent duplicate, net moves, monotone recurrences, mirrors, running peaks, run compression, parity counts, digit sums, sign alternation, tree tip/knot counts, powers, mapped and summed concatenations, and clamping.
+  - Two T1 Verus drafts failed their first admission and were fixed before sealing. One was nonlinear overflow in an i32 × i32 → i64 scale, so the task became an offset. The other was usize overflow in a `k + 1 < len` loop guard; the guard was restructured, and that needed a length invariant on a second pass. All twelve T2 tasks were admitted at the first pass.
+  - Two references per tranche were re-verified with the canary line in place.
+- **Canaries.** Each tranche has its own `DVLCANARY-` token on line 2 of every sealed reference. Its sha256 is registered in `sandbox/canaries.sha256` against `T<n>-refs.tar.age`.
+- **Not done here.** T2's second half (12), T3 (24), the public cards (D76's draw) and the grader container's round trip (W1b, D80). No tranche task was run through a model.
+- **Running count (course-local):** q31-dev 24 / 24, q32-dev 30 / 30, q31 held-out 36 / 36, **q32 tranches 36 / 72** (T1 24 / 24, T2 12 / 24, T3 0 / 24). **Total 126 / 162.**
 - **Owner:** DV7's W3 lane; W1b for the round trip.
