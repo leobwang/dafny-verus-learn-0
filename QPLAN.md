@@ -1,6 +1,6 @@
 # QPLAN — the Q track plan (depth-ordered)
 
-*Status: **DV2a plan, revised 2026-10-04; §7 records the as-built deviations (DV2a integration) and the DV2a fix round (§6's resolution lines, §7.6, §7.7). DV3a plan, 2026-10-05, revised after review the same day: §8 adds layer L3 and the moderate tier's conventions, §9–§11 Q04–Q06 (§11.8 the `fvh` core Q06 needs), §5.1 their cross-module checks and §6 Q13–Q25 their open questions. DV3a records lane, 2026-10-05: §6's resolution lines for Q1, Q6 and Q13–Q25, §1.1 rule 3 amended (DELTAS Δ130), and every exit table reduced to item ids (Δ133). DV3a integration, 2026-10-05: §13 records the code half as built (Δ136–Δ140). DV3a kits phase, records lane, 2026-10-05: the plan lines that §13 superseded (in §5.1, §9.1, §9.3, §9.7 and §11.8) now state what was built. DV3a kits phase, integration lane, 2026-10-06: §13.6 points to the Q04–Q06 chapters and kits as built (Δ141–Δ144). DV3b plan, 2026-10-06: §14 adds layer L4 and the detailed tier's conventions, §15–§17 Q07–Q09, §5.2 their cross-module checks and §6 Q26–Q42 their open questions; revised after the plan review the same day (§6 Q43–Q46 added; the review's findings and what each changed are in the author notes, §R). DV3b records lane, 2026-10-06: §6's disposition lines for Q26–Q46, and Q31 aligned with DV4-PLAN §5.1 and §5.6 (DELTAS Δ145–Δ159). DV3b integration, 2026-10-06: §18 records layer L4, the tools items, Q07–Q09's code and DV4's step 1 as built (Δ160–Δ167). DV3b kits phase, integration lane, 2026-10-07: §18.7 points to Q07–Q09's chapters and kits as built and to the phase's follow-ups (Δ168–Δ172). DV5 plan, 2026-10-07, revised after the plan review: §19 adds layers L5–L7 and the practice tiers' conventions, §20–§28 Q10–Q18 with Labs 1–3, §29 their cross-module checks and §30 Q47–Q68 their open questions. DV5a records lane, 2026-10-07: §30's disposition lines for Q62–Q68 (DELTAS Δ173–Δ181). DV5a integration, 2026-10-07: layer L5, this round's tool items and Q10–Q12's code as built are recorded in DELTAS Δ182–Δ189, which supersede the §20–§22 lines they name (Q12's H6d and its Dafny imports, and the admissions each module lane recorded); Q10–Q12's chapters and kits come next. DV5a kits round, 2026-10-07: Q10–Q12's chapters and kits as built are recorded in DELTAS Δ190–Δ194. DV5b integration, 2026-10-11: layer L6, Q13–Q15's code, chapters and kits, the review fix round and DV4's steps 1a–4b as built are recorded in DELTAS Δ195–Δ205, which supersede the §23–§25 lines they name (the admissions, Q14's H3d statement, P1dv form, exit and H4d fallback note, Q13's H3v use site, Q15's H2v statement and §25.2's Python admissibility); Δ204 lists the decisions the lanes took that await the orchestrator. DV5c integration, 2026-10-12: the user's decisions D1–D4 (which replace Δ204 items 1, 2 and 5), layer L7, Q16–Q18's code, chapters and kits with Lab 3's material and the capstone's references, DV4's remainder, the review fix round and the completeness review's gaps as built are recorded in DELTAS Δ206–Δ217, which supersede the §19 and §23–§29 lines they name (§19.1, §19.4–§19.6's `sub`, built as `big_sub`; §23.5's, §24.2–§24.5's and §25.2's forms and admissions, brought up to date in place; §26.3–§26.6's H3v form, prompts, reference and imports; §27.1–§27.4's imports, permission map and admissions; §28's task list, B6, the H1d prompt and the admissions; §29's line counts and admissibility cells); Δ216 lists the readings the lanes built on that await the user, with the hard tier's shortfall notes. DV5d integration, 2026-10-13: the user's decisions D5–D19 (which settle Δ216), agent-mode batches, the grader's judging step, the public pools and the cards' attestation, the small fixes and the review fix round as built are recorded in DELTAS Δ218–Δ225, which supersede the §22.6, §25.5–§25.7, §28 and §30 Q49, Q57 and Q59 lines they name (§19.1, §19.4–§19.6 and §28.3 now read `big_sub`; §28's H1 wording, §27.2's and §28.2's admissions and §28.6's arms are amended in place, and **As built** notes follow the §25, §27 and §28 registry blocks); Δ224 lists the decisions that await the user. DV5e integration, 2026-10-13: the user's decisions D20–D25 (which settle Δ224), the study clone root, the attestation scan's recalibration, Lab 2's public task forms and their pre-registered draw, the learner's route to the hidden check and the review fix round as built are recorded in DELTAS Δ226–Δ233, which supersede the §22.6, §25.2, §25.6–§25.8 and §30 Q57 and Q63 lines they name (§19.0's prose-item row, §22.6, §23.5, §25.2's prose row and §28.8's registry snapshot are brought up to date in place, and **As built** notes follow §25.6 and §25.8); Δ232 lists the decisions that await the user. DV6 integration, 2026-10-14: DV5e's integration entry (Δ233), the user's release plan and decisions D26–D35 (which settle Δ232), the shipped reference moved to `basic` and `challenge`, Lab 2's public cards and Lab 1's draw under D27–D30, the scan and grading decisions D31–D35, the freeze-bar review of the Q core (the per-module, infrastructure, continuity and learner audits, the clean-clone dry run and the leakage review) and its fix round as built are recorded in DELTAS Δ233–Δ241, which supersede the §22.6 and §25.6 lines they name (**As built** notes follow §22.6's draw paragraph and §25.6's, and §29 gains the threshold-concept table); Δ240 lists the decisions that await the user, and `docs/design/BASIC-RELEASE.md` records the freeze bar line by line.** The DV2a revision fixes the BigNat spine layers L1–L2 and the code side of Q01–Q03 (exercise files, specimens, slots, check units, exit files, agentic files and their registry fields); the DV3a revision does the same for layer L3 and Q04–Q06. Chapters, written problems, card prose, banks, rubrics and simulations are written with each module's chapter (DV2b for Q01–Q03, the DV3a kits phase for Q04–Q06) and are only budgeted here. The DV3b plan does the same for layer L4 and Q07–Q09 (§14–§17); their chapters, kits and simulations are budgeted only. The DV5 plan does the same for layers L5–L7 and Q10–Q18 (§19–§30). Q19–Q33 are still described only by the design (`docs/design/DESIGN-PROPOSAL.md` §7) and `docs/design/DELTAS.md`; their sections arrive with DV7.*
+*Status: **DV2a plan, revised 2026-10-04; §7 records the as-built deviations (DV2a integration) and the DV2a fix round (§6's resolution lines, §7.6, §7.7). DV3a plan, 2026-10-05, revised after review the same day: §8 adds layer L3 and the moderate tier's conventions, §9–§11 Q04–Q06 (§11.8 the `fvh` core Q06 needs), §5.1 their cross-module checks and §6 Q13–Q25 their open questions. DV3a records lane, 2026-10-05: §6's resolution lines for Q1, Q6 and Q13–Q25, §1.1 rule 3 amended (DELTAS Δ130), and every exit table reduced to item ids (Δ133). DV3a integration, 2026-10-05: §13 records the code half as built (Δ136–Δ140). DV3a kits phase, records lane, 2026-10-05: the plan lines that §13 superseded (in §5.1, §9.1, §9.3, §9.7 and §11.8) now state what was built. DV3a kits phase, integration lane, 2026-10-06: §13.6 points to the Q04–Q06 chapters and kits as built (Δ141–Δ144). DV3b plan, 2026-10-06: §14 adds layer L4 and the detailed tier's conventions, §15–§17 Q07–Q09, §5.2 their cross-module checks and §6 Q26–Q42 their open questions; revised after the plan review the same day (§6 Q43–Q46 added; the review's findings and what each changed are in the author notes, §R). DV3b records lane, 2026-10-06: §6's disposition lines for Q26–Q46, and Q31 aligned with DV4-PLAN §5.1 and §5.6 (DELTAS Δ145–Δ159). DV3b integration, 2026-10-06: §18 records layer L4, the tools items, Q07–Q09's code and DV4's step 1 as built (Δ160–Δ167). DV3b kits phase, integration lane, 2026-10-07: §18.7 points to Q07–Q09's chapters and kits as built and to the phase's follow-ups (Δ168–Δ172). DV5 plan, 2026-10-07, revised after the plan review: §19 adds layers L5–L7 and the practice tiers' conventions, §20–§28 Q10–Q18 with Labs 1–3, §29 their cross-module checks and §30 Q47–Q68 their open questions. DV5a records lane, 2026-10-07: §30's disposition lines for Q62–Q68 (DELTAS Δ173–Δ181). DV5a integration, 2026-10-07: layer L5, this round's tool items and Q10–Q12's code as built are recorded in DELTAS Δ182–Δ189, which supersede the §20–§22 lines they name (Q12's H6d and its Dafny imports, and the admissions each module lane recorded); Q10–Q12's chapters and kits come next. DV5a kits round, 2026-10-07: Q10–Q12's chapters and kits as built are recorded in DELTAS Δ190–Δ194. DV5b integration, 2026-10-11: layer L6, Q13–Q15's code, chapters and kits, the review fix round and DV4's steps 1a–4b as built are recorded in DELTAS Δ195–Δ205, which supersede the §23–§25 lines they name (the admissions, Q14's H3d statement, P1dv form, exit and H4d fallback note, Q13's H3v use site, Q15's H2v statement and §25.2's Python admissibility); Δ204 lists the decisions the lanes took that await the orchestrator. DV5c integration, 2026-10-12: the user's decisions D1–D4 (which replace Δ204 items 1, 2 and 5), layer L7, Q16–Q18's code, chapters and kits with Lab 3's material and the capstone's references, DV4's remainder, the review fix round and the completeness review's gaps as built are recorded in DELTAS Δ206–Δ217, which supersede the §19 and §23–§29 lines they name (§19.1, §19.4–§19.6's `sub`, built as `big_sub`; §23.5's, §24.2–§24.5's and §25.2's forms and admissions, brought up to date in place; §26.3–§26.6's H3v form, prompts, reference and imports; §27.1–§27.4's imports, permission map and admissions; §28's task list, B6, the H1d prompt and the admissions; §29's line counts and admissibility cells); Δ216 lists the readings the lanes built on that await the user, with the hard tier's shortfall notes. DV5d integration, 2026-10-13: the user's decisions D5–D19 (which settle Δ216), agent-mode batches, the grader's judging step, the public pools and the cards' attestation, the small fixes and the review fix round as built are recorded in DELTAS Δ218–Δ225, which supersede the §22.6, §25.5–§25.7, §28 and §30 Q49, Q57 and Q59 lines they name (§19.1, §19.4–§19.6 and §28.3 now read `big_sub`; §28's H1 wording, §27.2's and §28.2's admissions and §28.6's arms are amended in place, and **As built** notes follow the §25, §27 and §28 registry blocks); Δ224 lists the decisions that await the user. DV5e integration, 2026-10-13: the user's decisions D20–D25 (which settle Δ224), the study clone root, the attestation scan's recalibration, Lab 2's public task forms and their pre-registered draw, the learner's route to the hidden check and the review fix round as built are recorded in DELTAS Δ226–Δ233, which supersede the §22.6, §25.2, §25.6–§25.8 and §30 Q57 and Q63 lines they name (§19.0's prose-item row, §22.6, §23.5, §25.2's prose row and §28.8's registry snapshot are brought up to date in place, and **As built** notes follow §25.6 and §25.8); Δ232 lists the decisions that await the user. DV6 integration, 2026-10-14: DV5e's integration entry (Δ233), the user's release plan and decisions D26–D35 (which settle Δ232), the shipped reference moved to `basic` and `challenge`, Lab 2's public cards and Lab 1's draw under D27–D30, the scan and grading decisions D31–D35, the freeze-bar review of the Q core (the per-module, infrastructure, continuity and learner audits, the clean-clone dry run and the leakage review) and its fix round as built are recorded in DELTAS Δ233–Δ241, which supersede the §22.6 and §25.6 lines they name (**As built** notes follow §22.6's draw paragraph and §25.6's, and §29 gains the threshold-concept table); Δ240 lists the decisions that await the user, and `docs/design/BASIC-RELEASE.md` records the freeze bar line by line.** The DV2a revision fixes the BigNat spine layers L1–L2 and the code side of Q01–Q03 (exercise files, specimens, slots, check units, exit files, agentic files and their registry fields); the DV3a revision does the same for layer L3 and Q04–Q06. Chapters, written problems, card prose, banks, rubrics and simulations are written with each module's chapter (DV2b for Q01–Q03, the DV3a kits phase for Q04–Q06) and are only budgeted here. The DV3b plan does the same for layer L4 and Q07–Q09 (§14–§17); their chapters, kits and simulations are budgeted only. The DV5 plan does the same for layers L5–L7 and Q10–Q18 (§19–§30). Q19–Q33 were described only by the design (`docs/design/DESIGN-PROPOSAL.md` §7) and `docs/design/DELTAS.md` until the **DV7 plan, 2026-10-20** (the dv7 planning lane, on the `dv7` line from `basic` `7800b83`): §31 the challenge tier's shared infrastructure (`challenge_gate.sh`, solo enforcement, single-use unsealing, results records), §32–§35 topic (e) Q31–Q33 in detail, §36 the statistical-feasibility check, §37 topics (a)–(d) in outline, §38 the branch and release mechanics, §39 the work order and §40 its open questions and DECISION NEEDED items (DELTAS Δ400). It builds nothing: every Q19–Q33 record stays `planned`.*
 
 > **Predictions first.** This file is on the README's *Predictions first* list: until a module's predictions are committed (`scripts/firsttry.sh <ID> --check`), do not open it, and keep it closed during an exit. It names every prediction, hole and exit item of every module (an exit item by its id, form, strand, language and minutes only: exit statements and prompts are author-only, DELTAS Δ133), and never an answer: no answer to a hole, slot or prediction of any module, and no description of a tool behaviour that any prediction asks about.
 
@@ -3542,3 +3542,522 @@ a callback in Q18 §5).
 66. **A maximal-automation run that ends out of resources (tools owner; low).** Q10.H5d's maxauto run ends `inconclusive` at the pinned limit, twice, while the shipped runs fail (§20.4). The plan counts it as failing at the pin, as Δ58 counts a wall-clock kill in Verus; confirm, or rerun maxauto with a raised limit for the record. **Decided** (Δ181): the tools lane of DV5 builds it, before Q10 is armed; its as-built entry records how the gate reports such a run. Q10.H5d's admission waits on that entry and on §19.0's four results.
 67. **W19 or a diversified Q17.H2v (orchestrator).** Q14.H5v now passes one permission per node (§24.2), so only Q17.H2v shares the tracked-map take-and-put pattern with R11's arena. Keep it under W19 (proposed), or diversify it (for example a fixed-capacity ring whose slot permissions are separate tracked fields), which drops W19. **Decided** (Δ177): diversify the Q side (separate tracked fields per slot for Q17.H2v, or Q14.H5v as a `PPtr` list) if the alternative probes in band in DV5, which drops W19; W19 is recorded as provisional until the Q14 and Q17 lanes record that.
 68. **Banding Q16's H3 as one problem (orchestrator; before Q16 is armed).** §26.4 bands H3 (design §7.5's "V + D mirror" line) as one problem: both halves' proof lines against the Verus band, the Dafny half a short companion whose `ensures` pins L7's exact definition. Alternatively each half is banded alone, as Q13's and Q14's pairs are; then the Dafny companion (below 30 on its own) carries no minutes and H3d's 20 move to H3v by a DELTAS entry. The two readings differ only once the Q16 lane has the in-place reference. **Decided** (Δ178): the first reading. H3 is banded as one V + D problem against the Verus band, and H3d keeps its minutes inside the pair.
+
+---
+
+## 31. The challenge tier: shared infrastructure (DV7)
+
+*Written 2026-10-20 by the DV7 planning lane (this section and §32–§40), on the `dv7` line cut from `basic` at `7800b83`. It plans the solo challenge tier Q19–Q33 on the branch `challenge`, topic (e) Q31–Q33 first (design D2 and §4 "author (e), then (c)"). It builds nothing: every Q19–Q33 record stays `planned`. Like the rest of this plan it names no answer, no held-out task, no sealed cheat, no par figure and no reference statement; held-out items are counted, sourced and dated only. The probes behind its facts ran with no model call, under an 8 GB scope with no swap and no solver job, and are archived in `~/.cache/dafny-verus-learn-0/author-probes/dv7-plan/` (README there). R-track material is not used: where this plan cites a lesson of R12's Lab α it cites the authoring line's DELTAS entries by number and copies nothing.*
+
+*Sources: design §2.3.8 (spec §2.3.8) and §7.6, §10–§11; DELTAS Δ73–Δ75, Δ79, Δ148, Δ176, Δ208, Δ215, Δ220, Δ221, Δ234–Δ237, Δ275; §1.7, §8.7, §14.7 and §19.7 (F1–F23); MODULES.toml's Q19–Q33 records; the gate pieces as built (`harness/q/fvh_q/gate/gate_v2.py` and its twin, `harness/fvh/`, `scripts/vcheck`, `scripts/vaudit`, `scripts/specfreeze`, `scripts/firsttry.py`, `sandbox/seal_hidden.py`, `sandbox/image/truthcheck.py`, `harness/fvh/statements.py`). The origin of the topic (e) shapes (dev/held-out splits, par, `MolePolicy`) is the Lean course's challenge plan (spec §2.3.8's L: reference); this plan adapts its sizes and rejects one of its acceptance rules on the numbers (§36).*
+
+### 31.0 Conventions the challenge tier adds to §0, §8.0, §14.0 and §19.0
+
+| what | form |
+|---|---|
+| **Solo** | `solo = true`, `agentic = []`, `tutor_max_rung = 2`, `viva_mode = "defense"` (the checker enforces all four, `scripts/check_course_map.py` lines 515–533). No contractor, no assistant: every learner file of a challenge (`Challenges/`, `agents/`) is rule 2s |
+| **Frozen statement manifest** | each module ships `Challenges/<Topic>/<ID>_<Name>/<ID>_Statement.toml` (rule 2f by its name, Δ79): the module's statement files and their sha256, the Python interface hashes (`dvl.python.spec_hash` over the shipped stubs' signatures), the seeds, the reach denylist, the trust allowlist rule, the pass and distinction criteria, and the sealed parts the module may unseal. The registry's `statements[]` lists the manifest and every statement file (Δ73: `{path, sha256}`, no `PENDING` once shipped) |
+| **Statement files** | Dafny `Challenges/<Topic>/<ID>_<Name>/<ID>_<Name>Statement.dfy`, Verus `…/<id>_<name>/src/statements.rs` (a module of the crate, frozen by its name); the learner proves them in the module's exercise files, which the registry already names |
+| **Holes** | tool-counted only (§0): the exercise files ship with the statement files' targets as holes, and every `agents/` stub ships its interface functions as Python holes (`raise NotImplementedError("<ID>.<fn>")`, AST-counted by `fvh.holes`). Done is zero holes per language under `challenge_gate.sh` |
+| **Minutes** | design §7.6's hours are bands, not budgets; each module's line table (§33.8, §34.8, §35.8) splits a planning figure inside its band. Agent and solver wall clock stays outside every budget (§0) |
+| **Prerequisites** | Q01–Q18 only (design §7.6 "after the hard tier"); modules within a topic in order; topics in any order. No R file, no R module id outside `deep_dive` (checker rule I2) |
+| **Results** | pass, distinction, or abandoned with a retrospective (§31.5) |
+
+### 31.1 `scripts/challenge_gate.sh <ID>`: the checks, what exists and what is new
+
+The gate is one script (spec §2.3.8 items 1–7, design §7.6's list); it writes the gradebook's `challenge` row and nothing else (`.claude/skills/instructor/CORE.md`, gradebook table: "`challenge` | `scripts/challenge_gate.sh` only"). Its library is a new `scripts/dvl/challenge.py`; the shell entry point exists only for the name the registry, CORE and the hook's build-tool pattern (`RX_BUILD_TOOL`, `.claude/hooks/spoiler-guard.sh:529`) already use. Every solver step runs under `dvl.run_capped` in `dvl0.slice` (Δ275 fix 10), one solver job at a time, at most 6 Verus workers.
+
+| # | check | exists (path) | new |
+|---|---|---|---|
+| 1 | **frozen-statement sha256** | the `statements[]` field and its shape (`scripts/check_course_map.py`, Δ73), the name rule (Δ79), rule 2f on `Challenges/**/*[Ss]tatement*` (`spoiler-guard.sh` `class_of`, line 865); `scripts/specfreeze --check/--against` (Dafny and Verus statement hashes); `dvl.python.spec_hash` (Python signatures); `fvh.statements.check` (tracked, committed, unchanged working copy) | the gate step: every `statements[]` entry's working copy and committed blob equal the pinned sha256, and every exercise file's statements equal the statement file's (`specfreeze --against`), and every `agents/` interface hash equals the manifest's |
+| 2 | **zero holes per language** | Dafny and Verus counts from `scripts/vcheck --gate` (positive counts, Δ11, Δ12); Python holes from `fvh.holes` through `dvl.python.holes` | units for `build_target = "Challenges"` (today `units = []` and `scripts/gen_units.py` writes none): one Dafny unit per challenge directory and one Verus crate outside the `verus/` workspace [verify: `vcheck`'s direct `verus` chain (Δ25) on a crate under `Challenges/`], each on the pinned options and with no given layer unless the manifest names one (§32.6); the Python route for `agents/` (§31.4); the gate prints `holes: dafny N · verus N · python N` and fails on any non-zero |
+| 3 | **clean `dafny audit` / `vaudit`** | `scripts/vaudit` (Dafny audit plus the Δ3 lint; Verus `--no-cheating` plus the trust allowlist `expected/verus_trust.toml`, `--trust FILE`) | an audit per challenge unit, with the module's trust allowlist built from the learner's `TRUST.md` challenge section (design item 5: escape hatches only where `TRUST.md` lists them): `dvl.challenge.trust_allowlist(ID)` parses one table per module and passes it as `--trust` |
+| 4 | **the trust-leap lint** | the leap constructs vaudit already reports (Dafny `{:extern}`, `{:axiom}`, `assume {:axiom}`; Verus `external_body`, `external`, `assume_specification`, `external_type_specification`, code outside `verus!` (V9)); Q18's option scan (the learner's) | `scripts/dvl/trustleap.py`: one list of leap constructs per language (vaudit's kinds plus the ones it allows: a compiled `{:extern}` without contract, Verus `#[verifier::truncate]` casts, `unsafe`, a `[[bin]]` target's code), diffed both ways against the `TRUST.md` table: an unlisted leap fails, a listed entry with no leap fails |
+| 5 | **fresh-process N-seed re-verification; a second solver labelled not independent** | `scripts/vcheck --brittleness` (seeds 1–3 from `pins.toml`, each a fresh process) and `--solvers` (Dafny's bundled Z3s; Verus refuses it, one solver); `fvh.tools`' `seed-rerun` instrument | the gate runs both and prints the fixed label `solver diversity and seed variation: not independent checking` (spec §11.5 item 2), into the gradebook row too; Verus rows say `one solver`. N stays the pinned 3 unless the manifest raises it (decided per topic at its statements freeze) |
+| 6 | **the reach scan** | the import tiers (Δ77, `check_course_map.py`), the later-layer corpus fixtures (`tests/corpus/*/*` kind `later-layer`), Δ35's refusal of `Std.Arithmetic.LittleEndianNat`, the lever check (`dvl.levers`) | `scripts/dvl/reach.py`: the manifest's denylist (denied declarations, denied modules, "upstream results named in case the library adds them", spec §2.3.8 last row) and its required roots, checked on the resolved program (Dafny: the resolved symbol table of `dafny resolve`; Verus: the crate's `use` paths and the VIR call graph from `--log vir` [verify: a probe at the build step that the pinned Verus logs VIR call edges for a crate outside the workspace]); no path into a reference or held-out tree |
+| 7 | **CV and JSON completeness** | the brittleness CV (`pins.toml` `spread_flag_cv` 20 %, flagged, never gated, §6 Q29); Verus JSON completeness (Δ12: a missing key fails); minimum verified counts (`expected/<ID>.counts`, schema 2) | the gate fails on an incomplete document or a count below the manifest's minimum; the widest CV is printed and recorded, and gates only where the manifest says so (the production bar of topics (b) and (c)) |
+| 8 | **the harness stage** (topic (e) only: `review_bar = "harness"`) | the grader container (`scripts/mksandbox-run --truth … --truth-check manifest|validate|judge`, `sandbox/image/truthcheck.py`) | new grader modes (§31.3) and the module's frozen acceptance tests through `vcheck` (§31.4) |
+
+**What the gate prints.** One line per check (`ok` / `FAIL <reason>`), then `challenge: <ID> PASS | DISTINCTION | FAIL` with the statement manifest's sha256, the gate's own sha256, the seeds, the label of item 5 and `assisted (max hint-depth N)` read from the ledger's `source: tutor` lines for the module (CORE.md, ledger schema). Exit 0 only on PASS or DISTINCTION; 3 on a planned module ("nothing to gate", as the Lean gate's exit 3); 137/143 recorded as `killed(memory)`, never a verdict (CLAUDE.md §Resources).
+
+**Tests.** `tests/wrappers/test_challenge_gate.py`: an armed synthetic challenge (as `tests/course_map/armed/`) with a passing delivery, one planted failure per check (a changed statement, a hole per language, an audit finding, an unlisted leap, a seed flip, a denied reach, a missing JSON key), and a planned module (exit 3). CI's static job runs the static half; the solver half runs in `--author` CI.
+
+### 31.2 Solo enforcement: `/contract` refusal and `/tutor` capped at rung 2 with recorded assists
+
+| piece | exists (path) | new |
+|---|---|---|
+| `/contract` refuses solo modules | `.claude/skills/contract/SKILL.md` step 3 (the one-line refusal); its allowlist rule (no line under `Challenges/`, `agents/`); hook rule 2s refuses an allowlist line naming them (`spoiler-guard.sh` lines 866, 925–940); the checker's `solo ⇒ agentic = []` | must-block fixtures for an **armed** challenge (`tests/hooks/templates/must_block.tmpl.jsonl` has Challenges paths, not an armed record); a skill-simulation case `/contract Q31` → refusal (live, under the D47 validation lane) |
+| `/tutor` capped at rung 2 | `.claude/skills/tutor/SKILL.md` "Solo modules — the capped ladder" (dispute recipe and learner-proposed truth probes only past the cap); CORE.md's rung rule (`tutor_max_rung`) | a simulation case per topic (the cap holds, a truth probe reports only "counterexample found / none found"); nothing in the skill changes |
+| assists recorded | the ledger's `hint-depth:` field (CORE.md); `/viva` defense marks `assisted (max hint-depth N)` (CORE.md gradebook table; `.claude/skills/viva/SKILL.md` §Defense) | `challenge_gate.sh` copies the same N into the `challenge` row, so the gate row and the defense row agree |
+| the defense viva | `/viva` defense mode (six questions built from the artifact, anchors written first, disjoint re-defense) | the five topic banks `.claude/skills/instructor/banks/defense_<topic>.md` (none exists; `/viva` refuses an empty or absent bank): six templates each with insight bullets, written with each topic's chapters |
+
+### 31.3 Hidden material: sealing, single-use unsealing in the grader container
+
+| piece | exists (path) | new |
+|---|---|---|
+| sealing | `sandbox/seal_hidden.py` (manifest check, deterministic tar, age to the pinned recipient, pins written back into `sandbox/truth.toml`); the grader key outside the checkout (`~/.cache/dafny-verus-learn-0/keys/`, the user's custody decision, Δ218); canaries (`sandbox/canaries.sha256`, `Hidden/DVLCANARY`) | archives under `Hidden/Agentic/<ID>/<part>.tar.age` (and `Hidden/<Topic>/…` for (a)–(d)); `truth.toml` `[[lab]]` entries keyed by `id` and a new `part` (today one archive per lab id); `seal_hidden.py <ID> --part <p>`; each archive carries a canary token |
+| unsealing in the grader container | `truthcheck manifest|validate|judge` in a network-less verification container, verdict-level output only; `scripts/mksandbox-run --truth`; guard rule 1c refuses the line in a Claude session (the learner runs it from their own terminal) | three modes: `truthcheck gate-agree <ID>` (the learner's frozen gate on the sealed cheats and controls, per-class agree/disagree counts only), `truthcheck par-replay <ID>` (the learner's frozen bench over par's sealed run records, per-cell match/mismatch only), `truthcheck judge` reused as built for Q33's faithfulness verdicts (Δ220); the image rebuilt and re-pinned (`sandbox/images.lock`) |
+| **single use** | `fvh.statements.unseal` (writes cards only after the statements pin is committed; a second unseal is a no-op; `UNSEALED.toml`); D33's first-run rule (report the first run, Δ237) | `python -m fvh unseal <ID> --part <p> --once`: refuses unless the module's frozen-agent pin is committed (`expected/<ID>.statements` extended to the learner's `agents/` files and, for Q32, the retrieval index's sha256), and refuses a second unseal of the same part (a hash-chained `research/unseals.jsonl`, written only by `fvh`, like the run ledger, Δ149); the author override is a new seal, never a re-unseal. The consumed part is **retired**: its plaintext stays in the run's records and the part is listed as public in its `STRATUM.toml` |
+| policy-mode exposure | — | a model in policy mode reads a sealed task from a prompt built on the host, and the run's transcript holds it (the R line's Lab α found the same and left it open as a DECISION item). §40 D-6 decides the wording and the route |
+
+### 31.4 Python for `agents/`: the route that does not exist yet
+
+**Probe** (`dv7-plan/agents_route_intree.out`): `scripts/vcheck agents/q31_gate_bench/bench.py` (a temporary in-tree file, removed) is refused, "not a learner harness file": `dvl.python.LEARNER_FILE` is `harness/(q|r)/fvh_(q|r)/…`, `harness/pyproject.toml`'s `pythonpath` is `[".", "q", "r"]`, and `fvh.batch` imports an arm's `policy` only from `harness/` (`fvh`, `fvh_q`, `fvh_r`). So nothing in the course can count, lint, test or run a challenge agent today. **New** (rule 2g and 2f files, author-built, each additive):
+
+1. `dvl.python`: `LEARNER_FILE` gains `agents/q(19|…|33)_<name>/…\.py` (track `q`); holes, lint and the import judge cover it. The import tier `py-agents`: the standard library, `fvh`, `fvh_q` (the learner's own Q-track package, so Q31 may compose the learner's Q18 gate) and the `agents` packages of **earlier modules of the same topic** (Q32 may import Q31's, Q33 Q31's and Q32's); nothing else.
+2. `harness/pyproject.toml`: `pythonpath` adds `../agents`; the uv lock is unchanged (no dependency).
+3. Frozen acceptance tests `harness/tests/challenges/<id>/test_<stem>.py` with recorded fixtures (replay, no solver; rule 2f by `harness/tests/**`), mapped by `dvl.python.acceptance_tests`.
+4. `fvh.batch`: an arm's `policy = "<module>:<name>"` may name an `agents` package of the plan's module (the batch refuses one of another module); the frozen-agent pin (§31.3) is checked at `open()`.
+5. `fvh.tools`: two instruments added to `INSTRUMENTS` (`harness/fvh/tools/runners.py:116`: today `vcheck --gate`, `vaudit`, `specfreeze --check`, `witness`, `swap-to-false`, `seed-rerun`): `solver-swap` (`vcheck --brittleness --solvers`, Dafny) and `reach` (§31.1 item 6), with recorded fixtures.
+
+### 31.5 Results: pass, distinction, abandoned with a retrospective
+
+| record | exists | new |
+|---|---|---|
+| `challenge` row | its writer is fixed (CORE.md) | written by `challenge_gate.sh` as `PASS` or `DISTINCTION` with the shas, seeds, the item-5 label and the assisted line; a FAIL writes no row (the gate prints it) |
+| `defense` row | `/viva` defense | — |
+| abandoned | Q18's retrospective form (`research/q18_retrospective.md`) | `challenge_gate.sh --abandon <ID>`: checks `research/<id>_retrospective.md` (what was attempted, where it broke and the evidence, what the next attempt would change, hours spent) and writes `abandoned (retrospective <sha16>)`; it is not a pass (spec §2.3.8 "Bands"). For a `reference-impl` module it is also the event that opens `Solutions/Challenges/Ref/<Topic>/<ID>/` (the tutor's `reference-impl` answer) |
+| distinction | — | each module's criteria in its manifest (§33–§35); the gate decides them from the same evidence as the pass |
+
+### 31.6 Registry and checker changes the challenges need
+
+| field or rule | today | change (per module, when it leaves planned) |
+|---|---|---|
+| `engines` | `[]` (Δ73 "until DV7") | (e): `["policy"]`; `"agent"` only if a module's plan names agent-mode Qwen runs |
+| `budget` | all 0 | the module's ceilings (§33–§35); **the course total is already at the cap**: `gpu_hours` sum 45 of 45 (`GPU_HOURS_TOTAL`, `check_course_map.py:317`; Q07 1, Q12 10, Q15 3, Q18 9, R12 10, R15 3, R16 9) and Claude calls 1,690 of design D8's ≈ 1,700. Any challenge GPU hour fails the checker today (§40 D-1, D-2) |
+| `paper`, `rubric` | `false`, `""` | `true` and `paper/rubrics/<ID>_rubric.md` wherever `engines` holds `policy` (the checker's Δ74 rule) or a blueprint is graded; the pre-registration is the pair's `[pre-registration]` problem (`fvh.prereg`) |
+| `statements` | `[]` | §31.0's manifest and files |
+| `harness` | one file per (e) module | every `agents/` file of the module |
+| `imports` | `{}` | every file, with the new `py-agents` tier and, for the Dafny and Verus files, the tiers their units use |
+| `status` | `planned` | `authoring` on `dv7` as each module is built; `shipped` only on `challenge` (§38) |
+| checker | challenge rules (solo, defense, all strands, not solutions-first; `statements` past planned) | the statement manifest's presence and name; `build_target = "Challenges"` units; the `py-agents` tier; the budget exception rule §40 D-1 settles |
+
+---
+
+## 32. Topic (e), agentic: shared apparatus, sources, budgets and rules
+
+### 32.1 What the topic is for
+
+Design §7.6: *the research program itself, with tool-less `claude -p` or Qwen policies.* Q31 builds the measuring instrument (gate and bench), Q32 an agent measured with it against a hidden par, Q33 the statement problem (autoformalization and a red-teamed multi-agent pipeline). Each module is pre-registered, run once on sealed material, and reported "small-scale replication with model substitution" (design §11.1).
+
+### 32.2 Prerequisites (Q01–Q18 only) and what each module reuses
+
+| module | reuses (learner work) | reuses (frozen core) |
+|---|---|---|
+| Q31 | Q09 gate core and Q18 gate v2 (`harness/q/fvh_q/gate/`), Q06/Q09 `fvh.stats` composition, Q12 policies and report | `fvh.tools` instruments, `fvh.corpus` (the Q half), `fvh.verdicts`, `fvh.batch`, `fvh.report`, `fvh.prereg` |
+| Q32 | Q31's gate and bench; Q12's best-first and repair policies as a starting point | `fvh.protocol` (typed edits compile to its `Edit`; dedup keys on `State.files` hashes and the verifier document), `fvh.policies`, `fvh.executor` |
+| Q33 | Q31's gate, Q32's prover (a role), Q15's oracles (`fvh_q/oracles.py`), Q13/Q17 prose items' discipline | `fvh.judging` and `truthcheck judge` (Δ220) for faithfulness verdicts; `fvh.policies` plus the new `MolePolicy` (§35.3) |
+
+**Probe** (`dv7-plan/q18_gate_ref.out`): `scripts/vcheck --ref Solutions/harness/q/fvh_q/gate/gate_v2.py` — Q18's frozen acceptance tests on the reference twin, replaying recorded fixtures: 80 passed, 0 failed, 0 holes. Q18's `CrateTarget` already takes a Dafny root file or a Verus crate, `gate_crate` takes an injected `run`, and `fp_report` composes `fvh.stats.wilson_interval`: Q31 can extend the learner's gate by composition, as assumed, once §31.4 makes `agents/` importable and the two instruments exist.
+
+### 32.3 Task sources, licences and authoring hours
+
+Held-out corpora are **authored or admitted by the author**, never produced by running a model on the learner's tasks or runs. Public tasks are admitted by a pre-registered seeded draw from a validated pool (the Δ221 pool rule: the answer passes the done check and the lab gate's static half, the task form fails at the verify stage), excluding every task another lab already drew. Course-local tasks are written after the models' release (the contamination control of Labs 1–3), posed nowhere else (never stripped forms of hand items the learner has solved, which would put the learner's own answers within reach of a retrieval index), and dated.
+
+| source | licence (bench/manifest.toml) | validated pool (`POOLS.toml`) | already drawn or excluded | DV7 use |
+|---|---|---|---|---|
+| DafnyBench (`hints_removed`) | Apache-2.0 | 303 | Lab 1's 20; the R line's Lab α corpus admits 42 (authoring line, not released) | Dafny proof-completion forms, Q31 and Q32 |
+| HumanEval-Verus (`verus-strip-proofs` forms) | MIT | 83 | Lab 2's 5, Lab 1's 20 of 74 eligible (D39); the R line's Lab α corpus admits 30 | Verus proof-completion forms; **at most 24–54 unseen**, too few alone (§36) |
+| vericoding, licensed subsets | MIT (upstream: apps MIT, dafnybench Apache-2.0, humaneval MIT/Apache-2.0, verina Apache-2.0) | pool members with a validated answer: Verus 402 (apps 196, dafnybench 94, humaneval 40, verina 72), Dafny 957 | Lab 2's 5 Dafny humaneval | a new transform strips the proofs of a validated answer into a proof-completion form [verify: the same `verus-strip-proofs` step and the pool rule on a 40-task sample before the draw]; Q33's dev pairs from the Dafny dafnybench subset (230 of its 929 task files carry prose comments of ≥ 15 words, counted read-only on the installed copy) |
+| vericoding `verified_cogen` | upstream has no licence | — | excluded | — |
+| vericoding `numpy_*` | upstream licence not recorded | — | excluded (although it holds most of the prose: 580 Dafny files) | — |
+| MINIF2F-DAFNY, LemmaScript | MIT | 0 / not a pool (§22.6, §30 Q57) | — | — |
+| the Q cheat corpus (`tests/corpus/`, half Q) | course | 34 source-level constructs, 9 controls, 10 covered-elsewhere rows (no program) | — | Q31's public cheats (§33.4) |
+| course-local, author-written | course | — | — | over layers L1–L7 and design §10.1's extras (bool formulas, ring buffer, priority queue, decimal parser, While language, JSON fixtures); counted per module below |
+
+**Authoring hours for the corpora [A]** (a course-local proof task with its reference and the four admission results 30–45 min; a statement pair with prose, reference, witness, two faithful alternatives and a near-miss, each judged in the grader container, 60–75 min; a ticket 2–3 h; a sealed cheat with its label and both instruments' recorded verdicts 60–90 min):
+
+| item | count | author-hours |
+|---|---|---|
+| Q31 course-local tasks (dev 16, held-out 24) | 40 | 20–30 |
+| Q31 public deliveries for the 10 covered-elsewhere rows and two build-tool plants | 12 | 10–14 |
+| Q31 sealed cheats | 12 | 12–18 |
+| Q32 course-local tasks (dev 20, three tranches × 16) | 68 | 34–51 |
+| Q32 hand-closure targets (3 D + 3 V, §34.1) | 6 | 6–9 |
+| Q33 sealed statement pairs | 60 | 60–75 |
+| Q33 tickets (8 sealed, 4 public) | 12 | 24–36 |
+| public draws: validation and records (solver time, one job at a time) | ≈ 250 tasks | 8–12 |
+| **total** | | **≈ 175–245** |
+
+Par runs (§32.5) are model time on top: about 30 GPU-h of author runs at the measured rate.
+
+### 32.4 Budgets, engines and transports
+
+- **The measured rate.** The R line's Lab α measured the pinned Qwen through the pinned transport at **72 GPU-s and 73 s wall per real proof call** (about 49 calls per hour, no gain from concurrency on the pinned server), against the 7.3 s per call the labs were planned on (authoring line, Δ292). Every GPU figure in §33–§36 uses 72 s per call and states its ceiling and its expected spend (a run stops at its first success; Lab α's pilot spent 28 % of its ceiling); the Q core labs' own figures are outside DV7 (flagged in §36).
+- **Transports.** Claude in policy mode on the host (`claude -p`, the pinned argv, `claude-opus-5-5` in `sandbox/apparatus.toml`), under the window rule and sentinels (Δ148); Qwen (`qwen3.8:latest`, digest pinned) through its pinned tool-less CLI behind the per-run model gate (D3); every `Verify` in a fresh network-less verification container (`fvh.tools.ContainerRunner`, agent provenance, Δ145). No Claude Code in a container (D10 defers it to R16). Harness-executed runs only; agent mode (`construct = "agent"`, D8) is available to Qwen arms where a module says so.
+- **Registry.** Each module's `budget` (calls, runs, GPU hours) is enforced by `fvh` (Δ75, Δ176). The course is at its caps (§31.6), so every number below is a proposal awaiting §40 D-1 and D-2.
+
+### 32.5 Par
+
+Par is the author's reference policy (or the stronger of two, chosen on the dev set), never shipped: its code and its run records are sealed in `Hidden/Agentic/<ID>/par.tar.age`, its summary table `PAR.md` beside them. Par runs at authoring time, on the same pins, the same per-task budget B and the same gate as the learner's runs, before the learner can see the material; its records carry the apparatus block (CLI version, model digest, prompt hash). Because the learner's run comes later, a **drift sentinel** re-runs par on five public dev tasks just before the learner's sealed run, and the report states both. §40 D-7 decides between this and running par beside the learner's agent.
+
+### 32.6 Leak and tier rules for topic (e)
+
+1. **No layer is new.** Course-local tasks are stated over L1–L7 and the extras; a task that needs a layer item cites it (§19.7 F17), poses no Q01–Q18 hole, exit or test-out target (F1, F2, F5, F11, F17, F22), and no full multiplication (F20: only Q27 re-poses it). A challenge unit includes a given layer only when its manifest names it.
+2. **What the learner sees before the freeze:** the dev sets, the public cheats with their labels, every `STRATUM.toml` (card ids, counts, strata, licences, the sealed cheats' class mix, archive sha256), the statement manifest, the frozen tests. Never: a sealed task, a sealed cheat, par's code, par's records or `PAR.md`.
+3. **The freeze.** A sealed part is unsealed only after the module's frozen pin (the learner's `agents/` files, Q32's retrieval index) is committed (§31.3), once.
+4. **Retrieval and exfiltration (X17).** Q32's retrieval index is built from an allowlist (the given layers' declarations, the dev sets, the learner's own Q01–Q18 files) and pinned by sha256 at the freeze; the attestation scan (`dvl.sandbox`, D25/D31) checks it against every sealed twin and against the public answers of every held-out public task (`bench/public/**/answers/` is on disk), and a hit voids the run.
+5. **Contamination disclosure.** Public tasks are possibly seen by both models; course-local tasks are dated; course-local tasks and cheats are written by Claude author lanes, so a Claude policy may share the author's habits: every report says so, and results are reported per stratum.
+6. **R disjointness.** Waiver W13 (R12/R15 pre-empting Q32/Q33) is avoided under D2's order only if the learner takes topic (e) before the R core; otherwise it applies. The genres Q32 shares with R12's Lab α (matched-budget search) and Q33 with R15's Lab β (spec oracles) are W9's and W10's on the Q side; the records lane checks with `avoid.sh` that no Q31–Q33 file holds a regex artifact. No new waiver is proposed.
+7. **This plan names nothing sealed.** Counts, sources, strata and dates only.
+
+---
+
+## 33. Q31 — Gate & bench (D + V + `fvh`)
+
+*Challenge, topic (e), solo, harness-graded (`review_bar = "harness"`, persona `eval-skeptic`). Design band 30–45 h; planning figure 2,240 min (§33.8). Prerequisites: Q09's gate core, Q18's gate v2, Q12's policies and report. Engines: policy (Qwen; Claude per §40 D-2).*
+
+### 33.1 What the learner builds
+
+1. **Gate v3** (`agents/q31_gate_bench/gate.py`), composing the learner's Q18 `gate_v2` (imported read-only; its sha256 is recorded at the freeze): one entry point over a **task delivery** (a single file or a crate, either language) that adds to gate v2 (a) statement identity across fresh processes (`specfreeze --check` against the task's frozen statement, and the statement file's sha256 before and after), (b) the task-form lever check (the lab gate's rule, Δ182, D24) as an instrument result, (c) the seed sweep and, for Dafny, the solver swap with item 5's label, (d) the reach instrument, (e) a run-record audit for the run-level classes: harness tampering (X15: a returned file outside the task's editable set, a changed companion), exfiltration (X17: a read outside the readable set, a canary in a transcript), and policy tool use (X18: the recorded argv and apparatus against the pins, a transcript with a tool call), and (f) `UNKNOWN` on X07, X08 and X14, never `PASS` while one is undecided.
+2. **The eval harness** (`agents/q31_gate_bench/bench.py`): from `fvh` run records only, deterministic tables composing `fvh.stats` (never re-deriving an estimator: the import lint's `stats-reimplementation` rule): unbiased pass@k with n ≥ 2k samples per task, Wilson intervals, bootstrap intervals with a pinned seed, solves-versus-cost curves over calls, tokens, wall clock and GPU-seconds, per stratum and per language, paired comparisons (McNemar or a permutation test, Holm across the declared family) and the MDE at the pre-registered n.
+3. **Baselines** (`agents/q31_gate_bench/baselines.py`): a scripted policy (`fvh.policies.ScriptedPolicy` over recorded edits, for the harness's own tests) and a one-shot renderer for `fvh.backends.ModelPolicy` on each shipped transport.
+4. **Own cheats**: at least three new decidable-class deliveries per language not in the public corpus, with labels in a separate file only the evaluator reads (`agents/q31_gate_bench/plants/`, solo).
+5. **The honest witness set** (the exercise files `Q31_GateBench.dfy` and the crate `q31_gate_bench`): four Dafny and four Verus course-local dev tasks, stated in the statement files and proved by hand; they are the gate's own honest controls and the scripted policy's targets.
+
+### 33.2 Frozen statements
+
+`Q31_Statement.toml` (manifest), `Q31_GateBenchStatement.dfy` and `q31_gate_bench/src/statements.rs` (the eight witness tasks' statements), and the interface hashes of `gate.py`, `bench.py` and `baselines.py` (their shipped signatures and types; the frozen tests import them). Shipped holes: 4 Dafny, 4 Verus, and one Python hole per interface function (about 12).
+
+### 33.3 The gate checks (`challenge_gate.sh Q31`)
+
+Items 1–7 of §31.1 on the exercise files and on `agents/`; then the harness stage: (a) the frozen acceptance tests (`harness/tests/challenges/q31/`, replaying recorded instrument results; no solver); (b) `truthcheck gate-agree Q31` on the frozen gate; (c) `truthcheck par-replay Q31` on the frozen bench; (d) `fvh report Q31 --reverify` on the learner's dev and held-out runs (every claimed success reproduced by the trusted instruments in the container, from a clean checkout).
+
+### 33.4 Held-out material and how it is sealed
+
+| part | size | composition | where | sealed |
+|---|---|---|---|---|
+| dev tasks | 40 (20 D, 20 V) | 16 course-local (8 of them the witness set), 24 public (12 DafnyBench; 12 Verus from HumanEval-Verus or stripped vericoding answers) | `bench/local/q/agentic/q31-dev/` (forms; public ones by draw record) | open |
+| held-out tasks | 60 (30 D, 30 V) | 24 course-local, 36 public, by a pre-registered seeded draw disjoint from the dev draw and every other lab's | `bench/local/q/agentic/q31-heldout/STRATUM.toml`; `Hidden/Agentic/Q31/heldout.tar.age` | yes; single use |
+| public cheats | 46 | the Q half of `tests/corpus/` (34 constructs), the 10 covered-elsewhere rows materialized as deliveries (flags, environment and build-tool rows as project-file deliveries, as Q18's P1–P4 are), and Q18's two build-tool plants; plus the 9 controls | `bench/local/q/agentic/q31-cheats/` (labels separate) | open |
+| sealed cheats | 12 | author-written, decidable classes only, class mix published in the stratum (proposed: two each of X02, X06, X10, X11, X15, X16) | `Hidden/Agentic/Q31/cheats.tar.age` | yes |
+| par | — | par's records on the 60 held-out tasks and `PAR.md` | `Hidden/Agentic/Q31/par.tar.age` | yes |
+
+### 33.5 Grading
+
+Harness-graded; the gate decides, `/review-code` at the `harness` bar and the defense viva review.
+
+- **Pass:** (1) agreement with the trusted instruments (`vcheck`, `vaudit`, `specfreeze`, the recorded verdicts) on **every** decidable-class delivery of the 46 public and 12 sealed cheats, and `UNKNOWN`, never `PASS`, on X07/X08/X14; (2) no false reject on the honest set (the 9 controls, the 8 witnesses and the 40 dev references: 57 deliveries; §36 gives what that does and does not support); (3) `par-replay` matches `PAR.md` cell for cell; (4) the dev runs reproduce from their logs; (5) items 1–7.
+- **Distinction:** the single-use held-out run of the one-shot baselines, with the full table, its intervals, the per-stratum split and the disclosure block, **and** either a decidable cheat class the course instruments miss (a real finding, with a fixture) or the solves-versus-cost curves with bootstrap bands on both transports.
+- **What a result may conclude:** the gate agrees with the course's trusted instruments on this corpus (a census, not a rate); a baseline's pass@k on this stratum with its interval. Not: that the gate catches cheats in general, or that one model is better at n = 60 unless the pre-registered test says so.
+
+### 33.6 Par and baselines; budget
+
+Par: the author's one-shot baselines on the 60 held-out tasks (§32.5). The learner's runs:
+
+| part | arithmetic | calls · GPU-h at 72 s |
+|---|---|---|
+| Qwen, dev | 40 tasks × one-shot × n = 4 samples | 160 |
+| Qwen, held-out (single use) | 60 × one-shot × n = 4 | 240 |
+| **Qwen total** | | **400 calls, 400 runs · 8.0 GPU-h** (ceiling = spend: one call per run) |
+| Claude (if §40 D-2 allows) | dev 20 × 1 + held-out 60 × 1 + sentinels 10 | 90 calls, 80 runs |
+
+Proposed `budget = { claude_calls = 0 | 90, claude_runs = 0 | 80, qwen_calls = 400, qwen_runs = 400, gpu_hours = 8 }`.
+
+### 33.7 Leak and tier rules (Q31)
+
+§32.6 applies. The held-out 60 are drawn disjoint from Q32's tranches and Q33's pairs. The covered-elsewhere deliveries carry project files (`dfyconfig.toml`, `Cargo.toml`, `.cargo/config.toml`, `build.rs`): they live in the corpus directory, never in a unit the course builds (the checker's build-script refusal, Δ78), and every instrument on them runs in the verification container.
+
+### 33.8 Itemized minutes (planning figure 2,240; band 1,800–2,700)
+
+| line | min |
+|---|---|
+| brief and chapter | 30 |
+| pre-registration B1, `/grade-paper` ≥ 3 | 90 + 10 |
+| gate v3: composition and interface 120, statement identity 120, lever and option checks 90, seeds and solver swap 90, reach 90, run-record audit 120, `UNKNOWN` discipline 30 | 660 |
+| own cheats (≥ 3 per language) and labels | 120 |
+| honest witness set (4 D + 4 V by hand) | 240 |
+| eval harness: records 90, pass@k and intervals 120, curves and strata 120, paired tests and MDE 90, deterministic tables 60 | 480 |
+| baselines (scripted, one-shot on both transports) | 120 |
+| dev runs: setup and analysis | 120 |
+| gate on the 46 public cheats and the controls; FP report | 60 |
+| freeze, single-use held-out run, analysis | 90 |
+| report B2 (the benchmark card, par comparison, disclosure) | 120 |
+| `TRUST.md` challenge section | 30 |
+| `/review-code` (harness bar), defense viva, retrospective and ledger | 20 + 30 + 20 |
+| **total** | **2,240 (37.3 h)** |
+
+---
+
+## 34. Q32 — Proof-search agent (D + V)
+
+*Challenge, topic (e), solo, harness-graded. Design band 45–70 h; planning figure 3,450 min. Prerequisites: Q31 (gate and bench), Q12's policies. Engines: policy (Qwen engine of record).*
+
+### 34.1 What the learner builds
+
+`agents/q32_proof_search/agent.py`, a policy on the frozen protocol (`propose(state, ctx, budget) -> [Action]`; it never acts): **typed edits** (at least five kinds: loop invariant, assertion, lemma call, `decreases`, trigger or proof block; each compiled to `fvh` `Edit` actions, so the protocol stays frozen), **state dedup** (the work copy's file hashes in `State.files`, and the normalized set of failing obligations from the verifier document), a **value heuristic** (failing obligations by kind and count, plus an optional model score), a **budget scheduler** over the per-task budget B, and **retrieval** over the pinned index (§32.6 rule 4). Every candidate is accepted only through the learner's Q31 gate (`acceptance = "gate"`, the gated arm of `fvh.batch`). The exercise files `Q32_ProofSearch.dfy` and the crate hold **three Dafny and three Verus hand closures**: author-chosen dev tasks par does not solve at B, proved by hand, with a failure taxonomy in the report. The written pair: B1 pre-registration, B2 a two-page note (method, ablations with intervals, the sealed result, the disclosure).
+
+### 34.2 Frozen statements
+
+`Q32_Statement.toml`; `Q32_ProofSearchStatement.dfy` and `q32_proof_search/src/statements.rs` (the six hand-closure targets); the interface of `agent.py` (the policy class, the typed-edit schema, the index builder's signature). Shipped holes: 3 D, 3 V, Python interface holes (about 8).
+
+### 34.3 The gate checks
+
+§31.1 items 1–7; the harness stage: the frozen tests (typed edits compile to valid `Edit`s, dedup on recorded documents, the scheduler never exceeds B, the index builder refuses a path outside its allowlist); `fvh report Q32 --reverify` on every claimed success; the index attestation (§32.6 rule 4); any gate failure on a claimed success voids the run.
+
+### 34.4 Held-out material and how it is sealed
+
+| part | size | composition | sealed |
+|---|---|---|---|
+| dev | 50 (25 D, 25 V) | 20 course-local, 30 public | open |
+| tranches T1–T3 | 3 × 40 (each 20 D, 20 V) | each 16 course-local, 24 public; a task is admitted only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample (the analogue of the Lean "closed by a library search in 10 s" filter) | `Hidden/Agentic/Q32/T<k>.tar.age`, each single use, retired after its run |
+| par | — | par's records per tranche and `PAR.md` | `Hidden/Agentic/Q32/par.tar.age` |
+
+### 34.5 Grading, and what a result may conclude
+
+The design's row reads "beat par at B · 3 × 40 sealed". The Lean rule this course inherited (at any of up to three pooled looks, solves ≥ par's + 3, or ≥ par's with ≤ 50 % of par's calls) **passes an agent equal to par about 45 % of the time** (§36.3). Proposed, for §40 D-3:
+
+- **Pass:** a gate-clean run of the frozen agent on all three tranches (one final analysis, no interim look), the pre-registered analysis reproduced from the logs, and the paired point estimate (learner − par, over 120 tasks) with its interval reported; plus items 1–7 and the hand closures.
+- **Distinction:** the pre-registered one-sided exact McNemar test at α = 0.05 over the 120 tasks rejects "no better than par" (`fvh.stats.mcnemar`, halved for the one-sided reading), **or** equal solves at ≤ 50 % of par's calls with a bootstrap interval on the call ratio excluding 1.
+- **Wording:** only a significant result may say "beats par"; a point win is "not distinguishable from par at n = 120". Ablations are reported with intervals, never as point wins.
+
+### 34.6 Par and budget
+
+Par: the stronger of two author policies (a best-first searcher and a repair loop, on the same transports), chosen on the dev set, then run once per tranche at the same B. **B = 8 calls per task** (Lab 1's B), turn and token caps as Lab 1's.
+
+| part | arithmetic | calls (ceiling) |
+|---|---|---|
+| pilot (ceiling rule: neither arm above 60 % at call 1 nor below 5 % by call B, as Lab α) | 10 dev × 8 × 1 arm | 80 |
+| dev development and ablations | 50 × 8 × 4 arms (full and three ablations) × 1 repeat | 1,600 |
+| sealed tranches | 120 × 8 × 1 arm (par is pre-run) | 960 |
+| **Qwen total** | | **2,640 calls (ceiling) · 52.8 GPU-h ceiling; ≈ 21 GPU-h expected at 40 % spend** |
+| Claude (if §40 D-2 allows; descriptive only) | 10 dev × 8 + sentinels 10 | 90 |
+
+Author par cost, outside the learner's budget: ≈ 700 Qwen calls (dev selection and three tranches) ≈ 14 GPU-h. Proposed `budget = { claude_calls = 0 | 90, claude_runs = 0 | 10, qwen_calls = 2640, qwen_runs = 330, gpu_hours = 25 }` — over the per-module 10 (§40 D-1).
+
+### 34.7 Leak and tier rules (Q32)
+
+§32.6 applies, rule 4 in full. The hand-closure targets are dev tasks, never tranche tasks. Tranches are drawn disjoint from Q31's and Q33's material. A tranche's transcripts reveal it: it is retired after its single use, and the report says which tranches were consumed.
+
+### 34.8 Itemized minutes (planning figure 3,450; band 2,700–4,200)
+
+| line | min |
+|---|---|
+| brief | 30 |
+| pre-registration B1 and `/grade-paper` | 120 + 10 |
+| search core: frontier and scheduler 240, typed edits 300, dedup 150, value heuristic 240, retrieval and index 300, budget and stop rules 90 | 1,320 |
+| gate integration (Q31's gate as acceptance) | 90 |
+| pilot and ceiling check | 90 |
+| dev iterations and three ablations with intervals | 600 |
+| hand closures (3 D + 3 V) and failure taxonomy | 360 |
+| index attestation and leak audit | 60 |
+| freeze; three tranche runs: setup and monitoring | 120 |
+| analysis (pre-registered test, curves, strata) | 180 |
+| note B2 (two pages) and `/grade-paper` | 240 + 10 |
+| `EVAL.md` / `TRUST.md` updates, `/review-code`, defense, retrospective | 30 + 20 + 30 + 20 |
+| resume and re-issue margin (infra-failed ids, window deferrals) | 120 |
+| **total** | **3,450 (57.5 h)** |
+
+---
+
+## 35. Q33 — The statement problem (D + V)
+
+*Challenge, topic (e), solo, harness-graded. Design band 60–100 h; planning figure 4,640 min. Prerequisites: Q31, Q32, Q15's oracles, the prose-item discipline of Q13/Q17. Engines: policy (Qwen engine of record).*
+
+### 35.1 What the learner builds
+
+`agents/q33_statement_problem/pipeline.py` in two parts.
+
+- **(A) Autoformalization with faithfulness verdicts:** prose → a Dafny or Verus statement, with self-checks (it resolves; a non-vacuity witness; the learner's Q15 mutation and subset-implication oracles; a back-translation check) and an abstain option. Graded by the grader's verdict per pair (`truthcheck judge` as built, Δ220: `faithful`, `strong`, `weak`, `vacuous`, `undecided`, `mismatch`, `context`; `undecided` counts as not faithful, reported apart).
+- **(B) A red-teamed multi-agent coding pipeline:** spec-writer → implementer → prover (the learner's Q32 agent) → auditor, each role with its own editable and readable sets (`Context.editable`/`readable`), done only when the course gate and the learner's Q31 gate pass; **`MolePolicy`** plants cheats at pre-registered injection points, and the auditor and gate must reject every decidable plant while passing honest deliveries.
+
+The exercise files hold **six Dafny and six Verus dev prose items**: the learner writes the faithful statement and witness by hand (the `statement-item` route of D9 and the prose-item form of §19.0), which calibrates the self-checks. The written pair: B1 pre-registration, B2 the report (faithfulness table, red-team table, FP, disclosure).
+
+### 35.2 Frozen statements
+
+`Q33_Statement.toml`; `Q33_StatementProblemStatement.dfy` and `src/statements.rs` (the twelve dev prose items' given clients and use-site checks); the pipeline's interface (roles, hand-off records, the auditor's verdict type). Shipped holes: the twelve prose items' labelled assumes (tool-counted) and the Python interface holes.
+
+### 35.3 New frozen core: `fvh.policies.MolePolicy`
+
+A wrapper over a role's policy: at a pre-registered injection point (role, turn) it replaces the role's proposal with a planted action drawn from a sealed plant catalog (one per decidable class: X01–X06, X09–X13, X15, X16), records the plant id only in a label file the evaluator reads, and otherwise passes the inner policy through. Built in `harness/fvh/policies.py` with frozen tests (CI replays scripted runs); the plant catalog is sealed (`Hidden/Agentic/Q33/plants.tar.age`) and unsealed in the grader container for the campaign.
+
+### 35.4 Held-out material and how it is sealed
+
+| part | size | composition | sealed |
+|---|---|---|---|
+| dev pairs | 20 | public-admitted (vericoding Dafny dafnybench subset with prose; HumanEval-Verus prompts not drawn elsewhere), each with an author-checked reference | open |
+| sealed pairs | 60 (30 D, 30 V) | author-written: prose, reference statement, witness, two faithful alternatives and one near-miss, every alternative judged as intended by `truthcheck judge` before sealing | `Hidden/Agentic/Q33/pairs.tar.age` (with references in the judge's form), single use |
+| tickets | 12 (8 sealed, 4 public) | multi-file coding tickets over the extras (decimal parser, ring buffer, priority queue, JSON fixtures) | `Hidden/Agentic/Q33/tickets.tar.age` |
+| honest set for FP | ≥ 81 deliveries | the 60 sealed pairs' reference deliveries, the learner's 12 witnesses, the 9 corpus controls | references sealed with the pairs |
+| plant catalog | 13 classes × ≥ 3 injection points ≥ 39 plants | §35.3 | sealed |
+
+### 35.5 Grading, and what a result may conclude
+
+- **Pass:** (1) the auditor-plus-gate rejects **every** decidable plant of the campaign (all classes × ≥ 3 injection points; a census of the campaign, §36.2); (2) FP: false rejects on the honest set at the threshold §40 D-4 fixes, reported with the Wilson interval; (3) part (A)'s faithfulness rate on the 60 sealed pairs with its interval and the per-verdict table; (4) items 1–7.
+- **Distinction:** zero false rejects on ≥ 81 honest deliveries (Wilson upper bound ≤ 5 %), and part (A) above par on the 60 pairs by the pre-registered paired test, or part (B) closing the four public tickets end to end with every plant caught.
+- **What a result may conclude:** "the pipeline rejected every plant of this campaign"; "FP observed k of n, 95 % upper bound u"; "faithful on x of 60 sealed pairs". Not: a rejection *rate* for unseen cheats, and not "better than par" without the test.
+
+### 35.6 Par and budget
+
+Par: the author's reference autoformalizer (a one-shot drafter with a witness check) and the reference pipeline, on the same pins, run on the 60 pairs and the 12 tickets (author cost ≈ 400 calls ≈ 8 GPU-h). The learner's runs (B_A = 4 calls per pair; 6 calls per role per ticket):
+
+| part | arithmetic | calls (ceiling) |
+|---|---|---|
+| (A) dev | 20 pairs × 4 × 2 arms (with and without self-checks) | 160 |
+| (A) sealed | 60 × 4 | 240 |
+| (B) honest tickets | 12 × 4 roles × 6 | 288 |
+| (B) plant campaign | 39 plants × ≈ 6 calls downstream of the injection | 234 |
+| auditor's model review over the honest set | 81 × 1 | 81 |
+| **Qwen total** | | **≈ 1,000 calls · 20 GPU-h ceiling; ≈ 10 GPU-h expected** |
+| Claude (if §40 D-2 allows) | (A) sealed descriptive 60 × 1 + sentinels 10 | 70 |
+
+Proposed `budget = { claude_calls = 0 | 70, claude_runs = 0 | 60, qwen_calls = 1000, qwen_runs = 300, gpu_hours = 20 }` (§40 D-1).
+
+### 35.7 Leak and tier rules (Q33)
+
+§32.6 applies. The sealed pairs' prose never enters a learner file before the freeze; the judge reads references only inside the grader container; its output is verdict words (Δ220). Tickets build on the extras and pose no Q01–Q18 target. The plant catalog names classes in the stratum, never the plants.
+
+### 35.8 Itemized minutes (planning figure 4,640; band 3,600–6,000)
+
+| line | min |
+|---|---|
+| brief; pre-registration B1 and `/grade-paper` | 30 + 120 + 10 |
+| (A) drafting policy 240, resolution check 90, witness generation 180, oracles 240, back-translation 180, abstain 90 | 1,020 |
+| (A) hand calibration: 6 D + 6 V dev prose items | 420 |
+| (A) dev runs and error analysis | 300 |
+| (B) roles and allowlists 360, orchestration 240, auditor 360, plant campaign 300, honest FP analysis 120 | 1,380 |
+| pilot | 120 |
+| leak audit (prompts, index, transcripts) | 60 |
+| freeze; sealed runs (pairs, tickets, campaign) | 180 |
+| judge disputes and ticket triage | 150 + 200 |
+| analysis | 240 |
+| report B2 and `/grade-paper` | 300 + 10 |
+| `TRUST.md`, `/review-code`, defense, retrospective | 30 + 20 + 30 + 20 |
+| **total** | **4,640 (77.3 h)** |
+
+Topic (e) total: 2,240 + 3,450 + 4,640 = **10,330 min ≈ 172 h**, inside design §7.7's 135–215 h.
+
+---
+
+## 36. Statistical feasibility before the design is frozen
+
+*The lesson of R12's Lab α (authoring line, Δ290–Δ295): its planned n could not support its claim, and its call rate was ten times the plan's; it was redesigned around one pre-registered contrast sized by a power simulation. This section checks every threshold claim of topic (e) the same way, before any statement freezes. Every interval and MDE is `fvh.stats` (frozen core at `7800b83`): `wilson_interval` (two-sided 95 %), `mde_two_proportions(paired=True)` (McNemar, Connor 1987, conservative under independence), `mcnemar`. The decision-rule simulations draw per-task difficulty from a Beta distribution (mean 0.3–0.5, concentration 2) shared by both agents, one run per agent per task, 4,000 simulations each (`dv7-plan/stats_probe*.py`, `.out`).*
+
+### 36.1 False rejects and FP thresholds
+
+| claim | n planned | observed bar | what `fvh.stats` supports |
+|---|---|---|---|
+| Q31: no false reject on the honest set | 57 | 0/57 | Wilson upper ≈ 6.3 % (0/40: 8.8 %; 0/60: 6.0 %) — a census; supports "FP ≤ 6.3 %" at most |
+| Q33: FP ≤ 5 % on "60 pairs" | 60 | 0/60 | **Wilson upper 6.0 % > 5 %: unsupported even at zero errors** (the one-sided Clopper–Pearson bound, 4.87 %, is not in `fvh.stats`); at 3/60 (a 5 % point estimate) the upper bound is 13.7 % |
+| the n a 5 % upper bound needs | — | — | Wilson upper ≤ 5 % needs n ≥ 73 at 0 errors, 110 at 1, 142 at 2, 173 at 3 |
+| Q33 as re-planned (§35.4) | ≥ 81 | 0/81 | upper ≈ 4.5 %: supported at zero errors only |
+
+**Flag:** "FP ≤ 5 %" on 60 cannot be supported; §35.4's honest set of ≥ 81 supports it only at zero errors (§40 D-4).
+
+### 36.2 "100 % decidable rejection" and gate agreement
+
+| set | k/k caught | Wilson lower bound |
+|---|---|---|
+| a class with 3 injection points | 3/3 | 43.9 % |
+| Q31's 12 sealed cheats | 12/12 | 75.8 % |
+| Q33's campaign, 13 classes × 3 | 39/39 | 91.0 % |
+| Q31's 46 public | 46/46 | 92.3 % |
+| Q31 public and sealed | 58/58 | 93.8 % |
+
+A gate is deterministic on a fixed delivery, so "100 % on the corpus" is a census, and it is the right bar. As a **rate** it supports at most "≥ 91–94 % of cheats like these", and per class nothing useful. **Flag:** results must be worded as a census (§33.5, §35.5); the sealed cheats are the only generalization check (§40 D-5).
+
+### 36.3 "Beat par at B" on 3 × 40
+
+| rule | true Δ = 0 (false pass) | Δ = +5 pp | +10 pp | +15 pp | +20 pp |
+|---|---|---|---|---|---|
+| Lean rule: solves ≥ par + 3 at any of 3 pooled looks | **0.45–0.47** | 0.78–0.80 | 0.95 | 0.995 | 1.0 |
+| the same, one look at n = 40 | 0.24 | — | 0.64 | — | 0.91 |
+| one-sided exact McNemar, α = 0.05/3 at each of 3 looks | 0.02 | 0.11–0.12 | 0.36–0.40 | 0.67–0.74 | 0.89–0.93 |
+| **one-sided exact McNemar, α = 0.05, one final look at n = 120** | **0.04** | 0.20 | 0.52 | **0.82** | 0.96 |
+| the same at n = 80 (two tranches) | 0.03 | 0.15 | 0.38 | 0.66 | 0.86 |
+| the same at n = 40 (one tranche) | 0.03 | 0.08 | 0.19 | 0.35 | 0.55 |
+
+`mde_two_proportions(n, p0=0.5, paired=True)`: 0.30 at n = 40, 0.18 at n = 120 (two-sided α = 0.05; 0.21 at α = 0.05/3) — conservative, since shared task difficulty lowers the discordance. **Flag:** the inherited rule is a coin flip under the null; with three looks it is worse. At n = 120 and one final look, a pre-registered test has 80 % power only for about +15 points; one tranche alone supports no comparison. Hence §34.5's pass (gate-clean, analysis reproduced, estimate reported) and distinction (significant) (§40 D-3).
+
+### 36.4 Descriptive rates
+
+pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.588]. Q33's faithfulness on 60 pairs: the same width; a paired comparison with par on 60 has an MDE of about 0.25. **Flag:** "> par" on 60 pairs is reportable only as a distinction under the test.
+
+### 36.5 Budgets and pools against the claims
+
+| check | figure | status |
+|---|---|---|
+| GPU at 72 s per call: Q31 | 8.0 GPU-h | inside the per-module 10; the course total is full |
+| Q32 | 52.8 ceiling, ≈ 21 expected | **over the per-module 10** |
+| Q33 | 20 ceiling, ≈ 10 expected | **over 10 at its ceiling** |
+| course GPU total | 45 of 45 used | **no room for any challenge GPU hour** (§40 D-1) |
+| Claude calls | 1,690 of ≈ 1,700 used | **no room for a Claude arm** (§40 D-2) |
+| at the planning rate the core labs used (7.3 s) | Q32's ceiling would be 5.8 GPU-h | the core labs Q12, Q15 and Q18 were sized at that rate; **flagged to basic, outside DV7** |
+| Verus public proof-completion tasks needed | Q31 30 + Q32 51 = 81 | HumanEval-Verus leaves 24–54 unseen; **needs the vericoding strip transform** ([verify] sample, §32.3) |
+| Dafny public tasks needed | Q31 30 + Q32 51 = 81 | DafnyBench 303 less 20 (Lab 1) and up to 42 (Lab α's corpus): enough |
+| course-local items to author | ≈ 170 plus 12 tickets | ≈ 175–245 author-hours (§32.3): the topic's largest cost |
+
+---
+
+## 37. Topics (a)–(d), Q19–Q30: outline
+
+*Each topic is authored **statements and gate first** and ends in a **resize-or-kill call** (design §7.6): after its statements freeze, its references or skeletons are measured against the bands, its held-out material is costed, and the call (ship as designed, resize, or kill a module) is recorded in a DELTAS entry before any chapter is written. Proposed order after (e): **(c) → (a) → (d) → (b)** (design §4 names (e) then (c); §40 D-9).*
+
+| order | topic · modules | lang · policy | depends on (Q01–Q18) | held-out | the resize-or-kill question |
+|---|---|---|---|---|---|
+| 2 | **(c) numerics**: Q25 exact money (`Dec`: rounding, overflow, mul-div); Q26 bit tricks (division by constants, popcount, saturation; `bv64` vs `bit_vector`); Q27 multi-precision (Karatsuba, Montgomery, modexp) | V (D model) · reference-impl; D + V · verifier-graded; V · reference-impl, ≤ 3× `num-bigint` | L1–L7, Q16's multiplication (F20: Q27 alone re-poses it, at scale), Q18's crate | sealed vectors (Q25), sealed moduli (Q27) | Q27: is a Karatsuba proof inside 2× the hard band at the statements freeze, and can the speed bar's comparison crate be a benchmark-only dependency outside the verified target (`Cargo.toml` is rule 2g)? Else drop Karatsuba, keep Montgomery and modexp. Q26: does `bit_vector` close the Verus half on the pins? |
+| 3 | **(a) algorithms**: Q19 sorting (heapsort, quickselect; Verus port with fidelity audit); Q20 hash map (open addressing refining `Map<K,V>`); Q21 graphs (Dijkstra, union-find) | D + V · verifier-graded; V · reference-impl, ≤ 3× `std`; D (V optional) · reference-impl | Q07's port and fidelity audit, Q08's refinement, Q14/Q17's permissions | a bilingual held-out stratum (VERINA/CLEVER shape), adversarial keys, graphs | public proofs of these algorithms exist (math-like policy: no reference proof ships, Q19); Q20: is ≤ 3× `std` reachable with `Vec` and verified probing, or does the bar resize? |
+| 4 | **(d) PL**: Q28 VC generator (While with invariants; VCgen soundness); Q29 bytecode verifier (register bytecode; sound abstract interpreter); Q30 re-check the oracle | D · verifier-graded; V · reference-impl; choice · verifier-graded | Q05 wp→VC, Q08's verified wp, the While extra | a planted weakened variant (Q28); malicious and benign corpora (Q29); a forgery corpus (Q30) | Q30's scope (below), settled at (d)'s call after Q28's statements freeze |
+| 5 | **(b) quant**: Q22 codec and sequencer; Q23 matching engine; Q24 service `dvx` | V · reference-impl, production bar | Q17/Q18's crate discipline, the capstone CLI route (`vcheck --bin`, D16) | fuzz, traces, chaos | Q24 (80–150 h) is the course's largest module: resize to risk, torn-tail recovery and replay determinism, with PnL as distinction, if the statements exceed the band |
+
+**Q30's scope options:** (i) a verified checker of Farkas certificates for a linear fragment of the learner's own Q28 VCs, either language (ties the oracle to Q28, smallest statement surface); (ii) a DRAT/LRAT checker on a propositional fragment [verify: no pinned tool emits DRAT today, so the corpus needs a pinned SAT solver or author-made proofs]; (iii) both offered, the learner picks (the design's "choice"); (iv) kill Q30 and make certificate re-checking Q28's distinction. Recommended default (i), decided at (d)'s call (§40 D-10).
+
+---
+
+## 38. Branch and release mechanics
+
+1. **Lines.** `dv7` (this worktree, from `basic` `7800b83`) is the challenge authoring line. It merges `basic` to take fixes, and never merges `authoring`, `labalpha`, `sysb` or any `archive/*` line; no R file enters it. R content reaches it only if the release plan's R core is added to `basic` and then merged forward.
+2. **`challenge`.** Created from `basic`'s tip when topic (e) passes its freeze bar. Each topic lands as **one squash commit** `challenge: topic (<x>) <name> Q<a>–Q<b>`, whose tree is `challenge`'s tip plus that topic's content and its records, never `dv7`'s history (D42's rule, carried to `challenge`).
+3. **Fixes land on `basic` first** (`basic: ` commits, the D42 linear chain) and are merged forward into `challenge` at once (`challenge: merge basic <sha12>`, `basic` as second parent) and into `dv7`. **Shared tooling** that the Q core also runs (`fvh` additions, `dvl.python`'s `agents` route, the checker's challenge rules, `check_release_history.py`'s challenge mode) is inert while every challenge record is planned; §40 D-11 decides whether it lands on `basic` first (recommended: it keeps the frozen core one file on both branches, so a later `basic` fix to `fvh` merges forward cleanly) or only on `challenge`.
+4. **D26's shipped reference** (Δ235): a learner who merges `challenge` gets its files as "as shipped" (the newest merge base with `basic`/`challenge`); a `challenge` that does not contain the newest `basic` is ignored by the helper (Δ235's "challenge not contained" case), which is why every basic fix is merged forward before the next learner update. `firsttry --report`, `pins.py` and `/review-code` gate 5 then count the challenge files.
+5. **History check.** `scripts/check_release_history.py` gains `challenge` mode: main..challenge is `basic`'s chain plus a chain whose commits are single-parent `challenge: ` squashes or `challenge: merge basic` merges whose second parent is on `basic`; no commit reachable from an `archive/*` tag, `dv7`, `authoring` or `labalpha` unless it is on `basic`; CI's static job runs it on `challenge` (else `origin/challenge`).
+6. **CI per topic** (CLAUDE.md procedure item 4): `scripts/course_mode.sh study`, then `scripts/ci.sh` and `scripts/ci.sh --author` on the `dv7` tree (full runs, ≈ 1.3 h study and ≈ 4.8 h author at the basic tip's figures, BASIC-RELEASE F1/F2), with the new challenge job: `challenge_gate.sh` on the author's reference delivery of each module (PASS) and on one planted failure per check (FAIL), the sealed archives' round trip (`--truth-check manifest`), the attestation scan of every new public form against the sealed twins, `test_hooks.sh` with the armed-challenge fixtures, the history check. Before a merge that changes the guard, `tests/acceptance/guard_doors.py all` (model; under the D47 lane).
+7. **Freeze bar per topic** (BASIC-RELEASE F1–F8's shape): F1/F2 CI green both modes; F3 skill simulations for the topic (solo tutor cap, `/contract` refusal, defense viva, `/grade-paper` on the pre-registrations; live, D47 lane); F4 calibration cases for the new rubrics; F5 guard acceptance if the guard changed; F6 a clean-clone dry run of the chapters' commands; F7 a leak audit (sealed spans against every learner-visible file of the topic, the canaries); F8 no open DECISION NEEDED; plus every `statements[]` sha pinned, every sealed part round-tripped, par recorded, the defense bank complete, `chapter_lint` 0, and the topic's resize-or-kill entry recorded.
+
+---
+
+## 39. Work order and estimates
+
+*A session is one author lane session (2–4 h of model time); wall time includes solver validation (one job at a time) and GPU time at about 49 Qwen calls per hour. Estimates [A].*
+
+| step | content | sessions | wall |
+|---|---|---|---|
+| W0 | the user's decisions (§40), blocking W1 | — | — |
+| W1 | shared infrastructure: `challenge_gate.sh` and `dvl.challenge`, `trustleap`, `reach` (with its [verify] probe), `gen_units` for Challenges, the `agents` Python route, `fvh` additions (batch import, two instruments, `MolePolicy`, `unseal --once` and its ledger), the three `truthcheck` modes and the image rebuild, the checker and history-check changes, hook fixtures, tests | 7–9 | 5–7 days |
+| W2 | topic (e) statements and gate first: the three manifests, statement files, interface stubs, frozen tests with recorded fixtures; the author's reference gate v3, bench and searcher passing `challenge_gate.sh`; §36 re-run on the real pool counts → **(e)'s resize-or-kill call** | 3–4 | 3–4 days |
+| W3 | corpora: course-local tasks (108), public draws and validation (≈ 250), the vericoding strip transform with its sample, cheats (12 public deliveries, 12 sealed), Q33's 60 pairs judged in the container, 12 tickets, plant catalog; sealing and round trips | 12–16 | 2.5–3.5 weeks |
+| W4 | par: dev selection, Q31's 60, Q32's three tranches, Q33's pairs and tickets; `PAR.md`; sealing | 3–4 | 1–1.5 weeks (≈ 30 GPU-h, GPU calendar) |
+| W5 | learner materials: three chapters, written pairs and rubrics (pre-registrations, card, note, report), `defense_agentic.md`, research forms, README and CLAUDE.md lines | 4–5 | 4–5 days |
+| W6 | freeze bar for (e): adversarial reviews (leak, statistics, decisions), CI both modes, the D47 lane's live checks, squash onto `challenge`, history check | 3–4 | 4–6 days |
+| | **topic (e)** | **32–42** | **≈ 7–9 weeks** |
+| W7–W10 | (c), (a), (d), (b), each: statements and gate first → resize-or-kill → corpora and references → chapters and kits → freeze bar → squash | 15–30 each | 3–6 weeks each |
+
+---
+
+## 40. Open questions (Q69 on) and DECISION NEEDED
+
+*Each item changes scope, minutes, what a learner receives or what a result may conclude, so it is the user's. Options and a recommendation each; the proposed DELTAS entry is Δ400's follow-up once decided.*
+
+**DECISION NEEDED**
+
+- **D-1 · GPU hours for topic (e)** (blocks W1's registry work and every (e) run). The registry is at 45 of 45 GPU-h; Q32 needs ≈ 21 expected (52.8 ceiling) and Q33 ≈ 10 (20 ceiling) at the measured rate. (a) A separate challenge pool, e.g. +55 GPU-h for (e) (Q31 8, Q32 25, Q33 20, plus margin) with per-module exceptions to the 10-hour cap, as the R line's D56 did for R12; (b) keep 45 and shrink: B = 4, one tranche, Q33 part (B) descriptive only (§36: one tranche supports no comparison); (c) Claude as engine of record instead (collides with D-2). **Recommended (a).**
+- **D-2 · Claude calls for topic (e).** The reserve is at 1,690 of ≈ 1,700. (a) Qwen is the engine of record; no Claude arm (budgets 0); (b) a challenge allowance of ≈ 250 calls for descriptive Claude arms (Q31 90, Q32 90, Q33 70); (c) Claude for par only. **Recommended (a)**, with (b) if the user wants a cross-model line.
+- **D-3 · Q32's acceptance rule.** The inherited "+3 at any of three looks" passes an equal agent ≈ 45 % of the time. (a) Pass = gate-clean run, reproduced pre-registered analysis and a reported estimate; distinction = one-sided exact McNemar at α = 0.05 over 120 tasks, one final look (80 % power at ≈ +15 pp); (b) pass only on the significant test (a real +10 pp agent fails ≈ half the time); (c) keep the inherited rule, worded as descriptive. **Recommended (a).**
+- **D-4 · Q33's FP threshold.** "FP ≤ 5 %" on 60 is unsupported even at zero errors (Wilson upper 6.0 %). (a) Grow the honest set to ≥ 81 deliveries (the sealed pairs' references, the learner's witnesses, the controls: no extra model calls) and keep 5 % as the bound, met only at zero errors; pass at ≤ 3 observed with the bound reported; (b) keep 60, restate the bar as "≤ 3/60 observed" with the interval; (c) add one-sided Clopper–Pearson to `fvh.stats` (0/60 → 4.87 %). **Recommended (a).**
+- **D-5 · "100 % decidable rejection" wording.** (a) A census bar on the full corpus and campaign, worded as such, with the sealed cheats as the only generalization check; (b) add a sealed plant set of ≥ 60 to estimate a rate (≈ 60 more author-hours). **Recommended (a).**
+- **D-6 · Sealed tasks in policy mode.** A policy-mode prompt is built on the host and its transcript holds the task. (a) "Unsealed once, by the grader, after the freeze": `fvh unseal --once` writes the part to a run-scoped directory outside the course tree, the batch runs, the part is retired and its records stay; (b) Qwen agent mode in per-run containers only (plaintext stays in containers except transcripts; Claude impossible until D10's step); (c) keep the design wording and accept the host exposure silently. **Recommended (a)**, worded honestly in each chapter.
+- **D-7 · When par runs.** (a) Author-run before the learner, sealed, with a five-task drift sentinel at the learner's run; (b) beside the learner's agent at evaluation (same day and apparatus; par's code decrypted on the host; the learner's GPU budget doubles for the sealed runs); (c) a public par (the learner's own Q12 policy). **Recommended (a).**
+- **D-8 · Corpus sizes** (≈ 175–245 author-hours). (a) As planned (Q31 40/60, Q32 50 + 3 × 40, Q33 20 + 60 pairs, 12 tickets); (b) reduced: Q32 2 × 40 (§36: n = 80 has 66 % power at +15 pp), Q33 40 sealed pairs, ≈ −45 h; (c) public-heavy (20 % course-local), cheaper but more contaminated. **Recommended (a)**, (b) if W3 runs long.
+- **D-9 · Topic order after (e).** (a) (c) → (a) → (d) → (b); (b) the design's index order (a) → (b) → (c) → (d); (c) stop after (e) and (c) and decide again. **Recommended (a).**
+- **D-10 · Q30's scope.** §37's options (i)–(iv). **Recommended:** decide at (d)'s resize-or-kill call, default (i).
+- **D-11 · Where shared tooling lands.** (a) On `basic` first, inert until a challenge is armed, then merged forward (one frozen core on both branches); (b) on `challenge` only (basic untouched; later `fvh` fixes on basic may conflict at merge-forward). **Recommended (a).**
+- **D-12 · Minutes and what the learner receives.** (a) Accept the planning figures (Q31 37.3 h, Q32 57.5 h, Q33 77.3 h; 172 h) and the shipped sets of §33–§35; (b) cut Q33 part (B) to a distinction (−≈ 25 h); (c) cut Q31's held-out live run to a distinction only (−≈ 4 h, and 240 fewer calls). **Recommended (a).**
+
+**Open questions (owners named; not the user's unless they become a decision)**
+
+69. **The reach instrument's Verus half** (W1, tools owner): whether the pinned Verus exposes call edges (`--log vir`) for a crate outside the workspace; fallback, a `use`-path and name scan with the residual recorded.
+70. **The vericoding strip transform** (W3, bench owner): `verus-strip-proofs` on validated vericoding answers, a 40-task sample through the pool rule before any draw.
+71. **The trust-leap list** (W1): the constructs vaudit allows but `TRUST.md` must list, per language, frozen in `scripts/dvl/trustleap.py` with a fixture each.
+72. **The core labs' GPU budgets** (basic, outside DV7): Q12, Q15 and Q18 were sized at 7.3 s per call; the R line measured 72 s. A basic lane should re-check them before the learner runs Lab 1.
+73. **F1–F23 for the challenges** (each topic's statements freeze): DV7 confirms them per topic as DV5 did for Q10–Q18 (§30, Q39); for (e) §32.6 rule 1 is the confirmation.
+74. **Registry `harness` lists** (records lane): each (e) module lists every `agents/` file (today one each).
