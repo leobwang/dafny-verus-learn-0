@@ -18,14 +18,14 @@ role = "held-out"
 sealed = true
 target = { total = 40, course_local = 24, public = 16 }
 archive = "Hidden/Agentic/Q32/T2.tar.age"
-archive_sha256 = "857c25d031014a455cad2fa98d8bf8e72bff304204b8b34186af52a5ed5497e5"
+archive_sha256 = "136a6bb4155e68f5e8c10e5b7fe0633cc6a303279f3f0fba24e8d430262e44e3"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
-files = 12
-manifest_sha256 = "55925f6ada1eab3f563a1c8fb26457c0299d8f399f46afb84c268a0abe10d296"
+files = 24
+manifest_sha256 = "12ce456bef311307531313990a50723d089ed73c109bbf703cafdc4ccae32960"
 refs_archive = "Hidden/Agentic/Q32/T2-refs.tar.age"
-refs_sha256 = "6fab7b73272f5ca2a537ba28146324bda8b5e49cfa358dfee03a7fd8ef7adbfc"
-refs_files = 12
-refs_manifest_sha256 = "b5e975ef059fd98096d7212ec0bfa6459d77d02b37a29eb9cac79fd52a329bd5"
+refs_sha256 = "743b75d8512af832cf9c1be94366bf11c3d18fe0423625e1ff0f354575e8b11c"
+refs_files = 24
+refs_manifest_sha256 = "714f85d792f0b1ee8909a5594e6971d55e02ea9e5289b2049d8e9c0023d09020"
 
 [[card]]
 id = "cl-d101-q32t2"
@@ -94,6 +94,72 @@ maxauto_fails = true
 admission_sha256 = "354f0e3ad22e2a488442394825d3af723f4726ec654ffa4689a1c77c4b75437e"
 
 [[card]]
+id = "cl-d107-q32t2"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q32/cl-d107-q32t2/tasks/cl-d107-q32t2.dfy"
+form_sha256 = "2c74099bb9da3faba801fcf00cd9c4c3d7c759188eb455d7720e9432a3c48529"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "15e3ba4537c674ba0ee230a12835f2c0b4bcbd15a3e56107189cf29bccc4226e"
+
+[[card]]
+id = "cl-d108-q32t2"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q32/cl-d108-q32t2/tasks/cl-d108-q32t2.dfy"
+form_sha256 = "a317f0372e7ccbf1a6280d55c0ecd27bb899b89a24ca1e370b9c44d9dc12e0fd"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "4d49fb6735f5dbdb4c5e51e1f3e7e280e2770cea4a2d755cfff1b4ab0f3c40fb"
+
+[[card]]
+id = "cl-d109-q32t2"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q32/cl-d109-q32t2/tasks/cl-d109-q32t2.dfy"
+form_sha256 = "046cf240eb0774f8668612b49c5ec6be2a5eed56b04f87d479d2acf1a39310fa"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "4799f4cd420f7146c0341bfdb439701f2c377d3c6ecb34335c96991fb0552347"
+
+[[card]]
+id = "cl-d110-q32t2"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q32/cl-d110-q32t2/tasks/cl-d110-q32t2.dfy"
+form_sha256 = "418517389ba28bb76c8f267d735e41973e5520366579d6480f0a1ef12dc062c1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "e37f18c1c12f8f0d7074d8a2c43883e197ab3e3799da6896ef727950654219b6"
+
+[[card]]
+id = "cl-d111-q32t2"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q32/cl-d111-q32t2/tasks/cl-d111-q32t2.dfy"
+form_sha256 = "1d9e2a075dcac94463d09abc4c212010488c9f23bb721f796a6bc063852ad08d"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "978572bc27bbb5bda4436d9e1d3a0e6057811e7a9986f5ff2084852e10fa0ce8"
+
+[[card]]
+id = "cl-d112-q32t2"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q32/cl-d112-q32t2/tasks/cl-d112-q32t2.dfy"
+form_sha256 = "e07077d7b91e3f132b17f82d18bbe6987fab5a2f45c4f1920839290188f9b134"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "a0686f01812853bb5c39bb6025cccb2eecf8c3a2e3657f0021b71417611b83ff"
+
+[[card]]
 id = "cl-v101-q32t2"
 lang = "verus"
 source = "course-local"
@@ -158,3 +224,69 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "7766b97877c35f845ebc0cad5e42fd4995bdcb24b85e30909b985191fdc6b422"
+
+[[card]]
+id = "cl-v107-q32t2"
+lang = "verus"
+source = "course-local"
+form = "labs/Q32/cl-v107-q32t2/tasks/cl-v107-q32t2.rs"
+form_sha256 = "4d2d38b304bb4c4bca1cb5d11bb971c73f914e165963053c1b8a5717db92b0f1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "8c539a57fb3d0a1602e1c6cac8f82f868973c0f02c46d1e1cc7e62392ccf545b"
+
+[[card]]
+id = "cl-v108-q32t2"
+lang = "verus"
+source = "course-local"
+form = "labs/Q32/cl-v108-q32t2/tasks/cl-v108-q32t2.rs"
+form_sha256 = "2b22c306dcb8079eae92809b0ed9605a943d9f338b86ca8b5df989509aa30b03"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "b09115531abf9cd803de8817b8f050c74c3eca247b13659f5226b9f6c1cca29c"
+
+[[card]]
+id = "cl-v109-q32t2"
+lang = "verus"
+source = "course-local"
+form = "labs/Q32/cl-v109-q32t2/tasks/cl-v109-q32t2.rs"
+form_sha256 = "54c2f6dba37ccc9df332d0b4e77e800459d742b7981052bdfa096d25a24c7a58"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "553be75385a3a24645b79334d3ce1595acc785a574d8c1a9931f50f612131e98"
+
+[[card]]
+id = "cl-v110-q32t2"
+lang = "verus"
+source = "course-local"
+form = "labs/Q32/cl-v110-q32t2/tasks/cl-v110-q32t2.rs"
+form_sha256 = "b7457b69de8d0e97f69dceb19c8288b75ca7c9b311238322e94936613b98f6e1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "d54f3f045a9a7a360dfa33422cb7be17d8080192f5c4d5d0b95ba9fd6c5e97e7"
+
+[[card]]
+id = "cl-v111-q32t2"
+lang = "verus"
+source = "course-local"
+form = "labs/Q32/cl-v111-q32t2/tasks/cl-v111-q32t2.rs"
+form_sha256 = "2115c6f2fc925ed7e2b6fd7df5032e8929f1a0b945fd7dd346a92782050f6dd1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "3938876993d3c3bf78ad12e2e2da33624800092f8fa63c0962349b94861da645"
+
+[[card]]
+id = "cl-v112-q32t2"
+lang = "verus"
+source = "course-local"
+form = "labs/Q32/cl-v112-q32t2/tasks/cl-v112-q32t2.rs"
+form_sha256 = "d7f4d3a32c0fd7686c8bf79284667ebe2f970d13513203842be9c5b8d1a77935"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "acd5bd24a2def998ff1f2979bfb4098f249c7dd25d7c6401f561441c194f1801"
