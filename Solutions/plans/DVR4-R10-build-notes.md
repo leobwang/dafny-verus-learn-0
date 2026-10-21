@@ -54,6 +54,8 @@ Minutes reconcile: 55 + 55 = 110 = PLAN §12's hole line; `[module.admissible]` 
 
 **Written pair and numerals.** Problems, rubric and `tools/R10/README.md` numerals spaced; rubric pins refreshed; `make -C paper paper` builds.
 
+**Focused author CI.** Run `20261021T040214Z-1955924` on `41bc3b0` (a detached clone with the R10 commit and the A1b hash refresh; the earlier run on `fc6ef39` was interrupted by the 22:43 CDT reboot and counts as not run): verify-r-dafny PASS 488 s, verify-r-verus PASS 347 s; static FAIL 850 s at `check_single_route.py` (the pre-existing Lab α files `bench/local/r/labalpha/pub-hev-075/tasks/pub-hev-075.rs`, `harness/fvh/report.py`) and `chapter_lint --all` (11 stale pins in `docs/R08_Abstraction.md`, inputs `RG_A1b_Facts.dfy`: P1's A1b header change, R08 is P1's module); pins FAIL 2,627 s on the same 11 R08 pins only (1,463 pins over 31 modules checked; `pins --ref` 192 checks, 0 problems). Every R10 check passed.
+
 ## 4. DECISION NEEDED
 
 **1 · H3 under the line band.** H3 (15 minutes per language) is a structural induction whose references are 10 (Dafny) and 11 (Verus) proof lines by the counter, one statement per line: below §2.2's 15–30-line band for a 15–20-minute hole. All four results pass. Options: (a) keep 15 / 15 as an R10 exception: the item's difficulty is reading why each smart constructor returns its plain node on normal children (three `Normal` cases), which the line count does not show; (b) move 5 minutes per language from H3 to H4 (H3 10, H4 25 / 23; the 110 total is unchanged; H4's references are the longest, 30 and 28 lines); (c) extend H3 to the idempotence corollary as part of the hole (adds 2–4 lines; the corollary is given today). **Recommend (b).**

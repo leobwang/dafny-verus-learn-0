@@ -4801,6 +4801,7 @@ DVR4 step 5's systemic pass on R10 (plan §2's row: **keep** + systemic; §4.2's
 - **Bank.** Q06 schema: 12 questions, 1,499 lines, 12 Reread lines, 7 backward edges, two disjoint draws with two live predicts each, two parallel problems with author-verified runs.
 - **Leak patterns and overlap.** 8 patterns re-cut with `# source:` lines; verifier OK over 2,594 public files; 0 public-answer windows. The Lab α forms `r10-mk-cat-correct-{d,v}`, `r10-star-star-{d,v}` hold the flagship's reference helpers: covered by the Lab α lane's later-tier overlap declaration (labalpha `c9a659a`). Neither the chapter nor the bank prints a flagship statement.
 - **Written pair and numerals.** Problems, rubric and the tools README spaced; rubric pins refreshed; `make -C paper paper` builds. Study workflow 17/17 on a disposable clone (5 first tries; strict OK; freeze; three compiled tests; four gates and audits; the three R10 tools).
+- **Focused author CI** `20261021T040214Z-1955924` on `41bc3b0`: verify-r-dafny PASS, verify-r-verus PASS; static FAIL only at `check_single_route.py` (pre-existing Lab α files) and `chapter_lint` (R08's 11 A1b-stale pins, P1's module); pins FAIL on the same 11 R08 pins only (`--ref` 0 problems).
 
 ### Δ322 · R11 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-21 UTC)
 
