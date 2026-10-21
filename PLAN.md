@@ -693,7 +693,7 @@ Header counts: **10 holes**, **2 test-out items**, **5 predictions**.
 | R02.H2v | H | — | R02.H2d | datatype-match | `pub proof fn lemma_node_count_backwards(r: Re)`, the same (`decreases r`) | `proof_note` assume · none |
 | R02.H3d | H | — | R02.H3v | datatype-match | `lemma {:induction false} NullableBackwards(r: Re) ensures Nullable(Backwards(r)) == Nullable(r)` (`decreases r`) | bodyless lemma · `{:induction false}` |
 | R02.H3v | H | — | R02.H3d | datatype-match | `pub proof fn lemma_nullable_backwards(r: Re)`, the same | `proof_note` assume · none |
-| R02.H4d | H | — | R02.H4v | exists-witness | `lemma CatEpsLeft(r: Re, s: seq<char>) ensures Matches(Cat(Eps, r), s) <==> Matches(r, s)` | bodyless lemma · none |
+| R02.H4d | H | — | R02.H4v | exists-witness | `lemma CatTwoChrs(r: Re, c: char, d: char, s: seq<char>) ensures Matches(Cat(Cat(r, Chr(c)), Chr(d)), s + [c, d]) <==> Matches(r, s)` (the user's D60, 2026-10-20: `CatEpsLeft`'s smallest Dafny proof is one slice fact; A1b still supplies `CatEpsLeft`) | bodyless lemma · none |
 | R02.H4v | H | — | R02.H4d | exists-witness | `pub proof fn lemma_cat_eps_left(r: Re, s: Seq<char>) ensures matches(Re::Cat(Box::new(Re::Eps), Box::new(r)), s) <==> matches(r, s)` | `proof_note` assume · none |
 | R02.H5d | H | — | R02.H5v | datatype-match, decreases | `method IsVoid(r: Re) returns (b: bool) ensures b == VoidSpec(r)` | exec hole `{ assume false; }` · none |
 | R02.H5v | H | — | R02.H5d | datatype-match, decreases | `pub fn is_void(r: &Re) -> (b: bool) ensures b == void_spec(*r)` (`decreases r` is yours) | `external_body` + `unimplemented!()` · none |

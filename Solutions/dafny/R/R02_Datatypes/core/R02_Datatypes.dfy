@@ -266,22 +266,27 @@ module R02_Datatypes {
   // item: R02.H4d
   // uses: exists-witness
   // pair: R02.H4v
-  /** **H4.** Putting `Eps` in front changes no language. Each direction is
-      about the existential over split points in `Matches`' `Cat` case: which
-      split proves `Matches(Cat(Eps, r), s)` from `Matches(r, s)`, and what
-      does `Eps` force about any split of a match of `Cat(Eps, r)`? */
-  lemma CatEpsLeft(r: Re, s: seq<char>)
-    ensures Matches(Cat(Eps, r), s) <==> Matches(r, s)
+  /** **H4.** Appending two characters `c`, `d` to a string that `r` matches
+      gives a match of `Cat(Cat(r, Chr(c)), Chr(d))`, and every match of that
+      regex on `s + [c, d]` comes from a match of `r` on `s`. Each direction
+      is about the split existentials of the two `Cat`s: at which index does
+      each `Cat` split `s + [c, d]`, and what does a `Chr` side force about
+      any split a match supplies? (Verus's H4 is `Cat(Eps, r)`: chapter §2.3
+      says why the two languages pose different statements here.) */
+  lemma CatTwoChrs(r: Re, c: char, d: char, s: seq<char>)
+    ensures Matches(Cat(Cat(r, Chr(c)), Chr(d)), s + [c, d]) <==> Matches(r, s)
   {
     // @hole-begin R02.H4d
-    if Matches(r, s) {
-      assert s[..0] == [];
-      assert s[0..] == s;
-    }
+    assert (s + [c, d])[..|s| + 1] == s + [c];
+    assert (s + [c])[..|s|] == s;
+    assert Matches(Cat(r, Chr(c)), s + [c]) <==> Matches(r, s);
     // @hole-end R02.H4d
   }
-  // Hint(1): `Eps` matches one string only, so it can take only one prefix.
-  // Hint(2): name that split by its slices, as W1 does; one of them is the empty sequence.
+  // Hint(1): work from the inside: first the inner `Cat(r, Chr(c))` on `s + [c]`,
+  //    then the outer `Cat` on `s + [c, d]`; a `Chr` side matches one string only.
+  // Hint(2): name each split by its prefix slice, as W1 does; the inner `Cat` on
+  //    `s + [c]` is a smaller claim of the same shape, and stating it gives
+  //    the outer step a fact to use.
 
   // item: R02.H5d
   // uses: datatype-match, decreases

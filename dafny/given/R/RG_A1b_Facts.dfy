@@ -1,9 +1,9 @@
 /*!
 # RG_A1b — regex spine, layer A1b (PROVIDED, complete)
 
-Do not open this file before R02 and R05 are done: it re-supplies, complete and proved,
-the answers to R02's holes (`NullableCorrect`, `CatEpsLeft`) and R05's band-1 facts
-(`CatAssoc`, `StarOne`, `StarConcat`). Finish their holes and record their first tries
+Do not open this file before R02 and R05 are done: it re-supplies R02's `NullableCorrect`,
+`CatEpsLeft` (R02's H4 in Verus; its Dafny H4 is `CatTwoChrs`, D60) and R05's band-1 facts
+(`CatAssoc`, `StarOne`, `StarConcat`), proved. Finish their holes and record first tries
 (`scripts/firsttry.sh R02 --check`, `scripts/firsttry.sh R05 --check`) first.
 
 Frozen infrastructure, not an exercise. Imported by R06–R16: band-1 facts re-supplied after their original exercises.
