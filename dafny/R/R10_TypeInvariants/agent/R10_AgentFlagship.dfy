@@ -6,18 +6,27 @@ additional language promise yourself. The actor may edit only bodies and
 reference-only helpers in its delivery; it must preserve your snapshot.
 */
 module R10_AgentFlagship {
- import opened RG_A1_Re
- import opened RG_A1b_Facts
- import opened RG_A4_Norm
- 
- 
- 
- 
- // item: R10.A1d
- method BuildAltR10(a:NormRe,b:NormRe) returns (out:NormRe)
-  { assume false; }
- method BuildCatR10(a:NormRe,b:NormRe) returns (out:NormRe)
-  { assume false; }
- method BuildStarR10(a:NormRe) returns (out:NormRe)
-  { assume false; }
+  import opened RG_A1_Re
+  import opened RG_A1b_Facts
+  import opened RG_A4_Norm
+
+  // Your statements: add requires and ensures clauses to each constructor
+  // below, and snapshot the file under research/R10/ before any contractor edit.
+  // The contractor may add private proof helpers here and write the bodies.
+
+  // item: R10.A1d
+  method BuildAltR10(a: NormRe, b: NormRe) returns (out: NormRe)
+  {
+    assume false;
+  }
+
+  method BuildCatR10(a: NormRe, b: NormRe) returns (out: NormRe)
+  {
+    assume false;
+  }
+
+  method BuildStarR10(a: NormRe) returns (out: NormRe)
+  {
+    assume false;
+  }
 }

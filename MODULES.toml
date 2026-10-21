@@ -1907,7 +1907,7 @@ write_v = ["ensures", "assert", "lemma-call"]
 recognise_d = ["requires", "decreases", "function", "forall"]
 recognise_v = ["requires", "decreases", "function", "forall"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
+admissible = { "R01.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R01.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R01.H1d" = { admitted = true, minutes = 4, fallback = "" }, "R01.H2d" = { admitted = true, minutes = 4, fallback = "" }, "R01.H3d" = { admitted = true, minutes = 4, fallback = "" }, "R01.H1v" = { admitted = true, minutes = 4, fallback = "" }, "R01.H2v" = { admitted = true, minutes = 4, fallback = "" }, "R01.H3v" = { admitted = true, minutes = 4, fallback = "" } }
 imports = { "dafny/R/R01_Hello/core/R01_Hello.dfy" = "core", "dafny/checks/R01_checks.dfy" = "core", "dafny/R/R01_Hello/agent/R01_AgentRepair.dfy" = "core", "verus/r/r01_hello/src/lib.rs" = "prelude", "verus/r/r01_hello/src/agent.rs" = "prelude" }
 concept_items = {}
 
@@ -1947,7 +1947,7 @@ write_v = ["datatype-match", "decreases", "exists-witness"]
 recognise_d = ["test", "ghost"]
 recognise_v = ["test", "ghost", "box"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
+admissible = { "R02.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R02.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R02.H1d" = { admitted = true, minutes = 5, fallback = "" }, "R02.H2d" = { admitted = true, minutes = 5, fallback = "printed induction-disabled levers" }, "R02.H3d" = { admitted = true, minutes = 5, fallback = "printed induction-disabled levers" }, "R02.H4d" = { admitted = true, minutes = 5, fallback = "" }, "R02.H5d" = { admitted = true, minutes = 5, fallback = "" }, "R02.H1v" = { admitted = true, minutes = 7, fallback = "" }, "R02.H2v" = { admitted = true, minutes = 7, fallback = "" }, "R02.H3v" = { admitted = true, minutes = 7, fallback = "" }, "R02.H4v" = { admitted = true, minutes = 7, fallback = "" }, "R02.H5v" = { admitted = true, minutes = 7, fallback = "" } }
 imports = { "dafny/given/R/RG_A1_Re.dfy" = "core", "verus/given/rg_re_a1/src/lib.rs" = "prelude", "dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "core", "dafny/checks/R02_checks.dfy" = "core", "dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy" = "core", "verus/r/r02_datatypes/src/lib.rs" = "prelude", "verus/r/r02_datatypes/src/agent.rs" = "prelude" }
 concept_items = {}
 
@@ -2027,7 +2027,7 @@ write_v = ["forall-intro", "exists-elim"]
 recognise_d = ["expect"]
 recognise_v = ["assume"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
+admissible = { "R04.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R04.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R04.H1d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H2d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H3d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H4d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H5d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H1v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H2v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H3v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H4v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H5v" = { admitted = true, minutes = 7, fallback = "" } }
 imports = { "dafny/R/R04_Specs/core/R04_Specs.dfy" = "core", "dafny/R/R04_Specs/agent/R04_AgentProver.dfy" = "core", "verus/r/r04_specs/src/lib.rs" = "prelude", "verus/r/r04_specs/src/agent.rs" = "prelude" }
 concept_items = {}
 
@@ -2267,7 +2267,7 @@ write_v = ["type-invariant", "ghost", "tracked"]
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = { "R10.H1d" = { admitted = true, minutes = 8, fallback = "" }, "R10.H2d" = { admitted = true, minutes = 12, fallback = "" }, "R10.H3d" = { admitted = true, minutes = 15, fallback = "" }, "R10.H4d" = { admitted = true, minutes = 20, fallback = "" }, "R10.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R10.H2v" = { admitted = true, minutes = 12, fallback = "" }, "R10.H3v" = { admitted = true, minutes = 15, fallback = "" }, "R10.H4v" = { admitted = true, minutes = 18, fallback = "" } }
+admissible = { "R10.H1d" = { admitted = true, minutes = 8, fallback = "" }, "R10.H2d" = { admitted = true, minutes = 12, fallback = "" }, "R10.H3d" = { admitted = true, minutes = 10, fallback = "printed induction-disabled levers" }, "R10.H4d" = { admitted = true, minutes = 25, fallback = "" }, "R10.H1v" = { admitted = true, minutes = 10, fallback = "" }, "R10.H2v" = { admitted = true, minutes = 12, fallback = "" }, "R10.H3v" = { admitted = true, minutes = 10, fallback = "" }, "R10.H4v" = { admitted = true, minutes = 23, fallback = "" } }
 imports = { "dafny/given/R/RG_A4_Norm.dfy" = "std", "verus/given/rg_re_a4/src/lib.rs" = "prelude", "dafny/checks/R10_checks.dfy" = "std", "dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy" = "std", "dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy" = "std", "verus/r/r10_type_invariants/src/lib.rs" = "all", "verus/r/r10_type_invariants/src/agent.rs" = "all" }
 concept_items = {}
 
@@ -2307,7 +2307,7 @@ write_v = ["tracked"]
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = { "R11.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R11.H1d" = { admitted = true, minutes = 18, fallback = "" }, "R11.H2d" = { admitted = true, minutes = 17, fallback = "" }, "R11.H3d" = { admitted = true, minutes = 20, fallback = "" }, "R11.H4d" = { admitted = true, minutes = 15, fallback = "" }, "R11.H5d" = { admitted = true, minutes = 15, fallback = "" }, "R11.H6d" = { admitted = true, minutes = 10, fallback = "" }, "R11.H7d" = { admitted = true, minutes = 5, fallback = "" }, "R11.X1d" = { admitted = true, minutes = 6, fallback = "" }, "R11.X2d" = { admitted = true, minutes = 5, fallback = "" }, "R11.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R11.H1v" = { admitted = true, minutes = 15, fallback = "" }, "R11.H2v" = { admitted = true, minutes = 15, fallback = "" }, "R11.H3v" = { admitted = true, minutes = 15, fallback = "" }, "R11.H4v" = { admitted = true, minutes = 10, fallback = "" }, "R11.H5v" = { admitted = true, minutes = 10, fallback = "" }, "R11.H6v" = { admitted = true, minutes = 5, fallback = "" }, "R11.H7v" = { admitted = true, minutes = 5, fallback = "" }, "R11.H8v" = { admitted = true, minutes = 20, fallback = "Vec index/frame fallback; PointsTo lane parked" }, "R11.H9v" = { admitted = true, minutes = 25, fallback = "Vec index/frame fallback; PointsTo lane parked" }, "R11.X1v" = { admitted = true, minutes = 6, fallback = "" }, "R11.X2v" = { admitted = true, minutes = 5, fallback = "" } }
+admissible = { "R11.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R11.H1d" = { admitted = true, minutes = 18, fallback = "" }, "R11.H2d" = { admitted = true, minutes = 17, fallback = "printed induction-disabled levers" }, "R11.H3d" = { admitted = true, minutes = 20, fallback = "" }, "R11.H4d" = { admitted = true, minutes = 15, fallback = "" }, "R11.H5d" = { admitted = true, minutes = 15, fallback = "" }, "R11.H6d" = { admitted = true, minutes = 10, fallback = "" }, "R11.H7d" = { admitted = true, minutes = 5, fallback = "" }, "R11.X1d" = { admitted = true, minutes = 6, fallback = "printed induction-disabled levers" }, "R11.X2d" = { admitted = true, minutes = 5, fallback = "" }, "R11.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R11.H1v" = { admitted = true, minutes = 15, fallback = "" }, "R11.H2v" = { admitted = true, minutes = 15, fallback = "" }, "R11.H3v" = { admitted = true, minutes = 15, fallback = "" }, "R11.H4v" = { admitted = true, minutes = 10, fallback = "" }, "R11.H5v" = { admitted = true, minutes = 10, fallback = "" }, "R11.H6v" = { admitted = true, minutes = 5, fallback = "" }, "R11.H7v" = { admitted = true, minutes = 5, fallback = "" }, "R11.H8v" = { admitted = true, minutes = 20, fallback = "Vec index/frame fallback; PointsTo lane parked" }, "R11.H9v" = { admitted = true, minutes = 25, fallback = "Vec index/frame fallback; PointsTo lane parked" }, "R11.X1v" = { admitted = true, minutes = 6, fallback = "" }, "R11.X2v" = { admitted = true, minutes = 5, fallback = "" } }
 imports = { "dafny/R/R11_Theory/std/R11_Theory.dfy" = "std", "dafny/R/R11_Theory/exit/R11_Checkpoint.dfy" = "std", "dafny/R/R11_Theory/agent/R11_AgentMetatheory.dfy" = "std", "dafny/checks/R11_checks.dfy" = "std", "verus/r/r11_theory/src/lib.rs" = "all", "verus/r/r11_theory/src/exit.rs" = "all", "verus/r/r11_theory/src/agent.rs" = "all" }
 concept_items = {}
 

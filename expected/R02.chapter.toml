@@ -77,9 +77,9 @@ cmd = ["scripts/vcheck", "dafny/R/R02_Datatypes/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "7b266aae5ecd2a1246a1f1f9cf2f48a31692273e967efaeb15c2779a086909f2"
+body = "d410800253a27340cb3d59fae173ee9804633d7d12864ab6c1791180da3c6c7f"
 [entry.pinned.inputs]
-"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "66de859ccc5d5285eabb229612aadd549f9f6bd030f96f35d0ca6d98f740f201"
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "676a106ecdec2b3b5a26ac3a61a56ef6765ddecb5b2b956f563afc4074f3773d"
 "dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
 
 [[entry]]
@@ -88,11 +88,11 @@ cmd = ["scripts/vcheck", "verus/r/r02_datatypes"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "3dced22d3c5eaf22e168188a4abe8fc66a799facabe134488b81550d83a848ca"
+body = "1e2605cd9199f44c35c820eed689a53006364b01415eb5d2c75f6ef570b39561"
 [entry.pinned.inputs]
 "verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
-"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
-"verus/r/r02_datatypes/src/lib.rs" = "49f5d383e3723678523c96ffddd2743e81d09f0e4a3144b805f54cb15b4c3aac"
+"verus/r/r02_datatypes/src/agent.rs" = "782905e0fb1c7482100af31ee6eaa2216b224891badc9988b08c45031ed68d53"
+"verus/r/r02_datatypes/src/lib.rs" = "7ebc2db1568b9c7cf113bc041c4b648c1f591c2026c340be47367b9e544dd4ef"
 
 [[entry]]
 id = "gate-d"
@@ -100,9 +100,9 @@ cmd = ["scripts/vcheck", "--gate", "dafny/R/R02_Datatypes/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "e27a186b31a28ce7fac0db8b445786e3beca18205cce016766d5324f7a5052ad"
+body = "243e32e47dc16dec19925b47de9bdbac13dea917f8082faac7da403ab280476b"
 [entry.pinned.inputs]
-"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "66de859ccc5d5285eabb229612aadd549f9f6bd030f96f35d0ca6d98f740f201"
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "676a106ecdec2b3b5a26ac3a61a56ef6765ddecb5b2b956f563afc4074f3773d"
 "dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
 
 [[entry]]
@@ -111,11 +111,11 @@ cmd = ["scripts/vcheck", "--gate", "verus/r/r02_datatypes"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "84547a2ba55b7c857a65d1faf775edf001eb78cc34982ec7b5a9067116a879d1"
+body = "590b64232343f0f91a88e836b0ac582039b9f7ed5e2e5c622e410a3491c522ce"
 [entry.pinned.inputs]
 "verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
-"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
-"verus/r/r02_datatypes/src/lib.rs" = "49f5d383e3723678523c96ffddd2743e81d09f0e4a3144b805f54cb15b4c3aac"
+"verus/r/r02_datatypes/src/agent.rs" = "782905e0fb1c7482100af31ee6eaa2216b224891badc9988b08c45031ed68d53"
+"verus/r/r02_datatypes/src/lib.rs" = "7ebc2db1568b9c7cf113bc041c4b648c1f591c2026c340be47367b9e544dd4ef"
 
 [[entry]]
 id = "audit-d"
@@ -123,9 +123,9 @@ cmd = ["scripts/vaudit", "dafny/R/R02_Datatypes/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "f1bd9f300cdd58a619f4eca11bab0c964160f427acaceb8ccf501db6879c16dc"
+body = "ae3bd5b0b79dde0e8f81b25b3eac9ed3beed7606c98612c26d8c2bbd89b86f4e"
 [entry.pinned.inputs]
-"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "66de859ccc5d5285eabb229612aadd549f9f6bd030f96f35d0ca6d98f740f201"
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "676a106ecdec2b3b5a26ac3a61a56ef6765ddecb5b2b956f563afc4074f3773d"
 "dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
 
 [[entry]]
@@ -134,11 +134,11 @@ cmd = ["scripts/vaudit", "verus/r/r02_datatypes"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "71048a5fdd6b1e8a6e3caf0a7619ee0dfe74cf4d50c647a9c2e13e0e4594ce90"
+body = "95859598c6484b7bc28586aaaaca5379a5be4fd66a3f84161ef21f6e5e6536d3"
 [entry.pinned.inputs]
 "verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
-"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
-"verus/r/r02_datatypes/src/lib.rs" = "49f5d383e3723678523c96ffddd2743e81d09f0e4a3144b805f54cb15b4c3aac"
+"verus/r/r02_datatypes/src/agent.rs" = "782905e0fb1c7482100af31ee6eaa2216b224891badc9988b08c45031ed68d53"
+"verus/r/r02_datatypes/src/lib.rs" = "7ebc2db1568b9c7cf113bc041c4b648c1f591c2026c340be47367b9e544dd4ef"
 
 [[entry]]
 id = "agent-d"
@@ -146,9 +146,9 @@ cmd = ["scripts/vcheck", "dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "6719ba07bec1561f501714068387f937faeb29fe71e80a1f22f89cd98cbc9f6c"
+body = "d296fdf4129ee09e986656893dec96683b9685df245ee2ffcaaf5701a64f9f0e"
 [entry.pinned.inputs]
-"dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy" = "5d2a378e05c080cb738d395d0bd9d00e23b2d8350fc3db1fcdecd6b6e05fda59"
+"dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy" = "7d89ba00d7501301781956ef1e59a34e6db9aa4393a7fe971c68511c75cfa536"
 
 [[entry]]
 id = "agent-v"
@@ -156,6 +156,421 @@ cmd = ["scripts/vcheck", "verus/r/r02_datatypes/src/agent.rs"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "f636078171813cacee1de96eeb6ac133bdeb0dd9d1c6de1d7ba89a4641909a8f"
+body = "d08d26b363a65f15285abc36e7ef51d17cfa2b9c0eed4722e5ec1cf95f15dd40"
 [entry.pinned.inputs]
-"verus/r/r02_datatypes/src/agent.rs" = "806894ed2f311f1546a99a9cf4b0a2f17109c6768d45432b8cef492cdcf8015a"
+"verus/r/r02_datatypes/src/agent.rs" = "782905e0fb1c7482100af31ee6eaa2216b224891badc9988b08c45031ed68d53"
+
+[[entry]]
+id = "c1d"
+cmd = ["scripts/vcheck", "specimens/R02/card-c1d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "e7bbf0716f21cfb4ea6c287f897012d52d924a13f0dbb887aa55514b8674b26d"
+[entry.pinned.inputs]
+"specimens/R02/card-c1d.dfy.specimen" = "0c1b1e8797cb373b351e9d5487396c20da4580da8379db208b2556590cc5390e"
+
+[[entry]]
+id = "c1v"
+cmd = ["scripts/vcheck", "specimens/R02/card-c1v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "946dd819aeeb639b7abffb4ae8fbf7be74fef3785f1fd84221c5df017d47fcc7"
+[entry.pinned.inputs]
+"specimens/R02/card-c1v.rs.specimen" = "db16b60c63290f1f9842bb9ea6175c7a7c9faf4c87a98ecdb162dccc4d048245"
+
+[[entry]]
+id = "nobound-v"
+cmd = ["scripts/vcheck", "--module", "R02", "star-count-unbounded.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."star-count-unbounded.rs"]
+fence = "above"
+[entry.pinned]
+body = "c36485a40baf07f3db26557f2f7cde352ee3a66da8db399487bdd46efbd252fb"
+[entry.pinned.inputs]
+"scratch:star-count-unbounded.rs" = "577075bd63fac7eda8e40112bf118513b14a2a8ede34f70d52d9740d0a814182"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "c7dv-d"
+cmd = ["scripts/vcheck", "specimens/R02/card-c7dv-d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9f3e5f711ce3e4f3f6d9285d4ce706ddb58fa53276bdb14a59631fd578906140"
+[entry.pinned.inputs]
+"specimens/R02/card-c7dv-d.dfy.specimen" = "36de02b13c1a688f5e3378b9e37f8d1f2a6b0892f9fb59578b12e36f464b2204"
+
+[[entry]]
+id = "c7dv-v"
+cmd = ["scripts/vcheck", "specimens/R02/card-c7dv-v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "a852dc6c4a91b8a1ac5b6077c00a33be6eccbf1ccf85bfb1f0794cb5d4366036"
+[entry.pinned.inputs]
+"specimens/R02/card-c7dv-v.rs.specimen" = "20476397271ee4e540cb09e4b74a4a7c9e671ae7a4749b6500be77d2584512a4"
+
+[[entry]]
+id = "w1bare-d"
+cmd = ["scripts/vcheck", "--module", "R02", "split-bare.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."split-bare.dfy"]
+fence = "above"
+[entry.pinned]
+body = "f3e0e62ccc2c7e090b4f69b40b3d35f6f1074d3d98dfe55c00afadd36d6ca1cf"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:split-bare.dfy" = "48834386e1c7d9e9f538b5b93d06433930f91f3869c0cabb3f09b2add33df2eb"
+
+[[entry]]
+id = "w1bare-v"
+cmd = ["scripts/vcheck", "--module", "R02", "split-bare.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."split-bare.rs"]
+fence = "above"
+[entry.pinned]
+body = "4b543ebb5a9cb4fa7f3dda0c0b55331a27e9dcb09ca290f85a2203f47373494c"
+[entry.pinned.inputs]
+"scratch:split-bare.rs" = "6f0c300fa2c5cbb5f09ef98444b0947058c57f863c3d44653ad3524ba1ad13d3"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "c3d"
+cmd = ["scripts/vcheck", "specimens/R02/card-c3d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "f4a1e7b90765c03be30aec24aa367f671ff2d7147fc984fa9243130fbca4c33b"
+[entry.pinned.inputs]
+"specimens/R02/card-c3d.dfy.specimen" = "c7d540f08396134f5fb08d84465560faa072414bd64536ab86d9402a1cb59a01"
+
+[[entry]]
+id = "c3v"
+cmd = ["scripts/vcheck", "specimens/R02/card-c3v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "84c9d0677afeea72e98cee59f4b8581002c1e4ad98edc86eb81cf982aeba5858"
+[entry.pinned.inputs]
+"specimens/R02/card-c3v.rs.specimen" = "3ff8ff3ec35ffe58d41365221cc58c70ac689163a8af90e801eff3f4a666cccc"
+
+[[entry]]
+id = "take-bare-v"
+cmd = ["scripts/vcheck", "--module", "R02", "take-bare.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."take-bare.rs"]
+fence = "above"
+[entry.pinned]
+body = "b78c58d8f586237858e850b8abb6d0ff6cdf772c3b688f6229744b30bfccfcb9"
+[entry.pinned.inputs]
+"scratch:take-bare.rs" = "346fbde6ead7d0eac011b76daa557f232f03df78fc6b4b3dd23a060dc3cf115e"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "take-v"
+cmd = ["scripts/vcheck", "--module", "R02", "take.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."take.rs"]
+fence = "above"
+[entry.pinned]
+body = "b883f67fb8cd3957ec2472f8789192351274fdda7c54665c3afe24e054cd6812"
+[entry.pinned.inputs]
+"scratch:take.rs" = "f3242182633514d196fdec0b56d8dea0a950f7f76fa70a34d2125f25211d9741"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "take-bare-d"
+cmd = ["scripts/vcheck", "--module", "R02", "take-bare.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."take-bare.dfy"]
+fence = "above"
+[entry.pinned]
+body = "1ca47d6c1b1c7bfc63de27ab84c1df86c07ef273c4d7c0982e52350e62205e68"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:take-bare.dfy" = "d358526aee34fd22bd4526094bd6f006ee67adb8a8ee693acd31cdd9f2f4a2ab"
+
+[[entry]]
+id = "take-d"
+cmd = ["scripts/vcheck", "--module", "R02", "take.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."take.dfy"]
+fence = "above"
+[entry.pinned]
+body = "cb370bc8109ab046b38404b865095d722b8215a16c57d2efd79dfb070679194a"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:take.dfy" = "dcdc11a75ddb0b088417866167dc6f32a023a6255d1b52137d4b85fe559d3f17"
+
+[[entry]]
+id = "nullvoid-d"
+cmd = ["scripts/vcheck", "--module", "R02", "star-empty.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+answers = ["R02.P1d"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."star-empty.dfy"]
+fence = "above"
+[entry.pinned]
+body = "9d2de551c174bdfb3ba6053288ad302f0d35130a9bf8769c5fe733624cfa48f8"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:star-empty.dfy" = "dc11f348076aebafdfdb2ac15e4a508f0eac5e8c2079051b9d7e7b46d20b7bc1"
+
+[[entry]]
+id = "p5-d"
+cmd = ["scripts/vcheck", "--test", "specimens/R02/chapter-p5-d.dfy.specimen"]
+answers = ["R02.P5d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "842e3ec98072dcd8329d6a94cf20431957a3519bc48457522160afd639e76d3a"
+[entry.pinned.inputs]
+"specimens/R02/chapter-p5-d.dfy.specimen" = "8dcb2f1c20270e167f0757fc440ed90d4e6cdcd6716ba3c02bc0a94244fbceeb"
+
+[[entry]]
+id = "ghost-d"
+cmd = ["scripts/vcheck", "--module", "R02", "ghost-call.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."ghost-call.dfy"]
+fence = "above"
+[entry.pinned]
+body = "1475a98b4d5b4c176b7a0066c149b69392ddc8334a442a26eb9c9470c5602e4e"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:ghost-call.dfy" = "156c50446d44344a3dc9dde9ad86521528159c5beddd8b0803f16fd343c27f7b"
+
+[[entry]]
+id = "ghost-v"
+cmd = ["scripts/vcheck", "--module", "R02", "ghost-call.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."ghost-call.rs"]
+fence = "above"
+[entry.pinned]
+body = "8bf9a7c13f385b42da66566281e8b1111995b3f367bc1bf118e1a81c10a95088"
+[entry.pinned.inputs]
+"scratch:ghost-call.rs" = "b8591487deaef49ff6d987926405833a35188d5f8480ba770b5c9089296746fc"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "ih-none-d"
+cmd = ["scripts/vcheck", "--module", "R02", "stars-bare.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."stars-bare.dfy"]
+fence = "above"
+[entry.pinned]
+body = "912342273f6117596fc263bff65f003bfec4beacd22d09b4b8032e94a1e19c79"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:stars-bare.dfy" = "d257494f080e7c3fc6cd8c1b8a21a5dee2649b46a3fc54a4414302a49c1b3132"
+
+[[entry]]
+id = "ih-calls-d"
+cmd = ["scripts/vcheck", "--module", "R02", "stars.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."stars.dfy"]
+fence = "above"
+[entry.pinned]
+body = "b1a8c839ad3b3398fff04db8d47c2200fb060908310b899575f77c3e3319b714"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:stars.dfy" = "f49843d74af585c0aa680622c75768c56c25d675b8d0070b6bd9502fc88718bf"
+
+[[entry]]
+id = "ih-auto-d"
+cmd = ["scripts/vcheck", "--module", "R02", "stars-auto.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/given/R/RG_A1_Re.dfy"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."stars-auto.dfy"]
+fence = "above"
+[entry.pinned]
+body = "0707138d785ba539cf145e7a078850b6b0d23398b18840efceaea47c2235947b"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:stars-auto.dfy" = "390b168737d0863b54f16069e3f0810d9ed015cdc1b0ee93924cbca0e2f988ef"
+
+[[entry]]
+id = "ih-none-v"
+cmd = ["scripts/vcheck", "--module", "R02", "stars-bare.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."stars-bare.rs"]
+fence = "above"
+[entry.pinned]
+body = "6907cb36c70108bb834986ca06fe18de68c31a44b2d8090fde8bd18d736c1c5c"
+[entry.pinned.inputs]
+"scratch:stars-bare.rs" = "298cf24cdc3ecc2b39cb1c70d56dbd74f6153663dc471201abf33fad8265ce90"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "ih-calls-v"
+cmd = ["scripts/vcheck", "--module", "R02", "stars.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."stars.rs"]
+fence = "above"
+[entry.pinned]
+body = "6767644b78d87a7c035b1cfb1c0a2c97ac335efcacfd0be772b0aa429333cc9f"
+[entry.pinned.inputs]
+"scratch:stars.rs" = "68cb4e47eb4e02088b727e7d496dfdd858dcb2e908ab84f52fae90e1b732f649"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "ih-self-v"
+cmd = ["scripts/vcheck", "--module", "R02", "stars-self.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."stars-self.rs"]
+fence = "above"
+[entry.pinned]
+body = "02b47f1e703687cb4d6a03f2c150d5087808e751a25ee47af9e3ee47599ba561"
+[entry.pinned.inputs]
+"scratch:stars-self.rs" = "d9f5e2b98bffce3059f28cbc79ed5f96a70871d476fc5401708706ee3b3a1210"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "c2d"
+cmd = ["scripts/vcheck", "specimens/R02/card-c2d.dfy.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4623a74344b748d785e923bb101405f6cb6d97e8efa1c20444763fa061d593bf"
+[entry.pinned.inputs]
+"specimens/R02/card-c2d.dfy.specimen" = "e0f2ecec70e842d0424df23878b67755cbfca816572ef8883ff2ec742a3c4c3a"
+
+[[entry]]
+id = "c2v"
+cmd = ["scripts/vcheck", "specimens/R02/card-c2v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "573a59d83863433f136affbe4c00bdcd8156887ae49a618df5e6a18ba6e326ca"
+[entry.pinned.inputs]
+"specimens/R02/card-c2v.rs.specimen" = "680bee07ed88e1b7be03a6d881536da59e78d4f6e6f2e85e18828c7a04efb179"
+
+[[entry]]
+id = "nomeasure-v"
+cmd = ["scripts/vcheck", "--module", "R02", "star-count-unmeasured.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+note = "The source shown above the pin, run in R02's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."star-count-unmeasured.rs"]
+fence = "above"
+[entry.pinned]
+body = "c4a76c8b29e14a4fb4b52edd94b23241a94857d5f4b3ce40028df0d20683f22a"
+[entry.pinned.inputs]
+"scratch:star-count-unmeasured.rs" = "6a9d5e4b293aee8ef252a349aa0ad49f1527fbf159e214a2567d1daf680e9a1a"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "test-d"
+cmd = ["scripts/vcheck", "--test", "dafny/R/R02_Datatypes/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "8876e2f22f5476c72ef2e972af249cb85a4af2f4e22589859b50f3fcff9095c1"
+[entry.pinned.inputs]
+"dafny/R/R02_Datatypes/core/R02_Datatypes.dfy" = "676a106ecdec2b3b5a26ac3a61a56ef6765ddecb5b2b956f563afc4074f3773d"
+"dafny/R/R02_Datatypes/core/dfyconfig.toml" = "4d0bd26b84a40cebc3a018cca31500f0a14a5c9e2568e182bf438a9077fc2828"
+
+[[entry]]
+id = "test-v"
+cmd = ["scripts/vcheck", "--test", "verus/r/r02_datatypes"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "74eac2d06100a95fcfcafcab791eb197c1d39c5fbd0ddad65f45d1462af3f3dc"
+[entry.pinned.inputs]
+"verus/r/r02_datatypes/Cargo.toml" = "6009811d56f68d270e3e61fb7ab57ee4cc5dea01a48edf616aa0b82e0d580b34"
+"verus/r/r02_datatypes/src/agent.rs" = "782905e0fb1c7482100af31ee6eaa2216b224891badc9988b08c45031ed68d53"
+"verus/r/r02_datatypes/src/lib.rs" = "7ebc2db1568b9c7cf113bc041c4b648c1f591c2026c340be47367b9e544dd4ef"
+
+[[entry]]
+id = "agent-fast-d"
+cmd = ["scripts/vcheck", "--symbol", "R02_AgentImplement.AlphabetLeafCheck", "dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "db2a1a06840b3363dfbf5423cf09a74d2fa3aea6cff3426bf71b3810ef3b0e98"
+[entry.pinned.inputs]
+"dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy" = "7d89ba00d7501301781956ef1e59a34e6db9aa4393a7fe971c68511c75cfa536"
+
+[[entry]]
+id = "agent-fast-v"
+cmd = ["scripts/vcheck", "--symbol", "alphabet_leaf_check", "verus/r/r02_datatypes/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b7b2c25b6b73e19f4fdef7573763bc994afc68de2d3ed0e562ed396f963c28eb"
+[entry.pinned.inputs]
+"verus/r/r02_datatypes/src/agent.rs" = "782905e0fb1c7482100af31ee6eaa2216b224891badc9988b08c45031ed68d53"

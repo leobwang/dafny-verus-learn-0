@@ -126,4 +126,12 @@ pub fn copy_re(r: &Re) -> (out: Re)
 
 } // verus!
 
-verus! { spec fn visit_regex(r: Re) -> nat decreases r, { visit_regex(r) } }
+verus! {
+
+spec fn visit_regex(r: Re) -> nat
+    decreases r,
+{
+    visit_regex(r)
+}
+
+} // verus!

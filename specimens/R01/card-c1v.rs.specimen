@@ -1,2 +1,12 @@
 use vstd::prelude::*;
-verus! { fn keep(c: char) -> (r: char) ensures r == c, { '?' } }
+
+verus! {
+
+fn keep(c: char) -> (r: char)
+    ensures
+        r == c,
+{
+    '?'
+}
+
+} // verus!

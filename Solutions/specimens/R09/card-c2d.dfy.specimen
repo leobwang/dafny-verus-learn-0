@@ -1,11 +1,17 @@
 // Reference Solution.
 module R09_OldCard {
- class CardCursorR09 {var word:seq<char> var at:nat}
- // item: R09.C2d write:old
- // WRITE: preserve the mutable word and move the cursor once.
- method AdvanceCardR09(cur:CardCursorR09)
-  requires cur.at<|cur.word|
-  modifies cur
-  ensures cur.word==old(cur.word) && cur.at==old(cur.at)+1
- {cur.at:=cur.at+1;}
+  class CardCursorR09 {
+    var word: seq<char>
+    var at: nat
+  }
+
+  // item: R09.C2d write:old
+  // WRITE: preserve the mutable word and move the cursor once.
+  method AdvanceCardR09(cur: CardCursorR09)
+    requires cur.at < |cur.word|
+    modifies cur
+    ensures cur.word == old(cur.word) && cur.at == old(cur.at) + 1
+  {
+    cur.at := cur.at + 1;
+  }
 }

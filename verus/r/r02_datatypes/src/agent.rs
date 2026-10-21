@@ -58,24 +58,40 @@ pub proof fn lemma_min_len_bound(r: Re)
 proof fn alphabet_leaf_check() {
     assert(alphabet(Re::Chr('q')) == set!['q']);
 }
+
 proof fn alphabet_pair_check() {
-    let a = Re::Chr('q'); let b = Re::Chr('r');
-    assert(alphabet(a) == set!['q']); assert(alphabet(b) == set!['r']);
+    let a = Re::Chr('q');
+    let b = Re::Chr('r');
+    assert(alphabet(a) == set!['q']);
+    assert(alphabet(b) == set!['r']);
     assert(alphabet(Re::Cat(Box::new(a), Box::new(b))) == set!['q', 'r']);
 }
+
 proof fn star_height_leaf_check() {
-    let a = Re::Chr('q'); assert(star_height(a) == 0);
+    let a = Re::Chr('q');
+    assert(star_height(a) == 0);
     assert(star_height(Re::Star(Box::new(a))) == 1);
 }
+
 proof fn star_height_pair_check() {
-    let a = Re::Chr('q'); let b = Re::Chr('r'); let s = Re::Star(Box::new(a));
-    assert(star_height(a) == 0); assert(star_height(b) == 0); assert(star_height(s) == 1);
+    let a = Re::Chr('q');
+    let b = Re::Chr('r');
+    let s = Re::Star(Box::new(a));
+    assert(star_height(a) == 0);
+    assert(star_height(b) == 0);
+    assert(star_height(s) == 1);
     assert(star_height(Re::Cat(Box::new(s), Box::new(b))) == 1);
 }
-proof fn min_len_leaf_check() { assert(min_len(Re::Chr('q')) == 1); }
+
+proof fn min_len_leaf_check() {
+    assert(min_len(Re::Chr('q')) == 1);
+}
+
 proof fn min_len_pair_check() {
-    let a = Re::Chr('q'); let b = Re::Chr('r');
-    assert(min_len(a) == 1); assert(min_len(b) == 1);
+    let a = Re::Chr('q');
+    let b = Re::Chr('r');
+    assert(min_len(a) == 1);
+    assert(min_len(b) == 1);
     assert(min_len(Re::Cat(Box::new(a), Box::new(b))) == 2);
 }
 

@@ -1,10 +1,36 @@
+# R10 withheld answers: the hole implementations and proofs (H1d-H4d, H1v-H4v), re-cut from the
+# one-statement-per-line twins (DVR4 step 5, lane P2); no prediction answer.
+
 # from Solutions/dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy
-ghost\s+var\s+measured\s*:=\s*NodeCount\(r\);
-ghost\s+var\s+cached\s*:=\s*if\s+a\.expr==Empty\s*\|\|\s*b\.expr==Empty\s+then\s+1
-case\s+Alt\(a,b\)\s*=>\s*NormalFixedR10\(a\);\s*NormalFixedR10\(b\);
-case\s+Cat\(a,b\)\s*=>\s*var\s+left:=NormalizePacketR10\(a\);
+# source: ghost var measured := NodeCount(r); return HasPacketR10(CountPacketR10(r, measured)); (R10.H1d)
+# verified: solutions=1 public=0
+ghost\s+var\s+measured\s*:=\s*NodeCount\(r\);\s*return\s+HasPacketR10\(CountPacketR10\(r,\s*measured\)\);
+
+# source: else if a.expr == Eps then b.count else if b.expr == Eps then a.count (R10.H2d)
+# verified: solutions=1 public=0
+else\s+if\s+a\.expr\s*==\s*Eps\s+then\s+b\.count\s*else\s+if\s+b\.expr\s*==\s*Eps\s+then\s+a\.count
+
+# source: case Alt(a, b) => NormalFixedR10(a); NormalFixedR10(b); (R10.H3d)
+# verified: solutions=1 public=0
+case\s+Alt\(a,\s*b\)\s*=>\s*NormalFixedR10\(a\);\s*NormalFixedR10\(b\);
+
+# source: var left := NormalizePacketR10(a); var right := NormalizePacketR10(b); return CatPacketR10(left, right); (R10.H4d)
+# verified: solutions=1 public=0
+var\s+left\s*:=\s*NormalizePacketR10\(a\);\s*var\s+right\s*:=\s*NormalizePacketR10\(b\);\s*return\s+CatPacketR10\(left,\s*right\);
+
 # from Solutions/verus/r/r10_type_invariants/src/lib.rs
-let\s+tracked\s+evidence=NormalEvidenceR10\s*\{pattern:r\};
-assert\(cached==node_count\(mk_cat\(left,right\)\)\);
-Re::Star\(a\)=>\{normal_fixed_r10\(\*a\);\},
-let\s+child=normalize_packet_r10\(a\);let\s+child_raw=child\.into_pattern_r10\(\);
+# source: let tracked evidence = NormalEvidenceR10 { pattern: r }; (R10.H1v)
+# verified: solutions=1 public=0
+let\s+tracked\s+evidence\s*=\s*NormalEvidenceR10\s*\{\s*pattern:\s*r\s*\};
+
+# source: assert(cached == node_count(mk_cat(left, right))); (R10.H2v)
+# verified: solutions=1 public=0
+assert\(cached\s*==\s*node_count\(mk_cat\(left,\s*right\)\)\);
+
+# source: Re::Star(a) => { normal_fixed_r10(*a); (R10.H3v)
+# verified: solutions=1 public=0
+Re::Star\(a\)\s*=>\s*\{\s*normal_fixed_r10\(\*a\);
+
+# source: let child = normalize_packet_r10(a); let child_raw = child.into_pattern_r10(); (R10.H4v)
+# verified: solutions=1 public=0
+let\s+child\s*=\s*normalize_packet_r10\(a\);\s*let\s+child_raw\s*=\s*child\.into_pattern_r10\(\);

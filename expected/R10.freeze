@@ -28,6 +28,7 @@ frozen_levers = ["R10_TypeInvariants.NormIdempotentR10 {:induction false}", "R10
 "R10_TypeInvariants.NormalFixedR10" = "1aa8d96ee359ec9501f6c019ec97ccc552cdd0f0deaeeef4d4b671af904aa1ab"
 "R10_TypeInvariants.NormalizePacketR10" = "d0400f0a2367f3b870d3ac193c4bb8e5de80caedc4b954a018980987cd1e4825"
 "R10_TypeInvariants.PacketChoiceR10" = "1cf921678292d7fa2455323baa41e1beee7855c447935d4af4290386b5d7bc41"
+"R10_TypeInvariants.PacketSampleTest" = "6c3aff67de018a246d7738de48e379ee8fab53a015c5a423a847890cf1c6d127"
 "R10_TypeInvariants.ReplaceRightR10" = "e4809f69943c3a170fc4b12a56e05bfb4afe70964aacb6630dc6f58079e547c5"
 "R10_TypeInvariants.RuntimeShapeR10" = "c3cd7dc46ff2f294aa83b8bf5fc07ba8c64eabae921ab2794894067901e95e85"
 "R10_TypeInvariants.TryPacketR10" = "4c3f9357fb02591abc930b8ea09044d7dd38933ba673eb16d38202a54953721f"
@@ -66,8 +67,6 @@ open_bodies = []
 [file.statements]
 "NormPacketR10" = "3194cd266e27806005106bb0df6e64236cd819c3b987b6f5b1146925c4be0780"
 "NormPacketR10::coherent" = "cdcec66218586228ebddec0cff0dad4cc122198e8d93d37a99b9a6177242a647"
-"NormPacketR10::into_pattern_r10" = "7ba0edf284f84dbefa1460a57e78f55db342ae7e97ffec94ebc02139a7332bc4"
-"NormPacketR10::pattern_ref_r10" = "090f68ec1ba095f6ea743b9a685cb9c2aec2f9673d4e7e0b969c16809a98dd78"
 "NormPacketR10::re" = "db18341c9e47d7bdc128037e36954cf49b581b506285a2dd3eea349d725e34fe"
 "NormalEvidenceR10" = "ab6c4d6c319040ece6ddcae7c853cca72670efbe68504a8584ab4a898ccef02b"
 "packet_claims_r10" = "e62a126fff44070e62899a4b04163ee5ba0317cf87c8764545bd54a4c167e1fd"
@@ -120,6 +119,18 @@ open_bodies = []
 "LeafPermitR10" = "dd8007411aaedd35fd0a3409933642c3facb916d3c9aab148f54a5f6c8cbbd28"
 "consume_leaf_r10" = "db63031ba94f788352890e5fb2e65a9eb2ad4d92cdcfeb8c91458e7a4c401a00"
 "leaf_permit_r10" = "3219da1fcc28f92d685d83c93b2dee1264d9ae97b6291e6b61e642b56b947e4c"
+
+[[file]]
+path = "specimens/R10/chapter-p1-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R10_P1Observed.MkCat" = "dd74bcfbf951a366a315c09b78a1c6fa5fb3c600d237776156ee0791fe3fb96e"
+"R10_P1Observed.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"R10_P1Observed.NormRe" = "253cab91dded103301fe8bec99cb82ecdf0934b30f9804fb747df1e7df9dab05"
+"R10_P1Observed.Normal" = "35be2b416b0b5adcc19375d8fc9ec4a76edff55865115a5039b9bd5110ec718f"
+"R10_P1Observed.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
+"R10_P1Observed.SmartCountObserved" = "8007719c1ea0cdd54b6ca4ede65f3e6eb387545971c0cd66d9ee47740675e0ba"
 
 [[file]]
 path = "specimens/R10/language-d.dfy.specimen"

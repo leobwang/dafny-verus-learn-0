@@ -126,4 +126,12 @@ pub fn copy_re(r: &Re) -> (out: Re)
 
 } // verus!
 
-verus! { fn regex_tag(r: &Re) -> u8 { match r { Re::Empty => 0 } } }
+verus! {
+
+fn regex_tag(r: &Re) -> u8 {
+    match r {
+        Re::Empty => 0,
+    }
+}
+
+} // verus!

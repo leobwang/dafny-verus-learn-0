@@ -17,7 +17,7 @@ holes: 0
    "message": "For more information about this error, try `rustc --explain E0382`."
   },
   {
-   "col": 21,
+   "col": 26,
    "file": "card-c1v.rs",
    "labels": [
     "move occurs because `input` has type `TicketR11`, which does not implement the `Copy` trait",
@@ -25,7 +25,7 @@ holes: 0
     "value used here after move"
    ],
    "level": "error",
-   "line": 10,
+   "line": 16,
    "message": "use of moved value: `input`"
   }
  ],

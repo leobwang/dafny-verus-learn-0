@@ -3,8 +3,8 @@
 Run from the repository root after committing the five predictions. Defaults
 read only the learner's actual files. An explicit `--dafny-file PATH` or
 `--verus-file PATH` selects another source; no tool locates reference answers.
-Use a native lane capped at16GiB, no swap, with GATE_WORKERS=1 and at most
-three Verus jobs. Keep all concurrent solver lanes within48GiB.
+Use a native lane capped at 16 GiB, no swap, with GATE_WORKERS=1 and at most
+three Verus jobs. Keep all concurrent solver lanes within 48 GiB.
 
 ```sh
 python3 tools/R10/check_normalizer.py
@@ -13,8 +13,8 @@ python3 tools/R10/check_constructors.py
 ```
 
 The normalizer checker first runs complete zero-hole native gates, then
-compiles120fixed cases in each language and checks exact trees, normality,
-node counts and11matching words per case. It also checks the concrete Rust
+compiles 120 fixed cases in each language and checks exact trees, normality,
+node counts and 11 matching words per case. It also checks the concrete Rust
 packet layout. Generated Dafny Python is copied before normal wrapper cleanup
 so you can inspect the packet fields and actual builder bodies. The observer
 itself computes node counts; distinguish that traversal from erased evidence
@@ -30,8 +30,8 @@ This is a guided specification-strength exercise: the desired consumer relation
 is visible. A native failure says the consumer was not proved. A contradictory
 postcondition can imply anything, so sufficiency is only one requirement.
 
-The constructor checker runs complete zero-hole gates and compiles27fixed
-normal-input cases per language, each checked on11words. It observes actual
+The constructor checker runs complete zero-hole gates and compiles 27 fixed
+normal-input cases per language, each checked on 11 words. It observes actual
 constructor results. Combine it with your own positive and negative witnesses,
 original human statement snapshots, audit and native gates. Finite agreement
 does not establish universal strength or prove that a contractor participated.

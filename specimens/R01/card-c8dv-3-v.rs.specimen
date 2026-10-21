@@ -1,2 +1,10 @@
 use vstd::prelude::*;
-verus! { proof fn all_chars() { assert forall|c: char| c == 'x' by { } } }
+
+verus! {
+
+proof fn all_x(s: Seq<char>) {
+    assert forall|i: int| 0 <= i < s.len() implies s[i] == 'x' by {
+    }
+}
+
+} // verus!

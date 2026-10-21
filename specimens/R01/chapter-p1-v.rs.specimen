@@ -1,8 +1,15 @@
 // after: R01.P1dv
 use vstd::prelude::*;
+
 verus! {
+
 fn middle(lo: u32, hi: u32) -> (m: u32)
-    requires lo <= hi,
-    ensures lo <= m <= hi,
-{ (lo + hi) / 2 }
+    requires
+        lo <= hi,
+    ensures
+        lo <= m <= hi,
+{
+    (lo + hi) / 2
 }
+
+} // verus!

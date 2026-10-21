@@ -1,2 +1,15 @@
 use vstd::prelude::*;
-verus! { spec fn count_down(n: nat) -> nat decreases n, { if n == 0 { 0 } else { 1 + count_down(n) } } }
+
+verus! {
+
+spec fn count_down(n: nat) -> nat
+    decreases n,
+{
+    if n == 0 {
+        0
+    } else {
+        1 + count_down(n)
+    }
+}
+
+} // verus!

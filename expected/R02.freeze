@@ -13,10 +13,11 @@ unfrozen = []
 path = "dafny/R/R02_Datatypes/core/R02_Datatypes.dfy"
 lang = "d"
 open_bodies = []
-frozen_levers = ["R02_Datatypes.NodeCountBackwards {:induction false}", "R02_Datatypes.NullableBackwards {:induction false}"]
+frozen_levers = ["R02_Datatypes.NodeCountBackwards {:induction false}", "R02_Datatypes.NullableBackwards {:induction false}", "R02_Datatypes.NullableCorrect {:induction false}"]
 [file.statements]
-"R02_Datatypes.CatEpsLeft" = "80f6a70e0660fd8cc65432bb489c227505f6421438e2974cf030e80ce8ac52f1"
+"R02_Datatypes.CatTwoChrs" = "630ec7f55a52345d5d30c013b78399b967d560ce545be1090030d5558fa8d7ca"
 "R02_Datatypes.IsVoid" = "b1914cdf3ddc9c05208d9d9f5d56b48770e15fe9e6f77d803a54eb796a03eed8"
+"R02_Datatypes.IsVoidClient" = "5315a0f3eee971676e0a12e633fabee11f7a0c3cea4f21a10b109d45bbbdfc39"
 "R02_Datatypes.MarkedPosition" = "6d065ea946d83f621ddba98f5dc13899b5759294962b2b0f91cf02eecdfeac26"
 "R02_Datatypes.MatchesAB" = "435ea1b65ea96f10f19e35c94af191370ed793d774b38e40071bb5ab0657f76e"
 "R02_Datatypes.NodeCountBackwards" = "0a6c04deb11b21d7385734531d77b5d64aada86faa62e4ef50f7ce2e799efc88"
@@ -43,6 +44,7 @@ open_bodies = []
 [file.statements]
 "boxed_regex" = "ca37f8826483f44dea49c88f748f8387240e9394b3a24c628a2e7fc6d3ce76b4"
 "is_void" = "0c3937c66299797b0cf16f07e96f31c4263e8ab2c3d6092249fe7f8d1388aa05"
+"is_void_client" = "8ae7a5050474f94b45de6f264a0ad966d585443a2ccafa0b91adfb2d82adca95"
 "lemma_cat_eps_left" = "035d87e9bf8f3d18e0b5976684f6ad90555a344a2529ff75637f71c807d9e63b"
 "lemma_marked_position" = "28174938b5ee7feb14bde9e7ef6872ec0d28cdfaa620bcf9fba676ae03cbc7b7"
 "lemma_matches_ab" = "bdc011fdfff8aec98eee7bc46cf86c755c7293d3c2194e4a9a4b12241e926727"
@@ -238,6 +240,19 @@ open_bodies = []
 "matches" = "41b8c092b289d3ec4cb11981f092a75ae29f81595557e7508f484db84549a169"
 "node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
 "nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
+
+[[file]]
+path = "specimens/R02/chapter-p5-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R02_P5Observed.NullableValueObserved" = "0c5350c2738e44585b4dd59fb0844bc07d41b80f9f7e5e7e84b7a415b29d970c"
+"RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
+"RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
+"RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
+"RG_A1_Re.NodeCount" = "60a76fee406c848fef2f6d548c2836e33ef9aa450495911d9735f60cf982d5d5"
+"RG_A1_Re.Nullable" = "1676f9b84c52b6da49204f936d6945ca4a757d87ed18f82074a233ab9f4dd2e4"
+"RG_A1_Re.Re" = "d97aa5f6987f8db5529009d132588dc9094924b9c2ca6cdd42a52c00deac6081"
 
 [[file]]
 path = "dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy"

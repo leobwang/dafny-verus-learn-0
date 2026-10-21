@@ -1,20 +1,36 @@
 // Reference Solution.
 use vstd::prelude::*;
+
 verus! {
-pub struct ToyCursorR09 {pub text:Vec<char>,pub at:usize}
-fn toy_step_r09(c:&mut ToyCursorR09)
- requires old(c).at<old(c).text.len(),
- ensures final(c).text@==old(c).text@,final(c).at==old(c).at+1,
- {c.at=c.at+1;}
+
+pub struct ToyCursorR09 {
+    pub text: Vec<char>,
+    pub at: usize,
+}
+
+fn toy_step_r09(c: &mut ToyCursorR09)
+    requires
+        old(c).at < old(c).text.len(),
+    ensures
+        final(c).text@ == old(c).text@,
+        final(c).at == old(c).at + 1,
+{
+    c.at = c.at + 1;
+}
+
 // item: R09.P4v obligation
 // Commit the failing labels under the printed old/final state; no error adapter.
 // FAILS b
-fn toy_twice_r09(c:&mut ToyCursorR09)
- requires old(c).text.len()==2,old(c).at==0,
+fn toy_twice_r09(c: &mut ToyCursorR09)
+    requires
+        old(c).text.len() == 2,
+        old(c).at == 0,
 {
- toy_step_r09(c);toy_step_r09(c);
- assert(c.at==2); // [a]
- assert(c.at==1); // [b]
- assert(c.at<=c.text.len()); // [c]
+    toy_step_r09(c);
+    toy_step_r09(c);
+    assert(c.at == 2); // [a]
+    assert(c.at == 1); // [b]
+    assert(c.at <= c.text.len()); // [c]
 }
-}
+
+} // verus!

@@ -40,12 +40,35 @@ module R02_AgentImplement {
     decreases r
 
   // Six shipped checks; two per definition. Preserve them all.
-  lemma AlphabetLeafCheck() { assert Alphabet(Chr('q')) == {'q'}; }
-  lemma AlphabetPairCheck() { assert Alphabet(Cat(Chr('q'), Chr('r'))) == {'q', 'r'}; }
-  lemma StarHeightLeafCheck() { assert StarHeight(Star(Chr('q'))) == 1; }
-  lemma StarHeightPairCheck() { assert StarHeight(Cat(Star(Chr('q')), Chr('r'))) == 1; }
-  lemma MinLenLeafCheck() { assert MinLen(Chr('q')) == 1; }
-  lemma MinLenPairCheck() { assert MinLen(Cat(Chr('q'), Chr('r'))) == 2; }
+  lemma AlphabetLeafCheck()
+  {
+    assert Alphabet(Chr('q')) == {'q'};
+  }
+
+  lemma AlphabetPairCheck()
+  {
+    assert Alphabet(Cat(Chr('q'), Chr('r'))) == {'q', 'r'};
+  }
+
+  lemma StarHeightLeafCheck()
+  {
+    assert StarHeight(Star(Chr('q'))) == 1;
+  }
+
+  lemma StarHeightPairCheck()
+  {
+    assert StarHeight(Cat(Star(Chr('q')), Chr('r'))) == 1;
+  }
+
+  lemma MinLenLeafCheck()
+  {
+    assert MinLen(Chr('q')) == 1;
+  }
+
+  lemma MinLenPairCheck()
+  {
+    assert MinLen(Cat(Chr('q'), Chr('r'))) == 2;
+  }
 
   /* LATENCY LOG — learner-owned, after /contract R02:
      symbol | wall time | fast or full | exit | transcript location

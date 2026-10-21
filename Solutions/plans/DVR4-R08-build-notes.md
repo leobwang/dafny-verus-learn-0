@@ -1,6 +1,6 @@
 # DVR4 step 3 — R08 rebuild build notes (author-only)
 
-Binding inputs: `Solutions/plans/DVR4-repair-plan.md` §2.1–§2.3 (the step-matcher interface, D-R08 (a)), §4.2 (the R module bar), §5 step 3; PLAN §3 R08 (Why, Core payload, Exercises) and PLAN §10's 354-minute record. Scratch: `/tmp/dvl0-dvr4-s3/r08/`; probes and run logs: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-s3/r08/`.
+Binding inputs: `Solutions/plans/DVR4-repair-plan.md` §2.1–§2.3 (the step-matcher interface, D-R08 (a)), §4.2 (the R module bar), §5 step 3; PLAN §3 R08 (Why, Core payload, Exercises) and PLAN §10's 354-minute record. Scratch: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step3/s3-scratch/r08/` (archived from `/tmp/dvl0-dvr4-s3`); probes and run logs: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-s3/r08/`.
 
 ## Objective-to-hole table (written before the code)
 

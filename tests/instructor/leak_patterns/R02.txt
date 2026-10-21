@@ -1,26 +1,29 @@
-# R02 withheld proof and implementation bodies.
-# Generated from verbatim verified reference spans; only whitespace is flexible.
-# from Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy R02.H1d
-# verbatim reference body; native reference and admission counterchecks captured
-match\s+r\s+case\s+Empty\s+=>\s+case\s+Eps\s+=>\s+case\s+Chr\(_\)\s+=>\s+case\s+Alt\(a,\s+b\)\s+=>\s+NullableCorrect\(a\);\s+NullableCorrect\(b\);\s+case\s+Cat\(a,\s+b\)\s+=>\s+NullableCorrect\(a\);\s+NullableCorrect\(b\);\s+var\s+e:\s+seq<char>\s+:=\s+\[\];\s+assert\s+e\[\.\.0\]\s+==\s+e\s+\&\&\s+e\[0\.\.\]\s+==\s+e;\s+case\s+Star\(_\)\s+=>
-# from Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy R02.H2d
-# verbatim reference body; native reference and admission counterchecks captured
-match\s+r\s+case\s+Empty\s+=>\s+case\s+Eps\s+=>\s+case\s+Chr\(_\)\s+=>\s+case\s+Alt\(a,\s+b\)\s+=>\s+NodeCountBackwards\(a\);\s+NodeCountBackwards\(b\);\s+case\s+Cat\(a,\s+b\)\s+=>\s+NodeCountBackwards\(a\);\s+NodeCountBackwards\(b\);\s+case\s+Star\(a\)\s+=>\s+NodeCountBackwards\(a\);
-# from Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy R02.H4d
-# verbatim reference body; native reference and admission counterchecks captured
-if\s+Matches\(r,\s+s\)\s+\{\s+assert\s+s\[\.\.0\]\s+==\s+\[\]\s+\&\&\s+s\[0\.\.\]\s+==\s+s;\s+\}
-# from Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy R02.H5d
-# verbatim reference body; native reference and admission counterchecks captured
-match\s+r\s+case\s+Empty\s+=>\s+b\s+:=\s+true;\s+case\s+Eps\s+=>\s+b\s+:=\s+false;\s+case\s+Chr\(_\)\s+=>\s+b\s+:=\s+false;\s+case\s+Alt\(a,\s+c\)\s+=>\s+var\s+x\s+:=\s+IsVoid\(a\);\s+var\s+y\s+:=\s+IsVoid\(c\);\s+b\s+:=\s+x\s+\&\&\s+y;\s+case\s+Cat\(a,\s+c\)\s+=>\s+var\s+x\s+:=\s+IsVoid\(a\);\s+var\s+y\s+:=\s+IsVoid\(c\);\s+b\s+:=\s+x\s+\|\|\s+y;\s+case\s+Star\(_\)\s+=>\s+b\s+:=\s+false;
-# from Solutions/verus/r/r02_datatypes/src/lib.rs R02.H1v
-# verbatim reference body; native reference and admission counterchecks captured
-let\s+e\s+=\s+Seq::<char>::empty\(\);\s+assert\(e\.subrange\(0,\s+0\)\s+=\~=\s+e\);\s+match\s+r\s+\{\s+Re::Alt\(a,\s+b\)\s+=>\s+\{\s+lemma_nullable_correct\(\*a\);\s+lemma_nullable_correct\(\*b\);\s+\},\s+Re::Cat\(a,\s+b\)\s+=>\s+\{\s+lemma_nullable_correct\(\*a\);\s+lemma_nullable_correct\(\*b\);\s+\},\s+_\s+=>\s+\{\},\s+\}
-# from Solutions/verus/r/r02_datatypes/src/lib.rs R02.H2v
-# verbatim reference body; native reference and admission counterchecks captured
-match\s+r\s+\{\s+Re::Alt\(a,\s+b\)\s+=>\s+\{\s+lemma_node_count_backwards\(\*a\);\s+lemma_node_count_backwards\(\*b\);\s+\},\s+Re::Cat\(a,\s+b\)\s+=>\s+\{\s+lemma_node_count_backwards\(\*a\);\s+lemma_node_count_backwards\(\*b\);\s+\},\s+Re::Star\(a\)\s+=>\s+\{\s+lemma_node_count_backwards\(\*a\);\s+\},\s+_\s+=>\s+\{\},\s+\}
-# from Solutions/verus/r/r02_datatypes/src/lib.rs R02.H4v
-# verbatim reference body; native reference and admission counterchecks captured
-let\s+e\s+=\s+Re::Cat\(Box::new\(Re::Eps\),\s+Box::new\(r\)\);\s+assert\(s\.subrange\(0,\s+s\.len\(\)\s+as\s+int\)\s+=\~=\s+s\);\s+if\s+matches\(r,\s+s\)\s+\{\s+assert\(s\.subrange\(0,\s+0\)\s+=\~=\s+Seq::<char>::empty\(\)\);\s+assert\(matches\(Re::Eps,\s+s\.subrange\(0,\s+0\)\)\);\s+\}\s+if\s+matches\(e,\s+s\)\s+\{\s+let\s+i\s+=\s+choose\|i:\s+int\|\s+0\s+<=\s+i\s+<=\s+s\.len\(\)\s+\&\&\s+matches\(Re::Eps,\s+\#\[trigger\]\s+s\.subrange\(0,\s+i\)\)\s+\&\&\s+matches\(\s+r,\s+s\.subrange\(i,\s+s\.len\(\)\s+as\s+int\),\s+\);\s+assert\(s\.subrange\(0,\s+i\)\.len\(\)\s+==\s+0\);\s+\}
-# from Solutions/verus/r/r02_datatypes/src/lib.rs R02.H5v
-# verbatim reference body; native reference and admission counterchecks captured
-match\s+r\s+\{\s+Re::Empty\s+=>\s+true,\s+Re::Eps\s+=>\s+false,\s+Re::Chr\(_\)\s+=>\s+false,\s+Re::Alt\(a,\s+b\)\s+=>\s+is_void\(a\)\s+\&\&\s+is_void\(b\),\s+Re::Cat\(a,\s+b\)\s+=>\s+is_void\(a\)\s+\|\|\s+is_void\(b\),\s+Re::Star\(_\)\s+=>\s+false,\s+\}
+# R02 withheld answers: hole proofs and implementations (H1d, H2d, H5d, H4v, H5v), the closed-book test-out (T1d) and the agent's definitions (A1d, A1v); no prediction answer.
+# from Solutions/dafny/R/R02_Datatypes/core/R02_Datatypes.dfy
+# source: NullableCorrect(b); var e: seq<char> := []; assert e[..0] == e; (R02.H1d)
+# verified: solutions=1 public=0
+NullableCorrect\(b\);\s*var\s+e:\s*seq<char>\s*:=\s*\[\];\s*assert\s+e\[\.\.0\]\s*==\s*e;
+# source: NodeCountBackwards(b); case Star(a) => NodeCountBackwards(a); (R02.H2d)
+# verified: solutions=1 public=0
+NodeCountBackwards\(b\);\s*case\s+Star\(a\)\s*=>\s*NodeCountBackwards\(a\);
+# source: var x := IsVoid(a); var y := IsVoid(c); b := x && y; (R02.H5d)
+# verified: solutions=1 public=0
+var\s+x\s*:=\s*IsVoid\(a\);\s*var\s+y\s*:=\s*IsVoid\(c\);\s*b\s*:=\s*x\s*&&\s*y;
+# source: case Chr(_) => 1 case Alt(a, b) => ChrCount(a) + ChrCount(b) (R02.T1d)
+# verified: solutions=1 public=0
+case\s+Chr\(_\)\s*=>\s*1\s*case\s+Alt\(a,\s*b\)\s*=>\s*ChrCount\(a\)\s*\+\s*ChrCount\(b\)
+# from Solutions/verus/r/r02_datatypes/src/lib.rs
+# source: && matches(r, s.subrange(i, s.len() as int)); assert(s.subrange(0, i).len() == 0); (R02.H4v)
+# verified: solutions=1 public=0
+&&\s*matches\(r,\s*s\.subrange\(i,\s*s\.len\(\)\s+as\s+int\)\);\s*assert\(s\.subrange\(0,\s*i\)\.len\(\)\s*==\s*0\);
+# source: Re::Alt(a, b) => is_void(a) && is_void(b), (R02.H5v)
+# verified: solutions=1 public=0
+Re::Alt\(a,\s*b\)\s*=>\s*is_void\(a\)\s*&&\s*is_void\(b\),
+# from Solutions/dafny/R/R02_Datatypes/agent/R02_AgentImplement.dfy
+# source: if (x == 0 && !Nullable(a)) || (y == 0 && !Nullable(b)) then 0 else x + y (R02.A1d)
+# verified: solutions=1 public=0
+if\s*\(x\s*==\s*0\s*&&\s*!Nullable\(a\)\)\s*\|\|\s*\(y\s*==\s*0\s*&&\s*!Nullable\(b\)\)\s*then\s+0\s+else\s+x\s*\+\s*y
+# from Solutions/verus/r/r02_datatypes/src/agent.rs
+# source: if (x == 0 && !nullable(*a)) || (y == 0 && !nullable(*b)) { 0 } else { x + y } (R02.A1v)
+# verified: solutions=1 public=0
+if\s*\(x\s*==\s*0\s*&&\s*!nullable\(\*a\)\)\s*\|\|\s*\(y\s*==\s*0\s*&&\s*!nullable\(\*b\)\)\s*\{\s*0\s*\}\s*else\s*\{\s*x\s*\+\s*y\s*\}

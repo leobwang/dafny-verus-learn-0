@@ -3,5 +3,7 @@ module R01_P1Int {
   method Middle(lo: int, hi: int) returns (m: int)
     requires lo <= hi
     ensures lo <= m <= hi
-  { m := (lo + hi) / 2; }
+  {
+    m := (lo + hi) / 2;
+  }
 }

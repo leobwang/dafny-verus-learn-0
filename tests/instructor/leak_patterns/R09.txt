@@ -1,41 +1,36 @@
-# R09 answer tripwires; protected reference-class, never copied to public tooling.
+# R09 withheld answers: the hole implementations and proofs (H1d-H4d, H1v-H4v), re-cut from the
+# one-statement-per-line twins (DVR4 step 5, lane P2); no prediction answer.
 
 # from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
-# source: else if s[j+2]=='}' {var n:=BoundVal(s[j+1]);res:=Ok((SRep(a,n,n,a.lo,j+3),j+3));} (R09.H1d)
+# source: res := Ok((SRep(a, n, n, a.lo, j + 3), j + 3)); (R09.H1d)
 # verified: solutions=1 public=0
-else\s+if\s+s\[j\+2\]=='\}'\s+\{var\s+n:=BoundVal\(s\[j\+1\]\);res:=Ok\(\(SRep\(a,n,n,a\.lo,j\+3\),j\+3\)\);\}
+res\s*:=\s*Ok\(\(SRep\(a,\s*n,\s*n,\s*a\.lo,\s*j\s*\+\s*3\),\s*j\s*\+\s*3\)\);
 
-# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
 # source: var next := ClassInsert(ranges, CRange(Code(c), Code(d))); (R09.H2d)
 # verified: solutions=1 public=0
 var\s+next\s*:=\s*ClassInsert\(ranges,\s*CRange\(Code\(c\),\s*Code\(d\)\)\);
 
-# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
-# source: if hi>0 && base>(cap-overhead)/hi {res:=OverBudget;return;} (R09.H3d)
+# source: if hi > 0 && base > (cap - overhead) / hi { res := OverBudget; (R09.H3d)
 # verified: solutions=1 public=0
-if\s+hi>0\s+\&\&\s+base>\(cap\-overhead\)/hi\s+\{res:=OverBudget;return;\}
+if\s+hi\s*>\s*0\s*&&\s*base\s*>\s*\(cap\s*-\s*overhead\)\s*/\s*hi\s*\{\s*res\s*:=\s*OverBudget;
 
-# from Solutions/dafny/R/R09_Effects/std/R09_Effects.dfy
-# source: CopiesSplit(r, n, k, s); (R09.H4d)
+# source: CopiesSplit(r, n, k, s); assert Matches(Copies(r, n + k), s); (R09.H4d)
 # verified: solutions=1 public=0
-CopiesSplit\(r,\s+n,\s+k,\s+s\);
+CopiesSplit\(r,\s*n,\s*k,\s*s\);\s*assert\s+Matches\(Copies\(r,\s*n\s*\+\s*k\),\s*s\);
 
 # from Solutions/verus/r/r09_effects/src/lib.rs
-# source: let start=x.span.lo;return Ok((Syn {node:SyntaxKind::RepRange(Box::new(x),lo,lo),span:Span {lo:start,hi:j+3}},j+3)); (R09.H1v)
+# source: return Ok((Syn { node: SyntaxKind::RepRange(Box::new(x), lo, lo), span: Span { lo: start, hi: j + 3 } }, j + 3)); (R09.H1v)
 # verified: solutions=1 public=0
-let\s+start=x\.span\.lo;return\s+Ok\(\(Syn\s+\{node:SyntaxKind::RepRange\(Box::new\(x\),lo,lo\),span:Span\s+\{lo:start,hi:j\+3\}\},j\+3\)\);
+SyntaxKind::RepRange\(Box::new\(x\),\s*lo,\s*lo\),\s*span:\s*Span\s*\{\s*lo:\s*start,\s*hi:\s*j\s*\+\s*3\s*\}
 
-# from Solutions/verus/r/r09_effects/src/lib.rs
 # source: let next = acc.class_insert(c as u32, d as u32); (R09.H2v)
 # verified: solutions=1 public=0
 let\s+next\s*=\s*acc\.class_insert\(c\s+as\s+u32,\s*d\s+as\s+u32\);
 
-# from Solutions/verus/r/r09_effects/src/lib.rs
-# source: if hi>0 && base>(cap-overhead)/hi {return None;} (R09.H3v)
+# source: if hi > 0 && base > (cap - overhead) / hi { return None; (R09.H3v)
 # verified: solutions=1 public=0
-if\s+hi>0\s+\&\&\s+base>\(cap\-overhead\)/hi\s+\{return\s+None;\}
+if\s+hi\s*>\s*0\s*&&\s*base\s*>\s*\(cap\s*-\s*overhead\)\s*/\s*hi\s*\{\s*return\s+None;
 
-# from Solutions/verus/r/r09_effects/src/lib.rs
-# source: lemma_copies_join_r09(r,n,k,s);assert(matches(copies(r,n+k),s)); (R09.H4v)
+# source: lemma_copies_join_r09(r, n, k, s); assert(matches(copies(r, n + k), s)); (R09.H4v)
 # verified: solutions=1 public=0
-lemma_copies_join_r09\(r,n,k,s\);assert\(matches\(copies\(r,n\+k\),s\)\);
+lemma_copies_join_r09\(r,\s*n,\s*k,\s*s\);\s*assert\(matches\(copies\(r,\s*n\s*\+\s*k\),\s*s\)\);

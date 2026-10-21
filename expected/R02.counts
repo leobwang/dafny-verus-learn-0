@@ -14,14 +14,14 @@ module = "R02"
 [[unit]]
 path = "dafny/R/R02_Datatypes/core"
 lang = "dafny"
-reference_verified = 20
+reference_verified = 21
 min_verified = 12
-symbols = ["R02_Datatypes.CatEpsLeft", "R02_Datatypes.IsVoid", "R02_Datatypes.MarkedPosition", "R02_Datatypes.MatchesAB", "R02_Datatypes.NodeCountBackwards", "R02_Datatypes.NullableBackwards", "R02_Datatypes.NullableCorrect", "R02_Datatypes.OuterStars", "R02_Datatypes.RegexOuterTag", "R02_Datatypes.StarCount", "R02_Datatypes.StarCountSpec", "R02_Datatypes.VoidSpec"]
+symbols = ["R02_Datatypes.CatTwoChrs", "R02_Datatypes.IsVoid", "R02_Datatypes.MarkedPosition", "R02_Datatypes.MatchesAB", "R02_Datatypes.NodeCountBackwards", "R02_Datatypes.NullableBackwards", "R02_Datatypes.NullableCorrect", "R02_Datatypes.OuterStars", "R02_Datatypes.RegexOuterTag", "R02_Datatypes.StarCount", "R02_Datatypes.StarCountSpec", "R02_Datatypes.VoidSpec"]
 
 [[unit]]
 path = "verus/r/r02_datatypes"
 lang = "verus"
-reference_verified = 14
+reference_verified = 15
 min_verified = 12
 symbols = ["boxed_regex", "is_void", "lemma_cat_eps_left", "lemma_marked_position", "lemma_matches_ab", "lemma_node_count_backwards", "lemma_nullable_backwards", "lemma_nullable_correct", "outer_stars", "star_count", "star_count_spec", "void_spec"]
 

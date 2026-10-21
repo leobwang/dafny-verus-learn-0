@@ -1,5 +1,5 @@
-//! A4 frozen normal-form definitions. Semantic preservation and certificate
-//! correctness belong to later learner/contractor proofs, not this boundary.
+//! A4 frozen normal-form definitions (PROVIDED, frozen). Do not open before R02, R03, R05 and
+//! R06 are done (it depends on A1b and A2, which re-supply their answers); semantics are later work.
 use vstd::prelude::*;
 use rg_re_a1::*;
 verus! {

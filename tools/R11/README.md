@@ -41,9 +41,9 @@ python3 tools/R11/check_runtime.py
 ```
 
 This tool first gates the actual specified core implementation with zero holes,
-then compiles it. It checks120syntax patterns against11words using an independent
+then compiles it. It checks 120 syntax patterns against 11 words using an independent
 finite language interpreter, inspects returned certificates with the actual
-checker, and checks every prefix flag plus final acceptance. The fixed29explicit
+checker, and checks every prefix flag plus final acceptance. The fixed 29 explicit
 certificate cases cover constructors, malformed trees, invalid tails, zero and
 oversized splits. Verus uses shifted slices and also checks invalid slice bounds
 and Vec-arena append/link frames. The pattern input corpus contains syntax only;

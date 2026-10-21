@@ -37,13 +37,18 @@ seven_day_max = 0.6      # [A]
 max_age_s = 18000        # one five-hour window
 
 [backend.claude]
-# Claude Code 2.1.296, the version file itself (never the `claude` link), so an
+# Claude Code 2.1.306, the version file itself (never the `claude` link), so an
 # auto-update cannot change the apparatus under a batch (author notes §1.7).
-# Re-pinned from DV0's 2.1.288 after the probes of claude_policy_smoke.py
-# (`pins` and `smoke`) passed on this file (VERSIONS.md §1.4, §2.3).
-version = "2.1.296"
-binary = "~/.local/share/claude/versions/2.1.296"
-sha256 = "24972e3bc859fab2b46ed4c1e51f7d6130f06d3bd550811a114640de3370d0de"
+# The binary is the course's own copy of the version file (Δ500): the updater
+# deletes old files from ~/.local/share/claude/versions/ (it deleted 2.1.296),
+# so `scripts/get_toolchain.sh claude` copies the pinned one into the course's
+# store, checks this sha256, and `--check` verifies it; the store keeps every
+# copy it installed. Re-pinned from 2.1.296 (DV4 step 4a, from DV0's 2.1.288)
+# after the probes of claude_policy_smoke.py (`pins` and `smoke`) passed on the
+# copy (VERSIONS.md §1.4, §2.3).
+version = "2.1.306"
+binary = "~/.local/share/dafny-verus-learn-0/claude/versions/2.1.306"
+sha256 = "520bc6c1f40af466bd03a278b5ae1af1a2938bc7de5b9e5cb15526da20d71cfe"
 model = "claude-opus-5-5"
 effort = "low"           # [A]
 max_turns = 2            # a structured answer takes 2 turns (DV0; step 4a)

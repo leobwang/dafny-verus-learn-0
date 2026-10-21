@@ -1,5 +1,17 @@
 module R01_C3D {
-  opaque predicate Short(s: seq<char>) { |s| < 4 }
-  lemma Establish() ensures Short(['z']) { reveal Short(); }
-  lemma Client() { assert Short(['z']); }
+  opaque predicate ShortWord(s: seq<char>)
+  {
+    |s| < 4
+  }
+
+  lemma EstablishShort()
+    ensures ShortWord(['z'])
+  {
+    reveal ShortWord();
+  }
+
+  lemma ShortClient()
+  {
+    assert ShortWord(['z']);
+  }
 }

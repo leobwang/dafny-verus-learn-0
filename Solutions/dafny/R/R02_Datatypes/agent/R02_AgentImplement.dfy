@@ -41,8 +41,14 @@ module R02_AgentImplement {
     decreases r
   {
     match r
-    case Alt(a, b) => var x := StarHeight(a); var y := StarHeight(b); if x < y then y else x
-    case Cat(a, b) => var x := StarHeight(a); var y := StarHeight(b); if x < y then y else x
+    case Alt(a, b) =>
+      var x := StarHeight(a);
+      var y := StarHeight(b);
+      if x < y then y else x
+    case Cat(a, b) =>
+      var x := StarHeight(a);
+      var y := StarHeight(b);
+      if x < y then y else x
     case Star(a) => 1 + StarHeight(a)
     case _ => 0
   }
@@ -61,22 +67,47 @@ module R02_AgentImplement {
     case Chr(_) => 1
     case Star(_) => 0
     case Alt(a, b) =>
-      var x := MinLen(a); var y := MinLen(b);
+      var x := MinLen(a);
+      var y := MinLen(b);
       if x == 0 && !Nullable(a) then y
       else if y == 0 && !Nullable(b) then x
       else if x < y then x else y
     case Cat(a, b) =>
-      var x := MinLen(a); var y := MinLen(b);
+      var x := MinLen(a);
+      var y := MinLen(b);
       if (x == 0 && !Nullable(a)) || (y == 0 && !Nullable(b)) then 0 else x + y
   }
 
   // Six shipped checks; two per definition. Preserve them all.
-  lemma AlphabetLeafCheck() { assert Alphabet(Chr('q')) == {'q'}; }
-  lemma AlphabetPairCheck() { assert Alphabet(Cat(Chr('q'), Chr('r'))) == {'q', 'r'}; }
-  lemma StarHeightLeafCheck() { assert StarHeight(Star(Chr('q'))) == 1; }
-  lemma StarHeightPairCheck() { assert StarHeight(Cat(Star(Chr('q')), Chr('r'))) == 1; }
-  lemma MinLenLeafCheck() { assert MinLen(Chr('q')) == 1; }
-  lemma MinLenPairCheck() { assert MinLen(Cat(Chr('q'), Chr('r'))) == 2; }
+  lemma AlphabetLeafCheck()
+  {
+    assert Alphabet(Chr('q')) == {'q'};
+  }
+
+  lemma AlphabetPairCheck()
+  {
+    assert Alphabet(Cat(Chr('q'), Chr('r'))) == {'q', 'r'};
+  }
+
+  lemma StarHeightLeafCheck()
+  {
+    assert StarHeight(Star(Chr('q'))) == 1;
+  }
+
+  lemma StarHeightPairCheck()
+  {
+    assert StarHeight(Cat(Star(Chr('q')), Chr('r'))) == 1;
+  }
+
+  lemma MinLenLeafCheck()
+  {
+    assert MinLen(Chr('q')) == 1;
+  }
+
+  lemma MinLenPairCheck()
+  {
+    assert MinLen(Cat(Chr('q'), Chr('r'))) == 2;
+  }
 
   /* LATENCY LOG — learner-owned, after /contract R02:
      symbol | wall time | fast or full | exit | transcript location

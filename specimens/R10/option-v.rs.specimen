@@ -2,12 +2,27 @@
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a4::*;
+
 verus! {
-fn try_shape_r10(r:Re)->(out:Option<NormRe>)
- ensures match out {Some(p)=>p.re()==r && is_norm(r),None=>!is_norm(r)},
- {if is_normal_exec_r10(&r) {Some(NormRe::from_normal_r10(r))} else {None}}
+
+fn try_shape_r10(r: Re) -> (out: Option<NormRe>)
+    ensures
+        match out {
+            Some(p) => p.re() == r && is_norm(r),
+            None => !is_norm(r),
+        },
+{
+    if is_normal_exec_r10(&r) {
+        Some(NormRe::from_normal_r10(r))
+    } else {
+        None
+    }
+}
+
 fn observe_r10() {
- let raw=Re::Alt(Box::new(Re::Empty),Box::new(Re::Chr('q')));
- let result=try_shape_r10(raw);assert(result is None);
+    let raw = Re::Alt(Box::new(Re::Empty), Box::new(Re::Chr('q')));
+    let result = try_shape_r10(raw);
+    assert(result is None);
 }
-}
+
+} // verus!

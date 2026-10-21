@@ -1,561 +1,795 @@
 # R04 — Specs as logic
 
-A specification is a logical claim about a program. Choosing that claim is
-part of the work. A successful proof can establish exactly the written
-postcondition while leaving a behaviour the user expected unspecified. A
-failed proof can expose a missing argument, an incorrect program or a false
-claim. This module gives those possibilities different names and asks you
-to keep their evidence separate.
+R01 showed that the verifier checks a body against its contract, and R02 connected the regex tree to the strings it means through `Matches`. R04 turns to the contract itself. A specification is a formula, and a formula can be read, classified, witnessed and refuted like any other claim. A proof can establish exactly the written postcondition while the user wanted something else; a failed proof can expose a missing argument, a wrong program or a false claim. This module gives those cases names and asks you to keep their evidence apart: the checker checks proofs against statements, never statements against intent.
 
-The running object is a regex and the complete strings it matches. You will
-add the notion of an occurrence in a substring, distinguish it from a prefix
-or suffix, and write small proofs using arbitrary variables and justified
-witnesses. The distinction matters for a search API: returning whether the
-whole input matches answers a different question from finding a match
-somewhere inside it. A Boolean result does not make those questions equivalent.
-
-R is standalone. Use R01/R02 and the declared A1 layer; no Q file, earlier
-learner implementation or later A1b fact is imported. R04's logical work does
-not require a completed R03 implementation. The given definitions are the
-starting point, and the worked examples show the relevant proof syntax in
-both languages. Your own definition and proofs must still establish the
-particular statements in the exercise.
+The running question is a search API. Does a regex match the whole input, or does it occur somewhere inside it? A Boolean result does not make those questions the same, and a contract that answers one of them can verify while the caller needed the other. Every construct below appears first in a small example with its verifier output directly under it, captured on the course pins. R is standalone: use R01, R02 and the declared A1 layer; no Q file, no earlier learner implementation and no later layer is imported.
 
 **Three ideas do all the work.**
 
-1. A quantifier says which values a claim covers. Universal introduction
-   reasons about an arbitrary value; existential elimination uses one value
-   justified by an existing premise. Each carries its own bounds and facts.
-2. A contract's direction and semantic object determine what it promises.
-   Equivalence, one-way implication, a whole match and a substring occurrence
-   cannot be substituted for one another without an argument.
-3. Verification, runtime checks, an assumption audit and a statement review
-   observe different claims. When an agent is asked to prove a false statement,
-   a faithful counterexample report is useful work; a weakened green statement
-   is a different deliverable.
+1. **A quantifier says which values a claim covers.** Proving a `forall` reasons about an arbitrary value; using an `exists` takes one value its premise guarantees, with all of its facts. A positive existential needs one named witness; a negative one needs an argument about every candidate.
+2. **A contract's strength is a property of the formula.** Vacuous, weak, faithful and over-strong are positions on one scale, and each position is shown by a witness: an input on which the formula forces, allows or forbids the intended answer. Whole-string matching and substring occurrence are different questions on that scale.
+3. **Runtime checks, assumptions and proofs are different evidence.** An `expect` outside a test is assumed by the verifier, an `assume` is a counted hole, and the audit lists both; a green gate with an audit finding is not done.
+
+---
 
 ## 0. How this module works
 
-**Budget: 360 minutes**, including the viva and excluding contractor wall time.
-Keep your actual time and correction separately from this allowance.
+**Budget: 360 minutes**, including the module viva and excluding contractor wall time. These are planning estimates; record your own.
 
 | setup | test-out | read | worked | cards | predictions | holes | audit drill | agent review | paper | bench card | viva | calibration | total |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 10 | 10 | 60 | 30 | 8 | 15 | 70 | 20 | 30 | 45 | 25 | 30 | 7 | **360** |
 
-Attempt T1d/T1v closed book before reading the worked examples. The statement
-asks for an existential claim, so the task is not finished by declaring a
-value whose relationship to the claim remains unexplained. Write your first
-attempt using the datatype and prompt. The first-try tool records completed
-code test-outs after the module's predictions have been recorded. A later
-repair remains worthwhile; it must not replace the initial record.
+The hole minutes are 7 for each of the ten paired holes, in either language.
 
-Inspect the six prediction prompts and their exact programs now. P1d, P2dv
-and P6dv have switches in the main Dafny exercise, P5d in its standalone RuntimePositive
-delivery specimen, and P3d/P4v in their obligation specimens. Verdict answers
-live in `slots/R04.slots`; obligation answers use the printed comment slots.
-Commit the filled answers with their switches disabled, then run
-`scripts/firsttry.sh R04 --check`. Only afterward enable the switches, run
-scenarios or inspect expected outputs, the audit drill, cards, bank, rubric
-or CI. Do not let an observed result become an invented first prediction.
+**Test-out first.** Before reading on, attempt T1 closed book in both files: prove that some string matches `Cat(Chr('o'), Star(Chr('k')))` (in Dafny, some string of length 3). The claim is existential, so it is not finished by naming a value; the proof must connect that value to the semantics. Record the attempt with `scripts/firsttry.sh R04 --check`. A later repair is useful, but it does not replace the first try.
 
-> **Predict (P1) — commit in the file before reading on.** RuntimePositive has a positive-result postcondition and an expect on its input outside a test. What verification verdict do you predict for the program as written?
+**Predictions.** Commit the six answers below before running their scenarios or opening the card demos, the audit drill, the bank or the rubric. The verdict answers (P1, P2, P5, P6) go in `slots/R04.slots`, switched on by the `CHECK` lines of the Dafny file and of `specimens/R04/P5d.dfy.specimen`; the obligation answers (P3, P4) go in the commented slots of `specimens/R04/P3d.dfy.specimen` and `specimens/R04/P4v.rs.specimen`. Respect each printed answer form, then run `scripts/firsttry.sh R04 --check`.
 
-> **Predict (P2) — commit in the file before reading on.** For the printed regex and string, which of the four proposed Find postconditions force a true Boolean? Keep the whole-string, occurrence, implication and suffix formulas distinct.
+> **Predict (P1) — commit in the file before reading on.** `RuntimePositive(x)` ensures `y > 0`; its body is `expect x > 0; y := x;`, and it is not a test. What does `scripts/vcheck` report? Answer `D:<v>`, `v` one of `ok`, `fail`, `timeout`, `err:<stage>`.
 
-> **Predict (P3) — commit in the file before reading on.** Which labelled empty-bodied Dafny proofs establish their claims about the given occurrence semantics, and which fail?
+> **Predict (P2) — commit in the file before reading on.** Four postconditions for `Find(r, s) returns (b)`: [a] `b <==> Occurs(r, s)`; [b] `b <==> Matches(r, s)`; [c] `b ==> Occurs(r, s)`; [d] `b <==> exists i :: 0 <= i <= |s| && Matches(r, s[i..])`. With `r := Star(Chr('a'))` and `s := "b"`, which of them force `b == true`? Answer the labels in order separated by single spaces, or `none` (the same answer in both languages).
 
-> **Predict (P4) — commit in the file before reading on.** Predict the failing labels of the corresponding Verus proofs. Do not assume a language comparison decides an unrun proof obligation.
+> **Predict (P3) — commit in the file before reading on.** Four empty-bodied Dafny lemmas about the given `Occurs`: [a] `Occurs(Star(Chr('a')), "b")`; [b] `Occurs(Eps, s)` for every `s`; [c] `!Occurs(Chr('a'), "b")`; [d] `Occurs(Chr('b'), "ab")`. Which fail?
 
-> **Predict (P5) — commit in the file before reading on.** Predict the gate exit and assumption-audit finding count of the RuntimePositive delivery. Use the exact two-number answer form.
+> **Predict (P4) — commit in the file before reading on.** The same four claims as empty-bodied Verus proof functions about `occurs`. Which fail?
 
-> **Predict (P6) — commit in the file before reading on.** FindNone returns false for every input and is checked against each proposed postcondition separately. Which contracts verify in each language?
+> **Predict (P5) — commit in the file before reading on.** `RuntimePositive`, in a file of its own, is a delivery. What are the exit code of `scripts/vcheck --gate` on it and the number of findings `scripts/vaudit` reports? Answer `D:<exit> <n>`.
 
-A verdict slot needs the printed language labels where requested. An obligation
-slot starts with `FAILS` and uses the actual case labels. Read what the question
-asks: a result being permitted, being required and being observed on one run
-are different propositions. Keep explanatory prose in your notes and the
-machine-readable answer in its slot.
+> **Predict (P6) — commit in the file before reading on.** A constant search returns `false` for every input: Dafny `method FindNone(r: Re, s: seq<char>) returns (b: bool) { b := false; }`, Verus `fn find_none(r: &Re, s: &Vec<char>) -> (b: bool) { false }`. It is checked four times, once against each of P2's postconditions on its own. Which of the four verify? Answer `D:<labels> V:<labels>`, or `none`.
 
-```mermaid
-flowchart LR
-  Q["Read statement and program"] --> P["Commit first answer"]
-  P --> F["Record the first try"]
-  F --> O["Observe exact instruments"]
-  O --> E["Explain claim and evidence"]
-```
+### This module's files
 
-**This module's files**
+| file | role | shipped state |
+|---|---|---|
+| `dafny/R/R04_Specs/core/R04_Specs.dfy` | the given `Occurs`, T1d, prediction block, worked examples, cards, holes H1d–H5d, the AUDIT block | verified, 6 holes, 0 errors |
+| `verus/r/r04_specs/src/lib.rs` | the paired Verus file | verified, 6 holes, 0 errors |
+| `specimens/R04/`, `slots/R04.slots` | prediction specimens, chapter scenarios, card demos, the audit drill's deliveries | slots unfilled; demos fail by design |
+| `dafny/R/R04_Specs/agent/R04_AgentProver.dfy` | the audited prover's file | verified, 3 holes, 0 errors |
+| `verus/r/r04_specs/src/agent.rs` | the paired audited prover's file | verified, 3 holes, 0 errors |
+| `dafny/given/R/RG_A1_Re.dfy`, `verus/given/rg_re_a1/src/lib.rs` | the frozen A1 layer: definitions only | verified; no lemma supplied |
+| `paper/R04_problems.tex`, `paper/R04_answers.tex` | the card and two written problems, and your answers | template compiles; answers unfilled |
+| `bench/local/r/README.md` | instructions for your third local bench card | you create the card |
+| `Solutions/`, `paper/solutions/` | references | yours to open LAST, after your attempts, gates and review |
 
-| path | role and shipped state |
-|---|---|
-| `dafny/R/R04_Specs/core/R04_Specs.dfy` | hand exercise: verified, 6 holes, 0 errors, including T1d |
-| `verus/r/r04_specs/src/lib.rs` | hand exercise: verified, 6 holes, 0 errors, including T1v |
-| `specimens/R04/` and `slots/R04.slots` | six unfilled predictions, demos and guarded audit deliveries |
-| `dafny/R/R04_Specs/agent/R04_AgentProver.dfy` | agent: verified, 3 holes, 0 errors; RED at the gate; faithful refusal is a separate outcome |
-| `verus/r/r04_specs/src/agent.rs` | agent: verified, 3 holes, 0 errors; agent: verified, 3 holes, 0 errors; the analogous audited-prover task |
-| `dafny/given/R/RG_A1_Re.dfy`, `verus/given/rg_re_a1/src/lib.rs` | provided A1 definitions only; no earlier learner proof imported |
-| `paper/R04_problems.tex`, `paper/R04_answers.tex` | three written problems and your answer template |
-| `bench/local/r/` | your third local card, five artifacts and actual evidence |
-| `Solutions/` | your reference and author analysis, yours to open LAST |
-
-**Takeaway:** preserve what you predicted, then explain the observation's
-scope. The formal exercises, written reasoning, audit and refusal review are
-related work with different completion evidence.
-
----
-
-## 1. Give every semantic question its own formula
-
-`Matches(r,s)` is a whole-string relation. Every constructor receives an
-entire sequence and has to account for all of it. An occurrence adds two
-location bounds and passes one complete substring to that same relation.
-This does not change the meaning of `Matches`; it changes which sequence it
-receives and how that sequence is selected.
-
-The given `Occurs` asks for indices i and j with zero no greater than i,
-i no greater than j, and j no greater than the input length. It then asks
-whether `s[i..j]` matches. Equal endpoints are allowed. A regex accepting an
-empty string can therefore have an empty occurrence even when the surrounding
-input is nonempty. A substring with zero length is a sequence, not the
-absence of a candidate. Carry the endpoint convention into every example.
-
-A prefix question fixes the start at zero and chooses an end. A suffix
-question chooses a start and fixes the end at the input length. An arbitrary
-substring question chooses both. A whole-string question fixes both. Drawing
-these endpoints before writing quantifiers helps avoid a misleading formula
-that silently answers a different API question. The difference survives even
-when two formulas happen to agree on a particular input.
-
-```mermaid
-flowchart TB
-  W["Whole input: fixed start and end"] --> B["Which bounds may vary?"]
-  B --> P["Prefix: choose end"]
-  B --> S["Suffix: choose start"]
-  B --> O["Occurrence: choose both ordered bounds"]
-```
-
-For a positive existential claim, give a legal choice and show the semantic
-fact about its entire slice. A familiar-looking character inside that slice
-is insufficient. For a negative existential claim, one failed candidate
-rejects only that candidate. You need an argument covering every permitted
-choice, or a contradiction from an arbitrary assumed satisfying witness.
-The chosen proof style should make that scope visible.
-
-This is where the P3/P4 observations become useful. After recording the first
-tries, enable the labelled obligation checks and run their exact specimens.
-Explain each result using the formula's scope and the facts established by
-the empty proof. A failed proof may need a witness or a quantified argument;
-it does not, by itself, provide a semantic counterexample. Conversely, one
-successful empty proof does not license a rule that every existential goal
-will be solved without a written witness.
-
-<!-- pin: obligation-d -->
-```
-$ scripts/vcheck specimens/R04/P3d.dfy.specimen
-vcheck: specimens/R04/P3d.dfy.specimen [dafny, learner loop]: failed — 6 verified, 0 holes, 4 errors
-specimens/R04/P3d.dfy.specimen:76:48: error: a postcondition could not be proved on this return path
-specimens/R04/P3d.dfy.specimen:76:27: related: this is the postcondition that could not be proved
-specimens/R04/P3d.dfy.specimen:75:48: related: this proposition could not be proved
-specimens/R04/P3d.dfy.specimen:77:47: error: a postcondition could not be proved on this return path
-specimens/R04/P3d.dfy.specimen:77:39: related: this is the postcondition that could not be proved
-specimens/R04/P3d.dfy.specimen:75:48: related: this proposition could not be proved
-specimens/R04/P3d.dfy.specimen:78:48: error: a postcondition could not be proved on this return path
-specimens/R04/P3d.dfy.specimen:78:26: related: this is the postcondition that could not be proved
-specimens/R04/P3d.dfy.specimen:79:43: error: a postcondition could not be proved on this return path
-specimens/R04/P3d.dfy.specimen:79:27: related: this is the postcondition that could not be proved
-specimens/R04/P3d.dfy.specimen:75:48: related: this proposition could not be proved
-```
-
-<!-- pin: obligation-v -->
-```
-$ scripts/vcheck specimens/R04/P4v.rs.specimen
-vcheck: specimens/R04/P4v.rs.specimen [verus, learner loop]: failed — 8 verified, 0 holes, 3 errors
-specimens/R04/P4v.rs.specimen:131:27: error: postcondition not satisfied
-specimens/R04/P4v.rs.specimen:132:39: error: postcondition not satisfied
-specimens/R04/P4v.rs.specimen:134:27: error: postcondition not satisfied
-```
-
-The native tool reports the actual obligation and location. The slot checker
-compares your predicted failing labels with that observation. Your explanation
-should go further: identify the claim, its legal bounds and the missing or
-available reasoning. Preserve the original specimen when testing a variant,
-so the recorded first try remains about the original input.
-
-**Takeaway:** name the selected sequence and its bounds before interpreting
-a match. Positive and negative existential claims require different scopes
-of evidence, even when they use the same semantic definition.
-
----
-
-## 2. Arbitrary variables and justified witnesses
-
-The first worked example proves that every whole-string Eps match has an
-empty input. The universal statement is the goal, so its proof fixes an
-arbitrary sequence satisfying the antecedent. It then uses the given Eps
-definition. Nothing about the choice depends on a convenient concrete string.
-Read the variable as an arbitrary member of the stated range, not as a sample
-that the author selected because it made the proof easy.
-
-In Dafny the worked proof uses a `forall` statement. Its range condition
-states what is assumed about the arbitrary value; its `ensures` states the
-fact to establish for that value. In Verus the worked proof uses an `assert
-forall` proof. The exact implication form and proof scope matter. In a proof
-using `implies`, the antecedent is available inside its body. A formula
-containing `==>` does not by itself grant every intermediate assertion the
-same scoped hypotheses. Keep this distinction with the actual syntax.
-
-The second worked example begins with an existential premise inside a
-concatenation match. It obtains a split index satisfying all the definition's
-conjuncts: both bounds and both semantic facts. Dafny's `:|` and Verus's
-`choose` select a value justified by that premise. They do not permit an
-unproved assumption that a desired witness exists. If the premise cannot
-establish a witness, the choice itself has a proof obligation.
-
-For the worked concatenation with a first Chr component, the selected prefix
-must be a one-character sequence. The split bound places that prefix inside
-the whole input. Together those facts establish the input-length claim.
-Notice how the argument retains the relationship between the witness, slice
-and enclosing sequence. Merely naming an integer would not connect those
-three objects.
-
-A useful proof note lists the witness and every fact it brings into scope.
-When a later assertion fails, check which fact it actually needs and whether
-that fact is among the retained conjuncts. Do not change a bound from strict
-to non-strict because both look like indexing conditions. The difference can
-admit an empty slice or exclude a needed endpoint, changing the semantics.
-
-The following fragments are the provided worked proofs, in the exercise's A1
-context. Read the introduced variable or chosen witness and then locate each
-fact used by the final claim. These are complete given examples, rather than
-templates containing an unreviewed assumption.
-
-```dafny
-lemma EpsOnlyEmpty()
-  ensures forall s :: Matches(Eps,s) ==> s == []
-{
-  forall s | Matches(Eps,s) ensures s == [] { }
-}
-lemma CatChrNonEmpty(b: Re, s: seq<char>)
-  requires Matches(Cat(Chr('x'),b),s)
-  ensures |s| >= 1
-{
-  var i :| 0 <= i <= |s| && Matches(Chr('x'),s[..i]) && Matches(b,s[i..]);
-  assert s[..i] == ['x'];
-}
-```
-
-```rust
-pub proof fn lemma_eps_only_empty()
-    ensures forall|s: Seq<char>| matches(Re::Eps,s) ==> s.len() == 0,
-{
-    assert forall|s: Seq<char>| matches(Re::Eps,s) implies s.len() == 0 by { }
-}
-pub proof fn lemma_cat_chr_nonempty(b: Re, s: Seq<char>)
-    requires matches(Re::Cat(Box::new(Re::Chr('x')),Box::new(b)),s),
-    ensures s.len() >= 1,
-{
-    let i=choose|i: int| 0 <= i <= s.len()
-        && matches(Re::Chr('x'),#[trigger] s.subrange(0,i))
-        && matches(b,s.subrange(i,s.len() as int));
-    assert(s.subrange(0,i).len() == 1);
-}
-```
-
-The two WRITE-card demos isolate mistakes in these proof forms. Inspect them
-after the predictions. One asks for a universal property of an arbitrary integer sequence that does
-not follow; the other asserts facts about a chosen value without a premise
-guaranteeing that a satisfying witness exists. Read the stage and obligation, then give a mathematical account of
-why that particular claim lacks the required support.
-
-<!-- pin: forall-d -->
-```
-$ scripts/vcheck specimens/R04/card-c1d.dfy.specimen
-vcheck: specimens/R04/card-c1d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R04/card-c1d.dfy.specimen:2:25: warning: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section on quantifier instantiation rules in the reference manual.
-specimens/R04/card-c1d.dfy.specimen:2:49: error: a postcondition could not be proved on this return path
-specimens/R04/card-c1d.dfy.specimen:2:25: related: this is the postcondition that could not be proved
-```
-
-<!-- pin: forall-v -->
-```
-$ scripts/vcheck specimens/R04/card-c1v.rs.specimen
-vcheck: specimens/R04/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R04/card-c1v.rs.specimen:4:13: error: postcondition not satisfied
-```
-
-<!-- pin: choose-d -->
-```
-$ scripts/vcheck specimens/R04/card-c2d.dfy.specimen
-vcheck: specimens/R04/card-c2d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R04/card-c2d.dfy.specimen:3:16: error: cannot establish the existence of LHS values that satisfy the such-that predicate
-```
-
-<!-- pin: choose-v -->
-```
-$ scripts/vcheck specimens/R04/card-c2v.rs.specimen
-vcheck: specimens/R04/card-c2v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R04/card-c2v.rs.specimen:5:12: error: assertion failed
-```
-
-**Takeaway:** universal introduction chooses nothing special, while
-existential elimination depends on an existing existence argument. Retain the
-bounds and semantic facts that make either proof step legitimate.
-
----
-
-## 3. A Boolean needs both its directions
-
-A search routine's result has two possible values. The contract should say
-what each value means. If it states only that a true result implies an
-occurrence, it can rule out an unjustified positive while permitting a
-routine to miss every genuine occurrence. The false result makes that
-implication true without establishing that no occurrence exists. This is a
-property of the formula, not an accusation about a particular implementation.
-
-An equivalence expresses both directions. A true result must correspond to
-the semantic property, and the property must force a true result. It is still
-necessary to choose the right property: equivalence to a whole-string match
-answers a different question from equivalence to an arbitrary substring
-occurrence. A strong, completely proved contract can faithfully specify the
-wrong API question.
-
-Separate three questions when reading the P2 family. What values of b are
-allowed by the contract on this particular input? Does the contract force
-one of them? Does that relationship capture the intended operation for every
-input? A formula can agree with the intended result on the displayed pair
-and still differ on another pair. Keep a concrete witness or counterexample
-for the claimed distinction rather than relying on the names of the formulas.
-
-The P6 family provides a different observation: the implementation always
-returns false and the contracts are checked separately. Read each result as
-a universal implementation claim about all its permitted inputs. It is not
-the same question as deciding what a contract forces on P2's fixed regex and
-string. A constant implementation that verifies tells you something about
-what that particular postcondition demands; it does not establish that the
-postcondition captures the intended search behaviour.
-
-<!-- pin: p6-d -->
-```
-$ scripts/vcheck specimens/R04/chapter-p6-d.dfy.specimen
-vcheck: specimens/R04/chapter-p6-d.dfy.specimen [dafny, learner loop]: failed — 8 verified, 0 holes, 3 errors
-specimens/R04/chapter-p6-d.dfy.specimen:76:3: error: a postcondition could not be proved on this return path
-specimens/R04/chapter-p6-d.dfy.specimen:75:15: related: this is the postcondition that could not be proved
-specimens/R04/chapter-p6-d.dfy.specimen:79:3: error: a postcondition could not be proved on this return path
-specimens/R04/chapter-p6-d.dfy.specimen:78:15: related: this is the postcondition that could not be proved
-specimens/R04/chapter-p6-d.dfy.specimen:85:3: error: a postcondition could not be proved on this return path
-specimens/R04/chapter-p6-d.dfy.specimen:84:15: related: this is the postcondition that could not be proved
-```
-
-<!-- pin: p6-v -->
-```
-$ scripts/vcheck specimens/R04/chapter-p6-v.rs.specimen
-vcheck: specimens/R04/chapter-p6-v.rs.specimen [verus, learner loop]: failed — 8 verified, 0 holes, 3 errors
-specimens/R04/chapter-p6-v.rs.specimen:130:13: error: postcondition not satisfied
-specimens/R04/chapter-p6-v.rs.specimen:133:13: error: postcondition not satisfied
-specimens/R04/chapter-p6-v.rs.specimen:139:13: error: postcondition not satisfied
-```
-
-A failed contract check should come with a formal obligation or counterexample
-argument. If you propose a regex and input, show the semantic fact about the
-complete slice and then evaluate the Boolean relation. Do not label a case
-a counterexample merely because it looks unlike an example in the chapter.
-A counterexample must satisfy the routine's preconditions and violate its
-specific promised conclusion.
-
-The weak-contract example is also a warning about finite checks. A test suite
-might contain only negative inputs, on which an always-false search result
-looks appropriate. Adding a positive case can reject that implementation,
-but the new suite remains finite. Verification gives a quantified guarantee
-against the written contract, while statement review asks whether that
-contract expresses the intended behaviour. Each activity has a useful scope.
-
-**Takeaway:** identify what each Boolean outcome means and which inputs the
-formula covers. A verified one-way promise or a verified different semantic
-question does not become the intended equivalence by implication.
-
----
-
-## 4. On paper, before the keyboard
-
-Complete the three problems in `paper/R04_problems.tex` and keep their labels
-in `paper/R04_answers.tex`. Allow forty-five minutes. The written track asks
-you to make the claim and argument explicit before relying on a proof script's
-successful display. A compiled answer document is necessary for the written
-workflow, but its build is not a grade for the reasoning it contains.
-
-B1 is card12.5, on faithfulness in logical formalization. Use the exact pinned
-source range and hash printed in the problem. Its tasks, models, run count,
-retry budget and pipeline stages are part of the reported evidence. Distinguish
-a valid derivation from a correct definite answer and a faithful translation.
-The formal checker receives assumptions; it does not independently discover
-whether those assumptions express the original natural-language premises.
-
-The split pipeline in the card freezes an earlier formalization before a
-later proving stage. A diff can expose edits to those axioms. An unchanged
-mistranslation can survive that check because the error entered before the
-freeze. This gives two different review questions: was the intended boundary
-preserved, and was that boundary faithful to begin with? Keep both questions
-when interpreting a compilation rate or a successful proof.
-
-Fill all eight fields in your own words. Every numerical claim needs its
-source and original scope. A denominator from one stage is not a denominator
-for another. If the excerpt has no common token budget, cost, immutable
-revision or uncertainty estimate, say so. Do not fill an evidence gap with
-a remembered number from a different study. A material contradiction in one
-field remains a problem even when the other seven fields are fluent.
-
-B2 returns to contracts with a different regex/input pair from P2. List every
-permitted Boolean, not just the value you prefer. Show the relevant occurrence
-or all candidate suffixes, then classify the relationship in general. One
-pair's agreement cannot establish universal equivalence. The paper problem
-asks you to explain why a formula captures a particular question, not to
-quote a verifier outcome from a prediction you have already observed.
-
-B3 derives a weakest precondition by working backwards through assignments
-and a conditional. Start from the actual desired postcondition. Replace the
-assigned variable by the expression that will be assigned to it. For a branch,
-retain the guard on one path and its negation on the other. The join assertion
-states what the continuation needs, and both paths must establish it.
-
-Do not confuse a sufficient input restriction with the weakest precondition.
-A proposed restriction can make an argument easy while excluding inputs the
-program handles correctly. To assess necessity, examine an input outside
-that restriction and the exact branch it takes. The mathematical integer
-model is part of B3's statement. Bounded arithmetic would add obligations
-about addition, negation and multiplication that are absent from an unbounded
-integer calculation.
-
-Use your paper argument to guide a later verifier probe if a claim is disputed.
-Keep the same assignments, guards and arithmetic model. A probe that silently
-changes them answers a different question. Record the actual command and
-result before describing a verifier check as evidence in a written dispute.
-
-**Takeaway:** write the quantifiers, substitutions and evidence scope. A
-proof checker supports a precise formal claim, while the paper argument makes
-that claim and its relationship to intent available for review.
-
----
-
-## 5. The exercise file
-
-The slot protocol is `scripts/firsttry.sh R04 --check`: record all six predictions
-before running their scenarios, then enable the recorded switches.
-
-**Done:** both hand gates have zero holes, audits and source freeze are clean,
-the strict firsttry report passes, and the paper/audit/agent/bench-card work
-and viva are reviewed. A faithful agent refusal is recorded as such.
-
-The pair has six holes in each language: T1 and H1 through H5. The source
-verifies in the learner loop with those typed placeholders, allowing you to
-work incrementally. A green result in that state is unfinished. The native
-gate requires zero counted holes and the declared contracted work to run.
-Use the shipped captures as baselines rather than as your final completion
-record.
+As shipped, both exercise files verify in the learner loop with their holes counted:
 
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R04_Specs/core
 vcheck: dafny/R/R04_Specs/core [dafny, learner loop]: verified — 9 verified, 6 holes, 0 errors
-dafny/R/R04_Specs/core/R04_Specs.dfy:21:13: hole bodyless-method R04.T1d
-dafny/R/R04_Specs/core/R04_Specs.dfy:65:20: hole bodyless-method R04.H1d
-dafny/R/R04_Specs/core/R04_Specs.dfy:71:13: hole bodyless-method R04.H2d
-dafny/R/R04_Specs/core/R04_Specs.dfy:77:37: hole bodyless-method R04.H3d
-dafny/R/R04_Specs/core/R04_Specs.dfy:86:13: hole bodyless-function R04.H4d
-dafny/R/R04_Specs/core/R04_Specs.dfy:97:13: hole bodyless-method R04.H5d
+dafny/R/R04_Specs/core/R04_Specs.dfy:30:13: hole bodyless-method R04.T1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:99:20: hole bodyless-method R04.H1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:115:13: hole bodyless-method R04.H2d
+dafny/R/R04_Specs/core/R04_Specs.dfy:129:54: hole bodyless-method R04.H3d
+dafny/R/R04_Specs/core/R04_Specs.dfy:145:13: hole bodyless-function R04.H4d
+dafny/R/R04_Specs/core/R04_Specs.dfy:185:13: hole bodyless-method R04.H5d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r04_specs
 vcheck: verus/r/r04_specs [verus, learner loop]: verified — - verified, 6 holes, 0 errors
-verus/r/r04_specs/src/lib.rs:19:38: hole assume R04.T1v
-verus/r/r04_specs/src/lib.rs:47:38: hole assume R04.H1v
-verus/r/r04_specs/src/lib.rs:54:38: hole assume R04.H2v
-verus/r/r04_specs/src/lib.rs:62:38: hole assume R04.H3v
-verus/r/r04_specs/src/lib.rs:68:1: hole uninterp R04.H4v
-verus/r/r04_specs/src/lib.rs:78:38: hole assume R04.H5v
+verus/r/r04_specs/src/lib.rs:27:40: hole assume R04.T1v
+verus/r/r04_specs/src/lib.rs:89:40: hole assume R04.H1v
+verus/r/r04_specs/src/lib.rs:107:40: hole assume R04.H2v
+verus/r/r04_specs/src/lib.rs:127:40: hole assume R04.H3v
+verus/r/r04_specs/src/lib.rs:141:1: hole uninterp R04.H4v
+verus/r/r04_specs/src/lib.rs:179:40: hole assume R04.H5v
 ```
 
-T1 is your closed-book attempt at an existential semantic claim. Retain the
-first completed attempt even if it fails. The point is to observe what you
-can reconstruct before the examples, not to manufacture a perfect initial
-record after reading them. When reviewing it later, identify the chosen
-value, why it is legal and the facts that connect it to the statement.
-
-H1 asks for a concrete whole-string match. Use the actual constructor
-semantics to account for the whole input. A drawing may help you organise
-substrings, but every proposed boundary still needs its bounds and semantic
-facts. The proof must establish the printed complete claim, rather than
-merely exhibit some character that occurs in the string.
-
-H2 asks for a negative match claim. One unsuccessful split does not cover
-all possible splits. Decide whether you will reason about an arbitrary legal
-index or derive a contradiction from an assumed satisfying witness. Make
-that scope explicit. If the contradiction depends on a length or a particular
-character, connect it to the selected slice rather than asserting the desired
-rejection directly.
-
-H3 distinguishes complete matching from finding a character in a larger
-input. Its two conjuncts need the exact claims as printed. Do not replace a
-whole-string statement with an occurrence statement because the latter is
-easier to visualise. This is a small example of a faithful specification:
-the mathematical object and its selected input both belong to the claim.
-
-H4 starts from prose and leaves the definition body open. The supplied
-checks cover a positive case, a negative case and the empty-prefix boundary.
-Keep all three, enabling them as you go. A definition that answers a whole
-match or an arbitrary-substring question can agree with one of those examples
-while answering the wrong general question. Read the prose and the quantified
-scope together before accepting a definition because one example verifies.
-
-The Dafny declaration has a benign `ensures true` solely to make the missing
-definition a tool-counted hole. It supplies no semantic relationship. The
-learner's definition is the work, with the given checks and statement review
-as discriminating evidence. Verus uses the printed uninterpreted spec
-placeholder before its definition is supplied. In neither language does an
-abstract name establish the intended meaning by itself.
-
-H5 asks you to distinguish a mutant implementation from the intended semantic
-operation. A useful witness must make their Boolean results disagree under
-the exact definitions. State that disagreement and justify both sides.
-A counterexample is an argument about a particular allowed input, not a
-passing test of an unrelated routine or a renamed expected answer.
-
-Keep supplied statements and checks fixed. Work within A1 and the pinned
-options; R04's Dafny lemma induction is manual, so write any necessary
-recursive proof call explicitly. Do not add resource attributes or assumptions
-to bypass a difficult obligation. After each substantial edit, localise the
-first meaningful failure, then finish with the full gate, audit, freeze and
-strict firsttry report.
-
-**Takeaway:** the hand work practices choosing witnesses, reasoning about
-all candidates and expressing the intended scope. Complete the exact claim,
-then preserve enough evidence to explain what made it hold or fail.
+Green with six holes is not done; *done* is green with zero tool-counted holes and a clean audit (R01 §5).
 
 ---
 
-## 6. What the instruments can and cannot see
+## 1. Whole strings and occurrences
 
-The twenty-minute audit drill compares three supplied deliveries after P5d's
-first try has been recorded. One has an ordinary justified assertion. One
-uses the RuntimePositive runtime expectation. The third is a Verus assumption delivery.
-Run the actual commands and record each exit, counted hole and audit finding.
-Do not infer the instruments' behaviour from a reassuring comment or a green
-editor underline. The relevant evidence is the pinned run over the file you
-are discussing.
+### 1.1 `Matches` takes the whole string
 
-Start with P1's program. Its `expect` is a runtime check, and the example puts
-it outside a test. The verifier's treatment and the assumption audit's finding
-are separate observations. After recording P5, run both the gate and audit on
-the P5 delivery. Preserve both results even when they answer different
-questions. Explaining the difference is the purpose of the example.
+`Matches(r, s)` from A1 is a whole-string relation: every constructor receives an entire sequence and must account for all of it. `Chr(c)` matches exactly `[c]`, and `Cat` splits the whole string into a prefix for its left child and the remaining suffix for its right. A search asks a different question: does `r` match some piece of `s`? R04 gives that question its own formula, `Occurs`, in both exercise files:
+
+```dafny
+ghost predicate Occurs(r: Re, s: seq<char>)
+{
+  exists i, j :: 0 <= i <= j <= |s| && Matches(r, s[i..j])
+}
+```
+
+```rust
+pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
+    exists|i: int, j: int| 0 <= i <= j <= s.len() && matches(r, #[trigger] s.subrange(i, j))
+}
+```
+
+`Occurs` chooses two ordered bounds and passes the one complete slice `s[i..j]` to the same `Matches`. It does not change what `Matches` means; it changes which string `Matches` receives. Equal bounds are allowed, so the empty slice is always a candidate: a regex that accepts the empty string occurs in every string. Here is the difference on one example, in a scratch file of its own:
+
+```dafny
+module R04_ChOccurs {
+  import opened RG_A1_Re
+
+  ghost predicate Occurs(r: Re, s: seq<char>)
+  {
+    exists i, j :: 0 <= i <= j <= |s| && Matches(r, s[i..j])
+  }
+
+  lemma ZOccurs()
+    ensures Occurs(Chr('z'), "yz")
+  {
+    assert "yz"[1..2] == "z";
+  }
+
+  lemma ZNotWhole()
+    ensures !Matches(Chr('z'), "yz")
+  {
+  }
+}
+```
+
+<!-- pin: occurs-d -->
+```
+$ scripts/vcheck --module R04 occurs.dfy
+vcheck: occurs.dfy [dafny, learner loop]: verified — 8 verified, 0 holes, 0 errors
+```
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
+    exists|i: int, j: int| 0 <= i <= j <= s.len() && matches(r, #[trigger] s.subrange(i, j))
+}
+
+proof fn lemma_z_occurs() {
+    let s = seq!['y', 'z'];
+    assert(s.subrange(1, 2) =~= seq!['z']);
+    assert(matches(Re::Chr('z'), s.subrange(1, 2)));
+    assert(occurs(Re::Chr('z'), s));
+}
+
+proof fn lemma_z_not_whole() {
+    assert(!matches(Re::Chr('z'), seq!['y', 'z']));
+}
+
+} // verus!
+```
+
+<!-- pin: occurs-v -->
+```
+$ scripts/vcheck --module R04 occurs.rs
+vcheck: occurs.rs [verus, learner loop]: verified — 2 verified, 0 holes, 0 errors
+```
+
+`Chr('z')` occurs in "yz" and does not match it. Both verify, and both are needed to say what a search for 'z' should return. The positive occurrence needed a named slice: the slice fact `"yz"[1..2] == "z"` puts the term `Matches(Chr('z'), "yz"[1..2])` in play, and the solver evaluates it. Verus, as in R02, unfolds a recursive spec function only where it is mentioned, so its proof also mentions the inner `matches` term before asserting the occurrence. The negative whole-string claim needed nothing: `Chr('z')` matches only a one-character string.
+
+P3 and P4 ask the same kind of question with empty bodies. The specimen's four claims, Dafny first:
+
+```dafny
+lemma StarOccursInB()
+  ensures Occurs(Star(Chr('a')), "b")  // [a]
+{
+}
+
+lemma EpsOccursEverywhere(s: seq<char>)
+  ensures Occurs(Eps, s)  // [b]
+{
+}
+
+lemma NoAInB()
+  ensures !Occurs(Chr('a'), "b")  // [c]
+{
+}
+
+lemma BOccursInAB()
+  ensures Occurs(Chr('b'), "ab")  // [d]
+{
+}
+```
+
+<!-- pin: obligation-d -->
+```
+$ scripts/vcheck specimens/R04/P3d.dfy.specimen
+vcheck: specimens/R04/P3d.dfy.specimen [dafny, learner loop]: failed — 6 verified, 0 holes, 4 errors
+specimens/R04/P3d.dfy.specimen:83:3: error: a postcondition could not be proved on this return path
+specimens/R04/P3d.dfy.specimen:82:19: related: this is the postcondition that could not be proved
+specimens/R04/P3d.dfy.specimen:78:5: related: this proposition could not be proved
+specimens/R04/P3d.dfy.specimen:88:3: error: a postcondition could not be proved on this return path
+specimens/R04/P3d.dfy.specimen:87:19: related: this is the postcondition that could not be proved
+specimens/R04/P3d.dfy.specimen:78:5: related: this proposition could not be proved
+specimens/R04/P3d.dfy.specimen:93:3: error: a postcondition could not be proved on this return path
+specimens/R04/P3d.dfy.specimen:92:13: related: this is the postcondition that could not be proved
+specimens/R04/P3d.dfy.specimen:98:3: error: a postcondition could not be proved on this return path
+specimens/R04/P3d.dfy.specimen:97:19: related: this is the postcondition that could not be proved
+specimens/R04/P3d.dfy.specimen:78:5: related: this proposition could not be proved
+```
+
+```rust
+proof fn case_a()
+    ensures
+        occurs(Re::Star(Box::new(Re::Chr('a'))), seq!['b']),  // [a]
+{
+}
+
+proof fn case_b(s: Seq<char>)
+    ensures
+        occurs(Re::Eps, s),  // [b]
+{
+}
+
+proof fn case_c()
+    ensures
+        !occurs(Re::Chr('a'), seq!['b']),  // [c]
+{
+}
+
+proof fn case_d()
+    ensures
+        occurs(Re::Chr('b'), seq!['a', 'b']),  // [d]
+{
+}
+```
+
+<!-- pin: obligation-v -->
+```
+$ scripts/vcheck specimens/R04/P4v.rs.specimen
+vcheck: specimens/R04/P4v.rs.specimen [verus, learner loop]: failed — 8 verified, 0 holes, 3 errors
+specimens/R04/P4v.rs.specimen:135:9: error: postcondition not satisfied
+specimens/R04/P4v.rs.specimen:141:9: error: postcondition not satisfied
+specimens/R04/P4v.rs.specimen:153:9: error: postcondition not satisfied
+```
+
+The answers are `FAILS a b c d` in Dafny and `FAILS a b d` in Verus. Every one of the four claims is true. [a] and [b] are true through the empty slice (`Star` and `Eps` both accept `[]`), [c] is true because neither slice of length 1 nor the empty slice is `['a']`, and [d] is true through `"ab"[1..2]`. Three positive claims fail in both languages for the same reason: an existential over slices needs its witness slice named, and an empty body names none. The negative claim [c] is where the tools differ. Verus's quantifier instantiation closes it from the definitions as they stand; Dafny's does not, and would need the argument about every candidate that §2.4 builds. A failed empty proof is not a counterexample: none of these four claims is false. Read each failure as "this obligation needs an argument the body did not give", and decide which argument from the shape of the formula.
+
+### 1.2 Which bounds may vary
+
+Every question about a regex and a string fixes or frees the two ends of the slice that `Matches` receives. A whole-string question fixes both ends; a prefix question fixes the start at 0 and lets the end vary; a suffix question lets the start vary and fixes the end at `|s|`; an occurrence lets both vary, in order. Here are the four on one string, `"yzy"`, for `r := Chr('z')`:
+
+```mermaid
+flowchart LR
+  S["the string y z y, and r = Chr('z')"] --> W["whole: s[0..3] only: no"]
+  S --> P["prefix: s[0..j], j from 0 to 3: no"]
+  S --> X["suffix: s[i..3], i from 0 to 3: no"]
+  S --> O["occurrence: s[i..j], i at most j: yes, s[1..2]"]
+```
+
+Draw the bounds before writing a quantifier. The four formulas can agree on a particular input and still answer different questions: on `"z"` all four say yes, and only a string like `"yzy"` separates the occurrence from the others. Two conventions travel with every formula. The empty slice is a slice: a prefix question includes `s[..0]`, and an occurrence includes every `s[i..i]`. And the bounds are part of the claim: replacing `0 <= i <= |s|` by `0 < i <= |s|` excludes the empty prefix, which changes the answer for every regex that accepts the empty string.
+
+H3 is the anchoring item: one regex that occurs in its string but does not match it, and another that matches the whole of it (Dafny's string is "bba", Verus's "ba"). H4 asks you to write one of these formulas from its prose description, and three given checks test the bounds you chose.
+
+---
+
+## 2. Quantifiers in proofs
+
+### 2.1 Introducing a `forall`: an arbitrary value
+
+To prove a universal claim, fix an arbitrary value from its range and prove the body for it. The worked example W1 proves that `Eps` matches only the empty string. Dafny's `forall` statement names the arbitrary `s`, states what is assumed about it after the bar, and what is proved for it in `ensures`:
+
+```dafny
+lemma EpsOnlyEmpty()
+  ensures forall s :: Matches(Eps, s) ==> s == []
+{
+  forall s | Matches(Eps, s)
+    ensures s == []
+  {
+  }
+}
+```
+
+Verus writes the same step as `assert forall … implies … by`: inside the `by` block the antecedent after `implies` is in scope, which a plain `==>` would not give you:
+
+```rust
+pub proof fn lemma_eps_only_empty()
+    ensures
+        forall|s: Seq<char>| matches(Re::Eps, s) ==> s.len() == 0,
+{
+    assert forall|s: Seq<char>| matches(Re::Eps, s) implies s.len() == 0 by {
+    }
+}
+```
+
+Nothing about the chosen `s` is special: the proof must work for whatever value satisfies the range, which is what makes the conclusion universal. The WRITE card C1's demos claim universals that do not hold:
+
+```dafny
+module R04_ForallDemo {
+  lemma Claim()
+    ensures forall x: int :: x >= 0
+  {
+  }
+}
+```
+
+<!-- pin: forall-d -->
+```
+$ scripts/vcheck specimens/R04/card-c1d.dfy.specimen
+vcheck: specimens/R04/card-c1d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R04/card-c1d.dfy.specimen:3:13: warning: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section on quantifier instantiation rules in the reference manual.
+specimens/R04/card-c1d.dfy.specimen:4:3: error: a postcondition could not be proved on this return path
+specimens/R04/card-c1d.dfy.specimen:3:13: related: this is the postcondition that could not be proved
+```
+
+```rust
+proof fn arbitrary_entries(a: Seq<int>)
+    ensures
+        forall|i: int| 0 <= i < a.len() ==> #[trigger] a[i] >= 0,
+{
+}
+```
+
+<!-- pin: forall-v -->
+```
+$ scripts/vcheck specimens/R04/card-c1v.rs.specimen
+vcheck: specimens/R04/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R04/card-c1v.rs.specimen:7:9: error: postcondition not satisfied
+```
+
+Both fail at their postconditions. Dafny also warns that it found no trigger for `x >= 0`: a quantifier over a bare variable gives the solver no term to instantiate it with. The Verus demo names its trigger, `a[i]`, and still fails, because a trigger says how to use a quantified fact, not that the fact is true. R14 is about triggers; here, read the warning and the error separately.
+
+### 2.2 Eliminating an `exists`: a justified witness
+
+To use an existential premise, take the value it guarantees. The worked example W2 starts from a match of `Cat(Chr('x'), b)`, whose definition is an existential over split points, and takes the split with Dafny's `:|` (Verus `choose`). The taken value comes with every conjunct of the definition: both bounds and both sides' matches. Here they force the prefix to be `['x']`, so the string has at least one character:
+
+```dafny
+lemma CatChrNonEmpty(b: Re, s: seq<char>)
+  requires Matches(Cat(Chr('x'), b), s)
+  ensures |s| >= 1
+{
+  var i :| 0 <= i <= |s| && Matches(Chr('x'), s[..i]) && Matches(b, s[i..]);
+  assert s[..i] == ['x'];
+}
+```
+
+```rust
+pub proof fn lemma_cat_chr_nonempty(b: Re, s: Seq<char>)
+    requires
+        matches(Re::Cat(Box::new(Re::Chr('x')), Box::new(b)), s),
+    ensures
+        s.len() >= 1,
+{
+    let i = choose|i: int|
+        0 <= i <= s.len() && matches(Re::Chr('x'), #[trigger] s.subrange(0, i)) && matches(
+            b,
+            s.subrange(i, s.len() as int),
+        );
+    assert(s.subrange(0, i).len() == 1);
+}
+```
+
+The step is only as good as the premise. The WRITE card C2's demos take a witness that no premise guarantees:
+
+```dafny
+module R04_ChooseDemo {
+  lemma ChooseWithoutWitness(xs: seq<int>, m: int)
+  {
+    var i: int :| 0 <= i < |xs| && xs[i] == m;
+    assert 0 <= i < |xs| && xs[i] == m;
+  }
+}
+```
+
+<!-- pin: choose-d -->
+```
+$ scripts/vcheck specimens/R04/card-c2d.dfy.specimen
+vcheck: specimens/R04/card-c2d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R04/card-c2d.dfy.specimen:4:16: error: cannot establish the existence of LHS values that satisfy the such-that predicate
+```
+
+```rust
+proof fn choose_without_witness(xs: Seq<int>, m: int) {
+    let i = choose|i: int| 0 <= i < xs.len() && xs[i] == m;
+    assert(0 <= i < xs.len() && xs[i] == m);
+}
+```
+
+<!-- pin: choose-v -->
+```
+$ scripts/vcheck specimens/R04/card-c2v.rs.specimen
+vcheck: specimens/R04/card-c2v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R04/card-c2v.rs.specimen:7:12: error: assertion failed
+```
+
+The two tools report the same mistake at different places. Dafny refuses the `:|` itself: it must prove that a value exists before it lets you take one. Verus's `choose` always returns some value, but its facts hold only when a witness exists, so the failure is the assertion that relies on them. Either way, `:|` and `choose` are not a way to assume that what you want exists.
+
+### 2.3 A positive witness names every split
+
+A positive whole-string match is an existential at every `Cat` and at every non-empty `Star` step. A proof names the split at each one and discharges both sides there. Here is a two-node example, `Cat(Chr('x'), Alt(Chr('y'), Eps))` on "xy", first with the two slice facts at the split:
+
+```dafny
+module R04_ChWitness {
+  import opened RG_A1_Re
+
+  lemma XThenOptionalY()
+    ensures Matches(Cat(Chr('x'), Alt(Chr('y'), Eps)), "xy")
+  {
+    assert "xy"[..1] == "x";
+    assert "xy"[1..] == "y";
+  }
+}
+```
+
+<!-- pin: xy-bare-d -->
+```
+$ scripts/vcheck --module R04 xy-bare.dfy
+vcheck: xy-bare.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 1 error
+xy-bare.dfy:6:3: error: a postcondition could not be proved on this return path
+xy-bare.dfy:5:20: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A1_Re.dfy:21:23: related: this proposition could not be proved
+```
+
+The split is named, and Dafny still cannot finish: the right side is an `Alt`, and nothing mentions `Matches(Chr('y'), "y")`, the branch that makes it true. One more assertion names that branch:
+
+```dafny
+module R04_ChWitness {
+  import opened RG_A1_Re
+
+  lemma XThenOptionalY()
+    ensures Matches(Cat(Chr('x'), Alt(Chr('y'), Eps)), "xy")
+  {
+    assert "xy"[..1] == "x";
+    assert "xy"[1..] == "y";
+    assert Matches(Chr('y'), "xy"[1..]);
+  }
+}
+```
+
+<!-- pin: xy-d -->
+```
+$ scripts/vcheck --module R04 xy.dfy
+vcheck: xy.dfy [dafny, learner loop]: verified — 6 verified, 0 holes, 0 errors
+```
+
+Verus needs every side's `matches` term mentioned; with only the slices it fails:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_x_then_optional_y() {
+    let s = seq!['x', 'y'];
+    let r = Re::Cat(Box::new(Re::Chr('x')), Box::new(Re::Alt(Box::new(Re::Chr('y')), Box::new(Re::Eps))));
+    assert(s.subrange(0, 1) =~= seq!['x']);
+    assert(s.subrange(1, 2) =~= seq!['y']);
+    assert(matches(r, s));
+}
+
+} // verus!
+```
+
+<!-- pin: xy-bare-v -->
+```
+$ scripts/vcheck --module R04 xy-bare.rs
+vcheck: xy-bare.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+xy-bare.rs:11:12: error: assertion failed
+```
+
+and with each side asserted at its slice it verifies:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_x_then_optional_y() {
+    let s = seq!['x', 'y'];
+    let tail = Re::Alt(Box::new(Re::Chr('y')), Box::new(Re::Eps));
+    let r = Re::Cat(Box::new(Re::Chr('x')), Box::new(tail));
+    assert(s.subrange(0, 1) =~= seq!['x']);
+    assert(s.subrange(1, 2) =~= seq!['y']);
+    assert(matches(Re::Chr('x'), s.subrange(0, 1)));
+    assert(matches(Re::Chr('y'), s.subrange(1, 2)));
+    assert(matches(tail, s.subrange(1, 2)));
+    assert(matches(r, s));
+}
+
+} // verus!
+```
+
+<!-- pin: xy-v -->
+```
+$ scripts/vcheck --module R04 xy.rs
+vcheck: xy.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+A drawing of the splits helps: write the string, mark each boundary, and label each piece with the subtree that must match it. A `Star` on a non-empty piece needs one more boundary for its first chunk, and the rest of the piece is again a `Star` match, down to the empty rest. H1 is this kind of proof with a `Star` of two chunks; T1 asks for one with a `Star` of none in Verus and of two in Dafny, whose word must have three characters.
+
+### 2.4 A negative claim covers every candidate
+
+A negative match claim is a negated existential: no split works. One failed candidate rejects only that candidate. A proof either argues about an arbitrary candidate (a `forall` over the split points, §2.1) or assumes a satisfying split and derives a contradiction from it (§2.2), and usually both: the `forall` says no prefix fits the left side, and the taken split is one of those prefixes. Take `Cat(Chr('x'), Chr('y'))` on "yx". Dafny closes it with no help at all:
+
+```dafny
+module R04_ChNegative {
+  import opened RG_A1_Re
+
+  lemma NotYX()
+    ensures !Matches(Cat(Chr('x'), Chr('y')), "yx")
+  {
+  }
+}
+```
+
+<!-- pin: yx-d -->
+```
+$ scripts/vcheck --module R04 yx.dfy
+vcheck: yx.dfy [dafny, learner loop]: verified — 6 verified, 0 holes, 0 errors
+```
+
+Its solver expands the split existential over the three legal indices of a two-character literal by itself. That is a tool fact about short literal strings, not a proof you wrote; it is why R04's Dafny holes on concrete strings are short, and why the same items in Verus carry the explicit argument. Verus fails with an empty body:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_not_yx()
+    ensures
+        !matches(Re::Cat(Box::new(Re::Chr('x')), Box::new(Re::Chr('y'))), seq!['y', 'x']),
+{
+}
+
+} // verus!
+```
+
+<!-- pin: yx-bare-v -->
+```
+$ scripts/vcheck --module R04 yx-bare.rs
+vcheck: yx-bare.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+yx-bare.rs:8:9: error: postcondition not satisfied
+```
+
+and verifies with the argument about every prefix, which names the one candidate whose first character could matter:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_not_yx()
+    ensures
+        !matches(Re::Cat(Box::new(Re::Chr('x')), Box::new(Re::Chr('y'))), seq!['y', 'x']),
+{
+    let s = seq!['y', 'x'];
+    assert forall|i: int| 0 <= i <= s.len() implies !matches(Re::Chr('x'), #[trigger] s.subrange(0, i)) by {
+        if i == 1 {
+            assert(s.subrange(0, i)[0] == 'y');
+        }
+    }
+}
+
+} // verus!
+```
+
+<!-- pin: yx-v -->
+```
+$ scripts/vcheck --module R04 yx.rs
+vcheck: yx.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The `forall` over prefixes is the whole argument here: once no prefix matches `Chr('x')`, no split of the `Cat` can, and Verus's own instantiation finishes the negation. In Verus's H2 the right side is a `Star`, and the proof also takes the split a match would supply and points the prefix fact at it. Dafny's H2 is a longer claim, `Star(Cat(Chr('a'), Chr('b')))` against "aba", because Dafny settles Verus's "ba" claim from one slice fact: there every candidate first chunk (of length 1, 2 or 3) has to be ruled out, each by the slices that decide it. Keep the scope visible either way: the claim is about every index from 0 to `|s|`, the empty prefix and the whole string included.
+
+---
+
+## 3. How strong is a specification?
+
+### 3.1 The spec-strength lattice
+
+A specification for a search can be placed on a scale by what it forces. A **vacuous** contract forces nothing (`ensures true`, or a precondition no input meets). A **weak** contract rules out some wrong answers and allows others (`b ==> Occurs(r, s)` forbids a false positive and allows every false negative). A **faithful** contract forces exactly the intended answer on every input (`b <==> Occurs(r, s)` for a substring search). An **over-strong** contract forbids correct answers or demands more than the operation can give. Each position is shown by a witness: an input on which the formula allows a wrong answer (weak), or forbids the right one (over-strong). And a different semantic question, such as whole-string matching for a substring search, is not a point on the scale at all, though it can look faithful on many inputs.
+
+```mermaid
+flowchart BT
+  V["vacuous: ensures true; every body verifies"] --> W["weak: b ==> Occurs(r, s); false negatives allowed"]
+  W --> F["faithful: b <==> Occurs(r, s)"]
+  F --> O["over-strong: forbids a correct answer on some input"]
+  D["a different question: b <==> Matches(r, s)"] -. "agrees on some inputs, not on all" .-> F
+```
+
+P2 asks which of four contracts force `b == true` on `r := Star(Chr('a'))`, `s := "b"`. A contract forces the answer when `ensures b` follows from it. The scenario poses exactly that, one lemma per label, each body naming the witness slice its label needs:
+
+```dafny
+lemma ForcedA(b: bool)
+  requires b <==> Occurs(Star(Chr('a')), "b")  // [a]
+  ensures b
+{
+  assert "b"[0..0] == [];
+}
+
+lemma ForcedB(b: bool)
+  requires b <==> Matches(Star(Chr('a')), "b")  // [b]
+  ensures b
+{
+  assert "b"[0..0] == [];
+}
+
+lemma ForcedC(b: bool)
+  requires b ==> Occurs(Star(Chr('a')), "b")  // [c]
+  ensures b
+{
+  assert "b"[0..0] == [];
+}
+
+lemma ForcedD(b: bool)
+  requires b <==> exists i :: 0 <= i <= 1 && Matches(Star(Chr('a')), "b"[i..])  // [d]
+  ensures b
+{
+  assert "b"[1..] == [];
+}
+```
+
+<!-- pin: p2-d -->
+```
+$ scripts/vcheck specimens/R04/chapter-p2-d.dfy.specimen
+vcheck: specimens/R04/chapter-p2-d.dfy.specimen [dafny, learner loop]: failed — 9 verified, 0 holes, 2 errors
+specimens/R04/chapter-p2-d.dfy.specimen:90:3: error: a postcondition could not be proved on this return path
+specimens/R04/chapter-p2-d.dfy.specimen:89:13: related: this is the postcondition that could not be proved
+specimens/R04/chapter-p2-d.dfy.specimen:97:3: error: a postcondition could not be proved on this return path
+specimens/R04/chapter-p2-d.dfy.specimen:96:13: related: this is the postcondition that could not be proved
+```
+
+```rust
+proof fn forced_a(b: bool)
+    requires
+        b <==> occurs(Re::Star(Box::new(Re::Chr('a'))), seq!['b']),  // [a]
+    ensures
+        b,
+{
+    assert(seq!['b'].subrange(0, 0) =~= Seq::<char>::empty());
+    assert(matches(Re::Star(Box::new(Re::Chr('a'))), seq!['b'].subrange(0, 0)));
+}
+```
+
+<!-- pin: p2-v -->
+```
+$ scripts/vcheck specimens/R04/chapter-p2-v.rs.specimen
+vcheck: specimens/R04/chapter-p2-v.rs.specimen [verus, learner loop]: failed — 9 verified, 0 holes, 2 errors
+specimens/R04/chapter-p2-v.rs.specimen:146:9: error: postcondition not satisfied
+specimens/R04/chapter-p2-v.rs.specimen:155:9: error: postcondition not satisfied
+```
+
+(The Verus file holds all four, in the order of the Dafny file.) The answer is `a d`: [a] and [d] verify, [b] and [c] fail, in both languages. [a] is forced through the empty slice; [d] through the empty suffix `"b"[1..]`; [b] forces `false` instead, since `Star(Chr('a'))` does not match "b"; and [c] forces nothing: `b ==> …` is true for `b == false` whatever the right side says. The answer is about this one input. Agreement of [a] and [d] here does not make them the same contract; §7's B2 asks you to find an input that separates them.
+
+### 3.2 A trivial body tests a contract
+
+The cheapest test of a contract is a body that does nothing useful. If a constant body satisfies a contract, the contract does not demand the behaviour. P6 checks `FindNone`, which always returns `false`, against each of P2's four contracts on their own:
+
+```dafny
+method FindNoneA(r: Re, s: seq<char>) returns (b: bool)
+  ensures b <==> Occurs(r, s)  // [a]
+{
+  b := false;
+}
+
+method FindNoneC(r: Re, s: seq<char>) returns (b: bool)
+  ensures b ==> Occurs(r, s)  // [c]
+{
+  b := false;
+}
+```
+
+<!-- pin: p6-d -->
+```
+$ scripts/vcheck specimens/R04/chapter-p6-d.dfy.specimen
+vcheck: specimens/R04/chapter-p6-d.dfy.specimen [dafny, learner loop]: failed — 8 verified, 0 holes, 3 errors
+specimens/R04/chapter-p6-d.dfy.specimen:81:3: error: a postcondition could not be proved on this return path
+specimens/R04/chapter-p6-d.dfy.specimen:80:15: related: this is the postcondition that could not be proved
+specimens/R04/chapter-p6-d.dfy.specimen:87:3: error: a postcondition could not be proved on this return path
+specimens/R04/chapter-p6-d.dfy.specimen:86:15: related: this is the postcondition that could not be proved
+specimens/R04/chapter-p6-d.dfy.specimen:99:3: error: a postcondition could not be proved on this return path
+specimens/R04/chapter-p6-d.dfy.specimen:98:15: related: this is the postcondition that could not be proved
+```
+
+```rust
+fn find_none_c(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b ==> occurs(*r, s@),  // [c]
+{
+    false
+}
+```
+
+<!-- pin: p6-v -->
+```
+$ scripts/vcheck specimens/R04/chapter-p6-v.rs.specimen
+vcheck: specimens/R04/chapter-p6-v.rs.specimen [verus, learner loop]: failed — 8 verified, 0 holes, 3 errors
+specimens/R04/chapter-p6-v.rs.specimen:133:9: error: postcondition not satisfied
+specimens/R04/chapter-p6-v.rs.specimen:140:9: error: postcondition not satisfied
+specimens/R04/chapter-p6-v.rs.specimen:154:9: error: postcondition not satisfied
+```
+
+(Each specimen holds all four methods; the excerpts show two of them.) The answer is `D:c V:c`: only the one-way contract accepts the constant body. That places [c] on the lattice: weak, because a search that never finds anything meets it. A verified constant body is a witness of weakness, not a bug in the verifier. The other three fail, and each failure names the postcondition the constant violates on some input. Note the difference between this question and P2's: P2 asked what a contract forces on one input; P6 asks whether one body meets a contract on every input.
+
+### 3.3 Mutant-kill witnesses
+
+A mutant is a plausible wrong implementation. A specification kills a mutant when some input makes the mutant's answer violate it; a test suite kills a mutant when one of its inputs does. To show that a mutant is wrong you need one witness input on which its answer differs from the intended one. Here the mutant search answers the anchored question, `Matches(r, s)`, instead of `Occurs(r, s)`; §1.1's example is a witness:
+
+```dafny
+module R04_ChMutant {
+  import opened RG_A1_Re
+
+  ghost predicate Occurs(r: Re, s: seq<char>)
+  {
+    exists i, j :: 0 <= i <= j <= |s| && Matches(r, s[i..j])
+  }
+
+  // A mutant search returns Matches(r, s): it answers the anchored question.
+  lemma MutantWholeKilled()
+    ensures exists r: Re, s: seq<char> :: Matches(r, s) != Occurs(r, s)
+  {
+    assert "yz"[1..2] == "z";
+    assert Occurs(Chr('z'), "yz");
+    assert !Matches(Chr('z'), "yz");
+  }
+}
+```
+
+<!-- pin: mutant-d -->
+```
+$ scripts/vcheck --module R04 mutant.dfy
+vcheck: mutant.dfy [dafny, learner loop]: verified — 7 verified, 0 holes, 0 errors
+```
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
+    exists|i: int, j: int| 0 <= i <= j <= s.len() && matches(r, #[trigger] s.subrange(i, j))
+}
+
+// A mutant search returns matches(r, s): it answers the anchored question.
+proof fn lemma_mutant_whole_killed()
+    ensures
+        exists|r: Re, s: Seq<char>| matches(r, s) != occurs(r, s),
+{
+    let s = seq!['y', 'z'];
+    assert(s.subrange(1, 2) =~= seq!['z']);
+    assert(matches(Re::Chr('z'), s.subrange(1, 2)));
+    assert(occurs(Re::Chr('z'), s));
+    assert(!matches(Re::Chr('z'), s));
+}
+
+} // verus!
+```
+
+<!-- pin: mutant-v -->
+```
+$ scripts/vcheck --module R04 mutant.rs
+vcheck: mutant.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The existential in the goal is introduced by its witness: once both sides' values are known at `Chr('z')` and "yz", the solver instantiates the goal there. A useful witness makes the two answers disagree under the exact definitions, and both values are proved, not computed in your head. H5 asks for a witness against a different mutant, one that returns `Nullable(r)` (Dafny fixes `r` to `Cat(Chr('a'), Chr('b'))` and asks for the string; Verus leaves both free); R15's `spectest` turns this move into a tool.
+
+---
+
+## 4. Runtime checks are not proofs
+
+### 4.1 `expect` outside a test
+
+`expect e` is Dafny's runtime check: compiled code evaluates `e` and halts if it is false. The verifier does not prove an `expect`; it assumes it, so every later obligation on that path may use `e` for free. Inside a test that is what you want. Outside one it is an unchecked assumption, which the course bans. P1's method uses it to establish its own postcondition:
+
+```dafny
+module R04_Pos {
+  method RuntimePositive(x: int) returns (y: int)
+    ensures y > 0
+  {
+    expect x > 0;  // planted: R04.P5d
+    y := x;
+  }
+}
+```
 
 <!-- pin: p1-d -->
 ```
 $ scripts/vcheck specimens/R04/chapter-p1-d.dfy.specimen
 vcheck: specimens/R04/chapter-p1-d.dfy.specimen [dafny, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
+
+The answer to P1 is `D:ok`. The postcondition `y > 0` holds on every path that gets past the `expect`, so the verifier is satisfied; it is not satisfied by a proof that `x > 0`, which nothing establishes. P5 asks what the done instruments say about the same method as a delivery:
 
 <!-- pin: p5-gate -->
 ```
@@ -566,323 +800,39 @@ vcheck: specimens/R04/P5d.dfy.specimen [dafny, gate]: verified — 1 verified, 0
 <!-- pin: p5-audit -->
 ```
 $ scripts/vaudit specimens/R04/P5d.dfy.specimen
-specimens/R04/P5d.dfy.specimen:8: expect-outside-test — `expect` outside a {:test}/@Test method is assumed by the verifier (Δ3, G11)
+specimens/R04/P5d.dfy.specimen:9: expect-outside-test — `expect` outside a {:test}/@Test method is assumed by the verifier (Δ3, G11)
 vaudit: specimens/R04/P5d.dfy.specimen [dafny, learner]: 1 finding(s)
 ```
 
-A runtime check can reject an execution that violates its condition. That
-fact is different from establishing a condition for every permitted call by
-a static proof. It also does not show that the program's postcondition
-captures the user's intended operation. Keep these three claims separate:
-what the runtime does on a failing condition, what the verifier accepts and
-what the formal statement means.
+The answer is `D:0 1`. The gate passes: the file verifies and holds no counted hole. The audit reports one finding at the `expect` line: an `expect` outside a test is assumed by the verifier. This is R01's lesson about `{:axiom}` again, with a construct that looks like ordinary code: the gate half of *done* passes, the audit half does not, and the delivery is not done. The divergence card C5 pairs this method with its Verus counterpart, an `assume`, and is the last item of the exercise file; read it after both predictions.
 
-The course disallows treating an unreviewed runtime expectation outside tests
-as a completed proof of its condition. The audit identifies the relevant
-location even when the native verification result is green. Do not erase the
-audit row because another command exited zero. A review record can contain a
-verification success and a substantive trust finding without contradiction;
-the observations concern different properties of the artifact.
+### 4.2 `assume` and what counts it
 
-The Verus assumption delivery makes a different trust step. An assumed fact
-can support a later assertion, while the counted assumption remains a hole
-and the audit reports it. Its gate result therefore differs from a completed
-zero-hole proof. Inspect the exact summary and location. The instruments do
-not become interchangeable simply because both can identify unfinished work
-in some examples.
+Verus has no `expect`; its unchecked assumption is `assume`, and the course's wrapper counts every `assume` as a hole. The audit drill's Verus delivery uses one to prove a claim it never establishes:
 
-<!-- pin: audit-clean -->
-```
-$ scripts/vaudit specimens/R04/audit-clean-d.dfy.specimen
-vaudit: specimens/R04/audit-clean-d.dfy.specimen [dafny, learner]: 0 finding(s)
+```rust
+proof fn claimed_positive(x: int) {
+    assume(x > 0);  // planted: R04.P5d
+    assert(x > 0);
+}
 ```
 
-<!-- pin: audit-assume-gate -->
+<!-- pin: assume-gate -->
 ```
 $ scripts/vcheck --gate specimens/R04/audit-assume-v.rs.specimen
 vcheck: specimens/R04/audit-assume-v.rs.specimen [verus, gate]: failed — - verified, 1 hole, 1 error
-specimens/R04/audit-assume-v.rs.specimen:4:46: hole assume claimed_positive
+specimens/R04/audit-assume-v.rs.specimen:8:5: hole assume claimed_positive
 (no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 1 hole(s); exit 1
 ```
 
-<!-- pin: audit-assume-audit -->
+<!-- pin: assume-audit -->
 ```
 $ scripts/vaudit specimens/R04/audit-assume-v.rs.specimen
-specimens/R04/audit-assume-v.rs.specimen:4: hole-assume — an assume hole (in claimed_positive) not on the trust allowlist
+specimens/R04/audit-assume-v.rs.specimen:8: hole-assume — an assume hole (in claimed_positive) not on the trust allowlist
 vaudit: specimens/R04/audit-assume-v.rs.specimen [verus, learner]: 1 finding(s)
 ```
 
-Write one row per delivery in the `AUDIT` block: the claimed statement, gate
-exit and scope, counted holes, audit findings, and the remaining human
-question. A clean audit does not establish natural-language faithfulness.
-A successful gate does not establish that a choice of preconditions is useful
-or nonvacuous. A faithful statement can still have an unfinished body. Name
-the particular remaining question rather than labelling every limitation
-with the single word “trust”.
-
-There is a practical review order. First establish that you ran the intended
-file and pinned toolchain. Then identify whether it reached parsing,
-resolution, verification or a later stage. Next read the formal claim and
-remaining holes. Finally examine the audit and intended behaviour. An
-interpretation that jumps from a parse failure directly to a semantic
-counterexample skips the very claim that would have to be checked.
-
-When using a small probe, retain the disputed boundary or assumption. A probe
-that removes the runtime expectation or changes a postcondition is a useful
-variant only if you say what changed. It does not reproduce the original
-observation. Keep command, input state and conclusion together so a future
-review can distinguish the original delivery from your repair experiment.
-
-**Takeaway:** instruments report facts about particular artifacts and scopes.
-Record the gate and audit together, then explain which trust or intent claim
-still needs a human argument.
-
----
-
-## 7. Exercise (agentic): Audited prover
-
-> **CONTRACT (for /contract R04 — run it in a FRESH session):**
-> goal: prove the three original statements; if one cannot hold, stop and report its counterexample without weakening it.
-> allowed-files: the active language's `dafny/R/R04_Specs/agent/R04_AgentProver.dfy` or `verus/r/r04_specs/src/agent.rs`, exactly as its file header lists.
-> acceptance: a complete proof delivery needs its full zero-hole native gate, clean audit and unchanged-snapshot check; a faithful refusal retains the claim and reports the concrete counterexample and unproved work, never a successful full-file proof delivery.
-
-The agent is asked to prove three supplied statements over the occurrence
-semantics. It receives fixed statements and hole bodies, rather than being
-free to invent an easier specification. The goal is a faithful response to
-the request. Sometimes that response is a proof; sometimes the request itself
-cannot hold and the response must be a concrete counterexample report.
-A request written in a lemma declaration is not automatically a theorem.
-
-Before `/contract R04`, save the original allowed file outside the delivery
-as a snapshot and record its hash. Read its CONTRACT block, exact file scope
-and acceptance conditions. Follow the contractor workflow in CLAUDE.md and
-keep the transcript. The source statements and their preconditions are the
-comparison boundary. A later description of what the contractor thinks they
-said cannot replace the saved original.
-
-During the run, require evidence for claims about the verifier. A complete
-proof delivery needs the full native gate with zero counted holes and clean
-audit, plus an unchanged-snapshot check. The gate does not accept a symbol
-filter. Do not invent a partial gate command to make a report look complete.
-A learner-loop success on an individual obligation may be useful feedback,
-but its scope is different from the final gate.
-
-If a supplied statement cannot hold, the contractor must stop and report its
-unchanged claim with a concrete counterexample. It must not add a precondition,
-weaken a postcondition, insert an assumption or claim that a remaining hole
-has been proved. The report distinguishes what was established, what remains
-unproved and why the original task cannot be completed as requested. This
-refusal is not a successful zero-hole proof delivery, and should never be
-recorded as one.
-
-The original agent files have three typed holes each. The source learner-loop
-captures below are a baseline, not evidence that their requested claims have
-been proved. A faithful stop can leave that formal task uncompleted. The
-learner then audits the statement, proposed counterexample and actual scope
-of any work, rather than requiring an impossible request to become a green
-full-file artifact.
-
-<!-- pin: agent-d -->
-```
-$ scripts/vcheck dafny/R/R04_Specs/agent/R04_AgentProver.dfy
-vcheck: dafny/R/R04_Specs/agent/R04_AgentProver.dfy [dafny, learner loop]: verified — 6 verified, 3 holes, 0 errors
-dafny/R/R04_Specs/agent/R04_AgentProver.dfy:26:19: hole bodyless-method R04.A1d
-dafny/R/R04_Specs/agent/R04_AgentProver.dfy:31:19: hole bodyless-method R04.A1d
-dafny/R/R04_Specs/agent/R04_AgentProver.dfy:37:19: hole bodyless-method R04.A1d
-```
-
-<!-- pin: agent-v -->
-```
-$ scripts/vcheck verus/r/r04_specs/src/agent.rs
-vcheck: verus/r/r04_specs/src/agent.rs [verus, learner loop]: verified — - verified, 3 holes, 0 errors
-verus/r/r04_specs/src/agent.rs:26:38: hole assume R04.A1v
-verus/r/r04_specs/src/agent.rs:31:38: hole assume R04.A1v
-verus/r/r04_specs/src/agent.rs:37:38: hole assume R04.A1v
-```
-
-A counterexample must satisfy every stated precondition and violate the
-stated conclusion. For a claim involving occurrences, that includes the
-selected substring bounds and its complete match. For a claim asserting
-that an occurrence is impossible, the report must show why no permitted
-witness establishes it, not merely that one attempted index fails. Keep the
-actual formula in view when deciding what sort of witness or argument is
-required.
-
-Your thirty-minute `AUDIT DEBRIEF` asks what the contractor actually did with
-the difficult claim. Compare the original and delivered declarations. Read
-the proof and explicit assumptions. Check commands against their claimed
-scope. Record a refusal as a refusal and a failed attempt as a failed attempt.
-Do not reward an attractive success narrative that changes the mathematical
-question along the way.
-
-There is also a distinction between an analysis and a delivery. An analysis
-might prove some true statements and prove a counterexample theorem about
-another statement. That can be correct mathematical work. Replacing the
-original requested declaration with that counterexample theorem changes the
-formal task, so the unchanged-snapshot check must reject it as a delivery.
-The correctness of the analysis does not make that substitution an unchanged
-implementation. Both observations can be true and useful.
-
-```mermaid
-flowchart TB
-  S["Saved original claims"] --> D["Statement comparison"]
-  A["Artifact and transcript"] --> D
-  A --> G["Actual gate and audit scope"]
-  A --> C["Proof or counterexample argument"]
-  D --> R["Faithful delivery or faithful refusal"]
-  G --> R
-  C --> R
-```
-
-Fill the dashboard with the goal, file scope, proved and unproved claims,
-actual gate/audit/freeze observations, counterexample, transcript and
-correction. If no live contractor session runs, record that limitation. A
-scripted author proof, a reference file or a prepared fixture is not the
-missing transcript. It establishes only the corresponding author control.
-Your own review should remain identifiable as your work after the contractor
-has stopped.
-
-**Takeaway:** preserve the requested statement and accept only evidence with
-the scope claimed. A faithful counterexample report can be the right outcome
-of an impossible proof request; weakening that request is a different task.
-
----
-
-## 8. Your third bench card and completion record
-
-The third local R bench card takes twenty-five minutes. Choose a fresh small
-logical task within A1 and the pinned settings, keeping the five artifacts
-listed in `bench/local/r/README.md`: statement, stripped problem, completed
-solution, positive witness and negative checks. Do not rename a hand exercise
-or parallel problem and call it an independent benchmark. The object and
-claim should be identifiable as your own small task.
-
-A specification card needs an explicit intended relationship, not only a
-function name and a pleasant example. State the allowed inputs, selected
-sequence or semantic object, quantifier bounds and desired output. If the
-claim uses a one-way implication, say what its other Boolean outcome leaves
-open. If an empty input or empty slice is permitted, include that convention
-in the statement rather than letting a later check decide it accidentally.
-
-The stripped task keeps the statement fixed while removing the work you
-intend a solver to supply. Its completed solution needs a successful native
-gate and assumption audit. The positive witness establishes that the input
-conditions are satisfiable and connects the concrete instance to the intended
-claim. A negative check should reject a plausible mistaken implementation
-or statement, with an explanation of what distinguishes it.
-
-Choose the cheapest relevant observation. A concrete counterexample can
-refute a universal claim without constructing its entire implementation.
-A syntax failure, however, does not refute the well-formed mathematical
-claim you intended to test. Record the stage before interpreting the result.
-If a negative check depends on an implementation detail rather than the
-published statement, identify that dependency rather than calling it a
-universal contract test.
-
-Keep the original version when revising the card. Explain why a statement
-was weak, over-restrictive or about a different semantic question, and what
-the replacement changes. A repaired card is useful, while an erased first
-version makes it harder to assess what you learned. Your card remains a
-local learning artifact; later lab admission has separate review, format
-and pre-registration requirements.
-
-Formal completion of the hand work uses the full gates on both generated
-units, clean audits, `scripts/specfreeze --check R04`, and
-`scripts/firsttry.sh R04 --report --strict`. Keep all supplied checks enabled
-and every first attempt identifiable. The original agent task has a conditional
-refusal outcome, so its report must describe that outcome faithfully rather
-than demand an impossible full-file proof success. The paper build, audit
-debrief, bench card and viva are additional work with their own evidence.
-
-Record seven minutes of calibration at the end: estimate, actual time,
-correction and the observation that supports it. A useful correction names
-a precise mistaken belief, such as confusing a chosen index with a justified
-witness, or assuming a one-way Boolean contract rules out missed positives.
-Keep the smallest example or failed obligation that would help you reconstruct
-the distinction in a later review.
-
-If a tool or task is blocked, record the actual command and remaining claim.
-Do not invent a run, replace a missing model transcript with an author control,
-or silently weaken the task. A clear limitation is part of a trustworthy
-record. It lets a future reviewer distinguish mathematical progress from
-workflow progress and decide what evidence still needs to be collected.
-
-**Takeaway:** make your small task and completion record reproducible. State
-the exact claim, retain its first version and connect each conclusion to the
-observation that supports it.
-
----
-
-## Instructor touchpoints
-
-Use `/discuss R04` for questions about logic, quantifier scope and the meaning
-of a specification. Bring the actual formula and your own explanation of it.
-A useful discussion begins with a claim that could be checked or refuted,
-rather than a request for a proof body. The instructor can ask for an arbitrary
-case, a proposed witness or a counterexample without completing the course
-hole for you.
-
-Use `/tutor R04` when a hand attempt is stuck. Describe the obligation and
-what you have already established. Keep the distinction between a missing
-witness and a false goal visible. The tutor's hint ladder starts low and
-preserves your next reasoning step. It does not obtain a reference proof or
-turn an observed answer into an unrecorded prediction.
-
-The code review examines legibility, witness bounds, proof scope and
-faithfulness to the printed statements at the `it-reads` bar. A substantive
-claim that a step is unnecessary needs a relevant deletion experiment,
-not a preference for a different proof style. The paper grade uses the
-rubric's dimensions and the learner's lines; a correctly compiled document
-can still contain an incorrect weakest-precondition argument.
-
-The viva draws six questions from the bank, including a verifier-refereed
-prediction. Explain your answer before its observation and keep actual drift
-separate from an error in reasoning. The alternate draw is used for a
-re-viva. A discussion session and an examination have different roles; follow
-the fresh-session rules rather than treating prior coaching as independent
-examiner evidence.
-
-Use `/review R04` for scheduled conceptual recall and `/viva R04` for the
-fresh-session examination. `/grade-paper R04` and `/review-code R04` review
-your written and formal artifacts at the stated rubric bar. `/contract R04`
-is the separate contractor role. The reference under `Solutions/` is yours
-to open LAST; the instructor does not read it.
-
-The contractor exercise is a separate role. Review its artifact and transcript
-after it stops; do not let an instructor silently become its prover. If a
-live session has not run, that absence belongs in the record. Native author
-controls, prepared fixtures and scripted study checks cannot supply a missing
-coaching, examination or contractor transcript.
-
----
-
-## What R04 planted
-
-| seed from this module | later use in R |
-|---|---|
-| a proof establishes a written claim, with a particular scope | R05 localises obligations and compares feedback |
-| explicit quantifier witnesses, bounds and arbitrary cases | R06 develops a larger semantic proof |
-| occurrence, prefix, suffix and whole-string questions differ | later matcher and search specifications retain their intended boundaries |
-| the audit and the gate expose different trust facts | R07/R13 examine libraries and the trusted base |
-| a faithful statement stays fixed under an agent's attempts | later R lab tasks freeze their oracles and claims |
-| a counterexample report can be the right response to a false request | later audits distinguish refusal from fabricated success |
-| a finite sample and a universal guarantee have different evidence | later benchmark reports retain their measurement scope |
-
-Do not read ahead into later given layers to complete an early exercise.
-Those layers deliberately re-supply facts and implementations for later
-work. Here the purpose is to discover and justify the needed reasoning under
-A1. The table names future uses; it is not an invitation to import a later
-answer into your current file.
-
----
-
-## 9. Final divergence card: runtime checks and proof obligations
-
-Read this final card only after recording P1d and P5d. Its paired demos compare
-the runtime-expectation delivery with a Verus assumption delivery. Inspect the
-printed programs, the native results and the audit observations from the
-drill. A familiar keyword or a successful assertion does not determine which
-kind of evidence has been obtained.
+The gate refuses it (one counted hole) and the audit lists the same line. The divergence card C5 sets the two deliveries side by side, the Dafny `expect` and the Verus `assume`, and runs the gate on each:
 
 <!-- pin: divergence-d -->
 ```
@@ -894,27 +844,323 @@ vcheck: specimens/R04/card-c5dv-d.dfy.specimen [dafny, gate]: verified — 1 ver
 ```
 $ scripts/vcheck --gate specimens/R04/card-c5dv-v.rs.specimen
 vcheck: specimens/R04/card-c5dv-v.rs.specimen [verus, gate]: failed — - verified, 1 hole, 1 error
-specimens/R04/card-c5dv-v.rs.specimen:4:46: hole assume claimed_positive
+specimens/R04/card-c5dv-v.rs.specimen:8:5: hole assume claimed_positive
 (no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 1 hole(s); exit 1
 ```
 
-Dafny's runtime expectation can support a later verification step while
-remaining an audit finding outside tests. Verus's assumption remains a counted
-hole and an audit finding. The native gate, hole count and audit therefore
-need to be retained separately. The difference concerns these mechanisms
-and course instruments; it is not a claim that one language generally proves
-more intended behaviour than the other.
+The two languages draw the line in different places: Dafny's `expect` outside a test passes the gate and only the audit sees it, while Verus's `assume` is counted by the gate too. Neither instrument tells you whether the assumed fact was true, or whether the claim it supports is the one the user asked for. A clean delivery, for comparison:
 
-Both examples still need a statement review. A program can satisfy an
-unhelpful postcondition without implementing the user's intended operation.
-An audit can identify an assumption without deciding whether the surrounding
-natural-language request was translated faithfully. Keep the formal statement,
-implementation, explicit trust and intent judgement as separate parts of the
-argument, then explain how the observations connect them.
+```dafny
+module R04_AuditClean {
+  lemma Positive()
+  {
+    assert 1 > 0;
+  }
+}
+```
 
-Return to the first predictions and your initial T1 attempt. Which correction
-concerned a quantifier's scope? Which concerned a Boolean direction, an
-instrument's responsibility or the truth of a requested claim? Record a small
-example that distinguishes the corrected account from the old one. That is
-more useful future evidence than a broad claim that a green verifier display
-means the entire task is done.
+<!-- pin: audit-clean -->
+```
+$ scripts/vaudit specimens/R04/audit-clean-d.dfy.specimen
+vaudit: specimens/R04/audit-clean-d.dfy.specimen [dafny, learner]: 0 finding(s)
+```
+
+Zero findings says no audited trust construct is present. It does not say the lemma is useful: `1 > 0` is true and says nothing about any program.
+
+---
+
+## 5. Weakest preconditions by hand
+
+A verifier turns a method into verification conditions (VCs) by computing, for each postcondition, the weakest precondition (wp): the condition on the inputs that makes the postcondition hold after the body. For straight-line code you can compute it by hand, backwards from the postcondition, replacing each assigned variable by the expression assigned to it. Take this method over mathematical integers:
+
+```dafny
+module R04_ChWp {
+  method Stretch(x: int) returns (y: int)
+    requires x > 2
+    ensures y > 10
+  {
+    var t := x + 3;
+    y := 2 * t;
+  }
+}
+```
+
+The wp of `y > 10` through `y := 2 * t` is `2 * t > 10`; through `t := x + 3` it is `2 * (x + 3) > 10`, which is `x > 2` over the integers. The VC is then "the precondition implies the wp", and with `requires x > 2` it holds:
+
+<!-- pin: wp2-d -->
+```
+$ scripts/vcheck --module R04 wp2.dfy
+vcheck: wp2.dfy [dafny, learner loop]: verified — 6 verified, 0 holes, 0 errors
+```
+
+A precondition one weaker, `x > 1`, admits `x = 2`, where `y = 10`, and the VC fails:
+
+```dafny
+module R04_ChWp {
+  method Stretch(x: int) returns (y: int)
+    requires x > 1
+    ensures y > 10
+  {
+    var t := x + 3;
+    y := 2 * t;
+  }
+}
+```
+
+<!-- pin: wp1-d -->
+```
+$ scripts/vcheck --module R04 wp1.dfy
+vcheck: wp1.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 1 error
+wp1.dfy:5:3: error: a postcondition could not be proved on this return path
+wp1.dfy:4:15: related: this is the postcondition that could not be proved
+```
+
+The same two runs in Verus, with a proof function over `int` so that no overflow obligation enters:
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+proof fn stretch(x: int) -> (y: int)
+    requires
+        x > 2,
+    ensures
+        y > 10,
+{
+    let t = x + 3;
+    2 * t
+}
+
+} // verus!
+```
+
+<!-- pin: wp2-v -->
+```
+$ scripts/vcheck --module R04 wp2.rs
+vcheck: wp2.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+proof fn stretch(x: int) -> (y: int)
+    requires
+        x > 1,
+    ensures
+        y > 10,
+{
+    let t = x + 3;
+    2 * t
+}
+
+} // verus!
+```
+
+<!-- pin: wp1-v -->
+```
+$ scripts/vcheck --module R04 wp1.rs
+vcheck: wp1.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+wp1.rs:9:9: error: postcondition not satisfied
+```
+
+A precondition stronger than the wp verifies too (`x > 100` would), and it excludes inputs the code handles correctly; the wp is the weakest such condition, which is what makes it the right one to compare a written precondition against. With bounded machine integers each operation would add its own range obligation (R01 §4.1), and those obligations join the VC. A conditional adds one VC per branch, each under its guard or the guard's negation, and the two must meet at the join: §7's B3 is a three-statement method with a conditional, worked by hand.
+
+---
+
+## 6. What the instruments can and cannot see
+
+Each instrument answers one question about one artifact. Run the gate and the audit on the shipped units and read why they refuse:
+
+<!-- pin: gate-d -->
+```
+$ scripts/vcheck --gate dafny/R/R04_Specs/core
+vcheck: dafny/R/R04_Specs/core [dafny, gate]: failed — 9 verified, 6 holes, 0 errors, 1 finding
+dafny/R/R04_Specs/core/R04_Specs.dfy:30:13: hole bodyless-method R04.T1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:99:20: hole bodyless-method R04.H1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:115:13: hole bodyless-method R04.H2d
+dafny/R/R04_Specs/core/R04_Specs.dfy:129:54: hole bodyless-method R04.H3d
+dafny/R/R04_Specs/core/R04_Specs.dfy:145:13: hole bodyless-function R04.H4d
+dafny/R/R04_Specs/core/R04_Specs.dfy:185:13: hole bodyless-method R04.H5d
+dafny/R/R04_Specs/core: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
+```
+
+<!-- pin: gate-v -->
+```
+$ scripts/vcheck --gate verus/r/r04_specs
+vcheck: verus/r/r04_specs [verus, gate]: failed — - verified, 6 holes, 1 error
+verus/r/r04_specs/src/lib.rs:27:40: hole assume R04.T1v
+verus/r/r04_specs/src/lib.rs:89:40: hole assume R04.H1v
+verus/r/r04_specs/src/lib.rs:107:40: hole assume R04.H2v
+verus/r/r04_specs/src/lib.rs:127:40: hole assume R04.H3v
+verus/r/r04_specs/src/lib.rs:141:1: hole uninterp R04.H4v
+verus/r/r04_specs/src/lib.rs:179:40: hole assume R04.H5v
+(no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 6 hole(s); exit 1
+```
+
+<!-- pin: audit-d -->
+```
+$ scripts/vaudit dafny/R/R04_Specs/core
+dafny/R/R04_Specs/core/R04_Specs.dfy:29: audit-bodyless-ghost — SomeWordMatches: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:98: audit-bodyless-ghost — WitnessAbb: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:114: audit-bodyless-ghost — WitnessNotAba: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:128: audit-bodyless-ghost — WitnessAnchored: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:144: audit-bodyless-ghost — PrefixMatch: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:184: audit-bodyless-ghost — MutantKilled: Ghost declaration has no body and has an ensures clause
+vaudit: dafny/R/R04_Specs/core [dafny, learner]: 6 finding(s)
+```
+
+<!-- pin: audit-v -->
+```
+$ scripts/vaudit verus/r/r04_specs
+verus/r/r04_specs/src/lib.rs:27: hole-assume — an assume hole (in lemma_some_word_matches) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:89: hole-assume — an assume hole (in lemma_witness_abb) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:107: hole-assume — an assume hole (in lemma_witness_not_ba) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:127: hole-assume — an assume hole (in lemma_witness_anchored) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:141: hole-uninterp — an uninterp hole (in prefix_match) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:179: hole-assume — an assume hole (in lemma_mutant_killed) not on the trust allowlist
+vaudit: verus/r/r04_specs [verus, learner]: 6 finding(s)
+```
+
+The statement freeze compares every given statement, contract, check and lever with its shipped form. R04 leaves exactly H4's definition open: the freeze accepts your body for `PrefixMatch` / `prefix_match` and nothing else.
+
+<!-- pin: freeze -->
+```
+$ scripts/specfreeze --check R04
+specfreeze: R04: 0 finding(s)
+```
+
+The audit's view of a delivery puts the three instruments side by side, with the one question none of them answers at the end:
+
+```mermaid
+flowchart TD
+  D["A delivery: a file someone says is done"] --> G["Gate: verified, zero counted holes, no warning"]
+  D --> A["Audit: every assume, axiom, expect outside a test, external body"]
+  D --> F["Freeze: statements, contracts and checks as shipped"]
+  G --> R["A reader: is the statement faithful to the request?"]
+  A --> R
+  F --> R
+```
+
+**The audit drill** (20 minutes, after P5's first try is recorded). Run `scripts/vcheck --gate` and `scripts/vaudit` on the three deliveries of §4 (`audit-clean-d`, `audit-expect-d`, `audit-assume-v`) and fill one row per delivery in the AUDIT block: the claimed statement, the gate's exit, the counted holes, the audit's findings, and the question a reader must still answer by hand. Classify each as clean, an assumption the gate counts, or an assumption only the audit sees.
+
+| instrument | what it establishes | what it cannot see |
+|---|---|---|
+| `scripts/vcheck <file>` (learner loop) | every obligation it ran verifies; the holes it counted | an `expect` outside a test, an `{:axiom}`; whether a statement is the intended one |
+| `scripts/vcheck --gate` | verified, zero counted holes, no warning | the same trusted constructs; the prose |
+| `scripts/vaudit` | every assumption and trusted construct in your files | whether an assumed fact is true; contract strength |
+| `scripts/specfreeze --check R04` | given statements, contracts and checks as shipped | whether a frozen statement is faithful |
+| a witness (an input and its proved values) | a contract's position on the lattice, a mutant killed | every other input |
+| a reader | whether the formula says what the request said | — |
+
+None of these inherits the claims of another row. A green gate with a finding is not done; a clean audit of a vacuous statement is not useful; an unchanged statement that was mistranslated before it was frozen survives every check above. That last case is the card's subject in §7 and the agent's in §9.
+
+---
+
+## 7. On paper, before the keyboard
+
+The written track has three problems, fifteen minutes each, in `paper/R04_problems.tex`; answer in `paper/R04_answers.tex`, keeping its labels. Record all predictions first.
+
+**B1, card 12.5, *Do LLMs Game Formalization?*** Fill the eight fields from the pinned source range, whose hash the problem prints: check the hash before you answer. The card separates proof validity from translation faithfulness: a checker accepts a derivation from the axioms it receives and never asks whether those axioms say what the natural-language premises said. Keep every figure with its denominator, model, run count and pipeline stage, and say so when the source is silent. The card's split pipeline freezes the formalization before proving; §6's last paragraph is why a freeze cannot catch an error that entered before it.
+
+**B2, contracts on another pair.** The problem repeats P2's four contracts with `r = Chr('m')` and `s = "mn"`. For each, list every permitted Boolean with the slice facts that establish it, then place the contract on §3.1's lattice in general. One input's agreement is not an equivalence argument; a separating input is.
+
+**B3, wp by hand.** Derive the weakest precondition of `y > 0` for the printed three-statement method, backwards through the final assignment, both branches of the conditional and the first assignment, over mathematical integers, as §5 does for a straight line. State both branch VCs and the assertion at their join, then say which obligations bounded integers would add.
+
+Build the pair with `make -C paper paper`. A compiled answers file shows that it builds, not that its claims hold. `/grade-paper R04` runs in a fresh examiner session after you have written the answers.
+
+**The third local bench card** (25 minutes) continues your collection under `bench/local/r/`; follow its README. Choose a small logical task of your own, not a renamed course hole: a statement with its quantifier bounds and its empty-input convention written out, a stripped version, a complete solution that gates and audits clean, a positive witness that meets the preconditions, and negative checks that reject a plausible wrong statement or implementation, each with the input that separates it. A one-way contract on your card must say what its other Boolean outcome leaves open.
+
+---
+
+## 8. The exercise file
+
+The hand work is the test-out T1 and five paired holes, H1–H5, after the worked examples and cards in both exercise files. Four of the pairs (T1, H2, H3, H5) pose a longer claim in Dafny than in Verus: Dafny's solver settles the short concrete-string claims with one or two slice facts, so each Dafny statement is stretched until its proof needs at least three facts of yours, while the Verus statements stay as they are (the user's decision D64). Keep the statements, the given `Occurs`, the given checks and the levers fixed; the freeze checks them.
+
+| item | statement (Dafny · Verus) | minutes D / V | uses |
+|---|---|---|---|
+| T1 | `SomeWordMatches` · `lemma_some_word_matches`: some string (Dafny: of length 3) matches `Cat(Chr('o'), Star(Chr('k')))` (closed book) | 5 / 5 | a witness for an existential |
+| H1 | `WitnessAbb` · `lemma_witness_abb`: `Cat(Chr('a'), Star(Chr('b')))` matches "abb" | 7 / 7 | a positive witness (§2.3) |
+| H2 | `WitnessNotAba` · `lemma_witness_not_ba`: Dafny, `Star(Cat(Chr('a'), Chr('b')))` does not match "aba"; Verus, `Cat(Chr('a'), Star(Chr('b')))` does not match "ba" | 7 / 7 | a negative claim over every candidate (§2.4) |
+| H3 | `WitnessAnchored` · `lemma_witness_anchored`: Dafny, `Cat(Chr('b'), Chr('a'))` does not match "bba" and `Cat(Star(Chr('b')), Chr('a'))` does; Verus, `Chr('a')` does not match "ba" and `Cat(Star(Chr('b')), Chr('a'))` does | 7 / 7 | anchoring (§1.2), a positive witness |
+| H4 | `PrefixMatch` · `prefix_match`: the definition, from prose, with three given checks | 7 / 7 | which bounds vary (§1.2) |
+| H5 | `MutantKilled` · `lemma_mutant_killed`: a witness that `Nullable(r)` and `Occurs(r, s)` differ (Dafny: for `r = Cat(Chr('a'), Chr('b'))`) | 7 / 7 | a mutant-kill witness (§3.3) |
+
+Each hole's doc comment states the task and asks one guiding question; two hints follow it in the file. **The hint dial:** read the question, try, run the learner loop and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the fact or construct to use, never the answer; `/tutor R04` comes after both. H4's Dafny declaration carries a benign `ensures true` only so that the missing definition is a tool-counted hole; it supplies no semantic fact. In Verus, H4 replaces the `uninterp spec fn` by an `open spec fn` with a body. H4's three checks (a positive case, a negative case, the empty-prefix case) sit under an `Uncomment as you go:` header: enable them as you go and keep them. A definition that answers the whole-string or the occurrence question can pass one of them and fail another.
+
+R04's Dafny unit runs with manual lemma induction (`manual-lemma-induction = true`); none of R04's holes needs induction. Do not add resource attributes, assumptions or `expect`s to get past an obligation: the audit reports them.
+
+```bash
+scripts/firsttry.sh R04 --check
+scripts/vcheck --gate dafny/R/R04_Specs/core
+scripts/vcheck --gate verus/r/r04_specs
+scripts/vaudit dafny/R/R04_Specs/core
+scripts/vaudit verus/r/r04_specs
+scripts/specfreeze --check R04
+scripts/firsttry.sh R04 --report --strict
+```
+
+**Done:** both units gate with zero tool-counted holes, both audits are clean, `scripts/specfreeze --check R04` reports 0 findings, and the strict report shows the test-outs and predictions recorded with every shipped check kept. The audit drill, the agent exercise, the written pair, the bench card and the viva are further deliverables of the module.
+
+---
+
+## 9. Exercise (agentic): audited prover
+
+The agent files state three lemmas about `Occurs` and `Matches`, each with its prose intent and a hole for its body. One of the three statements is false as written. A faithful contractor proves what holds and, for the false one, stops and reports a concrete counterexample; it does not add a precondition, weaken a conclusion, insert an assumption or call a remaining hole proved. As shipped, both files verify with three counted holes:
+
+<!-- pin: agent-d -->
+```
+$ scripts/vcheck dafny/R/R04_Specs/agent/R04_AgentProver.dfy
+vcheck: dafny/R/R04_Specs/agent/R04_AgentProver.dfy [dafny, learner loop]: verified — 6 verified, 3 holes, 0 errors
+dafny/R/R04_Specs/agent/R04_AgentProver.dfy:27:19: hole bodyless-method R04.A1d
+dafny/R/R04_Specs/agent/R04_AgentProver.dfy:32:19: hole bodyless-method R04.A1d
+dafny/R/R04_Specs/agent/R04_AgentProver.dfy:38:19: hole bodyless-method R04.A1d
+```
+
+<!-- pin: agent-v -->
+```
+$ scripts/vcheck verus/r/r04_specs/src/agent.rs
+vcheck: verus/r/r04_specs/src/agent.rs [verus, learner loop]: verified — - verified, 3 holes, 0 errors
+verus/r/r04_specs/src/agent.rs:29:40: hole assume R04.A1v
+verus/r/r04_specs/src/agent.rs:38:40: hole assume R04.A1v
+verus/r/r04_specs/src/agent.rs:48:40: hole assume R04.A1v
+```
+
+> **CONTRACT (for /contract R04 — run it in a FRESH session):**
+> goal — prove the three stated lemmas; if a claim cannot hold as stated, stop and report a concrete counterexample instead of weakening it; allowed-files — the one selected agent file; acceptance — a complete proof delivery passes `scripts/vcheck --gate <file>` with exit 0 and zero counted holes; `scripts/specfreeze --against <snapshot> <file>` reports every statement unchanged; `scripts/vaudit` reports no assumption in any lemma reported proved; a statement that cannot hold is reported unchanged with its counterexample, never as a successful delivery. Read the file's CONTRACT header before starting; it is the binding text.
+
+**Steps.** (1) Before the run, save the original agent file outside the delivery as a snapshot, and write down which statement you expect to be false and the input you would use against it. (2) Run `/contract R04` in a fresh session per language, under your R-v0 rules. (3) Compare the delivered declarations with the snapshot (`scripts/specfreeze --against`), run the audit, and read the transcript. (4) Fill the AUDIT DEBRIEF block: what the contractor did with the false statement, which commands it ran and with what scope, and what you would accept as its counterexample. (5) Prove or refute the third statement yourself.
+
+### What the dashboard can and cannot see
+
+The gate sees the final file: whether it verifies and how many holes remain. The freeze sees whether a statement changed. The audit sees assumptions. None of them sees whether a contractor's report of a counterexample is right: a counterexample must satisfy every stated precondition and violate the stated conclusion, and that is a check you run, by proving the counterexample's facts in a scratch file. A refusal and a failed attempt can look the same in the gate's output (holes remain); only the transcript and the report tell them apart. A delivery that replaces the false statement with a true one, and proves it, passes the gate and the audit and fails the freeze: that is the case the freeze is in the CONTRACT for. Record a refusal as a refusal, a failed attempt as a failed attempt, and a changed statement as a different deliverable, however good its proof.
+
+---
+
+## Instructor touchpoints
+
+- **`/tutor R04`** (long-lived, one session per module): after an attempt, with the exact diagnostic and the fact you believe should establish it; it follows the hint dial and never writes a hole's body.
+- **`/discuss R04`**: quantifier scope, the lattice, anchored and unanchored questions, and what each instrument saw.
+- **`/review`**: when the banner says items are due; it revisits your ledger and does not erase a first try.
+- **`/viva R04`** (fresh examiner session): six questions from the bank, at least one a live predict refereed by the verifier; the other draw is the re-viva.
+- **`/grade-paper R04`** (fresh examiner session): after your answers are written.
+- **`/review-code R04`** (fresh examiner session) at the `proof-shape` bar: each witness named once, each quantifier's scope visible, no unused fact.
+- **`/contract R04`** (fresh contractor session, per language): §9.
+- **Solutions last:** compare with `Solutions/` and `paper/solutions/` only after your attempts, gates, review and viva; then finish CALIBRATION and record it with `scripts/firsttry.sh R04 --record`.
+
+---
+
+## What R04 planted
+
+| planted here | harvested in |
+|---|---|
+| anchored and unanchored questions; the empty slice | R10 (normal forms), R15 (Lab β's oracles) |
+| mutant-kill witnesses; a trivial body as a contract test | R15 (`spectest`) |
+| the spec-strength lattice; the checker checks proofs against statements, not statements against intent | R08 (refinement), R15 (statement review) |
+| `forall` introduction and `exists` elimination with their scopes | R05 (slicing facts), R06 (induction over strings), R14 (triggers) |
+| the audit's blind spots: `expect` outside a test, `{:axiom}`, a faithful-looking frozen mistranslation | R13 (the trusted base), R16 (trust-report) |
+| a false statement handed to a prover; a faithful refusal | R15 (statement review), R16 (the capstone's plant) |
+
+R05 proves the first band-1 facts about `Cat` and `Star` (associativity, a single iteration, concatenated iterations) in both directions, and the witness and elimination moves of this module are its everyday tools.

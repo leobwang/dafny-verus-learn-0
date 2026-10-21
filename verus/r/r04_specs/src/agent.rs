@@ -15,28 +15,40 @@ acceptance:
 use vstd::prelude::*;
 use rg_re_a1::*;
 verus! {
-pub open spec fn occurs(r: Re,s: Seq<char>) -> bool {
-    exists|i: int,j: int| 0 <= i <= j <= s.len() && matches(r,#[trigger] s.subrange(i,j))
+pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
+    exists|i: int, j: int| 0 <= i <= j <= s.len() && matches(r, #[trigger] s.subrange(i, j))
 }
 // item: R04.A1v
 /// A witnessed occurrence survives appending input.
-pub proof fn lemma_occurs_append(r: Re,s: Seq<char>,t: Seq<char>)
-    requires occurs(r,s),
-    ensures occurs(r,s+t),
-{ #[verifier::proof_note("R04.A1v")] assume(false); }
+pub proof fn lemma_occurs_append(r: Re, s: Seq<char>, t: Seq<char>)
+    requires
+        occurs(r, s),
+    ensures
+        occurs(r, s + t),
+{
+    #[verifier::proof_note("R04.A1v")] assume(false);
+}
 /// A whole-string match is an occurrence of the whole input.
-pub proof fn lemma_match_is_occurrence(r: Re,s: Seq<char>)
-    requires matches(r,s),
-    ensures occurs(r,s),
-{ #[verifier::proof_note("R04.A1v")] assume(false); }
+pub proof fn lemma_match_is_occurrence(r: Re, s: Seq<char>)
+    requires
+        matches(r, s),
+    ensures
+        occurs(r, s),
+{
+    #[verifier::proof_note("R04.A1v")] assume(false);
+}
 /// Claimed intent: concatenation order is irrelevant to occurrence.
 // planted: R04.A1v
-pub proof fn lemma_occurs_cat_swap(a: Re,b: Re,s: Seq<char>)
-    requires occurs(Re::Cat(Box::new(a),Box::new(b)),s),
-    ensures occurs(Re::Cat(Box::new(b),Box::new(a)),s),
-{ #[verifier::proof_note("R04.A1v")] assume(false); }
+pub proof fn lemma_occurs_cat_swap(a: Re, b: Re, s: Seq<char>)
+    requires
+        occurs(Re::Cat(Box::new(a), Box::new(b)), s),
+    ensures
+        occurs(Re::Cat(Box::new(b), Box::new(a)), s),
+{
+    #[verifier::proof_note("R04.A1v")] assume(false);
+}
 
-  /* AUDIT DEBRIEF — learner-owned,30 min after the contractor stops.
+  /* AUDIT DEBRIEF — learner-owned, 30 min after the contractor stops.
      Diff against the snapshot. Which statements did the contractor report
      proved, unproved or refuted? Check the actual gate scope and hole count
      for each claimed proof, then inspect the assumptions and counterexample.

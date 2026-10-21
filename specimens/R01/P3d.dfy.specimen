@@ -4,16 +4,35 @@
 // SLOT: FAILS ???
 module R01_P3d {
   newtype U32 = x: int | 0 <= x < 0x1_0000_0000
+
   method NextUp(x: U32) returns (y: U32)
     requires x < 100
     ensures y > x
-  { y := x + 1; }
-  method CaseA() { var y := NextUp(5); assert y > 5; // [a]
+  {
+    y := x + 1;
   }
-  method CaseB() { var y := NextUp(5); assert y == 6; // [b]
+
+  method CaseA()
+  {
+    var y := NextUp(5);
+    assert y > 5;  // [a]
   }
-  method CaseC() { var y := NextUp(5); assert y >= 6; // [c]
+
+  method CaseB()
+  {
+    var y := NextUp(5);
+    assert y == 6;  // [b]
   }
-  method CaseD() { var y := NextUp(5); assert y < 1000; // [d]
+
+  method CaseC()
+  {
+    var y := NextUp(5);
+    assert y >= 6;  // [c]
+  }
+
+  method CaseD()
+  {
+    var y := NextUp(5);
+    assert y < 1000;  // [d]
   }
 }

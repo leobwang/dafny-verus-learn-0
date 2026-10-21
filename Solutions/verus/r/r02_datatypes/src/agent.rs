@@ -44,8 +44,16 @@ pub open spec fn star_height(r: Re) -> nat
     decreases r,
 {
     match r {
-        Re::Alt(a, b) => if star_height(*a) < star_height(*b) { star_height(*b) } else { star_height(*a) },
-        Re::Cat(a, b) => if star_height(*a) < star_height(*b) { star_height(*b) } else { star_height(*a) },
+        Re::Alt(a, b) => if star_height(*a) < star_height(*b) {
+            star_height(*b)
+        } else {
+            star_height(*a)
+        },
+        Re::Cat(a, b) => if star_height(*a) < star_height(*b) {
+            star_height(*b)
+        } else {
+            star_height(*a)
+        },
         Re::Star(a) => 1 + star_height(*a),
         _ => 0,
     }
@@ -55,9 +63,17 @@ pub proof fn lemma_star_height_bound(r: Re)
     decreases r,
 {
     match r {
-        Re::Alt(a, b) => { lemma_star_height_bound(*a); lemma_star_height_bound(*b); },
-        Re::Cat(a, b) => { lemma_star_height_bound(*a); lemma_star_height_bound(*b); },
-        Re::Star(a) => { lemma_star_height_bound(*a); },
+        Re::Alt(a, b) => {
+            lemma_star_height_bound(*a);
+            lemma_star_height_bound(*b);
+        },
+        Re::Cat(a, b) => {
+            lemma_star_height_bound(*a);
+            lemma_star_height_bound(*b);
+        },
+        Re::Star(a) => {
+            lemma_star_height_bound(*a);
+        },
         _ => {},
     }
 }
@@ -74,14 +90,26 @@ pub open spec fn min_len(r: Re) -> nat
         Re::Chr(_) => 1,
         Re::Star(_) => 0,
         Re::Alt(a, b) => {
-            let x = min_len(*a); let y = min_len(*b);
-            if x == 0 && !nullable(*a) { y }
-            else if y == 0 && !nullable(*b) { x }
-            else if x < y { x } else { y }
+            let x = min_len(*a);
+            let y = min_len(*b);
+            if x == 0 && !nullable(*a) {
+                y
+            } else if y == 0 && !nullable(*b) {
+                x
+            } else if x < y {
+                x
+            } else {
+                y
+            }
         },
         Re::Cat(a, b) => {
-            let x = min_len(*a); let y = min_len(*b);
-            if (x == 0 && !nullable(*a)) || (y == 0 && !nullable(*b)) { 0 } else { x + y }
+            let x = min_len(*a);
+            let y = min_len(*b);
+            if (x == 0 && !nullable(*a)) || (y == 0 && !nullable(*b)) {
+                0
+            } else {
+                x + y
+            }
         },
     }
 }
@@ -96,24 +124,40 @@ pub proof fn lemma_min_len_bound(r: Re)
 proof fn alphabet_leaf_check() {
     assert(alphabet(Re::Chr('q')) == set!['q']);
 }
+
 proof fn alphabet_pair_check() {
-    let a = Re::Chr('q'); let b = Re::Chr('r');
-    assert(alphabet(a) == set!['q']); assert(alphabet(b) == set!['r']);
+    let a = Re::Chr('q');
+    let b = Re::Chr('r');
+    assert(alphabet(a) == set!['q']);
+    assert(alphabet(b) == set!['r']);
     assert(alphabet(Re::Cat(Box::new(a), Box::new(b))) == set!['q', 'r']);
 }
+
 proof fn star_height_leaf_check() {
-    let a = Re::Chr('q'); assert(star_height(a) == 0);
+    let a = Re::Chr('q');
+    assert(star_height(a) == 0);
     assert(star_height(Re::Star(Box::new(a))) == 1);
 }
+
 proof fn star_height_pair_check() {
-    let a = Re::Chr('q'); let b = Re::Chr('r'); let s = Re::Star(Box::new(a));
-    assert(star_height(a) == 0); assert(star_height(b) == 0); assert(star_height(s) == 1);
+    let a = Re::Chr('q');
+    let b = Re::Chr('r');
+    let s = Re::Star(Box::new(a));
+    assert(star_height(a) == 0);
+    assert(star_height(b) == 0);
+    assert(star_height(s) == 1);
     assert(star_height(Re::Cat(Box::new(s), Box::new(b))) == 1);
 }
-proof fn min_len_leaf_check() { assert(min_len(Re::Chr('q')) == 1); }
+
+proof fn min_len_leaf_check() {
+    assert(min_len(Re::Chr('q')) == 1);
+}
+
 proof fn min_len_pair_check() {
-    let a = Re::Chr('q'); let b = Re::Chr('r');
-    assert(min_len(a) == 1); assert(min_len(b) == 1);
+    let a = Re::Chr('q');
+    let b = Re::Chr('r');
+    assert(min_len(a) == 1);
+    assert(min_len(b) == 1);
     assert(min_len(Re::Cat(Box::new(a), Box::new(b))) == 2);
 }
 

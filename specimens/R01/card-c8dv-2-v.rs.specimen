@@ -1,2 +1,9 @@
 use vstd::prelude::*;
-verus! { proof fn claim(c: char) { assert(c == 'x'); } }
+
+verus! {
+
+proof fn claim(c: char) {
+    assert(c == 'x');
+}
+
+} // verus!

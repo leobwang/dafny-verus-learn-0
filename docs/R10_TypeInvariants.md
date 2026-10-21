@@ -1,742 +1,75 @@
 # R10 — Invariants in types
 
-A regex can be well shaped and still describe the wrong language. That distinction
-is the starting point of this module. We will put a representation invariant in
-a type, carry extra proof evidence that disappears from the executable program,
-and ask what a client can actually conclude from the resulting interface. The
-answer depends on the promise written at the boundary. A normal-form wrapper
-provides a useful shape guarantee; preserving the language of an original
-operation needs its own statement.
+R09 put effects at the parser's boundary: a result or a positioned error, an old state and a new one. R10 moves a different kind of promise into the boundary: a representation invariant. A regex in normal form has no `Empty` operand in an alternation, no `Eps` operand in a concatenation, no star of a star; A4 states that shape as a predicate and gives it a type. Once the shape is in the type, every value of the type carries it, every constructor owes it, and every client may use it. What a client may *not* do is read more into the type than it states: a well-shaped regex can still describe the wrong language.
 
-Three ideas do all the work:
+The module is standalone. It imports the frozen layers A1 to A4 and no earlier learner file. A4 supplies the normal-form predicate and type, the smart constructors `MkAlt`, `MkCat`, `MkStar` and their executable twins, the ghost normalization model `Norm`, a few shape and congruence facts, and the certificate definitions R11 will use. It does not supply the compiled normalizer, the smart constructors' language proofs, or anything about certificates beyond their definitions.
 
-1. Constructing a refined value creates a proof obligation; consuming it exposes
-   only the facts its actual interface supplies.
-2. Erased proof data can justify an executable result without becoming a runtime
-   cache or an executable decision procedure.
-3. A proposed contract must support an original consumer over the original
-   domain, and must also admit a real implementation.
+**Three ideas do all the work.**
+
+1. Constructing a refined value is a proof obligation; consuming one exposes exactly the facts its type states. A subset type (Dafny) or a type invariant (Verus) makes the shape travel with the value, and nothing else travels with it.
+2. Erased data carries proof information, never runtime decisions. A ghost count or a tracked witness can justify the compiled result and then disappear; the compiled program must still make every choice from compiled data.
+3. A mathematical function and the method that computes it are separate objects. `function … by method` (Dafny) and an exec function whose `ensures` names a spec model (Verus) tie them together, and the language a constructor preserves is a third promise that neither the shape nor the model states.
+
+---
 
 ## 0. How this module works
 
-Allow408minutes: setup5, reading60, worked examples30, cards8, predictions15,
-hand holes110, spectrum lab30, flagship statements40 and audit20, paper30,
-bench20, viva30 and calibration10. Hand work is55minutes in each language.
-These are estimates, not measured learner times. Record interruptions, first
-attempts and failed approaches. The actor's wall-clock time is outside the
-budget. Live Claude, contractor and grading validation remains recorded D45
-debt. A local reference or deliberately scripted control is not a live outcome.
+**Budget: 408 minutes**, including the module viva and excluding contractor wall time. These are planning estimates; record your own times, interruptions and failed attempts.
 
-The module is standalone. It imports the provided A1, A1b, A2, A3 and A4
-interfaces and does not import an earlier learner solution. A4 provides normal
-forms, raw smart operations, mathematical normalization and derivative models,
-some shape and congruence facts, and certificate definitions for later work.
-It does not supply this module's compiled full normalizer or the flagship's
-semantic proofs. Certificate soundness, completeness and executable checking
-belong to R11; do not broaden a claim about this chapter to those tasks.
+| setup | read | worked | cards | predictions | holes | spectrum lab | flagship statements | flagship audit | paper | bench card | viva | calibration | total |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 5 | 60 | 30 | 8 | 15 | 110 | 30 | 40 | 20 | 30 | 20 | 30 | 10 | **408** |
 
-**This module's files** include the following source and validation inputs.
+The hole minutes are 55 in each language: H1 8 (Verus 10), H2 12, H3 10, H4 25 (Verus 23). R10 has no closed-book test-out; its first tries are the five predictions.
 
-| artifact | purpose |
-|---|---|
-| `dafny/given/R/RG_A4_Norm.dfy`, `verus/given/rg_re_a4/` | frozen shape definitions, wrappers, models and given facts |
-| `dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy`, `verus/r/r10_type_invariants/src/lib.rs` | 4 holes each; complete worked boundaries |
-| `dafny/checks/R10_checks.dfy` | given-only std value check, with no hand-hole dependency |
-| `specimens/R10/`, `slots/R10.slots` | five predictions, six WRITE cards and paired spectrum probes |
-| `dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy`, `verus/r/r10_type_invariants/src/agent.rs` | 3 holes each, 0 errors; human adds the semantic statements first |
-| `tools/R10/check_statements.py` | contract sufficiency without using implementation bodies |
-| `tools/R10/check_normalizer.py`, `tools/R10/check_constructors.py` | fixed actual-source compiled observations and retained native evidence |
-| `paper/R10_problems.tex`, `paper/R10_answers.tex` | SpecGen card03.5 and an erasure/contract argument |
-| `bench/local/r/` | your ninth course-derived benchmark card |
-| `Solutions/` | reference twins, read last after original attempts and receipts |
+**Predictions.** Commit the five answers below before running their scenarios or opening the specimens' expected outputs, the bank or the rubric. The value slots are in `dafny/checks/R10_checks.dfy` (P1) and `specimens/R10/P2v.rs.specimen` (P2), the obligation slot in `specimens/R10/P4v.rs.specimen` (P4), and the two verdicts in `slots/R10.slots`, switched on by the two `CHECK` lines of the Dafny file's prediction block (P3, P5). Respect each printed answer form; then run `scripts/firsttry.sh R10 --check` and keep its receipts.
 
-Commit all five predictions before continuing. P1d takes a numeral in the given-only
-Dafny check file. P2v takes a Boolean literal in its specimen. P4v takes the set of
-failing assertion labels. P3dv and P5dv take ordered native verdicts in
-`slots/R10.slots`; enable their CHECK switches only after recording the answer.
-Run `scripts/firsttry.sh R10 --check` to retain first tries. A later correction
-can help you learn, but does not replace what you committed before observation.
+> **Predict (P1) — commit in the file before reading on.** The given-only check unit builds `MkCat(Eps, Chr('k'))` with A4's smart concatenation and evaluates `NodeCount` of the result as compiled code. Which numeral reaches the slot? Answer form: a numeral.
 
-> **Predict (P1) — commit in the file before reading on.** Inspect the complete
-> smart-constructor expression and its executable node-count observation in the
-> Dafny check file. Which numeral belongs in the value slot? Follow the actual
-> fixed operation rather than counting an unreduced syntax tree by habit.
+> **Predict (P2) — commit in the file before reading on.** `specimens/R10/P2v.rs.specimen` asks whether `Star(Alt(Empty, Chr('m')))` satisfies A4's `is_norm`. Answer form: `true` or `false`.
 
-> **Predict (P2) — commit in the file before reading on.** The Verus specimen
-> asks whether one concrete nested representation satisfies the supplied normal
-> predicate. Commit a Boolean literal. Check the predicate at every constructor,
-> including conditions on children and exceptional shapes.
+> **Predict (P3) — commit in the file before reading on.** `option-x` validates the raw regex `Alt(Empty, Chr('q'))` at run time and asserts what it receives; `precondition-x` passes the same raw regex to a routine whose parameter type (Dafny) or precondition (Verus) demands normal shape. Answer `D:<x>,<y> V:<x>,<y>`, each one of `ok`, `fail`, `timeout`, `err:<stage>`.
 
-> **Predict (P3) — commit in the file before reading on.** Compare the complete
-> optional-validation scenario and the complete precondition-only scenario.
-> Commit `D:<x>,<y> V:<x>,<y>` for the actual code and original domain. A caller
-> proving a precondition and a caller receiving a rejection are different events.
+> **Predict (P4) — commit in the file before reading on.** `specimens/R10/P4v.rs.specimen` opens a packet's type invariant and asserts three labelled facts: [a] the pattern is normal, [b] the ghost weight is its node count, [c] the ghost weight is 0. Which labels fail? Answer form: the failing label set, or `none`.
 
-> **Predict (P4) — commit in the file before reading on.** The packet specimen
-> opens its actual type invariant and lists three labelled assertions. Commit
-> exactly the unprovable labels before running it. Keep an equality connecting
-> the erased witness to its representation distinct from an arbitrary numeral.
+> **Predict (P5) — commit in the file before reading on.** `shape-x` returns `Empty` as a normal regex with no further promise; `language-x` returns the same value under the promise that it matches exactly what `Chr('q')` matches. Answer `D:<x>,<y> V:<x>,<y>` as in P3.
 
-> **Predict (P5) — commit in the file before reading on.** Two complete producers
-> return the same kind of normal result under different promises. Compare the
-> shape-only interface with the original concrete language requirement. Commit
-> `D:<x>,<y> V:<x>,<y>` for the printed statements, without replacing a model.
+### This module's files
 
-The chapter captures later show the actual learner-loop scope. A typed
-placeholder can leave the learner loop green while the full gate still counts
-unfinished work. That is a stated course fact, not another prediction. Done
-means a complete gate with zero tool-counted holes, an audit, and preserved
-original statements. Inspect the native stage whenever a command fails.
+| file | role | shipped state |
+|---|---|---|
+| `dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy` | the prediction block, worked examples, the Dafny holes and a compiled use-site test | verified, 4 holes, 0 errors |
+| `verus/r/r10_type_invariants/src/lib.rs` | the paired Verus crate | verified, 4 holes, 0 errors |
+| `dafny/checks/R10_checks.dfy` | given-only compiled value check (P1) | verified, no hole; P1's slot unfilled |
+| `dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy` | the flagship: three constructors whose statements you write | verified, 3 holes, 0 errors |
+| `verus/r/r10_type_invariants/src/agent.rs` | the paired flagship | verified, 3 holes, 0 errors |
+| `specimens/R10/`, `slots/R10.slots` | prediction specimens, the spectrum scenarios, card demos | slots unfilled; card demos fail by design |
+| `dafny/given/R/RG_A4_Norm.dfy`, `verus/given/rg_re_a4/` | the frozen A4 layer: normal forms, smart constructors, models, shape facts | verified; no semantic constructor proof, no compiled normalizer |
+| `tools/R10/check_normalizer.py`, `check_statements.py`, `check_constructors.py` | compiled observations and the statement consumer | read the sources they name; run after your work |
+| `paper/R10_problems.tex`, `paper/R10_answers.tex` | written problems and your answers | template compiles; answers unfilled |
+| `bench/local/r/README.md` | instructions for your ninth local bench card | you create the card |
+| `Solutions/`, `paper/solutions/` | references | yours to open LAST, after your attempts, gates and review |
 
----
-
-## 1. A representation predicate becomes a boundary
-
-The supplied normal predicate describes selected syntactic reductions. It
-excludes empty operands and duplicate branches where the smart alternation
-removes them. It excludes annihilating or identity operands where smart
-concatenation reduces them. A normal star has a normal child of an admissible
-shape. Leaves provide base cases. Read the actual predicate, because a phrase
-such as “simplified regex” can hide many different reduction policies.
-
-Normality does not identify a unique representative for every language. Two
-different normal trees may accept the same words. Conversely, two normal
-trees may accept different words. The predicate is a representation policy,
-not a decision procedure for language equivalence. A constructor returning
-some normal regex therefore has considerable freedom unless its contract
-also relates that result to an input operation.
-
-Dafny expresses the provided wrapper as a subset of the regex datatype. A
-value of the subset satisfies its predicate. The witness makes the subset
-inhabited without placing an assumption in every client. A method returning
-that type must establish membership for every return. The compiler does not
-have to attach a runtime Boolean test to every value merely because the
-verifier used the predicate to justify construction.
-
-Verus's provided wrapper has private representation and a type invariant.
-Actual executable construction and use must respect that invariant. Its
-methods expose a mathematical regex view and executable access under their
-contracts. Keep the modes straight: a proof taking an arbitrary spec-mode
-wrapper value cannot casually treat it as an executable object whose invariant
-has been opened. Use the actual executable getter or state the needed logical
-domain explicitly when reasoning about arbitrary model values.
-
-```mermaid
-flowchart LR
-    Raw["Raw regex"] --> Obligation["Validate or prove shape"]
-    Obligation --> Wrapped["Normal representation"]
-    Wrapped --> Client["Client uses supplied facts"]
-    Client --> Separate["Additional semantic claim needs its own relation"]
-```
-
-W1d and W1v expose the packet representation built around that boundary. First
-identify each field's role without editing the holes. Which part is the regex
-that will execute? Which part is mathematical evidence? Where does the
-coherence condition mention the actual stored expression? A useful drawing
-shows the objects and their logical equalities, rather than a vague box marked
-“verified.” Every equality has to connect the values that are really present.
-
-The subset and wrapper are different language mechanisms. Dafny checks a
-predicate over a value of the underlying datatype. Verus manages an invariant
-around an executable object and offers an abstract view. They serve a similar
-client goal here, but their native syntax, mode restrictions and opening rules
-are not interchangeable. The purpose of the paired work is to understand both
-boundaries, including the differences you must account for in a port.
-
----
-
-## 2. Erased fields carry proof information
-
-Our packet includes a normal expression and evidence of its mathematical
-node count. In Dafny the count field is ghost, and the packet's subset relates
-it to the expression. In Verus a Ghost wrapper carries the number, while a
-Tracked witness records the expression associated with the evidence. The type
-invariant ties all these pieces together. A number with the right name is not
-enough: it must be the count of this representation, and the evidence must
-refer to this expression.
-
-Ghost and tracked data are proof resources. They can support an assertion,
-justify a constructor or express a relation that would otherwise be awkward
-to expose. They cannot be read to decide an executable branch. If a runtime
-branch depends on whether a regex is empty, inspect the executable regex. If
-a proof uses a stored mathematical count to justify the resulting field, keep
-that reasoning in proof mode. Erasing the proof must leave a program that can
-still make every runtime choice it needs.
-
-A tracked value adds mode and consumption discipline. It does not automatically
-make an arbitrary proposition true. Constructing a tracked witness must still
-establish its fields and every relevant invariant. Consuming it in a proof
-must use the promised relationship. Calling it evidence does not turn it into
-runtime authorization, an oracle, or proof that the original input's language
-has been preserved. State its actual proposition whenever that distinction
-could matter.
-
-This module deliberately makes the cache erased. Do not describe the result
-as a constant-time executable node-count cache. A client wanting a runtime
-count would need executable data and an appropriate agreement invariant.
-That would change the implementation and its costs. The current packet is a
-teaching boundary for proof data. Its count supports verification while the
-executable payload remains the regex representation.
-
-The compiled checker retains generated Dafny Python before the wrapper's
-usual cleanup. Inspect the packet's runtime fields and the actual builder
-bodies. Then inspect the observer separately. The observer explicitly walks
-the output to check a count; finding that traversal does not show the builder
-keeps an executable count field. Likewise, removing a ghost field does not
-remove all work related to shape: the executable validator and regex
-construction still perform their own operations.
-
-In Verus the compiled layout check compares this packet's size with its
-provided normal wrapper. This is a concrete fact about these compiled types.
-It is not a universal theorem about all ghost encodings, the optimizer,
-allocation sharing, peak heap use, stack depth or runtime speed. Describe the
-observed representation and the target configuration. A precise small claim
-is more useful than a performance story that the experiment did not measure.
-
----
-
-## 3. A method implements a mathematical function
-
-Dafny's by-method boundary separates a function's mathematical result from
-the executable method supplying it. Here the normalization model is ghost.
-The method must compute the chosen result and justify its agreement with the
-model. A ghost model alone does not provide compiled normalization. The course
-states this as a fact; your task is to write and verify the implementation
-under that fixed model.
-
-Agreement includes the logical packet, even when some fields disappear at
-runtime. The expression must match the function model, and the ghost witness
-must satisfy the packet's constraint. Erasure does not waive either proof
-obligation. Instead it explains why the compiled representation can be smaller
-than the mathematical object whose correctness you established.
-
-The smart raw operations are already executable in A4. They implement fixed
-shape models. Use their contracts as interfaces. Calling one of those
-operations is different from writing the recursive full normalizer: the latter
-must walk an arbitrary input tree, normalize the relevant children, combine
-their results and establish the chosen model for the complete result. Keep the
-termination argument aligned with the actual recursive inputs.
-
-W2d and W2v provide a small runtime shape wrapper. The result is a Boolean
-whose meaning is fixed by the supplied predicate. This makes a useful contrast
-with the ghost normalization model. One interface computes a decision about
-an executable representation; the other fixes a mathematical result that the
-learner must implement. Both are useful, and neither should be silently
-substituted for the other when explaining what a program runs.
-
-W3d and W3v show a provided congruence fact used by a client. Replacing a
-concatenation operand with a language-equivalent operand preserves the
-language of the whole expression. The premise concerns language equality,
-not merely normal shape. Read it before applying the lemma. If all you have
-is a shape invariant, a semantic congruence theorem still needs its semantic
-premise. An available lemma does not manufacture that missing relationship.
-
-The six WRITE cards isolate subset results, by-method agreement, erased
-witnesses, executable type invariants, Ghost values and Tracked consumption.
-Attempt each printed failure before consulting its reference. State the exact
-failed obligation and preserve the model while repairing the body. H1 and H2
-then require actual hand uses of the declared constructs in the full packet
-setting, so recognizing a syntax example is not the whole learning objective.
-
----
-
-## 4. Runtime checks, optional values and preconditions
-
-Take one arbitrary raw regex and imagine three interfaces around the same
-shape predicate. A runtime checker returns a Boolean. Its correctness contract
-relates the Boolean to the predicate, but it does not change the input's type.
-A caller can branch on the result and use the branch fact while it remains
-valid. The check's own computation is part of the executable program.
-
-An optional validated constructor packages success differently. On success it
-returns a wrapper around the original validated input. On rejection it
-characterizes why no wrapper was returned. Both directions matter. A promise
-saying only that every successful result is valid allows an implementation
-that rejects everything. Our H1 interface also fixes the rejection case, so
-normal inputs cannot disappear into an always-reject implementation.
-
-A precondition-only constructor moves the burden to its caller. It does not
-promise to detect bad input or return a rejection value. The caller must
-establish the domain before the call is verified. That can be the right
-interface when callers already carry the proof, but it is a different public
-behavior from validation over arbitrary raw inputs. A failed proof at the call
-site is not a runtime validation result.
-
-```mermaid
-flowchart TD
-    Input["Original raw-input domain"] --> Test["Runtime predicate"]
-    Input --> Optional["Optional validated result"]
-    Proof["Caller proves original predicate"] --> Required["Precondition-only constructor"]
-    Optional --> Some["Validated original representation"]
-    Optional --> None["Characterized rejection"]
-```
-
-The spectrum lab takes30minutes. Draw the three interfaces, write each
-original domain, and describe the result and caller obligations in words.
-Use fresh examples rather than changing a prediction after observing it.
-Include a normal input and a nonnormal input. For the optional interface,
-explain which clause rejects always-None. For the precondition-only interface,
-identify the exact fact needed before a call. Retain native source and stage
-for any disputed example.
-
-Then consider a change request: clients want to normalize every raw input
-rather than reject nonnormal inputs. A validated-input constructor does not
-already implement that request. The new operation needs a result relation
-between the arbitrary original input and the chosen normalized output. H4
-provides exact agreement with the fixed normalization model. Discuss separately
-what language theorem would connect that chosen model to the original regex.
-
-Do not strengthen a precondition merely to make a difficult branch disappear.
-The original task determines which inputs must remain supported. A smaller
-domain can produce an easier proof while changing the service offered to the
-client. Write an original valid input that would be excluded, and keep that
-witness in the review. The proof's assumptions are part of its result.
-
----
-
-## 5. The four paired hand exercises
-
-H1 accepts exactly normal inputs into the evidence-carrying packet. Allow8
-minutes in Dafny and10in Verus. Preserve the original input relation on
-success and the rejection characterization. Establish the packet's erased
-coherence at construction. A Boolean shape test alone is insufficient when
-the returned object must also contain a correctly related witness.
-
-H2 concatenates two packets. Allow12minutes per language. Open or use the
-actual input invariants, follow the supplied smart-concatenation model, and
-rebuild the erased evidence from the branches and original caches. Explain
-why the expression selected at runtime agrees with the witness established
-in proof mode. Keep the original function model or postcondition fixed.
-
-H3 proves that an already normal regex is a fixed point of the normalization
-model. Allow15minutes per language. The separate provided corollary derives
-idempotence from that fixed-point result and model closure. Dafny's H3
-explicitly disables automatic induction. Its empty body verifies when that
-lever is removed; this is a disclosed induction-control exercise. Supply the
-structural argument in the shipped configuration rather than changing the
-attribute to make the task disappear.
-
-H4 implements compiled structural normalization. Allow20minutes in Dafny
-and18in Verus. Every returned packet must be valid and its expression must
-agree with the fixed ghost model. The complete input tree matters. A method
-that always returns one valid packet can preserve shape while missing the
-specified normalization result. Use the recursive subproblem contracts and
-provided raw smart-operation interfaces, retaining structural termination.
-
-Write a short receipt after each attempt using the item's `did:` convention.
-A receipt should say which original obligation you discharged, rather than
-reporting that the screen turned green. Run the learner loop during editing,
-then the complete gate. A successful fast check of one function cannot stand
-in for verification of the whole module, and a typed placeholder remains
-unfinished work even when other declarations verify around it.
-
-After all four exercises, run the actual-source normalizer checker. Its fixed
-cases cover leaves and the important shape reductions, plus a reproducible
-collection of small compound trees. It compares exact normal forms, counts
-and normality and checks matching observations on a finite word set. These
-checks can expose a wrong implementation or shared model binding, but their
-finite nature remains explicit. The full native contract and its domain are
-the universal statement you actually proved.
-
----
-
-## 6. What the consumer can and cannot establish
-
-The statement checker uses the course's native parsers to extract the proposed
-requires and ensures clauses. It generates a proof consumer over arbitrary
-normal inputs and a fresh arbitrary normal result. First the original domain
-must establish the proposed preconditions. Then those preconditions and the
-proposed postconditions must establish the required raw-operation language
-relationship. No concrete constructor body is assumed in that implication.
-
-This matters because calling a known correct implementation can hide an
-inadequate interface. A body might preserve the original language for reasons
-that its public contract never mentions. A client restricted to the contract
-cannot use those hidden reasons. Quantifying over a fresh result asks which
-results the proposed clauses actually permit. If the clauses permit a normal
-result with the wrong language, the consumer still has an unproved goal.
-
-A native proof failure means this consumer was not proved under this
-configuration. It is not a universal semantic decision procedure for arbitrary
-specifications. Inspect whether the failure is a failed obligation, an
-unsupported expression, a resolution problem or a resource limit. Keep the
-original source and native output. Repairing the wrong problem can otherwise
-look like progress while leaving the intended interface unresolved.
-
-Logical sufficiency also has a classic limitation: an inconsistent
-postcondition implies any consumer goal. That does not make it a useful
-specification. An actual implementation over the original domain must
-establish the postcondition, and nonvacuous witness calls must remain
-supported. Use the full implementation gate and compiled observations as
-separate controls. Do not interpret a green implication as a completed
-constructor delivery.
-
-```mermaid
-flowchart LR
-    Human["Human original statements"] --> Consumer["Logical sufficiency"]
-    Human --> Implementation["Full implementation gate"]
-    Human --> Snapshot["Original snapshot comparison"]
-    Implementation --> Runtime["Actual-source finite observations"]
-    Consumer --> Review["Human design review"]
-    Runtime --> Review
-    Snapshot --> Review
-```
-
-The local negative controls illustrate the distinction. A complete shape-only
-delivery can pass its native contract while failing fixed semantic runtime
-observations. A false-domain clause can make body verification easy while
-failing the original-domain consumer. An inconsistent postcondition can make
-the consumer implication easy while failing implementation verification.
-Those are distinct failures with different remedies. Keep their evidence
-separate in the audit rather than reducing every result to one Boolean.
-
----
-
-## 7. On paper, before the keyboard
-
-Paper card03.5 covers SpecGen using the exact pinned local excerpt. Fill all
-eight fields: Task shape, Oracle, Trust, Cheat surface, Metric, Budget,
-Variance and Artifact. Describe the program-to-annotation task and the oracle
-that checks it. Then ask what accepted annotations establish about the
-program's actual behavior and what remains unknown about an independently
-intended requirement.
-
-Preserve the two benchmark denominators and distinguish their total from a
-separately reported success-probability estimator. Describe the conversational
-round budget, model, examples and mutation priorities without inventing a
-matched dollar, token or wall-clock budget. Report unavailable variance or
-replication metadata as unavailable. A percentage of verifier calls saved is
-a claim about calls in a particular comparison, not automatically a timing
-speedup or evidence that every contract is strong.
-
-Relate the paper to your flagship. A proposer can produce annotations that
-verify while dropping requirements a consumer needs. A specification for
-buggy behavior can faithfully describe that behavior without repairing the
-bug. Write one original-domain review question that would expose this gap.
-Your question should identify a missing relationship, rather than merely
-requesting more tests or a larger model.
-
-The second problem asks for an erasure and contract argument. Name the
-executable and ghost fields, state their coherence, explain construction and
-use obligations, and justify the concatenation cases from the original
-packet facts. Explain why by-method agreement survives the reasoning even
-though fields disappear from the executable representation. Finally separate
-sufficiency, implementability, witnesses, snapshots and finite observations.
-An argument that conflates these evidence types has missed the module's point.
-
----
-
-## 8. The exercise file
-
-After filling holes, record receipts and run the full code gates and audits
-for both hand files and both agent files. Check the course statement snapshot
-and your original human snapshots. Run the three supplied actual-source
-checkers under the course's memory caps. Keep all concurrent solver lanes
-within48GiB, with a16GiB cap and no swap per native lane. Tools print retained
-private driver and result paths; read their stage and claim scope.
-
-```sh
-scripts/firsttry.sh R10 --check
-scripts/vcheck --gate dafny/R/R10_TypeInvariants/std
-scripts/vcheck --gate verus/r/r10_type_invariants
-scripts/vaudit dafny/R/R10_TypeInvariants/std
-scripts/vaudit verus/r/r10_type_invariants
-scripts/vcheck --gate dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
-scripts/vcheck --gate verus/r/r10_type_invariants/src/agent.rs
-scripts/specfreeze --check R10
-python3 tools/R10/check_normalizer.py
-python3 tools/R10/check_statements.py
-python3 tools/R10/check_constructors.py
-scripts/firsttry.sh R10 --report --strict
-```
-
-Complete the paper pair, your bench card, spectrum record, flagship audit and
-viva. The strict report checks course receipts; it cannot replace those human
-artifacts or infer a contractor session. Keep the original failing observations
-when you revise a body. A source change after a capture requires re-capturing
-the affected evidence before calling that capture current.
-
-
-Done means four H solutions per language and all three agent constructors satisfy their original statements, zero-hole gates, audits, snapshots and the required paper/bench/viva work.
-
----
-
-## 9. Exercise (agentic): human statements before contractor bodies
-
-> **CONTRACT (for /contract R10 — run it in a FRESH session):** Use the
-> human's fixed statements and witnesses. Edit only permitted constructor
-> bodies and proof helpers, preserve original snapshots and given models,
-> and return full zero-hole gates, audits and actual-source observations.
-> Human statement design precedes body work; deferred live work is not a pass.
-
-The flagship starts with three fixed constructor signatures and shape-typed
-results. You write the semantic requires/ensures clauses yourself. Spend40
-minutes on statements and witnesses before any actor body edits. The public
-consumer checker exposes the desired client relationship, so this is a guided
-Basic design exercise. It is not a blind benchmark of whether an actor can
-invent an undisclosed intended specification.
-
-For each operation, state the original admissible input domain in words.
-Describe the language relationship a client needs between the output and the
-corresponding raw operation. Identify the provided definitions that bind those
-words to formal expressions. Decide which statement facts are necessary to
-support a client and which merely describe a particular implementation. Do
-not assume the raw smart-operation body supplies a promise you omitted.
-
-Write nonvacuous examples before running the checker. Include a normal input
-with a meaningful accepted word and one with a meaningful rejection. Cover
-identity, annihilating and unreduced shapes where appropriate. The examples
-must exercise the actual original domain. A case excluded by your precondition
-cannot witness that a constructor implements its promised service there.
-Explain what observation would distinguish a normal result with the wrong
-language from an acceptable result.
-
-Copy the human-completed agent source to a fixed snapshot under
-`research/R10/`, one Dafny file and one Verus file. This copy includes the
-original statements and model bindings even though body holes remain. Keep
-it unchanged. Later use `scripts/specfreeze --against ORIGINAL DELIVERY` for
-each language. The course's base snapshot permits adding the human's clauses;
-your own snapshot freezes the clauses after that human design step.
-
-Only then define the actor edit allowlist and ask for bodies and proofs under
-those statements. The actor may not weaken clauses, alter models, change given
-files or replace the original snapshot. Additional private proof helpers must
-fit the permitted delivery boundary and remain subject to the audit. Use a
-fresh contractor session when live sessions are available. The current build's
-recorded deferral does not establish that such a session took place.
-
-The audit takes20minutes. Compare original snapshots, run full zero-hole
-gates and assumption audits, run the statement consumer, and run the compiled
-constructor observations. Review each command's scope. A delivery with three
-correct-looking bodies but a changed language predicate is a changed task.
-A supplied reference demonstrates local implementability; it does not supply
-your missing human design work or a measured actor success.
-
----
-
-## 10. Bench card and viva
-
-Build your ninth card from one of your own completed invariant or normalization
-goals. Preserve its original statement and model, complete and stripped
-versions, source revision, native commands, witness and negative controls.
-Label it course-derived and previously exposed. Reconstructing a known course
-problem is useful practice; it is not an independent unseen benchmark result.
-The author does not supply a learner's completed card or fabricate a result.
-
-Use the30-minute module viva to explain boundaries aloud. Expect to reconstruct
-an invariant, diagnose an erased-cache claim, compare input policies and
-critique a proposed contract. A fresh live prediction uses native source and
-is committed before the referee runs. The instructor uses disjoint six-question
-draws for a re-viva, retaining the original statements and evidence rather
-than replacing a difficult question with an easier model.
-
-The design-judgment review asks whether the abstraction supports its intended
-consumer. Show where facts enter and leave the boundary. Explain each
-precondition's effect on the original domain and each postcondition's effect
-on permitted results. Identify one claim that native proof establishes and
-one that remains a human judgment. Source fidelity, type correctness, logical
-sufficiency and practical usefulness can support one another without becoming
-the same criterion.
-
-Calibration uses explicit gold and flawed fixtures with expected rubric
-anchors. These are author materials for checking the grading workflow.
-Expected scores are not measured live grades. The recorded D45 skip remains
-validation debt for actual model and contractor sessions. Keep the status
-honest in a progress report, even when every local native and compiled check
-has passed.
-
-### A concrete review record
-
-Keep a compact record for each disputed claim. Start with the source revision,
-original input domain and the exact observation at issue. Then name the
-supporting contract clause or provided invariant. If the claim needs a fact
-that the boundary does not supply, write that fact as an open obligation.
-This record makes an interface discussion actionable: another reader can
-inspect the same values and see which logical step remains unsupported.
-
-For a witness, identify both the input and the observation that makes it
-nonvacuous. An accepted empty word can exercise a different branch from an
-accepted nonempty word. A rejected word matters when it distinguishes the
-original language from an overly permissive result. Avoid treating a long
-list of identical observations as diverse coverage. Explain why each chosen
-case would detect a particular wrong result or excluded input.
-
-For an erasure claim, record the generated target and which function body you
-inspected. A test driver, a library helper and a packet builder may all mention
-node counts for different reasons. Follow the data flow in the actual builder
-and list the runtime fields of its returned object. If a claim concerns speed
-or allocation, identify the missing measurement rather than extrapolating from
-that representation inspection. Keep proof acceptance and executable evidence
-attached to their respective artifacts.
-
-For an actor delivery, retain the human snapshot even when the actor proposes
-a more convenient statement. Discuss a proposed design change separately and
-identify which original consumers would lose support. A new task can be useful,
-but its result cannot close the old task by renaming it. This habit is central
-to design judgment and will matter again when a later evaluation pipeline
-reports a large aggregate success count.
-
-The60-minute reading allocation includes the chapter, provided interfaces and
-worked source files. Read the prose alongside the actual modes, type
-constraints and native statements. A term that feels familiar in one language
-is a reason to inspect its paired boundary carefully before assuming the same
-construction and use rules apply.
-
----
-
-## Captured native examples
-
-Dafny card inputs import provided layers. Copy a card to a real `.dfy` file
-and give the wrapper its R10 context, for example:
-
-```sh
-mkdir -p instructor/scratch/R10
-cp specimens/R10/shape-d.dfy.specimen instructor/scratch/R10/shape-d.dfy
-scripts/vcheck --module R10 instructor/scratch/R10/shape-d.dfy
-```
-
-The capture runner makes that same named copy in fresh scratch and applies
-`--module R10`; its manifest pins the copied source and given dependencies.
-Verus specimens use their supplied module context through the native wrapper.
-
-The following blocks are generated from the actual learner sources and
-complete probes in their provided context. They report shipped scope and failure locations without
-filling a learner slot or proof body. Do not infer a zero-hole full gate from
-an ordinary learner-loop capture.
+The exercise files run in the learner loop as shipped: the holes are counted, everything else verifies.
 
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R10_TypeInvariants/std
-vcheck: dafny/R/R10_TypeInvariants/std [dafny, learner loop]: verified — 72 verified, 4 holes, 0 errors
-dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:20:16: hole assume R10.H1d
-dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:26:16: hole assume R10.H2d
-dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:32:4: hole assume R10.H3d
-dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:41:14: hole assume R10.H4d
+vcheck: dafny/R/R10_TypeInvariants/std [dafny, learner loop]: verified — 73 verified, 4 holes, 0 errors
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:93:5: hole assume R10.H1d
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:110:5: hole assume R10.H2d
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:126:5: hole assume R10.H3d
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:151:5: hole assume R10.H4d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r10_type_invariants
 vcheck: verus/r/r10_type_invariants [verus, learner loop]: verified — - verified, 4 holes, 0 errors
-verus/r/r10_type_invariants/src/lib.rs:32:1: hole external_body R10.H1v
-verus/r/r10_type_invariants/src/lib.rs:39:1: hole external_body R10.H2v
-verus/r/r10_type_invariants/src/lib.rs:48:38: hole assume R10.H3v
-verus/r/r10_type_invariants/src/lib.rs:55:1: hole external_body R10.H4v
-```
-
-<!-- pin: agent-d -->
-```
-$ scripts/vcheck dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
-vcheck: dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy [dafny, learner loop]: verified — 65 verified, 3 holes, 0 errors
-dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:18:5: hole assume R10.A1d
-dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:20:5: hole assume R10.A1d
-dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:22:5: hole assume R10.A1d
-```
-
-<!-- pin: agent-v -->
-```
-$ scripts/vcheck verus/r/r10_type_invariants/src/agent.rs
-vcheck: verus/r/r10_type_invariants/src/agent.rs [verus, learner loop]: verified — - verified, 3 holes, 0 errors
-verus/r/r10_type_invariants/src/agent.rs:19:1: hole external_body R10.A1v
-verus/r/r10_type_invariants/src/agent.rs:24:1: hole external_body R10.A1v
-verus/r/r10_type_invariants/src/agent.rs:29:1: hole external_body R10.A1v
-```
-
-<!-- pin: card-c1d-dfy -->
-```
-$ scripts/vcheck --module R10 card-c1d.dfy
-vcheck: card-c1d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
-card-c1d.dfy:7:8: error: value does not satisfy the subset constraints of 'NormRe'
-```
-
-<!-- pin: card-c1v-rs -->
-```
-$ scripts/vcheck specimens/R10/card-c1v.rs.specimen
-vcheck: specimens/R10/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R10/card-c1v.rs.specimen:10:46: error: constructed value may fail to meet its declared type invariant
-```
-
-<!-- pin: card-c2d-dfy -->
-```
-$ scripts/vcheck --module R10 card-c2d.dfy
-vcheck: card-c2d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
-card-c2d.dfy:7:13: error: a postcondition could not be proved on this return path
-card-c2d.dfy:7:2: related: this is the postcondition that could not be proved
-```
-
-<!-- pin: card-c2v-rs -->
-```
-$ scripts/vcheck specimens/R10/card-c2v.rs.specimen
-vcheck: specimens/R10/card-c2v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R10/card-c2v.rs.specimen:6:10: error: postcondition not satisfied
-```
-
-<!-- pin: card-c3d-dfy -->
-```
-$ scripts/vcheck --module R10 card-c3d.dfy
-vcheck: card-c3d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
-card-c3d.dfy:8:28: error: value does not satisfy the subset constraints of 'UnitLeafR10'
-```
-
-<!-- pin: card-c3v-rs -->
-```
-$ scripts/vcheck specimens/R10/card-c3v.rs.specimen
-vcheck: specimens/R10/card-c3v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R10/card-c3v.rs.specimen:11:9: error: precondition not satisfied
-```
-
-<!-- pin: language-d-dfy -->
-```
-$ scripts/vcheck --module R10 language-d.dfy
-vcheck: language-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
-language-d.dfy:7:2: error: a postcondition could not be proved on this return path
-language-d.dfy:6:26: related: this is the postcondition that could not be proved
-dafny/given/R/RG_A4_Norm.dfy:11:46: related: this proposition could not be proved
-```
-
-<!-- pin: language-v-rs -->
-```
-$ scripts/vcheck specimens/R10/language-v.rs.specimen
-vcheck: specimens/R10/language-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R10/language-v.rs.specimen:7:10: error: postcondition not satisfied
-```
-
-<!-- pin: option-d-dfy -->
-```
-$ scripts/vcheck --module R10 option-d.dfy
-vcheck: option-d.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
-```
-
-<!-- pin: option-v-rs -->
-```
-$ scripts/vcheck specimens/R10/option-v.rs.specimen
-vcheck: specimens/R10/option-v.rs.specimen [verus, learner loop]: verified — 2 verified, 0 holes, 0 errors
-```
-
-<!-- pin: precondition-d-dfy -->
-```
-$ scripts/vcheck --module R10 precondition-d.dfy
-vcheck: precondition-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
-precondition-d.dfy:6:42: error: value does not satisfy the subset constraints of 'NormRe'
-```
-
-<!-- pin: precondition-v-rs -->
-```
-$ scripts/vcheck specimens/R10/precondition-v.rs.specimen
-vcheck: specimens/R10/precondition-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R10/precondition-v.rs.specimen:8:13: error: precondition not satisfied
-```
-
-<!-- pin: shape-d-dfy -->
-```
-$ scripts/vcheck --module R10 shape-d.dfy
-vcheck: shape-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
-```
-
-<!-- pin: shape-v-rs -->
-```
-$ scripts/vcheck specimens/R10/shape-v.rs.specimen
-vcheck: specimens/R10/shape-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+verus/r/r10_type_invariants/src/lib.rs:111:1: hole external_body R10.H1v
+verus/r/r10_type_invariants/src/lib.rs:131:1: hole external_body R10.H2v
+verus/r/r10_type_invariants/src/lib.rs:153:40: hole assume R10.H3v
+verus/r/r10_type_invariants/src/lib.rs:175:1: hole external_body R10.H4v
 ```
 
 <!-- pin: checks-d -->
@@ -747,52 +80,1175 @@ vcheck: dafny/checks/R10_checks.dfy [dafny, learner loop]: verified — 63 verif
 
 ---
 
+## 1. A representation predicate becomes a boundary
+
+### 1.1 A4's normal form
+
+A4's predicate is a list of reductions that a normal regex has already undergone, one case per constructor, recursively:
+
+```dafny
+predicate Normal(r: Re)
+  decreases r
+{
+  match r
+  case Empty => true
+  case Eps => true
+  case Chr(_) => true
+  case Alt(a, b) => a != Empty && b != Empty && a != b && Normal(a) && Normal(b)
+  case Cat(a, b) => a != Empty && b != Empty && a != Eps && b != Eps && Normal(a) && Normal(b)
+  case Star(a) => a != Empty && a != Eps && !a.Star? && Normal(a)
+}
+type NormRe = r: Re | Normal(r) witness Empty
+```
+
+Read it as a policy, not as "simplified". An alternation has no `Empty` branch and no two equal branches; a concatenation has neither an `Empty` nor an `Eps` operand; a star's body is neither `Empty`, nor `Eps`, nor another star. The last line turns the predicate into a type: `NormRe` is the set of regexes satisfying `Normal`, and the witness `Empty` shows that it is inhabited. In Verus the same boundary is a struct with a private field and a type invariant:
+
+```rust
+// The type boundary exports shape and exact views, not language preservation.
+pub struct NormRe {
+    r: Re,
+}
+
+impl NormRe {
+    #[verifier::type_invariant]
+    spec fn normal_shape(&self) -> bool {
+        is_norm(self.r)
+    }
+
+    pub closed spec fn re(self) -> Re {
+        self.r
+    }
+
+    pub fn from_normal_r10(r: Re) -> (out: NormRe)
+        requires
+            is_norm(r),
+        ensures
+            out.re() == r,
+    // ...
+}
+```
+
+The field is private, so the only way to obtain a `NormRe` is `from_normal_r10`, whose precondition is the shape. Dafny checks membership of a value in a subset type; Verus checks an invariant around an object it builds. Both serve the same client goal, and their syntax, modes and opening rules differ: the paired holes make you meet both.
+
+### 1.2 Building a refined value
+
+Returning a `NormRe` is a promise about the value returned, checked at the return. A routine that combines two normal regexes under `Alt` owes the predicate's `Alt` case, and two non-`Empty` normal children are not enough:
+
+```dafny
+module R10_AltDistinctDemo {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  // The result type is the obligation: Alt(a, b) must be Normal at the return.
+  method AltOfNormal(a: NormRe, b: NormRe) returns (out: NormRe)
+    requires a != Empty && b != Empty
+  {
+    out := Alt(a, b);
+  }
+}
+```
+
+<!-- pin: alt-bare-d -->
+```
+$ scripts/vcheck --module R10 alt-distinct.dfy
+vcheck: alt-distinct.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+alt-distinct.dfy:9:12: error: value does not satisfy the subset constraints of 'NormRe'
+```
+
+The missing conjunct is `a != b`. With it as a precondition the same body verifies:
+
+```dafny
+module R10_AltDistinctFixedDemo {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  method AltOfNormal(a: NormRe, b: NormRe) returns (out: NormRe)
+    requires a != Empty && b != Empty && a != b
+  {
+    out := Alt(a, b);
+  }
+}
+```
+
+<!-- pin: alt-fixed-d -->
+```
+$ scripts/vcheck --module R10 alt-distinct-fixed.dfy
+vcheck: alt-distinct-fixed.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+Verus says the same through `from_normal_r10`'s precondition; the moved patterns keep their shape through `into_pattern_r10`'s postcondition:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a4::*;
+
+verus! {
+
+// Verus's NormRe is built only through from_normal_r10, whose precondition is the shape.
+fn alt_of_normal(a: NormRe, b: NormRe) -> (out: NormRe)
+    requires
+        !(a.re() is Empty),
+        !(b.re() is Empty),
+        a.re() != b.re(),
+    ensures
+        out.re() == Re::Alt(Box::new(a.re()), Box::new(b.re())),
+{
+    let x = a.into_pattern_r10();
+    let y = b.into_pattern_r10();
+    NormRe::from_normal_r10(Re::Alt(Box::new(x), Box::new(y)))
+}
+
+} // verus!
+```
+
+<!-- pin: alt-v -->
+```
+$ scripts/vcheck --module R10 alt-distinct.rs
+vcheck: alt-distinct.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The WRITE card C1 isolates the obligation: a leaf boundary that returns an unreduced tree in Dafny, and an object whose ghost mark breaks its own invariant in Verus. Both demos fail by design:
+
+```dafny
+module R10_SubsetCard {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  // item: R10.C1d write:subset-type
+  // WRITE: a subset result requires its predicate at every return.
+  method LeafBoundaryR10(c: char) returns (out: NormRe)
+  {
+    out := Cat(Eps, Chr(c));
+  }
+}
+```
+
+<!-- pin: card-c1d -->
+```
+$ scripts/vcheck --module R10 card-c1d.dfy
+vcheck: card-c1d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+card-c1d.dfy:9:12: error: value does not satisfy the subset constraints of 'NormRe'
+```
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+struct MarkedLeafR10 {
+    c: char,
+    marked: Ghost<bool>,
+}
+
+impl MarkedLeafR10 {
+    #[verifier::type_invariant]
+    spec fn coherent(&self) -> bool {
+        self.marked@
+    }
+}
+
+// item: R10.C1v write:type-invariant
+// WRITE: constructing the object must establish its representation invariant.
+fn leaf_boundary_r10(c: char) -> MarkedLeafR10 {
+    MarkedLeafR10 { c, marked: Ghost(false) }
+}
+
+} // verus!
+```
+
+<!-- pin: card-c1v -->
+```
+$ scripts/vcheck specimens/R10/card-c1v.rs.specimen
+vcheck: specimens/R10/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R10/card-c1v.rs.specimen:20:5: error: constructed value may fail to meet its declared type invariant
+```
+
+Dafny names the subset constraint at the value that violates it; Verus names the struct expression that "may fail to meet its declared type invariant". Neither waits for a client to misuse the value.
+
+A subset type costs nothing at run time. The compiled program has no `NormRe` tag and no check on assignment: the verifier proved, once, that every value reaching a `NormRe` variable satisfies `Normal`, and the compiler relies on that proof. The witness clause (`witness Empty`) is the same kind of obligation in miniature: Dafny wants one value of the type so that a declaration of a `NormRe` variable without an initializer is sound. Verus's private field plays the role of the subset: code outside the impl cannot build a `NormRe` except through a constructor whose precondition is the shape, so the invariant cannot be skipped by a struct literal elsewhere.
+
+### 1.3 Shape is not language
+
+Normality does not pick one representative per language. Two different normal trees can match exactly the same strings:
+
+```dafny
+module R10_SameLanguageDemo {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  // Two different normal trees with one language.
+  lemma TwoNormalForms(s: seq<char>)
+    ensures Normal(Alt(Chr('a'), Chr('b'))) && Normal(Alt(Chr('b'), Chr('a')))
+    ensures Alt(Chr('a'), Chr('b')) != Alt(Chr('b'), Chr('a'))
+    ensures Matches(Alt(Chr('a'), Chr('b')), s) <==> Matches(Alt(Chr('b'), Chr('a')), s)
+  {
+  }
+}
+```
+
+<!-- pin: same-language-d -->
+```
+$ scripts/vcheck --module R10 same-language.dfy
+vcheck: same-language.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+So the type `NormRe` says nothing about *which* normal regex a routine returns. A constructor that returns "some normal regex" has enormous freedom unless its contract also relates the result to its inputs. That relation is the flagship's subject (§10), and §6 shows what goes wrong without it.
+
+The enforcement spectrum orders the ways a program can hold one invariant, from the latest check to the earliest:
+
+```mermaid
+flowchart LR
+  R["runtime predicate: test, then branch"] --> O["Option result: Some carries a validated value, None a characterized rejection"]
+  O --> P["precondition: the caller proves the shape before the call"]
+  P --> T["type: the subset type or type invariant travels with the value"]
+```
+
+Each step moves an obligation from the run to the proof and from the callee to someone else. §4 runs one invariant at three of these points.
+
+None of the points is better in general. A runtime check is the only option when the input comes from outside the program (a parser's output, a file); an `Option` result keeps the check but lets the type say which values passed; a precondition is cheapest when every caller already knows the fact; a type is right when the fact must hold everywhere the value goes. A design review asks which point a boundary chose and whether its callers can meet that choice.
+
+---
+
+## 2. Erased fields carry proof information
+
+### 2.1 Ghost fields and subset types
+
+The worked packet W1 pairs a normal regex with a ghost node count, and a subset type ties the two together:
+
+```dafny
+datatype CountPacketR10 = CountPacketR10(expr: NormRe, ghost count: nat)
+
+type TypedPacketR10 = p: CountPacketR10 | p.count == NodeCount(p.expr) witness CountPacketR10(Empty, 1)
+
+datatype PacketChoiceR10 = NoPacketR10 | HasPacketR10(packet: TypedPacketR10)
+```
+
+The count is a proof resource. It can justify an assertion, appear in a contract or a subset predicate, and then disappear: the compiled program holds only the regex. The flip side is a mode rule. Compiled code cannot read an erased field, because after erasure there is nothing to read:
+
+```dafny
+module R10_GhostReadDemo {
+  datatype TaggedR10 = TaggedR10(word: seq<char>, ghost size: nat)
+
+  // Compiled code cannot read an erased field.
+  method SizeOfR10(t: TaggedR10) returns (n: nat)
+  {
+    n := t.size;
+  }
+}
+```
+
+<!-- pin: ghost-read-d -->
+```
+$ scripts/vcheck --module R10 ghost-read.dfy
+vcheck: ghost-read.dfy [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+ghost-read.dfy:7:12: error: a ghost field is allowed only in specification contexts
+```
+
+The error comes at resolution, before any proof. The WRITE card C3d asks for the converse obligation: building a value of a subset type with an erased field still has to satisfy the subset at construction, ghost or not:
+
+```dafny
+module R10_GhostCard {
+  import opened RG_A1_Re
+
+  datatype LeafWitnessR10 = LeafWitnessR10(c: char, ghost count: nat)
+
+  type UnitLeafR10 = p: LeafWitnessR10 | p.count == 1 witness LeafWitnessR10('x', 1)
+
+  // item: R10.C3d write:ghost
+  // WRITE: the erased witness must still satisfy the subset at construction.
+  method WitnessLeafR10(c: char) returns (out: UnitLeafR10)
+  {
+    ghost var cached := 0;
+    out := LeafWitnessR10(c, cached);
+  }
+}
+```
+
+<!-- pin: card-c3d -->
+```
+$ scripts/vcheck --module R10 card-c3d.dfy
+vcheck: card-c3d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
+card-c3d.dfy:13:12: error: value does not satisfy the subset constraints of 'UnitLeafR10'
+```
+
+### 2.2 `Ghost` and `Tracked` in Verus
+
+Verus wraps erased data in two types. `Ghost<T>` holds a spec value; `Tracked<T>` holds a proof-mode object with ownership (it can be consumed, and a consumed tracked value is gone). The packet W1v keeps a `Ghost<nat>` weight and a `Tracked` evidence object naming the pattern, and its type invariant states all three relations:
+
+```rust
+pub tracked struct NormalEvidenceR10 {
+    pub ghost pattern: Re,
+}
+
+pub struct NormPacketR10 {
+    repr: NormRe,
+    weight: Ghost<nat>,
+    evidence: Tracked<NormalEvidenceR10>,
+}
+
+impl NormPacketR10 {
+    #[verifier::type_invariant]
+    spec fn coherent(&self) -> bool {
+        is_norm(self.repr.re()) && self.weight@ == node_count(self.repr.re()) && self.evidence@.pattern == self.repr.re()
+    }
+
+    pub closed spec fn re(self) -> Re {
+        self.repr.re()
+    }
+    // ...
+}
+```
+
+Exec code cannot branch on a ghost value, for the same reason as in Dafny:
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+pub struct TaggedR10 {
+    pub word: Vec<char>,
+    pub checked: Ghost<bool>,
+}
+
+// Exec code cannot branch on a Ghost's value.
+fn was_checked_r10(t: &TaggedR10) -> bool {
+    let ghost g = t.checked@;
+    if g {
+        true
+    } else {
+        false
+    }
+}
+
+} // verus!
+```
+
+<!-- pin: ghost-read-v -->
+```
+$ scripts/vcheck --module R10 ghost-read.rs
+vcheck: ghost-read.rs [verus, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+ghost-read.rs:13:8: error: cannot access spec-mode place in executable context
+```
+
+The WRITE cards C2v and C3v isolate the two wrappers: a function that keeps the right fact in a ghost and returns the wrong exec value, and a proof call that consumes tracked evidence with the wrong label:
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+// item: R10.C2v write:ghost
+// WRITE: Ghost values retain a proof fact while the executable result uses c.
+fn leaf_echo_r10(c: char) -> (out: char)
+    ensures
+        out == c,
+{
+    let ghost remembered = c;
+    assert(remembered == c);
+    'z'
+}
+
+} // verus!
+```
+
+<!-- pin: card-c2v -->
+```
+$ scripts/vcheck specimens/R10/card-c2v.rs.specimen
+vcheck: specimens/R10/card-c2v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R10/card-c2v.rs.specimen:9:9: error: postcondition not satisfied
+```
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+tracked struct LeafPermitR10 {
+    ghost label: char,
+}
+
+// item: R10.C3v write:tracked
+// WRITE: construct and consume tracked evidence in proof mode.
+proof fn consume_leaf_r10(tracked permit: LeafPermitR10, c: char)
+    requires
+        permit.label == c,
+{
+}
+
+fn leaf_permit_r10(c: char) -> char {
+    let tracked permit = LeafPermitR10 { label: '!' };
+    proof {
+        consume_leaf_r10(permit, c);
+    }
+    c
+}
+
+} // verus!
+```
+
+<!-- pin: card-c3v -->
+```
+$ scripts/vcheck specimens/R10/card-c3v.rs.specimen
+vcheck: specimens/R10/card-c3v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
+specimens/R10/card-c3v.rs.specimen:20:9: error: precondition not satisfied
+```
+
+A ghost fact about `c` does not make `'z'` equal to `c`; a tracked object is evidence only of the proposition its fields state, and the consumer's `requires` decides which proposition that must be.
+
+### 2.3 What erasure leaves
+
+The packet is a teaching boundary for proof data. Do not describe its count as a constant-time cache: a client wanting a runtime count would need an executable field and an invariant tying it to the regex, which changes the implementation and its costs. The diagram follows one function, H4's normalizer, through erasure:
+
+```mermaid
+flowchart TD
+  F["NormalizePacketR10: function body Norm(r) and the packet's subset predicate"] --> V["verified: the method's result equals the function body"]
+  M["the by-method body: recursion, MkAlt, MkCat, MkStar, ghost counts"] --> V
+  V --> E["erasure removes the function body, ghost locals and ghost fields"]
+  E --> C["compiled: the recursion and the smart constructors over plain regexes"]
+```
+
+Two facts survive erasure: the compiled result equals what the verified method computed, and every proof obligation about it was discharged before the ghost parts were removed. `tools/R10/check_normalizer.py` inspects the generated code to show which fields remain; that inspection is about these compiled types, not a general claim about allocation, speed or memory.
+
+A useful exercise is to read the generated code yourself after H4 verifies. The Dafny compiler's Python output for the packet datatype has one field, the expression; the ghost count is gone. The builder's body keeps every branch on the expression and every smart-constructor call, and no arithmetic on counts. If you find a traversal that counts nodes, check where it is: the checker's observer counts nodes to compare with its expected values, and that code is not part of your packet.
+
+---
+
+## 3. A function implemented by a method
+
+### 3.1 `function … by method`
+
+A Dafny `function … by method` has two bodies. The function body is the mathematical definition, usable in specifications; the method body is what compiles, and it must return exactly the function's value. The method may loop, allocate and use ghost locals; the function may be ghost-only, recursive and slow. A small example:
+
+```dafny
+module R10_ByMethodDemo {
+  // The function body is the specification; the method body is what compiles.
+  function DoubledR10(n: nat): nat
+  {
+    n + n
+  } by method {
+    return 2 * n;
+  }
+
+  method UseDoubledR10() returns (m: nat)
+    ensures m == 14
+  {
+    m := DoubledR10(7);
+  }
+}
+```
+
+<!-- pin: by-method-d -->
+```
+$ scripts/vcheck --module R10 by-method.dfy
+vcheck: by-method.dfy [dafny, learner loop]: verified — 65 verified, 0 holes, 0 errors
+```
+
+`UseDoubledR10` reasons with the function body (`7 + 7`), while compiled code runs `2 * 7`. The WRITE card C2d asks for the same discipline with a leaf: its method returns the wrong character, and the agreement obligation fails at the return:
+
+```dafny
+module R10_ByMethodCard {
+  import opened RG_A1_Re
+
+  ghost function LeafModelR10(c: char): Re
+  {
+    Chr(c)
+  }
+
+  // item: R10.C2d write:by-method
+  // WRITE: the compiled method must implement the fixed ghost function model.
+  function LeafR10(c: char): Re
+  {
+    LeafModelR10(c)
+  } by method {
+    return Chr('z');
+  }
+}
+```
+
+<!-- pin: card-c2d -->
+```
+$ scripts/vcheck --module R10 card-c2d.dfy
+vcheck: card-c2d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+card-c2d.dfy:15:5: error: a postcondition could not be proved on this return path
+card-c2d.dfy:14:5: related: this is the postcondition that could not be proved
+```
+
+### 3.2 A ghost model cannot be called
+
+A4's `Norm` is a ghost function: it defines the normal form of every regex and compiles to nothing. A method that tries to compute with it is refused at resolution:
+
+```dafny
+module R10_GhostCallDemo {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  // A4's Norm is ghost: a method cannot compute with it.
+  method NormalizeByModel(r: Re) returns (out: Re)
+  {
+    out := Norm(r);
+  }
+}
+```
+
+<!-- pin: ghost-call-d -->
+```
+$ scripts/vcheck --module R10 ghost-call.dfy
+vcheck: ghost-call.dfy [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+ghost-call.dfy:8:16: error: a call to a ghost function is allowed only in specification contexts (consider declaring the function without the 'ghost' keyword)
+```
+
+So H4's method body must do the work the model only describes: walk the input, normalize the children, combine them with the compiled smart constructors, and keep the recursion's measure (`decreases r`, the function's own). Verus states the same split with a spec fn `norm` and an exec fn whose `ensures` mentions it; the exec body cannot call `norm` either.
+
+The model is concrete enough to evaluate. Each case below is one smart-constructor rewrite or a composition of them, and the verifier computes them all:
+
+```dafny
+module R10_NormValuesDemo {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  // Norm on concrete trees: each rewrite is one smart constructor.
+  lemma NormSamples()
+    ensures Norm(Alt(Chr('a'), Chr('a'))) == Chr('a')
+    ensures Norm(Cat(Eps, Alt(Empty, Chr('b')))) == Chr('b')
+    ensures Norm(Star(Star(Eps))) == Eps
+    ensures Norm(Cat(Chr('a'), Empty)) == Empty
+  {
+  }
+}
+```
+
+<!-- pin: norm-values-d -->
+```
+$ scripts/vcheck --module R10 norm-values.dfy
+vcheck: norm-values.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+The rewrites form a small lattice: `Empty` absorbs a concatenation and vanishes from an alternation, `Eps` vanishes from a concatenation and absorbs a star, equal branches merge, and a star of a star collapses.
+
+```mermaid
+flowchart LR
+  A["Alt(x, Empty) and Alt(Empty, x)"] --> X["x"]
+  B["Alt(x, x)"] --> X
+  C["Cat(x, Eps) and Cat(Eps, x)"] --> X
+  D["Cat(x, Empty) and Cat(Empty, x)"] --> N["Empty"]
+  S["Star(Star(x))"] --> T["Star(x)"]
+  E["Star(Eps) and Star(Empty)"] --> P["Eps"]
+```
+
+Every arrow preserves the language, which is what the flagship asks you to state and the contractor to prove; none of them is stated by A4.
+
+---
+
+## 4. Runtime checks, optional values and preconditions
+
+### 4.1 One invariant at three points
+
+Take one raw regex and three interfaces around the same shape predicate. The worked W2 is the runtime end: a compiled Boolean whose meaning is the predicate.
+
+```dafny
+function RuntimeShapeR10(r: Re): bool
+{
+  Normal(r)
+}
+```
+
+A caller can branch on it and use the branch's fact while it lasts. An optional validator packages the same test differently: `Some` carries the validated input, `None` comes with a characterization of the rejection. Both halves matter: a contract that says only "every `Some` is valid" admits a body that always returns `None`. H1's statement fixes both, so normal inputs cannot disappear into an always-reject body. A precondition moves the burden to the caller: the routine promises nothing about bad input, and the caller must prove the shape before the call verifies. That can be the right interface when every caller already carries the proof; it is a different public behaviour from validation, and a failed proof at a call site is not a runtime rejection.
+
+### 4.2 The answer to P3
+
+The two scenarios on the same raw regex `Alt(Empty, Chr('q'))`:
+
+```dafny
+// after: R10.P3dv
+module R10_SpectrumProbe {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  datatype ShapeChoiceR10 = NoShapeR10 | HasShapeR10(value: NormRe)
+
+  function TryShapeR10(r: Re): ShapeChoiceR10
+  {
+    if Normal(r) then HasShapeR10(r) else NoShapeR10
+  }
+
+  method ObserveR10()
+  {
+    var result := TryShapeR10(Alt(Empty, Chr('q')));
+    assert result.NoShapeR10?;
+  }
+}
+```
+
+<!-- pin: option-d -->
+```
+$ scripts/vcheck --module R10 option-d.dfy
+vcheck: option-d.dfy [dafny, learner loop]: verified — 64 verified, 0 holes, 0 errors
+```
+
+```dafny
+// after: R10.P3dv
+module R10_SpectrumProbe {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  method RequireShapeR10(r: NormRe)
+  {
+  }
+
+  method ObserveR10()
+  {
+    RequireShapeR10(Alt(Empty, Chr('q')));
+  }
+}
+```
+
+<!-- pin: precondition-d -->
+```
+$ scripts/vcheck --module R10 precondition-d.dfy
+vcheck: precondition-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+precondition-d.dfy:12:24: error: value does not satisfy the subset constraints of 'NormRe'
+```
+
+<!-- pin: option-v -->
+```
+$ scripts/vcheck specimens/R10/option-v.rs.specimen
+vcheck: specimens/R10/option-v.rs.specimen [verus, learner loop]: verified — 2 verified, 0 holes, 0 errors
+```
+
+<!-- pin: precondition-v -->
+```
+$ scripts/vcheck specimens/R10/precondition-v.rs.specimen
+vcheck: specimens/R10/precondition-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R10/precondition-v.rs.specimen:10:18: error: precondition not satisfied
+```
+
+`D:ok,fail V:ok,fail`. The optional validator receives a rejection, and its contract lets the caller prove which one; the precondition version cannot be called on a raw regex that is not normal, and the verifier reports the call site, not a runtime event. The spectrum lab (30 minutes) asks you to place one invariant of your own at all four points of §1.3's diagram, with a normal and a non-normal input each, and to write down for each point who proves what, and when.
+
+### 4.3 The answers to P1 and P2
+
+P1's check evaluates a smart concatenation as compiled code:
+
+```dafny
+// after: R10.P1d
+// A specimen runs alone, so the A1 and A4 definitions it needs are copied here verbatim.
+module R10_P1Observed {
+  datatype Re = Empty | Eps | Chr(c: char) | Alt(a: Re, b: Re) | Cat(a: Re, b: Re) | Star(r: Re)
+
+  function NodeCount(r: Re): nat
+    decreases r
+  {
+    match r
+    case Empty => 1
+    case Eps => 1
+    case Chr(_) => 1
+    case Alt(a, b) => 1 + NodeCount(a) + NodeCount(b)
+    case Cat(a, b) => 1 + NodeCount(a) + NodeCount(b)
+    case Star(a) => 1 + NodeCount(a)
+  }
+
+  predicate Normal(r: Re)
+    decreases r
+  {
+    match r
+    case Empty => true
+    case Eps => true
+    case Chr(_) => true
+    case Alt(a, b) => a != Empty && b != Empty && a != b && Normal(a) && Normal(b)
+    case Cat(a, b) => a != Empty && b != Empty && a != Eps && b != Eps && Normal(a) && Normal(b)
+    case Star(a) => a != Empty && a != Eps && !a.Star? && Normal(a)
+  }
+
+  type NormRe = r: Re | Normal(r) witness Empty
+
+  function MkCat(a: NormRe, b: NormRe): NormRe
+  {
+    if a == Empty || b == Empty then Empty
+    else if a == Eps then b
+    else if b == Eps then a
+    else Cat(a, b)
+  }
+
+  // P1's expression, run as compiled code.
+  @Test
+  method SmartCountObserved()
+  {
+    var result := MkCat(Eps, Chr('k'));
+    var value := NodeCount(result);
+    expect value == 1;
+  }
+}
+```
+
+<!-- pin: p1-d -->
+```
+$ scripts/vcheck --test specimens/R10/chapter-p1-d.dfy.specimen
+vcheck: specimens/R10/chapter-p1-d.dfy.specimen [dafny, test]: verified — 1 passed, 0 failed
+PASSED R10_P1Observed.SmartCountObserved
+```
+
+`1`: `MkCat(Eps, Chr('k'))` is `Chr('k')`, one node; a count of the unreduced tree would say 3. P2 asks for the predicate on a star of an alternation with an `Empty` branch:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a4::*;
+
+verus! {
+
+// P2's expression, evaluated by the verifier.
+proof fn nested_normal_value_observed() {
+    assert(is_norm(Re::Star(Box::new(Re::Alt(Box::new(Re::Empty), Box::new(Re::Chr('m')))))) == false) by (compute_only);
+}
+
+} // verus!
+```
+
+<!-- pin: p2-v -->
+```
+$ scripts/vcheck --module R10 p2.rs
+vcheck: p2.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+`false`: the star's body is normal-shaped as a star body, but the body itself is not normal, because an alternation may not have an `Empty` branch. The predicate recurses into every child.
+
+---
+
+## 5. A type invariant is opened, not assumed
+
+### 5.1 `use_type_invariant`
+
+Inside an impl, Verus does not put a type's invariant in scope automatically: `use_type_invariant(x)` asserts it for a value `x` of the type, in proof mode. Without it, a fact that the invariant guarantees is just unknown:
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+pub struct BudgetR10 {
+    used: u64,
+    cap: u64,
+}
+
+impl BudgetR10 {
+    #[verifier::type_invariant]
+    spec fn within(&self) -> bool {
+        self.used <= self.cap
+    }
+
+    // Without use_type_invariant the invariant is not in scope.
+    fn room_r10(&self) -> (r: u64)
+        ensures
+            r == self.cap - self.used,
+    {
+        self.cap - self.used
+    }
+}
+
+} // verus!
+```
+
+<!-- pin: invariant-closed-v -->
+```
+$ scripts/vcheck --module R10 invariant-closed.rs
+vcheck: invariant-closed.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+invariant-closed.rs:21:9: error: possible arithmetic underflow/overflow
+```
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+pub struct BudgetR10 {
+    used: u64,
+    cap: u64,
+}
+
+impl BudgetR10 {
+    #[verifier::type_invariant]
+    spec fn within(&self) -> bool {
+        self.used <= self.cap
+    }
+
+    fn room_r10(&self) -> (r: u64)
+        ensures
+            r == self.cap - self.used,
+    {
+        proof {
+            use_type_invariant(self);
+        }
+        self.cap - self.used
+    }
+}
+
+} // verus!
+```
+
+<!-- pin: invariant-open-v -->
+```
+$ scripts/vcheck --module R10 invariant-open.rs
+vcheck: invariant-open.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The subtraction is safe only because `used <= cap` holds of every `BudgetR10`; the verifier needs to be told to use that. Dafny's subset types need no such call: membership is part of the value's type and is available wherever the value is.
+
+### 5.2 The answer to P4
+
+The packet specimen opens its invariant and asserts three facts:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a4::*;
+
+verus! {
+
+pub tracked struct NormalEvidenceR10 {
+    pub ghost pattern: Re,
+}
+
+pub struct NormPacketR10 {
+    repr: NormRe,
+    weight: Ghost<nat>,
+    evidence: Tracked<NormalEvidenceR10>,
+}
+
+impl NormPacketR10 {
+    #[verifier::type_invariant]
+    spec fn coherent(&self) -> bool {
+        is_norm(self.repr.re()) && self.weight@ == node_count(self.repr.re()) && self.evidence@.pattern == self.repr.re()
+    }
+
+    pub closed spec fn re(self) -> Re {
+        self.repr.re()
+    }
+}
+
+// item: R10.P4v obligation
+// Commit exactly the unprovable labelled assertions under this packet invariant.
+// SLOT: FAILS ???
+fn packet_claims_r10(p: &NormPacketR10) {
+    proof {
+        use_type_invariant(p);
+        assert(is_norm(p.re())); // [a]
+        assert(p.weight@ == node_count(p.re())); // [b]
+        assert(p.weight@ == 0); // [c]
+    }
+}
+
+} // verus!
+```
+
+<!-- pin: obligation-v -->
+```
+$ scripts/vcheck specimens/R10/P4v.rs.specimen
+vcheck: specimens/R10/P4v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R10/P4v.rs.specimen:36:16: error: assertion failed
+```
+
+`FAILS c`. The invariant gives [a] and [b] directly; nothing makes the weight 0, and the weight of a normal regex is at least 1. An erased witness is related to its representation by the invariant, and to nothing else.
+
+---
+
+## 6. What the consumer can and cannot establish
+
+### 6.1 The answer to P5
+
+The two producers return the same value:
+
+```dafny
+// after: R10.P5dv
+module R10_SpectrumProbe {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  method ProduceR10() returns (out: NormRe)
+  {
+    out := Empty;
+  }
+}
+```
+
+<!-- pin: shape-d -->
+```
+$ scripts/vcheck --module R10 shape-d.dfy
+vcheck: shape-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
+```
+
+```dafny
+// after: R10.P5dv
+module R10_SpectrumProbe {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  method ProduceR10() returns (out: NormRe)
+    ensures EquivalentReR10(out, Chr('q'))
+  {
+    out := Empty;
+  }
+}
+```
+
+<!-- pin: language-d -->
+```
+$ scripts/vcheck --module R10 language-d.dfy
+vcheck: language-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+language-d.dfy:8:3: error: a postcondition could not be proved on this return path
+language-d.dfy:7:28: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A4_Norm.dfy:11:46: related: this proposition could not be proved
+```
+
+<!-- pin: shape-v -->
+```
+$ scripts/vcheck specimens/R10/shape-v.rs.specimen
+vcheck: specimens/R10/shape-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+<!-- pin: language-v -->
+```
+$ scripts/vcheck specimens/R10/language-v.rs.specimen
+vcheck: specimens/R10/language-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+specimens/R10/language-v.rs.specimen:10:9: error: postcondition not satisfied
+```
+
+`D:ok,fail V:ok,fail`. `Empty` is normal, so the shape-only promise holds; it matches nothing, so the language promise fails. The same value satisfies one interface and violates the other: what a delivery is correct *for* is decided by the statement, never by the value.
+
+### 6.2 A consumer over an arbitrary result
+
+A client of a constructor knows only its contract. The honest way to test a proposed contract is to give the client an arbitrary result that satisfies it and ask whether the client's goal follows. With a shape-only contract the result is any normal regex, and the goal does not follow:
+
+```dafny
+module R10_ShapeConsumerDemo {
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  // A consumer of a canonicalizer that should keep its input's language, knowing
+  // only the result type: any normal regex could be out.
+  lemma ShapeOnlyConsumer(a: NormRe, out: NormRe)
+    ensures EquivalentReR10(out, a)
+  {
+  }
+}
+```
+
+<!-- pin: consumer-d -->
+```
+$ scripts/vcheck --module R10 consumer-shape.dfy
+vcheck: consumer-shape.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
+consumer-shape.dfy:9:3: error: a postcondition could not be proved on this return path
+consumer-shape.dfy:8:28: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A4_Norm.dfy:11:46: related: this proposition could not be proved
+```
+
+That is the whole design problem of the flagship. `tools/R10/check_statements.py` generates exactly this kind of consumer from the clauses you write: arbitrary normal inputs, a fresh arbitrary normal result constrained only by your postconditions, and the language relation a client of `Alt`, `Cat` and `Star` needs. No constructor body is assumed. A native failure there means the consumer was not proved; it is not a proof that your statement is wrong for every purpose.
+
+Logical sufficiency has a classic loophole: a contradictory postcondition implies any goal. So sufficiency is one requirement among four: the consumer follows from your statements; an implementation over the original domain can establish them (the contractor's gate); the statements are not vacuous (your witnesses: a normal input with an accepted word and one with a rejected word, for each constructor); and the statements stay as you wrote them (your snapshot and `specfreeze --against`).
+
+### 6.3 Language facts need language premises
+
+W3 uses one of A4's congruence facts: replacing the right operand of a `Cat` by a language-equal one keeps the language.
+
+```dafny
+lemma ReplaceRightR10(a: Re, b1: Re, b2: Re, s: seq<char>)
+  requires forall t :: Matches(b1, t) <==> Matches(b2, t)
+  ensures Matches(Cat(a, b1), s) <==> Matches(Cat(a, b2), s)
+{
+  CatCongRight(a, b1, b2, s);
+}
+```
+
+The premise is a language equality, not a shape. If all you have is that two operands are normal, the lemma does not apply; an available lemma does not manufacture its premise. The smart constructors' language facts are of this kind too, and A4 deliberately does not supply them.
+
+---
+
+## 7. The holes, item by item
+
+H1 accepts exactly the normal inputs into the packet and rejects the rest. Dafny's item is the method half of a `function … by method` whose function body is the model; the method branches on the compiled `Normal` and builds the packet with a ghost count. Verus's is an exec fn returning `Option<NormPacketR10>`, building `Ghost` and `Tracked` fields and a `NormRe` through `from_normal_r10`.
+
+H2 concatenates two packets and rebuilds the erased count from the operands' counts, following `MkCat`'s four branches, rather than traversing the result. In Verus you open both operands' invariants first, and A4's `lemma_cat_shape_r10` gives the result's shape.
+
+H3 is a proof: a normal regex is a fixed point of `Norm`. It is a structural induction, and Dafny's ships with `{:induction false}`, so the hypotheses are yours to call; with the lever removed the empty body verifies, and the freeze reports a removed lever. The given corollary `NormIdempotentR10` derives idempotence from H3 and A4's closure fact.
+
+H4 is the compiled normalizer: a packet whose regex equals `Norm(r)`. It reuses H1 for the leaves and H2 for concatenation, and the alternation and star cases build their own packets. A body that always returns one valid packet keeps the shape and misses the model; the function body is what rules it out. Both languages also ship a compiled test (`PacketSampleTest`, `packet_sample_test`) that runs your H1, H2 and H4 bodies on a few inputs once they are written.
+
+Two pitfalls recur across the four holes. The first is reading a ghost value in a compiled branch: H2's count and H1's weight are erased, so the branch that decides which `MkCat` case applies must test the expressions, never the counts. The second is proving more than the statement asks: H3's statement is about normal inputs only, and an attempt that tries to prove `Norm(r) == r` for every `r` is chasing a false claim (`Norm(Alt(Chr('a'), Chr('a')))` is `Chr('a')`). When a proof attempt seems to need a fact the statement does not mention, write the fact down and ask whether it follows from the precondition.
+
+---
+
+## 8. What the instruments can and cannot see
+
+Run the gate on the shipped files and read why it refuses them:
+
+<!-- pin: gate-d -->
+```
+$ scripts/vcheck --gate dafny/R/R10_TypeInvariants/std
+vcheck: dafny/R/R10_TypeInvariants/std [dafny, gate]: failed — 73 verified, 4 holes, 0 errors, 1 finding
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:93:5: hole assume R10.H1d
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:110:5: hole assume R10.H2d
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:126:5: hole assume R10.H3d
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:151:5: hole assume R10.H4d
+dafny/R/R10_TypeInvariants/std: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
+```
+
+<!-- pin: gate-v -->
+```
+$ scripts/vcheck --gate verus/r/r10_type_invariants
+vcheck: verus/r/r10_type_invariants [verus, gate]: failed — - verified, 4 holes, 1 error
+verus/r/r10_type_invariants/src/lib.rs:111:1: hole external_body R10.H1v
+verus/r/r10_type_invariants/src/lib.rs:131:1: hole external_body R10.H2v
+verus/r/r10_type_invariants/src/lib.rs:153:40: hole assume R10.H3v
+verus/r/r10_type_invariants/src/lib.rs:175:1: hole external_body R10.H4v
+(no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 4 hole(s); exit 1
+```
+
+The audit reports each hole as a finding:
+
+<!-- pin: audit-d -->
+```
+$ scripts/vaudit dafny/R/R10_TypeInvariants/std
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:93: audit-assume — TryPacketR10: Definition has `assume` statement in body
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:110: audit-assume — CatPacketR10: Definition has `assume` statement in body
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:126: audit-assume — NormalFixedR10: Definition has `assume` statement in body
+dafny/R/R10_TypeInvariants/std/R10_TypeInvariants.dfy:151: audit-assume — NormalizePacketR10: Definition has `assume` statement in body
+vaudit: dafny/R/R10_TypeInvariants/std [dafny, learner]: 4 finding(s)
+```
+
+<!-- pin: audit-v -->
+```
+$ scripts/vaudit verus/r/r10_type_invariants
+verus/r/r10_type_invariants/src/lib.rs:111: hole-external-body — an external_body hole (in try_packet_r10) not on the trust allowlist
+verus/r/r10_type_invariants/src/lib.rs:131: hole-external-body — an external_body hole (in cat_packet_r10) not on the trust allowlist
+verus/r/r10_type_invariants/src/lib.rs:153: hole-assume — an assume hole (in normal_fixed_r10) not on the trust allowlist
+verus/r/r10_type_invariants/src/lib.rs:175: hole-external-body — an external_body hole (in normalize_packet_r10) not on the trust allowlist
+vaudit: verus/r/r10_type_invariants [verus, learner]: 4 finding(s)
+```
+
+The statement freeze checks every given statement, model and lever, including H3's `{:induction false}`:
+
+<!-- pin: freeze -->
+```
+$ scripts/specfreeze --check R10
+specfreeze: R10: 0 finding(s)
+```
+
+| instrument | what it establishes | what it cannot see |
+|---|---|---|
+| `scripts/vcheck <file>` (learner loop) | every obligation it ran verifies; the holes it counted | whether a statement is the one you meant |
+| `scripts/vcheck --gate` | verified, zero holes, no warning | the prose; how the delivery was produced |
+| `scripts/vaudit` | the assumptions and trusted interfaces in your files | the layers, the libraries, the solver |
+| `scripts/specfreeze --check R10` | every given statement, model and lever is as shipped | whether a frozen statement is strong enough |
+| `scripts/specfreeze --against <snapshot> <file>` | your own statements are as you wrote them | whether you wrote the right ones |
+| `scripts/vcheck --test` | the compiled tests ran and passed | every input not sampled |
+| `python3 tools/R10/check_statements.py` | your constructor statements support the language consumer over arbitrary results | implementability; vacuity; intent beyond the consumer |
+| `python3 tools/R10/check_normalizer.py`, `check_constructors.py` | the compiled code agrees with fixed observations, and which fields survive erasure | every input outside the cases; performance |
+
+Keep each result with its target, command, stage and counts. None inherits another row's claims.
+
+---
+
+## 9. On paper, before the keyboard
+
+The written track has two problems in `paper/R10_problems.tex`; answer in `paper/R10_answers.tex`, keeping its labels. Record all predictions first.
+
+**Card 03.5 (SpecGen).** Fill the card's eight fields from the pinned excerpt: task shape, oracle, trust, cheat surface, metric, budget, variance and artifact. SpecGen asks a model for annotations and repairs them by verifier feedback and mutation; an accepted annotation is one that verifies, which says nothing yet about whether it states what the program should do. Keep the two benchmark denominators and the separately reported estimator apart, and report missing variance or replication data as missing. The connection to this module is direct: your flagship statements are the human half of that loop, and §6.2's consumer is one way to check that an annotation is strong enough for its client.
+
+**Erasure and the contract.** Name the packet's executable and ghost fields and their coherence; state the construction and use obligations; justify H2's four concatenation cases from the operands' packet facts; and explain why the by-method agreement still holds for the compiled program although fields disappear. End by separating sufficiency, implementability, witnesses, snapshots and finite observations, each with the claim it supports.
+
+Build the pair with `make -C paper paper`. `/grade-paper R10` runs in a fresh examiner session after you have written the answers.
+
+**The ninth local bench card** (20 minutes): one of your own completed invariant or normalization goals, labelled course-derived and previously exposed, with its statement, the complete and stripped pair, a positive witness and negative controls. Follow `bench/local/r/README.md`.
+
+---
+
+## 10. The exercise file
+
+The hand work is four paired holes, H1 to H4, after the prediction block and the worked examples W1 to W3. Keep the statements, the given code, the given tests and the levers fixed; the freeze checks them.
+
+| item | statement (Dafny · Verus) | minutes D / V | uses |
+|---|---|---|---|
+| H1 | `TryPacketR10` · `try_packet_r10`: exactly the normal inputs, packed with their count | 8 / 10 | subset type or type invariant, by-method, ghost, tracked |
+| H2 | `CatPacketR10` · `cat_packet_r10`: concatenate packets, rebuild the erased count | 12 / 12 | the same, `MkCat`'s branches |
+| H3 | `NormalFixedR10` · `normal_fixed_r10`: a normal regex is a fixed point of `Norm` | 10 / 10 | structural induction |
+| H4 | `NormalizePacketR10` · `normalize_packet_r10`: the compiled normalizer equals the model | 25 / 23 | by-method, recursion, H1 and H2 |
+
+Each hole's doc comment states the task and asks one guiding question; two hints follow it. **The hint dial:** read the question, try, run the learner loop, and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the given fact or construct, never the answer; `/tutor R10` comes after both. In Verus you also remove each exec item's `external_body`.
+
+Do not strengthen a precondition, narrow a model or delete a lever to get green: the freeze reports it.
+
+Work one hole at a time and keep the learner loop's output for each first attempt. A by-method hole that fails reports the agreement obligation at the method's return; a subset or invariant violation names the constructed value; a Verus mode error stops at resolution before any obligation is generated. Each of these points to a different repair: the value computed, the evidence supplied, or the mode of the data you used.
+
+```bash
+scripts/firsttry.sh R10 --check
+scripts/vcheck --gate dafny/R/R10_TypeInvariants/std
+scripts/vcheck --gate verus/r/r10_type_invariants
+scripts/vaudit dafny/R/R10_TypeInvariants/std
+scripts/vaudit verus/r/r10_type_invariants
+scripts/vcheck --test dafny/R/R10_TypeInvariants/std
+scripts/vcheck --test verus/r/r10_type_invariants
+scripts/specfreeze --check R10
+python3 tools/R10/check_normalizer.py
+scripts/firsttry.sh R10 --report --strict
+```
+
+**Done:** both units gate with zero tool-counted holes, both audits are clean, both units' compiled tests pass, `scripts/specfreeze --check R10` reports 0 findings, the normalizer check agrees on its fixed cases, and the strict report shows the predictions recorded with every shipped check kept. The spectrum lab, the flagship, the written pair, the bench card and the viva are further deliverables of the module.
+
+---
+
+## 11. Exercise (agentic): the spec-to-proof flagship
+
+Rung 8 of the escalation ladder: you write the statements, the contractor writes the bodies and proofs. The flagship files ship three constructor signatures with shape-typed results and no contract at all; each body is a hole.
+
+<!-- pin: agent-d -->
+```
+$ scripts/vcheck dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy
+vcheck: dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy [dafny, learner loop]: verified — 65 verified, 3 holes, 0 errors
+dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:20:5: hole assume R10.A1d
+dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:25:5: hole assume R10.A1d
+dafny/R/R10_TypeInvariants/agent/R10_AgentFlagship.dfy:30:5: hole assume R10.A1d
+```
+
+<!-- pin: agent-v -->
+```
+$ scripts/vcheck verus/r/r10_type_invariants/src/agent.rs
+vcheck: verus/r/r10_type_invariants/src/agent.rs [verus, learner loop]: verified — - verified, 3 holes, 0 errors
+verus/r/r10_type_invariants/src/agent.rs:21:1: hole external_body R10.A1v
+verus/r/r10_type_invariants/src/agent.rs:27:1: hole external_body R10.A1v
+verus/r/r10_type_invariants/src/agent.rs:33:1: hole external_body R10.A1v
+```
+
+**Your 40 minutes: the statements.** For each of `BuildAltR10`, `BuildCatR10` and `BuildStarR10` (Verus `build_alt_r10`, …) write the `requires` and `ensures` clauses a client needs: the admissible inputs and the language relation between the result and the corresponding raw constructor (A4's `EquivalentReR10` or `equiv`). Then write non-vacuous witnesses: for each constructor a normal input with an accepted word and one with a rejected word, chosen so that a normal result with the wrong language would be caught. Run `python3 tools/R10/check_statements.py`; it tells you whether your clauses support the consumer, nothing more. Copy each completed file to a fixed snapshot under `research/R10/` before any contractor edit.
+
+> **CONTRACT (for /contract R10 — run it in a FRESH session):**
+> goal — implement the three constructor bodies (and private proof helpers) so that the human-written statements hold; allowed-files — the selected agent file; acceptance — after every edit `scripts/vcheck <file>`; finally `scripts/vcheck --gate <file>` exit 0 with zero holes, `scripts/vaudit <file>` with no finding, `scripts/specfreeze --against research/R10/<snapshot> <file>` with 0 findings, and `python3 tools/R10/check_constructors.py` agreeing on its fixed cases; the human's statements, the given models and the snapshots are never edited. Read the file's header before starting; it is the binding text.
+
+**Your 20 minutes: the audit.** Compare the delivery with your snapshot, run the gates and audits, re-run the statement consumer and the compiled constructor observations, and record which claim each supports. A delivery with three correct-looking bodies under a changed language predicate is a changed task. Live contractor sessions are deferred validation debt (D45): do not invent a transcript or a measured success; the reference twins show the task is implementable, not that an actor did it.
+
+### What the dashboard can and cannot see
+
+The gate sees that the bodies meet the statements; it cannot see whether the statements are the ones a client needs, which is why the consumer check exists, and it cannot see whether the consumer's goal is the right one, which is why your witnesses exist. A shape-only delivery passes its own gate (§6.1's `shape-x`), fails the consumer and fails the compiled observations; a false-domain clause makes the bodies easy and fails the consumer; a contradictory postcondition makes the consumer trivial and fails the gate. Three different failures, three different instruments: your audit names which one showed what.
+
+---
+
 ## Instructor touchpoints
 
-Use `/tutor R10` for a legal next step, `/discuss R10` for the type boundary,
-`/review R10` for a disputed concept, `/viva R10` for a committed six-question
-draw, `/grade-paper R10` for the written pair, and `/review-code R10` for the
-complete native evidence and original snapshots. `/contract R10` requires a
-fresh available actor session after human statement design. Solutions are
-reference-class and yours to open LAST, after attempts and original receipts.
-
-### What the instruments can and cannot see
-
-The gate checks formal obligations and counts unfinished holes. The audit
-checks trust escapes; snapshots bind original statements and referenced models.
-The statement consumer tests a particular logical consequence over an explicit
-domain. Runtime observations compare the fixed finite cases. None decides
-whether a formal relation is the requirement a person intended. Keep the
-question and evidence paired when explaining a result.
-
-When two results disagree, retain both original artifacts and identify the
-first stage at which their claims differ. A changed precondition, different
-model binding, unresolved dependency or untested implementation requires a
-different repair. Ask the instructor to inspect that exact boundary before
-resampling an actor. Do not erase an earlier failed result, report a deferred
-live grade as measured, or turn an author fixture into a learner transcript.
+- **`/tutor R10`** (long-lived, one session per module): after an attempt, with the exact diagnostic and the fact you believe should establish it; it follows the hint dial and never writes a hole's body.
+- **`/discuss R10`**: the enforcement spectrum; what erasure removes and what it keeps; shape against language.
+- **`/review`**: when the banner says items are due.
+- **`/viva R10`** (fresh examiner session): six questions from the bank, at least one a live predict refereed by the verifier; the other draw is the re-viva.
+- **`/grade-paper R10`** (fresh examiner session): after your answers are written.
+- **`/review-code R10`** (fresh examiner session) at the `design-judgment` bar: does each boundary support its consumer, and does each statement say what its client needs?
+- **`/contract R10`** (fresh contractor session): §11, after your statements and snapshot.
+- **Solutions last:** compare with `Solutions/` and `paper/solutions/` only after your attempts, gates, review and viva; then finish CALIBRATION and record it with `scripts/firsttry.sh R10 --record`.
 
 ---
 
 ## What R10 planted
 
-You can now read a representation invariant as an explicit promise, build a
-value that satisfies it, and use erased evidence without confusing it with
-runtime computation. You can implement a fixed mathematical normalization
-model and explain what its interface does and does not promise about language.
-You can also challenge a proposed contract using an arbitrary-result consumer,
-original-domain obligations and separate implementation controls.
-
-R11 will use the provided certificate definitions for new correctness and
-construction work. Its obligations remain distinct from normal-form shape and
-from finite observations in this module. Bring forward the habit that matters
-most: identify the original domain, the exact formal relation, the actual
-native scope and the evidence supporting each claimed result.
-
-| seed | harvest |
+| planted here | harvested in |
 |---|---|
-| Explicit normal-form type boundary | certificate and VM representation reviews |
-| Erased evidence with an executable payload | later resource and trust-report claims |
-| Original-domain arbitrary-result consumer | statement-strength audits and fixed-task deliveries |
-| Separate implementation, snapshot and runtime controls | evaluations with honest claim scope |
-
+| normal forms and the smart constructors' rewrites | R11 (derivations over normal forms), R16 (jump threading as a normal-form pass) |
+| erased evidence: ghost counts, tracked witnesses | R11 (certificates checked at run time), R13 (what reaches the compiled pipeline) |
+| shape against language; the consumer over an arbitrary result | R15 (statement review), R16 (frozen statements and statement-only review) |
+| human statements before contractor bodies | R15 (the ladder's proof rung), R16 (the capstone's statement freeze) |

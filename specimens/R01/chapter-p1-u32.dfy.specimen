@@ -1,8 +1,11 @@
 // after: R01.P1dv
 module R01_P1U32 {
   newtype U32 = x: int | 0 <= x < 0x1_0000_0000
+
   method Middle(lo: U32, hi: U32) returns (m: U32)
     requires lo <= hi
     ensures lo <= m <= hi
-  { m := (lo + hi) / 2; }
+  {
+    m := (lo + hi) / 2;
+  }
 }

@@ -1,8 +1,18 @@
 // after: R10.P3dv
 module R10_SpectrumProbe {
- import opened RG_A1_Re
- import opened RG_A4_Norm
- datatype ShapeChoiceR10=NoShapeR10|HasShapeR10(value:NormRe)
- function TryShapeR10(r:Re):ShapeChoiceR10 {if Normal(r) then HasShapeR10(r) else NoShapeR10}
- method ObserveR10() {var result:=TryShapeR10(Alt(Empty,Chr('q')));assert result.NoShapeR10?;}
+  import opened RG_A1_Re
+  import opened RG_A4_Norm
+
+  datatype ShapeChoiceR10 = NoShapeR10 | HasShapeR10(value: NormRe)
+
+  function TryShapeR10(r: Re): ShapeChoiceR10
+  {
+    if Normal(r) then HasShapeR10(r) else NoShapeR10
+  }
+
+  method ObserveR10()
+  {
+    var result := TryShapeR10(Alt(Empty, Chr('q')));
+    assert result.NoShapeR10?;
+  }
 }

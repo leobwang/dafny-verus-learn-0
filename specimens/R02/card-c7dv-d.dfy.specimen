@@ -69,5 +69,11 @@ module RG_A1_Re {
 
 module R02_BoxDemo {
   import opened RG_A1_Re
-  lemma Child(r: Re) { match r case Star(a) => assert a == r; case _ => }
+  lemma Child(r: Re)
+  {
+    match r
+    case Star(a) =>
+      assert a == r;
+    case _ =>
+  }
 }
