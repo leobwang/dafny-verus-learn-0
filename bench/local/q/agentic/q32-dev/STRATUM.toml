@@ -69,6 +69,61 @@ maxauto_fails = true
 admission_sha256 = "939284babd807e235a26edfb133a726d86102388aac8b3621f940d3c6593e0a0"
 
 [[card]]
+id = "cl-d18-reverse-copy"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d18-reverse-copy/tasks/cl-d18-reverse-copy.dfy"
+form_sha256 = "ca89b120e3c6b4b61433ec13d5117628b25418606efc5c42a9eec433f5f0ba71"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "f2ffa03da6c64182ae3c3995da9e2a153171d6c2c58669c440e82f3ed79c88e4"
+
+[[card]]
+id = "cl-d19-index-of-min"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d19-index-of-min/tasks/cl-d19-index-of-min.dfy"
+form_sha256 = "03787fc11be54cb42288e718402b5f7bda368bcd2f6c62c0eb16431dfdc1af44"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "97bb4398c0356e27e353d913b0aee89919eddefbfdbea399c0ddfa854dbf036e"
+
+[[card]]
+id = "cl-d20-zeros-three"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d20-zeros-three/tasks/cl-d20-zeros-three.dfy"
+form_sha256 = "cb16257fba7d02fdcdff474bc53fc7a9b07a506f781d70e2cdb5f90b2d0c682f"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "8589370b1c5551f2011cdbca671db83d2e5f49ff918e45ba6f3492dbde5bc651"
+
+[[card]]
+id = "cl-d21-count-greater"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d21-count-greater/tasks/cl-d21-count-greater.dfy"
+form_sha256 = "86fa78419e590a18a696f44fb88d477209138822a084dde45808bcd056a1c41a"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "64eae9ca64c5a2957d9dfc671225f9472f3bc1fc30018fe05b6a3e1725c85a6c"
+
+[[card]]
+id = "cl-d22-clamp-all"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-d22-clamp-all/tasks/cl-d22-clamp-all.dfy"
+form_sha256 = "016ab6912751d3bf267d292ac3339972102981791dff038a05ee7b27d996f81e"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "8c1d73abf3e93a610d2f1bb49c0b5f8a85cad0593f3b004717ca61f3fc8a7b18"
+
+[[card]]
 id = "cl-v13-count-up"
 lang = "verus"
 source = "course-local"
@@ -122,3 +177,58 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "fd6073138bd41c993208e0c5ccd2a44546884979b9490d5a9b2813d13d4d2e2f"
+
+[[card]]
+id = "cl-v18-index-of-min"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v18-index-of-min/tasks/cl-v18-index-of-min.rs"
+form_sha256 = "7bba2d69001ba08a40e6f99ea13fe7916d0ff728865ded3f2637bbf58b163a86"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "0a53c033f46971358e5207a6d3126d09b6f920f26b73e3307cbaac9f2462c89e"
+
+[[card]]
+id = "cl-v19-count-greater"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v19-count-greater/tasks/cl-v19-count-greater.rs"
+form_sha256 = "a85c76668aa99bd196c18c3fd6486bc72bfbea524e86bf82b24598d33bbe0664"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "770ae422b271bdd32ad3c3cbd0545d669a84934674620bbb1aa7ff90ab7aa8a8"
+
+[[card]]
+id = "cl-v20-clamp-all"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v20-clamp-all/tasks/cl-v20-clamp-all.rs"
+form_sha256 = "71a564cce4183c5559f4a831ad10b8dc128e8503e1d26a00d3d6ff2e38fcdf86"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "ea44703a9b0cce8de3ed64fa3ed6b5e125dc99a23a047cc7ed1475fe5e089b09"
+
+[[card]]
+id = "cl-v21-zeros-three"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v21-zeros-three/tasks/cl-v21-zeros-three.rs"
+form_sha256 = "4215818cbd1055e15eb7673bcc4ba4ab76abeb98b2257f27d835490f4c9560fe"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "10f1005f26a73601413aaff5afb4ddbd91c0f30e1daa9ac377e6012ba7066c3b"
+
+[[card]]
+id = "cl-v22-reverse-copy"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q32-dev/cl-v22-reverse-copy/tasks/cl-v22-reverse-copy.rs"
+form_sha256 = "d7bca5c35458dbd601f3ccaa79d80d11472f5ecb3c6cb5e0067ecdc1052703eb"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "004f202254611e9a048e93edb9ad94d7595005c2d59c7c47e78b4a2da7211c5a"
