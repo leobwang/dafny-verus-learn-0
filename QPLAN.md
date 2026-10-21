@@ -3673,15 +3673,15 @@ Held-out corpora are **authored or admitted by the author**, never produced by r
 
 | item | count | author-hours |
 |---|---|---|
-| Q31 course-local tasks (dev 16, held-out 24) | 40 | 20–30 |
+| Q31 course-local tasks (dev 24, held-out 36; D76's fallback (b), Δ405) | 60 | 30–45 |
 | Q31 public deliveries for the 10 covered-elsewhere rows and two build-tool plants | 12 | 10–14 |
 | Q31 sealed cheats | 12 | 12–18 |
-| Q32 course-local tasks (dev 20, three tranches × 16) | 68 | 34–51 |
+| Q32 course-local tasks (dev 30, three tranches × 24; Δ405) | 102 | 51–77 |
 | Q32 hand-closure targets (3 D + 3 V, §34.1) | 6 | 6–9 |
 | Q33 sealed statement pairs | 60 | 60–75 |
 | Q33 tickets (8 sealed, 4 public) | 12 | 24–36 |
 | public draws: validation and records (solver time, one job at a time) | ≈ 250 tasks | 8–12 |
-| **total** | | **≈ 175–245** |
+| **total** | | **≈ 202–286** (Δ405: +54 course-local tasks under fallback (b); was 175–245) |
 
 Par is code, not author model time (D68, §32.5): the author writes and seals the par agents and never runs a model on any held-out or sealed task; par's calls are the learner's run's, inside the D65 pool.
 
@@ -3731,8 +3731,8 @@ Items 1–7 of §31.1 on the exercise files and on `agents/`; then the harness s
 
 | part | size | composition | where | sealed |
 |---|---|---|---|---|
-| dev tasks | 40 (20 D, 20 V) | 16 course-local (8 of them the witness set), 24 public (12 DafnyBench; 12 Verus from HumanEval-Verus or stripped vericoding answers) | `bench/local/q/agentic/q31-dev/` (forms; public ones by draw record) | open |
-| held-out tasks | 60 (30 D, 30 V) | 24 course-local, 36 public, by a pre-registered seeded draw disjoint from the dev draw and every other lab's | `bench/local/q/agentic/q31-heldout/STRATUM.toml`; `Hidden/Agentic/Q31/heldout.tar.age` | yes; single use |
+| dev tasks | 40 (20 D, 20 V) | 24 course-local (8 of them the witness set), 16 public (Δ405: fallback (b); 8 DafnyBench under D76's exclusion; 8 Verus from stripped vericoding apps/verina answers) | `bench/local/q/agentic/q31-dev/` (forms; public ones by draw record) | open |
+| held-out tasks | 60 (30 D, 30 V) | 36 course-local, 24 public (Δ405), by a pre-registered seeded draw disjoint from the dev draw and every other lab's | `bench/local/q/agentic/q31-heldout/STRATUM.toml`; `Hidden/Agentic/Q31/heldout.tar.age` | yes; single use |
 | public cheats | 46 | the Q half of `tests/corpus/` (34 constructs), the 10 covered-elsewhere rows materialized as deliveries (flags, environment and build-tool rows as project-file deliveries, as Q18's P1–P4 are), and Q18's two build-tool plants; plus the 9 controls | `bench/local/q/agentic/q31-cheats/` (labels separate) | open |
 | sealed cheats | 12 | author-written, decidable classes only, class mix published in the stratum (proposed: two each of X02, X06, X10, X11, X15, X16) | `Hidden/Agentic/Q31/cheats.tar.age` | yes |
 | par agent | — | the course's one-shot baselines as a frozen par agent (code only; D68) | `Hidden/Agentic/Q31/par-agent.tar.age` | yes; run only by `truthcheck par-run` |
@@ -3804,8 +3804,8 @@ Par: the frozen par agent (one-shot baselines) on the same 60 held-out tasks, be
 
 | part | size | composition | sealed |
 |---|---|---|---|
-| dev | 50 (25 D, 25 V) | 20 course-local, 30 public | open |
-| tranches T1–T3 | 3 × 40 (each 20 D, 20 V) | each 16 course-local, 24 public; a task is admitted only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample (the analogue of the Lean "closed by a library search in 10 s" filter) | `Hidden/Agentic/Q32/T<k>.tar.age`, each single use, retired after its run |
+| dev | 50 (25 D, 25 V) | 30 course-local, 20 public (Δ405) | open |
+| tranches T1–T3 | 3 × 40 (each 20 D, 20 V) | each 24 course-local, 16 public (Δ405); a task is admitted only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample (the analogue of the Lean "closed by a library search in 10 s" filter) | `Hidden/Agentic/Q32/T<k>.tar.age`, each single use, retired after its run |
 | par agent | — | the course's frozen searcher (code only; D68), run per tranche beside the learner's agent | `Hidden/Agentic/Q32/par-agent.tar.age` |
 
 ### 34.5 Grading, and what a result may conclude
@@ -4088,6 +4088,7 @@ pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.5
   - **If the projection is at least 81 (v ≥ 13), (a) holds; otherwise (b) applies automatically**: the strata become 60 % course-local and 40 % public in every topic (e) set, sizes unchanged, and no further sample is drawn.
   - The result and the decision are recorded in a DELTAS entry before W3 draws any public task.
 - **W3's order:** W1b's par-run route first (QPLAN §39).
+- **Applied (Δ405, 2026-10-21):** the full sample gave **v = 12 valid of 40** (7 unchanged by the strip, 21 forms still verifying as stripped), a projection of ⌊268 · 12 / 40⌋ = **80 < 81**, so **fallback (b) applies**: every topic (e) task set is 60 % course-local and 40 % public, sizes unchanged (Q31 dev 24 + 16, held-out 36 + 24; Q32 dev 30 + 20, each tranche 24 + 16; Q33's pairs and tickets are already ≥ 60 % course-authored and do not change). Public needs fall to 54 Verus and 54 Dafny tasks; the stripped apps/verina supply projects 80 valid Verus tasks, and the Dafny tasks come from DafnyBench under D76's exclusion with its spares. Course-local tasks rise from 108 to 162 (+27–41 author-hours; corpus total ≈ 202–286 h).
 
 **Open questions (owners named; not the user's unless they become a decision)**
 
