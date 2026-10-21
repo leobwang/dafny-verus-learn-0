@@ -460,5 +460,135 @@ class Defaults(unittest.TestCase):
                         want = False
                 self.assertTrue(hit, f"{mid}.{hole}: no pattern cut from its answer")
 
+class GradePaperRules(unittest.TestCase):
+    """Δ502 (the dv7-live2 findings of Δ501): the /grade-paper probe rule, the Rule 2
+    exemption of the stream scan, host paths out of the token set, and the skill text
+    the harness checks against. Synthetic inputs; the only repo files read are the
+    skill, the given layers' file list and Q06's fixture (its anchors, never its text)."""
+
+    PROBE = ("lemma ZorkClosed()\n  ensures frob(3) == 7 && quux(4) == 9\n{}\n"
+             "method {:test} ZorkCheck()\n{\n  var x: nat := frob(3) + quux(4);\n"
+             "  expect x == 16, \"the claimed sum\";\n}\n")
+
+    def write(self, path, text):
+        return dict(tool="Write", input=dict(file_path=path, content=text))
+
+    def names(self, checks, ok=False):
+        return {c["check"] for c in checks if c["ok"] is ok}
+
+    def test_probe_checks_pass_on_the_rule(self):
+        calls = [self.write("/tmp/dvl-1000/grade-paper/Q02/probe.dfy", self.PROBE),
+                 dict(tool="Bash", input=dict(command="scripts/vcheck --module Q02 "
+                                                       "/tmp/dvl-1000/grade-paper/Q02/probe.dfy"))]
+        fb = "Probe: `vcheck ... probe.dfy`: verified; the claim fails at x = 16, not 17."
+        checks = cal.probe_checks("Q02", fb, calls, tree_files=["instructor/feedback/Q02_paper.md"],
+                                  probes_left=[])
+        self.assertEqual(self.names(checks), set(), checks)
+        self.assertEqual(len(checks), 3)
+        self.assertEqual(len(cal.probe_checks("Q02", fb, calls)), 2)   # nothing recorded: skipped
+
+    def test_probe_checks_fail_each_way(self):
+        inside = [self.write("instructor/scratch/probe.dfy", self.PROBE)]
+        self.assertIn("probes outside the learner's tree (none under instructor/scratch/)",
+                      self.names(cal.probe_checks("Q02", "ok", inside)))
+        self.assertTrue(self.names(cal.probe_checks(
+            "Q02", "ok", [], tree_files=["instructor/scratch/p.rs"])))
+        left = cal.probe_checks("Q02", "ok", [], probes_left=["grade-paper/Q02/probe.dfy"])
+        self.assertEqual(self.names(left), {"probes deleted (nothing left under "
+                                            "DVL_SCRATCH/grade-paper/)"})
+        outside = [self.write("/tmp/dvl-1000/grade-paper/Q02/probe.dfy", self.PROBE)]
+        fb = "Probe source:\n```dafny\n  ensures frob(3) == 7 && quux(4) == 9\n```\n"
+        got = cal.probe_checks("Q02", fb, outside)
+        self.assertEqual(self.names(got), {"feedback quotes no probe source (verdicts and values only)"})
+        detail = next(c["detail"] for c in got if not c["ok"])
+        self.assertIn("feedback:L[3]", detail)
+        self.assertNotIn("frob", detail)          # counts and line numbers, never the text
+        # a line the public texts hold (the learner's own answer) may be quoted
+        self.assertEqual(self.names(cal.probe_checks(
+            "Q02", fb, outside, public="ensures frob(3) == 7 && quux(4) == 9")), set())
+
+    def test_probe_sources_read_heredocs_and_edits(self):
+        cmd = ("P=/tmp/dvl-1000/grade-paper/Q05; mkdir -p $P && cat > \"$P/probe_c.rs\" <<'EOF'\n"
+               "proof fn zork_closed() ensures 3nat + 4nat == 7nat {}\nEOF\n"
+               "cat <<EOF\nnot a probe: no redirect\nEOF")
+        src = cal.probe_sources([dict(tool="Bash", input=dict(command=cmd)),
+                                 dict(tool="Edit", input=dict(file_path="/x/grade-paper/Q05/a.dfy",
+                                                              old_string="a", new_string="b := c;")),
+                                 self.write("instructor/feedback/Q05_paper.md", "a report")])
+        self.assertEqual([p for p, _ in src], ["$P/probe_c.rs", "/x/grade-paper/Q05/a.dfy"])
+        self.assertIn("zork_closed", src[0][1])
+        self.assertNotIn("not a probe", "".join(t for _, t in src))
+
+    def test_eval_grading_carries_the_probe_checks(self):
+        calls = [self.write("instructor/scratch/probe.dfy", self.PROBE)]
+        fb = "\n".join(f"% GRADER[B{i}][x][1]: not attempted" for i in (1, 2, 3))
+        _, checks = cal.eval_grading("Q02", "empty", fb, GRADEBOOK.format(g=1), "", [], calls,
+                                     tree_files=["instructor/scratch/probe.dfy"], probes_left=[])
+        self.assertEqual(self.names(checks),
+                         {"probes outside the learner's tree (none under instructor/scratch/)"})
+        _, checks = cal.eval_grading("Q02", "empty", "", "", "", [], calls)
+        self.assertFalse(checks[0]["ok"])
+        self.assertIn("probes outside the learner's tree (none under instructor/scratch/)",
+                      self.names(checks))
+
+    def test_rule2_exemption_in_the_stream(self):
+        import re
+        rec = lambda mid, layer: dict(id=mid, layer=layer)  # noqa: E731
+        self.assertTrue(cal.above_layer("verus/given/qg_bignat_l7/src/lib.rs", rec("Q10", "L5")))
+        self.assertTrue(cal.above_layer("dafny/given/Q/QG_L6_BigNat.dfy", rec("Q10", "L5")))
+        self.assertFalse(cal.above_layer("dafny/given/Q/QG_L5_BigNat.dfy", rec("Q10", "L5")))
+        self.assertFalse(cal.above_layer("verus/given/rg_re_a7/src/lib.rs", rec("Q10", "L5")))
+        self.assertFalse(cal.above_layer("verus/q/q10_practice_ia/src/lib.rs", rec("Q10", "L5")))
+        pats = [dict(mid="Q10", idx=1, rx=re.compile(r"zork\s*\+\s*quux", re.M), src=None)]
+        layer = {"Q10": [cal.squash_ws("fn f() { zork +\n   quux }")]}
+        texts = ["src/lib.rs:145:    zork + quux", "my own zork+quux"]
+        self.assertEqual(cal.split_pattern_hits(pats, texts, layer), ({"Q10#1": 1}, {"Q10#1": 1}))
+        self.assertEqual(cal.split_pattern_hits(pats, texts), ({"Q10#1": 2}, {}))
+        self.assertEqual(cal.split_pattern_hits(pats, texts, {"Q04": layer["Q10"]}), ({"Q10#1": 2}, {}))
+        # the shipped layers: Q10 (L5) gets L6 and L7 of both languages, Q18 (L7) none
+        recs = {m: cal.resolve(m) for m in ("Q10", "Q18")}
+        ex = cal.exempt_layer_texts(recs, ["Q10", "Q18"])
+        self.assertGreaterEqual(len(ex["Q10"]), 4)
+        self.assertEqual(ex["Q18"], [])
+
+    def test_host_paths_cut_no_token(self):
+        gd = cal.GD
+        line = "it is `~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/vstd-0.0/` here"
+        spans = gd.host_path_spans(line)
+        self.assertEqual(len(spans), 1)
+        import re
+        ids = [(m.group(0), gd.in_spans(spans, m.start()))
+               for m in re.finditer(r"[A-Za-z_][A-Za-z0-9_]{11,}", line + " zork_frob_quux")]
+        self.assertEqual(ids, [("cf8c6b5b557f", True), ("zork_frob_quux", False)])
+        for s in ("dafny/given/Q/QG_L1_BigNat.dfy", "https://example.org/a/b", "// a/b/c",
+                  "x := a / b / c;", "assert s[i..][1..] == s[i + 1..];"):
+            self.assertEqual(gd.host_path_spans(s), [], s)
+        for s in ("/home/someone/code/x.rs", "$HOME/.cache/x/y", "see /tmp/dvl-1000/runs/a"):
+            self.assertTrue(gd.host_path_spans(s), s)
+
+    def test_the_skill_states_what_the_harness_checks(self):
+        text = (cal.ROOT / ".claude/skills/grade-paper/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn(f'"${{DVL_SCRATCH:-/tmp/dvl-$(id -u)}}/{cal.PROBE_DIR}/<ID>/"', text)
+        self.assertIn("Never the probe's source", text)
+        self.assertIn("never proves a general lemma that an exercise asks for", text)
+        self.assertIn("`% GRADER[B<n>][<dimension>][1]: not attempted`", text)
+        self.assertIn("one ledger line for each distinct `% GRADER[…][…][1|2]` margin note", text)
+        self.assertNotIn("Write each anchor to `instructor/scratch/`", text)
+
+    def test_q06_expected_lines_anchor_in_their_problem(self):
+        """Δ502 D-5: each recomputation EXPECTED line of Q06's flawed fixture anchors
+        three answer lines inside its own problem (line numbers only)."""
+        lines = cal.dropin_text(cal.ROOT, "Q06", "flawed").splitlines()
+        sec = cal.problem_sections(lines)
+        exp = [cal.RX_EXPECTED.match(l) for l in
+               (cal.FIXTURES / "Q06_flawed_answers.tex").read_text().splitlines()]
+        exp = [m for m in exp if m and int(m.group(3)) <= 2 and m.group(2) == "recomputation"]
+        self.assertEqual(len(exp), 3)
+        for m in exp:
+            got = cal.anchor_lines(m.group(4), lines, sec[m.group(1)])
+            self.assertEqual(len(got), 3, m.group(1))
+            self.assertTrue(all(sec[m.group(1)][0] <= n <= sec[m.group(1)][1] for n in got))
+
+
 if __name__ == "__main__":
     unittest.main()

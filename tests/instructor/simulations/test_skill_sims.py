@@ -64,6 +64,16 @@ class Selection(unittest.TestCase):
         with self.assertRaises(sims.Refusal):
             sims.leak_patterns(self.tmp / "empty-dir-that-is-missing")
 
+    def test_rule2_exemption(self):
+        """Δ502 (Δ501 D-4): with `exempt`, a match whose text lies in a given layer above
+        the pattern module's layer is recorded as exempt, not as a hit."""
+        det = {"pats": self.pats, "tokens": [], "origin": [],
+               "exempt": {"Q02": ["a shipped layer line zorkQ0277 here"]}}
+        hay = "Grep result: zorkQ0277\nzorkQ0412"
+        self.assertEqual(sims.scan_text(det, hay, exempt=True)[0], ["Q04:2"])
+        self.assertEqual(det["exempt_hits"], {"Q02:2": 1})
+        self.assertEqual(sims.scan_text(det, hay)[0], ["Q02:2", "Q04:2"])
+
     def test_tier_filter(self):
         sel = lambda mids: {p["mid"] for p in sims.patterns_for_case(  # noqa: E731
             self.pats, set(mids), RECORDS)}
