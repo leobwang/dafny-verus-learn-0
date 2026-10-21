@@ -296,6 +296,7 @@
 | 404 | D76 settles D-13: option (a) with (b) as the automatic fallback; the public strata's sources, the unseal-time exclusion of Lab 1 and Lab α tasks with 20 % spare cards, and the fallback rule written before the sample finished | adopted (the user, 2026-10-21) | the user; DV7's W2 and W3 lanes |
 | 405 | D76's sample: 12 valid of 40, projection 80 < 81, so fallback (b) applies: every topic (e) task set 60 % course-local, sizes unchanged | adopted by the pre-registered rule (DV7 W2, 2026-10-21) | DV7's W2 lane; W3 |
 | 406 | DV7 W2's remainder as built: the reference twins of Q31's gate v3, bench and baselines and of Q32's searcher, their frozen tests and Q31's recorded fixtures; the reference check's overlay of earlier twins; `harness/tests/challenges` a course tree | adopted (DV7 W2, 2026-10-21) | DV7's W2 lane |
+| 407 | Q33's pipeline: exact contracts, reference twin and frozen tests; W3's order under D80 (W1b waits for the container redesign) | adopted (DV7 W2/W3, 2026-10-21) | DV7's lanes |
 
 ## A. Holes and hole counting
 
@@ -3968,3 +3969,8 @@
 - **Not built:** Q33's pipeline twin and tests (`MolePolicy` exists, Δ402); the grader modes and the rest of W1b, now first in W3 (D76).
 - **Tests and CI:** the four suites above through `scripts/vcheck --ref` (twins) and `scripts/vcheck` (stubs); the checker is clean. No model call; recordings ran one solver job at a time (12 GB scope, one Verus worker).
 - **Owner:** DV7's W2 lane; W3 for Q33 and W1b.
+
+### Δ407 · Q33's pipeline twin and tests; W3's order under the user's D80 — adopted (DV7, 2026-10-21)
+- **Built:** `agents/q33_statement_problem/pipeline.py` with exact contracts (`autoformalize` keeps the first reply with both frozen tags, the signature and a witness, else abstains; `self_checks` over `SELF_CHECKS` through a caller-supplied `run`; `run_pipeline` holds each role to its `Ticket.allowlists` and raises `RoleViolation`; `audit` over `AUDIT_CHECKS` gives FAIL, UNKNOWN or PASS), its twin under `Solutions/agents/`, and `harness/tests/challenges/q33_statement_problem/test_pipeline.py` (6 tests, scripted `ask`, roles and `run`; a planted role stands for MolePolicy's plants). Twin 6/6; stub 0/6 (4 holes). The Q33 manifest re-pinned.
+- **W3's order (the coordinator, relaying the user's D80, D78 and D79):** W1b's grader modes (gate-agree, bench-agree, par-run) wait until D80's container redesign (`port-containers`: native amd64/arm64 images with their own pinned toolchain; host Ollama through an internal Docker network and a gate container; the lifeline fix) is merged into `basic` and `basic` into `dv7`. Meanwhile: the corpora under fallback (b), course-local tasks first, each with its reference, admission evidence and frozen tests, in small commits with a running count; no author model run on any held-out or sealed task (D68). Supersedes Δ404's "W3 starts with par-run".
+- **Owner:** DV7's W3 lane.
