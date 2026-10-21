@@ -3632,6 +3632,10 @@ The gate is one script (spec §2.3.8 items 1–7, design §7.6's list); it write
 | `status` | `planned` | `authoring` on `dv7` as each module is built; `shipped` only on `challenge` (§38) |
 | checker | challenge rules (solo, defense, all strands, not solutions-first; `statements` past planned) | the statement manifest's presence and name; `build_target = "Challenges"` units; the `py-agents` tier; the budget exception rule §40 D-1 settles |
 
+### 31.7 As built (W1, DELTAS Δ402)
+
+Built on `dv7`: the `agents/` route and the `py-agents` tier (§31.4 items 1–4), the checker's challenge pool, Claude-zero and manifest rules (§31.6), `dvl.trustleap`, `dvl.reach`, `scripts/challenge_gate.sh` with `dvl.challenge` (§31.1, §31.5), `fvh unseal --once` with `research/unseals.jsonl` (§31.3), `MolePolicy` (§35.3), the batch's `agents` imports and the `solver-swap` and `reach` instruments (§31.4 item 5), and `check_release_history.py --challenge` (§38 item 5). **Changed from the plan:** no generated units for `Challenges/` — a probe showed `vcheck --gate` verifies a challenge's Dafny file and its out-of-workspace Verus crate as they stand (§31.1 item 2's [verify] settled); a challenge part unseals by default under `~/.cache/dafny-verus-learn-0/unsealed/<ID>/<part>`. **Left for W1b** (before any sealed run): the grader modes `gate-agree`, `bench-agree` and `par-run`, `truth.toml`'s `part` key, the image rebuild, the armed-challenge hook fixtures and simulations.
+
 ---
 
 ## 32. Topic (e), agentic: shared apparatus, sources, budgets and rules

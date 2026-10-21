@@ -39,7 +39,8 @@ Run from harness/ (`uv run --offline --frozen --directory harness python -m fvh 
       live model server (version, digests, the unit's settings).
   unseal <ID> [--dry-run] [--part P] [--once --into DIR]
       a challenge module (Q19-Q33) is always --once: one part, written to DIR
-      outside the course tree, at most once (research/unseals.jsonl, the
+      outside the course tree (default ~/.cache/dafny-verus-learn-0/unsealed/
+      <ID>/<part>, in the reference class), at most once (research/unseals.jsonl, the
       hash-chained single-use ledger; QPLAN §31.3, DELTAS Δ402); otherwise
       the module's sealed lab tasks (fvh.statements; QPLAN §28.6, §30 Q64):
       refused until every statement file expected/<ID>.statements names is
@@ -316,6 +317,10 @@ def cmd_unseal(a, root):
     if rec.get("status") == "planned":
         raise Refusal(f"{rec['id']} is planned: not authored yet")
     once = a.once or rec.get("tier") == "challenge"     # a challenge part is single use (D-6)
+    if once and a.part and not a.into:
+        # the default home is in the reference class, which guard rules 1/1c and the
+        # canonical deny rule keep out of every study session (Δ402)
+        a.into = os.path.expanduser(f"~/.cache/dafny-verus-learn-0/unsealed/{rec['id']}/{a.part}")
     try:
         got = statements.unseal(root, rec["id"], dry_run=a.dry_run, part=a.part, once=once,
                                 into=a.into)
