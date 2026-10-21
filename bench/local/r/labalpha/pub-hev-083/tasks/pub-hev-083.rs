@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","i","i32","len","max_so_far","number","numbers","pos","result","rolling_max","seq_max"]},{"name":"i2","identifiers":["Vec","i","i32","len","max_so_far","number","numbers","pos","result","rolling_max","seq_max"]},{"name":"i3","identifiers":["Vec","i","i32","len","max_so_far","number","numbers","pos","result","rolling_max","seq_max"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"rolling_max","start":27,"end":48}]
 // R12 public task: humaneval-verus human_eval_009.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

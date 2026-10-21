@@ -1,7 +1,1 @@
-{
- "hints": [
-  "0 <= i <= strings.len()",
-  "concatenate(strings.deep_view()) == joined@ + concat_helper( strings.deep_view(), i as nat, )",
-  "concatenate(strings.deep_view()) == joined@ + strings[i as int]@ + concat_helper( strings.deep_view(), (i + 1) as nat, )"
- ]
-}
+{"hints": ["0 <= i <= strings.len()", "concatenate(strings.deep_view()) == joined@ + concat_helper( strings.deep_view(), i as nat, )", "strings.len() - i", "concatenate(strings.deep_view()) == joined@ + strings[i as int]@ + concat_helper( strings.deep_view(), (i + 1) as nat, )"]}

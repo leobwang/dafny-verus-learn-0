@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","a","appendArray","array","b","c","i","j"]},{"name":"i2","identifiers":["Length","a","appendArray","array","b","c","i","j"]},{"name":"i3","identifiers":["Length","a","appendArray","array","b","c","i","j"]},{"name":"i4","identifiers":["Length","a","appendArray","array","b","c","i","j"]},{"name":"i5","identifiers":["Length","a","appendArray","array","b","c","i","j"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"},{"name":"i5"}]
 // R12_SOURCE_SPANS: [{"symbol":"appendArray","start":4,"end":28}]
 // R12 public task: dafnybench dafny-exercise_tmp_tmpouftptir_appendArray.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method appendArray(a: array<int>, b: array<int>) returns (c: array<int>)

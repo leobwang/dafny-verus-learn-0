@@ -1,8 +1,1 @@
-{
- "hints": [
-  "brazilian_factorial((start - 1) as nat) == special_fact",
-  "factorial((start - 1) as nat) == fact_i",
-  "1 <= start <= end < 10",
-  "factorial(start as nat) == fact_i"
- ]
-}
+{"hints": ["brazilian_factorial((start - 1) as nat) == special_fact", "factorial((start - 1) as nat) == fact_i", "1 <= start <= end < 10", "(end - start)", "factorial(start as nat) == fact_i"]}

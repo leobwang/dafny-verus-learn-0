@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["CountLessThan","count","else","grow","i","if","in","numbers","set","shrink","then","threshold"]},{"name":"i2","identifiers":["CountLessThan","count","else","grow","i","if","in","numbers","set","shrink","then","threshold"]},{"name":"i3","identifiers":["CountLessThan","count","else","grow","i","if","in","numbers","set","shrink","then","threshold"]}]
+// R12_HINT_SITES: [{"name":"d1","kind":"decreases"},{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"CountLessThan","start":4,"end":26}]
 // R12 public task: dafnybench Clover_count_lessthan.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method CountLessThan(numbers: set<int>, threshold: int) returns (count: int)
@@ -8,7 +8,7 @@ method CountLessThan(numbers: set<int>, threshold: int) returns (count: int)
   var shrink := numbers;
   var grow := {};
   while |shrink | > 0
-    decreases shrink
+    decreases /*R12_DECREASES:d1*/ (0 as int)
     invariant /*R12_HINT:i1*/ true
     invariant /*R12_HINT:i2*/ true
     invariant /*R12_HINT:i3*/ true

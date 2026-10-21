@@ -9,15 +9,29 @@
 % PREREG-BEGIN
 \section*{Problem B1}\label{ans:B1}
 \begin{answer}
-We will prove best-first is superior regardless of the observed rates. Independent
-gets one call, best-first gets100. We tune width using each prefix\'s results.
-Forty tasks times four arms times three repeats times ten calls is400calls, so
-all extra pilots are free. Treat120repeats as independent tasks and stop when our
-favorite arm leads. Missing diagnostics and score0count as proofs; allow the
-model to change postconditions. Run missing containers on the host. There is no
-need to bind a plan, hash a task or disclose previously seen proofs. Claude\'s
-controllable seeds eliminate model variance. A mock green result fills every
-unrun live row. Confidence is100\%without computing an interval.
+\textbf{Frame binding:} not needed; we register our own design instead.
+
+\textbf{Claim:} best-first is superior regardless of the observed rates, so we
+switch the primary contrast to independent versus best-first, the arm we expect
+to win, and we stop as soon as it leads.
+
+\textbf{Why the test:} we run a paired test at each of the ten budget points with
+Holm, and treat the 240 repeats of each arm as independent tasks, which gives
+far more power than the clusters.
+
+\textbf{MDE:} \texttt{stats.mde\_two\_proportions(240, 0.5, paired=True)}, about
+0.12; the frame's simulation is not needed.
+
+\textbf{Cheat surface:} none; an empty obligation list or a score of 0 means the
+proof is accepted, and a model may adjust a postcondition that is too strong.
+
+\textbf{Stopping rule:} stop when our favourite arm leads; a failed container run
+is re-run on the host, and a scored attempt is re-run when it looks unlucky.
+
+\textbf{Budget:} 80 tasks times 4 arms times 3 repeats times 10 calls is 960 calls,
+so the ceiling does not matter and pilots are free.
+
+\textbf{Batch plan binding:} to be filled in after the runs.
 \end{answer}
 % PREREG-END
 \section*{Problem B2}\label{ans:B2}

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","a","a_len","b","char","i","is_binary_digit","len","pos","result","string_xor","xor_char"]}]
+// R12_HINT_SITES: [{"name":"i1"}]
 // R12_SOURCE_SPANS: [{"symbol":"string_xor","start":34,"end":59}]
 // R12 public task: humaneval-verus human_eval_011.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

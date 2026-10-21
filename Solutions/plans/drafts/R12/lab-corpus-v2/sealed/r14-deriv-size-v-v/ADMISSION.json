@@ -16,7 +16,7 @@
   "id": "r14-deriv-size-v-v",
   "lang": "verus",
   "max_auto_reading": "maximal automation",
-  "private_evidence_sha256": "76cce4f03e68d568eaa7e315b86df7588b85f6346e2d9c5613bcd5fca7ff6338",
+  "private_evidence_sha256": "ca63fa6c91980f568cdeb27ba6451f393771b5ce3001cdce22a3834061b5eeb8",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -38,7 +38,7 @@
       "name": "c3"
     }
   ],
-  "source_sha256": "812b3407ced6b76aae1da92378dd3cf8924d5b44ae95d215f99250ed5e0d8cd8",
+  "source_sha256": "fb90c983f6e55201e4abd2c02aaac2650c30c815b0eba0e7c590641586fc24b3",
   "status": "admitted",
   "target": "lemma_deriv_size_v",
   "validated_span": {
@@ -46,5 +46,5 @@
     "start": 103,
     "symbol": "lemma_deriv_size_v"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0 (no expression site: equals the baseline)"
 }

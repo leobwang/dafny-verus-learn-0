@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["BinarySearch","Length","a","array","high","i","in","index","low","mid","sorted","x"]},{"name":"i2","identifiers":["BinarySearch","Length","a","array","high","i","in","index","low","mid","sorted","x"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"}]
 // R12_SOURCE_SPANS: [{"symbol":"BinarySearch","start":11,"end":36}]
 // R12 public task: dafnybench 630-dafny_tmp_tmpz2kokaiq_Solution.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 

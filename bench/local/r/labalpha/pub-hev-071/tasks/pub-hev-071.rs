@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["divides","i","k","largest_divisor","mul","n","ret","u32"]},{"name":"i2","identifiers":["divides","i","k","largest_divisor","mul","n","ret","u32"]},{"name":"i3","identifiers":["divides","i","k","largest_divisor","mul","n","ret","u32"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"largest_divisor","start":65,"end":103}]
 // R12 public task: humaneval-verus human_eval_024.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -76,7 +76,7 @@ fn largest_divisor(n: u32) -> (ret: u32)
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
             /*R12_HINT:i3*/ true,
-        decreases i,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         if n % i == 0 {
             assert(divides(i as nat, n as nat)) by {

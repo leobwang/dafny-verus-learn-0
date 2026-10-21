@@ -1,7 +1,1 @@
-{
- "hints": [
-  "n > 0",
-  "i < n",
-  "forall|k: u32| i < k < n ==> !divides(k as nat, n as nat)"
- ]
-}
+{"hints": ["n > 0", "i < n", "forall|k: u32| i < k < n ==> !divides(k as nat, n as nat)", "i"]}

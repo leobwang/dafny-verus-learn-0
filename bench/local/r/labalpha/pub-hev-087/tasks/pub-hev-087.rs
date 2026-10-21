@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","char","concat_helper","concatenate","concatenate_impl","copy_str","deep_view","i","joined","len","strings"]},{"name":"i2","identifiers":["Vec","char","concat_helper","concatenate","concatenate_impl","copy_str","deep_view","i","joined","len","strings"]},{"name":"a3","identifiers":["Vec","char","concat_helper","concatenate","concatenate_impl","copy_str","deep_view","i","joined","len","strings"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"d1","kind":"decreases"},{"name":"a3"}]
 // R12_SOURCE_SPANS: [{"symbol":"concatenate_impl","start":43,"end":63}]
 // R12 public task: humaneval-verus human_eval_028.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -51,7 +51,7 @@ fn concatenate_impl(strings: Vec<Vec<char>>) -> (joined: Vec<char>)
         invariant
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
-        decreases strings.len() - i,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         assert(/*R12_HINT:a3*/ true);
 

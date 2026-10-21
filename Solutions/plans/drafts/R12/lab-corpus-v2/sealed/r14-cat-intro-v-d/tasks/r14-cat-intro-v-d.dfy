@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"h1","identifiers":["s","u"]},{"name":"h2","identifiers":["s","u","v"]}]
+// R12_HINT_SITES: [{"name":"h1"},{"name":"h2"}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.CatIntroV","start":65,"end":72}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1: Re, Nullable, NodeCount) and RG_A2_Deriv (Deriv),

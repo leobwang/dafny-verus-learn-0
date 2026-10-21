@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","MaxArray","a","array","i","j","max"]},{"name":"i2","identifiers":["Length","MaxArray","a","array","i","j","max"]},{"name":"i3","identifiers":["Length","MaxArray","a","array","i","j","max"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"MaxArray","start":4,"end":21}]
 // R12 public task: dafnybench dafny-exercise_tmp_tmpouftptir_maxArray.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method MaxArray(a: array<int>) returns (max:int)

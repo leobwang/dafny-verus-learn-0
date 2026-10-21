@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"c1","identifiers":["m","c","w","deriv","drop_first"],"kind":"calls","callees":["lemma_alt_feed_law","lemma_parts_law","lemma_deriv_correct"]},{"name":"h1","identifiers":["matches","head","i","w"]},{"name":"h2","identifiers":["matches","tail","head","i","w","len"]},{"name":"h3","identifiers":["matches","m","j","c","w","seq"]},{"name":"h4","identifiers":["head","tail","k"]},{"name":"h5","identifiers":["matches","m","i","c","w","seq","drop_first"]},{"name":"h6","identifiers":["head","tail","k","len"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["lemma_alt_feed_law","lemma_parts_law","lemma_deriv_correct"]},{"name":"h1"},{"name":"h2"},{"name":"h3"},{"name":"h4"},{"name":"h5"},{"name":"h6"}]
 // R12_SOURCE_SPANS: [{"symbol":"lemma_alt_feed_law","start":254,"end":291}]
 use vstd::prelude::*;
 

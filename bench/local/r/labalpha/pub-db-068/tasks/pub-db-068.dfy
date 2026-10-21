@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Append","Checksum","GetData","Hash","SumChars","Valid","d","data","i","old","string","this"]},{"name":"i2","identifiers":["Append","Checksum","GetData","Hash","SumChars","Valid","d","data","i","old","string","this"]},{"name":"i3","identifiers":["Append","Checksum","GetData","Hash","SumChars","Valid","d","data","i","old","string","this"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"Append","start":28,"end":43}]
 // R12 public task: dafnybench Dafny_Learning_Experience_tmp_tmpuxvcet_u_week8_12_week8_CheckSumCalculator.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 ghost function Hash(s:string):int {

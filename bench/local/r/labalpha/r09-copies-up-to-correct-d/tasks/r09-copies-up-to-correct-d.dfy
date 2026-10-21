@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"c1","identifiers":["r","j","s","i"],"kind":"calls","callees":["CopiesUpToCorrect"]},{"name":"h1","identifiers":["Copies","Cat","r","k"]},{"name":"h2","identifiers":["Matches","Copies","r","k","s"]},{"name":"h3","identifiers":["Matches","Copies","r","s"]},{"name":"h4","identifiers":["Copies","Cat","r","k"]},{"name":"c2","identifiers":["r","j","s","i"],"kind":"calls","callees":["CopiesUpToCorrect"]},{"name":"h5","identifiers":["Matches","Cat","r","u","s"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["CopiesUpToCorrect"]},{"name":"h1"},{"name":"h2"},{"name":"h3"},{"name":"h4"},{"name":"c2","kind":"calls","callees":["CopiesUpToCorrect"]},{"name":"h5"}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.CopiesUpToCorrect","start":37,"end":79}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1), copied verbatim.

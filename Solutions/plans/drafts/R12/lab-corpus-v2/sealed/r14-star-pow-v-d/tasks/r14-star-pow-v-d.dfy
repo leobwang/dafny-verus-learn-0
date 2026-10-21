@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"c1","identifiers":["c","n"],"kind":"calls","callees":["StarPowV"]},{"name":"h1","identifiers":["s","c","PowerWord","n"]},{"name":"h2","identifiers":["MatchesV","Chr","c","s"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["StarPowV"]},{"name":"h1"},{"name":"h2"}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.StarPowV","start":65,"end":74}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1: Re, Nullable, NodeCount) and RG_A2_Deriv (Deriv),

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","T","a","array","i","j","k","multiset","old","partition","pivotPos"]},{"name":"i2","identifiers":["Length","T","a","array","i","j","k","multiset","old","partition","pivotPos"]},{"name":"i3","identifiers":["Length","T","a","array","i","j","k","multiset","old","partition","pivotPos"]},{"name":"i4","identifiers":["Length","T","a","array","i","j","k","multiset","old","partition","pivotPos"]}]
+// R12_HINT_SITES: [{"name":"d1","kind":"decreases"},{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"}]
 // R12_SOURCE_SPANS: [{"symbol":"partition","start":10,"end":41}]
 // R12 public task: dafnybench MIEIC_mfes_tmp_tmpq3ho7nve_exams_mt2_19_p5.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 type T = int // example
@@ -22,7 +22,7 @@ method partition(a: array<T>) returns(pivotPos: int)
  
     // Scan the array and move elements as needed
     while  j < a.Length-1 
-        decreases a.Length-1-j
+        decreases /*R12_DECREASES:d1*/ (0 as int)
         invariant /*R12_HINT:i1*/ true
         invariant /*R12_HINT:i2*/ true
         invariant /*R12_HINT:i3*/ true

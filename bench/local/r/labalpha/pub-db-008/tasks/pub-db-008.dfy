@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Fib","add","fib","i","n","next","r","sum","tmp"]},{"name":"i2","identifiers":["Fib","add","fib","i","n","next","r","sum","tmp"]},{"name":"i3","identifiers":["Fib","add","fib","i","n","next","r","sum","tmp"]},{"name":"a4","identifiers":["Fib","add","fib","i","n","next","r","sum","tmp"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"a4"}]
 // R12_SOURCE_SPANS: [{"symbol":"Fib","start":10,"end":34}]
 // R12 public task: dafnybench Software-building-and-verification-Projects_tmp_tmp5tm1srrn_CVS-projeto_aula3.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 function fib(n : nat) : nat

@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"c1","identifiers":["a","b"],"kind":"calls","callees":["lemma_nullable_correct"]},{"name":"c2","identifiers":["a","b"],"kind":"calls","callees":["lemma_nullable_correct"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["lemma_nullable_correct"]},{"name":"c2","kind":"calls","callees":["lemma_nullable_correct"]}]
 // R12_SOURCE_SPANS: [{"symbol":"lemma_nullable_correct","start":55,"end":71}]
 use vstd::prelude::*;
 

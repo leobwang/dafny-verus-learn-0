@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Vec","delimiter","even","index","intersperse","intersperse_quantified","intersperse_spec","len","numbers","odd","result","u64"]},{"name":"i2","identifiers":["Vec","delimiter","even","index","intersperse","intersperse_quantified","intersperse_spec","len","numbers","odd","result","u64"]},{"name":"i3","identifiers":["Vec","delimiter","even","index","intersperse","intersperse_quantified","intersperse_spec","len","numbers","odd","result","u64"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"intersperse","start":96,"end":125}]
 // R12 public task: humaneval-verus human_eval_005.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -109,7 +109,7 @@ pub fn intersperse(numbers: Vec<u64>, delimiter: u64) -> (result: Vec<u64>)
                 /*R12_HINT:i3*/ true,
                 forall|i: int| 0 <= i < index ==> #[trigger] result[even(i)] == numbers[i],
                 forall|i: int| 0 <= i < index ==> #[trigger] result[odd(i)] == delimiter,
-            decreases numbers.len() - 1 - index,
+            decreases /*R12_DECREASES:d1*/ (0 as int),
         {
             result.push(numbers[index]);
             result.push(delimiter);

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["RotateRight","i","k","l","n","r","rotated","seq"]},{"name":"i2","identifiers":["RotateRight","i","k","l","n","r","rotated","seq"]},{"name":"i3","identifiers":["RotateRight","i","k","l","n","r","rotated","seq"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"RotateRight","start":4,"end":18}]
 // R12 public task: dafnybench dafny-synthesis_task_id_743.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method RotateRight(l: seq<int>, n: int) returns (r: seq<int>)

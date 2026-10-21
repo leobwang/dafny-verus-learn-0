@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"c1","identifiers":["a","b","c","NodeCount"],"kind":"calls","callees":["DerivSizeV","SquareGrowth"]},{"name":"c2","identifiers":["a","b","c","NodeCount"],"kind":"calls","callees":["DerivSizeV","SquareGrowth"]},{"name":"c3","identifiers":["a","c","NodeCount"],"kind":"calls","callees":["DerivSizeV","SquareGrowth"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["DerivSizeV","SquareGrowth"]},{"name":"c2","kind":"calls","callees":["DerivSizeV","SquareGrowth"]},{"name":"c3","kind":"calls","callees":["DerivSizeV","SquareGrowth"]}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.DerivSizeV","start":75,"end":88}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1: Re, Nullable, NodeCount) and RG_A2_Deriv (Deriv),

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","List","T","a","array","at","from_array","i","j","k","l","length","mem","x"]},{"name":"i2","identifiers":["Length","List","T","a","array","at","from_array","i","j","k","l","length","mem","x"]},{"name":"i3","identifiers":["Length","List","T","a","array","at","from_array","i","j","k","l","length","mem","x"]},{"name":"i4","identifiers":["Length","List","T","a","array","at","from_array","i","j","k","l","length","mem","x"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"}]
 // R12_SOURCE_SPANS: [{"symbol":"from_array","start":33,"end":50}]
 // R12 public task: dafnybench CVS-handout1_tmp_tmptm52no3k_2.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 /*                                      Functional Lists and Imperative Arrays                                        */

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"c1","identifiers":["r"],"kind":"calls","callees":["NullableCorrect"]},{"name":"c2","identifiers":["r","u","Deriv"],"kind":"calls","callees":["NullableDerivsR13","DerivCorrect"]},{"name":"h1","identifiers":["u"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["NullableCorrect"]},{"name":"c2","kind":"calls","callees":["NullableDerivsR13","DerivCorrect"]},{"name":"h1"}]
 // R12_SOURCE_SPANS: [{"symbol":"R12_LabCase.NullableDerivsR13","start":131,"end":141}]
 module R12_LabCase {
   // Provided definitions: RG_A1_Re (layer A1), copied verbatim.

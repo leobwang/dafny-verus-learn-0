@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Pot","Potencia","b","e","r","x","y"]}]
+// R12_HINT_SITES: [{"name":"i1"}]
 // R12_SOURCE_SPANS: [{"symbol":"Pot","start":17,"end":31}]
 // R12 public task: dafnybench Metodos_Formais_tmp_tmpql2hwcsh_Invariantes_potencia.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 // Potência

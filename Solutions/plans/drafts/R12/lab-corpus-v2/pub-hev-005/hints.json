@@ -1,18 +1,1 @@
-{
- "hints": [
-  "input_len == input.len()",
-  "ghost_groups == vecs_to_seqs(groups@)",
-  "ghost_groups.flatten() + current_group@ == remove_nonparens(input@[..pos])",
-  "current_nesting_level == nesting_level(input@[..pos])",
-  "current_nesting_level == nesting_level(current_group@)",
-  "current_nesting_level <= pos",
-  "current_group@.len() == 0 <==> current_nesting_level == 0",
-  "is_sequence_of_balanced_groups(input@)",
-  "input@[..pos + 1] == input@[..pos].push(c)",
-  "input@[..pos + 1].drop_last() == input@[..pos]",
-  "current_group@.drop_last() == prev_group",
-  "current_group@.drop_last() == prev_group",
-  "ghost_groups.drop_last() == prev_groups",
-  "ghost_groups.flatten() + current_group@ == ghost_groups.flatten()"
- ]
-}
+{"hints": ["input_len == input.len()", "ghost_groups == vecs_to_seqs(groups@)", "ghost_groups.flatten() + current_group@ == remove_nonparens(input@[..pos])", "current_nesting_level == nesting_level(input@[..pos])", "current_nesting_level == nesting_level(current_group@)", "current_nesting_level <= pos", "current_group@.len() == 0 <==> current_nesting_level == 0", "is_sequence_of_balanced_groups(input@)", "input@[..pos + 1] == input@[..pos].push(c)", "input@[..pos + 1].drop_last() == input@[..pos]", "current_group@.drop_last() == prev_group", "current_group@.drop_last() == prev_group", "ghost_groups.drop_last() == prev_groups", "ghost_groups.flatten() + current_group@ == ghost_groups.flatten()"]}

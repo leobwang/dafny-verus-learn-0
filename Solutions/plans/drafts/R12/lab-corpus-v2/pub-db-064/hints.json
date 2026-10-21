@@ -1,6 +1,1 @@
-{
- "hints": [
-  "0<=i<=v.Length",
-  "forall j:: 0<=j<i ==> v[j]!=0"
- ]
-}
+{"hints": ["0<=i<=v.Length", "forall j:: 0<=j<i ==> v[j]!=0", "v.Length -i"]}

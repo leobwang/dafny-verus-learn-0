@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["MAX","MIN","b","brackets","c","correct_bracketing","i","i32","len","prev","ret","spec_bracketing","spec_bracketing_helper","stack_size","str"]},{"name":"i2","identifiers":["MAX","MIN","b","brackets","c","correct_bracketing","i","i32","len","prev","ret","spec_bracketing","spec_bracketing_helper","stack_size","str"]},{"name":"i3","identifiers":["MAX","MIN","b","brackets","c","correct_bracketing","i","i32","len","prev","ret","spec_bracketing","spec_bracketing_helper","stack_size","str"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"correct_bracketing","start":36,"end":67}]
 // R12 public task: humaneval-verus human_eval_056.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -49,7 +49,7 @@ fn correct_bracketing(brackets: &str) -> (ret: bool)
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
             /*R12_HINT:i3*/ true,
-        decreases brackets@.len() - i,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         let c = brackets.get_char(i);
         let ghost prev = spec_bracketing_helper(brackets@[..i]);

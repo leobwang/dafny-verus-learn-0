@@ -1,7 +1,1 @@
-{
- "hints": [
-  "0 <= i <= |l|",
-  "|rotated| == i",
-  "forall k :: 0 <= k < i ==> rotated[k] == l[(k - n + |l|) % |l|]"
- ]
-}
+{"hints": ["0 <= i <= |l|", "|rotated| == i", "forall k :: 0 <= k < i ==> rotated[k] == l[(k - n + |l|) % |l|]"]}
