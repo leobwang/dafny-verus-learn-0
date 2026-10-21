@@ -63,6 +63,28 @@ maxauto_fails = false
 admission_sha256 = "f9ddb00f6b90ebdf178ef09fd964ffc7e0c248fc2211a5bb6451179771a28df5"
 
 [[card]]
+id = "cl-d5-take-sum"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d5-take-sum/tasks/cl-d5-take-sum.dfy"
+form_sha256 = "d536a0f7549dfb9f3ff2dbaf1a08b0564989241216602f53e687c615b5396c7f"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "f360ce1d147cb2fb2f0497be035bc4dee87679554f6218f5aaea2bad299a5d70"
+
+[[card]]
+id = "cl-d6-replicate-count"
+lang = "dafny"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-d6-replicate-count/tasks/cl-d6-replicate-count.dfy"
+form_sha256 = "be16f057b9e07324263f4f7185bff29407f7dc9ba3d694a1d973d120d9f0d4d6"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "919eea0419ff93908f5aaa5ba76f5df45c2bf81bd4ab5d90781abe4aa3e2d892"
+
+[[card]]
 id = "cl-v1-sum-push"
 lang = "verus"
 source = "course-local"
@@ -105,3 +127,25 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "0d23c04c0ebd5cca93de115ad5f44c0e4c4a394f75af88bf09b6f47e6264375b"
+
+[[card]]
+id = "cl-v5-sum-zeros"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v5-sum-zeros/tasks/cl-v5-sum-zeros.rs"
+form_sha256 = "2c2d1170f807cffd51ad90b8ce082719f31ae580f8a5428aa0bfb15d008a9467"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "601c928b2f9aefba231ae5eb2b9adf54251584f823ff754572e4e7abe171262c"
+
+[[card]]
+id = "cl-v6-max-ge"
+lang = "verus"
+source = "course-local"
+form = "bench/local/q/agentic/q31-dev/cl-v6-max-ge/tasks/cl-v6-max-ge.rs"
+form_sha256 = "e91962e7874971bbdf977f95aec5e54aef1b6e4f0354183419ff7550c87feabc"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "5e4796e3bf95d09a0a6689ce02920bc0c20d18c9fdcdd0458736866af17561d0"
