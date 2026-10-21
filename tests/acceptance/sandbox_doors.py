@@ -473,6 +473,11 @@ def s_canary():
     listed = sandbox.read_canaries(ROOT)
     note("canary", "trees listed", len(listed) >= 6, f"{len(listed)} tree(s) in sandbox/canaries.sha256")
     for i, (h, tree) in enumerate(sorted(listed.items(), key=lambda kv: kv[1])):
+        if tree.endswith(".tar.age"):
+            # a sealed archive's canary is inside its plaintext (topic (e)'s references,
+            # Δ409): nothing to read here without the grader's key, so the line is noted
+            note("canary", f"tree {tree}", (ROOT / tree).is_file(), "sealed: its token is inside the archive")
+            continue
         top = Path(os.path.expanduser(tree)) if tree.startswith("~") else ROOT / tree
         f = top / "DVLCANARY"
         if not f.is_file():

@@ -8,6 +8,9 @@
 # truth, the author cache and each public set's answers/ (the last written by
 # scripts/get_bench.sh from the set's name and pinned commit, outside the
 # set's digest). The token is the file's first line; nothing else is secret.
+# A line whose tree is a sealed archive (*.tar.age) marks a canary planted INSIDE the
+# archive's plaintext (topic (e)'s sealed references, DELTAS Δ409): a staged file that
+# carries it was copied out of a sealed reference.
 67a71b90b1272f450b34bc861016fa624bac2feaf760cf5677bc6fe3ff185e30  Solutions/
 627593c50e7dc2ca384c935f9f09e87c11442722862c326e3c278aca1c6880e9  paper/solutions/
 fe92544652afb45414314bc870c5d1a85426b0c706ca5aa6d0563d24229e6404  tests/instructor/leak_patterns/
@@ -19,3 +22,4 @@ f4e37ffe19ae17c024d47d91ffd9dbb94fcbce000b9ef31e010caf433c4967fc  ~/.cache/dafny
 2ca659a92035413a33686b3e0b970b09be0b82e0e0a8da5aec157ce76629682a  bench/public/vericoding/answers/
 110267cc77c207291787de78b19e3d89344f99dbc392dedebd37f2fd67210cf6  bench/public/lemmascript/answers/
 1584f4b943876686af8abc94a3302554931e82bc4816fb7e475913930d5c2622  bench/public/minif2f-dafny/answers/
+7ebd53d8d64953659cd4e8a48951c42c28517436d9f8dda5ac718624fc761bd9  Hidden/Agentic/Q31/heldout-refs.tar.age
