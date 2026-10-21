@@ -4000,11 +4000,21 @@
   - Two drafts whose forms already verified as shipped (nothing left to prove) were dropped and replaced.
 - **Checks after sealing.**
   - No held-out name occurs anywhere in dv7's history (git log -p 7800b83..HEAD).
-  - On the unreleased R line, two names occur with other meanings: `Flatten` (the Dafny standard library's sequence flatten, in R07) and `Flip` (a sequence reversal named in a Q13 bank revision on `authoring`). Each held-out task defines its own, different object; recorded for when the R core reaches basic.
+  - On the unreleased R line, two names occurred with other meanings: `Flatten` (the Dafny standard library's sequence flatten, in R07) and `Flip` (a sequence reversal in a Q13 bank revision on `authoring`).
+  - **Amended (2026-10-21, the coordinator's instruction):**
+    - Both are renamed in their sealed tasks; both were re-admitted.
+    - The name check now also runs `git grep` on the refs `authoring`, `sysb` and `labalpha` (no checkout). All 36 held-out tasks pass it.
+    - The same check over the open dev strata found three names shared with Lab α's public HumanEval-Verus tasks: `count_up_to`, `odd_count` and `seq_max`. Those tasks were renamed (`tick_up_to`, `odd_tally`, `seq_peak`) and re-admitted (commit 46729a8). The other hits are ordinary words in banks, hooks and plans (Sum, Total, count, rev, Place, Occurrences, Twos, Pos, Acc, CountLoop, SumAppend, calls), none a task of the R line, and are left as they are.
+  - **Canary (the plan's step, QPLAN §31.3):**
+    - Every sealed reference carries a fresh `DVLCANARY-` token as its second line. The token stays in the author archive; its sha256 is registered in `sandbox/canaries.sha256` against `Hidden/Agentic/Q31/heldout-refs.tar.age`.
+    - A copy of a sealed reference staged anywhere is therefore attributed by the sandbox self-test.
+    - The task forms carry no canary: they are staged legitimately once unsealed, and a canary there would refuse the runs.
+    - Two references were re-verified with the line in place.
+    - The by-hand canary acceptance door (`tests/acceptance/sandbox_doors.py`) notes a sealed-archive line instead of looking for a DVLCANARY file there.
+  - Both archives were re-sealed and the pins updated (commit 76040be).
   - No held-out task was run through a model.
 - **Not done here.**
   - The archive round trip in the grader container waits for W1b (D80), so these archives have not yet been decrypted by the grader's check.
-  - No canary token is inside the archives yet.
   - The 24 public held-out cards (D76's draw) and the q32 tranches come later.
 - **Running count (course-local):** q31-dev 24 / 24, q32-dev 30 / 30, **q31 held-out 36 / 36**, q32 tranches 0 / 72. **Total 90 / 162.**
 - **Owner:** DV7's W3 lane; W1b for the round trip.
