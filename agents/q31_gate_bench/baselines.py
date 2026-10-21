@@ -10,19 +10,26 @@ from collections.abc import Sequence
 
 from fvh import policies, protocol
 
-__all__ = ["one_shot_render", "scripted"]
+__all__ = ["REPLY_RULE", "one_shot_render", "scripted"]
+
+REPLY_RULE = ('Reply with one JSON object and nothing else: {"actions": [{"kind": "edit", '
+              '"path": <the target>, "old": "", "new": <the whole new file>}]}.')
+"""The reply rule every one-shot prompt ends with (given; frozen)."""
 
 
 # item: Q31.H14py S9
 def scripted(edits: Sequence[protocol.Edit]) -> policies.ScriptedPolicy:
-    """**H14py.** A ScriptedPolicy that applies `edits` at step 0, verifies at step 1
-    and stops at step 2 ("done" when the last verification passed, else "give-up")."""
+    """**H14py.** A ScriptedPolicy of two proposals: step 0 applies `edits` and runs
+    Verify(); step 1 stops with Stop("done"). (The scripted baseline exists for the
+    harness's own tests; it calls no model.)"""
     raise NotImplementedError("Q31.H14py")
 
 
 # item: Q31.H15py S9
 def one_shot_render(state: protocol.State, ctx: protocol.Context, budget: protocol.Budget) -> str:
-    """**H15py.** The one-shot prompt: the task statement, the editable file's text
-    and the reply rule (one JSON object holding the whole-file Edit); no feedback, so a
-    run is one call."""
+    """**H15py.** The one-shot prompt, as text: ctx.material["instructions"], then
+    "Statement:" and ctx.statement, then the target's shipped text
+    (ctx.material["text"]) in a fenced block, then REPLY_RULE. It uses nothing of the
+    run's history (a one-shot run is one call), and the same arguments always give the
+    same text."""
     raise NotImplementedError("Q31.H15py")
