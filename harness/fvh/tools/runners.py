@@ -133,7 +133,7 @@ SCHEMA = 1
 _RANK = {p: i for i, p in enumerate(PROVENANCES)}
 _JSON = {"vcheck --gate": True, "vaudit": True, "specfreeze --check": False, "witness": True,
          "swap-to-false": True, "seed-rerun": True, "solver-swap": True, "reach": True}
-COURSE_TREES = ("tests/corpus", "harness/tests/q/fixtures")
+COURSE_TREES = ("tests/corpus", "harness/tests/q/fixtures", "harness/tests/challenges")  # Δ406
 AGENT_TREES = ("research",)
 GIVEN_TREES = ("dafny/given", "verus/given")
 LEARNER_KEYS = ("exercises", "exits", "agentic", "harness", "units")

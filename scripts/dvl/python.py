@@ -666,6 +666,18 @@ def _overlay(root, inner, text):
     agents = Path(root) / AGENT_DIR
     if agents.is_dir():
         shutil.copytree(agents, s / AGENT_DIR, ignore=COPY_IGNORE, symlinks=True)
+    if inner.startswith(AGENT_DIR + "/"):
+        # a challenge twin composes the learner's earlier work (Q31's gate imports the Q18
+        # gate, fvh_q.gate.gate_v2): in its reference check that work is the reference's,
+        # so every harness twin and every earlier agents twin is laid over the copy (Δ406)
+        for top in (HARNESS, AGENT_DIR):
+            ref = Path(root) / REF_DIR / top
+            if ref.is_dir():
+                for f in ref.rglob("*.py"):
+                    if not {"__pycache__", ".venv"} & set(f.parts):
+                        dest = s / top / f.relative_to(ref)
+                        dest.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copyfile(f, dest)
     corpus = Path(root) / "tests" / "corpus"
     if corpus.is_dir():
         shutil.copytree(corpus, s / "tests" / "corpus", ignore=COPY_IGNORE, symlinks=True)

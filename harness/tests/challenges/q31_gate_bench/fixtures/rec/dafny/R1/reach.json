@@ -1,0 +1,22 @@
+{
+ "argv": [
+  "scripts/dvl/reach.py",
+  "--json",
+  "--manifest",
+  "harness/tests/challenges/q31_gate_bench/fixtures/R1/reach.toml",
+  "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+ ],
+ "document": {
+  "files": 1,
+  "findings": [
+   "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy:3: names the denied declaration LemmaShortcut"
+  ]
+ },
+ "exit_code": 1,
+ "instrument": "reach",
+ "killed": null,
+ "output_sha256": "9f8449b287ec059267a11691d9972f76505eacd9593afcbfc9b4cc830bf026b3",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+}

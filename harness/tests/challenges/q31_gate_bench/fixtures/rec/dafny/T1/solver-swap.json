@@ -1,0 +1,57 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "--solvers",
+  "harness/tests/challenges/q31_gate_bench/fixtures/T1/main.dfy"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "dafny",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": [
+   "4.12.1",
+   "4.14.1"
+  ],
+  "spread": [
+   {
+    "cv": 0.0004,
+    "max": 3497,
+    "min": 3494,
+    "solver": "4.12.1",
+    "symbol": "Gate2C4.MinOf"
+   },
+   {
+    "cv": 0.0001,
+    "max": 3547,
+    "min": 3546,
+    "solver": "4.14.1",
+    "symbol": "Gate2C4.MinOf"
+   }
+  ],
+  "stable": true,
+  "target": "<root>/harness/tests/challenges/q31_gate_bench/fixtures/T1/main.dfy",
+  "verdicts": {
+   "4.12.1 seed 1": "verified",
+   "4.12.1 seed 2": "verified",
+   "4.12.1 seed 3": "verified",
+   "4.14.1 seed 1": "verified",
+   "4.14.1 seed 2": "verified",
+   "4.14.1 seed 3": "verified"
+  }
+ },
+ "exit_code": 0,
+ "instrument": "solver-swap",
+ "killed": null,
+ "output_sha256": "1604504c41ccbcdc85adb0cc7e9c5799553db9a10b1dd89cedd1789589bb0c32",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/T1/main.dfy"
+}

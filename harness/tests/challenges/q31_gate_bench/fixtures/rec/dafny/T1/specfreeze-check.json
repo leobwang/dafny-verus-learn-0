@@ -1,0 +1,21 @@
+{
+ "argv": [
+  "scripts/specfreeze",
+  "--against",
+  "harness/tests/challenges/q31_gate_bench/fixtures/T1/frozen.dfy",
+  "harness/tests/challenges/q31_gate_bench/fixtures/T1/main.dfy"
+ ],
+ "document": {
+  "exit_code": 0,
+  "lines": [
+   "specfreeze: harness/tests/challenges/q31_gate_bench/fixtures/T1/main.dfy: 0 finding(s)"
+  ]
+ },
+ "exit_code": 0,
+ "instrument": "specfreeze --check",
+ "killed": null,
+ "output_sha256": "11e90597d1a3a899a2ac47bf248f250fce5bc22120e9e220d2d53d2a5b06d350",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/T1/main.dfy"
+}

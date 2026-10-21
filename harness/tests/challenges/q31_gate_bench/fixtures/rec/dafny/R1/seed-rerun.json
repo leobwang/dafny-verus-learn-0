@@ -1,0 +1,50 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "dafny",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.0002,
+    "max": 2472,
+    "min": 2471,
+    "solver": null,
+    "symbol": "Gate2C4.LemmaShortcut"
+   },
+   {
+    "cv": 0.0001,
+    "max": 3496,
+    "min": 3495,
+    "solver": null,
+    "symbol": "Gate2C4.MinOf"
+   }
+  ],
+  "stable": true,
+  "target": "<root>/harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy",
+  "verdicts": {
+   "1": "verified",
+   "2": "verified",
+   "3": "verified"
+  }
+ },
+ "exit_code": 0,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "482ab53f99baaf81e1f48f449a3206bbb1f0cdf861bdb31cc3b999236487e96a",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+}

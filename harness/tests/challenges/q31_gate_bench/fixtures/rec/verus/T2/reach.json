@@ -1,0 +1,20 @@
+{
+ "argv": [
+  "scripts/dvl/reach.py",
+  "--json",
+  "--manifest",
+  "harness/tests/challenges/q31_gate_bench/fixtures/T2/reach.toml",
+  "harness/tests/challenges/q31_gate_bench/fixtures/T2"
+ ],
+ "document": {
+  "files": 1,
+  "findings": []
+ },
+ "exit_code": 0,
+ "instrument": "reach",
+ "killed": null,
+ "output_sha256": "a7beb2030c69b59c376cf2e281414b1b900e93bb042c8152530df748cc47405e",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/T2"
+}

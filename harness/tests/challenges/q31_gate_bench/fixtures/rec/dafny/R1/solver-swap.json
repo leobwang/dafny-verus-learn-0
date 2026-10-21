@@ -1,0 +1,71 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "--solvers",
+  "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "dafny",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": [
+   "4.12.1",
+   "4.14.1"
+  ],
+  "spread": [
+   {
+    "cv": 0.0002,
+    "max": 2472,
+    "min": 2471,
+    "solver": "4.12.1",
+    "symbol": "Gate2C4.LemmaShortcut"
+   },
+   {
+    "cv": 0.0002,
+    "max": 2472,
+    "min": 2471,
+    "solver": "4.14.1",
+    "symbol": "Gate2C4.LemmaShortcut"
+   },
+   {
+    "cv": 0.0001,
+    "max": 3496,
+    "min": 3495,
+    "solver": "4.12.1",
+    "symbol": "Gate2C4.MinOf"
+   },
+   {
+    "cv": 0.0001,
+    "max": 3547,
+    "min": 3546,
+    "solver": "4.14.1",
+    "symbol": "Gate2C4.MinOf"
+   }
+  ],
+  "stable": true,
+  "target": "<root>/harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy",
+  "verdicts": {
+   "4.12.1 seed 1": "verified",
+   "4.12.1 seed 2": "verified",
+   "4.12.1 seed 3": "verified",
+   "4.14.1 seed 1": "verified",
+   "4.14.1 seed 2": "verified",
+   "4.14.1 seed 3": "verified"
+  }
+ },
+ "exit_code": 0,
+ "instrument": "solver-swap",
+ "killed": null,
+ "output_sha256": "aff74e8e88db8822cabbfcc92af5111d9b1b842f871ac0843a5ef25b3a9232b2",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+}

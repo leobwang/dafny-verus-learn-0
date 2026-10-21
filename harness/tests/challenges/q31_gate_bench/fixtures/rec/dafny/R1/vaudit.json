@@ -1,0 +1,19 @@
+{
+ "argv": [
+  "scripts/vaudit",
+  "--json",
+  "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+ ],
+ "document": {
+  "findings": [],
+  "lang": "dafny",
+  "target": "<root>/harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+ },
+ "exit_code": 0,
+ "instrument": "vaudit",
+ "killed": null,
+ "output_sha256": "21b892d81fb9472e41c8d6f61d1baa147f00ea2a5c18fe0c5639cc8e098c92bc",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/R1/main.dfy"
+}

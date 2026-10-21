@@ -1,0 +1,16 @@
+# Q31 gate v3 fixture T2 (a copy of Q18 C1; harness/tests/challenges/q31_gate_bench/fixtures): an invented crate. Frozen (rule 2f).
+[package]
+name = "q31_fixture_t2"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+
+[package.metadata.verus]
+verify = true

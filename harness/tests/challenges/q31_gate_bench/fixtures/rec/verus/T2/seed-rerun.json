@@ -1,0 +1,43 @@
+{
+ "argv": [
+  "scripts/vcheck",
+  "--json",
+  "--brittleness",
+  "harness/tests/challenges/q31_gate_bench/fixtures/T2"
+ ],
+ "document": {
+  "differs": [],
+  "flag_cv": 0.2,
+  "flagged": [],
+  "lang": "verus",
+  "seeds": [
+   1,
+   2,
+   3
+  ],
+  "solvers": null,
+  "spread": [
+   {
+    "cv": 0.0,
+    "max": 778,
+    "min": 778,
+    "solver": null,
+    "symbol": "q31_fixture_t2::larger_word"
+   }
+  ],
+  "stable": true,
+  "target": "<root>/harness/tests/challenges/q31_gate_bench/fixtures/T2",
+  "verdicts": {
+   "1": "verified",
+   "2": "verified",
+   "3": "verified"
+  }
+ },
+ "exit_code": 0,
+ "instrument": "seed-rerun",
+ "killed": null,
+ "output_sha256": "1f9394d096bdb29b8d35560a8ad46c0871a62bd9aa143210a95252eaba5097bb",
+ "provenance": "course",
+ "schema": 1,
+ "target": "harness/tests/challenges/q31_gate_bench/fixtures/T2"
+}
