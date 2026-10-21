@@ -41,3 +41,23 @@ def test_proof_call_sites_cannot_add_code_bindings_trust_or_new_callees(text):
 def test_proof_call_metadata_requires_trusted_nonempty_callees():
     for kw in [dict(kind='calls'),dict(kind='calls',callees=('assume',)),dict(kind='expr',callees=('unfold_window_r12',))]:
         with pytest.raises(ValueError):HintSite('site',(),**kw)
+
+
+# D63 (DELTAS Δ296): a site may carry no identifier list (any identifier outside the forbidden
+# words), and a decreases site renders like an expression site from its verify-failing placeholder.
+def open_task():
+    return HintTask('header\nwhile i<n\n invariant /*R12_HINT:bounds*/ true\n decreases /*R12_DECREASES:measure*/ (0 as int)\n {i=i+1;}\n',
+                    (HintSite('bounds',None),HintSite('measure',None,kind='decreases')))
+
+def test_open_vocabulary_and_decreases_sites_render_like_expressions():
+    t=open_task();out=render_hint_r12(t,Hint(('any_name(i) <= n','n - i')))
+    assert ' invariant (any_name(i) <= n)\n decreases (n - i)\n' in out and '{i=i+1;}' in out
+
+@pytest.mark.parametrize('pair',[('assume(false)','n - i'),('true','decreases 0'),('true','n - i; return 0'),('true','n - i} fn x(){}'),('true','unsafe')])
+def test_open_vocabulary_still_rejects_forbidden_words_and_escapes(pair):
+    with pytest.raises(ValueError):render_hint_r12(open_task(),Hint(pair))
+
+def test_decreases_site_metadata_and_marker():
+    assert HintSite('m',None,kind='decreases').marker=='/*R12_DECREASES:m*/ (0 as int)'
+    with pytest.raises(ValueError):HintSite('m',None,kind='decreases',callees=('f',))
+    with pytest.raises(ValueError):HintTask('x /*R12_DECREASES:other*/ (0 as int)',(HintSite('m',None,kind='decreases'),))

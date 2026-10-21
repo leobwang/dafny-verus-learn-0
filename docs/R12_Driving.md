@@ -416,7 +416,7 @@ acceptance-case failures are omitted.
 <!-- pin: shipped-python -->
 ```
 $ scripts/vcheck harness/r/fvh_r/engine.py
-vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 30 passed, 129 failed, 5 holes
+vcheck: harness/r/fvh_r/engine.py [python, learner loop]: failed — 32 passed, 135 failed, 5 holes
 harness/r/fvh_r/engine.py:72:1: hole raise-not-implemented R12.H1py
 harness/r/fvh_r/engine.py:86:1: hole raise-not-implemented R12.H2py
 harness/r/fvh_r/engine.py:164:1: hole raise-not-implemented R12.H4py

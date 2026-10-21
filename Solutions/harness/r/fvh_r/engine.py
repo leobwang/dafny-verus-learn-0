@@ -305,18 +305,18 @@ _FORBIDDEN=frozenset(['assume','admit','axiom','unsafe','external_body','proof_n
 @dataclass(frozen=True)
 class HintSite:
     name:str
-    identifiers:tuple[str,...]
+    identifiers:tuple[str,...]|None
     kind:str="expr"
     callees:tuple[str,...]=()
     def __post_init__(self):
         if not _IDENTIFIER.fullmatch(self.name):raise ValueError('site name')
-        if any(not _IDENTIFIER.fullmatch(x) or x in _FORBIDDEN for x in self.identifiers):raise ValueError('allowed identifiers')
-        if self.kind not in ('expr','calls'):raise ValueError('site kind')
-        if self.kind=='expr' and self.callees:raise ValueError('expression site has no statement callees')
+        if self.identifiers is not None and any(not _IDENTIFIER.fullmatch(x) or x in _FORBIDDEN for x in self.identifiers):raise ValueError('allowed identifiers')
+        if self.kind not in ('expr','calls','decreases'):raise ValueError('site kind')
+        if self.kind!='calls' and self.callees:raise ValueError('expression site has no statement callees')
         if self.kind=='calls' and (not self.callees or len(set(self.callees))!=len(self.callees)):raise ValueError('unique nonempty proof callees')
         if any(not _IDENTIFIER.fullmatch(x) or x in _FORBIDDEN or x in _KEYWORDS for x in self.callees):raise ValueError('proof callee')
     @property
-    def marker(self):return ('/*R12_HINT:'+self.name+'*/ true') if self.kind=='expr' else ('/*R12_CALLS:'+self.name+'*/')
+    def marker(self):return {'expr':'/*R12_HINT:'+self.name+'*/ true','decreases':'/*R12_DECREASES:'+self.name+'*/ (0 as int)'}.get(self.kind,'/*R12_CALLS:'+self.name+'*/')
 
 @dataclass(frozen=True)
 class HintTask:
@@ -328,17 +328,17 @@ class HintTask:
         if len({self.template[:self.template.index(s.marker)].count('\n') for s in self.sites})!=len(self.sites):raise ValueError('one hint site per source line')
         rest=self.template
         for site in self.sites:rest=rest.replace(site.marker,'')
-        if 'R12_HINT:' in rest or 'R12_CALLS:' in rest:raise ValueError('unlisted hint marker')
+        if 'R12_HINT:' in rest or 'R12_CALLS:' in rest or 'R12_DECREASES:' in rest:raise ValueError('unlisted hint marker')
 
 def _check_expression(expression,identifiers):
-    allowed=set(identifiers)|_KEYWORDS
+    allowed=None if identifiers is None else set(identifiers)|_KEYWORDS  # None: any identifier outside _FORBIDDEN
     at=0
     while at<len(expression):
         if expression[at] in ' \t':at+=1;continue
         token=_TOKEN.match(expression,at)
         if token is None:raise ValueError('only proof-expression tokens')
         word=token.group()
-        if _IDENTIFIER.fullmatch(word) and (word not in allowed or word in _FORBIDDEN):raise ValueError('identifier outside frozen task vocabulary')
+        if _IDENTIFIER.fullmatch(word) and ((allowed is not None and word not in allowed) or word in _FORBIDDEN):raise ValueError('identifier outside frozen task vocabulary')
         at=token.end()
 
 
@@ -366,7 +366,8 @@ def _proof_calls(expression,site):
 def render_hint_r12(task:HintTask,hint:Hint)->str:
     """Replace exactly one bounded proof hint per committed site. Expression sites
     use the provided token grammar and vocabulary; call sites use only their approved
-    proof callees and bounded call lists. Reject code, declarations, attributes,
+    proof callees and bounded call lists. A decreases site renders like an expression
+    site, and a site without an identifier list accepts any non-forbidden identifier. Reject code, declarations, attributes,
     quotes, comments, newlines, NUL, unknown identifiers, wrong counts and oversized
     hints. Preserve every byte outside the sites. Rendering is pure data work, not
     execution or acceptance. The form-admission tool independently checks native
@@ -376,7 +377,7 @@ def render_hint_r12(task:HintTask,hint:Hint)->str:
     rendered=task.template
     for site,expression in zip(task.sites,hint.annotations):
         if not expression or len(expression)>8192 or any(x in expression for x in ['\n','\r','\x00','//','/*','*/']):raise ValueError('invalid hint text')
-        if site.kind=='expr':
+        if site.kind in ('expr','decreases'):
             _check_expression(expression,site.identifiers)
             replacement='('+expression+')'
         else:replacement=_proof_calls(expression,site)
@@ -402,8 +403,8 @@ def source_task(text):
     rows=re.findall(r'^// R12_HINT_SITES: (.+)$',text,re.M)
     if len(rows)!=1:raise ValueError('one committed hint-site manifest required')
     sites=json.loads(rows[0],object_pairs_hook=unique)
-    if not isinstance(sites,list) or any(not isinstance(s,dict) or not {'name','identifiers'}<=set(s) or not set(s)<={'name','identifiers','kind','callees'} for s in sites):raise ValueError('hint-site manifest')
-    task=HintTask(text,tuple(HintSite(s['name'],tuple(s['identifiers']),s.get('kind','expr'),tuple(s.get('callees',()))) for s in sites))
+    if not isinstance(sites,list) or any(not isinstance(s,dict) or 'name' not in s or not set(s)<={'name','identifiers','kind','callees'} for s in sites):raise ValueError('hint-site manifest')
+    task=HintTask(text,tuple(HintSite(s['name'],tuple(s['identifiers']) if 'identifiers' in s else None,s.get('kind','expr'),tuple(s.get('callees',()))) for s in sites))
     spans=re.findall(r'^// R12_SOURCE_SPANS: (.+)$',text,re.M)
     if len(spans)>1:raise ValueError('at most one source-span manifest')
     raw=json.loads(spans[0],object_pairs_hook=unique) if spans else []
@@ -433,7 +434,7 @@ def check_source_frame(task,text):
     forbidden={'assume','admit','axiom','external_body','proof_note','unsafe','expect','print','println','return','while','loop','for','fn','method','function','lemma','module','import','use','requires','ensures','decreases'}
     for site,inserted in zip(ordered,match.groups()):
         if not inserted or len(inserted)>8192 or any(x in inserted for x in ['//','/*','*/','\x00']):raise ValueError('structural proof-site escape')
-        if site.kind=='expr':
+        if site.kind in ('expr','decreases'):
             if ';' in inserted:raise ValueError('statement in expression site')
             _check_expression(inserted,site.identifiers)
         else:_proof_calls(inserted,site)
@@ -443,7 +444,7 @@ def check_source_frame(task,text):
 def hint_data(text,task):
     obj=json.loads(text,object_pairs_hook=unique)
     if not isinstance(obj,dict) or set(obj) not in ({'hints'},{'invariants'}) or not isinstance(obj.get('hints',obj.get('invariants')),list):raise ValueError('only one hints array is permitted (invariants is the expression-only legacy spelling)')
-    if 'invariants' in obj and any(s.kind!='expr' for s in task.sites):raise ValueError('proof-call sites use the hints spelling')
+    if 'invariants' in obj and any(s.kind=='calls' for s in task.sites):raise ValueError('proof-call sites use the hints spelling')
     hint=Hint(tuple(obj.get('hints',obj.get('invariants'))))
     check_source_frame(task,render_hint_r12(task,hint)) # independent of the learner renderer
     return hint

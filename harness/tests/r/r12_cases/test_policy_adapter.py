@@ -122,3 +122,13 @@ def test_green_original_benchmark_cannot_count_as_zero_call_model_success():
  runner=GreenOriginal()
  result=executor.Executor(ctx(),{'task.dfy':TEXT},runner=runner).run(R12BestFirst(lambda p,s:pytest.fail('inadmissible baseline reached model'),[1]))
  assert result.outcome=='malformed' and result.files=={'task.dfy':TEXT} and runner.texts==[TEXT]
+
+
+def test_a_manifest_site_may_omit_its_identifier_list_and_a_decreases_site_is_framed():
+ from fvh_r.engine import check_source_frame
+ meta=json.dumps([dict(name='bounds'),dict(name='measure',kind='decreases')],separators=(',',':'))
+ text='// R12_HINT_SITES: '+meta+'\nwhile i<n\n invariant /*R12_HINT:bounds*/ true\n decreases /*R12_DECREASES:measure*/ (0 as int)\n{}\n'
+ task,_=source_task(text)
+ assert task.sites[0].identifiers is None and task.sites[1].kind=='decreases'
+ check_source_frame(task,text.replace(task.sites[0].marker,'(i <= n)').replace(task.sites[1].marker,'(n - i)'))
+ with pytest.raises(ValueError):check_source_frame(task,text.replace(task.sites[0].marker,'(i <= n)').replace(task.sites[1].marker,'(n - i); assume(false)'))

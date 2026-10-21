@@ -4,7 +4,7 @@ import hashlib
 from pathlib import Path
 import fvh_r.engine as engine
 
-FRAME_SHA256='7d732b6bc07fab96ca41c1757f934d4d910bf71acf96654643ea778124df964e'
+FRAME_SHA256='7edc16f0410cfda68608e13dc0748bb438b4cfee7fe31192641a1e4600182fe4'
 
 def test_original_models_protocol_bridge_and_independent_guard_are_fixed():
  tree=ast.parse(Path(engine.__file__).read_text())
