@@ -24,14 +24,15 @@ module R04_Specs {
   // item: R04.T1d
   // uses: exists-elim
   // pair: R04.T1v
-  // Closed book, before reading: give a witness and prove the claim.
+  // Closed book, before reading: give a witness of length 3 and prove the claim
+  // (D64: the Dafny test-out asks for a three-character word; Verus's asks for any).
   lemma SomeWordMatches()
-    ensures exists s :: Matches(Cat(Chr('o'), Star(Chr('k'))), s)
+    ensures exists s :: |s| == 3 && Matches(Cat(Chr('o'), Star(Chr('k'))), s)
   {
     // @hole-begin R04.T1d
-    var s := "o";
-    assert s[..1] == "o";
-    assert s[1..] == [];
+    var s := "okk";
+    assert s[1..] == "kk";
+    assert "kk"[1..] == "k";
     assert Matches(Cat(Chr('o'), Star(Chr('k'))), s);
     // @hole-end R04.T1d
   }
@@ -125,74 +126,57 @@ module R04_Specs {
   // item: R04.H2d
   // uses: forall-intro, exists-elim
   // pair: R04.H2v
-  /** **H2.** A negative claim: `Cat(Chr('a'), Star(Chr('b')))` does not match
-      "ba". One failed split proves nothing about the others: which claim
-      about every prefix of "ba" rules out the `Cat`, and how do you use it
-      against a split that a match would supply? */
-  lemma WitnessNotBa()
-    ensures !Matches(Cat(Chr('a'), Star(Chr('b'))), "ba")
+  /** **H2.** A negative claim: `Star(Cat(Chr('a'), Chr('b')))` does not match
+      "aba". One failed split proves nothing about the others: which first
+      chunks could a star match take from "aba", and why does each one leave
+      a rest that no star of "ab" matches? (D64: the Dafny statement is longer
+      than Verus's "ba" claim, because Dafny's solver settles that one alone.) */
+  lemma WitnessNotAba()
+    ensures !Matches(Star(Cat(Chr('a'), Chr('b'))), "aba")
   {
     // @hole-begin R04.H2d
-    var s := "ba";
-    forall i | 0 <= i <= |s|
-      ensures !Matches(Chr('a'), s[..i])
-    {
-      if i == 0 {
-        assert s[..i] == [];
-      } else if i == 1 {
-        assert s[..i] == "b";
-      } else {
-        assert s[..i] == "ba";
-      }
-    }
-    if Matches(Cat(Chr('a'), Star(Chr('b'))), s) {
-      var i :| 0 <= i <= |s| && Matches(Chr('a'), s[..i]) && Matches(Star(Chr('b')), s[i..]);
-      assert !Matches(Chr('a'), s[..i]);
-    }
+    assert "aba"[..1] == "a";
+    assert "aba"[1..] == "ba";
+    assert "aba"[..2] == "ab";
+    assert "aba"[2..] == "a";
+    assert "a"[..1] == "a";
+    assert "a"[1..] == [];
+    assert !Matches(Cat(Chr('a'), Chr('b')), "a");
+    assert !Matches(Star(Cat(Chr('a'), Chr('b'))), "a");
+    assert !Matches(Cat(Chr('a'), Chr('b')), "aba");
     // @hole-end R04.H2d
   }
-  // Hint(1): prove the claim for every prefix with a `forall` statement (W1),
-  //    one case per legal index.
-  // Hint(2): then assume the match, take its split with `:|` (W2), and point
-  //    the forall fact at that split.
+  // Hint(1): list every candidate first chunk of "aba" (lengths 1, 2, 3) and,
+  //    for each, the rest the star must still match.
+  // Hint(2): each candidate is decided by naming its slices as sequences;
+  //    a `forall` statement over the chunk lengths (W1) is one way to say so.
 
   // item: R04.H3d
-  // uses: forall-intro, exists-elim
   // pair: R04.H3v
-  /** **H3.** Anchoring: `Chr('a')` does not match the whole string "ba",
-      although 'a' occurs in it, and `Cat(Star(Chr('b')), Chr('a'))` does.
-      Which conjunct is a claim about every candidate, and which needs one
-      split named and both its sides proved? */
+  /** **H3.** Anchoring: `Cat(Chr('b'), Chr('a'))` occurs in "bba" but does not
+      match the whole string, and `Cat(Star(Chr('b')), Chr('a'))` does match
+      it. Which splits would the first `Cat` need, and which split, with how
+      many star chunks, makes the second one hold? */
   lemma WitnessAnchored()
-    ensures !Matches(Chr('a'), "ba") && Matches(Cat(Star(Chr('b')), Chr('a')), "ba")
+    ensures !Matches(Cat(Chr('b'), Chr('a')), "bba") && Matches(Cat(Star(Chr('b')), Chr('a')), "bba")
   {
     // @hole-begin R04.H3d
-    var s := "ba";
-    forall k | 0 <= k <= |s|
-      ensures !Matches(Chr('a'), s[..k])
-    {
-      if k == 0 {
-        assert s[..k] == [];
-      } else if k == 1 {
-        assert s[..k] == "b";
-      } else {
-        assert s[..k] == "ba";
-      }
-    }
-    assert s[..|s|] == s;
-    assert s[..1] == "b";
-    assert s[1..] == "a";
-    var t := "b";
-    assert t[..1] == "b";
-    assert t[1..] == [];
-    assert Matches(Star(Chr('b')), t);
-    assert Matches(Star(Chr('b')), s[..1]) && Matches(Chr('a'), s[1..]);
+    assert "bba"[..1] == "b";
+    assert "bba"[1..] == "ba";
+    assert "bba"[..2] == "bb";
+    assert "bba"[2..] == "a";
+    assert "bb"[..1] == "b";
+    assert "bb"[1..] == "b";
+    assert "b"[..1] == "b";
+    assert "b"[1..] == [];
+    assert Matches(Star(Chr('b')), "b");
+    assert Matches(Star(Chr('b')), "bb");
     // @hole-end R04.H3d
   }
-  // Hint(1): the first conjunct is about the whole string "ba" only; the
-  //    second is H1's kind of witness with the Star on the left.
-  // Hint(2): a whole string is its own longest prefix (`s[..|s|] == s`);
-  //    the prefix facts of H2 then settle the first conjunct.
+  // Hint(1): the first conjunct is a whole-string claim; the second is H1's
+  //    kind of witness with the Star on the left, here of two chunks.
+  // Hint(2): name the `Cat` split of the second conjunct at 2, then the star's
+  //    chunks, by their slices; the empty rests count.
 
   // item: R04.H4d
   // pair: R04.H4v
@@ -245,22 +229,24 @@ module R04_Specs {
   // item: R04.H5d
   // pair: R04.H5v
   /** **H5.** A mutant-kill witness: a mutant `Find` returns `Nullable(r)`
-      instead of `Occurs(r, s)`. Prove that some regex and string tell the
-      two apart. Which regex is not nullable yet occurs in a string, and
-      which facts make each side's value known? */
+      instead of `Occurs(r, s)`. For `r := Cat(Chr('a'), Chr('b'))`, prove that
+      some string tells the two apart. Which string makes the occurrence true,
+      and which facts name it? (D64: the Dafny statement fixes `r`; Verus's
+      leaves both free.) */
   lemma MutantKilled()
-    ensures exists r: Re, s: seq<char> :: Nullable(r) != Occurs(r, s)
+    ensures exists s: seq<char> :: Nullable(Cat(Chr('a'), Chr('b'))) != Occurs(Cat(Chr('a'), Chr('b')), s)
   {
     // @hole-begin R04.H5d
-    var r := Chr('a');
-    var s := "a";
-    assert s[0..1] == "a";
-    assert Occurs(r, s);
+    var s := "xab";
+    assert s[1..3] == "ab";
+    assert Matches(Chr('a'), "ab"[..1]);
+    assert Occurs(Cat(Chr('a'), Chr('b')), s);
     // @hole-end R04.H5d
   }
-  // Hint(1): a single character is the smallest regex that is not nullable.
+  // Hint(1): `Cat(Chr('a'), Chr('b'))` is not nullable, so the string must
+  //    contain an occurrence.
   // Hint(2): `Occurs` is an existential: name its two indices by a slice
-  //    fact, the way §3.3's witness does.
+  //    fact, and the occurrence's own split, the way §3.3's witness does.
 
   /* AUDIT — learner-owned, 20 min, after recording P5d.
      Run the three supplied deliveries; classify gate and audit observations,
