@@ -21,14 +21,14 @@ role = "held-out"
 sealed = true
 target = { total = 60, course_local = 36, public = 24 }
 archive = "Hidden/Agentic/Q31/heldout.tar.age"
-archive_sha256 = "cf9e7de233d99e6353f61b6cdd15ccf7cbb39ff6a85c24ea6e70cb9a1e15f2e0"
+archive_sha256 = "ca868fbbf1d0d64842efde53a1923c0d02f09836a9722d71769cf2cb186ab44a"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
 files = 65
-manifest_sha256 = "6f547f2585a7f29f4070919eef4e82a378befe515e2b0f45e4d581cc4212eb59"
+manifest_sha256 = "55d5a4e026b9a1ac064755676b7f07757d7f36d637c41982a5282ee23866e687"
 refs_archive = "Hidden/Agentic/Q31/heldout-refs.tar.age"
-refs_sha256 = "32bec7cfa28c0662f33e1b8da77fc1193cbdb0407841359c2ab7dc829ad009bb"
+refs_sha256 = "25032fd5f5b123561ec08ff48fdf370ef2ce299c9606df4ab7c2475cb6a4552d"
 refs_files = 65
-refs_manifest_sha256 = "4f2fc1d704a87eada0a59d6fb4f9640ff61fdb23f93b18f8b5b0993253acf6d2"
+refs_manifest_sha256 = "e1d5578b63bef1e37e0b201196917752106e07fcacdc3e6c14c157a3c092c814"
 
 [[card]]
 id = "cl-d101-q31h"
@@ -251,17 +251,6 @@ maxauto_fails = false
 admission_sha256 = "94b09bba373091f153b46c7e5d4061d2c1f50777c388e676d3e3e926cb12ca33"
 
 [[card]]
-id = "cl-v103-q31h"
-lang = "verus"
-source = "course-local"
-form = "labs/Q31/cl-v103-q31h/tasks/cl-v103-q31h.rs"
-form_sha256 = "e625baf6707d7b0563f45245a754456bd215dbd6e967e2b547d58a0396f1eebf"
-admitted = true
-admitted_on = "2026-10-21"
-maxauto_fails = false
-admission_sha256 = "4e42e023529721d58f8b5c8d701550306fe3efbc3601bcce3baaad99855985ec"
-
-[[card]]
 id = "cl-v104-q31h"
 lang = "verus"
 source = "course-local"
@@ -427,6 +416,17 @@ maxauto_fails = false
 admission_sha256 = "7cdc73bc296a950ba6cae55a64c29419381bb132bdb03497f702423362a7e59e"
 
 [[card]]
+id = "cl-v119-q31h"
+lang = "verus"
+source = "course-local"
+form = "labs/Q31/cl-v119-q31h/tasks/cl-v119-q31h.rs"
+form_sha256 = "40266274155175fd308bdf7be0a4a35e2f10ced649decf612e302f07ec28aec0"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "1bcd2ad5388aa8ef12907904eb772b98b6d9860472ea0bd9b02a4ab0cc0b7f79"
+
+[[card]]
 id = "pd-d101-q31h"
 lang = "dafny"
 source = "public"
@@ -570,30 +570,17 @@ maxauto_fails = true
 admission_sha256 = "130bdc90be7d306f1bf93c66d330c65555e4afe41b75e574f7a83c7892680b7d"
 
 [[card]]
-id = "pd-d112-q31h"
+id = "pd-d113-q31h"
 lang = "dafny"
 source = "public"
 set = "dafnybench"
 role = "card"
-form = "labs/Q31/pd-d112-q31h/tasks/pd-d112-q31h.dfy"
-form_sha256 = "e9830666833acc34ef149981c1f2aaa526de740a050564db8e4630f79f22f785"
+form = "labs/Q31/pd-d113-q31h/tasks/pd-d113-q31h.dfy"
+form_sha256 = "d3bd6416a1a9b8468e7a4aa49a9214ee7590b0e6a55002b091769f5d35239ab8"
 admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = true
-admission_sha256 = "090f7ab1eb038697ef48ed60dfe5e7a4e85671abeb1e1d1e3a8650c942c3b7f5"
-
-[[card]]
-id = "pv-v101-q31h"
-lang = "verus"
-source = "public"
-set = "vericoding"
-role = "card"
-form = "labs/Q31/pv-v101-q31h/tasks/pv-v101-q31h.rs"
-form_sha256 = "15da3d73fc4cc486aac71f1e33787c3d605bdf021f84b018a8309d746c3a8754"
-admitted = true
-admitted_on = "2026-10-21"
-maxauto_fails = false
-admission_sha256 = "455781e400192fb12e5a91f8a737767f27a3de25e7e82422215c9fc717c18666"
+admission_sha256 = "510804dedac2a54233aabf7b0b7b00392024558d3c5b96477d9c29f97fafb4d0"
 
 [[card]]
 id = "pv-v102-q31h"
@@ -739,18 +726,17 @@ maxauto_fails = false
 admission_sha256 = "cc9d11eba0640c023bcbd0960addeca0231dba61a054090448db0d1a80ab78ed"
 
 [[card]]
-id = "pd-d113-q31h"
-lang = "dafny"
+id = "pv-v113-q31h"
+lang = "verus"
 source = "public"
-set = "dafnybench"
-role = "spare"
-spare_order = 1
-form = "labs/Q31/pd-d113-q31h/tasks/pd-d113-q31h.dfy"
-form_sha256 = "d3bd6416a1a9b8468e7a4aa49a9214ee7590b0e6a55002b091769f5d35239ab8"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v113-q31h/tasks/pv-v113-q31h.rs"
+form_sha256 = "a68a80ffa2d0a67afe6a6819304ed365393acd1064aee18dab32c88aa11ddb80"
 admitted = true
-admitted_on = "2026-10-21"
-maxauto_fails = true
-admission_sha256 = "510804dedac2a54233aabf7b0b7b00392024558d3c5b96477d9c29f97fafb4d0"
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "e51f692abab0a5d2e6f313e73067336282f318e84da4ed3fe1ec615a0db50166"
 
 [[card]]
 id = "pd-d114-q31h"
@@ -758,7 +744,7 @@ lang = "dafny"
 source = "public"
 set = "dafnybench"
 role = "spare"
-spare_order = 2
+spare_order = 1
 form = "labs/Q31/pd-d114-q31h/tasks/pd-d114-q31h.dfy"
 form_sha256 = "016976d56150aeced8aa8e57a9f590115b34c6a9d68ab3808e39102e5235fda5"
 admitted = true
@@ -767,26 +753,12 @@ maxauto_fails = true
 admission_sha256 = "328da61ab68a0dcf84ef7de073b92fa6f042d5a80a6e654f34a97fa833d3a872"
 
 [[card]]
-id = "pd-d115-q31h"
-lang = "dafny"
-source = "public"
-set = "dafnybench"
-role = "spare"
-spare_order = 3
-form = "labs/Q31/pd-d115-q31h/tasks/pd-d115-q31h.dfy"
-form_sha256 = "b2f16ce0ca20b027b4c0ba645e38a5f0248b95e6c4ad1000391da2dd32881b5b"
-admitted = true
-admitted_on = "2026-10-21"
-maxauto_fails = true
-admission_sha256 = "6f4e49c370ae47fe9c20245b1b9d894370f1cf5be4ede312bee6c340ce31683c"
-
-[[card]]
 id = "pd-d116-q31h"
 lang = "dafny"
 source = "public"
 set = "dafnybench"
 role = "spare"
-spare_order = 4
+spare_order = 2
 form = "labs/Q31/pd-d116-q31h/tasks/pd-d116-q31h.dfy"
 form_sha256 = "787f941ebf5bd514da2905c712762904f4fcadbb63b752f89ee9675071a898f7"
 admitted = true
@@ -800,10 +772,38 @@ lang = "dafny"
 source = "public"
 set = "dafnybench"
 role = "spare"
-spare_order = 5
+spare_order = 3
 form = "labs/Q31/pd-d117-q31h/tasks/pd-d117-q31h.dfy"
 form_sha256 = "37cbd72a701406e43e83351103a070741e06df7fcb23692f9f71c9904440353a"
 admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = true
 admission_sha256 = "6fc9316abb9c35aa6af2ecfcab40997ee21221003494d5a762fffc6d34642eb9"
+
+[[card]]
+id = "pd-d118-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 4
+form = "labs/Q31/pd-d118-q31h/tasks/pd-d118-q31h.dfy"
+form_sha256 = "d7db61f5cd20c53f753b4603db2c026cda0bfffcdc42b336f25f4ce5aff25e41"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "11ef1059bc008ab8c1dba6fa36b78a3da99b701dfbf783d9ed28501efa9adc3b"
+
+[[card]]
+id = "pd-d119-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 5
+form = "labs/Q31/pd-d119-q31h/tasks/pd-d119-q31h.dfy"
+form_sha256 = "1700360c3e0a980e35dffea3d525be9a76e93d7f6d4e432369bca51d1e4179b8"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "a51c70e6486a1cb14013760ee0159032cad6af7f29f3ffbbc05fd1eeee4bb0ef"
