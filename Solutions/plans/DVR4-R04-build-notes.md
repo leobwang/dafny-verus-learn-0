@@ -147,3 +147,20 @@ The Verus minimum is the Dafny one, line for line: Verus unfolds `matches` once 
 
 **Evidence.** In §12, written after the runs.
 
+## 12. Evidence for the Verus mirror (2026-10-22)
+
+Probes are in `r04/d8283v/` (`out.json`, and `*.min.fwd`/`*.min.rev` from the minimizer in both orders). H2v and H3v: `-0` and `-1` fail, `-2` (the three lines) verifies, and the full bodies verify. Both core twins are stable on seeds 1–3 (`brittle-d8283v-core-v.log`, CV 2.2 %; `brittle-d8283v-core-d.log`, CV 15.2 %, advisory). `firsttry.sh R04 --empty-body` gives 12/12 (`empty-body-d8283v.log`). The registry rows are unchanged at 7 minutes.
+
+Re-pins and checks:
+- Freeze re-pinned (110 statements); `--check` 0.
+- Counts re-pinned; `--shipped` 0.
+- R04 rubric pins refreshed; all 194 pins are current after P2's R11 refresh.
+- `--lint-hollow` OK, `reference_lint` 0, `avoid.sh` OK, `check_course_map` OK.
+- Chapter re-captured (42 pins); `chapter_lint` 0 problems at 6,102 words.
+- `pins.py --ci --module R04` 71 pins, 0 problems; `--ref` 6 checks, 0 problems.
+- Leak verifier 8 OK over 2,728 public files.
+
+Answer overlap: the shared 30-token windows of H2v and H3v are the statement's own regex, which the reference binds as `let r` and which the learner file holds in its `ensures`. H3d's shared windows are with Lab α's W2 split idiom (the overlap declared in Δ294).
+
+Study workflow 11/11 on `f8b36a8b` (`workflow-d8283v.log`).
+
