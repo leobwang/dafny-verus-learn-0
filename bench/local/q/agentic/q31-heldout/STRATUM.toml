@@ -5,9 +5,13 @@
 # (single use, QPLAN §31.3). The reference deliveries are sealed apart in `refs_archive`; no
 # course tool but the grader reads them. No held-out task has been run through a model.
 #
-# Composition under D76's fallback (b) (Δ405): 60 tasks, 36 course-local and 24 public (the
-# public cards, drawn from DafnyBench under D76's exclusion with their spare cards, are added
-# in a later turn). Admission as q31-dev's header says, run by the author on the archive copy.
+# Composition under D76's fallback (b) (Δ405): 60 tasks, 36 course-local and 24 public. The
+# public cards were drawn by Δ411's pre-registered walk: 12 Dafny from DafnyBench and 12 Verus
+# from vericoding's apps and verina answers (proofs stripped), plus 5 Dafny spare cards. At
+# unseal, any public card whose task your tree records as met (Lab 1, any lab's draw, Lab
+# alpha's lists) is replaced by the next free spare, and unused spares are not written (D76).
+# Each public form names its source on its second line. Admission as q31-dev's header says,
+# run by the author on the archive copy.
 schema = 1
 module = "Q31"
 lab = "Q31"
@@ -17,14 +21,14 @@ role = "held-out"
 sealed = true
 target = { total = 60, course_local = 36, public = 24 }
 archive = "Hidden/Agentic/Q31/heldout.tar.age"
-archive_sha256 = "3f0a2cbc958cc3c4418fdf2c8efa49d439a120b935a62ec7a04f81b6eea33730"
+archive_sha256 = "cf9e7de233d99e6353f61b6cdd15ccf7cbb39ff6a85c24ea6e70cb9a1e15f2e0"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
-files = 36
-manifest_sha256 = "1edaf21b9cb34c2f38300a2ffb30d18a2a378a2a8b894d9725e3df1a082f40ee"
+files = 65
+manifest_sha256 = "6f547f2585a7f29f4070919eef4e82a378befe515e2b0f45e4d581cc4212eb59"
 refs_archive = "Hidden/Agentic/Q31/heldout-refs.tar.age"
-refs_sha256 = "5fb81f3ce50f4ffe52ecf0a506536173776fc6cdb83f3b3d97b9001f5837399d"
-refs_files = 36
-refs_manifest_sha256 = "87074a15eea0c014f97312b14c0f1f2623e45c78d3ee3d88b5c00c2595bc3702"
+refs_sha256 = "32bec7cfa28c0662f33e1b8da77fc1193cbdb0407841359c2ab7dc829ad009bb"
+refs_files = 65
+refs_manifest_sha256 = "4f2fc1d704a87eada0a59d6fb4f9640ff61fdb23f93b18f8b5b0993253acf6d2"
 
 [[card]]
 id = "cl-d101-q31h"
@@ -421,3 +425,385 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "7cdc73bc296a950ba6cae55a64c29419381bb132bdb03497f702423362a7e59e"
+
+[[card]]
+id = "pd-d101-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d101-q31h/tasks/pd-d101-q31h.dfy"
+form_sha256 = "a3a342dd406265cd8b54e621665d9e4239e11b381dc794b6408fb8f32036495f"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "1bd0ead7afb894ad08e5728483b9461fa1f9966a787e01b6a0cc1aa74119c94d"
+
+[[card]]
+id = "pd-d102-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d102-q31h/tasks/pd-d102-q31h.dfy"
+form_sha256 = "360cd7aefcfb2a56cf9dcadad39c5ee7404149da0681a6142d725872113a492c"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "20189fbe2d0da44a3224fb7dd86220f63c71a6bf500d091ffcd17fc60ee4a909"
+
+[[card]]
+id = "pd-d103-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d103-q31h/tasks/pd-d103-q31h.dfy"
+form_sha256 = "75e7aea80aeb4d4e4cac97dbc4802cd3fa3c5e33c60da5ad2818f66fe2301a79"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "8dc5c713b398cbc4f4f7612647c028c7e391ff9957a6a3b68b9ade77bb409738"
+
+[[card]]
+id = "pd-d104-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d104-q31h/tasks/pd-d104-q31h.dfy"
+form_sha256 = "01bf4a4aa37a4d27dd2cbc36863f240c15fe63fb45e58bd1166c0bb68517a332"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "0a325fb9050f412a9bd4ed363b6a4757f4ea5aecb4978786f4958c66fc470827"
+
+[[card]]
+id = "pd-d105-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d105-q31h/tasks/pd-d105-q31h.dfy"
+form_sha256 = "ffa0cb5b0e27720470181c63b3a55ffdd2237f38d3df3005118ef9a7daa17c66"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "e7ffe4467129254d9d2a9a78aae3f18833331dbae4b9e2013091b96924392665"
+
+[[card]]
+id = "pd-d106-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d106-q31h/tasks/pd-d106-q31h.dfy"
+form_sha256 = "e2c6990e4ff17a95c684f1228743d488e9b6550221b947419428e57ec907f17a"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "4a3889e5c28064213fb5e8ecdb2b0a49bc574ec27fdf2994411ac41f96067f05"
+
+[[card]]
+id = "pd-d107-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d107-q31h/tasks/pd-d107-q31h.dfy"
+form_sha256 = "a1921d58e50ee467a4eecf31e8d7e3c0582b88da47db271ca5b38e8666ef67da"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "0b1ebe471b3ba73be399bfd6d6798dd4e126b76d22ba7023fe4ea8f322e3fb9c"
+
+[[card]]
+id = "pd-d108-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d108-q31h/tasks/pd-d108-q31h.dfy"
+form_sha256 = "aa7c1f9bad06e03ddc02af6016487e479da761e0bb65a6cf834f091015011d28"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "6f7f4cff1659570f63ba90fe86d0a492b8896f07fb80dc4d16d3673be0c8cfdc"
+
+[[card]]
+id = "pd-d109-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d109-q31h/tasks/pd-d109-q31h.dfy"
+form_sha256 = "c216eb8091f806e0f85b50e36c3a56b1ac1cbd23870b53bd5286f9fc3794d2b5"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "dab085d1c57bd492676b45746f382424d3c0e4c37348098405a4a72d6e68e910"
+
+[[card]]
+id = "pd-d110-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d110-q31h/tasks/pd-d110-q31h.dfy"
+form_sha256 = "cfea27af269f95948438de40638cb208562bb87c03523a65300e95a05202015c"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "75dd5b9f35043849c97dffb882102c6cc4e521a215b3b28a0414a608ebc9c7dc"
+
+[[card]]
+id = "pd-d111-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d111-q31h/tasks/pd-d111-q31h.dfy"
+form_sha256 = "fdd87303dda5018d370c5032e911600bfa272c118e845fe9a4073590790fd50a"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "130bdc90be7d306f1bf93c66d330c65555e4afe41b75e574f7a83c7892680b7d"
+
+[[card]]
+id = "pd-d112-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "labs/Q31/pd-d112-q31h/tasks/pd-d112-q31h.dfy"
+form_sha256 = "e9830666833acc34ef149981c1f2aaa526de740a050564db8e4630f79f22f785"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "090f7ab1eb038697ef48ed60dfe5e7a4e85671abeb1e1d1e3a8650c942c3b7f5"
+
+[[card]]
+id = "pv-v101-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v101-q31h/tasks/pv-v101-q31h.rs"
+form_sha256 = "15da3d73fc4cc486aac71f1e33787c3d605bdf021f84b018a8309d746c3a8754"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "455781e400192fb12e5a91f8a737767f27a3de25e7e82422215c9fc717c18666"
+
+[[card]]
+id = "pv-v102-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v102-q31h/tasks/pv-v102-q31h.rs"
+form_sha256 = "bcfc843940d642133137dbb922a5335043dd1e6d363a74968374d2c66a1fdfd3"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "274d13a63ed7927b53ae3096205c88c7e361ca61224830383561c6775e2e6f31"
+
+[[card]]
+id = "pv-v103-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v103-q31h/tasks/pv-v103-q31h.rs"
+form_sha256 = "511b9c804758cae726627764780e957b028f55a2c5ad3f76bb7d9d0187fdb3d6"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "102f308a267c32e297224eb05a0e4fb32ed89979af151dfa5b3f361a470375fa"
+
+[[card]]
+id = "pv-v104-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v104-q31h/tasks/pv-v104-q31h.rs"
+form_sha256 = "396384b6a1681fd656dc87c1b0a0671ac276a8728414dbd503297d47812bf682"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "d5db9dcdd5531d6719c0a3795da87c62e8431ddd2ede9421bcb08893edf160bc"
+
+[[card]]
+id = "pv-v105-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v105-q31h/tasks/pv-v105-q31h.rs"
+form_sha256 = "3daf7b9ec5fd49582c8f09393424304cd85ef2072ca6bfad8c154f2790cf1edc"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "664364bcc481b9f0dbb612ffbd2cef528c66a11f51a50a5fb458015bed6108c4"
+
+[[card]]
+id = "pv-v106-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v106-q31h/tasks/pv-v106-q31h.rs"
+form_sha256 = "6532064189e47fce9fc892779e35fee0f9b3a23203f436e1caa501a819c5a6b7"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "e18cd314505bf445d25970bad021989a5850be7f0027de7a7da425007e6f4054"
+
+[[card]]
+id = "pv-v107-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v107-q31h/tasks/pv-v107-q31h.rs"
+form_sha256 = "f60cbc940caea9bed4fdd7a7be4518644cdbf491a4fa8e62c1728da0f7093c03"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "f47c1bbcae6d682df6243821827a1e681474a8d1ca5f1032c99bdbf71661bb3b"
+
+[[card]]
+id = "pv-v108-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v108-q31h/tasks/pv-v108-q31h.rs"
+form_sha256 = "c2d6959c9faf09b84eef0306f56fd13cf00542caa0d6806049111d187819bddd"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "55afac2bb4e7fbbd40d0983c991e64855099f8954e3d092724f2752a51f50028"
+
+[[card]]
+id = "pv-v109-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v109-q31h/tasks/pv-v109-q31h.rs"
+form_sha256 = "ba2712c46f64fab1d89a78cbea282dbcce07b92847856412ffd6f12616114cb1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "398272fb57a29da4c3e79c8511955867943349a2aa0676f0d8084790f7a9d728"
+
+[[card]]
+id = "pv-v110-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v110-q31h/tasks/pv-v110-q31h.rs"
+form_sha256 = "49021f69fbcb6b33565c785d341b8ae110206c5543c20ed30bf20fae9288e988"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "9ef3948cfbef88c0a3d3fb61e0564d6076cba5a7c1db46c0ecd8995511ec4159"
+
+[[card]]
+id = "pv-v111-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v111-q31h/tasks/pv-v111-q31h.rs"
+form_sha256 = "875fa0d5d5488cdc160eecd93e685d8c69dfe055e7fbd10cc9a4d9326b9df0e1"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "8c39266daa0f5d27451aadf678f74f12741ccbe28b065abc352bc7956548c024"
+
+[[card]]
+id = "pv-v112-q31h"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "labs/Q31/pv-v112-q31h/tasks/pv-v112-q31h.rs"
+form_sha256 = "3174b87117e6e374f879601c8462c3fa5366eb6bcfd53c8aa6ac14bddea2f095"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = false
+admission_sha256 = "cc9d11eba0640c023bcbd0960addeca0231dba61a054090448db0d1a80ab78ed"
+
+[[card]]
+id = "pd-d113-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 1
+form = "labs/Q31/pd-d113-q31h/tasks/pd-d113-q31h.dfy"
+form_sha256 = "d3bd6416a1a9b8468e7a4aa49a9214ee7590b0e6a55002b091769f5d35239ab8"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "510804dedac2a54233aabf7b0b7b00392024558d3c5b96477d9c29f97fafb4d0"
+
+[[card]]
+id = "pd-d114-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 2
+form = "labs/Q31/pd-d114-q31h/tasks/pd-d114-q31h.dfy"
+form_sha256 = "016976d56150aeced8aa8e57a9f590115b34c6a9d68ab3808e39102e5235fda5"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "328da61ab68a0dcf84ef7de073b92fa6f042d5a80a6e654f34a97fa833d3a872"
+
+[[card]]
+id = "pd-d115-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 3
+form = "labs/Q31/pd-d115-q31h/tasks/pd-d115-q31h.dfy"
+form_sha256 = "b2f16ce0ca20b027b4c0ba645e38a5f0248b95e6c4ad1000391da2dd32881b5b"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "6f4e49c370ae47fe9c20245b1b9d894370f1cf5be4ede312bee6c340ce31683c"
+
+[[card]]
+id = "pd-d116-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 4
+form = "labs/Q31/pd-d116-q31h/tasks/pd-d116-q31h.dfy"
+form_sha256 = "787f941ebf5bd514da2905c712762904f4fcadbb63b752f89ee9675071a898f7"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "7cedf6bfbc1480946577f8ef19c5d0e128d25f4cb0b6d8b3068d5711b4992f13"
+
+[[card]]
+id = "pd-d117-q31h"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "spare"
+spare_order = 5
+form = "labs/Q31/pd-d117-q31h/tasks/pd-d117-q31h.dfy"
+form_sha256 = "37cbd72a701406e43e83351103a070741e06df7fcb23692f9f71c9904440353a"
+admitted = true
+admitted_on = "2026-10-21"
+maxauto_fails = true
+admission_sha256 = "6fc9316abb9c35aa6af2ecfcab40997ee21221003494d5a762fffc6d34642eb9"
