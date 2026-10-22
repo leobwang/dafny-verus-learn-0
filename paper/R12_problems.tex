@@ -11,66 +11,72 @@ Commit the five native predictions before checking their results. Read B3 and B4
 from your own pinned local notes, then complete B1 before any live Lab $\alpha$
 run. B1 is graded by \texttt{/grade-paper R12}; B2 only by
 \texttt{/grade-paper R12 --report} after runs. Every method dimension must be at
-least3. The frozen harness also requires the exact PREREG hash and the exact
-\texttt{plan-sha256:} binding. A calibration fixture cannot unlock a run.
+least 3. The frozen harness also requires the exact PREREG hash, the exact
+\texttt{plan-sha256:} binding of the plan you run and the exact
+\texttt{freeze-sha256:} binding of the course's frame. A calibration fixture
+cannot unlock a run.
 
 \begin{problem}[pre-registration]\label{prob:B1}
-Pre-register where the three fixed search regimes' success-versus-node-budget
-curves cross, and whether localized obligations improve best-first search over
-raw verifier JSON. Use one engine with independent $(10,1,\mathrm{fifo})$,
-repair $(1,10,\mathrm{lifo})$ and best-first $(3,10,\mathrm{best})$; the fourth arm
-keeps best-first and changes only feedback to raw. A generated candidate is a
-node even when malformed. No configuration is retuned at a budget prefix.
-The observation at $k=1,\ldots,10$ is a prefix of the same run, not a new run.
+Register your Lab $\alpha$ runs inside the course-fixed frame,
+\texttt{bench/local/r/labalpha/FREEZE.toml}. The frame fixes the primary contrast
+(best-first search with obligation-localized versus raw feedback), the estimand,
+the single test and its interval, the budget axis, the aggregation, the
+missing-result rule, the resource accounting, the corpus, the composition and
+$K$. You do not choose or change any of these: cite the frame by its sha256 on a
+line \texttt{freeze-sha256:} followed by the 64 hex digits (\texttt{fvh} refuses a
+lab plan whose registration names another frame), and refer to its fields by
+name. What you write yourself, and what \texttt{/grade-paper} scores:
 
-Name falsifiable contrasts, estimands and language strata. Define solved as a
-full original-task zero-hole proof-stage gate, with original source, models,
-code, levers, audit and executor provenance preserved. Missing scores and empty
-localization do not establish success. Specify paired permutation tests at each
-registered budget point with Holm correction over the named family, and
-bootstrap bands with the original algorithm as cluster, preserving both languages. Compose \texttt{fvh.stats} rather
-than reimplementing estimators. State whether bands are pointwise; do not call
-pointwise intervals simultaneous bands. Define how crossing and ties are
-reported when uncertainty prevents ordering.
-
-The main local stratum has40tasks,20per language, with an unused public slice
-kept separate. Record exact form hashes, admission evidence and source exposure;
-course-derived tasks are previously seen. Public tasks must come from an unused
-pinned pool and stay explicitly possibly contaminated. The live Qwen ceiling is
-$40\times4\times3=480$runs and $480\times10=4800$calls, with10GPU-hours.
-Claude's descriptive subset is10tasks,5per language, at10calls plus at most
-10sentinels:110calls and10runs. A public-slice pilot is not silently additional
-budget: it requires its own bound plan, grading and an explicit allocation within
-the same ceiling or remains unrun. No provider or container blocker permits
-releasing a quota, replacing the verifier or using host execution for agent code.
-
-State seeds, prompts, settings, per-arm time/token/GPU accounting, throughput
-assumption and its measured source, truncation sensitivity, exclusions, stopping
-rule,80\%prediction intervals and the fallback when the ceiling is infeasible.
-Compute the MDE with \texttt{fvh.stats.mde\_two\_proportions} at the number of
-declared algorithm clusters, baseline, paired flag and family-adjusted alpha;
-explain why twenty paired-language clusters do not become40independent tasks or120repeats.
-At baseline0.5, n=20and alpha0.05/40 the frozen planning call returns infinity.
-Report that result and its conservative assumptions explicitly; do not invent
-a finite MDE, turn repeats into independent tasks or shrink the family after
-seeing data. Keep the comparison exploratory when the allocation is underpowered.
-Write all17fields in the answer template. Finalize the batch file, then bind its
-actual64hex digest and re-grade the changed registration before execution.
+\begin{enumerate}
+\item \textbf{Claim.} State in your own words what the fixed contrast can show
+on this corpus, which direction you expect and why, what result would refute
+your expectation, and an 80\% prediction interval for $\theta$ written before
+any data.
+\item \textbf{Justify the fixed test.} Explain why one paired sign-flip test on
+cluster differences replaces a test at each budget point, why a cluster (a
+lemma family's Dafny and Verus forms, or one public task) and not a task or a
+repeat is the unit, what the cluster bootstrap interval adds, and what one
+test cannot tell you about where the four curves cross.
+\item \textbf{Reproduce the design's MDE.} Compute the frozen design's minimum
+detectable difference yourself with \texttt{fvh.stats.mde\_paired\_clusters\_sim}:
+take the cluster sizes from the stratum's confirmatory clusters and the other
+arguments from the frame's \texttt{power\_sim\_cell}. Paste the call and its
+output; they must equal the frame's values. Then say which effects this design
+cannot detect and why the repeats do not shrink that bound much.
+\item \textbf{Cheat surface.} Name how a run could look successful without a
+proof (a changed statement or lever, an empty or unknown score read as success,
+a host fallback, a re-issued scored attempt) and the gate or rule that stops
+each one.
+\item \textbf{Stopping rule.} State when each run, each batch and the study stop,
+how a batch that reaches R12's 80 GPU-hour ceiling pauses and resumes, and why
+no attempt is re-run after it is scored.
+\item \textbf{Your own runs.} Your plans' seeds, your budget arithmetic against
+R12's ceiling (10,700 calls, 80 GPU-hours) with a measured cost per call and a
+truncation sensitivity line, your descriptive analyses (the four regimes'
+curves with bands, crossings read off the bands and never tested, the regex and
+public strata, the language views), and each executed plan's
+\texttt{plan-sha256:} binding. Each separately executed plan needs its own
+binding and grade.
+\end{enumerate}
+Write every field of the answer template. Changing this block after grading
+needs a new grade.
 \end{problem}
 
 \begin{problem}[lab-report]\label{prob:B2}
 After authorized, unlocked runs, provide one Reproduce command over
-\texttt{research/runs/R12/}. Regenerate cumulative success curves at budgets1--10,
-paired differences, corrected tests, bootstrap intervals, per-language views,
-all arm costs and truncation rates from recorded attempts. Re-judge every claimed
-success in the pinned container with the original task form, full gate, audit,
-source frame and statement freeze. Report the curve crossing only with its
-registered uncertainty rule. Audit20transcript moments including malformed
-nodes, empty localization, unknown scores, source/provenance attacks and stopped
-requests. Include deviations, prediction-interval scoring and contamination.
-Keep Claude's small subset descriptive. Grade method and reproducibility,
-never favorable outcomes. If live apparatus is unavailable, record deferred
-rows and the exact blocker; a mock/replay result cannot fill a live report.
+\texttt{research/runs/R12/} (\texttt{fvh report R12 --labalpha} builds the
+frame's tables from the logs). Report $\theta$ with its interval and the single
+test's $p$, the worst-case sensitivity for excluded runs, the four regimes'
+curves with cluster-bootstrap bands, the regex and public strata and the
+language views, all arm costs, the feedback cap's truncation rate and the
+output-cap cuts. Re-judge every claimed success in the pinned container with
+the original task form, full gate, audit, source frame and statement freeze.
+Score your prediction interval. Audit 20 transcript moments including failed
+nodes, empty localization, unknown scores, source/provenance attacks and
+stopped requests. Include deviations and contamination. Keep Claude's small
+subset descriptive. Grade method and reproducibility, never favorable outcomes.
+If live apparatus is unavailable, record deferred rows and the exact blocker; a
+mock or replay result cannot fill a live report.
 \end{problem}
 \begin{problem}[paper-card]\label{prob:B3}
 \textbf{Card06.10: Cobblestone.} Fill Task shape, Oracle, Trust, Cheat surface, Metric, Budget, Variance and Artifact. The card score is the minimum of its eight field scores. Use exactly the local range below; name missing information instead of inventing it.

@@ -1,13 +1,13 @@
-# R04 withheld hand-answer tripwires; author-only. Re-cut 2026-10-19 (DVR4 step 5)
+# R04 withheld hand-answer tripwires; author-only. Re-cut 2026-10-19 (DVR4 step 5; H2d re-cut 2026-10-21 for D82)
 # from the one-statement-per-line twins; no prediction answer.
 
 # from Solutions/dafny/R/R04_Specs/core/R04_Specs.dfy
 # source: var s := "abb"; (R04.H1d)
 # verified: solutions=1 public=0
 var\s+s\s*:=\s*"abb"\s*;
-# source: assert !Matches(Star(Cat(Chr('a'), Chr('b'))), "a"); assert !Matches(Cat(Chr('a'), Chr('b')), "aba"); (R04.H2d, D64)
+# source: var i :| 0 <= i <= |s| && Matches(Chr('x'), s[..i]) && Matches(Cat(Chr('y'), Star(Chr('z'))), s[i..]); (R04.H2d, D82)
 # verified: solutions=1 public=0
-assert\s+!Matches\(Star\(Cat\(Chr\(\x27a\x27\),\s*Chr\(\x27b\x27\)\)\),\s*"a"\);\s*assert\s+!Matches\(Cat\(Chr\(\x27a\x27\),\s*Chr\(\x27b\x27\)\),\s*"aba"\);
+Matches\(Chr\(\x27x\x27\),\s*s\[\.\.i\]\)\s*&&\s*Matches\(Cat\(Chr\(\x27y\x27\),\s*Star\(Chr\(\x27z\x27\)\)\),\s*s\[i\.\.\]\)
 # source: exists i :: 0 <= i <= |s| && Matches(r, s[..i]) (R04.H4d)
 # verified: solutions=1 public=0
 exists\s+i\s*::\s*0\s*<=\s*i\s*<=\s*\|s\|\s*&&\s*Matches\(r,\s*s\[\.\.i\]\)

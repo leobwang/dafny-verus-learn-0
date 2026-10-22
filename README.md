@@ -81,9 +81,12 @@ chapter (→ optional /discuss) → paper problems → make -C paper paper green
    | uv and the harness environment | uv 0.12.4 (`sandbox/images.lock`) | Q06, R05 | install uv, then `uv sync --directory harness --frozen` | `uv --version`; `uv run --directory harness python3 -c 'import fvh'` |
    | Docker and the course images (`dvl-toolchain`, `dvl-agent`) | `sandbox/images.lock` | Q07 (the local agent replay) | Docker Engine, then `sandbox/build-images.sh` | `sandbox/build-images.sh --check` |
    | Ollama and the local model | `qwen3.8:latest` (`sandbox/apparatus.toml`) | Q07, the labs | Ollama, then `ollama pull qwen3.8:latest` | `ollama list`; `scripts/contract_local.sh Q07 --available` |
+   | the course's copy of Claude Code's version file | Claude Code 2.1.306, `[backend.claude]` in `sandbox/apparatus.toml` | Q12 (Lab 1: every `fvh` batch checks it, a Qwen-only one too) | `scripts/get_toolchain.sh claude`, while that version is still in `~/.local/share/claude/versions/` (see below) | `scripts/get_toolchain.sh claude --check` |
    | age and the grader's key | age v1.3.2 at `~/.local/bin/age` (`sandbox/truth.toml`) | Q13 (the hidden checks) | the pinned release binary, and the key where `sandbox/truth.toml` names it | `sha256sum ~/.local/bin/age` against `age_sha256` |
    | the public benchmark sets | `bench/manifest.toml`, `bench/public/POOLS.toml` | Q12 (Lab 1) | `scripts/get_bench.sh --all` | `scripts/get_bench.sh --check` |
    | the editor | the Dafny extension at 4.11.0 and verus-analyzer on the pinned `verus` (`.vscode/settings.json`) | Q01 (its language-server door), Q04 (the IDE rung) | VS Code with both extensions; open the repository root | hover a symbol in `dafny/Q/Q01_Hello/core/Q01_Hello.dfy` |
+
+   Claude Code updates itself and deletes old version files, so `fvh` never runs the `claude` link or the updater's files: it runs the course's own copy of the pinned version, `~/.local/share/dafny-verus-learn-0/claude/versions/<version>`, which `scripts/get_toolchain.sh claude` makes once (it checks the pinned sha256) and which survives every later update. Your Claude Code and its auto-updater stay as they are. When a course update moves the pin, run `scripts/get_toolchain.sh claude` again; if your CLI has already deleted that version, it says so and how to put it back (`VERSIONS.md` §1.3).
 
 ## Verifying, memory, and the local CI
 

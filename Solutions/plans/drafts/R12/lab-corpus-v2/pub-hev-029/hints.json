@@ -1,8 +1,1 @@
-{
- "hints": [
-  "len == string.len()",
-  "0 <= beginning_of_suffix <= len",
-  "ret@ == (string@[..beginning_of_suffix] + string@[beginning_of_suffix..len]) + string@[..beginning_of_suffix].reverse()",
-  "s[s.len() - len..len] == s[..string@.len()][s.len() - len..len]"
- ]
-}
+{"hints": ["len == string.len()", "0 <= beginning_of_suffix <= len", "len - beginning_of_suffix", "ret@ == (string@[..beginning_of_suffix] + string@[beginning_of_suffix..len]) + string@[..beginning_of_suffix].reverse()", "s[s.len() - len..len] == s[..string@.len()][s.len() - len..len]"]}

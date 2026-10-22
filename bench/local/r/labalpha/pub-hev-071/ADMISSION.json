@@ -15,7 +15,8 @@
   },
   "id": "pub-hev-071",
   "lang": "verus",
-  "private_evidence_sha256": "4af29c5d6673617f07aec55cba82dd67bc591ae870fef93d2bfc78ad16ab8fa0",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "3b2d7ebefd5805776f4e550cb40e612c002e5f7ea11cb01785904daf7919af26",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -35,9 +36,13 @@
     {
       "kind": "expr",
       "name": "i3"
+    },
+    {
+      "kind": "decreases",
+      "name": "d1"
     }
   ],
-  "source_sha256": "d4d73e840fc798cfdb7cc7dab17fcb9ac870426cdc9b94dfae4da187e5bfcd05",
+  "source_sha256": "edea8cf38509e4dea7ebfdb80e962ec999e0b55520e08612b482e8122ca992bb",
   "status": "admitted",
   "target": "largest_divisor",
   "validated_span": {
@@ -45,5 +50,5 @@
     "start": 65,
     "symbol": "largest_divisor"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

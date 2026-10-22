@@ -15,7 +15,8 @@
   },
   "id": "pub-hev-029",
   "lang": "verus",
-  "private_evidence_sha256": "757f74aab9ef281de7f1671d003382b5c810ec5f6794802dd445c6a0c1e51f46",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "48e2b45d5b1ea83c2e1c5b9f223b3d5aea32e87a65dad5d9bdbe7ba339fe74d1",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -33,6 +34,10 @@
       "name": "i2"
     },
     {
+      "kind": "decreases",
+      "name": "d1"
+    },
+    {
       "kind": "expr",
       "name": "a3"
     },
@@ -41,7 +46,7 @@
       "name": "a4"
     }
   ],
-  "source_sha256": "2531b4be716bc0c4f04bead3b59884f10d3c199f29ccf583c3f182d2c033c3c9",
+  "source_sha256": "936af2da378f446bde009615607ec55c9741c468f3f57c57340a4fd309fa9492",
   "status": "admitted",
   "target": "make_palindrome",
   "validated_span": {
@@ -49,5 +54,5 @@
     "start": 81,
     "symbol": "make_palindrome"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

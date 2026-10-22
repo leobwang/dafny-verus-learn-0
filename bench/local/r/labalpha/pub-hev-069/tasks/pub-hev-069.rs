@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["MAX","MIN","char","count_uppercase_sum","digit_sum","drop_last","index","is_upper_case","len","sum","text","u128","u64"]},{"name":"i2","identifiers":["MAX","MIN","char","count_uppercase_sum","digit_sum","drop_last","index","is_upper_case","len","sum","text","u128","u64"]},{"name":"i3","identifiers":["MAX","MIN","char","count_uppercase_sum","digit_sum","drop_last","index","is_upper_case","len","sum","text","u128","u64"]},{"name":"a4","identifiers":["MAX","MIN","char","count_uppercase_sum","digit_sum","drop_last","index","is_upper_case","len","sum","text","u128","u64"]},{"name":"a5","identifiers":["MAX","MIN","char","count_uppercase_sum","digit_sum","drop_last","index","is_upper_case","len","sum","text","u128","u64"]},{"name":"a6","identifiers":["MAX","MIN","char","count_uppercase_sum","digit_sum","drop_last","index","is_upper_case","len","sum","text","u128","u64"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"d1","kind":"decreases"},{"name":"a4"},{"name":"a5"},{"name":"a6"}]
 // R12_SOURCE_SPANS: [{"symbol":"digit_sum","start":35,"end":64}]
 // R12 public task: humaneval-verus human_eval_066.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -48,7 +48,7 @@ fn digit_sum(text: &[char]) -> (sum: u128)
                     #[trigger] text@[..j],
                 )) <= u64::MAX * index),
             /*R12_HINT:i3*/ true,
-        decreases text@.len() - index,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         if (text[index] >= 'A' && text[index] <= 'Z') {
             assert(text@[..index] =~= text@[..index + 1].drop_last());

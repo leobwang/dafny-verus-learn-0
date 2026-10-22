@@ -3,77 +3,77 @@
 schema = 1
 lab = "R12"
 archive = "Hidden/labs/R12/tasks.tar.age"
-archive_sha256 = "9624bbd0abd6e6611c0189a2a43d9d1c4f8104a2ee1f687190d63fa09afdb43b"
+archive_sha256 = "1fd24a2d74cba86cb71f74d53e9cd9b3e4082465d67b5d0b792e9ea831155b17"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
 files = 21
-manifest_sha256 = "86833fc870226868c35e4c590c112b7c52f7984201cc10e82ae240091f733f0a"
+manifest_sha256 = "ab067a83014c69b0c17bed53e778855c79fed711c74b8f742f1b31f5f4afca01"
 
 [[task]]
 id = "r13-class-covers-d"
 cluster = "r13-class-covers"
-source_sha256 = "b82fee3de858234756441cb9c693996649d271ce09a6262858bf6d245861f1c6"
-admission_sha256 = "bc75bc9eb64e92fa8df0bc0adcb1428725e32ad75086aba16d5343d67518b073"
+source_sha256 = "d0aa1fe1a519443a7a8a56e751f50f90b60f73ee59cb8c6bec75066947524dd8"
+admission_sha256 = "0bcecc2742414371b447e0bcb37ad9381f7f144ccc3605e69738a70e7c1ea60b"
 file = "r13-class-covers-d.dfy"
 
 [[task]]
 id = "r13-class-covers-v"
 cluster = "r13-class-covers"
-source_sha256 = "d7d6e7724141259bd831cc3c42429f81654cdf4b3059fcb7d81df9521984d332"
-admission_sha256 = "74b9e96b44f8115ceacf87e351818505804db76cacdfa3ee9c8c09392d2ba049"
+source_sha256 = "8b80247a979f6d7075e53d2f89cb7cd5bfe213d2db851e0707e39578ee2bed29"
+admission_sha256 = "86aeb73575d810407650438916b2608a57a47a6654b06167064f0e3b48401bd6"
 file = "r13-class-covers-v.rs"
 
 [[task]]
 id = "r13-nullable-derivs-d"
 cluster = "r13-nullable-derivs"
-source_sha256 = "38e579dc6bbde0428a2674dd6b4c9ea4f9a5e5baff19ed66125bcf19f53990d7"
-admission_sha256 = "dd410a1ad9a7d08952358f18b51ea7a8f25e444792cebec7be29069c664b748e"
+source_sha256 = "3283b22de948c7467684f2f1dc80c91c77942e9052da83dcbe820f121b78f2ec"
+admission_sha256 = "9de304db5b4fe1c363169232177960de31446e39675eb981be07084f35a8356a"
 file = "r13-nullable-derivs-d.dfy"
 
 [[task]]
 id = "r13-nullable-derivs-v"
 cluster = "r13-nullable-derivs"
-source_sha256 = "11ef3c2a32ea438435e3b749a14fb62bc109cb1b1617677ad5c96f94b6649034"
-admission_sha256 = "6933a759b18e6d1bdfba889190c3ca3d32bc798c38ad65905fd831ea21ed291c"
+source_sha256 = "d86f13ff21276e26472f0f4167c1b8aa5870a96330a05bc8eea4ea4331aa3dc6"
+admission_sha256 = "82edefadc1d5f4b8be59e6cddaf7229367e97610499182a6f8e886037e6f517d"
 file = "r13-nullable-derivs-v.rs"
 
 [[task]]
 id = "r14-cat-intro-v-d"
 cluster = "r14-cat-intro-v"
-source_sha256 = "d08816f0e7310fa4210f4ef7d35e069d0814b33efd2f9d090a9a32f9b1d96545"
-admission_sha256 = "05930e78d0196dca05dc2ec332f918fc65d928cdeb0ff475e72fcc1eba90956f"
+source_sha256 = "07191657e5c3deb203b21d6875c3fc539399a1a8cfae26db7d2cf29ef50b2e58"
+admission_sha256 = "708ddcc9085b712f385283bd78ea3d7aeec89843bc38b014941973f001bc8f81"
 file = "r14-cat-intro-v-d.dfy"
 
 [[task]]
 id = "r14-cat-intro-v-v"
 cluster = "r14-cat-intro-v"
-source_sha256 = "bbe7910509ef0caebda22a83a2198fd7ce98f0929a582be5e93a5c05acf4db3f"
-admission_sha256 = "5a945c1f98c9b954b1d5551ecfc97445764d55b04ef748c4ec61887d3aa49f38"
+source_sha256 = "def7fc2942b5c1783ece5003c3b707e5ba02c45fa9d9d03405b92634b50fbebc"
+admission_sha256 = "5526a3bbfa077a271ff7e6fbd85bc5ea6986e526403dee56fac95fc9a33bab8e"
 file = "r14-cat-intro-v-v.rs"
 
 [[task]]
 id = "r14-deriv-size-v-d"
 cluster = "r14-deriv-size-v"
-source_sha256 = "6f54dfa22ebca5ec1a919f5527fc56909a12d29247892fd62456f9f9189f85b0"
-admission_sha256 = "3ca5b0d842207bd2947d8da6ae87f007eb5b1abcc7b83dfa1fe35171e5eea166"
+source_sha256 = "3362250b43aedff8c7dccccfc785863ac61f069219db3b55af34caead33fa7de"
+admission_sha256 = "94e0ae4d829ca07abfa97a0294f3ea93b6f4cd86b5dbb5a0ec8e99c1aaaa2b1b"
 file = "r14-deriv-size-v-d.dfy"
 
 [[task]]
 id = "r14-deriv-size-v-v"
 cluster = "r14-deriv-size-v"
-source_sha256 = "812b3407ced6b76aae1da92378dd3cf8924d5b44ae95d215f99250ed5e0d8cd8"
-admission_sha256 = "211060fa7082527e8b9a302c07c6d2a79b39bde7170f1afd9945ba4ff41a7116"
+source_sha256 = "fb90c983f6e55201e4abd2c02aaac2650c30c815b0eba0e7c590641586fc24b3"
+admission_sha256 = "a73307fd41242597c390494f440f298f1b1bf9ca5ff37f39399076fba7bc7614"
 file = "r14-deriv-size-v-v.rs"
 
 [[task]]
 id = "r14-star-pow-v-d"
 cluster = "r14-star-pow-v"
-source_sha256 = "a3a8cf76cc9540bb91910c24f37c8497a34ecef21266f0984db79d567d51829c"
-admission_sha256 = "679b8d177f1ad5b545c7399aef7ac0c08398b98f05feecba3a6b0476809e5e47"
+source_sha256 = "a2684f6e1f148881822690a256d4c06f53b82014e26c58f8ba982cd572be4b09"
+admission_sha256 = "c7d17cfeecae29d422be38c6910eba2585721e25ffb97aaf46f9f3c7432bb53b"
 file = "r14-star-pow-v-d.dfy"
 
 [[task]]
 id = "r14-star-pow-v-v"
 cluster = "r14-star-pow-v"
-source_sha256 = "241eb3d58c410272c18176164f4bd2a03138b6dfd68670c9198ba20b67809bc3"
-admission_sha256 = "0201931cb7cf8c26cb8ca236911e4c4813b91c17b3071d851a686002f3aae2a5"
+source_sha256 = "202e23ffab541ecee4fb7effbcb77acc8ee05f18bbcc1a2ce5a517c0b607eecf"
+admission_sha256 = "def8680e3a03b112f17a336edd17ee4f361826877814386a43165114c2515dfb"
 file = "r14-star-pow-v-v.rs"

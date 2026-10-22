@@ -21,7 +21,9 @@ around fvh_r.engine's policy), construct "seeded", rounds 10, turns 12 (baseline
 at most ten generations, closure). Each task's statement binds its source bytes
 (R12_TASK_SHA256), its cluster (R12_CLUSTER) and its exposure. fvh.batch refuses a
 pilot plan whose tasks leave the pilot clusters and a confirmatory or descriptive
-plan without a complete freeze (fvh.prereg.check_roles).
+plan without a complete freeze (fvh.prereg.check_roles). A sealed task (the R13/R14-
+derived forms, sealed in Hidden/labs/R12/) is counted in the stratum but never enters
+any plan (the user's D61), unsealed or not.
 
 This performs no model, provider or container execution, creates no grade row and
 never discovers reference completions; a lab plan still needs its genuine graded
@@ -161,6 +163,10 @@ def render_plan(task_rows, *, family, seed, repeats, arms, role, lab, freeze):
     if freeze:
         s += 'freeze = ' + q(freeze) + '\n'
     s += 'seed = ' + str(seed) + '\nrepeats = ' + str(repeats) + '\nattempts = 1\nmax_reissue = 3\nlever_check = true\n'
+    names = [name for name, _ in arms]
+    groups = [list(g) for g in (PRIMARY, DESCRIPTIVE) if all(n in names for n in g)]
+    if groups:   # primary pairs first, adjacent per task and repeat; descriptive after (Δ298)
+        s += 'interleave = ' + q(groups) + '\n'
     s += 'tasks = ' + q([t['id'] for t in task_rows]) + '\n'
     s += 'system = ' + q((ROOT / 'tools/R12/lab_system.md').read_text()) + '\ninstructions = ' + q((ROOT / 'tools/R12/lab_instructions.md').read_text()) + '\n'
     for t in task_rows:
@@ -196,9 +202,9 @@ def build_plans(clusters, tasks, *, seed, roles=('pilot', 'confirmatory', 'descr
         rows = role_tasks(clusters, tasks, pick[role])
         if not rows:
             raise ValueError('no ' + role + ' cluster in the stratum')
-        sealed = [t['id'] for t in rows if not t.get('unsealed', True)]
+        sealed = [t['id'] for t in rows if t.get('sealed')]
         if sealed:
-            raise ValueError(role + ' plan: task(s) still sealed (unseal them first): ' + ', '.join(sealed))
+            raise ValueError(role + ' plan: sealed task(s) never enter a learner plan (D61): ' + ', '.join(sealed))
         lab = role != 'pilot'
         plans[role] = render_plan(rows, family=QWEN, seed=seed + i, repeats=REPEATS, arms=arms[role],
                                   role=role, lab=lab, freeze=freeze if lab else '')

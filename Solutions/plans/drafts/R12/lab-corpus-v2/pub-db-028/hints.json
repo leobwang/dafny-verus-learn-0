@@ -1,7 +1,1 @@
-{
- "hints": [
-  "0 <= i <= a.Length",
-  "forall j :: 0 <= j < i ==> a[j] <= max",
-  "exists j :: 0 <= j < i && a[j] == max"
- ]
-}
+{"hints": ["0 <= i <= a.Length", "forall j :: 0 <= j < i ==> a[j] <= max", "exists j :: 0 <= j < i && a[j] == max"]}

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"c1","identifiers":["c","n","as","nat"],"kind":"calls","callees":["lemma_star_pow_v"]},{"name":"h1","identifiers":["matches_v","Re","Chr","c","s","subrange"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["lemma_star_pow_v"]},{"name":"h1"}]
 // R12_SOURCE_SPANS: [{"symbol":"lemma_star_pow_v","start":93,"end":105}]
 use vstd::prelude::*;
 

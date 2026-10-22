@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["InArray","Length","SharedElements","a","array","b","i","in","j","res","result","seq","x"]},{"name":"i2","identifiers":["InArray","Length","SharedElements","a","array","b","i","in","j","res","result","seq","x"]},{"name":"i3","identifiers":["InArray","Length","SharedElements","a","array","b","i","in","j","res","result","seq","x"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"SharedElements","start":10,"end":28}]
 // R12 public task: dafnybench dafny-synthesis_task_id_2.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 predicate InArray(a: array<int>, x: int)

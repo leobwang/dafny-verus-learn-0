@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["AddLists","a","b","i","k","result","seq"]},{"name":"i2","identifiers":["AddLists","a","b","i","k","result","seq"]},{"name":"i3","identifiers":["AddLists","a","b","i","k","result","seq"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"}]
 // R12_SOURCE_SPANS: [{"symbol":"AddLists","start":4,"end":17}]
 // R12 public task: dafnybench dafny-synthesis_task_id_728.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method AddLists(a: seq<int>, b: seq<int>) returns (result: seq<int>)

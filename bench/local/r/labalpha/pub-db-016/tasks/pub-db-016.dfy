@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"i2","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"a3","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"a4","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"a5","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"a6","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"a7","identifiers":["Pow","a","k","n","pow","x","y"]},{"name":"a8","identifiers":["Pow","a","k","n","pow","x","y"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"d1","kind":"decreases"},{"name":"a3"},{"name":"a4"},{"name":"a5"},{"name":"a6"},{"name":"a7"},{"name":"a8"}]
 // R12_SOURCE_SPANS: [{"symbol":"Pow","start":8,"end":32}]
 // R12 public task: dafnybench Prog-Fun-Solutions_tmp_tmp7_gmnz5f_extra_pow.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 ghost function pow(a: int, e: nat): int {
@@ -14,7 +14,7 @@ ensures y == pow(a, n)
     while k < n
     invariant /*R12_HINT:i1*/ true
     invariant /*R12_HINT:i2*/ true
-    decreases n-k
+    decreases /*R12_DECREASES:d1*/ (0 as int)
     {
         assert /*R12_HINT:a3*/ true;
         x := a*x;

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Count","Element","FindPositionOfElement","Length","Position","a","array","i","n1","s1","seq"]},{"name":"i2","identifiers":["Count","Element","FindPositionOfElement","Length","Position","a","array","i","n1","s1","seq"]},{"name":"i3","identifiers":["Count","Element","FindPositionOfElement","Length","Position","a","array","i","n1","s1","seq"]},{"name":"i4","identifiers":["Count","Element","FindPositionOfElement","Length","Position","a","array","i","n1","s1","seq"]},{"name":"a5","identifiers":["Count","Element","FindPositionOfElement","Length","Position","a","array","i","n1","s1","seq"]},{"name":"a6","identifiers":["Count","Element","FindPositionOfElement","Length","Position","a","array","i","n1","s1","seq"]}]
+// R12_HINT_SITES: [{"name":"d1","kind":"decreases"},{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"},{"name":"a5"},{"name":"a6"}]
 // R12_SOURCE_SPANS: [{"symbol":"FindPositionOfElement","start":4,"end":38}]
 // R12 public task: dafnybench Dafny_Learning_Experience_tmp_tmpuxvcet_u_week8_12_a3_search_findPositionOfIndex.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method FindPositionOfElement(a:array<int>,Element:nat,n1:nat,s1:seq<int>) returns (Position:int,Count:nat)
@@ -12,7 +12,7 @@ method FindPositionOfElement(a:array<int>,Element:nat,n1:nat,s1:seq<int>) return
        // assert forall i:: 0<= i <|s1| ==> a[n1-1-i] == s1[n1-1-i];
        // assert forall i:: 0<= i <|s1| ==> a[n1-1-i]!= Element;
         while Count != n1
-            decreases n1 - Count
+            decreases /*R12_DECREASES:d1*/ (0 as int)
             invariant /*R12_HINT:i1*/ true
             invariant /*R12_HINT:i2*/ true
             invariant /*R12_HINT:i3*/ true

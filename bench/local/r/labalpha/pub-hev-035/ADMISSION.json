@@ -15,7 +15,8 @@
   },
   "id": "pub-hev-035",
   "lang": "verus",
-  "private_evidence_sha256": "fd58b66fc597cb3fd0656e94712105789d4894a8f3ec99fe95f3008d2b6bf683",
+  "max_auto_reading": "maximal automation",
+  "private_evidence_sha256": "995f6963aa5d399f7e909453d2740821bbe4725052155dbeb1f2974c0282437c",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -37,11 +38,15 @@
       "name": "i3"
     },
     {
+      "kind": "decreases",
+      "name": "d1"
+    },
+    {
       "kind": "expr",
       "name": "a4"
     }
   ],
-  "source_sha256": "954904664bcc0af3833b2c22ac7dbcdd8651dbccc26daf46f267c5c3e9c16f05",
+  "source_sha256": "5aabee4b7717e87000c1e623051fd57eb29152ce57300dd250459571b81294b1",
   "status": "admitted",
   "target": "brazilian_factorial_impl",
   "validated_span": {
@@ -49,5 +54,5 @@
     "start": 90,
     "symbol": "brazilian_factorial_impl"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

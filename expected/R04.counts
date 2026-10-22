@@ -14,9 +14,9 @@ module = "R04"
 [[unit]]
 path = "dafny/R/R04_Specs/core"
 lang = "dafny"
-reference_verified = 17
+reference_verified = 19
 min_verified = 9
-symbols = ["R04_Specs.CatChrNonEmpty", "R04_Specs.EpsOnlyEmpty", "R04_Specs.MutantKilled", "R04_Specs.Occurs", "R04_Specs.PrefixMatch", "R04_Specs.SomeWordMatches", "R04_Specs.WitnessAbb", "R04_Specs.WitnessAnchored", "R04_Specs.WitnessNotAba"]
+symbols = ["R04_Specs.CatChrNonEmpty", "R04_Specs.EpsOnlyEmpty", "R04_Specs.MutantKilled", "R04_Specs.NoXInSecondPlace", "R04_Specs.Occurs", "R04_Specs.PrefixMatch", "R04_Specs.SomeWordMatches", "R04_Specs.WitnessAbb", "R04_Specs.WitnessAnchored"]
 
 [[unit]]
 path = "verus/r/r04_specs"

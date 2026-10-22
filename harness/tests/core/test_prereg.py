@@ -267,3 +267,16 @@ def test_plans_over_other_strata_carry_no_role(tmp_path):
     assert G.check_roles(tmp_path, "Q98", p) is None
     with pytest.raises(G.FreezeRefused, match="serve a plan over a schema-2 stratum"):
         G.check_roles(tmp_path, "Q98", SimpleNamespace(**dict(vars(p), role="pilot")))
+
+
+def test_a_sealed_cluster_never_enters_a_plan(tmp_path):
+    rel = freeze(tmp_path)
+    st = tmp_path / STRATUM_REL
+    st.write_text(st.read_text() + '[[task]]\nid = "c2-d"\nsealed = true\n')
+    import hashlib as h
+    text = (tmp_path / rel).read_text()
+    old = [l for l in text.splitlines() if l.startswith("stratum_sha256")][0]
+    (tmp_path / rel).write_text(text.replace(old, f'stratum_sha256 = "{h.sha256(st.read_bytes()).hexdigest()}"'))
+    assert G.check_roles(tmp_path, "Q98", plan(["c1-d"], role="confirmatory", frz=rel))
+    with pytest.raises(G.FreezeRefused, match="outside the confirmatory clusters: c2-d"):
+        G.check_roles(tmp_path, "Q98", plan(["c2-d"], role="confirmatory", frz=rel))

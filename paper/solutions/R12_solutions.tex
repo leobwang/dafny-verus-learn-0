@@ -8,94 +8,149 @@
 \sloppy
 \section*{Problem B1}\label{ans:B1}
 \begin{answer}
-This is a prospective author method exemplar, not a graded registration, a
-live result or a run authorization. A learner must choose and bind actual final
-artifacts before grading. It cannot supply a missing task-admission or cost pin.
+This is the author's method exemplar inside the course-fixed frame, not a graded
+registration, a live result or a run authorization: the learner writes, binds and
+has graded their own registration before any run.
 
-\textbf{Claim and refutation.} Primary contrast is localized minus raw
-best-first cumulative solve rate over the same40task forms in20paired-language clusters at each registered budget
-1--10, two-sided; an effect interval wholly at or below zero contradicts a positive advantage;
-intervals that span zero leave the direction unresolved. Secondary comparisons are the three localized
-regimes pairwise. Predeclare all40pointwise comparisons as one Holm family.
-A crossing is a change in the sign of a registered paired difference; overlapping
-pointwise uncertainty gives an unresolved crossing, not evidence of a ranking.
+\textbf{Frame binding.} \texttt{freeze-sha256: 763a8f267702de09690e6411e95d5ffe57ad1e512445b751b804aea987e1530d}. The frame fixes the
+contrast, the estimand $\theta$, the test, the budget axis, the aggregation, the
+missing-result rule, the resource accounting, the corpus, the composition and
+$K = 80$; this registration cites them by name and changes none of them.
 
-\textbf{Feedback and estimand.} Each task's rate at a prefix averages its three
-recorded repeated runs. Average the two language tasks within each of20original
-algorithm clusters, then estimate the mean paired arm difference over clusters.
-Retain both languages, all repeats, arms and budgets within the same cluster. Localized feedback derives only from that candidate's trusted native
-Result plus original source spans. Raw feedback is the same Result document;
-no hidden reference, reference proof or human repair enters either prompt.
+\textbf{Claim, expected direction and refutation.} The fixed contrast asks
+whether best-first search finds a verified hint set earlier, in node calls, when
+its feedback names the failing obligation and its span rather than handing the
+model the whole wrapper document. I expect $\theta$ near zero, slightly negative:
+the localized list is shorter, but the raw document also carries the context
+around the failing site, and the course's three five-cluster pilots all ran the
+other way ($\theta = -0.04$, $-0.03$, $-0.10$, never a test). An interval wholly
+above zero refutes that expectation in favour of localization, one wholly below
+zero confirms that raw feedback is better here, and an interval spanning zero
+leaves the direction unresolved, which is a result, not a failure of the study.
 
-\textbf{Arms.} One engine, with independent10/1/fifo, repair1/10/lifo,
-best-first3/10/best, and best-first/raw3/10/best. Width/depth/priority remain fixed
-across prefixes. Malformed output consumes a node and parent width slot, scores
-are advisory only, and unknown scores sort last. Accepted means the full bound
-native gate succeeds; score0and an empty obligation list are insufficient.
+\textbf{Prediction interval for theta.} 80\% prediction interval
+$[-0.10, 0.04]$ AUC points, written before any data: centred a little below
+zero, as the pilots were, and wider than the reproduced MDE below, because five
+pilot clusters say little about eighty.
 
-\textbf{Tasks and exposure.} Admit40forms,20per language, before running. Keep
-exact original bytes, models, executable skeleton and allowed proof-call
-bindings. Require failing zero-hole proof-stage baselines, complete references
-under three seeds and wrong-hint controls. Record course provenance and authorship
-rather than claiming course-derived goals are unseen. Keep the public slice
-pinned, unused and unrun unless separately allocated and graded.
+\textbf{Why the fixed test.} The cluster (a lemma family's Dafny and Verus forms,
+or one public task) is the unit because forms of one lemma share their
+difficulty, and repeats and budget points of one run are not independent draws;
+averaging inside the cluster first and then testing the 80 cluster differences
+respects that. One paired sign-flip test on those differences replaces a test at
+each budget point: the estimand already integrates the ten budget points into one
+area per run, so there is one hypothesis and no multiplicity correction; the
+sign-flip test needs no normality of the differences. The whole-cluster bootstrap
+interval reports the size of $\theta$, not only its sign. One test cannot locate
+where the four regimes' curves cross: crossings are described from the bands and
+never tested.
 
-\textbf{Budgets.}480runs,4800generation calls:120runs/1200calls per Qwen arm;
-fixed turns12cover initial native baseline, ten possible generations and closure.
-Baseline verification is not a model call; failed/malformed generations are.
-Claude's10task descriptive subset allows100calls plus at most10sentinels,110total.
-No pilot is additional to these ceilings. Seeds and prompt/source/task/plan hashes
-must be materialized before grading; Claude repeats are not controllable seeds.
-
-\textbf{Cost and stopping.}10GPU-hours means36000GPU-seconds, an average ceiling
-of7.5GPU-seconds per generation over4800calls before other GPU use. This arithmetic
-is not a throughput observation. Pin a current measured token/GPU assumption and
-per-arm expected totals. If they exceed the ceiling, retain a locked/deferred
-experiment and amend/re-grade a smaller allocation; do not run a favorable arm
-first or unlock a reserve. Stop at the fixed node cap, success or exhausted
-frontier. Administrative deferrals preserve the frozen resume rules and do not
-become best-of-n. State unavailable apparatus without host fallback.
-
-\textbf{Uncertainty.} Use paired permutation tests on20algorithm-cluster values,
-Holm on the40declared comparisons, and \texttt{fvh.stats.bootstrap\_ci} over
-whole algorithm-cluster vectors through a registered scalar statistic for each prefix.
-Declare these95\%intervals pointwise. Twenty paired-language algorithm clusters, not40independent programs or
-120repeats, define$n$. These engineered, exposed tasks do not form a random
-unseen sample; uncertainty is conditional on the registered cluster assumptions.
-For baseline0.5, pairedTrue, alpha0.05/40, the frozen MDE call below is the
-planning approximation and returns infinity: even a rise from0.5to1does not
-reach80\%power under this conservative formula at that family-adjusted level.
-This is an underpowered exploratory comparison, not a promise to establish a
-small effect or precise crossing. Actual correlated outcomes can differ from
-the approximation; non-significance does not establish absence of an effect. Register resampling seeds,10000resamples and80\%
-prediction intervals for each claim before data.
+\textbf{MDE reproduction.} With the stratum's confirmatory clusters (one four-task, 28 two-task and 51 one-task clusters)
+and the frame's \texttt{power\_sim\_cell} arguments:
 \begin{verbatim}
 from fvh import stats
-stats.mde_two_proportions(20, 0.5, alpha=0.05/40, paired=True)
+for base, tau in ((0.35, 0.5), (0.35, 1.0), (0.60, 0.5), (0.60, 1.0)):
+    print(base, tau, stats.mde_paired_clusters_sim(
+        {4: 1, 2: 28, 1: 51}, 3, base, 0.15, tau, n_sims=1000, n_delta=30000, seed=20261017))
 \end{verbatim}
+prints 0.0900, 0.1016, 0.0818, 0.0973, the frame's four values. The design cannot detect
+differences much below about 0.08 AUC points; effect heterogeneity across
+clusters and the number of clusters set that bound, and a fourth repeat would move
+it little, because the arms already share every cluster's and task's difficulty.
 
-\textbf{Integrity.} Hash the actual engine, adapter, task files, source spans,
-prompts and settings. Check source frames independently of the learner renderer;
-proof callees must be provided local proof declarations. Keep the full gate,
-audit, specfreeze, lever checks and executor/container provenance. Include
-killed, truncated and malformed attempts in the registered denominator, with
-truncation sensitivity. Reissue only true infra-failed ids under frozen rules.
-No absence of a diagnostic becomes proof evidence.
+\textbf{Cheat surface and gates.} A delivery could change a statement, a model or a
+lever (the lab gate's lever check and the source-frame guard refuse it); a reply
+could be read as success from an empty obligation list or an unknown score (only
+the full gate's clean verified result is success, re-judged in the container); a
+reply could escape a site with a statement or a trust word (the token grammar and
+the frame guard refuse it, a failed node); a container failure could tempt a host
+fallback (none exists: the run is an apparatus failure, re-run once); a scored
+attempt could be re-run for a better outcome (the ledger refuses it).
 
-\textbf{Disclosure and binding.} One machine/solver pin, model substitution,
-small task set, course exposure and Claude as subject/grader are limitations.
-The final learner registration supplies actual prediction intervals, final seeds,
-all artifact hashes, cost measurement and a single final plan digest. This
-exemplar deliberately has no unlock row or pretend plan binding.
+\textbf{Stopping rule.} A run stops at its first verified candidate, after ten node
+calls, or when its fixed frontier is exhausted. A batch that reaches R12's 80
+GPU-hour ceiling pauses between attempts and resumes later; no scored attempt is
+re-run, and an interrupted attempt is an apparatus failure, re-run once with
+the same seeds (the frame's \texttt{missing\_rule}). The study stops when
+every planned attempt of the frame's fixed $N$ is settled, never at an arm's lead.
+
+\textbf{Seeds and plans.} Confirmatory plan from \texttt{tools/R12/plan.py --seed
+20261101 --roles confirmatory}; descriptive plan from the same call with
+\texttt{--roles descriptive}; the per-call seeds derive from those base seeds and
+each attempt id.
+
+\textbf{Budget, cost and truncation sensitivity.} Confirmatory: 111 tasks
+$\times$ 2 arms $\times$ 3 repeats $\times$ 10 = 6{,}660 calls at most;
+descriptive: 34 tasks $\times$ 2 $\times$ 3 $\times$ 10 = 2{,}040;
+together 8{,}700 of R12's 10,700 (the Claude subset's 100 calls and 10
+sentinels are counted apart). At about 72 GPU-seconds per call (the measured cost
+on this corpus) the ceiling case would be 174 GPU-hours, more than R12's 80; but
+a run stops at its first success, and the pilots spent a quarter to a third of
+their planned calls, which puts the expected cost near 42 to 63 GPU-hours (the
+frame's \texttt{cost} field). If the batch
+reaches 80 GPU-hours it pauses between attempts and the rest stay planned for a
+later resume (the stopping rule). The confirmatory plan runs its two arms in
+adjacent pairs (\texttt{interleave}), so a pause leaves whole pairs behind it, and
+$\theta$ uses only clusters whose runs are settled in both arms (the frame's
+\texttt{aggregation}); the confirmatory plan runs before the descriptive one.
+Sensitivity: the share of calls cut at the output cap and the feedback cap's
+truncation rate, per arm, with $\theta$ recomputed on the cumulative prompt-token
+axis.
+
+\textbf{Descriptive analyses.} The four regimes' success curves with
+whole-cluster bootstrap bands (\texttt{fvh.stats.cluster\_bootstrap\_ci}), read as
+pointwise bands; crossings read off the bands and never tested; the regex and
+public strata and the Dafny and Verus views; the Claude subset's ten runs.
+
+\textbf{Contamination and disclosure.} The regex forms are course-derived
+(written after the pinned model's release, previously seen by me); the public
+forms are possibly seen by the model; the strata stay apart in every table; the
+sealed R13/R14 clusters are outside every plan. One model, one hardware and solver
+pin, these prompts and $B = 10$ bound the claim; Claude is both a subject and the
+grader; only the token-axis line separates localization from a shorter prompt.
+
+\textbf{Batch plan binding.} \texttt{plan-sha256:} c2ec02fb4f873b85f62de30b3fdd3cfd520ec40ae7020f64db2cbadf52559f1c (the confirmatory plan;
+the descriptive plan is registered and graded on its own).
 \end{answer}
 \section*{Problem B2}\label{ans:B2}
 \begin{answer}
-No live result is supplied. A valid report regenerates every table from frozen
-logs, retains unrun/deferred ids without inventing outcomes, re-judges successes
-under original task/frame/model bindings in the pinned container, and distinguishes
-pointwise uncertainty from simultaneous bands. Mock/Scripted/Replay fixtures
-validate software behavior only. D45 live runs stay deferred under the recorded
-user-directed skip. Numeric scores for an imagined experiment are not permitted.
+No live result is supplied: the confirmatory and descriptive runs are the
+learner's, and this exemplar invents no outcome. A valid report has this shape.
+
+\textbf{Reproduce.} One command, \texttt{fvh report R12 --labalpha --rejudged
+FILE}, regenerates every number from the frozen batch logs; the report names the
+\texttt{freeze-sha256} and the \texttt{plan-sha256} the runs were made on.
+
+\textbf{Theta, its interval, the test and the sensitivity line.} $\hat\theta$ is
+the mean over the 80 clusters of the per-cluster AUC difference (localized minus
+raw best-first); the whole-cluster bootstrap 95\% interval and the paired
+sign-flip $p$ are reported once each, together with the registered prediction
+interval and whether $\hat\theta$ fell inside it. The frame's worst-case line
+(excluded runs scored 0 in the localized arm and 1 in the raw arm) and the
+cumulative prompt-token axis line recompute $\theta$ and say whether the sign
+survives.
+
+\textbf{Curves, bands and strata.} The four regimes' success curves over the ten
+node calls with pointwise whole-cluster bands; the regex and public strata and the
+Dafny and Verus views stay apart; any crossing is described from the bands and is
+not a tested claim.
+
+\textbf{Re-judgement, provenance and transcript audit.} Every success is re-judged
+in the pinned container under the original task, frame and model bindings; the
+audit, frame-guard, statement-freeze and lever evidence travel with the logs; 20
+transcript moments are audited, failed nodes, empty localization, unknown scores,
+source or provenance attacks and stopped requests among them.
+
+\textbf{Costs, truncation, deviations and prediction intervals.} GPU-hours used
+against the 80-hour ceiling, pauses and resumes, the share of calls cut at the
+output cap and the feedback cap's truncation rate per arm; every deviation from the
+registration is listed; unrun or deferred attempt ids are kept as unrun, never
+imputed; the descriptive Claude subset stays descriptive.
+
+\textbf{Contamination and disclosure.} Course-derived regex forms and possibly
+seen public forms are reported apart; one model, one hardware and solver pin and
+$B = 10$ bound the conclusion; Claude is both a subject and the grader.
+Mock, Scripted and Replay fixtures validate software behaviour only.
 \end{answer}
 \section*{Problem B3}\label{ans:B3}
 \begin{answer}

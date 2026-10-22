@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Seq","Vec","app","beginning_of_suffix","char","len","make_palindrome","result","ret","reverse","s","spec_is_palindrome","string"]},{"name":"i2","identifiers":["Seq","Vec","app","beginning_of_suffix","char","len","make_palindrome","result","ret","reverse","s","spec_is_palindrome","string"]},{"name":"a3","identifiers":["Seq","Vec","app","beginning_of_suffix","char","len","make_palindrome","result","ret","reverse","s","spec_is_palindrome","string"]},{"name":"a4","identifiers":["Seq","Vec","app","beginning_of_suffix","char","len","make_palindrome","result","ret","reverse","s","spec_is_palindrome","string"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"d1","kind":"decreases"},{"name":"a3"},{"name":"a4"}]
 // R12_SOURCE_SPANS: [{"symbol":"make_palindrome","start":81,"end":132}]
 // R12 public task: humaneval-verus human_eval_010.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -101,7 +101,7 @@ fn make_palindrome(string: Vec<char>) -> (result: Vec<char>)
                 0 <= bos < beginning_of_suffix ==> !spec_is_palindrome(
                     #[trigger] string@[bos..len],
                 ),
-        decreases len - beginning_of_suffix,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         beginning_of_suffix += 1;
     }

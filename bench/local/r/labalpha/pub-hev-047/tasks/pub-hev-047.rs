@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["MAX","Vec","add","add_odd_evens","i","len","lst","odd_or_zero","sum","u32","u64"]},{"name":"i2","identifiers":["MAX","Vec","add","add_odd_evens","i","len","lst","odd_or_zero","sum","u32","u64"]},{"name":"i3","identifiers":["MAX","Vec","add","add_odd_evens","i","len","lst","odd_or_zero","sum","u32","u64"]},{"name":"i4","identifiers":["MAX","Vec","add","add_odd_evens","i","len","lst","odd_or_zero","sum","u32","u64"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"add","start":39,"end":68}]
 // R12 public task: humaneval-verus human_eval_085.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -53,7 +53,7 @@ fn add(lst: Vec<u32>) -> (sum: u64)
             /*R12_HINT:i2*/ true,
             /*R12_HINT:i3*/ true,
             /*R12_HINT:i4*/ true,
-        decreases lst.len() + 2 - i,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         if (lst[i] % 2 == 0) {
             sum += lst[i] as u64;

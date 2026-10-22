@@ -370,13 +370,27 @@ def attempt_id(arm: str, task: str, repeat: int, attempt: int) -> str:
 
 
 def enumerate_plan(arms: Iterable[Arm], tasks: Iterable[str], *, repeats: int = 1,
-                   attempts: int = 1) -> list[PlannedAttempt]:
-    """Every attempt id of a batch, in plan order (arm, task, repeat, attempt):
-    calls = tasks x attempts x rounds x arms x repeats (design §11.1)."""
+                   attempts: int = 1, interleave=()) -> list[PlannedAttempt]:
+    """Every attempt id of a batch, in plan order: calls = tasks x attempts x rounds x
+    arms x repeats (design §11.1). Without `interleave` the order is (arm, task, repeat,
+    attempt). `interleave` is a sequence of arm-name groups: each group runs first, in
+    the given sequence, ordered (task, repeat, attempt, arm), so the group's arms of one
+    task and repeat are adjacent and a batch that pauses between attempts leaves whole
+    groups behind it (Lab alpha: the two primary arms, Δ298); the arms of no group
+    follow in the old (arm, task, repeat, attempt) order."""
     arms, tasks = list(arms), list(tasks)
-    out = [PlannedAttempt(attempt_id(a.name, t, r, k), a.family, a.rounds)
-           for a in arms for t in tasks for r in range(1, repeats + 1)
-           for k in range(1, attempts + 1)]
+    by = {a.name: a for a in arms}
+    groups = [list(g) for g in interleave]
+    flat = [n for g in groups for n in g]
+    if any(not g for g in groups) or len(set(flat)) != len(flat) or set(flat) - set(by):
+        raise BudgetError("interleave names non-empty groups of distinct arms of the plan")
+
+    def one(a, t, r, k):
+        return PlannedAttempt(attempt_id(a.name, t, r, k), a.family, a.rounds)
+    out = [one(by[n], t, r, k) for g in groups for t in tasks for r in range(1, repeats + 1)
+           for k in range(1, attempts + 1) for n in g]
+    out += [one(a, t, r, k) for a in arms if a.name not in flat for t in tasks
+            for r in range(1, repeats + 1) for k in range(1, attempts + 1)]
     if len({p.id for p in out}) != len(out):
         raise BudgetError("the plan repeats an attempt id")
     return out

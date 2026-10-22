@@ -15,7 +15,8 @@
   },
   "id": "pub-db-070",
   "lang": "dafny",
-  "private_evidence_sha256": "1eb661d13ba01e8ef528e4014d814ba81dfa9510f31e60527cf0cb55f105b80d",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
+  "private_evidence_sha256": "0f00ecd8d54350620229c2770acde1995b7830a67bcaed7b94bcc4acf3789408",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -35,6 +36,10 @@
     {
       "kind": "expr",
       "name": "i3"
+    },
+    {
+      "kind": "decreases",
+      "name": "d1"
     },
     {
       "kind": "expr",
@@ -59,9 +64,13 @@
     {
       "kind": "expr",
       "name": "i9"
+    },
+    {
+      "kind": "decreases",
+      "name": "d2"
     }
   ],
-  "source_sha256": "5e8d80bee2365fb5360f12d1ce230e6c07eb1815dbb64e66c6c9af1cef1a11f7",
+  "source_sha256": "8caaf15de851343ff8b2f6e6461aa4dbf44b44daf7b21f737bf38febffd124da",
   "status": "admitted",
   "target": "BubbleSort",
   "validated_span": {
@@ -69,5 +78,5 @@
     "start": 21,
     "symbol": "BubbleSort"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

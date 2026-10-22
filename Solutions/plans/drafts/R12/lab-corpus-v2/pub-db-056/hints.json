@@ -1,9 +1,1 @@
-{
- "hints": [
-  "0 <= i <= a.Length",
-  "forall j :: 0 <= j < i ==> c[j] == a[j]",
-  "a.Length <= i <= b.Length + a.Length",
-  "forall j :: 0 <= j < a.Length ==> a[j] == c[j]",
-  "forall j :: a.Length <= j < i ==> c[j] == b[j - a.Length]"
- ]
-}
+{"hints": ["0 <= i <= a.Length", "forall j :: 0 <= j < i ==> c[j] == a[j]", "a.Length <= i <= b.Length + a.Length", "forall j :: 0 <= j < a.Length ==> a[j] == c[j]", "forall j :: a.Length <= j < i ==> c[j] == b[j - a.Length]"]}

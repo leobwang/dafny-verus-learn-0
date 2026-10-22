@@ -106,32 +106,38 @@ module R04_Specs {
   // item: R04.H2d
   // uses: forall-intro, exists-elim
   // pair: R04.H2v
-  /** **H2.** A negative claim: `Star(Cat(Chr('a'), Chr('b')))` does not match
-      "aba". One failed split proves nothing about the others: which first
-      chunks could a star match take from "aba", and why does each one leave
-      a rest that no star of "ab" matches? (D64: the Dafny statement is longer
-      than Verus's "ba" claim, because Dafny's solver settles that one alone.) */
-  lemma WitnessNotAba()
-    ensures !Matches(Star(Cat(Chr('a'), Chr('b'))), "aba")
+  /** **H2.** A negative claim about every match: no string that
+      `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second
+      place. Prove it for an arbitrary match with a `forall` statement (W1),
+      and use the match through the splits it guarantees (W2). Which two
+      splits does a match supply, and what does each `Chr` side force? (D82:
+      the Dafny statement quantifies over strings because Dafny's solver
+      settles Verus's concrete "ba" claim by itself.) */
+  lemma NoXInSecondPlace()
+    ensures forall s: seq<char> :: Matches(Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z')))), s) ==> |s| >= 2 && s[1] != 'x'
   // HOLE: write the proof body.
-  // Hint(1): list every candidate first chunk of "aba" (lengths 1, 2, 3) and,
-  //    for each, the rest the star must still match.
-  // Hint(2): each candidate is decided by naming its slices as sequences;
-  //    a `forall` statement over the chunk lengths (W1) is one way to say so.
+  // Hint(1): a `forall s | <the match> ensures <the claim> { … }` statement
+  //    fixes one arbitrary match; the rest of the proof is about that `s`.
+  // Hint(2): take the outer split with `:|`, then the split of its suffix;
+  //    each `Chr` side pins one character.
 
   // item: R04.H3d
+  // uses: forall-intro, exists-elim
   // pair: R04.H3v
-  /** **H3.** Anchoring: `Cat(Chr('b'), Chr('a'))` occurs in "bba" but does not
-      match the whole string, and `Cat(Star(Chr('b')), Chr('a'))` does match
-      it. Which splits would the first `Cat` need, and which split, with how
-      many star chunks, makes the second one hold? */
+  /** **H3.** Anchoring: a whole-string match of `Cat(Cat(Chr('a'),
+      Star(Chr('b'))), Chr('c'))` begins with 'a' and ends with 'c'; an
+      occurrence would pin neither end. Prove it for every matching string,
+      from the splits a match guarantees (W2). Which split pins the last
+      character, and which pins the first? (D83: the Dafny statement uses the
+      match as a premise, so its splits must be taken with `:|`; Verus's H3
+      is the concrete "ba" claim.) */
   lemma WitnessAnchored()
-    ensures !Matches(Cat(Chr('b'), Chr('a')), "bba") && Matches(Cat(Star(Chr('b')), Chr('a')), "bba")
+    ensures forall s: seq<char> :: Matches(Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c')), s) ==> |s| >= 2 && s[0] == 'a' && s[|s| - 1] == 'c'
   // HOLE: write the proof body.
-  // Hint(1): the first conjunct is a whole-string claim; the second is H1's
-  //    kind of witness with the Star on the left, here of two chunks.
-  // Hint(2): name the `Cat` split of the second conjunct at 2, then the star's
-  //    chunks, by their slices; the empty rests count.
+  // Hint(1): the outer split's right side is `Chr('c')`, which matches one
+  //    string only; the left side is itself a `Cat`, whose split you take next.
+  // Hint(2): W2 takes a split out of a premise with `:|`; here the premise is
+  //    the antecedent of the `forall`, inside a `forall` statement (W1).
 
   // item: R04.H4d
   // pair: R04.H4v

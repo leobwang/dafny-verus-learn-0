@@ -27,7 +27,8 @@ verify with zero unfinished holes. This does not unlock a live lab run.
                                    empty-body run (Dafny maxauto and the shipped
                                    seeds; Verus every applicable mode x seed)
         wrong-hints-fail           every expression site `false`, every call
-                                   site empty: failed at verify, no holes
+                                   site empty, every decreases site `(0 as int)`:
+                                   failed at verify, no holes
       HINTS.json is {"hints": [...]} in site order; the target is the first
       R12_SOURCE_SPANS symbol. --admission writes the public summary
       (no reference body, no private path).
@@ -68,6 +69,7 @@ def analyze_form(path,core,source_task):
     checked=[]
     for site in task.sites:
         if site.kind=='expr':probes=['false']
+        elif site.kind=='decreases':probes=['(0 as int)']   # D63: a measure, never a statement
         else:
             position=text.index(site.marker)
             callers=[d for d in proof_decls if d.body and src.toks[d.body[0]].start<position<src.toks[d.body[1]].end]
@@ -101,14 +103,15 @@ def render_reference(engine,text,hints):
     if type(hints) is not list or len(hints)!=len(task.sites) or any(not isinstance(h,str) or not h for h in hints):raise ValueError('one nonempty reference hint per site')
     out=text
     for site,hint in zip(task.sites,hints):
-        if site.kind=='expr':engine._check_expression(hint,site.identifiers);out=out.replace(site.marker,'('+hint+')',1)
+        if site.kind in ('expr','decreases'):engine._check_expression(hint,site.identifiers);out=out.replace(site.marker,'('+hint+')',1)
         else:out=out.replace(site.marker,engine._proof_calls(hint,site),1)
     engine.check_source_frame(task,out)
     return task,spans,out
 
 
 def wrong_text(task,text):
-    for site in task.sites:text=text.replace(site.marker,'false' if site.kind=='expr' else '',1)
+    # wrong hints: an expression site false, a call site empty, a decreases site the constant 0
+    for site in task.sites:text=text.replace(site.marker,{'expr':'false','decreases':'(0 as int)'}.get(site.kind,''),1)
     return text
 
 
@@ -210,7 +213,7 @@ def admit(root,core,engine,form,hints_path,evidence,admission=None,log=print,shi
     if not c['wrong-hints-fail']:
         code,d=cli('wrong-hints',[vcheck,'--module','R12','--gate','--json',str(wrong)])
         checked('wrong-hints-fail','wrong-hints',d.get('verdict') in ('failed','inconclusive') and d.get('stage')=='verify' and not d.get('holes'),d)
-        report['wrong_hint_kind']='expression sites false, call sites empty'+(' (no expression site: equals the baseline)' if all(s.kind=='calls' for s in task.sites) else '')
+        report['wrong_hint_kind']='expression sites false, call sites empty, decreases sites 0'+(' (no expression site: equals the baseline)' if all(s.kind!='expr' for s in task.sites) else '')
         c['wrong-hints-fail']=True;save()
     assert all(c.values())
     report['status']='admitted';save()

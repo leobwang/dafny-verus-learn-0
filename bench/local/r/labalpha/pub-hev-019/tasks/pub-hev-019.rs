@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["char","index","is_divisible","is_prime","k","len","prime_length","result","str"]},{"name":"i2","identifiers":["char","index","is_divisible","is_prime","k","len","prime_length","result","str"]},{"name":"a3","identifiers":["char","index","is_divisible","is_prime","k","len","prime_length","result","str"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"a3"}]
 // R12_SOURCE_SPANS: [{"symbol":"prime_length","start":29,"end":47}]
 // R12 public task: humaneval-verus human_eval_082.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

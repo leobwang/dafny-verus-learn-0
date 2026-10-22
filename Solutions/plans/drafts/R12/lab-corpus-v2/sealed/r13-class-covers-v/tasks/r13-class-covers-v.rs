@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"h1","identifiers":["k","s","len"]},{"name":"h2","identifiers":["cc","contains","s","i","k","int"]}]
+// R12_HINT_SITES: [{"name":"h1"},{"name":"h2"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"class_covers_r13","start":77,"end":94}]
 use vstd::prelude::*;
 
@@ -83,7 +83,7 @@ pub fn class_covers_r13(cc: &CharClass, s: &Vec<char>) -> (b: bool)
         invariant
             /*R12_HINT:h1*/ true,
             /*R12_HINT:h2*/ true,
-        decreases s.len() - k,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         if !cc.class_member(s[k]) {
             return false;

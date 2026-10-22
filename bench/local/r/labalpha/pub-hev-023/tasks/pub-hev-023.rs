@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["i","is_prime_2","num","result","spec_prime","spec_prime_helper","u64"]},{"name":"i2","identifiers":["i","is_prime_2","num","result","spec_prime","spec_prime_helper","u64"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"d1","kind":"decreases"}]
 // R12_SOURCE_SPANS: [{"symbol":"is_prime_2","start":46,"end":66}]
 // R12 public task: humaneval-verus human_eval_127.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*
@@ -55,7 +55,7 @@ fn is_prime_2(num: u64) -> (result: bool)
         invariant
             /*R12_HINT:i1*/ true,
             /*R12_HINT:i2*/ true,
-        decreases num - i,
+        decreases /*R12_DECREASES:d1*/ (0 as int),
     {
         if num % i == 0 {
             result = false;

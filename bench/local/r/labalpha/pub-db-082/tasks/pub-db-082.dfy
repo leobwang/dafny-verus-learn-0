@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a2","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a3","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a4","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a5","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a6","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a7","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a8","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a9","identifiers":["a","f","fSum","k","n","problem6","x","y"]},{"name":"a10","identifiers":["a","f","fSum","k","n","problem6","x","y"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"d1","kind":"decreases"},{"name":"a2"},{"name":"a3"},{"name":"a4"},{"name":"a5"},{"name":"a6"},{"name":"a7"},{"name":"a8"},{"name":"a9"},{"name":"a10"}]
 // R12_SOURCE_SPANS: [{"symbol":"problem6","start":19,"end":44}]
 // R12 public task: dafnybench Prog-Fun-Solutions_tmp_tmp7_gmnz5f_mockExam2_p6.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 // problem 6:
@@ -25,7 +25,7 @@ ensures a == fSum(n)
   var y := 2;
   while k < n
   invariant /*R12_HINT:i1*/ true
-  decreases n-k
+  decreases /*R12_DECREASES:d1*/ (0 as int)
   {
     assert /*R12_HINT:a2*/ true;
     k := k + 1;

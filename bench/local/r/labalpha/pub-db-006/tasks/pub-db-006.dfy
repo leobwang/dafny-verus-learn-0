@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Getmini","Length","a","array","i","in","k","min","mini","x"]},{"name":"i2","identifiers":["Getmini","Length","a","array","i","in","k","min","mini","x"]},{"name":"i3","identifiers":["Getmini","Length","a","array","i","in","k","min","mini","x"]},{"name":"i4","identifiers":["Getmini","Length","a","array","i","in","k","min","mini","x"]},{"name":"i5","identifiers":["Getmini","Length","a","array","i","in","k","min","mini","x"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"},{"name":"i5"}]
 // R12_SOURCE_SPANS: [{"symbol":"Getmini","start":4,"end":36}]
 // R12 public task: dafnybench SENG2011_tmp_tmpgk5jq85q_exam_ex2.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method Getmini(a:array<int>) returns(mini:nat) 

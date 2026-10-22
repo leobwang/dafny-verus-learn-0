@@ -1,18 +1,1 @@
-{
- "hints": [
-  "to_seq(result) == to_seq(strings)[..i].filter(|s: Seq<char>| prefix@.is_prefix_of(s))",
-  "to_seq(strings)[..i + 1] == to_seq(strings)[..i].push(strings[i as int]@)",
-  "strings[i as int]@[..0] == prefix@[..0]",
-  "prefix@.is_prefix_of(strings[i as int]@) ==> to_seq(strings)[..i + 1].filter( |s: Seq<char>| prefix@.is_prefix_of(s), ) == to_seq(strings)[..i].filter(|s: Seq<char>| prefix@.is_prefix_of(s)).push( strings[i as int]@, )",
-  "!prefix@.is_prefix_of(strings[i as int]@) ==> to_seq(strings)[..i + 1].filter( |s: Seq<char>| prefix@.is_prefix_of(s), ) == to_seq(strings)[..i].filter(|s: Seq<char>| prefix@.is_prefix_of(s))",
-  "0 <= i < strings.len()",
-  "strings[i as int].len() >= prefix.len()",
-  "flag == (strings[i as int]@[..j] == prefix@[..j])",
-  "strings[i as int]@[..j + 1][j as int] != prefix@[..j + 1][j as int]",
-  "strings[i as int]@[..j + 1] == prefix@[..j + 1]",
-  "strings[i as int]@[..j] == strings[i as int]@[..j + 1][..j]",
-  "prefix@[..j] == prefix@[..j + 1][..j]",
-  "prefix@[..prefix.len()] == prefix@",
-  "to_seq(strings)[..strings.len()] == to_seq(strings)"
- ]
-}
+{"hints": ["to_seq(result) == to_seq(strings)[..i].filter(|s: Seq<char>| prefix@.is_prefix_of(s))", "to_seq(strings)[..i + 1] == to_seq(strings)[..i].push(strings[i as int]@)", "strings[i as int]@[..0] == prefix@[..0]", "prefix@.is_prefix_of(strings[i as int]@) ==> to_seq(strings)[..i + 1].filter( |s: Seq<char>| prefix@.is_prefix_of(s), ) == to_seq(strings)[..i].filter(|s: Seq<char>| prefix@.is_prefix_of(s)).push( strings[i as int]@, )", "!prefix@.is_prefix_of(strings[i as int]@) ==> to_seq(strings)[..i + 1].filter( |s: Seq<char>| prefix@.is_prefix_of(s), ) == to_seq(strings)[..i].filter(|s: Seq<char>| prefix@.is_prefix_of(s))", "0 <= i < strings.len()", "strings[i as int].len() >= prefix.len()", "flag == (strings[i as int]@[..j] == prefix@[..j])", "strings[i as int]@[..j + 1][j as int] != prefix@[..j + 1][j as int]", "strings[i as int]@[..j + 1] == prefix@[..j + 1]", "strings[i as int]@[..j] == strings[i as int]@[..j + 1][..j]", "prefix@[..j] == prefix@[..j + 1][..j]", "prefix@[..prefix.len()] == prefix@", "to_seq(strings)[..strings.len()] == to_seq(strings)"]}

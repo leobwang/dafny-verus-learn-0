@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["IsEven","IsEvenAtIndexEven","i","k","lst","result","seq"]},{"name":"i2","identifiers":["IsEven","IsEvenAtIndexEven","i","k","lst","result","seq"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"}]
 // R12_SOURCE_SPANS: [{"symbol":"IsEvenAtIndexEven","start":9,"end":23}]
 // R12 public task: dafnybench dafny-synthesis_task_id_790.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 predicate IsEven(n: int)

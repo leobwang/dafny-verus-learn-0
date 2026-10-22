@@ -15,7 +15,8 @@
   },
   "id": "pub-db-016",
   "lang": "dafny",
-  "private_evidence_sha256": "7a0ea7b125f366161ef2d1d2b8fd81d8bbab3fceb74149efbdc9ec86e7a4795f",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
+  "private_evidence_sha256": "faa2aa42553d836fcf3d5528a61b81f5a11ff9791d438d070ce75a9334648e5b",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -31,6 +32,10 @@
     {
       "kind": "expr",
       "name": "i2"
+    },
+    {
+      "kind": "decreases",
+      "name": "d1"
     },
     {
       "kind": "expr",
@@ -57,7 +62,7 @@
       "name": "a8"
     }
   ],
-  "source_sha256": "96f4f1aaf0baa8e508245322ae8980adb006408840cf9d012c50b1bc738f8ac7",
+  "source_sha256": "10931e0ebe172c2dfe184aea3002c04eaee373ec4c86a2529b1e6ede4d1e27f6",
   "status": "admitted",
   "target": "Pow",
   "validated_span": {
@@ -65,5 +70,5 @@
     "start": 8,
     "symbol": "Pow"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

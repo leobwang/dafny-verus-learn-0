@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"a1","identifiers":["Interval","contains","empty","i1","i2","intersect","lo","max","min","overlap","overlap_ok","r","union"]},{"name":"a2","identifiers":["Interval","contains","empty","i1","i2","intersect","lo","max","min","overlap","overlap_ok","r","union"]}]
+// R12_HINT_SITES: [{"name":"a1"},{"name":"a2"}]
 // R12_SOURCE_SPANS: [{"symbol":"overlap_ok","start":76,"end":86}]
 // R12 public task: dafnybench Program-Verification-Dataset_tmp_tmpgbdrlnu__Dafny_mathematical objects verification_examples_interval_example.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 /* Here's a small but realistic setting where you could use Dafny.

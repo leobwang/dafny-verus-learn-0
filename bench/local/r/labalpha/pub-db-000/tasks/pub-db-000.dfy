@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","a","array","i","isSorted","j","lhs","multiset","old","real","rhs","selectionSort"]},{"name":"i2","identifiers":["Length","a","array","i","isSorted","j","lhs","multiset","old","real","rhs","selectionSort"]},{"name":"i3","identifiers":["Length","a","array","i","isSorted","j","lhs","multiset","old","real","rhs","selectionSort"]},{"name":"i4","identifiers":["Length","a","array","i","isSorted","j","lhs","multiset","old","real","rhs","selectionSort"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"},{"name":"i3"},{"name":"i4"}]
 // R12_SOURCE_SPANS: [{"symbol":"selectionSort","start":18,"end":35}]
 // R12 public task: dafnybench feup-mfes_tmp_tmp6_a1y5a5_examples_SelectionSort.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 /* 

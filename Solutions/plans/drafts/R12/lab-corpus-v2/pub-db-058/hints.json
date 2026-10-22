@@ -1,8 +1,1 @@
-{
- "hints": [
-  "-1 <= i <= a.Length - 1",
-  "length(l) == a.Length - 1 - i",
-  "forall j: int :: i < j < a.Length ==> at(l,j-i-1) == a[j]",
-  "forall x :: mem(l, x) ==> exists k: int :: i < k < a.Length && a[k] == x"
- ]
-}
+{"hints": ["-1 <= i <= a.Length - 1", "length(l) == a.Length - 1 - i", "forall j: int :: i < j < a.Length ==> at(l,j-i-1) == a[j]", "forall x :: mem(l, x) ==> exists k: int :: i < k < a.Length && a[k] == x"]}

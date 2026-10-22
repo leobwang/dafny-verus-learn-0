@@ -23,7 +23,7 @@
         "cmd": [
           "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/.toolchain/dafny-4.11.0/dafny/dafny",
           "verify",
-          "/tmp/dvl0-dvr4-labalpha/l4state/pub-db-016/pub-db-016.dfy",
+          "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/pub-db-016/tasks/pub-db-016.dfy",
           "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A1_Re.dfy",
           "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A1b_Facts.dfy",
           "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/dafny/given/R/RG_A2_Deriv.dfy",
@@ -43,25 +43,17 @@
           "false",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034700-nwszu6pe/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261020-224657-39fmnf9w/tasks.csv"
         ],
         "count_unit": "tasks",
         "diagnostics": [
           {
-            "code": "W-D10",
-            "col": 1,
-            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-db-016/pub-db-016.dfy",
-            "line": 10,
-            "message": "a postcondition could not be proved on this return path",
+            "code": "",
+            "col": 5,
+            "file": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/pub-db-016/tasks/pub-db-016.dfy",
+            "line": 14,
+            "message": "decreases expression might not decrease",
             "severity": "error"
-          },
-          {
-            "code": "W-D10",
-            "col": 11,
-            "file": "/tmp/dvl0-dvr4-labalpha/l4state/pub-db-016/pub-db-016.dfy",
-            "line": 9,
-            "message": "this is the postcondition that could not be proved",
-            "severity": "related"
           }
         ],
         "exit_code": 4,
@@ -101,6 +93,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -131,11 +124,11 @@
           "RG_A4_Norm.StarOfEps": "verified",
           "pow": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034700-nwszu6pe",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261020-224657-39fmnf9w",
         "stage": "verify",
-        "target": "/tmp/dvl0-dvr4-labalpha/l4state/pub-db-016/pub-db-016.dfy",
+        "target": "/home/leobwang/code/learn/dafny-verus/dafny-verus-learn-0-labalpha/bench/local/r/labalpha/pub-db-016/tasks/pub-db-016.dfy",
         "verdict": "failed",
-        "verified_count": 62
+        "verified_count": 63
       },
       "passed": true
     },
@@ -148,7 +141,7 @@
           "3",
           "--mutations",
           "1",
-          "/tmp/dvl-test-1000/runs/dafny-eb-20261018-034726-s1e6rgt3/src/reference.dfy",
+          "/tmp/dvl-test-1000/runs/dafny-eb-20261020-224728-o6irxd_r/src/reference.dfy",
           "--json-output",
           "--resource-limit",
           "5000000",
@@ -160,7 +153,7 @@
           "false",
           "--allow-warnings",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261018-034724-nd3zy8s0/shipped-seed3/tasks.csv",
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-emptybody-20261020-224725-tveghu9l/shipped-seed3/tasks.csv",
           "--filter-symbol",
           "Pow."
         ],
@@ -192,7 +185,7 @@
           "shipped:seed=2": "failed",
           "shipped:seed=3": "failed"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261018-034724-nd3zy8s0",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-emptybody-20261020-224725-tveghu9l",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/reference.dfy",
         "verdict": "failed",
@@ -216,6 +209,11 @@
               "callee_bindings": [],
               "kind": "expr",
               "name": "i2"
+            },
+            {
+              "callee_bindings": [],
+              "kind": "decreases",
+              "name": "d1"
             },
             {
               "callee_bindings": [],
@@ -248,7 +246,7 @@
               "name": "a8"
             }
           ],
-          "source_sha256": "96f4f1aaf0baa8e508245322ae8980adb006408840cf9d012c50b1bc738f8ac7",
+          "source_sha256": "10931e0ebe172c2dfe184aea3002c04eaee373ec4c86a2529b1e6ede4d1e27f6",
           "statement_sha256": "3c3ab7273537a45f3e1284dbfe9443a61f506ebd1c143b5b0ce4ba5fd0b56df6"
         },
         "native_span": [
@@ -289,7 +287,7 @@
           "false",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034703-dqwszjzq/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261020-224700-qx_2xyj5/tasks.csv"
         ],
         "count_unit": "tasks",
         "diagnostics": [],
@@ -330,6 +328,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -360,11 +359,11 @@
           "RG_A4_Norm.StarOfEps": "verified",
           "pow": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034703-dqwszjzq",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261020-224700-qx_2xyj5",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/reference.dfy",
         "verdict": "verified",
-        "verified_count": 63
+        "verified_count": 64
       },
       "passed": true
     },
@@ -396,7 +395,7 @@
           "--allow-warnings",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034707-c_9s3q4i/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261020-224706-o2m60cwd/tasks.csv"
         ],
         "count_unit": "passed-tasks",
         "diagnostics": [],
@@ -437,6 +436,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -467,11 +467,11 @@
           "RG_A4_Norm.StarOfEps": "verified",
           "pow": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034707-c_9s3q4i",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261020-224706-o2m60cwd",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/reference.dfy",
         "verdict": "verified",
-        "verified_count": 63
+        "verified_count": 64
       },
       "passed": true
     },
@@ -503,7 +503,7 @@
           "--allow-warnings",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034711-r2rlhm05/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261020-224712-tq9r616d/tasks.csv"
         ],
         "count_unit": "passed-tasks",
         "diagnostics": [],
@@ -544,6 +544,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -574,11 +575,11 @@
           "RG_A4_Norm.StarOfEps": "verified",
           "pow": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034711-r2rlhm05",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261020-224712-tq9r616d",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/reference.dfy",
         "verdict": "verified",
-        "verified_count": 63
+        "verified_count": 64
       },
       "passed": true
     },
@@ -610,7 +611,7 @@
           "--allow-warnings",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034717-t3zqlb7i/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261020-224717-51w0kprh/tasks.csv"
         ],
         "count_unit": "passed-tasks",
         "diagnostics": [],
@@ -651,6 +652,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -681,11 +683,11 @@
           "RG_A4_Norm.StarOfEps": "verified",
           "pow": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034717-t3zqlb7i",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261020-224717-51w0kprh",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/reference.dfy",
         "verdict": "verified",
-        "verified_count": 63
+        "verified_count": 64
       },
       "passed": true
     },
@@ -714,7 +716,7 @@
           "false",
           "--manual-lemma-induction",
           "--log-format",
-          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261018-034727-daisigb_/tasks.csv"
+          "csv;LogFileName=/tmp/dvl-test-1000/runs/dafny-verify-20261020-224729-d_7qe37l/tasks.csv"
         ],
         "count_unit": "tasks",
         "diagnostics": [
@@ -764,6 +766,7 @@
           "RG_A2_Deriv.RangesContain": "verified",
           "RG_A2_Deriv.RangesValid": "verified",
           "RG_A2_Deriv.ValidCons": "verified",
+          "RG_A2_StepMatcher.MatchWord": "verified",
           "RG_A3_Syntax.BoundVal": "verified",
           "RG_A3_Syntax.ClassToRe": "verified",
           "RG_A3_Syntax.Copies": "verified",
@@ -794,23 +797,24 @@
           "RG_A4_Norm.StarOfEps": "verified",
           "pow": "verified"
         },
-        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261018-034727-daisigb_",
+        "raw_dir": "/tmp/dvl-test-1000/runs/dafny-verify-20261020-224729-d_7qe37l",
         "stage": "verify",
         "target": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/wrong.dfy",
         "verdict": "failed",
-        "verified_count": 62
+        "verified_count": 63
       },
       "passed": true
     }
   },
-  "hints_sha256": "eac275e2a50118dd25bb436f3a49522cb0dfe55a0a7c767d04f457a761bb0fcb",
+  "hints_sha256": "25dca2dcba23ad2cec0b8c393992cc224e324c3ba4fea58c5ccbd7034bb5eb51",
   "id": "pub-db-016",
   "lang": "dafny",
+  "max_auto_reading": "shipped --manual-lemma-induction (D55; maxauto recorded: failed)",
   "reference_copy": "/tmp/dvl-test-1000/dvl0-r12-admit-pub-db-016/reference.dfy",
-  "reference_sha256": "5f7393ee2c9368ad62fe63ad0aad560ea150284fe527f04d24dbf50c653ffe58",
+  "reference_sha256": "6328cb94fc014717b5c6b20e13666b73eabefe6ede63a553c4359d3a1692a56b",
   "schema": 2,
-  "source_sha256": "96f4f1aaf0baa8e508245322ae8980adb006408840cf9d012c50b1bc738f8ac7",
+  "source_sha256": "10931e0ebe172c2dfe184aea3002c04eaee373ec4c86a2529b1e6ede4d1e27f6",
   "status": "admitted",
   "target": "Pow",
-  "wrong_hint_kind": "expression sites false, call sites empty"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0"
 }

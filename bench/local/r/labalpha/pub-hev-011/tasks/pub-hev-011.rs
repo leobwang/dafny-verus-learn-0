@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"a1","identifiers":["Seq","Vec","char","drop_last","empty","filter","index","is_vowel_spec","remove_vowels","str","str_length","str_without_vowels","x"]},{"name":"i2","identifiers":["Seq","Vec","char","drop_last","empty","filter","index","is_vowel_spec","remove_vowels","str","str_length","str_without_vowels","x"]},{"name":"a3","identifiers":["Seq","Vec","char","drop_last","empty","filter","index","is_vowel_spec","remove_vowels","str","str_length","str_without_vowels","x"]},{"name":"a4","identifiers":["Seq","Vec","char","drop_last","empty","filter","index","is_vowel_spec","remove_vowels","str","str_length","str_without_vowels","x"]}]
+// R12_HINT_SITES: [{"name":"a1"},{"name":"i2"},{"name":"a3"},{"name":"a4"}]
 // R12_SOURCE_SPANS: [{"symbol":"remove_vowels","start":32,"end":52}]
 // R12 public task: humaneval-verus human_eval_051.rs (MIT (set and HumanEval prompts)); proof annotations moved into hint sites.
 /*

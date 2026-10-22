@@ -72,7 +72,7 @@ pub proof fn lemma_cat_chr_nonempty(b: Re, s: Seq<char>)
 // Cards
 // ===========================================================================
 
-// item: R04.C1v write:forall-intro
+// item: R04.C1v recognise:forall-intro
 // The given forall proof introduces an arbitrary s, not a chosen sample.
 // EXPECT: card-c1v.rs.specimen fails: its claim does not hold for every s.
 // item: R04.C2v write:exists-elim

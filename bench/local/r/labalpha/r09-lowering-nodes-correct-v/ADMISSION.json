@@ -16,7 +16,7 @@
   "id": "r09-lowering-nodes-correct-v",
   "lang": "verus",
   "max_auto_reading": "maximal automation",
-  "private_evidence_sha256": "e6316ceaa1c8645d2ee38a34d82fe308dd7f89973ab640770f05f973b8e1712b",
+  "private_evidence_sha256": "6786a047964e36290fa71ff2c9a10fe4193afb14549cdcb31ede7b3492b2d507",
   "schema": 2,
   "scope": "author native task-validity controls; no learner grade or live run",
   "seeds": [
@@ -42,7 +42,7 @@
       "name": "c4"
     }
   ],
-  "source_sha256": "8aa8b4fcea6d2ff42487a67b829370013362867a69f19cb9f1220ce75df13fac",
+  "source_sha256": "974c0b02d998fc535d2f5b3acf5d980f861906c95fadf9d2a4a8c1a547804b3e",
   "status": "admitted",
   "target": "lemma_lowering_nodes_r09",
   "validated_span": {
@@ -50,5 +50,5 @@
     "start": 281,
     "symbol": "lemma_lowering_nodes_r09"
   },
-  "wrong_hint_kind": "expression sites false, call sites empty (no expression site: equals the baseline)"
+  "wrong_hint_kind": "expression sites false, call sites empty, decreases sites 0 (no expression site: equals the baseline)"
 }

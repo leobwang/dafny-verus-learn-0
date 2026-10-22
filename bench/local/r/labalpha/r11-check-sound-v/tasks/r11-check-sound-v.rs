@@ -1,7 +1,7 @@
 // [R12 header] DO NOT OPEN BEFORE R11 IS DONE. This Lab alpha task form restates a lemma of an
 // [R12 header] earlier module (R02-R11, or layer A1b) with parts of its proof; open it from R12 on,
 // [R12 header] after those modules' first tries are recorded (a declared later-tier overlap, Delta 294).
-// R12_HINT_SITES: [{"name":"c1","identifiers":["child","r","Alt_0","s"],"kind":"calls","callees":["sound_word_r11"]},{"name":"c2","identifiers":["child","r","Alt_1","s"],"kind":"calls","callees":["sound_word_r11"]},{"name":"c3","identifiers":["left","right","r","Cat_0","Cat_1","s","take","skip","k","as","int"],"kind":"calls","callees":["sound_word_r11"]},{"name":"c4","identifiers":["left","right","r","Star_0","s","take","skip","k","as","int"],"kind":"calls","callees":["sound_word_r11"]}]
+// R12_HINT_SITES: [{"name":"c1","kind":"calls","callees":["sound_word_r11"]},{"name":"c2","kind":"calls","callees":["sound_word_r11"]},{"name":"c3","kind":"calls","callees":["sound_word_r11"]},{"name":"c4","kind":"calls","callees":["sound_word_r11"]}]
 // R12_SOURCE_SPANS: [{"symbol":"sound_word_r11","start":61,"end":86}]
 use vstd::prelude::*;
 

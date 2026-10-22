@@ -123,6 +123,17 @@ def test_the_plan_enumerates_every_id_in_order():
         B.attempt_id("A/1", "t", 1, 1)
 
 
+def test_interleaved_groups_run_first_in_adjacent_runs():
+    items = B.enumerate_plan(arms(), ["t1", "t2"], repeats=2, interleave=[["A2", "A1"]])
+    ids = [p.id for p in items]
+    assert ids[:4] == ["A2/t1/1/1", "A1/t1/1/1", "A2/t1/2/1", "A1/t1/2/1"]
+    assert ids[8:] == ["C/t1/1/1", "C/t1/2/1", "C/t2/1/1", "C/t2/2/1"]
+    assert sorted(ids) == sorted(p.id for p in B.enumerate_plan(arms(), ["t1", "t2"], repeats=2))
+    for bad in ([["A1", "A1"]], [["A1"], ["A1"]], [["Z"]], [[]]):
+        with pytest.raises(B.BudgetError):
+            B.enumerate_plan(arms(), ["t1"], interleave=bad)
+
+
 def test_a_plan_over_the_registry_budget_is_refused():
     items = B.enumerate_plan(arms(), ["t1", "t2"], repeats=2)
     ok = {"qwen_calls": 64, "qwen_runs": 8, "claude_calls": 20, "claude_runs": 4}

@@ -1,4 +1,4 @@
-// R12_HINT_SITES: [{"name":"i1","identifiers":["Length","LinearSearch","P","T","a","array","i","n"]},{"name":"i2","identifiers":["Length","LinearSearch","P","T","a","array","i","n"]}]
+// R12_HINT_SITES: [{"name":"i1"},{"name":"i2"}]
 // R12_SOURCE_SPANS: [{"symbol":"LinearSearch","start":4,"end":19}]
 // R12 public task: dafnybench Dafny_Verify_tmp_tmphq7j0row_Generated_Code_LinearSearch.dfy (Apache-2.0 (set licence; per-file upstream licence not recorded)); proof annotations moved into hint sites.
 method LinearSearch<T>(a: array<T>, P: T -> bool) returns (n: int)

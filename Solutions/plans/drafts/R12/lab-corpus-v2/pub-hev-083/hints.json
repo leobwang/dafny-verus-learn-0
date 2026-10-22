@@ -1,7 +1,1 @@
-{
- "hints": [
-  "result.len() == pos",
-  "max_so_far == seq_max(numbers@[..pos])",
-  "forall|i: int| 0 <= i < pos ==> result[i] == seq_max(numbers@[..i + 1])"
- ]
-}
+{"hints": ["result.len() == pos", "max_so_far == seq_max(numbers@[..pos])", "forall|i: int| 0 <= i < pos ==> result[i] == seq_max(numbers@[..i + 1])"]}

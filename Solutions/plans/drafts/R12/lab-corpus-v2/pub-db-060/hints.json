@@ -1,7 +1,1 @@
-{
- "hints": [
-  "0 <= i <= v.Length",
-  "b==positive(v[0..i])",
-  "!b ==> !positive(v[0..v.Length])"
- ]
-}
+{"hints": ["v.Length - i", "0 <= i <= v.Length", "b==positive(v[0..i])", "!b ==> !positive(v[0..v.Length])"]}

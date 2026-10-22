@@ -921,9 +921,8 @@ Header counts: **12 holes**, **2 test-out items** (holes), **6 predictions**.
 
 #### Constructs (registry)
 
-- `write_d = write_v = ["forall-intro", "exists-elim"]` — 2 paired units, 4 slugs.
-- `recognise_d = ["expect"]`, `recognise_v = ["assume"]`.
-- Checked uses (≥ 2 per language): forall-intro d H2d, H3d · v H2v, H3v; exists-elim d T1d, H2d, H3d · v T1v, H2v, H3v.
+- `write_d = ["forall-intro", "exists-elim"]`, `write_v = ["exists-elim"]`; `recognise_d = ["expect"]`, `recognise_v = ["assume", "forall-intro"]` (Δ303 addendum and Δ304, 2026-10-21: D82 and D83 re-pose Dafny's H2 and H3 as universals over matches, so `forall` introduction is WRITE in Dafny again; in Verus only H2 needs it, so it stays RECOGNISE there).
+- Checked uses (≥ 2 per language): forall-intro d H2d, H3d; exists-elim d T1d, H2d, H3d · v T1v, H2v.
 
 #### Agentic file (rung 6: audited prover)
 
