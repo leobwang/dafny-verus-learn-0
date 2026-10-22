@@ -2,6 +2,9 @@
 # Learner-visible; the task forms are course-authored and shipped, the answers are not here.
 # Composition under D76's fallback (b) (Δ405): 50 tasks, 30 course-local and 20 public; this
 # file grows as the author admits tasks (the running count is `cards` below against `target`).
+# The 20 public cards (pd-, pv-) were drawn by Δ413's pre-registered walk: DafnyBench's
+# hints_removed forms and vericoding's apps/verina answers with their proofs stripped. Each
+# form names its source and licence on its second line.
 # The tasks are proof-search tasks: many ship their code and statement and need the proof
 # added (loop invariants, assertions, lemma calls), the moves Q32's typed edits make.
 #
@@ -342,3 +345,263 @@ admitted = true
 admitted_on = "2026-10-21"
 maxauto_fails = false
 admission_sha256 = "f5f6fed2f56af7aa6fbe1f3cc6f12e8c2bdbc9e29a3a0f3f4d952dfba4409856"
+
+[[card]]
+id = "pd-d101-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d101-q32d/tasks/pd-d101-q32d.dfy"
+form_sha256 = "8dbfae13a2587971a066ee990dfba1c08043d9da968444e90d4600552d9aacd1"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "f517db9c4d8dde52f681a039a84342425299c5603fb825dddc7e362eac3e90af"
+
+[[card]]
+id = "pd-d102-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d102-q32d/tasks/pd-d102-q32d.dfy"
+form_sha256 = "ad052ab8ce93ecdb46a8954e14b926f022a7d9a9206c7f09a1218c8c545aeb03"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "4e983839703ef8c26ea9be989ce17f8476c67820f2f0f898708bba0cf2cf8fcd"
+
+[[card]]
+id = "pd-d103-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d103-q32d/tasks/pd-d103-q32d.dfy"
+form_sha256 = "cbdb0d5be4c4f25b9a0c277424307a55f35db5d8dff17e0d406289efcbc8711c"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "0ec5c380d07d20052334718541dc2531f73783c286280f67cac951ede6c63eb6"
+
+[[card]]
+id = "pd-d104-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d104-q32d/tasks/pd-d104-q32d.dfy"
+form_sha256 = "55949e2905ca9572d27481305d0efb74e28e998d42b5bebd08c509ad2946402c"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "b8efb110cd1f52f3f8df4303b871f9413cc48487c59392a85d02fbed9fbb3cbd"
+
+[[card]]
+id = "pd-d105-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d105-q32d/tasks/pd-d105-q32d.dfy"
+form_sha256 = "017e57d2ab2afec34eda6d12129fd12c47d25af5bac251189c7223efc94adb53"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "53b8bbdcb7b6d6a59b8c390eea6c7e47af63f971e932f3c05352ab29c5d2a976"
+
+[[card]]
+id = "pd-d106-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d106-q32d/tasks/pd-d106-q32d.dfy"
+form_sha256 = "27a774fe607e93da71238899f0d2c024541798462af38c74cc6ddb3602080a12"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "626e2ab4da24a95b386788aeb43a15c9487b064f25a8ec6d6168912ac02380b4"
+
+[[card]]
+id = "pd-d107-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d107-q32d/tasks/pd-d107-q32d.dfy"
+form_sha256 = "29262ace262e8ab76b320d3e743ab48b5cd121da5dcbefb99cc8e0623c249439"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "4dafa22d13e9160f8fdfa640bc71871100fd20449ffb8796e20441802b02d45f"
+
+[[card]]
+id = "pd-d108-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d108-q32d/tasks/pd-d108-q32d.dfy"
+form_sha256 = "4bce205c4efba899274da893a4c309bc6864160c3fc376b19d45ff9950b5adfd"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "5b90f13d687ec89a39be239d321c8a3552159e3d6d763b00b360456073daca18"
+
+[[card]]
+id = "pd-d109-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d109-q32d/tasks/pd-d109-q32d.dfy"
+form_sha256 = "baae521f1be14f96e134055b52cbe13317b3f4f5a1ec4fd92c0a03bdb894da91"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "94963c95dc417e8c790de625151abcf307e2361832686186cb2932f3378da177"
+
+[[card]]
+id = "pd-d110-q32d"
+lang = "dafny"
+source = "public"
+set = "dafnybench"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pd-d110-q32d/tasks/pd-d110-q32d.dfy"
+form_sha256 = "2c044e586a8733ba445b167191c7ea8c1bc0ea104ee55e0ba4400af24b9689b6"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = true
+admission_sha256 = "2cd0955860fe00fe79a78d0e361ad5b5182fc60dc4cbe4dd817dbfaf334cb1f8"
+
+[[card]]
+id = "pv-v101-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v101-q32d/tasks/pv-v101-q32d.rs"
+form_sha256 = "9b98fa1ed879430d825a566e3dd58dacb975d52c2ca288d82a3a20d14d4f4177"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "9017ce44d8755c23177ed0580e64eb2edf4934ba497ac4b15efe0604c6db286b"
+
+[[card]]
+id = "pv-v102-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v102-q32d/tasks/pv-v102-q32d.rs"
+form_sha256 = "3d64b9c84865b39ba36e1e2e87480fb63277dc0d95df12cad34a8a512bbaa806"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "aff6a0b6f0d69e89cd2d9732e34aaadd6f11f846d67fe4d85b7d48b838459977"
+
+[[card]]
+id = "pv-v103-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v103-q32d/tasks/pv-v103-q32d.rs"
+form_sha256 = "60a2960f4fafc00736a2acd2ff137eab040e1963347929dc54b7590f5ea4f269"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "f7d189c3d7d8e7794b1a2d022b7d76416b164d783244827706b21fa0b6ffd788"
+
+[[card]]
+id = "pv-v104-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v104-q32d/tasks/pv-v104-q32d.rs"
+form_sha256 = "0170b83599e362ef33754433829bd522284312937e0c3cbbc961afe78ded65a9"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "f10b8d3f1c8bcd673d32274f60cf4b632a8fac01f7deacde8afc39c581e0bf97"
+
+[[card]]
+id = "pv-v105-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v105-q32d/tasks/pv-v105-q32d.rs"
+form_sha256 = "65831d293abbf5ff6e79183bf31dd366b89306e653e695c1c8cb80e3da20ae39"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "45786f4a3f4254d6959ad068f44a0d9307dec06b72fb4e7bf39cb7e987f9af9c"
+
+[[card]]
+id = "pv-v106-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v106-q32d/tasks/pv-v106-q32d.rs"
+form_sha256 = "c965792131826f375b4361856a88444f71220a34f0da68dda92f6f6417bd6423"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "41b82299df6209b20788a4abfaaa0059ff8f8fe7e1492c0def31923d3bce381c"
+
+[[card]]
+id = "pv-v107-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v107-q32d/tasks/pv-v107-q32d.rs"
+form_sha256 = "fdd476eea9e3b436c5eba03a5e091c89dcacfd3964d78eb2501247263edc5e3f"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "3772e87b18f7d73460ae16a434c30ca16371d5f12d4a65a5ed4aebbfbf82be47"
+
+[[card]]
+id = "pv-v108-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v108-q32d/tasks/pv-v108-q32d.rs"
+form_sha256 = "f547f8cae8ee7ff9236de64e6c55f8aaea9de6246c4b3b22cd1be672a22966f6"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "88bdeb28aebee56b510b43d0e85aa1180cfb6b4148a6e3c4bbe6cbb7e1ff507c"
+
+[[card]]
+id = "pv-v109-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v109-q32d/tasks/pv-v109-q32d.rs"
+form_sha256 = "cdbf59d4782cdba6195e7b05e9e21e87b1c54ddbd947795daeeec69c3a302bd2"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "3a221f89ab4648f129479a8d7a7ccb426d687172674dbdaf47d3b10ed9b5b137"
+
+[[card]]
+id = "pv-v110-q32d"
+lang = "verus"
+source = "public"
+set = "vericoding"
+role = "card"
+form = "bench/local/q/agentic/q32-dev/pv-v110-q32d/tasks/pv-v110-q32d.rs"
+form_sha256 = "c026d071434d62cfbd49f86aca6797e8684eae113f6d039dc406de809262d73f"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "faa25f2633e86db3243ac337eb3110d3f0abb762186ce56854391772432dbb58"
