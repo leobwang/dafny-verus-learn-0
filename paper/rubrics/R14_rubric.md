@@ -6,8 +6,8 @@ model grading and contractor sessions remain D45 debt.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R14_solutions.tex  sha256 89c13097f2c154a4a0cc46799a27e8621dde3d8cec1317051aa677abb780ca01
 paper/R14_problems.tex  sha256 78c46d3881aa11ab4fecdf76f801b76aab0ee2fc59614f44f081d4974350070e
-Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy  sha256 463582d4431938120083524e3c243c0518336da4c8b88b2e962b1efbac1fc642
-Solutions/verus/r/r14_smt/src/lib.rs  sha256 7dceb5887bfc475c5fed5496ffcd5eb03102ec098891aa4c30523c3de5b967d6
+Solutions/dafny/R/R14_Smt/std/R14_Smt.dfy  sha256 378d623b66eeba148607689d2c06d6539842d0b9cfd85d06a778e48dbc20b5c7
+Solutions/verus/r/r14_smt/src/lib.rs  sha256 3bf09ccb86cc18f4048a36e3bc32d1e00829e32b1bb8238fd8fc3f52bc6df5fa
 Solutions/tools/R14/trigscan.py  sha256 7d4055fcd43163672f8504573bbbc99b1e4595ef9dc57c7cc0af53f637a847d5
 
 ## Verifier anchors
@@ -62,11 +62,14 @@ Solutions/tools/R14/trigscan.py  sha256 7d4055fcd43163672f8504573bbbc99b1e4595ef
 ## Code and toolsmith
 
 All hand references and final deliveries gate at zero counted holes, audit clean, and
-preserve the shipped statements (`scripts/specfreeze --check R14`). H1 is `CatIntroV`
-(the slice equations that make the left part's match a trigger term), H2 `StarPowV` (an
-induction whose step names the first chunk's slice), H3 `DerivSizeV` (a structural
-induction ending in product inequalities; in Verus `by (nonlinear_arith)` in a helper and
-the given `lemma_deriv_cat_count_v` in the Cat case: fuel is RECOGNISE, D57). Under the production bar, look for:
+preserve the shipped statements (`scripts/specfreeze --check R14`). H1 is `TwoChunksV`
+(the slice equations that make each level's left part a trigger term: `v` as a one-chunk
+word of `Star(a)`, then the split of `u + v`), H2 `StarPowV` (an induction whose step names
+the first chunk's slice), H3 `CatCaseV` (the Cat case: the squares expanded, asserted in Dafny,
+`by (nonlinear_arith)` in Verus, and in Verus the given `lemma_deriv_cat_count_v`: fuel is
+RECOGNISE, D57), H4 `DerivSizeV` (a structural induction whose Cat case is H3 and whose Alt
+and Star cases need the same kind of inequality).
+Under the production bar, look for:
 the trigger term stated rather than a lemma that restates the goal; no lever added
 (`{:induction}`, `{:fuel}` on a hole's lemma, resource attributes); nonlinear queries whose
 `requires` lists exactly what they need. The toolsmith's delivery implements only

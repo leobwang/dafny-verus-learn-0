@@ -11,13 +11,13 @@ How to work this file:
 1. Predictions first: fill the slots of the prediction block below (verdicts in
    slots/R14.slots) and of specimens/R14/P*.specimen, then record the first tries
    with `scripts/firsttry.sh R14 --check`.
-2. Replace each hole, H1 to H3, in order.
+2. Replace each hole, H1 to H4, in order.
 3. Done = `scripts/vcheck --gate dafny/R/R14_Smt/std` prints only the summary line
    and exits 0, `scripts/vaudit dafny/R/R14_Smt/std` reports no finding, AND
    `scripts/firsttry.sh R14 --report --strict` exits 0. The levers printed on the
    lemmas (`{:induction false}`) are part of the task: keep them.
 
-This file ships with exactly 3 holes: H1–H3.
+This file ships with exactly 4 holes: H1–H4.
 */
 // =============================================================================
 // Predictions (commit before you run anything they are about)
@@ -70,19 +70,33 @@ module R14_Mechanics {
     if n == 0 then [] else [c] + PowerWord(c, n - 1)
   }
 
-  // item: R14.H1d
-  // uses: trigger
-  // pair: R14.H1v
-  /** **H1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`.
-      The Cat existential in MatchesV is triggered by `MatchesV(a, s[..i])`.
-      You know `MatchesV(a, u)`: which equation makes that a term of the
-      trigger's shape for `s = u + v`? */
+  // item: R14.W1d
+  /** **W1.** (worked) A word of `a` followed by a word of `b` matches `Cat(a, b)`.
+      The Cat existential is triggered by `MatchesV(a, s[..i])`: with `s = u + v`,
+      the two equations put `u` and `v` in the equivalence classes of the split's
+      slices, so `MatchesV(a, u)` is a trigger term at `i = |u|`. */
   lemma CatIntroV(a: Re, b: Re, u: seq<char>, v: seq<char>)
     requires MatchesV(a, u) && MatchesV(b, v)
     ensures MatchesV(Cat(a, b), u + v)
-  // Hint(1): the proof is about terms, not about cases: no induction.
-  // Hint(2): the trigger needs a term `s[..i]` for the right `i`; an equation
-  //          between sequences can introduce one.
+  {
+    var s := u + v;
+    assert s[..|u|] == u;
+    assert s[|u|..] == v;
+  }
+
+  // item: R14.H1d
+  // uses: trigger
+  // pair: R14.H1v
+  /** **H1.** Two non-empty words of `a`, one after the other, match `Star(a)`.
+      The Star case of MatchesV is an existential triggered by `MatchesV(a, s[..i])`,
+      and it recurses on the rest. Which terms must the solver see for the outer
+      split of `u + v`, and which for `v` alone as a one-chunk word of `Star(a)`? */
+  lemma TwoChunksV(a: Re, u: seq<char>, v: seq<char>)
+    requires MatchesV(a, u) && MatchesV(a, v) && u != [] && v != []
+    ensures MatchesV(Star(a), u + v)
+  // Hint(1): no induction: two levels of the same existential, each waiting for its term.
+  // Hint(2): first make `MatchesV(Star(a), v)` hold through the split of `v` at `|v|`;
+  //          then split `u + v` at `|u|` with two equations between sequences.
 
   // item: R14.H2d
   // uses: trigger
@@ -100,14 +114,30 @@ module R14_Mechanics {
   // item: R14.H3d
   // uses: nonlinear-arith
   // pair: R14.H3v
-  /** **H3.** A derivative is at most twice the square of its regex's size.
+  /** **H3.** The Cat case of H4 on its own: from the two bounds on the operands'
+      derivatives, the bound on the Cat's derivative. What is left after `NodeCount`
+      and `Deriv` unfold is an inequality between products of `NodeCount(a)` and
+      `NodeCount(b)`: which one, and how do you get the solver to multiply it out? */
+  lemma CatCaseV(a: Re, b: Re, c: char)
+    requires NodeCount(A2.Deriv(a, c)) <= 2 * NodeCount(a) * NodeCount(a)
+    requires NodeCount(A2.Deriv(b, c)) <= 2 * NodeCount(b) * NodeCount(b)
+    ensures NodeCount(A2.Deriv(Cat(a, b), c)) <= 2 * NodeCount(Cat(a, b)) * NodeCount(Cat(a, b))
+  {
+    assume false;
+  }
+  // Hint(1): write `x` for `NodeCount(a)` and `y` for `NodeCount(b)`; the nullable case needs `2 + 2x^2 + y + 2y^2 <= 2(1 + x + y)^2`.
+  // Hint(2): a lemma of your own over two naturals, whose body states each square in expanded form.
+
+  // item: R14.H4d
+  // uses: nonlinear-arith
+  // pair: R14.H4v
+  /** **H4.** A derivative is at most twice the square of its regex's size.
       The induction is structural; what is left in the Alt, Cat and Star
-      cases is an inequality between products of the subterms' sizes. Which
-      inequality, and how do you get the solver to expand a square? */
+      cases is an inequality between products of the subterms' sizes; H3 is the
+      Cat case. Which inequality do the Alt and Star cases need? */
   lemma {:induction false} DerivSizeV(r: Re, c: char)
     ensures NodeCount(A2.Deriv(r, c)) <= 2 * NodeCount(r) * NodeCount(r)
-  // Hint(1): one induction call per subterm, then one arithmetic fact per
-  //          case; a helper lemma over two naturals can hold all of them.
-  // Hint(2): assert the expanded form of `2 * (1 + x + y) * (1 + x + y)`.
+  // Hint(1): one induction call per subterm; the Cat case is then H3.
+  // Hint(2): the Alt and Star cases need inequalities of H3's shape at the subterms' sizes.
 
 }

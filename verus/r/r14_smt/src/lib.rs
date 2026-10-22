@@ -8,7 +8,7 @@
 //! 0, `scripts/vaudit verus/r/r14_smt` reports no finding, AND
 //! `scripts/firsttry.sh R14 --report --strict` exits 0.
 //!
-//! This file ships with exactly 3 holes: H1–H3.
+//! This file ships with exactly 4 holes: H1–H4.
 #![allow(unused_imports)]
 use vstd::prelude::*;
 use rg_re_a1::*;
@@ -52,12 +52,11 @@ pub open spec fn power_word(c: char, n: nat) -> Seq<char>
     }
 }
 
-// item: R14.H1v
-// uses: trigger
-// pair: R14.H1d
-/// **H1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`. The Cat existential
-/// of `matches_v` is triggered by `s.subrange(0, i)`: which subrange of `u + v` must
-/// appear, and what must the solver know it equals?
+// item: R14.W1v
+/// **W1.** (worked) A word of `a` followed by a word of `b` matches `Cat(a, b)`. The Cat
+/// existential is triggered by `s.subrange(0, i)`: the two extensional equalities make
+/// `u` and `v` the split's subranges at `i = u.len()`, so `matches_v(a, u)` is a trigger
+/// term there.
 pub proof fn lemma_cat_intro_v(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
     requires
         matches_v(a, u),
@@ -65,11 +64,32 @@ pub proof fn lemma_cat_intro_v(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
     ensures
         matches_v(Re::Cat(Box::new(a), Box::new(b)), u + v),
 {
+    let s = u + v;
+    assert(s.subrange(0, u.len() as int) =~= u);
+    assert(s.subrange(u.len() as int, s.len() as int) =~= v);
+}
+
+// item: R14.H1v
+// uses: trigger
+// pair: R14.H1d
+/// **H1.** Two non-empty words of `a`, one after the other, match `Star(a)`. The Star case
+/// of `matches_v` is an existential triggered by `s.subrange(0, i)`, and it recurses on the
+/// rest. Which subranges must appear for the outer split of `u + v`, and which for `v`
+/// alone as a one-chunk word of `Star(a)`?
+pub proof fn lemma_two_chunks_v(a: Re, u: Seq<char>, v: Seq<char>)
+    requires
+        matches_v(a, u),
+        matches_v(a, v),
+        u.len() > 0,
+        v.len() > 0,
+    ensures
+        matches_v(Re::Star(Box::new(a)), u + v),
+{
     #[verifier::proof_note("R14.H1v")] assume(false);
 }
-// Hint(1): no induction: the proof is about which terms exist.
-// Hint(2): the trigger needs a term `s.subrange(0, i)` for the right `i`; an extensional
-//          equality (`=~=`) can introduce one.
+// Hint(1): no induction: two levels of the same existential, each waiting for its term.
+// Hint(2): first make `matches_v(Star(a), v)` hold through the split of `v` at `v.len()`;
+//          then split `u + v` at `u.len()` with two extensional equalities (`=~=`).
 
 // item: R14.H2v
 // uses: trigger
@@ -103,19 +123,37 @@ pub proof fn lemma_deriv_cat_count_v(a: Re, b: Re, c: char)
 // item: R14.H3v
 // uses: nonlinear-arith
 // pair: R14.H3d
-/// **H3.** A derivative is at most twice the square of its regex's size. The induction is
+/// **H3.** The Cat case of H4 on its own: from the two bounds on the operands' derivatives,
+/// the bound on the Cat's derivative. What is left once the derivative's size is known is
+/// an inequality between products of `node_count(a)` and `node_count(b)`: which one, and
+/// which prover multiplies it out? Which given fact sizes a nullable Cat's derivative?
+pub proof fn lemma_cat_case_v(a: Re, b: Re, c: char)
+    requires
+        node_count(deriv(a, c)) <= 2 * node_count(a) * node_count(a),
+        node_count(deriv(b, c)) <= 2 * node_count(b) * node_count(b),
+    ensures
+        node_count(deriv(Re::Cat(Box::new(a), Box::new(b)), c)) <= 2 * node_count(Re::Cat(Box::new(a), Box::new(b))) * node_count(Re::Cat(Box::new(a), Box::new(b))),
+{
+    #[verifier::proof_note("R14.H3v")] assume(false);
+}
+// Hint(1): write `x` for `node_count(a)` and `y` for `node_count(b)`; the nullable case needs `2 + 2x^2 + y + 2y^2 <= 2(1 + x + y)^2`.
+// Hint(2): the given `lemma_deriv_cat_count_v` states the derivative's size; a proof fn of your own proves the squares expanded `by (nonlinear_arith)`.
+
+// item: R14.H4v
+// uses: nonlinear-arith
+// pair: R14.H4d
+/// **H4.** A derivative is at most twice the square of its regex's size. The induction is
 /// structural; what is left in the Alt, Cat and Star cases is an inequality between
-/// products of the subterms' sizes, and Verus's default arithmetic does not multiply
-/// unknowns. Which prover proves it, and which given fact sizes a nullable Cat's derivative?
+/// products of the subterms' sizes; H3 is the Cat case. Which inequality do the Alt and
+/// Star cases need?
 pub proof fn lemma_deriv_size_v(r: Re, c: char)
     ensures
         node_count(deriv(r, c)) <= 2 * node_count(r) * node_count(r),
     decreases r,
 {
-    #[verifier::proof_note("R14.H3v")] assume(false);
+    #[verifier::proof_note("R14.H4v")] assume(false);
 }
-// Hint(1): one recursive call per subterm, then a helper proof fn over two naturals that
-//          states the product inequalities `by (nonlinear_arith)`.
-// Hint(2): in the Cat case, the given `lemma_deriv_cat_count_v` states the derivative's size.
+// Hint(1): one recursive call per subterm; the Cat case is then H3.
+// Hint(2): the Alt and Star cases need inequalities of H3's shape at the subterms' sizes.
 
 } // verus!

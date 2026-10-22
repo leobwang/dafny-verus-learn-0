@@ -8,7 +8,7 @@ Three ideas do all the work:
 
 ## 0. How this module works
 
-Allow 390 minutes: setup 10, reading 60, worked examples 25, cards 8, predictions 20, hand holes 70 (H1 10, H2 10, H3 15 in each language), the assertion battery 60, CV sweeps 40, the toolsmith run 30, written work 30, viva 30 and calibration 7. These are planning estimates; record your own times. R14 asks you to **write** two kinds of construct, trigger terms (H1, H2, card C1) and nonlinear facts (H3, the C5dv divergence), and to **recognise** two more, fuel levers (card C2, and the given size lemma beside H3 in Verus) and bit-vector facts (card C3, the battery): you read and explain those, the holes do not ask you to write them.
+Allow 390 minutes: setup 10, reading 60, worked examples 25, cards 8, predictions 20, hand holes 70 (H1 10, H2 10, H3 5, H4 10 in each language), the assertion battery 60, CV sweeps 40, the toolsmith run 30, written work 30, viva 30 and calibration 7. These are planning estimates; record your own times. R14 asks you to **write** two kinds of construct, trigger terms (H1, H2, card C1) and nonlinear facts (H3, H4, the C5dv divergence), and to **recognise** two more, fuel levers (card C2, and the given size lemma beside H3 in Verus) and bit-vector facts (card C3, the battery): you read and explain those, the holes do not ask you to write them.
 
 R14 is standalone and declares layer A4, so its given chain is A1–A4; it uses A1's `Re` and `NodeCount` and A2's `Deriv`. It does not use A1's `Matches`: R14 states its own copy, `MatchesV` (Verus `matches_v`), with the triggers chosen in R14's file, so every trigger question here is about a definition you can read on the page. No earlier learner file is imported.
 
@@ -16,8 +16,8 @@ R14 is standalone and declares layer A4, so its given chain is A1–A4; it uses 
 
 | path | role and shipping state |
 |---|---|
-| `dafny/R/R14_Smt/std/R14_Smt.dfy` | hand work: verified, 3 holes, 0 errors |
-| `verus/r/r14_smt/src/lib.rs` | hand work: verified, 3 holes, 0 errors |
+| `dafny/R/R14_Smt/std/R14_Smt.dfy` | hand work: verified, 4 holes, 0 errors |
+| `verus/r/r14_smt/src/lib.rs` | hand work: verified, 4 holes, 0 errors |
 | `specimens/R14/`, `slots/R14.slots` | prediction scenarios, the trigger card and chapter demonstrations; the trigger-note capture `native-triggers/` |
 | `tools/R14/trigscan.py` | toolsmith: 1 hole (`scan_trigger_notes_r14`), with its frozen tests `tools/R14/test_trigscan.py` |
 | `tools/R14/battery.py`, `tools/R14/battery.json` | the provided battery executor and its 12 frozen assertions |
@@ -42,19 +42,21 @@ The shipped hand files run in the learner loop: the holes are counted, the rest 
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R14_Smt/std
-vcheck: dafny/R/R14_Smt/std [dafny, learner loop]: verified — 64 verified, 3 holes, 0 errors
-dafny/R/R14_Smt/std/R14_Smt.dfy:82:21: hole bodyless-method R14.H1d
-dafny/R/R14_Smt/std/R14_Smt.dfy:94:21: hole bodyless-method R14.H2d
-dafny/R/R14_Smt/std/R14_Smt.dfy:108:39: hole bodyless-method R14.H3d
+vcheck: dafny/R/R14_Smt/std [dafny, learner loop]: verified — 66 verified, 4 holes, 0 errors
+dafny/R/R14_Smt/std/R14_Smt.dfy:96:21: hole bodyless-method R14.H1d
+dafny/R/R14_Smt/std/R14_Smt.dfy:108:21: hole bodyless-method R14.H2d
+dafny/R/R14_Smt/std/R14_Smt.dfy:126:5: hole assume R14.H3d
+dafny/R/R14_Smt/std/R14_Smt.dfy:139:39: hole bodyless-method R14.H4d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r14_smt
-vcheck: verus/r/r14_smt [verus, learner loop]: verified — - verified, 3 holes, 0 errors
-verus/r/r14_smt/src/lib.rs:68:40: hole assume R14.H1v
-verus/r/r14_smt/src/lib.rs:85:40: hole assume R14.H2v
-verus/r/r14_smt/src/lib.rs:115:40: hole assume R14.H3v
+vcheck: verus/r/r14_smt [verus, learner loop]: verified — - verified, 4 holes, 0 errors
+verus/r/r14_smt/src/lib.rs:88:40: hole assume R14.H1v
+verus/r/r14_smt/src/lib.rs:105:40: hole assume R14.H2v
+verus/r/r14_smt/src/lib.rs:137:40: hole assume R14.H3v
+verus/r/r14_smt/src/lib.rs:154:40: hole assume R14.H4v
 ```
 
 ---
@@ -153,7 +155,7 @@ It helps to read the Cat case once as the solver does. The goal `MatchesV(Cat(Ch
 
 Two habits follow from this reading, and the hand items rely on both. First, when a proof about a quantified definition fails, look for the term, not for a missing fact: ask which term of the trigger's shape the proof contains, and if the answer is none, write an assertion that contains one. Second, state the equation that makes the term useful. A trigger term whose argument the solver cannot relate to what it knows (a slice it cannot evaluate, a subrange it does not know equals your word) instantiates the quantifier and then leaves the body unproved. In **H1** you know facts about `u` and `v`, and the existential is about slices of `u + v`: the equations you need are the ones that say which slices those are.
 
-The assertion is not a proof step in the logical sense; `['q'][..1] == ['q']` is something the solver knows. What it adds is the term `MatchesV(Chr('q'), ['q'][..1])`, which matches the trigger with `i = 1`. That is the move **H1** asks for, on a general split rather than a one-character word. C1d (`specimens/R14/card-c1d.dfy.specimen`) is the same move on a two-character word; do it before H1.
+The assertion is not a proof step in the logical sense; `['q'][..1] == ['q']` is something the solver knows. What it adds is the term `MatchesV(Chr('q'), ['q'][..1])`, which matches the trigger with `i = 1`. The worked lemma W1 (`CatIntroV` / `lemma_cat_intro_v`) makes the same move on a general split: two equations put `u` and `v` in the classes of the split's slices. **H1** asks for it twice, at two levels of the Star existential: once to see `v` as a one-chunk word of `Star(a)`, once for the split of `u + v`. C1d (`specimens/R14/card-c1d.dfy.specimen`) is the move on a two-character word; do it before H1.
 
 Verus states the same definition with a different trigger. A trigger on the recursive call, as Dafny has it, names a copy of `matches_v` *inside its own definition*: Verus encodes a recursive spec function with fuel, and the call in the body is the fuel-indexed copy, which no term outside the definition matches. The same one-character proof, with the extensionality assertions and even with extra fuel, fails:
 
@@ -426,11 +428,11 @@ vcheck: P2-v.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
 P2-v.rs:8:9: error: postcondition not satisfied
 ```
 
-`D:verified V:failed`. Dafny lets Z3 use its nonlinear arithmetic on every query (unless a module turns it off with `{:disableNonlinearArithmetic}`); Verus does not, and a nonlinear fact needs `by (nonlinear_arith)`, a separate query in which the solver may multiply, with only the facts the `requires` of the `by` names. C5dv is this divergence, and it decides how **H3** is written in each language. H3 bounds a derivative's size by twice the square of its regex's size: the induction is structural and easy; each case then needs an inequality between products, such as `2 + 2x^2 + y + 2y^2 <= 2(1 + x + y)^2` for the nullable Cat case. Dafny proves it once the square is stated in expanded form; Verus proves it `by (nonlinear_arith)` in a helper of its own, so that the nonlinear query sees two naturals and nothing else.
+`D:verified V:failed`. Dafny lets Z3 use its nonlinear arithmetic on every query (unless a module turns it off with `{:disableNonlinearArithmetic}`); Verus does not, and a nonlinear fact needs `by (nonlinear_arith)`, a separate query in which the solver may multiply, with only the facts the `requires` of the `by` names. C5dv is this divergence, and it decides how **H3** is written in each language. **H4** bounds a derivative's size by twice the square of its regex's size: the induction is structural and easy; each case then needs an inequality between products, such as `2 + 2x^2 + y + 2y^2 <= 2(1 + x + y)^2` for the nullable Cat case. **H3** is H4's Cat case on its own: from the bounds on the two operands' derivatives, the bound on the Cat's. Dafny proves the inequality once each square is stated in expanded form; Verus proves the expansions `by (nonlinear_arith)` in a proof fn of your own over two naturals, so that each nonlinear query sees two naturals and nothing else. H4 calls H3 in its Cat case and needs inequalities of the same shape in the Alt and Star cases.
 
-Where the inequality comes from is worth working once by hand, because it is the part of H3 that no tactic writes for you. Write `x` for `NodeCount(a)` and `y` for `NodeCount(b)`, so `NodeCount(Cat(a, b)) = 1 + x + y`. A2's derivative of a Cat is, when `a` is nullable, `Alt(Cat(Deriv(a, c), b), Deriv(b, c))`, whose size is `1 + (1 + NodeCount(Deriv(a, c)) + y) + NodeCount(Deriv(b, c))`. The two induction hypotheses bound the inner derivatives by `2x^2` and `2y^2`, so the size is at most `2 + 2x^2 + y + 2y^2`. The goal is that this is at most `2(1 + x + y)^2 = 2 + 4x + 4y + 2x^2 + 4xy + 2y^2`, and the difference, `4x + 3y + 4xy`, is non-negative for naturals. The solver can do the last step only once it sees the square multiplied out; the reference states the expansion as an assertion (Dafny) or proves the inequality in a helper `by (nonlinear_arith)` (Verus). The Alt case has the same shape with one fewer constant, and the Star case is the one-variable version, `2 + 2x^2 + x <= 2(1 + x)^2`. A useful check before you write anything: substitute small numbers (`x = y = 1`: the size bound is `7`, the goal `18`) and make sure the inequality you are about to ask for is the one the case needs.
+Where the inequality comes from is worth working once by hand, because it is the part of H3 and H4 that no tactic writes for you. Write `x` for `NodeCount(a)` and `y` for `NodeCount(b)`, so `NodeCount(Cat(a, b)) = 1 + x + y`. A2's derivative of a Cat is, when `a` is nullable, `Alt(Cat(Deriv(a, c), b), Deriv(b, c))`, whose size is `1 + (1 + NodeCount(Deriv(a, c)) + y) + NodeCount(Deriv(b, c))`. The two induction hypotheses bound the inner derivatives by `2x^2` and `2y^2`, so the size is at most `2 + 2x^2 + y + 2y^2`. The goal is that this is at most `2(1 + x + y)^2 = 2 + 4x + 4y + 2x^2 + 4xy + 2y^2`, and the difference, `4x + 3y + 4xy`, is non-negative for naturals. The solver can do the last step only once it sees the square multiplied out; The references state each expansion as an assertion (Dafny) or prove it `by (nonlinear_arith)` (Verus), in one helper over two naturals that H3 and H4 share. The Alt case has the same shape with one fewer constant, and the Star case is the one-variable version, `2 + 2x^2 + x <= 2(1 + x)^2`. A useful check before you write anything: substitute small numbers (`x = y = 1`: the size bound is `7`, the goal `18`) and make sure the inequality you are about to ask for is the one the case needs.
 
-In Verus the Cat case asks for one more thing. The size of the nullable derivative is a `node_count` of an `Alt` whose left part is a `Cat`: three levels of the recursive definition, where Verus opens one by default. Without that unfolding the solver knows nothing about the size of the `Alt` beyond its name, and the arithmetic fact, however well proved, is about different terms. This is §4's depth question inside an arithmetic proof. Fuel is a RECOGNISE construct in R14 (you read it; the holes do not ask you to write it), so the Verus file gives the unfolded size as a lemma, `lemma_deriv_cat_count_v`, whose body is the one `reveal_with_fuel(node_count, 3)`: read it, and call it in H3's Cat case.
+In Verus the Cat case asks for one more thing. The size of the nullable derivative is a `node_count` of an `Alt` whose left part is a `Cat`: three levels of the recursive definition, where Verus opens one by default. Without that unfolding the solver knows nothing about the size of the `Alt` beyond its name, and the arithmetic fact, however well proved, is about different terms. This is §4's depth question inside an arithmetic proof. Fuel is a RECOGNISE construct in R14 (you read it; the holes do not ask you to write it), so the Verus file gives the unfolded size as a lemma, `lemma_deriv_cat_count_v`, whose body is the one `reveal_with_fuel(node_count, 3)`: read it, and call it in H3.
 
 Bit-vectors are the other theory R14 uses, for code points. A code point `c` lies in the surrogate block `0xD800..0xDFFF` exactly when `c & 0xFFFFF800 == 0xD800`. *Commit P3 and P4 first.* P3d's answer is `55296` (`0xD800`) and P4v's is `57344` (`0xE000`): the mask keeps the bits above the low eleven. In Dafny a `bv32` value is a bit-vector and the fact is native:
 
@@ -554,9 +556,9 @@ Open `paper/R14_problems.tex` and answer in `paper/R14_answers.tex`; allow 15 mi
 
 ## 10. The exercise file
 
-Run `scripts/firsttry.sh R14 --check` once your five predictions are committed, then the holes in order. **H1** `CatIntroV` / `lemma_cat_intro_v`: a word of `a` followed by a word of `b` matches `Cat(a, b)`; the proof is the trigger term of the split (§1). **H2** `StarPowV` / `lemma_star_pow_v`: every power of `c` matches `Star(Chr(c))`; an induction whose step needs a trigger term (§1, §4). **H3** `DerivSizeV` / `lemma_deriv_size_v`: a derivative's size is at most twice the square of its regex's size; a structural induction whose cases end in product inequalities (§5); in Verus the Cat case also calls the given size lemma whose body is a fuel lever (§4, §5). Each hole has a prompt with a guiding question and two hints; the second names the fact or the lever, never the proof. Do the trigger card, C1d and C1v (`specimens/R14/card-c1*.specimen`), before H1.
+Run `scripts/firsttry.sh R14 --check` once your five predictions are committed, then the holes in order. **H1** `TwoChunksV` / `lemma_two_chunks_v`: two non-empty words of `a`, one after the other, match `Star(a)`; the proof is the trigger terms of two levels of the same existential, the outer split of `u + v` and `v` as a one-chunk word (§1). **H2** `StarPowV` / `lemma_star_pow_v`: every power of `c` matches `Star(Chr(c))`; an induction whose step needs a trigger term (§1, §4). **H3** `CatCaseV` / `lemma_cat_case_v`: the Cat case of H4, a product inequality once the derivative's size is known (§5); in Verus it calls the given size lemma whose body is a fuel lever (§4, §5). **H4** `DerivSizeV` / `lemma_deriv_size_v`: a derivative's size is at most twice the square of its regex's size; a structural induction whose Cat case is H3 and whose Alt and Star cases need inequalities of the same shape (§5). Each hole has a prompt with a guiding question and two hints; the second names the fact or the lever, never the proof. Do the trigger card, C1d and C1v (`specimens/R14/card-c1*.specimen`), before H1.
 
-Keep the levers that are printed: the Dafny lemmas H2 and H3 carry `{:induction false}`, so that no automatic induction (off in this tier's options, on under Dafny's defaults) makes the recursive call the item asks of you. Do not add a resource attribute, an `{:induction}` or a fuel attribute to a hole's lemma; `scripts/firsttry.sh R14 --report --strict` reports levers that were removed, and the review reads the ones that were added.
+Keep the levers that are printed: the Dafny lemmas H2 and H4 carry `{:induction false}`, so that no automatic induction (off in this tier's options, on under Dafny's defaults) makes the recursive call the item asks of you. Do not add a resource attribute, an `{:induction}` or a fuel attribute to a hole's lemma; `scripts/firsttry.sh R14 --report --strict` reports levers that were removed, and the review reads the ones that were added.
 
 Done = `scripts/vcheck --gate dafny/R/R14_Smt/std` and `scripts/vcheck --gate verus/r/r14_smt` print only their summary lines and exit 0, `scripts/vaudit` on both reports no finding, `scripts/specfreeze --check R14` reports none, `python3 tools/R14/test_trigscan.py` passes, `python3 tools/R14/battery.py --output DIR` closes all twelve cells, AND `scripts/firsttry.sh R14 --report --strict` exits 0.
 

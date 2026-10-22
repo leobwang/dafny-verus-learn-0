@@ -15,21 +15,25 @@ lang = "d"
 open_bodies = []
 frozen_levers = ["R14_Mechanics.DerivSizeV {:induction false}", "R14_Mechanics.StarPowV {:induction false}"]
 [file.statements]
+"R14_Mechanics.CatCaseV" = "e0d30db087c2eb8ffa88adeb3e3d40c8e866e735abecaf4f0bd988eff8fada1b"
 "R14_Mechanics.CatIntroV" = "fed2a8145016196b10d25cc723e86fe51cde04f7c4d7106eca279a1fc13ca9ff"
 "R14_Mechanics.DerivSizeV" = "fcff100be251329a13a4890b873a9f6f8be2fc978ef5cf32b0fa90df6d034605"
 "R14_Mechanics.MatchesV" = "609aa4fa822455c982d32316ef27eccd6ef003d1f0656b18fd24a2f147f171b6"
 "R14_Mechanics.PowerWord" = "d212a69f4db2767d9377ed55f893a1a592f27e1472cd7784720f89955d56a427"
 "R14_Mechanics.StarPowV" = "b30546f80421004040f79f9f73e3e73a9e6c1d05a04c21a1f7529ee8cfebe1d5"
+"R14_Mechanics.TwoChunksV" = "30eb24039a7c5ccca4a6f565f7b663bfeb68e9c237d7bcf12d4b1e6c4154e59d"
 
 [[file]]
 path = "verus/r/r14_smt/src/lib.rs"
 lang = "v"
 open_bodies = []
 [file.statements]
+"lemma_cat_case_v" = "47a628e3cf5204d86995b74973cccf720ac274c386a4f28c37e1b08d350c1883"
 "lemma_cat_intro_v" = "8f356e497b0f0343ac18ee37045d930210e9885997e3c1f1fd96fa1860349aa6"
 "lemma_deriv_cat_count_v" = "0b04d47ae5e2e00894024380862bf7c8afb9f497fff162cda55f9f5815ea9eeb"
 "lemma_deriv_size_v" = "ba443c495a014ce1673642a82884b4f8e7a75736b962481cdce6d376bf87e775"
 "lemma_star_pow_v" = "d94adebd9c81aa10c22e853bfe66dfb5b1bc6442aec1cab3e6ea2126e84b1c86"
+"lemma_two_chunks_v" = "e1711e98f399e6a0ae1a678d48df54a86c609a7c6b1f21c6797b942d09d246e9"
 "matches_v" = "6be7ee3af63c3d4efd33e6ba258fd2263e6a631e4e64cef3544f24899a1e7c8f"
 "power_word" = "94b5459c7319b0680a743cf0b4e081709ee0aefdd82450149cfdf2f33f8267a6"
 
