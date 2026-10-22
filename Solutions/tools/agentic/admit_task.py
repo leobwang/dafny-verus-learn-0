@@ -16,8 +16,11 @@ wrappers, one solver job at a time (they run under the wrappers' caps):
   5 stable           scripts/vcheck --brittleness --json [--solvers] <answer>: stable
                      (Dafny over every bundled Z3: solver diversity, not independent
                      checking)
-  6 maxauto (Dafny, recorded, not required): the form with its `{:induction false}`
-                     removed still fails at verify
+  6 maxauto (Dafny): the form with its `{:induction false}` removed still fails at
+                     verify. Recorded for every task; REQUIRED for a Q32 tranche task
+                     (QPLAN §34.4, Δ412): when --tranche is given or the form's path
+                     names a q32-t<k> stratum, a Dafny task maxauto closes is not
+                     admitted, so the check cannot be skipped
 
 A memory kill (137/143) or the wrappers' wall-clock kill (124) is recorded as such and
 the task is not admitted; it is never re-run for a better row. The evidence JSON (the
@@ -60,7 +63,10 @@ def fields(doc, keys=("verdict", "stage", "verified_count", "stable")):
 WORK = Path.home() / ".cache/dafny-verus-learn-0/author-probes/dv7-build/admit-work"
 
 
-def admit(form, answer):
+TRANCHE = re.compile(r"(^|/)q32-t\d+(/|$)")
+
+
+def admit(form, answer, tranche=False):
     """vcheck refuses a reference path, so the answer is verified as a copy outside the
     tree (the reference class's author scratch), named as the task form is."""
     lang = "dafny" if form.endswith(".dfy") else "verus"
@@ -99,6 +105,12 @@ def admit(form, answer):
             code, doc = run([vc, "--gate", "--json", str(f)])
             ev["maxauto"] = {"exit": code, "doc": fields(doc),
                              "fails": isinstance(doc, dict) and doc.get("verdict") == "failed"}
+            if code in KILLS:
+                ev["maxauto"]["killed"] = KILLS[code]
+        if tranche or TRANCHE.search(str(form)):
+            ev["maxauto"]["required"] = True
+            ev["maxauto"]["ok"] = ev["maxauto"]["fails"]
+            ok = ok and ev["maxauto"]["fails"]
     ev["admitted"] = ok
     return ev
 
@@ -108,8 +120,10 @@ def main(argv=None):
     ap.add_argument("form")
     ap.add_argument("answer")
     ap.add_argument("--out")
+    ap.add_argument("--tranche", action="store_true",
+                    help="a Q32 tranche task: maxauto must fail (also inferred from the path)")
     a = ap.parse_args(argv)
-    ev = admit(a.form, a.answer)
+    ev = admit(a.form, a.answer, tranche=a.tranche)
     text = json.dumps(ev, indent=1, sort_keys=True)
     if a.out:
         Path(a.out).parent.mkdir(parents=True, exist_ok=True)

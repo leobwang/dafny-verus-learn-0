@@ -301,6 +301,8 @@
 | 409 | Sealing topic (e) task parts (`seal_hidden.py --tasks`, `fvh unseal` under agentic/); Q31's held-out course-local stratum, 36 tasks, authored and admitted in the author archive and sealed | adopted (DV7 W3, 2026-10-21) | DV7's W3 lane |
 | 410 | Q32's sealed tranches T1, T2 and T3 (72 course-local tasks), authored and admitted in the author archive, sealed with one canary per tranche; the sealed-name history check | adopted (DV7 W3, 2026-10-21); the count grows in place | DV7's W3 lane |
 | 411 | Q31's public held-out draw (24 cards + 5 Dafny spares) pre-registered with a secret, sha256-pinned seed; D76's unseal-time exclusion and spare replacement in `fvh unseal` | adopted (DV7 W3, 2026-10-21) | DV7's W3 lane |
+| 412 | Q32 tranche admission as §34.4 writes it: maxauto enforced (10 cards replaced; admission and a strata test enforce it), the one-shot leg a census at par-run (D68); a mechanical dev/sealed theme check (tags author-side; 26 clashes found, all replaced) | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane; W1b |
+| 413 | The remaining public draws pre-registered (Q31 dev 16, Q32 dev 20, each tranche 16 + 4 Dafny spares) with a second secret seed; Δ411's walk amended by the theme step and re-walked | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane |
 
 ## A. Holes and hole counting
 
@@ -4054,4 +4056,32 @@
   - Nothing was run through a model.
   - The full author CI on 98f4c3f, the tip before this work, passed 14 / 14 (16 270 s, outer 20 GB scope).
 - **The dev draw.** Q31 dev's 16 public cards (8 Dafny, 8 Verus) come later. Their draw excludes every member this walk considered, so the two draws are disjoint.
+- **Owner:** DV7's W3 lane.
+
+### Δ412 · Q32 tranche admission as §34.4 writes it (maxauto enforced, the one-shot leg a census at par-run); a mechanical theme check between dev and sealed sets — adopted (DV7 W3, 2026-10-22; the coordinator's (a))
+- **The gap.** §34.4 admits a tranche task only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample. The 72 course-local tranche tasks were admitted under the standard admission, which records maxauto but does not require it. Ten Dafny tranche cards had `maxauto_fails = false` (3 in T1, 3 in T2, 4 in T3).
+- **Maxauto, enforced.**
+  - The ten cards are replaced by new course-local tasks that fail under maxauto.
+  - `Solutions/tools/agentic/admit_task.py` now requires maxauto for every Q32 tranche task, course-local or public. The requirement applies with `--tranche`, or whenever the form's path names a `q32-t<k>` stratum, so it cannot be skipped by omission.
+  - `tests/bench/test_agentic_strata.py` fails if any tranche Dafny card has `maxauto_fails` other than `true`.
+- **The one-shot leg, moved to the grader.** The author never runs a model on a sealed or held-out task (D68). The one-shot-baselines filter therefore cannot run at admission. It runs in the grader container at par-run (W1b): any tranche task that the first one-shot sample closes is dropped from the analysis. This is pre-registered as a census, so the dropped tasks are counted and reported, never replaced or re-drawn. The scripted no-op leg holds at admission, since every form fails at verify.
+- **The theme check.** Δ409 said held-out themes differ from the dev strata's, but no tool checked it, and T2 and T3 had cards that pose a dev task's problem.
+  - Every card now carries a theme tag: `<shape>:<operation>[:<class>]`, with constants abstracted, max one operation with argmax, and min one with argmin. The tags are kept in the author archive, not the tree, because a sealed card's tags would hint at its content.
+  - The admission tooling refuses a task that has no tag. It also refuses a sealed card that shares a tag with any dev card.
+  - Run over every sealed stratum, the check found 26 clashes: 4 in Q31 held-out (1 course-local, 3 public), 1 in T1, 8 in T2 and 13 in T3. Three more cards, named to the coordinator by hand, are replaced too.
+  - The course-local ones are replaced by new tasks with fresh tags. The public ones leave by Δ413's amended walk.
+  - Each replacement was name-checked, including a substring scan of the HEAD, authoring, sysb and labalpha trees, and admitted as before. No opaque id names two tasks.
+- **Re-seal.** Each tranche is re-sealed once, with these fixes and its public cards (Δ413). The sealed-name history check runs after each seal.
+- **Owner:** DV7's W3 lane; W1b for the census at par-run.
+
+### Δ413 · The remaining public draws, pre-registered; Δ411's walk amended by the theme step — adopted (DV7 W3, 2026-10-22)
+- **The rule** (the docstring of the author tool `public_draw2.py`, whose sha256 is `38607eb4e685b58c7c72f65593a7e52596dd7bda24283aa10d8f7c706b2a67ef`):
+  - The parts are walked in this order: the Q31 held-out re-walk, Q31 dev (8 Dafny + 8 Verus), Q32 dev (10 + 10), then T1, T2 and T3. Each tranche takes 8 Dafny + 4 Dafny spares (ceil(0.2 × 16)) + 8 Verus.
+  - The checks are Δ411's X0–X2 and A, with three changes:
+    - X0 also excludes every member that an earlier part's walk considered, so all the draws are disjoint.
+    - The new step X3 needs the author's theme tag on the member before its admission. A sealed part's member is skipped when it shares a tag with a dev card. A dev part's member is skipped when it shares a tag with a sealed card, so neither side gains a shared theme.
+    - A tranche member must fail under maxauto (Δ412).
+  - The Q31 held-out re-walk replays Δ411's order (same secret seed) with X3 inserted. It reuses Δ411's admission record for every member Δ411 admitted, and takes the next members where X3 skips one.
+  - The other parts use a second secret seed, whose sha256 is `46f64c1b66ee48d56b61c23d84648eceda1caed77ebaaca3714302c2a112cf2d`. Both seeds, the orders and the walk records are published when the parts are unsealed.
+- **Dev cards.** The Q31 and Q32 dev strata are open. Their public forms ship under `bench/local/q/agentic/<dev>/<id>/tasks/`, each with its source and licence on its second line. The answers go under `Solutions/` like the course-local references.
 - **Owner:** DV7's W3 lane.

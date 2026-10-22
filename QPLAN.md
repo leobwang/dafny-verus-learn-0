@@ -3805,7 +3805,7 @@ Par: the frozen par agent (one-shot baselines) on the same 60 held-out tasks, be
 | part | size | composition | sealed |
 |---|---|---|---|
 | dev | 50 (25 D, 25 V) | 30 course-local, 20 public (Δ405) | open |
-| tranches T1–T3 | 3 × 40 (each 20 D, 20 V) | each 24 course-local, 16 public (Δ405); a task is admitted only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample (the analogue of the Lean "closed by a library search in 10 s" filter) | `Hidden/Agentic/Q32/T<k>.tar.age`, each single use, retired after its run |
+| tranches T1–T3 | 3 × 40 (each 20 D, 20 V) | each 24 course-local, 16 public (Δ405); a task is admitted only if it fails under maximal automation and under the scripted no-op and one-shot baselines' first sample (the analogue of the Lean "closed by a library search in 10 s" filter); **as built (Δ412):** admission enforces maxauto and the scripted no-op leg, and a strata test checks maxauto; the one-shot leg needs a model, which the author never runs on a sealed task (D68), so it runs in the grader container at par-run, where any task the first one-shot sample closes is dropped from the analysis, pre-registered as a census; no tranche card shares a theme tag with a dev card (Δ412's check) | `Hidden/Agentic/Q32/T<k>.tar.age`, each single use, retired after its run |
 | par agent | — | the course's frozen searcher (code only; D68), run per tranche beside the learner's agent | `Hidden/Agentic/Q32/par-agent.tar.age` |
 
 ### 34.5 Grading, and what a result may conclude
