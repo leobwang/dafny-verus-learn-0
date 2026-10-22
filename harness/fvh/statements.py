@@ -46,6 +46,17 @@ seal is the author's only override). With `into` (a directory outside the course
 tree, required with `once`), the cards are written there and not into the stratum
 directory, and no UNSEALED.toml is written (the ledger is the record).
 
+Public cards (D76; QPLAN §33.4, DELTAS Δ411). A card with `source = "public"` names its
+public task in its sealed form's second line (`// Source: <set> <task file> (...)`), and is
+either a `role = "card"` or a `role = "spare"` with a `spare_order`. Before anything is
+written, every public card whose task the learner has met is excluded: a task file named
+in Lab 1's stratum (bench/local/q/lab1/STRATUM.toml) or run records (research/runs/Q12/),
+in any lab's [[draw]] record (bench/public/POOLS.toml) or in Lab alpha's lists
+(bench/local/r/labalpha/STRATUM.toml, FREEZE.toml) when the tree has them. Each excluded
+card is replaced by the next spare, in spare order, that is not excluded itself; the part
+is refused when the spares run out. Unused spares are not written. The replacements (card
+ids only) go into the result and the ledger entry.
+
 Refusals (StatementsRefused, exit 3 at the command line) name the file and the
 reason; nothing is written before every check passes. Frozen (guard rule 2f),
 standard library only.
@@ -73,6 +84,11 @@ AGE = "~/.local/bin/age"
 MAX_PLAIN = 64 << 20
 _CARD = re.compile(r"[a-z0-9][a-z0-9-]{0,63}")
 _SHA = re.compile(r"[0-9a-f]{64}")
+_SOURCE = re.compile(rb"^// Source: (\S+) (\S+) \(", re.M)
+_TASK_FILE = re.compile(r"[\w.+-]+\.(?:dfy|rs)")
+SEEN_FILES = ("bench/local/q/lab1/STRATUM.toml", "bench/public/POOLS.toml",
+              "bench/local/r/labalpha/STRATUM.toml", "bench/local/r/labalpha/FREEZE.toml")
+SEEN_DIRS = ("research/runs/Q12",)
 
 
 class StatementsRefused(RuntimeError):
@@ -220,6 +236,68 @@ def _manifest(files: dict) -> tuple:
     return listed, _sha(man)
 
 
+def learner_seen(root) -> set:
+    """D76's unseal-time exclusion: the task file names the learner's tree records as met
+    (Lab 1's stratum and run records, every [[draw]] record, Lab alpha's lists)."""
+    root = Path(root)
+    paths = [root / rel for rel in SEEN_FILES]
+    for rel in SEEN_DIRS:
+        d = root / rel
+        if d.is_dir():
+            paths += sorted(p for p in d.rglob("*") if p.is_file())
+    seen = set()
+    for p in paths:
+        try:
+            if not p.is_file() or p.is_symlink() or p.stat().st_size > MAX_PLAIN:
+                continue
+            text = p.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if p.name == "POOLS.toml":
+            # the pools list every member; only the [[draw]] records say what a lab took
+            try:
+                draws = tomllib.loads(text).get("draw", [])
+            except ValueError:
+                draws = []
+            text = json.dumps(draws)
+        seen.update(_TASK_FILE.findall(text))
+    return seen
+
+
+def _public_plan(rel_sp, meta, files, seen) -> tuple:
+    """(ids of the public cards not to write, [(excluded card, its spare)]) for one
+    stratum, or StatementsRefused when the spares run out."""
+    pub = [c for c in meta.get("card", []) if c.get("source") == "public"]
+    if not pub:
+        return set(), []
+
+    def task_of(c):
+        for rel, body in files.items():
+            if rel.startswith(f"{c.get('id')}/tasks/"):
+                m = _SOURCE.search(body)
+                if m:
+                    return m.group(2).decode("utf-8", "replace")
+        raise StatementsRefused(f"{rel_sp}: public card {c.get('id')} names no source")
+
+    cards = [c for c in pub if c.get("role", "card") == "card"]
+    spares = sorted((c for c in pub if c.get("role") == "spare"),
+                    key=lambda c: int(c.get("spare_order") or 0))
+    free = [s for s in spares if task_of(s) not in seen]
+    keep, replaced = set(), []
+    for c in cards:
+        if task_of(c) not in seen:
+            keep.add(c["id"])
+            continue
+        if not free:
+            raise StatementsRefused(f"{rel_sp}: {len([x for x in cards if task_of(x) in seen])} "
+                                    "public card(s) are tasks you have met (D76's exclusion) and "
+                                    "the spares have run out: this part cannot be unsealed")
+        s = free.pop(0)
+        keep.add(s["id"])
+        replaced.append((c["id"], s["id"]))
+    return {c["id"] for c in pub} - keep, replaced
+
+
 def _canon(obj):
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
@@ -266,6 +344,7 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
             raise StatementsRefused(f"{into}: a single-use part is written outside the course tree")
     ledger = unseal_ledger(root) if once else []
     committed = check(root, module)
+    seen = learner_seen(root)
     strata = sealed_strata(root, module)
     if part is not None:
         strata = [sp for sp in strata
@@ -320,6 +399,7 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
             raise StatementsRefused(f"{rel_sp}: the archive's manifest differs from the "
                                     "stratum's pins (manifest_sha256, files)")
         cards = {c.get("id") for c in meta.get("card", [])}
+        skip, replaced = _public_plan(rel_sp, meta, files, seen)
         writes = []
         for rel in sorted(listed):
             parts = rel.split("/")
@@ -327,6 +407,8 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
                     or not _CARD.fullmatch(parts[0])):
                 raise StatementsRefused(f"{rel_sp}: the archive holds a file that is not a "
                                         "listed card's task file")
+            if parts[0] in skip:
+                continue
             dest = (into / rel) if into is not None else sp.parent / rel
             shown = dest if into is not None else dest.relative_to(root)
             if dest.is_symlink() or (dest.exists() and not dest.is_file()):
@@ -335,9 +417,9 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
                 raise StatementsRefused(f"{shown} exists and differs from the "
                                         "sealed task: nothing is overwritten")
             writes.append((dest, files[rel]))
-        plans.append((sp, meta, _sha(data), man_sha, writes))
+        plans.append((sp, meta, _sha(data), man_sha, writes, replaced))
     out = {"statements": committed, "strata": []}
-    for sp, meta, arc_sha, man_sha, writes in plans:
+    for sp, meta, arc_sha, man_sha, writes, replaced in plans:
         written = kept = 0
         for dest, body in writes:
             if dest.is_file():
@@ -351,6 +433,8 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
         rec = {"stratum": sp.relative_to(root).as_posix(), "archive_sha256": arc_sha,
                "manifest_sha256": man_sha, "files": len(writes), "written": written,
                "kept": kept}
+        if replaced:
+            rec["public_replaced"] = [list(x) for x in replaced]
         if not dry_run and once:
             prev = (_sha(_canon(ledger[-1]).encode("utf-8")) if ledger else GENESIS)
             entry = {"seq": len(ledger) + 1, "prev": prev,
@@ -358,6 +442,8 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
                      "module": module, "part": part, "stratum": sp.relative_to(root).as_posix(),
                      "archive_sha256": arc_sha, "manifest_sha256": man_sha, "files": len(writes),
                      "statements": dict(sorted(committed.items()))}
+            if replaced:
+                entry["public_replaced"] = [list(x) for x in replaced]
             lp = root / LEDGER
             lp.parent.mkdir(parents=True, exist_ok=True)
             with open(lp, "a", encoding="utf-8") as f:

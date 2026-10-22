@@ -4089,6 +4089,7 @@ pass@1 on 60 tasks at 50 %: Wilson [0.377, 0.623] (±12 pp); on 120: [0.412, 0.5
   - The result and the decision are recorded in a DELTAS entry before W3 draws any public task.
 - **W3's order:** W1b's par-run route first (QPLAN §39).
 - **Applied (Δ405, 2026-10-21):** the full sample gave **v = 12 valid of 40** (7 unchanged by the strip, 21 forms still verifying as stripped), a projection of ⌊268 · 12 / 40⌋ = **80 < 81**, so **fallback (b) applies**: every topic (e) task set is 60 % course-local and 40 % public, sizes unchanged (Q31 dev 24 + 16, held-out 36 + 24; Q32 dev 30 + 20, each tranche 24 + 16; Q33's pairs and tickets are already ≥ 60 % course-authored and do not change). Public needs fall to 54 Verus and 54 Dafny tasks; the stripped apps/verina supply projects 80 valid Verus tasks, and the Dafny tasks come from DafnyBench under D76's exclusion with its spares. Course-local tasks rise from 108 to 162 (+27–41 author-hours; corpus total ≈ 202–286 h).
+- **The public draws (Δ411, 2026-10-21):** each public part is drawn by a pre-registered seeded walk whose seed is secret until the part is unsealed (its sha256 is pinned in the rule). Q31 held-out: 12 Dafny cards + 5 Dafny spares + 12 Verus cards. `fvh unseal` applies the exclusion and the spares (built). The Q31 dev draw (16) excludes every member the held-out walk considered.
 
 **Open questions (owners named; not the user's unless they become a decision)**
 

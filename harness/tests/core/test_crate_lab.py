@@ -341,6 +341,91 @@ def test_unseal_refuses_an_archive_that_is_not_its_pin(root):
     assert not (root / CRATE.format(t="c1")).exists()
 
 
+def _seal_public(root, cards):
+    """A fake sealed stratum of one-file Dafny cards: (id, task or None, role, spare_order)."""
+    files = {}
+    for cid, task, role, order in cards:
+        src = f"// Source: dafnybench {task} (Apache-2.0); unchanged.\n" if task else ""
+        files[f"{cid}/tasks/{cid}.dfy"] = (f"// task {cid}\n{src}lemma L() {{}}\n").encode()
+    man = "".join(f"{sha(v)}  {k}\n" for k, v in sorted(files.items())).encode()
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w") as tf:
+        for name, data in sorted({**files, "MANIFEST.sha256": man}.items()):
+            ti = tarfile.TarInfo(f"labs/Q98/{name}")
+            ti.size = len(data)
+            tf.addfile(ti, io.BytesIO(data))
+    d = root / "bench" / "local" / "q" / "lab9"
+    d.mkdir(parents=True, exist_ok=True)
+    arc = d / "tasks.tar.age"
+    arc.write_bytes(buf.getvalue())
+    toml = ""
+    for cid, task, role, order in cards:
+        toml += f'\n[[card]]\nid = "{cid}"\nlang = "dafny"\n'
+        toml += (f'source = "public"\nrole = "{role}"\n' + (f"spare_order = {order}\n" if order else "")
+                 if task else 'source = "course-local"\n')
+    (d / "STRATUM.toml").write_text(
+        f'schema = 1\nlab = "Q98"\nmodule = "Q98"\narchive = "bench/local/q/lab9/tasks.tar.age"\n'
+        f'archive_sha256 = "{sha(arc.read_bytes())}"\nrecipient = "age1fake"\n'
+        f'files = {len(files)}\nmanifest_sha256 = "{sha(man)}"\n' + toml)
+    fake = root.parent / "fake-age"
+    fake.write_text(f"#!{sys.executable}\nimport sys\nsys.stdout.buffer.write(open(sys.argv[-1], "
+                    "'rb').read())\n")
+    fake.chmod(0o755)
+    key = root.parent / "key.txt"
+    key.write_text("AGE-SECRET-KEY-FAKE\n")
+    return (str(fake), sha(fake.read_bytes())), str(key)
+
+
+PUBLIC = [("cl-d1-x", None, None, None), ("pd-d1-x", "A1.dfy", "card", None),
+          ("pd-d2-x", "B.dfy", "card", None), ("pd-d3-x", "S.dfy", "spare", 1),
+          ("pd-d4-x", "T.dfy", "spare", 2)]
+
+
+def _written(root):
+    d = root / "bench" / "local" / "q" / "lab9"
+    return sorted(p.parent.parent.name for p in d.glob("*/tasks/*.dfy"))
+
+
+def test_unseal_writes_public_cards_and_no_spare(root):
+    commit_statements(root)
+    age, key = _seal_public(root, PUBLIC)
+    got = statements.unseal(root, "Q98", age=age, identity=key)
+    assert _written(root) == ["cl-d1-x", "pd-d1-x", "pd-d2-x"]
+    assert "public_replaced" not in got["strata"][0]
+
+
+def test_unseal_replaces_a_card_the_learner_met_with_the_next_free_spare(root):
+    commit_statements(root)
+    lab1 = root / "bench" / "local" / "q" / "lab1"
+    lab1.mkdir(parents=True)
+    # B.dfy was in the learner's Lab 1; so was the first spare: the second one replaces it
+    (lab1 / "STRATUM.toml").write_text('task = "bench/public/dafnybench/tasks/B.dfy"\nalso = "S.dfy"\n')
+    age, key = _seal_public(root, PUBLIC)
+    got = statements.unseal(root, "Q98", age=age, identity=key)
+    assert _written(root) == ["cl-d1-x", "pd-d1-x", "pd-d4-x"]
+    assert got["strata"][0]["public_replaced"] == [["pd-d2-x", "pd-d4-x"]]
+    assert statements.learner_seen(root) >= {"B.dfy", "S.dfy"}
+
+
+def test_the_pools_count_as_met_only_through_their_draw_records(root):
+    pools = root / "bench" / "public"
+    pools.mkdir(parents=True)
+    (pools / "POOLS.toml").write_text('[[pool]]\nset = "dafnybench"\ntasks = ["A1.dfy", "B.dfy"]\n\n'
+                                      '[[draw]]\nlab = "Q12"\ndrawn = ["B.dfy"]\n')
+    assert statements.learner_seen(root) == {"B.dfy"}
+
+
+def test_unseal_refuses_a_part_whose_spares_run_out(root):
+    commit_statements(root)
+    alpha = root / "bench" / "local" / "r" / "labalpha"
+    alpha.mkdir(parents=True)
+    (alpha / "STRATUM.toml").write_text('a = "A1.dfy"\nb = "B.dfy"\nc = "T.dfy"\n')
+    age, key = _seal_public(root, PUBLIC)
+    with pytest.raises(statements.StatementsRefused, match="spares have run out"):
+        statements.unseal(root, "Q98", age=age, identity=key)
+    assert _written(root) == []
+
+
 def test_the_course_pins_the_shipped_statement_files():
     """expected/Q18.statements names Lab 3's statement files with the sha256 of their
     shipped form: the blob of the commit that added each file, or the working copy

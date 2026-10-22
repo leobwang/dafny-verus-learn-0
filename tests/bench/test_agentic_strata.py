@@ -5,6 +5,7 @@ across strata, and no answer material in the learner tree. Tool-free; the solver
 admission is the author's (Solutions/tools/agentic/admit_task.py, in `--author` CI)."""
 
 import hashlib
+import math
 import re
 import tomllib
 import unittest
@@ -33,8 +34,17 @@ class Strata(unittest.TestCase):
                 self.assertIn(d["module"], ("Q31", "Q32", "Q33"))
                 cards = d.get("card", [])
                 cl = sum(1 for c in cards if c["source"] == "course-local")
-                pub = sum(1 for c in cards if c["source"] == "public")
+                pub = sum(1 for c in cards if c["source"] == "public" and c.get("role", "card") == "card")
+                spares = [c for c in cards if c["source"] == "public" and c.get("role") == "spare"]
                 t = d["target"]
+                # D76: about 20 % spare public cards, rounded up per part, in a 1..n spare order
+                self.assertLessEqual(len(spares), math.ceil(0.2 * t["public"]))
+                self.assertEqual(sorted(c["spare_order"] for c in spares), list(range(1, len(spares) + 1)))
+                for c in cards:
+                    if c["source"] == "public":
+                        self.assertIn(c.get("role", "card"), ("card", "spare"))
+                        self.assertIn(c["set"], ("dafnybench", "vericoding", "humaneval-verus"))
+                        self.assertRegex(c["id"], r"^p[dv]-")
                 if name in TARGETS:
                     self.assertEqual((t["total"], t["course_local"], t["public"]), TARGETS[name])
                 self.assertLessEqual(cl, t["course_local"])
