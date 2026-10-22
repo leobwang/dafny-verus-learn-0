@@ -6,9 +6,9 @@ D45 live work and unavailable containers remain recorded skips, never passes.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R12_solutions.tex  sha256 7562ddd41cd0986ee91b15aba6980dc858e4542618977ac4258373a2db589b39
-paper/R12_problems.tex  sha256 9e1edad9fad29f5efdd8617e7b3ed2bce32f1dead734b1c0f740e45cff46b958
-Solutions/dafny/R/R12_Driving/std/R12_Driving.dfy  sha256 f3e694f3554bbc627414284bb3c9d05a59e6292868542c9e84c4a19a93a7ae96
-Solutions/verus/r/r12_driving/src/lib.rs  sha256 a42fe3dc981b3b92960f05fb46be468facb6b05a9e8492cc165f15404f5353e1
+paper/R12_problems.tex  sha256 aded2a7a357fe374b10889a38646045a987682538ad79fd975d499799d9a6d14
+Solutions/dafny/R/R12_Driving/std/R12_Driving.dfy  sha256 9e173fc5218b1222b5fccaa4f02b3858a18598ce24ab29669387acc81a2fa7f2
+Solutions/verus/r/r12_driving/src/lib.rs  sha256 380220666790dca343f4d7fbb5d23bfc5b719f3f5ed1705f7ce6dedfd8f7770f
 Solutions/harness/r/fvh_r/engine.py  sha256 9d5fe7aaa8439d6f3f684ebb809eae481f9c5aad5fd3945e3dba6be15c8f2835
 Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317bead68da9eeecadb241f4d15
 
@@ -37,7 +37,7 @@ Solutions/tools/R12/profiler.py  sha256 7e0dd3a13ec0820531e516fbd7b5605c96c41317
   audit. It does not establish completion, three-seed robustness or live success.
 - **Probe S:** compare snapshots before actor edits, full gates, audits and
   specfreeze. Profiler isolation and finite tests are not full gates.
-- **Probe C:** pin local06.10 lines2635–2673 and01.12 lines429–456 exactly as B3/B4.
+- **Probe C:** pin local 06.10 lines 2635–2673 and 01.12 lines 429–456 exactly as B3/B4.
   Re-pin changed source before grading; use only that excerpt for card claims.
 - **Probe R:** execute the report's Reproduce command and re-judge every claimed
   success in the pinned container from its original task. Missing apparatus
@@ -129,11 +129,11 @@ dimension that field belongs to.
 
 ## B3–B4 — paper cards; dimension: card-fidelity
 
-- **CF.a:** score all eight fields; minimum is the card score. Empty1, accurate
-  source-bound sentence4. Silent fields should state what the excerpt lacks.
+- **CF.a:** score all eight fields; minimum is the card score. Empty 1, accurate
+  source-bound sentence 4. Silent fields should state what the excerpt lacks.
 - **CF.b:** Cobblestone keeps checked prefixes and repairs prover-supplied goals;
-  admit marks in-progress only. Four samples/invocation, depth≤5, invocations≤5,
-  samples≤20; no transfer of those units to this lab's ten-node loop.
+  admit marks in-progress only. Four samples/invocation, depth ≤ 5, invocations ≤ 5,
+  samples ≤ 20; no transfer of those units to this lab's ten-node loop.
 - **CF.c:** keep each benchmark/system denominator and union separate. Small
   subsets/no variance, oracle human hints, Coq/GPT-4-era context are limitations.
 - **CF.d:** HyperTree uses AND-hyperedges, product child values and online

@@ -47,6 +47,15 @@ module R12_HintSites {
     assume false;
     assert /*R12_HINT:t1*/ true;
   }
+  // Uncomment as you go:
+  // lemma CatWitnessCheckR12()
+  // {
+  //   assert Matches(Chr('a'), ['a']);
+  //   assert Matches(Chr('b'), ['b']);
+  //   CatWitnessR12(Chr('a'), Chr('b'), ['a'], ['b']);
+  //   assert ['a'] + ['b'] == ['a', 'b'];
+  //   assert Matches(Cat(Chr('a'), Chr('b')), ['a', 'b']);
+  // }
 
   // item: R12.H1d
   // pair: R12.H1v

@@ -1,14 +1,22 @@
 // Reference Solution.
 use vstd::prelude::*;
+
 verus! {
-pub enum ProbePhaseR12 {Verification,Compilation}
-// This is an illustrative field predicate, not authenticated native evidence.
-pub open spec fn proof_fields_r12(phase:ProbePhaseR12,count:nat,holes:nat)->bool {
- phase is Verification && count>0 && holes==0
+
+pub enum ProbePhaseR12 {
+    Verification,
+    Compilation,
 }
+
+// This is an illustrative field predicate, not authenticated native evidence.
+pub open spec fn proof_fields_r12(phase: ProbePhaseR12, count: nat, holes: nat) -> bool {
+    phase is Verification && count > 0 && holes == 0
+}
+
 // item: R12.P2v value
 // Answer form: bool literal.
 proof fn phase_value_r12() {
- assert(proof_fields_r12(ProbePhaseR12::Compilation,7,0)==false) by (compute_only);
+    assert(proof_fields_r12(ProbePhaseR12::Compilation, 7, 0) == false) by (compute_only);
 }
-}
+
+} // verus!

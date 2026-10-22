@@ -1,11 +1,21 @@
 // after: R12.P5dv
 // Synthetic revision numbers illustrate identity, not cryptographic hash strength.
 module R12_RevisionProbe {
- datatype ReportR12=ReportR12(verified:bool,count:nat,holes:nat,revision:nat)
- ghost predicate FieldsR12(r:ReportR12) {r.verified && r.count>0 && r.holes==0}
- ghost predicate BoundR12(r:ReportR12,original:nat) {FieldsR12(r) && r.revision==original}
- lemma CompareR12() {
-  var report:=ReportR12(true,3,0,17);
-  assert BoundR12(report,23);
- }
+  datatype ReportR12 = ReportR12(verified: bool, count: nat, holes: nat, revision: nat)
+
+  ghost predicate FieldsR12(r: ReportR12)
+  {
+    r.verified && r.count > 0 && r.holes == 0
+  }
+
+  ghost predicate BoundR12(r: ReportR12, original: nat)
+  {
+    FieldsR12(r) && r.revision == original
+  }
+
+  lemma CompareR12()
+  {
+    var report := ReportR12(true, 3, 0, 17);
+    assert BoundR12(report, 23);
+  }
 }
