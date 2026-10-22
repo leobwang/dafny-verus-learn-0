@@ -11,9 +11,9 @@ cmd = ["scripts/vcheck", "dafny/R/R04_Specs/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "f04b2a13d2dc7ebe7e1b847d9c6fcb2e51f273b4696d305b959777bb511909c9"
+body = "bd77221c4cbceac5456571ff31bb6fb344ab9b5fe0330396b31780a27876d6b1"
 [entry.pinned.inputs]
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "823f6aae94505e282dec825e2315af4d8f812452ebfdc8461c7be26901aebfcd"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "3f4431691907fa8c7d36eb4dbec64873f3c296e0915fbd0638a4e0abbe55a34b"
 "dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
 
 [[entry]]
@@ -469,9 +469,9 @@ cmd = ["scripts/vcheck", "--gate", "dafny/R/R04_Specs/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "352bd6887fcbff1a755bfdf9b6380e4f317ce8877b3fdf85c037008089c6a241"
+body = "7bdca27e9caa9291f3909df8515327c2f3f017edf132fc0ab66f57d66841c551"
 [entry.pinned.inputs]
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "823f6aae94505e282dec825e2315af4d8f812452ebfdc8461c7be26901aebfcd"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "3f4431691907fa8c7d36eb4dbec64873f3c296e0915fbd0638a4e0abbe55a34b"
 "dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
 
 [[entry]]
@@ -492,9 +492,9 @@ cmd = ["scripts/vaudit", "dafny/R/R04_Specs/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "ffcd02160473be5779d65f347845cf30c2fd4513806b51e09f28faa14d6042d7"
+body = "e8acc7960e432c8aa812e8a042556ed54bf483726d310e8d73921b6c0dc27a7e"
 [entry.pinned.inputs]
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "823f6aae94505e282dec825e2315af4d8f812452ebfdc8461c7be26901aebfcd"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "3f4431691907fa8c7d36eb4dbec64873f3c296e0915fbd0638a4e0abbe55a34b"
 "dafny/R/R04_Specs/core/dfyconfig.toml" = "e9af81db14bce55522b1abbffab06c02a3e6be3239fc398b195b33e51588eefc"
 
 [[entry]]
@@ -518,7 +518,7 @@ drop = ["^raw output: "]
 body = "4964d23b8093c9d7d2dcab1f98ea4474ecbfe2a5838486be803447fd7a02546b"
 [entry.pinned.inputs]
 "dafny/R/R04_Specs/agent/R04_AgentProver.dfy" = "3bf199f792a189935918453efa79ed7fde3ff3159958f0008e1a0bcccbe4d70e"
-"dafny/R/R04_Specs/core/R04_Specs.dfy" = "823f6aae94505e282dec825e2315af4d8f812452ebfdc8461c7be26901aebfcd"
+"dafny/R/R04_Specs/core/R04_Specs.dfy" = "3f4431691907fa8c7d36eb4dbec64873f3c296e0915fbd0638a4e0abbe55a34b"
 "instructor/calib/R04.tsv" = "absent"
 "slots/R04.slots" = "c4a84a04ab171b887f3e736bc2695a2590c10625c76f40042ac30d8972d378c2"
 "specimens/R04/P3d.dfy.specimen" = "d8a729081931510f3bf3e4ffd6480ecb898e1aeb93f888a11389b5778733e827"
