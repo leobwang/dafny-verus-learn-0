@@ -22,7 +22,6 @@ module R04_Specs {
   }
 
   // item: R04.T1d
-  // uses: exists-elim
   // pair: R04.T1v
   // Closed book, before reading: give a witness of length 3 and prove the claim
   // (D64: the Dafny test-out asks for a three-character word; Verus's asks for any).
@@ -130,9 +129,7 @@ module R04_Specs {
       `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second
       place. Prove it for an arbitrary match with a `forall` statement (W1),
       and use the match through the splits it guarantees (W2). Which two
-      splits does a match supply, and what does each `Chr` side force? (D82:
-      the Dafny statement quantifies over strings because Dafny's solver
-      settles Verus's concrete "ba" claim by itself.) */
+      splits does a match supply, and what does each `Chr` side force? */
   lemma NoXInSecondPlace()
     ensures forall s: seq<char> :: Matches(Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z')))), s) ==> |s| >= 2 && s[1] != 'x'
   {
@@ -163,9 +160,7 @@ module R04_Specs {
       Star(Chr('b'))), Chr('c'))` begins with 'a' and ends with 'c'; an
       occurrence would pin neither end. Prove it for every matching string,
       from the splits a match guarantees (W2). Which split pins the last
-      character, and which pins the first? (D83: the Dafny statement uses the
-      match as a premise, so its splits must be taken with `:|`; Verus's H3
-      is the concrete "ba" claim.) */
+      character, and which pins the first? */
   lemma WitnessAnchored()
     ensures forall s: seq<char> :: Matches(Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c')), s) ==> |s| >= 2 && s[0] == 'a' && s[|s| - 1] == 'c'
   {
