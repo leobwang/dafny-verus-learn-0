@@ -2174,6 +2174,14 @@ def mode_ref(root, only, update):
 
 
 def main(argv=None):
+    rc = _main(argv)
+    if common.trust_note():
+        print(f"pins: {common.trust_note()}: every result above ran on a toolchain other "
+              "than the pinned one, so none of it is the course's pinned result (DELTAS Δ503, D79)")
+    return rc
+
+
+def _main(argv=None):
     ap = argparse.ArgumentParser(prog="pins.py", description="The golden harness.")
     ap.add_argument("args", nargs="*", metavar="ID|FILE")
     ap.add_argument("--ci", action="store_true")
@@ -2226,7 +2234,7 @@ def main(argv=None):
         print(f"pins: refused: {e}", file=sys.stderr)
         return core.EXIT_REFUSED
     except common.ToolchainError as e:
-        print(f"pins: {e}; run scripts/get_toolchain.sh dafny|verus", file=sys.stderr)
+        print(f"pins: {e}", file=sys.stderr)
         return core.EXIT_REFUSED
     except common.CapError as e:
         print(f"pins: {e}", file=sys.stderr)

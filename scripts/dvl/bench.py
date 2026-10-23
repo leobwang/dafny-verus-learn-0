@@ -517,13 +517,10 @@ def tmp_base():
 
 
 def mem_available_gb():
-    try:
-        for line in Path("/proc/meminfo").read_text().splitlines():
-            if line.startswith("MemAvailable:"):
-                return int(line.split()[1]) / (1024 * 1024)
-    except OSError:
-        pass
-    return 0.0
+    """MemAvailable in whole GiB, for the run's report only (DELTAS Δ503, D78: the
+    course applies no memory management; memory is the host's and the user's)."""
+    from dvl import host as plat
+    return plat.mem_available_gb()
 
 
 # --- --validate ----------------------------------------------------------------------------------
@@ -630,16 +627,9 @@ class _Runner:
         return float(common.load_pins().get(pool, {}).get("mem_gb", 8))
 
     def wait_memory(self, pool):
-        need = self.cap(pool) + 15
-        t0 = time.monotonic()
-        while mem_available_gb() < need:
-            if self.stop.is_set():
-                raise _Stop()
-            if time.monotonic() - t0 > MEM_WAIT_S:
-                raise Failed(f"MemAvailable stayed below {need:g} GB (the {pool} cap plus 15 GB, "
-                             f"CLAUDE.md §Resources) for {MEM_WAIT_S} s: stopped; the finished "
-                             "rows are kept")
-            time.sleep(10)
+        """No memory gate (D78): only a stop request ends the wait."""
+        if self.stop.is_set():
+            raise _Stop()
 
     def run(self, tool, target, pool, *, gate=False):
         if self.stop.is_set():
@@ -871,13 +861,6 @@ def validate_set(root, s, only=(), *, workers=1, mem_gb=None, sample=None, seed=
     caps = {lang: float(common.load_pins().get(lang, {}).get("mem_gb", 8))
             for lang in {SOLVER_EXT[PurePosixPath(r).suffix] for r in answers}}
     share = float(mem_gb) if mem_gb is not None else max(caps.values(), default=8.0)
-    for lang, cap in caps.items():
-        if workers * cap > share:
-            raise Refused(f"{workers} worker(s) x the {lang} cap {cap:g} GB exceeds the memory "
-                          f"share {share:g} GB (--mem-gb; CLAUDE.md §Resources)")
-    if mem_available_gb() < share + 15:
-        raise Failed(f"MemAvailable is below {share + 15:g} GB (the share plus 15 GB, CLAUDE.md "
-                     "§Resources): no solver job started")
     head = {"kind": "header", "schema": VALIDATION_SCHEMA, "set": name, "sha256": s["sha256"],
             "pins_sha256": pins_digest(), "selection": selection}
     partial = d / "validation.partial.jsonl"
@@ -1241,7 +1224,7 @@ def main(argv=None):
     ap.add_argument("--workers", type=int, default=1,
                     help=f"--validate: solver jobs at once (1..{WORKERS_MAX}; default 1)")
     ap.add_argument("--mem-gb", type=float,
-                    help="--validate: the lane's memory share (workers x cap must fit)")
+                    help="--validate: accepted and ignored (D78: no course-side memory management)")
     ap.add_argument("--restart", action="store_true",
                     help="--validate: discard a partial run of another selection")
     ap.add_argument("--root", help=argparse.SUPPRESS)

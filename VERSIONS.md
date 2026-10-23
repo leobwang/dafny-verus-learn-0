@@ -105,6 +105,36 @@ Every claim this course makes about the outside world has a row here (spec §8.7
 | the live batch runner (policy mode, opencode) | `python -m fvh run Q12 --plan …` and `resume` on two synthetic tasks in a scratch root, two Qwen arms (the Q12 twin's sampler and repair arms): every gated request carried the run's pre-registered seed (the gate's `seeds`, overriding the client's), temperature 0.6, top_p 0.95 and `max_tokens` 32768 (opencode sent 32000); one gated request per `complete` (the title request stays off: `admitted` = `calls` = completions); opencode's own system prompt on every call (3,736 characters); per call about 1.1 s of CLI start beyond the gate's busy time and 1.1 s for the two debug views of the per-call precheck (five timings 1.10–1.15 s, no model call) | 2026-10-11 verified locally (dv5c/dv4r/smoke: precheck-cost.json, root-research) |
 | `uv` version and `uv.lock`; latexmk version | `uv --version`: `uv 0.12.4 (x86_64-unknown-linux-gnu)`; `/home/leobwang/.local/bin/uv` (not a symlink), sha256 `47884be1ceaf3e73c6b6e5abed5cba5eba55109505b796c459503a48b70ba49d`. `latexmk -v`: `Latexmk, John Collins, 31 Jan. 2024. Version 4.83`; `/usr/bin/latexmk` (not a symlink), sha256 `a3dede79b58bde3bf360eba03df3284eb65d6abbae1ace11fe930d29b60d2536`; `pdflatex --version`: `pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)`, `kpathsea version 6.3.5`. **`uv.lock`** (DV3a, DELTAS Δ136): `harness/uv.lock`, sha256 `d3241ce16192ea57ebcb6339fc5acc06c3429fb764da57bd8f1b643f00477eac`, written by `uv lock` 0.12.4 for `harness/pyproject.toml` (`required-version = "==0.12.4"`, `python-preference = "only-system"`: the host's `/usr/bin/python3` 3.12.3); it locks the dev group only (pytest 9.1.1 with iniconfig 2.3.0, packaging 26.3, pluggy 1.6.0, pygments 2.21.0, colorama 0.4.6), so the `fvh` core has no runtime dependency. `uv lock --check` and `uv sync --frozen`, both offline, run in `scripts/ci.sh`'s `harness` job | 2026-10-04 verified locally (dv1a/uv-version, dv1a/latexmk-version); lock 2026-10-05 (DV3a fvh lane, `uv lock --check --offline`) |
 
+### 1.5 The toolchain contract and macOS (Δ503; D77, D78, D79)
+
+Since D78 the learner provides `dafny` and `verus` on PATH, and the course calls them as plain processes. `scripts/get_toolchain.sh dafny|verus` (§1.3) remains as a Linux x86-64 helper, which the sandbox image build uses. The pins of §1.1–§1.2 now define what a run *trusts* (D79):
+- At first use, the course compares the version lines with the pins:
+  - `dafny --version` with `4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2`;
+  - Dafny's solver `--version` with `Z3 version 4.12.1 - 64 bit`;
+  - `verus --version --output-json` with `0.2026.09.27.3cf1832` at commit `3cf18325f0fd0c3040fbdec8c0f2255c0504c91a`;
+  - Verus's `z3 --version` with `Z3 version 4.16.0 - 64 bit`.
+- Each Z3 bundled with Dafny (4.12.1 and 4.14.1) is also compared by its sha256, against the binary in this platform's pinned release zip (pins.toml `[dafny.solvers]` keeps one per platform; the macOS values are the table's below, read from the pinned `dafny-4.11.0-arm64-macos-13.zip`). `vcheck --versions` and every run share that one check (`dvl.common.toolchain`): the Mac's first self-test found them disagreeing, `--versions` trusted and a run naming a solver UNTRUSTED, with the x86 hashes as the only pins.
+- The age binary of the hidden checks is pinned the same way (`sandbox/truth.toml` `age_sha256`, per platform): linux-amd64 `eb7dd1b5…` (§1.4) and the upstream `age-v1.3.2-darwin-arm64.tar.gz` (sha256 `e2020b073c44f692685a24d6abc378817eb81ffaaf49fd0531ef8565f767f2f5`, GitHub's published digest) binary `age/age`, sha256 `4012dfc2725883beafb710894af4f599b7a94f8c8e0f51f02cc96ab8df33915e`, at `~/.local/bin/age`.
+- A mismatch warns, with the expected and the found value. The run continues, and the done gate's verdict, pins, first tries and brittleness figures say UNTRUSTED in their output and JSON.
+- `scripts/vcheck --versions` reports the comparison. `scripts/ci.sh` fails on a mismatch.
+- No memory cap is applied by the course (D78).
+- uv and Python are minimums, not pins: uv ≥ 0.11.0 (both projects' `required-version`; the locks were checked with 0.11.0, 0.11.11 and 0.12.4) and Python ≥ 3.12 (a system one first, else `uv python install 3.12`). The host uv of §1.4 is what this machine runs, and the sandbox image's pin.
+
+The macOS (Apple silicon) vendor assets, which the learner unzips onto PATH:
+
+| tool | asset | sha256 | bundled solvers |
+|---|---|---|---|
+| Dafny 4.11.0 | `dafny-4.11.0-arm64-macos-13.zip` (self-contained .NET 8.0.19) | `c90c75e7d5db9c6ccbb7127840dfe43f0ac938b039a7ebed146d8ead383a572f` | arm64 z3-4.12.1 `7d15df1e4ba8f60b0808dce02ec85e0dd6dac4b975231a2f7b35fe8789464208`, z3-4.14.1 `2fb05b03121f522fdea1ee523c73b9341d327814c81f051a887e97e931af06bf` (pinned per platform in pins.toml `[dafny.solvers]`) |
+| Verus 0.2026.09.27.3cf1832 | `verus-0.2026.09.27.3cf1832-arm64-macos.zip` (dir `verus-arm64-macos/`, Rust `1.98.1-aarch64-apple-darwin`) | `14ae529ef84178dd6b6debac76dd093803fcfd01123023561e19ac1575e53b83` | z3 4.16.0 `edae32f9…` |
+
+**The rlimit fingerprint** (`tests/fingerprint/z3/`, `scripts/vcheck --fingerprint`, a diagnostic) is the result and the `(get-info :rlimit)` count of 29 Dafny-written queries. Every build of one Z3 version that was measured gave the identical fingerprint:
+- vendor x64 and vendor arm64-glibc;
+- Dafny's own x64 build;
+- an aarch64 source build of 4.12.1;
+- **the macOS arm64 builds of 4.12.1, 4.14.1 and 4.16.0: identical to the x86 baselines on all 129 queries**, measured on the user's Mac on 2026-10-21 (22/22 easy and 21/21 hard per version).
+
+The versions do differ from one another: 4.12.1 against 4.14.1 matches on 14 of 29. So one set of pins holds on both platforms, including the 17 resource-sensitive pins (13 chapter fences and 4 specimens).
+
 ## 2. Probe results (DV0, with DV1b and DV1c additions)
 
 ### 2.1 Dafny probes (spec §11.6; D13 and D14 from design §14.2)

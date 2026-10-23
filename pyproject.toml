@@ -1,0 +1,27 @@
+# pyproject.toml — the course's Python entry point (DELTAS Δ503, D78).
+#
+# The course scripts (scripts/vcheck, pins.py, firsttry.sh, ci.sh, …) run on
+# Python >= 3.12. Run them through uv, from the repository root:
+#   uv sync                      # once: the environment in .venv (gitignored)
+#   uv run scripts/vcheck …      # or `source .venv/bin/activate` and run them bare
+# The scripts use the standard library only; pytest is the one dev dependency,
+# as in harness/pyproject.toml (the harness's own project, which
+# scripts/dvl/python.py runs with `uv run --directory harness`). uv 0.11.0 or
+# newer; Python 3.12 or newer, a system one when there is one (Ubuntu's
+# python3.12) or uv's own (`uv python install 3.12`). The learner also provides
+# `dafny` and `verus` on PATH (README, Setup).
+
+[project]
+name = "dafny-verus-learn-0"
+version = "0.1.0"
+description = "The course tools of dafny-verus-learn-0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[tool.uv]
+package = false
+required-version = ">=0.11.0"
+python-preference = "system"

@@ -4,7 +4,8 @@
 #
 # Each [[lab]] pins its sealed archive (a course path under Hidden/, which no
 # sandbox [[file]] may name, and its sha256), the age recipient it is sealed to,
-# the pinned age binary that seals it (VERSIONS.md §1.4), and where the grader's
+# the pinned age binary that seals it (VERSIONS.md §1.4; age_sha256 per platform,
+# the upstream v1.3.2 release binary for linux-amd64 and darwin-arm64, Δ503), and where the grader's
 # key (the age identity) lives: on the author's machine, outside the checkout, in
 # the reference class (~/.cache/dafny-verus-learn-0/, which the canonical deny
 # rule and guard rule 1 keep from every study session). Only the image's grader
@@ -23,7 +24,7 @@ archive = "Hidden/labs/Q15/verdicts.tar.age"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
 identity = "~/.cache/dafny-verus-learn-0/keys/hidden-labs.agekey"
 age_version = "v1.3.2"
-age_sha256 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c"
+age_sha256 = { linux-x86_64 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c", macos-arm64 = "4012dfc2725883beafb710894af4f599b7a94f8c8e0f51f02cc96ab8df33915e" }
 sha256 = "e262d6b1ed9e90745af81c4090aaffda07cae427c81b586dd41c9309697c34a4"
 files = 72
 manifest_sha256 = "5d5a353ea5c231025b78654242765c818090da458c597697c5ce5428e1803278"
@@ -34,7 +35,7 @@ archive = "Hidden/labs/Q13/verdicts.tar.age"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
 identity = "~/.cache/dafny-verus-learn-0/keys/hidden-labs.agekey"
 age_version = "v1.3.2"
-age_sha256 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c"
+age_sha256 = { linux-x86_64 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c", macos-arm64 = "4012dfc2725883beafb710894af4f599b7a94f8c8e0f51f02cc96ab8df33915e" }
 sha256 = "5c11502103c4ad7247ba2a4549d099073cefeef2fcc828629d254b959bd99253"
 files = 4
 manifest_sha256 = "1b5525a8267559dd6860e592d074a23ba28b16d76ae53bbbf1570e3de271fa51"
@@ -45,7 +46,7 @@ archive = "Hidden/labs/Q17/verdicts.tar.age"
 recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
 identity = "~/.cache/dafny-verus-learn-0/keys/hidden-labs.agekey"
 age_version = "v1.3.2"
-age_sha256 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c"
+age_sha256 = { linux-x86_64 = "eb7dd1b518f0a307c99cd97782623c5321da049154b04acd2d98d21aa7bc9b2c", macos-arm64 = "4012dfc2725883beafb710894af4f599b7a94f8c8e0f51f02cc96ab8df33915e" }
 sha256 = "255683f641d91a705c5b17f38192872527217e38e86bdd2900effbeda9163ecb"
 files = 4
 manifest_sha256 = "f83b64b22b5ec788580f85ce4a574ac7728ad0b8ad23f09b0f2a1d4745d978ef"

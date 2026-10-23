@@ -707,23 +707,6 @@ class CommonStatic(unittest.TestCase):
         r = common.Result("dafny", "t", 0, "verified", "verify", 2)
         self.assertIn('"verdict": "verified"', common.to_json(r))
 
-    def test_cap_argv(self):
-        argv = common.cap_argv(8, "dvl-x", {"PATH": "/usr/bin:/bin"})
-        self.assertEqual(argv[:4], ["systemd-run", "--user", "--scope", "--quiet"])
-        self.assertIn("MemoryMax=8G", argv)
-        self.assertIn("MemorySwapMax=0", argv)
-        self.assertEqual(argv[-3:], ["env", "-i", "PATH=/usr/bin:/bin"])
-        self.assertIn("MemoryMax=512M", common.cap_argv(0.5, "u", {}))
-        with self.assertRaises(ValueError):
-            common.cap_argv(0, "u", {})
-        self.assertNotIn("-p", argv[argv.index("MemorySwapMax=0") + 1:])
-        timed = common.cap_argv(8, "dvl-x", {}, runtime_max_s=1830)   # Δ58: systemd's net
-        self.assertEqual(timed[timed.index("RuntimeMaxSec=1830") - 1], "-p")
-        self.assertLess(timed.index("RuntimeMaxSec=1830"), timed.index("--"))
-        self.assertIn("RuntimeMaxSec=3", common.cap_argv(1, "u", {}, runtime_max_s=2.2))
-        with self.assertRaises(ValueError):
-            common.cap_argv(1, "u", {}, runtime_max_s=0)
-
     def test_pools_and_jobs(self):
         self.assertEqual(common.pool_of(["/a/dafny/dafny", "verify"]), "dafny")
         self.assertEqual(common.pool_of(["/a/verus-x86-linux/verus"]), "verus")

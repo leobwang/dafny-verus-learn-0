@@ -106,9 +106,32 @@ def _get_json(url, timeout):
         return None
 
 
+# The model server's settings on macOS, where Ollama.app reads them from launchd
+# (`launchctl setenv KEY value`; there is no systemd unit): these keys, if set.
+LAUNCHD_KEYS = ("OLLAMA_CONTEXT_LENGTH", "OLLAMA_KV_CACHE_TYPE", "OLLAMA_FLASH_ATTENTION",
+                "OLLAMA_NUM_PARALLEL", "OLLAMA_MAX_LOADED_MODELS", "OLLAMA_KEEP_ALIVE",
+                "OLLAMA_HOST", "OLLAMA_MODELS")
+
+
+def _launchd_environment(runner=subprocess.run):
+    """{KEY: value} of the LAUNCHD_KEYS launchd holds (macOS), or None when
+    launchctl cannot be read."""
+    out = {}
+    for k in LAUNCHD_KEYS:
+        try:
+            p = runner(["launchctl", "getenv", k], capture_output=True, text=True, timeout=20)
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+        if p.returncode == 0 and p.stdout.strip():
+            out[k] = p.stdout.strip()
+    return out
+
+
 def _unit_environment(unit="ollama", runner=subprocess.run):
     """{KEY: value} of a systemd unit's Environment (the system unit, else the user
-    unit), or None when neither can be read."""
+    unit), or None when neither can be read. On macOS, launchd's (no systemd)."""
+    if sys.platform == "darwin":
+        return _launchd_environment(runner)
     for scope in ([], ["--user"]):
         try:
             p = runner(["systemctl", *scope, "show", unit, "-p", "Environment", "--value"],
@@ -261,6 +284,10 @@ class GpuCalendar:
 
     def __init__(self, base=None):
         base = base or os.environ.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
+        if not Path(base).is_dir() and sys.platform == "darwin":
+            # macOS has no per-user runtime tmpfs: a private directory of its own
+            base = Path(os.environ.get("TMPDIR") or "/tmp") / f"dvl-runtime-{os.getuid()}"
+            base.mkdir(mode=0o700, exist_ok=True)
         self.path = Path(base) / CALENDAR_LOCK
         self.fh = None
 

@@ -38,9 +38,7 @@ def test_launcher_runs_the_scratch_server_under_the_cap():
         pytest.skip(f"no toolchain or no cap here: {p.stderr.strip()}")
     assert p.returncode == 0, p.stderr
     argv = p.stdout.splitlines()
-    assert argv[:3] == ["systemd-run", "--user", "--scope"]
-    assert any(a.startswith("MemoryMax=") for a in argv)
-    assert "MemorySwapMax=0" in argv and "RuntimeMaxSec=60" in argv
+    assert not any("systemd" in a or a.startswith("MemoryMax=") for a in argv)   # D78: no cap
     i = argv.index("server")
     assert "/dafny-server/" in argv[i - 1] and ".toolchain" not in argv[i - 1]
     assert "--resource-limit" in argv[i:] and "--solver-path" in argv[i:] and "--cores" in argv[i:]

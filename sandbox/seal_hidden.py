@@ -162,7 +162,7 @@ def main(argv=None):
             return 3
         any_pin = next(iter(sandbox.truth_pins(ROOT).values()), None) or {}
         pin = {"archive": meta["refs_archive"], "recipient": meta.get("recipient"),
-               "age_sha256": any_pin.get("age_sha256")}
+               "age_sha256": any_pin.get("age_sha256")}   # per platform (Δ503)
         if not pin["recipient"] or not pin["age_sha256"]:
             say("refused: the stratum's recipient or the pinned age's sha256 is missing", err=True)
             return 3
@@ -172,8 +172,9 @@ def main(argv=None):
         say(f"refused: no [[lab]] {a.lab} in {sandbox.TRUTH_FILE}", err=True)
         return 3
     age = Path(os.path.expanduser("~/.local/bin/age"))
-    if not age.is_file() or sha(age.read_bytes()) != pin.get("age_sha256"):
-        say(f"refused: {age} is missing or not the pinned age (sha256 {pin.get('age_sha256')})",
+    want = sandbox.age_sha256(pin)
+    if not age.is_file() or sha(age.read_bytes()) != want:
+        say(f"refused: {age} is missing or not the pinned age (sha256 {want})",
             err=True)
         return 3
     try:

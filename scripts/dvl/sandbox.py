@@ -90,6 +90,8 @@ SCRIPTS = REPO_ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
+from dvl import host  # noqa: E402
+
 SCHEMA = 1
 KINDS = ("agent", "verify")
 NETWORKS = ("none", "ollama", "anthropic")
@@ -1119,6 +1121,13 @@ def materialize(manifest, root=REPO_ROOT, base=None):
 # (sandbox/image/truthcheck.py) does, in the container, and it prints
 # verdict-level fields only.
 
+def age_sha256(pin, platform=None):
+    """The pinned age binary's sha256 on this platform: truth.toml's age_sha256 is
+    a table {platform id: sha256} of the upstream release binary for each
+    supported platform (Δ503), or a plain value (linux-x86_64 only)."""
+    return host.pinned(pin.get("age_sha256"), platform)
+
+
 def truth_pins(root=REPO_ROOT):
     """{lab: pin} from sandbox/truth.toml (schema 1, [[lab]] tables)."""
     p = Path(root) / TRUTH_FILE
@@ -1859,7 +1868,7 @@ def _sealed_tree(root, archive_rel, *, want_sha, want_manifest, want_files, reci
                               "recipient")
     binary = Path(os.path.expanduser(AGE))
     try:
-        ok_bin = binary.is_file() and sha256_bytes(binary.read_bytes()) == pin.get("age_sha256")
+        ok_bin = binary.is_file() and sha256_bytes(binary.read_bytes()) == age_sha256(pin)
     except OSError:
         ok_bin = False
     if not ok_bin:

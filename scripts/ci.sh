@@ -50,7 +50,8 @@
 #                   [A] reference_lint.py
 #   hook-test       scripts/test_hooks.sh
 #   verify-q-dafny, verify-q-verus, verify-r-dafny, verify-r-verus
-#                   the pinned toolchain's sha (get_toolchain.sh --check);
+#                   the toolchains on PATH are the pinned versions (vcheck
+#                   --versions; DELTAS Δ503, D79: a mismatch fails CI);
 #                   every given layer of the track gates and audits clean
 #                   (vcheck --gate, vaudit; for Verus also vaudit
 #                   --check-trust, once per run); per armed module, every
@@ -132,14 +133,13 @@
 # differ from this script's (CLAUDE.md, course_mode.sh, test_hooks.sh and
 # this script must agree).
 #
-# Memory (CLAUDE.md §Resources): one solver job at a time (DVL_DAFNY_JOBS=1,
-# DVL_VERUS_JOBS=1, set here whatever the environment says), each under the
-# dvl caps of scripts/dvl/pins.toml, which must not exceed 8 GB per Dafny job
-# and 16 GB per Verus job (else ci.sh refuses, exit 3). Before a job starts
-# its first solver step, MemAvailable must hold one job's cap plus a 15 GB
-# reserve (23 GB Dafny, 31 GB Verus), else the job fails without starting
-# anything. A step killed by memory (exit 137 or 143) is reported as
-# killed(memory), never as a verdict.
+# Memory (DELTAS Δ503, D78): the course applies no memory management; memory
+# is the host's and the user's (run ci.sh under your own limit, e.g.
+# `systemd-run --user --scope -p MemoryMax=32G -p MemorySwapMax=0 scripts/ci.sh`).
+# Jobs run one solver job at a time (DVL_DAFNY_JOBS=1, DVL_VERUS_JOBS=1, set
+# here whatever the environment says). A step killed by a signal (exit 137 or
+# 143, e.g. the host's OOM killer) is reported as killed(memory), never as a
+# verdict.
 #
 # Logs: one file per job, <log dir>/<job>.log (each step's command line, its
 # output and its exit code), and summary.txt; build/ci/latest points at the
@@ -163,7 +163,17 @@
 #
 # Exit: 0 every selected job passed (SKIP and ABSENT jobs are reported, not
 # failed) · 1 a job failed · 2 usage · 3 refused (--author outside the
-# author's context, solver caps above the course budget).
+# author's context).
+
+# bash >= 4 (associative arrays below). macOS ships 3.2: re-exec under a newer
+# bash when one is installed (Homebrew), else refuse (README §Platforms).
+if [ -z "${BASH_VERSINFO:-}" ] || [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
+  for _b in /opt/homebrew/bin/bash /usr/local/bin/bash; do
+    if [ -x "$_b" ]; then exec "$_b" "$0" "$@"; fi
+  done
+  echo "ci.sh: refused: needs bash >= 4 (macOS: brew install bash)" >&2
+  exit 3
+fi
 
 set -euo pipefail
 
@@ -187,9 +197,6 @@ ALWAYS_ON=(
 )
 REF_TREE=Solutions
 COURSE_CACHE="$HOME/.cache/dafny-verus-learn-0"
-DAFNY_CAP_GB=8
-VERUS_CAP_GB=16
-RESERVE_GB=15
 
 JOB_ORDER=(static hook-test verify-q-dafny verify-q-verus verify-r-dafny verify-r-verus
            pins empty-body corpus wrappers coexist paper rubric harness brittleness)
@@ -321,10 +328,10 @@ else
   unset CI
 fi
 
-# --- the helper and the solver caps -------------------------------------------------
+# --- the helper -------------------------------------------------
 
-# The helper: the registry listing, the hole comparison, the study-mode check,
-# the cap check and the coexistence checks. It imports the course's own
+# The helper: the registry listing, the hole comparison, the study-mode check
+# and the coexistence checks. It imports the course's own
 # parsers (check_course_map, gen_units, firsttry, dvl), never a second one.
 HELPER="$(cat <<'PY'
 import json, os, re, subprocess, sys, tomllib
@@ -542,28 +549,6 @@ def shipped():
     return 1 if errs else 0
 
 
-def caps(dafny_max, verus_max):
-    try:
-        with open(SCRIPTS / "dvl" / "pins.toml", "rb") as f:
-            pins = tomllib.load(f)
-    except (OSError, tomllib.TOMLDecodeError) as e:
-        print(f"scripts/dvl/pins.toml: unreadable ({type(e).__name__})")
-        return 1
-    bad = []
-    got = {}
-    for lang, lim in (("dafny", int(dafny_max)), ("verus", int(verus_max))):
-        v = pins.get(lang, {}).get("mem_gb")
-        got[lang] = v
-        if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0 < v <= lim:
-            bad.append(f"scripts/dvl/pins.toml [{lang}] mem_gb = {v!r}: the course budget "
-                       f"allows at most {lim} GB per {lang} job (CLAUDE.md §Resources)")
-    for b in bad:
-        print(b)
-    if not bad:
-        print(f"{got['dafny']:g} {got['verus']:g}")
-    return 1 if bad else 0
-
-
 def coexist_dafny(units):
     """Every given unit's files (learner and given, never reference) as one
     program, resolved once through the pinned wrapper (dvl.dafny.holes runs
@@ -672,7 +657,6 @@ sys.exit({"modules": lambda: modules(),
           "files": lambda: files(*args),
           "holes": lambda: holes(*args),
           "shipped": lambda: shipped(),
-          "caps": lambda: caps(*args),
           "coexist-dafny": lambda: coexist_dafny(args),
           "coexist-verus": lambda: coexist_verus(args)}[cmd]())
 PY
@@ -684,11 +668,6 @@ py() {
   DVLCI_ROOT="$ROOT" DVLCI_SCRIPTS="$SCRIPTS" python3 -B -c "$HELPER" "$@"
 }
 
-if ! CAPS="$(py caps "$DAFNY_CAP_GB" "$VERUS_CAP_GB")"; then
-  printf '%s\n' "$CAPS" >&2
-  refuse "the solver caps exceed the course budget (CLAUDE.md §Resources)"
-fi
-read -r CAP_D CAP_V <<< "$CAPS"
 
 # --- run directories and the registry ------------------------------------------------
 
@@ -773,18 +752,6 @@ astep() {     # LABEL CMD... — an author-only step: output into the reference 
   printf '\n$ %s\n' "$(qcmd "$@")" >> "$REFLOG"
   log "\$ $(qcmd "$@")   (output: $(show "$REFLOG"))"
   _run "$REFLOG" "$REFLOG" "$label" env DVL_SCRATCH="$REFDIR/scratch" "$@"
-}
-need_mem() {  # dafny|verus — the free-memory preflight before a job's first solver step
-  local need avail
-  [ -z "${J_MEM_OK:-}" ] || return 0
-  if [ "$1" = verus ]; then need=$((VERUS_CAP_GB + RESERVE_GB)); else need=$((DAFNY_CAP_GB + RESERVE_GB)); fi
-  avail="$(awk '/^MemAvailable:/ { printf "%d", $2 / 1048576 }' /proc/meminfo)"
-  if [ "${avail:-0}" -lt "$need" ]; then
-    fail_note "memory preflight" "${avail:-?} GB available, ${need} GB needed (one $1 job at its cap plus the ${RESERVE_GB} GB reserve, CLAUDE.md §Resources); no solver step was started"
-    return 1
-  fi
-  J_MEM_OK=1
-  log "memory preflight: ${avail} GB available, ${need} GB needed"
 }
 registry_ok() {
   if [ "$MODLIST_RC" != 0 ]; then
@@ -904,7 +871,7 @@ TRUST_DONE="$RUNDIR/.check-trust.done"
 job_verify() {   # TRACK d|v
   local track="$1" lang="$2" tool=dafny name=Dafny total ids id given t u twin json gv
   if [ "$lang" = v ]; then tool=verus; name=Verus; fi
-  step "toolchain $tool --check" bash "$SCRIPTS/get_toolchain.sh" "$tool" --check
+  step "toolchain versions (dafny, verus on PATH)" "${VCHECK[@]}" --versions
   registry_ok || return 0
   total="$(track_total "$track")"
   if [ "$total" -eq 0 ]; then
@@ -918,16 +885,12 @@ job_verify() {   # TRACK d|v
   given="$(given_targets "$track" "$lang")"
   if [ "$lang" = v ] && [ ! -e "$TRUST_DONE" ]; then
     : > "$TRUST_DONE"
-    gv="$(given_targets Q v; given_targets R v)"
-    if [ -z "$gv" ] || need_mem verus; then
-      step "vaudit --check-trust" "${VAUDIT[@]}" --check-trust
-    fi
+    step "vaudit --check-trust" "${VAUDIT[@]}" --check-trust
   fi
   if [ -z "$ids" ] && [ -z "$given" ]; then
     loud "no armed $track module with $name units and no $track given layer: nothing to verify ($total $track modules, all planned or without $name units)"
     return 0
   fi
-  need_mem "$tool" || return 0
   for t in $given; do
     step "gate $t" "${VCHECK[@]}" --gate "$ROOT/$t"
     step "audit $t" "${VAUDIT[@]}" "$ROOT/$t"
@@ -980,9 +943,7 @@ job_verify_r_verus() { job_verify R v; }
 
 job_pins() {
   registry_ok || return 0
-  if [ -n "$(armed)" ]; then
-    need_mem verus || return 0
-  else
+  if [ -z "$(armed)" ]; then
     loud "no armed module: pins.py passes loudly ($(lines "$MODLIST") modules, all planned)"
   fi
   step "pins.py --ci" python3 -B "$SCRIPTS/pins.py" --ci --root "$ROOT"
@@ -1001,7 +962,6 @@ job_empty_body() {
     loud "no armed module: no hole to empty ($(lines "$MODLIST") modules, all planned)"
     return 0
   fi
-  need_mem verus || return 0
   for id in $ids; do
     astep "empty-body $id" bash "$SCRIPTS/firsttry.sh" "$id" --empty-body --root "$ROOT"
   done
@@ -1035,12 +995,10 @@ job_corpus() {   # an absent corpus fails (Δ108, Δ109); nothing here before --
     fail_note "corpus layout" "a fixture directory is not tests/corpus/<lang>/<ID>/: $bad"
     return 0
   fi
-  need_mem verus || return 0
   step "test_corpus --ci" in_dir "$CHECKOUT" python3 -B "$SCRIPTS/test_corpus.py" --ci
 }
 
 job_wrappers() {
-  need_mem verus || return 0
   step "unittest tests/wrappers" in_dir "$CHECKOUT" python3 -B -m unittest discover -s tests/wrappers
   if [ -d "$CHECKOUT/tests/ci" ]; then
     step "unittest tests/ci" in_dir "$CHECKOUT" python3 -B -m unittest discover -s tests/ci
@@ -1059,7 +1017,6 @@ job_coexist() {
   if [ ${#dunits[@]} -eq 0 ]; then
     loud "no armed Dafny unit: nothing to resolve together"
   else
-    need_mem dafny || return 0
     step "dafny: both tracks resolve as one program" py coexist-dafny "${dunits[@]}"
   fi
   if [ ${#vunits[@]} -eq 0 ] && [ -z "$(given_targets Q v; given_targets R v)" ]; then
@@ -1252,7 +1209,6 @@ job_brittleness() {
     loud "no given layer and no armed unit: nothing to re-verify under the seeds"
     return 0
   fi
-  need_mem verus || return 0
   for t in "${targets[@]}"; do
     step "brittleness $t" "${VCHECK[@]}" --brittleness "$ROOT/$t"
   done
@@ -1311,7 +1267,7 @@ KIND="study run"
   echo "ci.sh: $KIND of $ROOT ($HEAD_DESC)"
   [ "$ROOT" = "$CHECKOUT" ] || echo "ci.sh: course root $ROOT, scripts of $CHECKOUT (hook-test, wrappers, corpus and the suites test this checkout)"
   echo "ci.sh: jobs: ${SELECTED[*]}"
-  echo "ci.sh: solver jobs one at a time (Dafny ${CAP_D} GB, Verus ${CAP_V} GB caps); logs: $(show "$RUNDIR")/"
+  echo "ci.sh: solver jobs one at a time (no course memory cap: the host's, Δ503 D78); logs: $(show "$RUNDIR")/"
   [ "$AUTHOR" = 0 ] || echo "ci.sh: reference logs: $(show "$REFDIR")/"
 } | tee "$RUNDIR/summary.txt"
 

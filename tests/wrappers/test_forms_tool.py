@@ -97,22 +97,32 @@ class VcheckSolvers(unittest.TestCase):
         self.assertIn("seed 1: verified · seed 2: verified · seed 3: verified — stable", out)
 
     def test_solver_hash_is_checked(self):
+        """D79: a solver whose sha256 is not the pinned one for this platform warns
+        and marks the run untrusted; it is never refused (DELTAS Δ503). The check
+        is common.toolchain("dafny")'s, which solver_path() and --versions share."""
         D = core.D
-        bad = dict(D.pins())
-        bad["solvers"] = {k: dict(v) for k, v in bad["solvers"].items()}
-        bad["solvers"]["4.14.1"]["sha256"] = "0" * 64
-        D._SOLVER_CHECKED.pop("4.14.1", None)
+        real = common.load_pins
+        def bad():
+            p = real()
+            p["dafny"]["solvers"]["4.14.1"]["sha256"] = {common.plat.current(): "0" * 64}
+            return p
+        saved = {k: list(v) for k, v in common._MISMATCH.items()}
+        warned = set(common._WARNED)
         try:
-            with unittest.mock.patch.object(D, "pins", lambda: bad):
-                with self.assertRaises(common.ToolchainError):
-                    D.solver_path("4.14.1")
-                res = D.verify(str(C.ROOT / self.OK), solver="4.14.1")
-                self.assertEqual(res.verdict, "error")
-                self.assertTrue(any(f.kind == "toolchain" for f in res.findings))
+            with unittest.mock.patch.object(common, "load_pins", bad):
+                common.toolchain("dafny", fresh=True)
+                self.assertTrue(str(D.solver_path("4.14.1")).endswith("dafny/z3/bin/z3-4.14.1"))
+                notes = common.untrusted("dafny").get("dafny", [])
+                self.assertTrue(any("4.14.1" in m and "sha256" in m for m in notes), notes)
+                self.assertTrue(common.trust_note("dafny").startswith("UNTRUSTED"))
         finally:
-            D._SOLVER_CHECKED.pop("4.14.1", None)
+            common._MISMATCH.clear()
+            common._MISMATCH.update(saved)
+            common._WARNED.clear()
+            common._WARNED.update(warned)
+            common.toolchain("dafny", fresh=True)
+        self.assertEqual(common.untrusted("dafny"), {})
         self.assertTrue(str(D.solver_path("4.14.1")).endswith("dafny/z3/bin/z3-4.14.1"))
-
 
 class VcheckRefBrittleness(unittest.TestCase):
     def test_twin_sweep_names_locations_only(self):

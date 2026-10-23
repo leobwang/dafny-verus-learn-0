@@ -1865,14 +1865,12 @@ def solver_names():
     return [pinned] + names
 
 
-_SOLVER_CHECKED: dict = {}
-
-
 def solver_path(name=None):
     """The path of a bundled solver by name (None: the pinned one). Raises
     Refused for a name the pins do not list, and common.ToolchainError when
-    the binary is missing or its sha256 is not the pinned one (checked once
-    per process)."""
+    the binary is missing. Its sha256 (one pin per platform) is compared by
+    common.toolchain("dafny") itself, the same check `vcheck --versions`
+    reports: a different build warns and marks the run UNTRUSTED (D79)."""
     tc = common.toolchain("dafny")
     if name is None:
         return tc["dafny_z3"]
@@ -1880,17 +1878,12 @@ def solver_path(name=None):
     if name not in table:
         raise Refused(f"solver {name!r}: not a solver bundled with the pinned Dafny; one of "
                       + ", ".join(solver_names()) + " (QPLAN §6 Q29)")
-    entry = table[name]
-    path = Path(tc["dafny_root"]) / entry["path"]
-    if name not in _SOLVER_CHECKED:
-        if not path.is_file():
-            raise common.ToolchainError(f"the bundled solver {name} is missing: {path}")
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if digest != entry["sha256"]:
-            raise common.ToolchainError(f"the bundled solver {name} at {path} has sha256 "
-                                        f"{digest}, not the pinned {entry['sha256']}")
-        _SOLVER_CHECKED[name] = path
-    return _SOLVER_CHECKED[name]
+    found = common.dafny_solvers().get(name)
+    if found is None:
+        path = Path(tc["dafny_root"]) / table[name]["path"]
+        raise common.ToolchainError(f"the solver {name} is neither bundled next to Dafny "
+                                    f"({path}) nor on PATH as {Path(table[name]['path']).name}")
+    return found
 
 
 def _base_flags(gate, cores=True, solver=None):

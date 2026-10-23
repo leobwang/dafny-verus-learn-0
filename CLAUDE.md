@@ -89,6 +89,7 @@ This host has about 123 GB of RAM, no swap, and other Claude sessions and servic
   `systemd-run --user --scope -p MemoryMax=<lane share>G -p MemorySwapMax=0 env GATE_WORKERS=<n> <command>`
 - **Before launching**, `free -g` must show the budget plus 15 GB available. **While running**, watch memory (`ps -C z3 -o rss= | awk '{s+=$1} END {print s/1048576 " GiB"}'`), not just CPU, and stop if it nears the budget.
 - **Script defaults must be safe when run bare.** Never hard-code a large worker pool.
+- The course tools apply no memory cap of their own (DELTAS Δ503, D78): these limits are the host's, so every run that starts solvers goes under a cap like the one above.
 - A job killed by memory exits 137/143 (-9/-15). Record it as `killed(memory)`, **never** as a verification verdict.
 - Workflow and subagent prompts that run solvers must state these limits explicitly, with each lane's share.
 

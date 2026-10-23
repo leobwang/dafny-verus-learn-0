@@ -56,14 +56,16 @@ stdlib_audit_rows = 81
 stdlib_files = ["DafnyStandardLibraries.dfy", "DafnyStandardLibraries-notarget.dfy"]
 
 # QPLAN §6 Q29 (Q09's brittleness measurement): the Z3 binaries bundled with
-# Dafny 4.11.0, by name, with their version line and sha256 (VERSIONS.md
-# §1.1; the install's tree digest covers them too). The first is the pinned
+# Dafny 4.11.0, by name, with their version line and, per supported platform
+# (dvl.host.current()), the sha256 of the binary in that platform's pinned
+# release zip (VERSIONS.md §1.1 and §1.5; on Linux x86-64 the install's tree
+# digest covers them too; Δ503). The first is the pinned
 # solver (`solver` above, Δ10): every gate, audit and plain run uses it.
 # `vcheck --solver <name>` and `vcheck --brittleness --solvers` run another
 # one for a measurement; the done gate and the reference gate refuse both.
 [dafny.solvers]
-"4.12.1" = { path = "dafny/z3/bin/z3-4.12.1", version = "Z3 version 4.12.1 - 64 bit", sha256 = "22214e518eed9eec867d18b485e7b2570d09cbf1d94a47c8eec6ec4de0287eff" }
-"4.14.1" = { path = "dafny/z3/bin/z3-4.14.1", version = "Z3 version 4.14.1 - 64 bit", sha256 = "5a4f295b2e64abd2e2463a321d33f8054585083230203a55fa57982a1843d559" }
+"4.12.1" = { path = "dafny/z3/bin/z3-4.12.1", version = "Z3 version 4.12.1 - 64 bit", sha256 = { linux-x86_64 = "22214e518eed9eec867d18b485e7b2570d09cbf1d94a47c8eec6ec4de0287eff", macos-arm64 = "7d15df1e4ba8f60b0808dce02ec85e0dd6dac4b975231a2f7b35fe8789464208" } }
+"4.14.1" = { path = "dafny/z3/bin/z3-4.14.1", version = "Z3 version 4.14.1 - 64 bit", sha256 = { linux-x86_64 = "5a4f295b2e64abd2e2463a321d33f8054585083230203a55fa57982a1843d559", macos-arm64 = "2fb05b03121f522fdea1ee523c73b9341d327814c81f051a887e97e931af06bf" } }
 
 # VERSIONS.md §2.4, verbatim: the fixed Dafny wordings the wrapper matches.
 [dafny.messages]

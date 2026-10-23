@@ -231,19 +231,12 @@ class Runs(unittest.TestCase):
         self.assertIn("the pre-merge gate is scripts/ci.sh --author", out)
         self.assertIn("skipped (author-only", (self.logs / "rubric.log").read_text())
 
-    def test_solver_caps_above_the_budget_are_refused(self):
-        checkout = self.base / "checkout"
-        shutil.copytree(C.ROOT / "scripts", checkout / "scripts",
-                        ignore=shutil.ignore_patterns("__pycache__"))
-        pins = checkout / "scripts" / "dvl" / "pins.toml"
-        text = pins.read_text(encoding="utf-8")
-        self.assertEqual(text.count("\nmem_gb = 16\n"), 1)
-        pins.write_text(text.replace("\nmem_gb = 16\n", "\nmem_gb = 32\n"), encoding="utf-8")
-        rc, out, err = C.run_ci("--job", "harness", root=self.root, logs=self.logs,
-                                script=checkout / "scripts" / "ci.sh")
-        self.assertEqual(rc, 3, (out, err))
-        self.assertIn("[verus] mem_gb = 32", err)
-        self.assertFalse(self.logs.exists())
+    def test_no_memory_preflight_or_cap_check_is_left(self):
+        """DELTAS Δ503 (D78): ci.sh applies no memory management."""
+        src = (C.ROOT / "scripts" / "ci.sh").read_text(encoding="utf-8")
+        for gone in ("need_mem", "RESERVE_GB", "MemAvailable", "--small-host", "def caps("):
+            self.assertNotIn(gone, src)
+        self.assertIn('"${VCHECK[@]}" --versions', src)
 
 
 # --- the corpus job and its runner (Δ108, Δ109) ----------------------------------
@@ -347,17 +340,6 @@ def run_runner(co, *args, env=None):
     return p.returncode, p.stdout, p.stderr
 
 
-def mem_available_gb():
-    try:
-        with open("/proc/meminfo", encoding="ascii") as fh:
-            for line in fh:
-                if line.startswith("MemAvailable:"):
-                    return int(line.split()[1]) // 1048576
-    except (OSError, ValueError, IndexError):
-        pass
-    return 0
-
-
 class Corpus(unittest.TestCase):
     """The corpus job fails on an absent corpus (Δ108, Δ109): a missing runner,
     a missing tests/corpus/, a failed listing or an empty one, each before any
@@ -414,8 +396,6 @@ class Corpus(unittest.TestCase):
         self.assertEqual(calls.read_text(encoding="utf-8").splitlines(), ['["--list"]'])
 
     def test_a_listing_is_followed_by_the_ci_run(self):
-        if mem_available_gb() < 31:
-            self.skipTest("ci.sh's memory preflight before --ci needs 31 GB available")
         co = checkout_copy(self.base)
         calls = stub_runner(co, "C-01   dafny  R  control           -    tests/corpus/dafny/C-01\n")
         rc, out, err, log = self.corpus_job(co, "listed")
