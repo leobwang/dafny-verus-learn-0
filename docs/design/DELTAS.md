@@ -4072,6 +4072,15 @@
   - The course-local ones are replaced by new tasks with fresh tags. The public ones leave by Δ413's amended walk.
   - Each replacement was name-checked, including a substring scan of the HEAD, authoring, sysb and labalpha trees, and admitted as before. No opaque id names two tasks.
 - **Re-seal.** Each tranche is re-sealed once, with these fixes and its public cards (Δ413). The sealed-name history check runs after each seal.
+- **Result (2026-10-22).**
+  - Replacements: 36 course-local tasks, all admitted with maxauto required where it applies (tranche Dafny) and each with a fresh tag. The breakdown:
+    - the 10 that maxauto closed;
+    - 25 tranche cards that shared a dev theme: 22 tag matches and the 3 cards named by hand;
+    - 1 Q31 held-out card, also a tag match.
+  - Card counts are unchanged: course-local stays 162 / 162 (q31-dev 24, q32-dev 30, Q31 held-out 36, T1–T3 24 each).
+  - The theme check reports 0 clashes in every sealed stratum, after the dev strata gained their public cards.
+  - `tests/bench/test_agentic_strata.py` passes, including the new tranche-maxauto test.
+  - The re-walk exercised the maxauto requirement: a public tranche member that maxauto closes was refused at admission.
 - **Owner:** DV7's W3 lane; W1b for the census at par-run.
 
 ### Δ413 · The remaining public draws, pre-registered; Δ411's walk amended by the theme step — adopted (DV7 W3, 2026-10-22)
@@ -4084,4 +4093,20 @@
   - The Q31 held-out re-walk replays Δ411's order (same secret seed) with X3 inserted. It reuses Δ411's admission record for every member Δ411 admitted, and takes the next members where X3 skips one.
   - The other parts use a second secret seed, whose sha256 is `46f64c1b66ee48d56b61c23d84648eceda1caed77ebaaca3714302c2a112cf2d`. Both seeds, the orders and the walk records are published when the parts are unsealed.
 - **Dev cards.** The Q31 and Q32 dev strata are open. Their public forms ship under `bench/local/q/agentic/<dev>/<id>/tasks/`, each with its source and licence on its second line. The answers go under `Solutions/` like the course-local references.
+- **Result (2026-10-22, after the rule's commit 1d28b8b).** All public draws are done:
+
+  | part | Dafny | Verus | members walked |
+  |---|---|---|---|
+  | Q31 held-out (re-walk) | 12 cards + 5 spares | 12 | 27 D / 48 V |
+  | Q31 dev | 8 | 8 | 12 / 30 |
+  | Q32 dev | 10 | 10 | 28 / 50 |
+  | T1 | 8 cards + 4 spares | 8 | 26 / 42 |
+  | T2 | 8 cards + 4 spares | 8 | 25 / 93 |
+  | T3 | 8 cards + 4 spares | 8 | 43 / 81 |
+
+  - **Totals:** 108 public cards (54 Dafny, 54 Verus: Δ405's public needs) and 17 Dafny spares.
+  - **Q31 held-out re-walk:** three members (two Dafny, one Verus) were skipped by X3. The re-walk reused Δ411's records for the 26 members Δ411 had admitted. Its re-admissions agreed with Δ411 on every member re-run.
+  - **The Verus pool:** the walks have now considered most of the apps/verina pool (T3's Verus walk skipped 52 members as considered by earlier walks). A later part needing more Verus public tasks would have to come from another source.
+  - **Sealing and checks:** each tranche and the Q31 held-out part was re-sealed once, with every reference carrying its canary. The sealed-name history check counts 0 hits, with public stems matched at word boundaries: a numbered dataset stem can be a prefix of an open one. Encrypted archives are left out of the pickaxe.
+  - Nothing was run through a model.
 - **Owner:** DV7's W3 lane.
