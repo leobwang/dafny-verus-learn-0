@@ -45,16 +45,27 @@ class Summary:
 
 # item: R05.H1py
 def runs_from_log(path: Path) -> list[TimingRun]:
-    """Read the exact row schema above, preserving every verdict and order.
+    """**H1py.** Read the variance log into `TimingRun` rows, one per line, in
+    order, keeping every verdict. Which conditions make a line malformed, and
+    why must one malformed line fail the whole read rather than be skipped?
+
+    Read the exact row schema above, preserving every verdict and order.
 
     Use json.loads for each line. Error messages identify the one-based line;
     parsing failure must never drop a failed run or return a partial prefix.
     """
     raise NotImplementedError("R05.H1py")
+# Hint(1): enumerate the lines from 1 and parse each with json.loads inside one try.
+# Hint(2): `bool` is a subclass of `int`: test it before the numeric check.
 
 # item: R05.H2py
 def variance_summary(runs: Sequence[TimingRun], field: str, *, seed: int) -> Summary:
-    """Summarise wall_s or resource_count for at least two comparable runs.
+    """**H2py.** Summarise one numeric field of the runs: n, mean, coefficient
+    of variation and a bootstrap interval of the mean. Which library function
+    does each statistic come from, and which inputs must be refused before any
+    arithmetic?
+
+    Summarise wall_s or resource_count for at least two comparable runs.
 
     ValueError for fewer than two runs, another field, an unavailable value,
     or a nonnumeric/bool/nonfinite/negative value. Use statistics.fmean and
@@ -67,3 +78,5 @@ def variance_summary(runs: Sequence[TimingRun], field: str, *, seed: int) -> Sum
     verifier invocation. It does not establish proof correctness.
     """
     raise NotImplementedError("R05.H2py")
+# Hint(1): validate every value first, then call statistics.fmean and statistics.stdev.
+# Hint(2): the interval is fvh.stats.bootstrap_ci(values, statistics.fmean, seed=seed).

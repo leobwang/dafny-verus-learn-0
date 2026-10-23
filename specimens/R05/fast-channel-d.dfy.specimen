@@ -1,5 +1,12 @@
 // after: R05.P4dv
 module R05_NoGoalState {
-  lemma First(n: int) ensures n+1 > n { }
-  lemma Second() { assert false; }
+  lemma First(n: int)
+    ensures n + 1 > n
+  {
+  }
+
+  lemma Second()
+  {
+    assert false;
+  }
 }

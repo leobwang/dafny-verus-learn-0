@@ -17,17 +17,18 @@ only the one final whole-file gate decides the delivery. See CONTRACT.
 */
 module R05_AgentObligation {
   import opened RG_A1_Re
-  lemma ChunkInStar(a: Re,u: seq<char>)
-    requires Matches(a,u)
-    ensures Matches(Star(a),u)
+  lemma ChunkInStar(a: Re, u: seq<char>)
+    requires Matches(a, u)
+    ensures Matches(Star(a), u)
   {
     if u != [] {
       assert u[..|u|] == u && u[|u|..] == [];
     }
-    }
-  lemma JoinStarWords(a: Re,u: seq<char>,v: seq<char>)
-    requires Matches(Star(a),u) && Matches(Star(a),v)
-    ensures Matches(Star(a),u+v)
+  }
+
+  lemma JoinStarWords(a: Re, u: seq<char>, v: seq<char>)
+    requires Matches(Star(a), u) && Matches(Star(a), v)
+    ensures Matches(Star(a), u + v)
     decreases |u|
   {
     if u == [] {
@@ -38,19 +39,25 @@ module R05_AgentObligation {
       assert (u + v)[..i] == u[..i];
       assert (u + v)[i..] == u[i..] + v;
     }
-    }
+  }
+
   // item: R05.A1d
-  lemma AppendChunk(a: Re,u: seq<char>,v: seq<char>)
-    requires Matches(Star(a),u) && Matches(a,v)
-    ensures Matches(Star(a),u+v)
-  { ChunkInStar(a,v); JoinStarWords(a,u,v); }
+  lemma AppendChunk(a: Re, u: seq<char>, v: seq<char>)
+    requires Matches(Star(a), u) && Matches(a, v)
+    ensures Matches(Star(a), u + v)
+  {
+    ChunkInStar(a, v);
+    JoinStarWords(a, u, v);
+  }
 
-
-  lemma CollapseStarCat(a: Re,s: seq<char>)
-    requires Matches(Cat(Star(a),Star(a)),s)
-    ensures Matches(Star(a),s)
-  { var i :| 0 <= i <= |s| && Matches(Star(a),s[..i]) && Matches(Star(a),s[i..]); JoinStarWords(a,s[..i],s[i..]); assert s[..i]+s[i..] == s; }
-
+  lemma CollapseStarCat(a: Re, s: seq<char>)
+    requires Matches(Cat(Star(a), Star(a)), s)
+    ensures Matches(Star(a), s)
+  {
+    var i :| 0 <= i <= |s| && Matches(Star(a), s[..i]) && Matches(Star(a), s[i..]);
+    JoinStarWords(a, s[..i], s[i..]);
+    assert s[..i] + s[i..] == s;
+  }
 
 /* OBLIGATION LOG — learner-owned after the contract run.
    Fast-channel calls and failed obligations per lemma: ...

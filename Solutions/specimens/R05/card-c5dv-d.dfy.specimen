@@ -1,4 +1,7 @@
 // after: R05.P3dv
 module R05_RepeatedTimingCard {
-  lemma TimingIdentityR05(n: int) ensures n+2 > n { }
+  lemma TimingIdentityR05(n: int)
+    ensures n + 2 > n
+  {
+  }
 }

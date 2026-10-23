@@ -1,6 +1,16 @@
 // after: R05.P4dv
 use vstd::prelude::*;
+
 verus! {
-pub proof fn first(n: int) ensures n+1 > n { }
-pub proof fn second() { assert(false); }
+
+pub proof fn first(n: int)
+    ensures
+        n + 1 > n,
+{
 }
+
+pub proof fn second() {
+    assert(false);
+}
+
+} // verus!

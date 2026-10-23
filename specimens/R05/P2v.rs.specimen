@@ -2,14 +2,18 @@
 // Commit labels before running; the paired chain uses subrange.
 // SLOT: FAILS ???
 use vstd::prelude::*;
+
 verus! {
-pub proof fn lemma_slice_chain_r05(s: Seq<char>,i: int,j: int)
-    requires 0 <= i <= j <= s.len(),
+
+pub proof fn lemma_slice_chain_r05(s: Seq<char>, i: int, j: int)
+    requires
+        0 <= i <= j <= s.len(),
 {
-    assert(s.subrange(0,i)+s.subrange(i,j) =~= s); // [a]
-    assert(s.subrange(j,s.len() as int) =~= Seq::<char>::empty()); // [b]
-    assert(s.subrange(0,j).subrange(0,i) =~= s.subrange(0,i)); // [c]
-    assert(s.subrange(i,s.len() as int).subrange(0,j-i) =~= s.subrange(i,j)); // [d]
-    assert(s.subrange(0,i) =~= Seq::<char>::empty()); // [e]
+    assert(s.subrange(0, i) + s.subrange(i, j) =~= s);  // [a]
+    assert(s.subrange(j, s.len() as int) =~= Seq::<char>::empty());  // [b]
+    assert(s.subrange(0, j).subrange(0, i) =~= s.subrange(0, i));  // [c]
+    assert(s.subrange(i, s.len() as int).subrange(0, j - i) =~= s.subrange(i, j));  // [d]
+    assert(s.subrange(0, i) =~= Seq::<char>::empty());  // [e]
 }
-}
+
+} // verus!

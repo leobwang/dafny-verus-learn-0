@@ -1,94 +1,168 @@
 # R05 — No goal state
 
-Three ideas do all the work:
+R02 and R04 gave you the proof moves of this track: a split named by its slices, an existential taken apart with `:|` or `choose`, a claim covering every candidate. Neither verifier shows you a goal state while you make them. There is no window listing the hypotheses and the remaining goal, as an interactive prover has; there is a failing line, sometimes a related line, and a verdict. R05 installs the habits that replace the goal window: read exactly which obligation failed and which definition it reached into, bisect a long failure into a short one, keep a fact's scope small with `assert … by`, isolate obligations so that one failure cannot hide another, use the fast channel while editing and the full gate once, and treat the time and work a proof costs as a measurement with a spread, not a constant.
 
-1. An error identifies an obligation that the current proof did not establish. Reconstruct its assumptions and conclusion from the program; the message does not supply an interactive goal state.
-2. A small, selected verification run is useful feedback during an edit. Completion needs the complete, unfiltered gate and an assumption audit against unchanged statements.
-3. Solver work and elapsed time describe a particular experiment. Repeated measurements and a stated sampling procedure make their uncertainty visible; a single fast run does not establish a performance advantage.
+Every construct below appears first in a small example whose verifier output is printed directly under it, captured on the course pins. R is standalone: use R01, R02, R04 and the declared A1 layer; Python enters the track here, in `harness/r/fvh_r/variance.py`.
+
+**Three ideas do all the work.**
+
+1. **A failure names an obligation, not a goal.** The error line, its related lines and the stage tell you which formula could not be established and which definition the solver was unfolding; the missing fact is yours to find, by adding one assertion at a time.
+2. **Scope is a tool.** `assert … by` proves a claim from a local block and exports only the claim; isolation runs each assertion or function in its own solver context. Both make a failure smaller and its cause easier to read.
+3. **A run is a sample.** The pinned solver's work count is reproducible for an unchanged input at the pinned seed; the wall time of the same run is not. A measurement needs its population, its sample size and its interval, and an interval about a mean is not a promise about the next run.
+
+---
 
 ## 0. How this module works
 
-R05 takes 402 minutes: setup 10, reading 65, worked examples and WRITE cards 30, other cards 6, predictions 12, eight formal holes 72, Python 35, variance log 30, latency log 15, agent 25, written work 45, bench card 20, viva 30 and calibration 7. These are planning estimates; record your actual times. There is no test-out or Q-credit waiver here. The measurement work introduces Python in the R track, even if you already used Python in Q.
+**Budget: 402 minutes**, including the module viva and excluding contractor wall time. These are planning estimates; record your own.
 
-Use only frozen A1. Earlier learner solutions are not dependencies: an unfinished R02 or parked R03 does not change the code this module verifies. A1b contains later re-supplied facts and is outside this module's layer. Do not import it to finish these holes. Keep proofs you develop here in the files that own them.
+| setup | read | worked | cards | predictions | holes | Python | variance log | latency log | agent | paper | bench card | viva | calibration | total |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10 | 65 | 30 | 6 | 12 | 72 | 35 | 30 | 15 | 25 | 45 | 20 | 30 | 7 | **402** |
 
-**This module's files** are listed below. A typed hole can produce a green learner-loop result; the gate still rejects it. The Python acceptance suite also rejects its two unfinished functions.
+The hole minutes are 8 for each of H1–H3 and 12 for H4, in either language; the two Python holes are 12 each.
 
-| path | role and shipping state |
-|---|---|
-| `dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy` | exercise: verified, 4 holes, 0 errors |
-| `verus/r/r05_no_goal_state/src/lib.rs` | exercise: verified, 4 holes, 0 errors |
-| `harness/r/fvh_r/variance.py` | learner Python: 2 holes; acceptance deliberately fails until completed |
-| `dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy` | agent: verified, 2 holes, 0 errors; RED at the gate |
-| `verus/r/r05_no_goal_state/src/agent.rs` | agent: verified, 2 holes, 0 errors; RED at the gate |
-| `specimens/R05/` and `slots/R05.slots` | four predictions, their exact run scenarios and card demonstrations |
-| `harness/tests/r/test_variance.py` | frozen acceptance tests; read after prediction commitment, never edit |
-| `research/r05/variance.jsonl`, `research/r05/NOTES.md` | your measured runs and interpretation; create them during the exercise |
-| `dafny/given/R/RG_A1_Re.dfy`, `verus/given/rg_re_a1` | frozen datatype and matching semantics, no earlier learner proofs |
-| `paper/R05_problems.tex`, `paper/R05_answers.tex` | three written problems and your answers |
-| `Solutions/`, `paper/solutions/` | reference twins and written solutions — LAST, after your completed attempt and review |
+**Predictions.** Commit the four answers below before running their scenarios or opening the card demos, the bank or the rubric. The obligation answers go in the commented slots of `specimens/R05/P1d.dfy.specimen` and `specimens/R05/P2v.rs.specimen`; the two verdicts in `slots/R05.slots`, switched on by the `CHECK` lines of the Dafny file. Respect each printed answer form, then run `scripts/firsttry.sh R05 --check`.
 
-Keep all prediction switches disabled while you commit answers. P1d and P2v are the two specimen headers; P3dv and P4dv use `slots/R05.slots`. Answer every one, then run `scripts/firsttry.sh R05 --check`. Only afterward enable `FAILS` and `CHECK`. A second run can help you learn, but it cannot replace the first recorded attempt. The prediction specimens contain assertions intended to fail; repairing them would change the question.
+> **Predict (P1) — commit in the file before reading on.** `specimens/R05/P1d.dfy.specimen` holds five labelled asserts about slices of a sequence `s` with `0 <= i <= j <= |s|`: [a] `s[..i] + s[i..j] == s`; [b] `s[j..] == []`; [c] `s[..j][..i] == s[..i]`; [d] `s[i..][..j - i] == s[i..j]`; [e] `s[..i] == []`. No lemma is called. Which fail?
 
-> **Predict (P1) — commit in the file before reading on.** In the Dafny slice specimen, five labelled assertions follow one another under the printed index bounds. Which labels fail? Include only labels the pinned verifier reports, in increasing label order, or `none`.
+> **Predict (P2) — commit in the file before reading on.** `specimens/R05/P2v.rs.specimen` holds the same five claims over `subrange`, each stated with `=~=`. Which fail?
 
-> **Predict (P2) — commit in the file before reading on.** The Verus specimen expresses the paired chain with `subrange` and sequence extensional equality. Which labels fail? Commit separately from P1d before comparing the outputs.
+> **Predict (P3) — commit in the file before reading on.** Ten runs of `scripts/vcheck --json --measures`, one after another, on one verified file (W1 copied into a file of its own; the pinned seed; nothing changed between runs). Across the ten documents, is the `resource_count` field always the same, and is `wall_s`? Answer `D:<same|varies>,<same|varies> V:<same|varies>,<same|varies>`, resource count first.
 
-> **Predict (P3) — commit in the file before reading on.** Run the unchanged W1 copy ten times sequentially with the pinned seed and `--json --measures`. Across the ten documents, is `resource_count` always the same, and is `wall_s`? Use `D:<same|varies>,<same|varies> V:<same|varies>,<same|varies>`, with resource count first.
+> **Predict (P4) — commit in the file before reading on.** A file holds two lemmas, the first correct and the second with a false `assert`. What verdict does `scripts/vcheck --symbol` report on the first (Dafny `R05_NoGoalState.First`, Verus `first`)? Answer `D:<v> V:<v>`.
 
-> **Predict (P4) — commit in the file before reading on.** Each fast-channel specimen contains a correct first lemma and a second lemma with a false assertion. Predict `--symbol R05_NoGoalState.First` in Dafny and `--symbol first` in Verus. Use `D:<v> V:<v>`; the question is about the named-symbol run.
+### This module's files
 
-Start with the shipping state so that later changes have an observable baseline. The output fences in this chapter are captures of the exact commands shown, under the course pin. Their hole counts describe the source as shipped, not your later completed file.
+| file | role | shipped state |
+|---|---|---|
+| `dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy` | prediction block, worked examples, cards, holes H1d–H4d, the logs block | verified, 4 holes, 0 errors |
+| `verus/r/r05_no_goal_state/src/lib.rs` | the paired Verus file | verified, 4 holes, 0 errors |
+| `harness/r/fvh_r/variance.py` | the variance log's parser and summary (Python) | 2 holes; its frozen acceptance tests fail as shipped |
+| `specimens/R05/`, `slots/R05.slots` | prediction specimens, the fast-channel and timing scenarios, card demos | slots unfilled; demos fail by design |
+| `dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy` | the obligation prover's file | verified, 2 holes, 0 errors |
+| `verus/r/r05_no_goal_state/src/agent.rs` | the paired obligation prover's file | verified, 2 holes, 0 errors |
+| `dafny/given/R/RG_A1_Re.dfy`, `verus/given/rg_re_a1/src/lib.rs` | the frozen A1 layer: definitions only | verified; no lemma supplied |
+| `paper/R05_problems.tex`, `paper/R05_answers.tex` | the card and two written problems, and your answers | template compiles; answers unfilled |
+| `bench/local/r/README.md` | instructions for your fourth local bench card | you create the card |
+| `Solutions/`, `paper/solutions/` | references | yours to open LAST, after your attempts, gates and review |
+
+As shipped, the exercise files verify in the learner loop with their holes counted, and the Python file's tests fail at its two holes:
 
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R05_NoGoalState/core
 vcheck: dafny/R/R05_NoGoalState/core [dafny, learner loop]: verified — 35 verified, 4 holes, 0 errors
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:57:20: hole bodyless-method R05.H1d
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:64:20: hole bodyless-method R05.H2d
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:70:20: hole bodyless-method R05.H3d
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:81:5: hole assume R05.H4d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:88:20: hole bodyless-method R05.H1d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:104:20: hole bodyless-method R05.H2d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:117:20: hole bodyless-method R05.H3d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139:5: hole assume R05.H4d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r05_no_goal_state
 vcheck: verus/r/r05_no_goal_state [verus, learner loop]: verified — - verified, 4 holes, 0 errors
-verus/r/r05_no_goal_state/src/lib.rs:47:38: hole assume R05.H1v
-verus/r/r05_no_goal_state/src/lib.rs:56:38: hole assume R05.H2v
-verus/r/r05_no_goal_state/src/lib.rs:64:38: hole assume R05.H3v
-verus/r/r05_no_goal_state/src/lib.rs:76:40: hole assume R05.H4v
+verus/r/r05_no_goal_state/src/lib.rs:84:40: hole assume R05.H1v
+verus/r/r05_no_goal_state/src/lib.rs:103:40: hole assume R05.H2v
+verus/r/r05_no_goal_state/src/lib.rs:120:40: hole assume R05.H3v
+verus/r/r05_no_goal_state/src/lib.rs:145:40: hole assume R05.H4v
 ```
+
+<!-- pin: python-shipped -->
+```
+$ scripts/vcheck harness/r/fvh_r/variance.py
+vcheck: harness/r/fvh_r/variance.py [python, learner loop]: failed — 0 passed, 38 failed, 2 holes
+harness/r/fvh_r/variance.py:47:1: hole raise-not-implemented R05.H1py
+harness/r/fvh_r/variance.py:62:1: hole raise-not-implemented R05.H2py
+harness/tests/r/test_variance.py:25: error: tests/r/test_variance.py::test_rows_preserve_order_verdict_null_and_extra_fields: NotImplementedError: R05.H1py
+...
+```
+
+The excerpt keeps the summary, the two holes and the first test failure; the other 37 failures also stop at `NotImplementedError` from one of the two holes.
 
 ---
 
-## 1. Read an obligation without a goal window
+## 1. Obligations without a goal window
 
-A verifier translates a declaration into verification conditions. The conditions cover its postconditions, the preconditions of calls, the validity of expressions, assertions and termination. A diagnostic gives a source location and some classification of the failed check. It usually leaves you to reconstruct the hypotheses that were in scope there. Start by writing a two-column note: what is available, and what is owed. Copy the actual expressions and their types. Replacing a sequence equality with an informal claim about “the same part” often hides precisely the index relation that is missing.
+### 1.1 What a failure names
 
-For a postcondition failure, the conclusion comes from the declaration's `ensures`. Its potential hypotheses include the declaration's `requires`, facts established by earlier statements, branch guards, and contracts of called lemmas. For a call failure, the conclusion is the callee's precondition after substituting its actual arguments. A successful call can then make the callee's postcondition available. The proof of that callee still needs its own complete verification. A call to a bodyless lemma can look useful while leaving a counted hole elsewhere in the unit.
+Take a fact that needs two splits named, `Cat(Cat(Chr('o'), Chr('k')), Alt(Chr('x'), Chr('y')))` matching "oky", with an empty body:
 
-Write down bounds before manipulating a slice. An expression such as `s[i..j]` is meaningful only with its required endpoint ordering. An assertion about slices can generate a range obligation in addition to an equality obligation. A message on the assertion's line does not tell you that the equality was the only problem. Inspect related diagnostic locations and classify every reported obligation before choosing a repair. In Verus, distinguish a sequence's mathematical length from a machine integer used by executable code; an `int` endpoint inside a proof has a different range story from an unchecked conversion in a program.
+```dafny
+module R05_ChBisect {
+  import opened RG_A1_Re
 
-The first diagram separates the source you wrote, the conditions generated from it and the observations you get back.
+  lemma OkThenXOrY()
+    ensures Matches(Cat(Cat(Chr('o'), Chr('k')), Alt(Chr('x'), Chr('y'))), "oky")
+  {
+  }
+}
+```
+
+<!-- pin: bis-0-d -->
+```
+$ scripts/vcheck --module R05 bis-0.dfy
+vcheck: bis-0.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 1 error
+bis-0.dfy:6:3: error: a postcondition could not be proved on this return path
+bis-0.dfy:5:20: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A1_Re.dfy:21:23: related: this proposition could not be proved
+```
+
+Read the three lines from the top. The error is the return path of `OkThenXOrY`: the postcondition was not established when the body ended. The first related line points at the postcondition itself. The second points into A1: line 21 of `RG_A1_Re.dfy` is the `Cat` case of `Matches`, the existential over split points. That is the closest thing to a goal state you get: the solver unfolded `Matches` at the outer `Cat` and could not find a split that makes both sides hold. It does not say which split, or which side failed; that is what you find out next, one fact at a time. Verus reports the same situation with less: the failing `assert` and its line.
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_ok_then_x_or_y() {
+    let ok = Re::Cat(Box::new(Re::Chr('o')), Box::new(Re::Chr('k')));
+    let xy = Re::Alt(Box::new(Re::Chr('x')), Box::new(Re::Chr('y')));
+    let s = seq!['o', 'k', 'y'];
+    assert(s.subrange(0, 2) =~= seq!['o', 'k']);
+    assert(s.subrange(2, 3) =~= seq!['y']);
+    assert(matches(Re::Cat(Box::new(ok), Box::new(xy)), s));
+}
+
+} // verus!
+```
+
+<!-- pin: bis-0-v -->
+```
+$ scripts/vcheck --module R05 bis-0.rs
+vcheck: bis-0.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+bis-0.rs:12:12: error: assertion failed
+```
+
+The subranges of the split are stated and the assertion still fails: Verus unfolds `matches` only where it is mentioned (R02 §2.2), and neither side's `matches` term is. The message names the assertion, and the assertion is yours to break into smaller ones.
 
 ```mermaid
 flowchart LR
-  src["Source and frozen contracts"] --> vc["Calls, assertions, bounds, termination"]
-  vc --> solver["Pinned solver run"]
-  solver --> loc["Verdict and labelled locations"]
-  loc --> note["Reconstruct hypotheses and conclusion"]
-  note --> edit["One justified edit"]
-  edit --> src
+  P["A proof: a postcondition and a body"] --> O["Obligations: one per assert, call, return path and arithmetic operation"]
+  O --> V["The solver: each obligation verified, failed or out of resource"]
+  V --> L["The output: the failing obligation's line, its related lines, the stage"]
+  L --> F["Your move: name the fact the failing obligation lacked"]
 ```
 
-The arrow back to the source represents an edit and a new run. It is not a hidden proof state that the solver maintains for you between runs. Preserve the command and output that motivated the edit so you can later distinguish a real repair from an unrelated outcome change.
+Every `assert`, every call's precondition, every return path's postcondition and every bounded operation is a separate obligation, with its own line in the output when it fails. Learning to see a proof as that list, rather than as one statement that is either proved or not, is the first half of working without a goal window.
 
-A failed verification establishes that the current attempt did not discharge the obligation within that run's settings. It does not generally prove that the mathematical claim is false. A counterexample to a universal claim needs a concrete allowed input and a checked contradiction of its conclusion. Conversely, increasing a resource limit until a proof succeeds says nothing about whether the original statement described your intended program. These are separate questions, with different evidence.
+### 1.2 The slice chain
 
-Do not infer a proof search trace from the order of messages. The tool may batch conditions, isolate assertions or report related locations alongside a primary failure. The same failed obligation can have several useful locations. Count failed obligations only under a defined convention in your log, and preserve the raw output so another reader can check that convention. A source-line count is especially misleading when several assertions occupy one line or a macro expands into several checks.
+The facts that most often go missing in this track are slice facts: what a slice of a slice is, and how two slices recombine. P1 and P2 ask which of five such facts the solvers know without help. The Dafny specimen's chain:
 
-After your first tries are recorded, run the two prediction specimens. A failed assertion can become an assumption for later verification conditions. Consequently the reported label set is not simply a list of every proposition that would be false when considered independently under the initial precondition. To investigate a surprising later label, copy the specimen into scratch, keep its index bounds, and remove or replace an earlier assertion in that copy. Do not change the committed prediction source to make the expected labels fit your intuition.
+```dafny
+lemma SliceChainR05(s: seq<char>, i: int, j: int)
+  requires 0 <= i <= j <= |s|
+{
+  assert s[..i] + s[i..j] == s;  // [a]
+  assert s[j..] == [];  // [b]
+  assert s[..j][..i] == s[..i];  // [c]
+  assert s[i..][..j - i] == s[i..j];  // [d]
+  assert s[..i] == [];  // [e]
+}
+```
 
 <!-- pin: obligation-d -->
 ```
@@ -98,105 +172,428 @@ specimens/R05/P1d.dfy.specimen:8:5: error: assertion might not hold
 specimens/R05/P1d.dfy.specimen:12:5: error: assertion might not hold
 ```
 
+```rust
+pub proof fn lemma_slice_chain_r05(s: Seq<char>, i: int, j: int)
+    requires
+        0 <= i <= j <= s.len(),
+{
+    assert(s.subrange(0, i) + s.subrange(i, j) =~= s);  // [a]
+    assert(s.subrange(j, s.len() as int) =~= Seq::<char>::empty());  // [b]
+    assert(s.subrange(0, j).subrange(0, i) =~= s.subrange(0, i));  // [c]
+    assert(s.subrange(i, s.len() as int).subrange(0, j - i) =~= s.subrange(i, j));  // [d]
+    assert(s.subrange(0, i) =~= Seq::<char>::empty());  // [e]
+}
+```
+
 <!-- pin: obligation-v -->
 ```
 $ scripts/vcheck specimens/R05/P2v.rs.specimen
 vcheck: specimens/R05/P2v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 2 errors
-specimens/R05/P2v.rs.specimen:9:12: error: assertion failed
-specimens/R05/P2v.rs.specimen:13:12: error: assertion failed
+specimens/R05/P2v.rs.specimen:12:12: error: assertion failed
+specimens/R05/P2v.rs.specimen:16:12: error: assertion failed
 ```
 
-Use the observations to explain the relationship between assertions, rather than memorising the letters. For each reported location, name its conclusion and the assumptions that preceded it. For one location that was not reported, explain whether its fact follows from the original bounds, earlier established facts, or an earlier failed assertion carried into the subsequent condition. This is a local explanation of this chain; it does not license a general rule that unreported assertions were all proved from sound earlier code.
+The answer is `FAILS a e` in both languages. [c] and [d] are true for every legal `i` and `j`, and both solvers prove them: a slice of a slice is a slice, with the indices added. [a] and [e] are false in general: [a] is missing the tail `s[j..]` (it holds only when `j == |s|`), and [e] says the head is empty, which the precondition does not imply. One counterexample (`s = "abc"`, `i = 1`, `j = 2`) refutes both.
+
+[b] is the instructive one. It is false in general too (`s[j..]` is empty only when `j == |s|`), and yet it verifies. A verifier reports a failed assertion and then *assumes* it for the rest of the path, so that one error does not cascade into many. After [a] fails, the solver knows `s[..i] + s[i..j] == s`, which forces `j == |s|`, and [b] follows. So an assertion that verifies after an earlier failure has verified *under that failure*: in a bisection, fix or remove the first failure before you trust anything after it. The two true facts, [c] and [d], are the ones the holes of this module need over and over: when a proof about a split fails, the first question is which slice of which string you have stated, and which you have assumed.
 
 ---
 
-## 2. Bisection turns a large failure into a small question
+## 2. Bisection
 
-W1 proves a short sequence decomposition with an assertion after each step. Read its five assertions as a chain of facts. First the selected suffix is nonempty; then its first element is identified; then its remaining suffix is identified; then the head and tail are reassembled; finally the names are substituted back into the advertised equality. No regex semantics is involved. This lets you inspect a complete slicing argument without being handed either direction of concatenation associativity.
+### 2.1 Bisect a failing proof
 
-Ask what an assertion is doing before adding another one. It might record a bound, instantiate a quantified fact, identify two sequence expressions extensionally, expose a definition, or package a conclusion for a later call. “The solver needs this” describes an observation, not the reason the proposition is true. The reason should fit on a short line beside the assertion: a precondition, an index calculation, a constructor equation or a lemma's postcondition. If you cannot supply that reason, stop before trying to make the solver accept the statement.
+Bisection finds a missing fact without a goal window. Assert an intermediate claim; if the failure moves to your new line, the claim itself is the next thing to establish; if the old failure persists while your line verifies, the gap is after it. Repeat until each failing line is one step. Here is §1.1's lemma, one fact at a time. First the outer split's two slices:
 
-For a long straight-line proof, start with a statement about the intended intermediate state near the middle. If it fails, focus on the earlier half; if it succeeds but the final target still fails, focus on the later half. This strategy assumes that the midpoint assertion is itself the right fact to connect the two parts. Choosing a proposition unrelated to the target can produce a perfectly verified midpoint and leave the original problem unchanged. State why the proposed midpoint would help the remaining proof before using the run to direct your next edit.
+```dafny
+module R05_ChBisect {
+  import opened RG_A1_Re
 
-Here is the diagnostic decision structure. Each split asks whether a particular intermediate fact was established.
+  lemma OkThenXOrY()
+    ensures Matches(Cat(Cat(Chr('o'), Chr('k')), Alt(Chr('x'), Chr('y'))), "oky")
+  {
+    assert "oky"[..2] == "ok";
+    assert "oky"[2..] == "y";
+  }
+}
+```
+
+<!-- pin: bis-1-d -->
+```
+$ scripts/vcheck --module R05 bis-1.dfy
+vcheck: bis-1.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 1 error
+bis-1.dfy:6:3: error: a postcondition could not be proved on this return path
+bis-1.dfy:5:20: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A1_Re.dfy:21:23: related: this proposition could not be proved
+```
+
+Both slice facts verify (no error names their lines; they are true, so §1.2's caution about facts after a failure does not arise), and the postcondition still fails at the same `Cat` case. So the split is not the problem; one of its sides is. Assert the left side:
+
+```dafny
+module R05_ChBisect {
+  import opened RG_A1_Re
+
+  lemma OkThenXOrY()
+    ensures Matches(Cat(Cat(Chr('o'), Chr('k')), Alt(Chr('x'), Chr('y'))), "oky")
+  {
+    assert "oky"[..2] == "ok";
+    assert "oky"[2..] == "y";
+    assert Matches(Cat(Chr('o'), Chr('k')), "ok");
+  }
+}
+```
+
+<!-- pin: bis-2-d -->
+```
+$ scripts/vcheck --module R05 bis-2.dfy
+vcheck: bis-2.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 2 errors
+bis-2.dfy:6:3: error: a postcondition could not be proved on this return path
+bis-2.dfy:5:20: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A1_Re.dfy:21:23: related: this proposition could not be proved
+bis-2.dfy:9:19: error: assertion might not hold
+dafny/given/R/RG_A1_Re.dfy:21:23: related: this proposition could not be proved
+```
+
+Now there are two errors, and the new one is on the line you added (line 9), again reaching into the `Cat` case: the left side is itself a `Cat` whose split nobody named. The failure moved inward. Name that split:
+
+```dafny
+module R05_ChBisect {
+  import opened RG_A1_Re
+
+  lemma OkThenXOrY()
+    ensures Matches(Cat(Cat(Chr('o'), Chr('k')), Alt(Chr('x'), Chr('y'))), "oky")
+  {
+    assert "oky"[..2] == "ok";
+    assert "oky"[2..] == "y";
+    assert "ok"[..1] == "o";
+    assert "ok"[1..] == "k";
+    assert Matches(Cat(Chr('o'), Chr('k')), "ok");
+  }
+}
+```
+
+<!-- pin: bis-3-d -->
+```
+$ scripts/vcheck --module R05 bis-3.dfy
+vcheck: bis-3.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 1 error
+bis-3.dfy:6:3: error: a postcondition could not be proved on this return path
+bis-3.dfy:5:20: related: this is the postcondition that could not be proved
+dafny/given/R/RG_A1_Re.dfy:21:23: related: this proposition could not be proved
+```
+
+The inner assertion verifies; the postcondition still fails. Only the right side is left, the `Alt`, and one more line names the branch that holds:
+
+```dafny
+module R05_ChBisect {
+  import opened RG_A1_Re
+
+  lemma OkThenXOrY()
+    ensures Matches(Cat(Cat(Chr('o'), Chr('k')), Alt(Chr('x'), Chr('y'))), "oky")
+  {
+    assert "oky"[..2] == "ok";
+    assert "oky"[2..] == "y";
+    assert "ok"[..1] == "o";
+    assert "ok"[1..] == "k";
+    assert Matches(Cat(Chr('o'), Chr('k')), "ok");
+    assert Matches(Chr('y'), "y");
+  }
+}
+```
+
+<!-- pin: bis-4-d -->
+```
+$ scripts/vcheck --module R05 bis-4.dfy
+vcheck: bis-4.dfy [dafny, learner loop]: verified — 6 verified, 0 holes, 0 errors
+```
+
+Four runs, each a small question with a definite answer. The Verus version needs every side's `matches` mentioned, as §1.1 found; its bisection ends here:
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+proof fn lemma_ok_then_x_or_y() {
+    let ok = Re::Cat(Box::new(Re::Chr('o')), Box::new(Re::Chr('k')));
+    let xy = Re::Alt(Box::new(Re::Chr('x')), Box::new(Re::Chr('y')));
+    let s = seq!['o', 'k', 'y'];
+    let w = seq!['o', 'k'];
+    assert(s.subrange(0, 2) =~= w);
+    assert(s.subrange(2, 3) =~= seq!['y']);
+    assert(w.subrange(0, 1) =~= seq!['o']);
+    assert(w.subrange(1, 2) =~= seq!['k']);
+    assert(matches(Re::Chr('o'), w.subrange(0, 1)));
+    assert(matches(Re::Chr('k'), w.subrange(1, 2)));
+    assert(matches(ok, s.subrange(0, 2)));
+    assert(matches(Re::Chr('y'), s.subrange(2, 3)));
+    assert(matches(xy, s.subrange(2, 3)));
+    assert(matches(Re::Cat(Box::new(ok), Box::new(xy)), s));
+}
+
+} // verus!
+```
+
+<!-- pin: bis-4-v -->
+```
+$ scripts/vcheck --module R05 bis-4.rs
+vcheck: bis-4.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The Dafny bisection as a tree: each question is one run, and each answer picks the next fact to assert.
 
 ```mermaid
 flowchart TD
-  target["Final obligation fails"] --> midpoint["Insert a justified midpoint fact"]
-  midpoint --> result["Run the selected lemma"]
-  result --> early["Midpoint fails: inspect its prerequisites"]
-  result --> late["Midpoint succeeds: inspect the remaining bridge"]
-  early --> smaller["Choose a smaller factual question"]
-  late --> smaller
+  F["The postcondition fails at the outer Cat"] --> S["Assert the split's two slices"]
+  S --> L{"Does the left side verify?"}
+  L -- "no: the failure moves to the new line" --> LL["Assert the inner split's slices"]
+  L -- "yes" --> R{"Does the right side verify?"}
+  LL --> R
+  R -- "no" --> RR["Assert the branch that holds"]
+  R -- "yes" --> D["The postcondition verifies"]
+  RR --> D
 ```
 
-This diagram describes an investigation, not a proof rule. Both halves can contain problems. After each repair, verify the whole lemma again and eventually verify the complete unit. Keep the original failure and the edit that removed it so that a later regression can be traced to a specific changed fact.
+A cheaper probe than a new assertion is `assert false;` at a point: if the error moves to it, everything before it verified and the gap is after it. Remove it before you go on; a forgotten `assert false` that verifies means the code after it is unreachable, which is its own bug.
 
-Bisection also applies to a branch. Put the condition you expect to hold at the join into words, then check whether each branch establishes it under its actual guard. An assertion before a recursive call and one after it answer different questions. The first might justify the call's arguments; the second might relate the callee's result to the caller's desired conclusion. Placing all assertions at the end makes those responsibilities harder to see and can hide an earlier missing range fact behind a later postcondition failure.
+### 2.2 Facts per line
 
-H4 is an annotation exercise: its branch, witness selection, recursive call and decreasing measure are given. Keep that structure. Replace its single typed placeholder with true annotations and locate the missing bridge using short runs. Do not replace the supplied proof with a call to a later given-layer theorem, add a precondition that excludes the difficult branch, or delete its recursive step. The exercise is about discovering and stating the facts that connect the given steps. Your final explanation should say which obligation each added fact addresses.
+When a proof verifies, each line still has a reason to be there or not. The worked example W1 relates a suffix of `s` to its first element and the rest, with one fact per line:
 
-Once the proof works, use a scratch copy for deletion experiments. Remove one proposed fact, rerun the same selected lemma with the same settings, and record whether the obligation returns. Restore the fact before testing another deletion so the experiment has a single changed variable. Several facts can be jointly redundant even when deleting either one individually appears harmless, and a solver may establish a fact in several ways. Report what your experiment shows, with its scope, instead of claiming to have found the unique minimal proof.
+```dafny
+lemma SliceBridge(s: seq<char>, i: int)
+  requires 0 <= i < |s|
+  ensures s[i..] == [s[i]] + s[i + 1..]
+{
+  var tail := s[i..];
+  assert |tail| > 0;
+  assert tail[0] == s[i];
+  assert tail[1..] == s[i + 1..];
+  assert tail == [tail[0]] + tail[1..];
+  assert s[i..] == [s[i]] + s[i + 1..];
+}
+```
 
-Temporary assertions can remain in a readable proof when they state meaningful steps. Remove accidental debris: duplicate bounds with no explanatory role, names that encode the last error message rather than the mathematical object, and assertions you cannot justify. At the proof-shape review bar, each recursive call should have an intelligible argument and each helper should have a contract that another reader can use without reading its implementation.
+```rust
+pub proof fn lemma_slice_bridge(s: Seq<char>, i: int)
+    requires
+        0 <= i < s.len(),
+    ensures
+        s.subrange(i, s.len() as int) == seq![s[i]] + s.subrange(i + 1, s.len() as int),
+{
+    let tail = s.subrange(i, s.len() as int);
+    assert(tail.len() > 0);
+    assert(tail[0] == s[i]);
+    assert(tail.drop_first() =~= s.subrange(i + 1, s.len() as int));
+    assert(tail =~= seq![tail[0]] + tail.drop_first());
+    assert(s.subrange(i, s.len() as int) == seq![s[i]] + s.subrange(i + 1, s.len() as int));
+}
+```
+
+The `var` (Verus `let`) is a binding, not a fact: it names `s[i..]` so that later lines can talk about it. Each `assert` is an obligation discharged at its line and a fact for every later one. Some of these lines may be unnecessary for the solver; a deletion experiment in a scratch copy tells you which, and §8's written problem B2 asks you to separate that solver observation from the logical dependency. At this module's bar (`proof-shape`), keep the lines a reader needs to follow the argument, and delete the ones that neither the solver nor a reader uses.
 
 ---
 
-## 3. Local proof scope and isolation
+## 3. Scope and isolation
 
-An `assert … by` block makes a local proof of one proposition. Within it, you may introduce temporary names or intermediate facts. The asserted proposition is available afterward; the internal scaffolding is local. If a later step needs an internal fact, either state it as the asserted conclusion or prove the needed fact where it belongs. Expanding every assertion into a long block is not the goal. Use scope to make the interface between steps explicit.
+### 3.1 `assert … by` keeps its facts local
 
-W2 demonstrates the paired syntax with a small integer argument. In Dafny, write `assert P by { ... }`; in Verus, write `assert(P) by { ... }`. Follow the actual punctuation in the given files. An error inside such a block is an obligation of that block, even when the outer proposition is mathematically easy. The WRITE card deliberately contains a bad local assertion. Explain why proving the outer arithmetic claim does not excuse the unjustified local step.
+`assert P by { … }` proves `P` from the block and makes only `P` available afterwards; whatever the block establishes or reveals stays inside it. The WRITE card C1's demos put a false fact inside the block:
+
+```dafny
+module R05_AssertScopeCard {
+  lemma ScopeR05(n: int)
+  {
+    assert n + 2 > n by {
+      assert false;
+    }
+  }
+}
+```
 
 <!-- pin: assert-by-d -->
 ```
 $ scripts/vcheck specimens/R05/card-c1d.dfy.specimen
 vcheck: specimens/R05/card-c1d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R05/card-c1d.dfy.specimen:3:25: error: assertion might not hold
+specimens/R05/card-c1d.dfy.specimen:5:7: error: assertion might not hold
+```
+
+```rust
+pub proof fn lemma_scope_r05(n: int) {
+    assert(n + 2 > n) by {
+        assert(false);
+    }
+}
 ```
 
 <!-- pin: assert-by-v -->
 ```
 $ scripts/vcheck specimens/R05/card-c1v.rs.specimen
 vcheck: specimens/R05/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R05/card-c1v.rs.specimen:4:33: error: assertion failed
+specimens/R05/card-c1v.rs.specimen:7:16: error: assertion failed
 ```
 
-Keep the distinction between proof scope and definition visibility. A proof block's closing brace does not turn an opaque definition into a revealed one everywhere, and opening a definition is not a substitute for proving a quantified property of it. Similarly, introducing a chosen witness gives a particular value satisfying its predicate; it does not establish the predicate for an arbitrary value that happens to have the same type. Use explicit names for the sequence, its endpoints and any chosen decomposition so that scope errors are visible in the prose account of the proof.
+The block's own obligations are checked: `assert false` fails inside it, so a `by` block is not a place to hide an assumption. The other half of the rule, that a fact established inside stays inside, shows with an opaque definition revealed only in the block:
 
-For Dafny, `@IsolateAssertions` asks the verifier to separate assertion batches. For Verus, `#[verifier::spinoff_prover]` places the annotated proof in a separate prover context. These mechanisms are related diagnostic tools, but they are not identical transformations with identical timing behavior. Use `scripts/vcheck --isolate` when the wrapper's diagnostic mode is appropriate, and preserve the command in your record. Ordinary gate runs still use the pinned acceptance route.
+```dafny
+module R05_ChByLocal {
+  opaque function Five(): int
+  {
+    5
+  }
+
+  lemma ByIsLocal()
+  {
+    assert Five() > 0 by {
+      reveal Five();
+    }
+    assert Five() == 5;
+  }
+}
+```
+
+<!-- pin: by-local-d -->
+```
+$ scripts/vcheck --module R05 by-local.dfy
+vcheck: by-local.dfy [dafny, learner loop]: failed — 5 verified, 0 holes, 1 error
+by-local.dfy:12:5: error: assertion might not hold
+```
+
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+#[verifier::opaque]
+spec fn five() -> int {
+    5
+}
+
+proof fn by_is_local() {
+    assert(five() > 0) by {
+        reveal(five);
+    }
+    assert(five() == 5);
+}
+
+} // verus!
+```
+
+<!-- pin: by-local-v -->
+```
+$ scripts/vcheck --module R05 by-local.rs
+vcheck: by-local.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
+by-local.rs:14:12: error: assertion failed
+```
+
+The `by` assertion verifies, and the assertion after it fails: the reveal did its work inside the block and nowhere else. That is the point of the construct. A proof whose facts are scoped to where they are needed gives the solver fewer facts to search everywhere else, and a failure inside a block is a failure about that block's claim only.
+
+### 3.2 Isolating obligations
+
+By default a verifier may check several obligations of one declaration in one solver run, so one hard or false obligation can slow or obscure the others. Dafny's `@IsolateAssertions` gives each assertion its own run; Verus's `#[verifier::spinoff_prover]` gives a function its own solver process; `scripts/vcheck --isolate` applies the same split to a whole run. The WRITE cards C2 and C3 have one true and one false assertion each:
+
+```dafny
+module R05_IsolationCard {
+  @IsolateAssertions
+  lemma IsolateR05(n: int)
+  {
+    assert n + 1 > n;
+    assert n == 0;
+  }
+}
+```
 
 <!-- pin: isolate-d -->
 ```
 $ scripts/vcheck specimens/R05/card-c2d.dfy.specimen
 vcheck: specimens/R05/card-c2d.dfy.specimen [dafny, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R05/card-c2d.dfy.specimen:5:5: error: assertion might not hold
+specimens/R05/card-c2d.dfy.specimen:6:5: error: assertion might not hold
+```
+
+```rust
+#[verifier::spinoff_prover]
+pub proof fn lemma_spinoff_r05(n: int) {
+    assert(n + 1 > n);
+    assert(n == 0);
+}
 ```
 
 <!-- pin: spinoff-v -->
 ```
 $ scripts/vcheck specimens/R05/card-c3v.rs.specimen
 vcheck: specimens/R05/card-c3v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R05/card-c3v.rs.specimen:6:12: error: assertion failed
+specimens/R05/card-c3v.rs.specimen:8:12: error: assertion failed
 ```
 
-Isolation changes how conditions are packaged and which accumulated solver context they encounter. A proof can therefore have a different resource profile after adding an isolation annotation without any change to its mathematical statement. Compare settings explicitly when discussing that difference. Never compare an isolated fast-channel measurement to an unisolated whole-file measurement and describe the result as the cost of the same experiment.
+Each names exactly the false assertion. Isolation changes how the obligations are checked, never which: an isolated proof proves the same claims, and a claim that needed a fact established by an earlier assertion still gets it, because assertions earlier on the path remain facts. Use isolation to diagnose (which obligation is slow, which fails) and keep it in a proof whose obligations are independent and heavy, as H1 and H4 do. W2 shows both constructs on a small lemma:
 
-C4 is recognition vocabulary: Dafny's `{:resource_limit ...}` and Verus's `#[verifier::rlimit(...)]` express solver-work budgets. The course wrapper owns the acceptance limits and pinned seeds. Recognising these forms lets you interpret a source or a paper, not silently change the course gate. An exhausted budget is a verdict with a resource explanation; it is not a counterexample. A memory kill is recorded as `killed(memory)`, not as a failed theorem, and a bounded wall-clock stop is not a proof either.
+```dafny
+@IsolateAssertions
+lemma ScopedArithmetic(n: int)
+  requires n >= 0
+  ensures n + 3 > n
+{
+  assert n + 1 > n by {
+    assert 1 > 0;
+  }
+  assert n + 3 > n;
+}
+```
 
-When a local run becomes unstable, first preserve the source and command. Check whether you changed a declaration's scope, introduced a new quantified expression, changed a trigger-bearing term, or moved a proof across an isolation boundary. You are not yet being asked to tune triggers or fuel in this module. A small reproducible example and an accurate description of the failure are useful progress. A changed limit without a saved baseline makes that investigation much harder to reproduce.
+```rust
+#[verifier::spinoff_prover]
+pub proof fn lemma_scoped_arithmetic(n: int)
+    requires
+        n >= 0,
+    ensures
+        n + 3 > n,
+{
+    assert(n + 1 > n) by {
+        assert(1 > 0);
+    }
+    assert(n + 3 > n);
+}
+```
 
 ---
 
 ## 4. The fast channel and the final gate
 
-The fast channel selects a named symbol for feedback. It is useful while editing a single lemma because the rest of a large file need not be reverified on every attempt. Its success is a statement about the selected work, under the supplied declarations and current settings. It leaves the unselected work outside that observation. The prediction scenario makes that scope visible with two lemmas in one file.
+### 4.1 One symbol, one file, one gate
+
+`scripts/vcheck --symbol <name> <file>` verifies one declaration and reports on it alone; it is the per-edit loop for a proof in a large file. P4's scenario holds a correct lemma and a false one:
+
+```dafny
+module R05_NoGoalState {
+  lemma First(n: int)
+    ensures n + 1 > n
+  {
+  }
+
+  lemma Second()
+  {
+    assert false;
+  }
+}
+```
 
 <!-- pin: fast-d -->
 ```
 $ scripts/vcheck --symbol R05_NoGoalState.First specimens/R05/fast-channel-d.dfy.specimen
 vcheck: specimens/R05/fast-channel-d.dfy.specimen [dafny, fast channel R05_NoGoalState.First]: verified — 1 verified, 0 holes, 0 errors
 symbol R05_NoGoalState.First: verified
+```
+
+```rust
+pub proof fn first(n: int)
+    ensures
+        n + 1 > n,
+{
+}
+
+pub proof fn second() {
+    assert(false);
+}
 ```
 
 <!-- pin: fast-v -->
@@ -206,47 +603,114 @@ vcheck: specimens/R05/fast-channel-v.rs.specimen [verus, fast channel first]: ve
 symbol first: verified
 ```
 
-Now compare the ordinary whole-file learner loop on those same bytes. Preserve the second lemma and the selected first lemma; changing either between the runs would invalidate the comparison.
+The answer is `D:ok V:ok`: the selected symbol verifies, and the fast channel says nothing about `Second`. The same file in the ordinary learner loop:
 
 <!-- pin: whole-d -->
 ```
 $ scripts/vcheck specimens/R05/fast-channel-d.dfy.specimen
 vcheck: specimens/R05/fast-channel-d.dfy.specimen [dafny, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R05/fast-channel-d.dfy.specimen:4:20: error: assertion might not hold
+specimens/R05/fast-channel-d.dfy.specimen:10:5: error: assertion might not hold
 ```
 
 <!-- pin: whole-v -->
 ```
 $ scripts/vcheck specimens/R05/fast-channel-v.rs.specimen
 vcheck: specimens/R05/fast-channel-v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R05/fast-channel-v.rs.specimen:5:32: error: assertion failed
+specimens/R05/fast-channel-v.rs.specimen:13:12: error: assertion failed
 ```
 
-For your own edits, use the declaration's qualified name, not a guessed file stem. In Dafny the module qualification is part of the symbol name. In Verus the wrapper accepts the function symbol that belongs to the selected verification target. A “symbol not found” or resolution failure is a tooling result to fix, not a successful quick check. Read the verdict's stage before treating a command as evidence about a proof obligation.
+Both fail, at `Second`'s assertion. A fast-channel `verified` is a statement about one symbol under the file's other declarations as given; it is never a statement about the file. Dafny qualifies the symbol by its module (`R05_NoGoalState.First`); Verus takes the function's name. A "symbol not found" result is a tooling error to fix, not a quick pass. The gate refuses a symbol filter: it checks the whole unit, requires zero counted holes, and is the only verdict a delivery is judged by.
 
-The latency ladder shows the progressively broader observations you might make while developing a proof.
+### 4.2 The latency ladder
+
+Each loop costs time, and the cheaper ones see less. On the course host, for R05's small scenario files, the fast channel and the whole-file loop each take about one to two seconds (§6.1's ten runs: about 1.0 s in Dafny, 1.7 s in Verus), and the gate the same plus its completion checks; on a module with heavy proofs the gap opens to minutes, which is when the fast channel pays for itself. Measure on your own proofs: the LATENCY block asks for several fast-channel and gate timings on one finished proof, with the commands, the order you ran them in (a warm cache makes a second run faster), and what the clock includes (process start-up, compilation, the solver).
 
 ```mermaid
 flowchart LR
-  edit["Edit and syntax feedback"] --> selected["Named-symbol verification"]
-  selected --> file["Whole-file learner loop"]
-  file --> gate["Complete gate: zero holes and full scope"]
-  gate --> review["Audit, freeze and human intent review"]
+  E["editor: underline as you type"] --> S["fast channel: one symbol"]
+  S --> W["learner loop: the whole file, holes counted"]
+  W --> G["gate: the whole unit, zero holes, no warning"]
+  G --> A["audit, freeze and a reader"]
 ```
 
-Each step adds a different kind of evidence. Later steps can reveal work that an earlier one never attempted. A green editor, a successful selected proof and a completed module are consequently distinct milestones, and your log should retain the exact command behind each one.
-
-The final gate refuses a symbol filter. It checks the complete unit, requires zero tool-counted holes and checks the module's required verification coverage. Do not remove a difficult file from the unit, replace a body with an assumption, or interpret an earlier selected success as permission to skip the gate. Run the audit as well: native proof acceptance and the assumption audit inspect different parts of the trust story. A frozen-statement check protects the question you were supposed to answer while those proofs were developed.
-
-For the latency exercise, choose one finished proof and keep its bytes fixed. Record several named-symbol timings and the corresponding whole-file gate timings. State whether setup, imports and process startup are included in the clock. Record which command ran first because cache and host-load effects can depend on order. Do not report one arbitrary small timing divided by one arbitrary large timing as a stable speedup. State the measured sample, the command scopes and what remains uncontrolled.
-
-The contractor task imposes a particular workflow: per edit, named-symbol runs only, followed by exactly one final full gate as the last native verification call. Its call discipline is a property of the transcript, not something a zero-hole final file can prove. The learner reviews that discipline afterward. If the final gate fails, the required outcome is an honest unfinished report within the agreed budget; an extra undocumented gate would change the experiment.
+Do not report one small timing divided by one large one as a speedup: two single runs have no spread, and the ratio of two noisy numbers is noisier than either. The obligation prover's contract (§10) makes the ladder a rule: fast channel only between edits, exactly one gate, last.
 
 ---
 
-## 5. Measure repeated runs with a defined sample
+## 5. Resource limits and verdict kinds
 
-After recording P3dv, open the timing specimens, which are copies of W1 with no learner hole. Use the pinned seed and unchanged code for ten sequential runs per language. `scripts/vcheck --json --measures` emits the usual structured result plus `resource_count` and `wall_s`. Resource count describes the solver work reported by the pinned tool. Wall time describes elapsed time spent by this wrapper invocation. Their units differ; dividing one by the other does not produce a universal measure of proof difficulty.
+The course pins how much work each solver may do: Dafny's `--resource-limit 5000000`, Verus's `--rlimit 2`. These bound solver *work*, not wall time or memory. An obligation that exhausts its budget is neither proved nor refuted, and the wrapper reports `inconclusive`. The Rosetta card C4 names the per-declaration overrides, Dafny's `{:resource_limit N}` and Verus's `#[verifier::rlimit(N)]`. Here is §1.1's kind of proof, complete and correct, under a deliberately tiny budget:
+
+```dafny
+module R05_ChBudget {
+  import opened RG_A1_Re
+
+  lemma {:resource_limit 1000} TinyBudget(s: seq<char>)
+    requires Matches(Cat(Chr('q'), Star(Chr('r'))), s)
+    ensures |s| >= 1 && s[0] == 'q'
+  {
+    var i :| 0 <= i <= |s| && Matches(Chr('q'), s[..i]) && Matches(Star(Chr('r')), s[i..]);
+    assert s[..i] == ['q'];
+    assert s[0] == s[..i][0];
+  }
+}
+```
+
+<!-- pin: rlimit-d -->
+```
+$ scripts/vcheck --module R05 rlimit.dfy
+vcheck: rlimit.dfy [dafny, learner loop]: inconclusive — 5 verified, 0 holes, 1 error
+rlimit.dfy:4:32: error: Verification out of resource (R05_ChBudget.TinyBudget)
+```
+
+```rust
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+#[verifier::rlimit(0.001)]
+proof fn lemma_tiny_budget(s: Seq<char>)
+    requires
+        matches(Re::Cat(Box::new(Re::Chr('q')), Box::new(Re::Star(Box::new(Re::Chr('r'))))), s),
+    ensures
+        s.len() >= 1 && s[0] == 'q',
+{
+    let i = choose|i: int|
+        0 <= i <= s.len() && matches(Re::Chr('q'), #[trigger] s.subrange(0, i)) && matches(
+            Re::Star(Box::new(Re::Chr('r'))),
+            s.subrange(i, s.len() as int),
+        );
+    assert(s.subrange(0, i).len() == 1);
+    assert(s.subrange(0, i)[0] == 'q');
+}
+
+} // verus!
+```
+
+<!-- pin: rlimit-v -->
+```
+$ scripts/vcheck --module R05 rlimit.rs
+vcheck: rlimit.rs [verus, learner loop]: inconclusive — 0 verified, 0 holes, 1 error
+rlimit.rs:7:7: error: function body check: Resource limit (rlimit) exceeded; consider rerunning with --profile for more details
+```
+
+Both are `inconclusive`: the summary word says so, and the message is an out-of-resource report, not a failed assertion. The same proofs verify at the course's limits. So an inconclusive result tells you about the budget and the solver's search, not about the claim; the course's response is to make the proof cheaper (a missing fact, an isolated obligation), never to raise the limit, which the done gate does not accept and the freeze reports. A process killed for memory (exit 137 or 143) is not a verdict of any kind.
+
+| verdict | the obligations | licenses |
+|---|---|---|
+| `verified` | every obligation that ran holds | the file's claims, at these settings, with its counted holes |
+| `failed` | at least one obligation is not established, or a stage refused the program | a fact is missing, a claim is false, or the program is ill-formed: read which |
+| `inconclusive` | at least one ran out of its budget, none failed | nothing about the claim; something about the cost |
+| killed | the process was stopped | nothing at all |
+
+---
+
+## 6. Measuring repeated runs
+
+### 6.1 Ten runs of one proof
+
+`scripts/vcheck --json --measures` prints one JSON document per run, with the usual verdict and counts plus `resource_count` (the solver's work, in the tool's own unit) and `wall_s` (the elapsed seconds of this invocation). P3 asks which of the two repeats over ten runs of the unchanged W1 copy. The timing specimens verify:
 
 <!-- pin: timing-d -->
 ```
@@ -260,145 +724,48 @@ $ scripts/vcheck specimens/R05/timing-v.rs.specimen
 vcheck: specimens/R05/timing-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
 
-The fences above verify the exact timing targets without quoting a host-dependent duration. Perform the repeated measurement yourself after your first try. The author captures used ten complete runs of each target, not a remembered claim about solver determinism. At the pin, repeated solver resource counts and changing elapsed durations describe those particular experiments. A different input, seed, option set or verifier version is a different experiment; do not transfer a numeric resource count across that boundary.
+and the author's ten runs of each, recorded on the course host with the two fields taken from each run's JSON document, are:
 
-Later, repeat the procedure on your completed H1 proofs. Save each JSON document as one line in `research/r05/variance.jsonl`, or use separate labelled files while retaining the required combined record. A JSON document's `lang` and `target` fields let you stratify the combined log. Keep the fields the wrapper emits, including the verdict. Do not remove slow or failed runs because they make an average look worse. If you intentionally analyse only successful runs, retain the full log and name that selection rule in the note.
-
-The frozen acceptance contract defines `TimingRun` and `Summary`. `runs_from_log` preserves row order and the verdict; it accepts extra wrapper fields so a document need not be hand-transcribed into a smaller schema. It rejects a malformed line with a one-based line number. Returning only the prefix before a bad row would silently turn a parsing problem into a changed sample size. Treat an empty file explicitly and let an inability to open the file remain an I/O error. A parser is not permitted to invent measurements to fill a broken record.
-
-`resource_count` may be null when that quantity is unavailable. Preserve null. Zero says that a numeric measurement of zero was reported; null says that the measurement is absent. A summary that requires the field cannot silently substitute one for the other. Booleans also require care in Python because `bool` is an `int` subclass: `True` is not a valid wall-time observation. Reject nonfinite values and negative values before performing any statistics. A syntactically valid JSON number is not by itself a valid measurement under the declared experiment.
-
-`variance_summary` accepts either `wall_s` or `resource_count`. It needs at least two observations because it uses the sample standard deviation. Compute the mean with `statistics.fmean`, the standard deviation with `statistics.stdev`, and their ratio for the coefficient of variation. All-zero measurements use the contract's explicit CV 0 convention. Do not borrow a convention for some other field without stating it. In particular, a missing count is still not an all-zero sample.
-
-Use `fvh.stats.bootstrap_ci` for the interval. The frozen core owns the estimator and its resampling implementation; your function composes it with the mean and the required seed. A fixed resampling seed makes the interval computation reproducible for an identical input vector. It does not make the original timing data a controlled sample or remove correlations between consecutive runs. Acceptance tests check that the core function was called, not merely that a few familiar numbers were printed.
-
-The interval estimates uncertainty about the sampled mean under the assumptions of the resampling procedure. It is not a prediction interval for the next verifier invocation, a guarantee that 95 percent of future runs fit between its endpoints, or proof that the code is correct. Ten runs are a small sample. Host contention, warmup and correlated measurements can remain important. State those limits in the five-line note even when the arithmetic is accurate.
-
-Use your log to distinguish two questions. “How variable were the observed timings of this fixed proof?” has this module's repeated-run data behind it. “Will a new proof be faster under a different workflow?” changes the population of tasks and needs a task-comparison design. The next R modules build on that distinction. A narrow experiment is valuable when its scope is explicit; making the conclusion broader than the sample erases that value.
-
----
-
-## 6. On paper, before the keyboard
-
-Complete all three problems in `paper/R05_problems.tex` and `paper/R05_answers.tex`. The first is card 06.3, *Agentic Proof Automation: A Case Study*. Fill the eight card fields: Task shape, Oracle, Trust, Cheat surface, Metric, Budget, Variance and Artifact. The printed local source range has a checksum. Use that exact source and state what it does not supply. A missing cost breakdown should remain missing; the total number of checks is not a substitute for dollars, tokens or time.
-
-Keep the study's task denominator and assistance policy attached to its success figure. A result from expert-guided proof engineering in one evolving development is evidence about that setup. It does not directly estimate success on an unseen collection of isolated Dafny or Verus theorems. The chapter's compiler-feedback loop is a useful connection, but translating between proof assistants and evaluation populations requires a new argument. Your card should make that gap visible instead of replacing the original task with this course's task.
-
-The second problem asks what each line of a short proof contributes. For each line, give the fact made available, its justification and the later obligation it supports. Separate a definition introduced by a local binding from a proposition checked by an assertion. State which hypotheses remain in scope at each point. If you think a line can be removed, distinguish the mathematical dependency from a solver observation; a deletion experiment in scratch can provide the latter. Do the written reconstruction before using the verifier as a referee.
-
-The third problem uses five supplied timings and five prescribed bootstrap resamples. Calculate the mean, sample standard deviation and CV by hand. Then calculate each resample's mean and the specified interpolated percentile endpoints. Five hand resamples are a teaching calculation, not the core's default Monte Carlo budget and not a new estimator implementation. Write down the interpolation positions so another reader can reproduce your endpoints without guessing the quantile convention.
-
-Finally classify the stated interpretation of that interval. An accurate pair of endpoints can accompany an invalid claim about the next run. Correct both the arithmetic and the inferential statement. Keep a difference between rounding an intermediate value and changing the procedure: report enough precision to check the calculation, and give the formula when a decimal approximation would hide the distinction between sample and population standard deviation.
-
-Build the written PDFs with `make -C paper R05_problems.pdf R05_answers.pdf`. A successful build checks typesetting. `/grade-paper R05` reviews reasoning and source fidelity in a fresh session; it does not obtain a grading authority from the PDF build. Live model calibration remains deferred author validation debt under D45. Local fixture compilation and arithmetic checks have their own narrower evidence.
-
----
-
-## 7. The exercise file
-
-Record all four first tries with `scripts/firsttry.sh R05 --check` before enabling predictions. H1 and H2 are the two directions of concatenation associativity; prove each exact statement in its own file. Do not call a later layer's equivalence to hide the work. H3 embeds one matching word in the star language. H4 keeps its supplied proof skeleton and asks you to supply facts. The Python pair parses the log and composes statistics. Develop these as separate obligations with a short record of the facts each one needed.
-
-During proof development, use named-symbol verification for feedback, complete-unit verification for scope, and scratch copies for counterfactual deletion tests. Preserve signatures, preconditions, postconditions and measures. Keep helper contracts small enough that a reader can name the job they do. Do not turn a specification that was hard to prove into a weaker one and call that a repair. If you suspect an exercise statement is false, report a concrete counterexample through `/discuss R05` with the actual frozen statement and your native evidence.
-
-For the Python pair, run `scripts/vcheck harness/r/fvh_r/variance.py` while editing and the gate when finished. The acceptance tests are frozen course infrastructure. Do not change the tests to accommodate a parser that drops rows, a summary that treats null as zero or a second implementation of bootstrap resampling. Read the contract and choose data structures that preserve its distinctions. Confirm that the original two typed placeholders are gone by the tool's syntax-tree hole count, not by a text search for a familiar exception name.
-
-<!-- pin: python-shipped -->
+<!-- pin: runs10-d -->
 ```
-$ scripts/vcheck harness/r/fvh_r/variance.py
-vcheck: harness/r/fvh_r/variance.py [python, learner loop]: failed — 0 passed, 38 failed, 2 holes
-harness/r/fvh_r/variance.py:47:1: hole raise-not-implemented R05.H1py
-harness/r/fvh_r/variance.py:56:1: hole raise-not-implemented R05.H2py
-harness/tests/r/test_variance.py:25: error: tests/r/test_variance.py::test_rows_preserve_order_verdict_null_and_extra_fields: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:28: error: tests/r/test_variance.py::test_empty_and_missing_file: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[not-json]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[[]]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[null]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": true, "resource_count": 29, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": -1, "resource_count": 29, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": null, "resource_count": 29, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": "2", "resource_count": 29, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": NaN, "resource_count": 29, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": Infinity, "resource_count": 29, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1.25, "resource_count": false, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1.25, "resource_count": -1, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1.25, "resource_count": "9", "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1.25, "resource_count": NaN, "verdict": "verified", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1.25, "resource_count": 29, "verdict": "ok", "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1.25, "resource_count": 29, "verdict": [], "lang": "dafny"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:35: error: tests/r/test_variance.py::test_malformed_line_fails_with_line_number_not_partial_results[{"wall_s": 1, "verdict": "verified"}]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:39: error: tests/r/test_variance.py::test_every_wrapper_verdict_is_retained[verified]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:39: error: tests/r/test_variance.py::test_every_wrapper_verdict_is_retained[failed]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:39: error: tests/r/test_variance.py::test_every_wrapper_verdict_is_retained[inconclusive]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:39: error: tests/r/test_variance.py::test_every_wrapper_verdict_is_retained[refused]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:39: error: tests/r/test_variance.py::test_every_wrapper_verdict_is_retained[killed(memory)]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:39: error: tests/r/test_variance.py::test_every_wrapper_verdict_is_retained[error]: NotImplementedError: R05.H1py
-harness/tests/r/test_variance.py:48: error: tests/r/test_variance.py::test_summary_composes_frozen_bootstrap_and_sample_statistics: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:58: error: tests/r/test_variance.py::test_real_bootstrap_matches_core_and_is_seeded: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:65: error: tests/r/test_variance.py::test_zero_and_constant_samples: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs0-wall_s]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs1-wall_s]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs2-verdict]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs3-resource_count]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs4-wall_s]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs5-wall_s]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs6-wall_s]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs7-wall_s]: NotImplementedError: R05.H2py
-harness/tests/r/test_variance.py:71: error: tests/r/test_variance.py::test_summary_rejects_insufficient_unknown_or_invalid_measurements[runs8-wall_s]: NotImplementedError: R05.H2py
+$ for n in 1 2 3 4 5 6 7 8 9 10; do scripts/vcheck --json --measures specimens/R05/timing-d.dfy.specimen; done
+run  1: verdict verified, resource_count 136772, wall_s 0.922
+run  2: verdict verified, resource_count 136772, wall_s 0.979
+run  3: verdict verified, resource_count 136772, wall_s 0.971
+run  4: verdict verified, resource_count 136772, wall_s 0.975
+run  5: verdict verified, resource_count 136772, wall_s 1.024
+run  6: verdict verified, resource_count 136772, wall_s 0.998
+run  7: verdict verified, resource_count 136772, wall_s 0.978
+run  8: verdict verified, resource_count 136772, wall_s 0.918
+run  9: verdict verified, resource_count 136772, wall_s 0.984
+run 10: verdict verified, resource_count 136772, wall_s 0.979
 ```
 
-Create the variance log from ten finished-H1 runs in each language. Keep experiments comparable, label the language and command scope, and summarise each numeric field within a stated group. The parser preserves extra wrapper fields so the original JSON can remain the audit trail, but `TimingRun` intentionally exposes only the fields needed for these two functions. Use the original documents to select a group before summarising; do not pretend the reduced record can reconstruct task identity that it does not contain.
-
-Write a five-line interpretation in `research/r05/NOTES.md`: sample definition and n; mean and interval; CV; what is controlled and uncontrolled; what the evidence licenses about another run. Add the `LATENCY` block with your selected-versus-gate measurements. The fifth line should be a scoped claim another reader can challenge using the saved documents. “Faster” without a comparator, sample and command does not meet that bar.
-
-Make the fourth bench card under `bench/local/r/` according to its README. Choose a local item appropriate to this stage without importing a learner solution into its task. Record source provenance, layer, contract and acceptance commands. A bench card is an evaluation artifact with a known task boundary. Keep any answer separated from the task and outside what a contractor is allowed to read. Reuse of a mathematical theme does not justify copying an earlier protected reference into a public benchmark prompt.
-
-**Done** means both hand units and the learner Python gate exit 0 with zero counted holes, their audits are clean, `scripts/specfreeze --check R05` passes, every prediction has a first-try record and `scripts/firsttry.sh R05 --report --strict` passes. Also complete the two measurement notes, written problems, agent review, fourth bench card, viva and calibration. The deliberately failing prediction/card specimens are not proof deliveries to repair, and a clean native gate does not grade your measurement interpretation or paper card.
-
----
-
-## 8. Exercise (agentic): obligation prover
-
-> **CONTRACT (for /contract R05 — run it in a FRESH session):** Prove both lemmas in the selected module-owned agent file, preserving its statements. Per edit use only the pinned named-symbol fast channel. Make exactly one full unfiltered gate run as the last native verification call; delivery requires exit 0 and zero holes, a clean audit and an unchanged-statement snapshot comparison. Record commands, verdicts, elapsed times and the final result. If the final gate fails, report the unfinished work within the agreed budget.
-
-Save an original snapshot before starting the fresh contractor session. The agent file imports only A1 and has two holes. It cannot call the proofs in the hand exercise. It may develop helpers inside its allowlisted file, provided their statements are legitimate and their proofs are part of the final gate. The two goals concern appending a chunk to a starred word and collapsing a concatenation of starred words. Their contracts, rather than remembered proofs from this chapter, define the task.
-
-<!-- pin: agent-d -->
+<!-- pin: runs10-v -->
 ```
-$ scripts/vcheck dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy
-vcheck: dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy [dafny, learner loop]: verified — 5 verified, 2 holes, 0 errors
-dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy:23:20: hole bodyless-method R05.A1d
-dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy:27:20: hole bodyless-method R05.A1d
+$ for n in 1 2 3 4 5 6 7 8 9 10; do scripts/vcheck --json --measures specimens/R05/timing-v.rs.specimen; done
+run  1: verdict verified, resource_count 38681, wall_s 1.731
+run  2: verdict verified, resource_count 38681, wall_s 1.686
+run  3: verdict verified, resource_count 38681, wall_s 1.751
+run  4: verdict verified, resource_count 38681, wall_s 1.744
+run  5: verdict verified, resource_count 38681, wall_s 1.734
+run  6: verdict verified, resource_count 38681, wall_s 1.741
+run  7: verdict verified, resource_count 38681, wall_s 1.744
+run  8: verdict verified, resource_count 38681, wall_s 1.783
+run  9: verdict verified, resource_count 38681, wall_s 1.75
+run 10: verdict verified, resource_count 38681, wall_s 1.754
 ```
 
-<!-- pin: agent-v -->
+The answer is `D:same,varies V:same,varies`. At the pinned seed and options, the solver performs the same search on the same input, so its work count is a property of the proof; the wall time is a property of the run, and moves with host load, caches and scheduling. The divergence card C5 is the same observation on a trivial lemma in each language:
+
+```dafny
+module R05_RepeatedTimingCard {
+  lemma TimingIdentityR05(n: int)
+    ensures n + 2 > n
+  {
+  }
+}
 ```
-$ scripts/vcheck verus/r/r05_no_goal_state/src/agent.rs
-vcheck: verus/r/r05_no_goal_state/src/agent.rs [verus, learner loop]: verified — - verified, 2 holes, 0 errors
-verus/r/r05_no_goal_state/src/agent.rs:22:38: hole assume R05.A1v
-verus/r/r05_no_goal_state/src/agent.rs:27:38: hole assume R05.A1v
-```
-
-Review the transcript as an experiment. Count named-symbol calls and failed obligations per requested lemma under your declared counting convention. Identify each added assertion or helper and test its necessity in an independent scratch copy after the contract run. These post-run investigations are your review, not extra hidden attempts by the contractor under its one-final-gate budget. Preserve that boundary when recording total calls and latency.
-
-Fill `OBLIGATION LOG` with the requested theorem, observed failing obligation, proposed fact, next command, outcome and eventual use in the proof. Include unsuccessful approaches that explain a meaningful change of direction. You need not transcribe every repeated compiler line, but retain the transcript so a reviewer can check whether a selected success was presented as a whole-file success or whether an extra final gate was omitted from the call count.
-
-Inspect the diff before reading the agent's narrative of success. A new precondition, changed match expression, assumed fact or unverified helper can invalidate the intended delivery even when a local check is green. Run the audit and frozen-statement comparison with the saved snapshot. Then check the final gate's scope and zero-hole count. Neither a plausible explanation nor a fast average command time replaces those artifacts. Live contractor transcripts are deferred author validation; your learner run, when you perform it, must produce its own evidence.
-
----
-
-## 9. What the instruments can and cannot see
-
-The pinned verifier observes discharged obligations under its formal semantics and settings. Its hole counter distinguishes typed placeholders from finished code. The full gate also checks scope and required verification coverage. The audit looks for the course's assumption and trust hazards; it does not establish that a statistical interpretation is valid. The freeze comparison protects the printed contracts while allowing legitimate proof development. It does not know whether you described the right real-world experiment in a note.
-
-Python acceptance checks the declared log schema, preservation of records, numerical conventions and composition of the frozen bootstrap. It uses fixed fixtures rather than running 20 solvers during a unit test. A parser passing those tests does not certify that your actual log was generated honestly or that two task groups were comparable. Retain the original JSON documents and commands. A reviewer can then examine provenance and grouping decisions that are intentionally outside the function's reduced `TimingRun` representation.
-
-A successful strict report establishes completion of its machine-checkable slots and records. Human review still assesses facts-per-line reasoning, proof shape, source fidelity, the interval's interpretation and compliance with the contractor's call discipline. Use the right instrument for the disputed claim. If a disagreement is formal, reproduce it in scratch through the pinned wrapper. If it is about a performance comparison, identify the sample and the procedure before asking for another solver run.
-
-### Final divergence card: fixed settings and repeated time
-
-Open C5 only after the recorded P3dv first try. Its paired specimens hold the code fixed; use them to discuss what a repeated work counter and a changing duration do and do not establish. The sidecars remain sealed until the prediction has been recorded. The chapter captures below are ordinary verification observations; your timing experiment requires the explicit measurement flag and saved JSON documents.
 
 <!-- pin: divergence-d -->
 ```
@@ -412,26 +779,186 @@ $ scripts/vcheck specimens/R05/card-c5dv-v.rs.specimen
 vcheck: specimens/R05/card-c5dv-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
 
-When reporting a difference, state the input, seed, options, target scope and host conditions you actually controlled. Resource units belong to the pinned solver/tool interface; they are not interchangeable between Dafny and Verus. Wall time includes effects beyond solver work. A fixed resampling seed controls your interval calculation, whereas the pinned solver seed controls a verification run. Keep those two seeds named separately in the notebook.
+Two cautions. A different seed, option, input or toolchain is a different experiment: a resource count does not transfer across that boundary, and R14 measures how much it moves when the seed changes. And "the same over ten runs" is an observation about ten runs, not a theorem; the course records it with its sample.
+
+### 6.2 The variance log in Python
+
+The variance log is ten runs of `scripts/vcheck --json --measures` on your finished H1d and ten on H1v, appended one document per line to `research/r05/variance.jsonl`, then summarised by the two Python holes in `harness/r/fvh_r/variance.py`. `runs_from_log` (H1py) parses the log into `TimingRun` rows, keeping every row and its verdict in order and refusing a malformed line with its one-based number; `variance_summary` (H2py) computes, for one numeric field, the number of runs, the mean, the coefficient of variation (CV, the sample standard deviation divided by the mean) and a 95 % bootstrap interval of the mean, by composing the standard library's `statistics.fmean` and `statistics.stdev` with the frozen `fvh.stats.bootstrap_ci`. A bootstrap interval resamples the observed values with replacement many times, takes the mean of each resample, and reports the central 95 % of those means. The frozen acceptance tests (`harness/tests/r/test_variance.py`) run through the wrapper, and as shipped they fail at the two holes (§0). The file's docstring is the contract: `null` means unavailable and is never zero, a Boolean is not a measurement, an empty file gives `[]`, and a failed run is kept, not dropped.
+
+### 6.3 What an interval licenses
+
+A 95 % bootstrap interval of the mean of ten timings estimates where the mean of this process's timings lies, under the assumption that the ten runs are independent draws from one distribution. It is not an interval for the next run (individual runs spread wider than their mean does), not a promise that 95 % of future runs fall inside it, and not evidence that the proof is correct. Ten consecutive runs on one host are also correlated: a warm cache or a background job moves several of them together, which makes the interval narrower than it should be. The five-line note in `research/r05/NOTES.md` states n, the interval, the field, the selection rule if you dropped anything, and one sentence on what the interval does and does not license. R07's pass@k, R12's Lab α and R14's seed sweeps build on this vocabulary.
+
+---
+
+## 7. What the instruments can and cannot see
+
+Run the gate and the audit on the shipped units and read why they refuse:
+
+<!-- pin: gate-d -->
+```
+$ scripts/vcheck --gate dafny/R/R05_NoGoalState/core
+vcheck: dafny/R/R05_NoGoalState/core [dafny, gate]: failed — 35 verified, 4 holes, 0 errors, 1 finding
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:88:20: hole bodyless-method R05.H1d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:104:20: hole bodyless-method R05.H2d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:117:20: hole bodyless-method R05.H3d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139:5: hole assume R05.H4d
+dafny/R/R05_NoGoalState/core: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
+```
+
+<!-- pin: gate-v -->
+```
+$ scripts/vcheck --gate verus/r/r05_no_goal_state
+vcheck: verus/r/r05_no_goal_state [verus, gate]: failed — - verified, 4 holes, 1 error
+verus/r/r05_no_goal_state/src/lib.rs:84:40: hole assume R05.H1v
+verus/r/r05_no_goal_state/src/lib.rs:103:40: hole assume R05.H2v
+verus/r/r05_no_goal_state/src/lib.rs:120:40: hole assume R05.H3v
+verus/r/r05_no_goal_state/src/lib.rs:145:40: hole assume R05.H4v
+(no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 4 hole(s); exit 1
+```
+
+<!-- pin: audit-d -->
+```
+$ scripts/vaudit dafny/R/R05_NoGoalState/core
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:86: audit-bodyless-ghost — CatAssocLR: Ghost declaration has no body and has an ensures clause
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:102: audit-bodyless-ghost — CatAssocRL: Ghost declaration has no body and has an ensures clause
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:115: audit-bodyless-ghost — StarOne: Ghost declaration has no body and has an ensures clause
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139: audit-assume — StarConcat: Definition has `assume` statement in body
+vaudit: dafny/R/R05_NoGoalState/core [dafny, learner]: 4 finding(s)
+```
+
+<!-- pin: audit-v -->
+```
+$ scripts/vaudit verus/r/r05_no_goal_state
+verus/r/r05_no_goal_state/src/lib.rs:84: hole-assume — an assume hole (in lemma_cat_assoc_lr) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:103: hole-assume — an assume hole (in lemma_cat_assoc_rl) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:120: hole-assume — an assume hole (in lemma_star_one) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:145: hole-assume — an assume hole (in lemma_star_concat) not on the trust allowlist
+vaudit: verus/r/r05_no_goal_state [verus, learner]: 4 finding(s)
+```
+
+The statement freeze checks the statements, H4's given skeleton (its case split, its choice of the first chunk, its recursive call and its measure) and the levers, including `@IsolateAssertions` and `#[verifier::spinoff_prover]`:
+
+<!-- pin: freeze -->
+```
+$ scripts/specfreeze --check R05
+specfreeze: R05: 0 finding(s)
+```
+
+| instrument | what it establishes | what it cannot see |
+|---|---|---|
+| a failing line and its related lines | which obligation failed and which definition it reached | the missing fact; the goal |
+| `scripts/vcheck --symbol` (fast channel) | one symbol's obligations | every other symbol of the file |
+| `scripts/vcheck --isolate`, `@IsolateAssertions`, `spinoff_prover` | each obligation's own verdict and cost | nothing new about which claims hold |
+| `scripts/vcheck --gate` | the whole unit verified, zero counted holes, no warning | the prose; how many edits it took |
+| `scripts/vcheck --json --measures` | one run's verdict, work count and wall time | the next run's wall time |
+| a bootstrap interval | the uncertainty of a sample's mean | the next run; correlation between runs; correctness |
+| `scripts/vaudit`, `scripts/specfreeze --check R05` | assumptions; unchanged statements, skeleton and levers | whether a fact you added was needed |
+
+A measurement and a proof are different kinds of evidence. The gate's verdict holds for every input of the stated claims; a timing summary holds for the runs you made, under the conditions you held fixed. Keep the two in separate sentences of every report.
+
+---
+
+## 8. On paper, before the keyboard
+
+The written track has three problems, fifteen minutes each, in `paper/R05_problems.tex`; answer in `paper/R05_answers.tex`, keeping its labels. Record all predictions first.
+
+**B1, card 06.3, *Agentic Proof Automation: A Case Study*.** Fill the eight fields from the pinned source range, whose hash the problem prints. The paper's agents run the edit, compile, refine loop on compiler feedback alone: the loop of §2, with an agent in your place. Keep its success figures with their task denominator and assistance policy; say so when the source gives no cost breakdown or variance, and do not substitute the number of checks run for a budget.
+
+**B2, facts per line.** For the printed five-line proof, give the fact each line introduces, why it is justified, and which later line uses it; separate the binding from the asserted facts, as §2.2 does. Then say what a deletion experiment could show (that the solver did not need a line) and what it could not (that the argument does not depend on it), and what is available after an `assert … by` block (§3.1).
+
+**B3, first intervals by hand.** For the printed five timings, compute the mean, the sample standard deviation and the CV; then the means of the five prescribed resamples and their 2.5th and 97.5th percentiles by the printed interpolation rule. Five resamples are a teaching calculation, not `fvh.stats`'s default budget. Then correct the printed claim about "the next run" with §6.3's distinction.
+
+Build the pair with `make -C paper paper`. A compiled answers file shows that it builds, not that its claims hold. `/grade-paper R05` runs in a fresh examiner session after you have written the answers.
+
+**The fourth local bench card** (20 minutes) continues your collection under `bench/local/r/`; follow its README. Choose a small proof of your own that needs at least two facts a solver lacks, so that its stripped version is a bisection exercise; keep the commands and outputs of your own bisection beside the five artifacts.
+
+---
+
+## 9. The exercise file
+
+The hand work is four paired holes and two Python holes. Keep the statements, H4's given skeleton, the levers and the frozen tests fixed; the freeze checks them.
+
+| item | statement (Dafny · Verus) | minutes D / V | uses |
+|---|---|---|---|
+| H1 | `CatAssocLR` · `lemma_cat_assoc_lr`: a match of `Cat(Cat(a, b), c)` is a match of `Cat(a, Cat(b, c))` | 8 / 8 | `assert … by`, isolation, two splits taken and one built |
+| H2 | `CatAssocRL` · `lemma_cat_assoc_rl`: the converse | 8 / 8 | `assert … by`, the index shift |
+| H3 | `StarOne` · `lemma_star_one`: a match of `a` is a match of `Star(a)` | 8 / 8 | one chunk and the empty rest |
+| H4 | `StarConcat` · `lemma_star_concat`: two star matches concatenate (bisect and repair) | 12 / 12 | bisection, slice facts about `u + v` |
+| H1py | `runs_from_log`: parse the variance log | 12 | the docstring's row schema |
+| H2py | `variance_summary`: n, mean, CV, a bootstrap interval | 12 | `statistics`, `fvh.stats.bootstrap_ci` |
+
+Each hole's doc comment states the task and asks one guiding question; two hints follow it in the file. **The hint dial:** read the question, try, run the fast channel or the learner loop and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the fact or construct to use, never the answer; `/tutor R05` comes after both. H4 is an annotation hole: its case split, its choice of the first chunk, its recursive call and its measure are given and frozen, and you add facts in the marked places only. R05's Dafny unit runs with manual lemma induction, so H4's given call is its only induction hypothesis. Do not raise a resource limit or add an assumption to get past an obligation.
+
+```bash
+scripts/firsttry.sh R05 --check
+scripts/vcheck --symbol R05_NoGoalState.CatAssocLR dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
+scripts/vcheck --gate dafny/R/R05_NoGoalState/core
+scripts/vcheck --gate verus/r/r05_no_goal_state
+scripts/vcheck --gate harness/r/fvh_r/variance.py
+scripts/vaudit dafny/R/R05_NoGoalState/core
+scripts/vaudit verus/r/r05_no_goal_state
+scripts/specfreeze --check R05
+scripts/firsttry.sh R05 --report --strict
+```
+
+**Done:** both units and the Python file gate with zero tool-counted holes, both audits are clean, `scripts/specfreeze --check R05` reports 0 findings, and the strict report shows the predictions recorded with every shipped check kept. The variance log and its note, the LATENCY block, the agent exercise, the written pair, the bench card and the viva are further deliverables of the module.
+
+---
+
+## 10. Exercise (agentic): obligation prover
+
+The agent files state two lemmas about `Star` and `Cat` that need helper facts the contractor must find without a goal view, verifying against A1 alone (no call into your exercise file). The contract restricts the loop to the fast channel between edits and one final gate. As shipped, both files verify with their two holes counted:
+
+<!-- pin: agent-d -->
+```
+$ scripts/vcheck dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy
+vcheck: dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy [dafny, learner loop]: verified — 5 verified, 2 holes, 0 errors
+dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy:23:20: hole bodyless-method R05.A1d
+dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy:27:20: hole bodyless-method R05.A1d
+```
+
+<!-- pin: agent-v -->
+```
+$ scripts/vcheck verus/r/r05_no_goal_state/src/agent.rs
+vcheck: verus/r/r05_no_goal_state/src/agent.rs [verus, learner loop]: verified — - verified, 2 holes, 0 errors
+verus/r/r05_no_goal_state/src/agent.rs:25:40: hole assume R05.A1v
+verus/r/r05_no_goal_state/src/agent.rs:34:40: hole assume R05.A1v
+```
+
+> **CONTRACT (for /contract R05 — run it in a FRESH session):**
+> goal — prove both supplied lemmas, preserving every statement; allowed-files — the one selected agent file; acceptance — per edit only the fast channel `scripts/vcheck --symbol <name> <file>`, recording each command, verdict and elapsed time; exactly one full `scripts/vcheck --gate <file>` run, last, exit 0 with zero counted holes; `scripts/vaudit <file>` reports no finding; `scripts/specfreeze --against <snapshot> <file>` reports no statement change; no assumption, weakened guarantee, strengthened input or filtered final verification; stop and report if the final gate fails. Read the file's CONTRACT header before starting; it is the binding text.
+
+**Steps.** (1) Save the original agent file outside the delivery as a snapshot. (2) Run `/contract R05` in a fresh session per language, under your R-v0 rules. (3) From the transcript, count fast-channel calls and failed obligations per lemma, and note what the contractor added: assertions, helper lemmas. (4) For each addition, delete it in a scratch copy and re-run: was it needed? (5) Fill the OBLIGATION LOG block, with the one final gate's command, exit and time.
+
+### What the dashboard can and cannot see
+
+The final gate sees the delivered file: verified or not, holes or not. It cannot see how the contractor got there: whether every intermediate run was the fast channel, whether a second gate was spent and hidden, or whether an added helper was needed. Those are properties of the transcript, which only you read. A fast-channel `verified` in the transcript is evidence about one symbol at one moment, and a sequence of them is not a gate. If the contractor's one gate fails, the honest report is an unfinished delivery within the budget, not a second gate run: the contract makes the gate's cost part of the experiment, and the OBLIGATION LOG is where that cost is recorded.
 
 ---
 
 ## Instructor touchpoints
 
-Use `/tutor R05` after a focused 20-minute attempt with your hypotheses/conclusion note and one reproducible command. Use `/discuss R05` to compare interpretations after predictions, `/review R05` for a spaced reconstruction, `/review-code R05` for proof shape and data handling, `/grade-paper R05` for written arguments and the card, `/viva R05` for a fresh six-question draw, and `/contract R05` only for the selected agent file in a fresh session. Coach, examiner and contractor histories remain separate. Keep Solutions LAST, after your completed attempt and the relevant review.
-
-Bring a precise question to each conversation: which call precondition you cannot establish, which assertion depends on an earlier failure, which measured population your interval describes, or which transcript command broke the agreed discipline. A short question anchored to actual code and a saved run is easier to referee than “the solver is confused.” Finish calibration with your original confidence, the observation and the specific habit you will change on the next module.
+- **`/tutor R05`** (long-lived, one session per module): after an attempt, with the exact diagnostic and the facts you have already asserted; it follows the hint dial and never writes a hole's body.
+- **`/discuss R05`**: reading an obligation, bisection, scope, and what a measurement licenses.
+- **`/review`**: when the banner says items are due; it revisits your ledger and does not erase a first try.
+- **`/viva R05`** (fresh examiner session): six questions from the bank, at least one a live predict refereed by the verifier; the other draw is the re-viva.
+- **`/grade-paper R05`** (fresh examiner session): after your answers are written.
+- **`/review-code R05`** (fresh examiner session) at the `proof-shape` bar: one fact per line, scopes as small as the proof allows, no fact neither the solver nor a reader uses.
+- **`/contract R05`** (fresh contractor session, per language): §10.
+- **Solutions last:** compare with `Solutions/` and `paper/solutions/` only after your attempts, gates, review and viva; then finish CALIBRATION and record it with `scripts/firsttry.sh R05 --record`.
 
 ---
 
 ## What R05 planted
 
-| habit or observation | where it is used later |
+| planted here | harvested in |
 |---|---|
-| obligations as data with a defined counting rule | R12's obligation extractor and evaluation records |
-| preserved sample definitions, variance and bootstrap scope | R07's library race, R12's Lab α and R14's controlled sweeps |
-| selected feedback followed by complete acceptance | every later proof workflow and the capstone gate |
-| helper contracts that expose the bridge between proof steps | R06's induction, later refinement and simulation arguments |
-| honest accounting of assisted proof engineering | later contractor comparisons and research cards |
+| obligations as data: the failing line, its related lines, the stage | R12 (the obligation extractor) |
+| bisection, one fact per line | R06 (loop invariants found by bisection), every later proof |
+| `assert … by` scope and isolation | R14 (proof splitting, matching loops) |
+| the fast channel against the gate; the latency ladder | R12 (the verifier loop's cost), R15 |
+| a resource count is reproducible at a pinned seed; a wall time is a sample | R14 (seed sweeps, CV), R12 (Lab α's budget axis) |
+| a bootstrap interval of a mean, and what it does not license | R07 (pass@k and `EVAL.md` R-v0), R12 (Lab α's statistics) |
 
-You also harvested R02's split semantics. The present proofs manipulate those splits while keeping every endpoint and recursive premise visible. R06 will re-supply selected band-1 facts through A1b; your unfinished learner file will still never become another module's dependency.
+R06 brings induction to strings and regexes: lemmas whose recursive calls you write, loops whose invariants you find, and the first checkpoint.

@@ -18,13 +18,13 @@ only the one final whole-file gate decides the delivery. See CONTRACT.
 module R05_AgentObligation {
   import opened RG_A1_Re
   // item: R05.A1d
-  lemma AppendChunk(a: Re,u: seq<char>,v: seq<char>)
-    requires Matches(Star(a),u) && Matches(a,v)
-    ensures Matches(Star(a),u+v)
+  lemma AppendChunk(a: Re, u: seq<char>, v: seq<char>)
+    requires Matches(Star(a), u) && Matches(a, v)
+    ensures Matches(Star(a), u + v)
 
-  lemma CollapseStarCat(a: Re,s: seq<char>)
-    requires Matches(Cat(Star(a),Star(a)),s)
-    ensures Matches(Star(a),s)
+  lemma CollapseStarCat(a: Re, s: seq<char>)
+    requires Matches(Cat(Star(a), Star(a)), s)
+    ensures Matches(Star(a), s)
 
 /* OBLIGATION LOG — learner-owned after the contract run.
    Fast-channel calls and failed obligations per lemma: ...

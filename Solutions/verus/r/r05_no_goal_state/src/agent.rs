@@ -15,9 +15,11 @@ acceptance:
 use vstd::prelude::*;
 use rg_re_a1::*;
 verus! {
-pub proof fn lemma_chunk_in_star(a: Re,u: Seq<char>)
-    requires matches(a,u),
-    ensures matches(Re::Star(Box::new(a)),u),
+pub proof fn lemma_chunk_in_star(a: Re, u: Seq<char>)
+    requires
+        matches(a, u),
+    ensures
+        matches(Re::Star(Box::new(a)), u),
 {
     if u.len() > 0 {
         assert(u.subrange(0, u.len() as int) =~= u);
@@ -25,9 +27,11 @@ pub proof fn lemma_chunk_in_star(a: Re,u: Seq<char>)
         assert(matches(Re::Star(Box::new(a)), Seq::<char>::empty()));
     }
 }
-pub proof fn lemma_join_star_words(a: Re,u: Seq<char>,v: Seq<char>)
-    requires matches(Re::Star(Box::new(a)),u),matches(Re::Star(Box::new(a)),v),
-    ensures matches(Re::Star(Box::new(a)),u+v),
+pub proof fn lemma_join_star_words(a: Re, u: Seq<char>, v: Seq<char>)
+    requires
+        matches(Re::Star(Box::new(a)), u), matches(Re::Star(Box::new(a)), v),
+    ensures
+        matches(Re::Star(Box::new(a)), u + v),
     decreases u.len(),
 {
     let st = Re::Star(Box::new(a));
@@ -46,19 +50,26 @@ pub proof fn lemma_join_star_words(a: Re,u: Seq<char>,v: Seq<char>)
     }
 }
 // item: R05.A1v
-pub proof fn lemma_append_chunk(a: Re,u: Seq<char>,v: Seq<char>)
-    requires matches(Re::Star(Box::new(a)),u), matches(a,v),
-    ensures matches(Re::Star(Box::new(a)),u+v),
-{ lemma_chunk_in_star(a,v); lemma_join_star_words(a,u,v); }
-
-pub proof fn lemma_collapse_star_cat(a: Re,s: Seq<char>)
-    requires matches(Re::Cat(Box::new(Re::Star(Box::new(a))),Box::new(Re::Star(Box::new(a)))),s),
-    ensures matches(Re::Star(Box::new(a)),s),
+pub proof fn lemma_append_chunk(a: Re, u: Seq<char>, v: Seq<char>)
+    requires
+        matches(Re::Star(Box::new(a)), u), matches(a, v),
+    ensures
+        matches(Re::Star(Box::new(a)), u + v),
 {
-    let st=Re::Star(Box::new(a));
-    let i=choose|i:int| 0 <= i <= s.len() && matches(st,#[trigger] s.subrange(0,i)) && matches(st,s.subrange(i,s.len() as int));
-    lemma_join_star_words(a,s.subrange(0,i),s.subrange(i,s.len() as int));
-    assert(s.subrange(0,i)+s.subrange(i,s.len() as int) =~= s);
+    lemma_chunk_in_star(a, v);
+    lemma_join_star_words(a, u, v);
+}
+
+pub proof fn lemma_collapse_star_cat(a: Re, s: Seq<char>)
+    requires
+        matches(Re::Cat(Box::new(Re::Star(Box::new(a))), Box::new(Re::Star(Box::new(a)))), s),
+    ensures
+        matches(Re::Star(Box::new(a)), s),
+{
+    let st = Re::Star(Box::new(a));
+    let i = choose|i: int| 0 <= i <= s.len() && matches(st, #[trigger] s.subrange(0, i)) && matches(st, s.subrange(i, s.len() as int));
+    lemma_join_star_words(a, s.subrange(0, i), s.subrange(i, s.len() as int));
+    assert(s.subrange(0, i) + s.subrange(i, s.len() as int) =~= s);
 }
 
 /* OBLIGATION LOG — learner-owned after the contract run.

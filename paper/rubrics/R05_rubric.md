@@ -6,11 +6,11 @@ deferred under D45, never inferred from local fixtures.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R05_solutions.tex  sha256 5024903c3980a0bed63640d9e6efccbb5d9dc326ab2295f79e7fa300576545f2
 paper/R05_problems.tex  sha256 e3eafd5a817257ea545f492ffb1ca83a8a278bb7c9ebffb46e0a44b078b2684e
-Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy  sha256 56301876a797374e2ee804dde7d7c4b901ecb6fc3f908a38120ec25481f12485
-Solutions/verus/r/r05_no_goal_state/src/lib.rs  sha256 7f7a0ff3c61b69ab7df12d85dc92e30a1aebae3c0f473e63237d1b23b3db6dd7
-Solutions/harness/r/fvh_r/variance.py  sha256 17168a8af1e301ebcb85c4e93048c01c78767d5f98f81dc3d8ec92c71c960cb8
-Solutions/dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy  sha256 245862e8820d5a72f6cf8a347c4d822c02b0927a013c77788f48574096c806bb
-Solutions/verus/r/r05_no_goal_state/src/agent.rs  sha256 16ae62f530337c172ece5a4e7aaefe5e0f41acec8aa3e518c15b496619e73015
+Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy  sha256 69e6f24f8ff7344cecf08d2997f3e82bbcb4e1bce439abb3dfef44449461bc1e
+Solutions/verus/r/r05_no_goal_state/src/lib.rs  sha256 e7b9d983b35d23b04d0676d3135e7346024879847b6f90f2174dec1303b51a48
+Solutions/harness/r/fvh_r/variance.py  sha256 edff314cf64487c12648da4c41ab06aaf1b04e479728df4dd4b4c786583977d7
+Solutions/dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy  sha256 80ae327456f228e3207e25c274954473423f5d04efe93fc2fa32bb16a27c1a31
+Solutions/verus/r/r05_no_goal_state/src/agent.rs  sha256 0203188c1a0a4486c3240bb3914767da2e9f602df261c1042fb6ede285d55b6e
 
 ## Verifier anchors
 

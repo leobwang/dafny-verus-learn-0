@@ -1,6 +1,11 @@
 use vstd::prelude::*;
+
 verus! {
+
 pub proof fn lemma_scope_r05(n: int) {
-    assert(n+2 > n) by { assert(false); }
+    assert(n + 2 > n) by {
+        assert(false);
+    }
 }
-}
+
+} // verus!

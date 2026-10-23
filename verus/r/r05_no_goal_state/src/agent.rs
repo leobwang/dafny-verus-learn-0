@@ -16,15 +16,23 @@ use vstd::prelude::*;
 use rg_re_a1::*;
 verus! {
 // item: R05.A1v
-pub proof fn lemma_append_chunk(a: Re,u: Seq<char>,v: Seq<char>)
-    requires matches(Re::Star(Box::new(a)),u), matches(a,v),
-    ensures matches(Re::Star(Box::new(a)),u+v),
-{ #[verifier::proof_note("R05.A1v")] assume(false); }
+pub proof fn lemma_append_chunk(a: Re, u: Seq<char>, v: Seq<char>)
+    requires
+        matches(Re::Star(Box::new(a)), u), matches(a, v),
+    ensures
+        matches(Re::Star(Box::new(a)), u + v),
+{
+    #[verifier::proof_note("R05.A1v")] assume(false);
+}
 
-pub proof fn lemma_collapse_star_cat(a: Re,s: Seq<char>)
-    requires matches(Re::Cat(Box::new(Re::Star(Box::new(a))),Box::new(Re::Star(Box::new(a)))),s),
-    ensures matches(Re::Star(Box::new(a)),s),
-{ #[verifier::proof_note("R05.A1v")] assume(false); }
+pub proof fn lemma_collapse_star_cat(a: Re, s: Seq<char>)
+    requires
+        matches(Re::Cat(Box::new(Re::Star(Box::new(a))), Box::new(Re::Star(Box::new(a)))), s),
+    ensures
+        matches(Re::Star(Box::new(a)), s),
+{
+    #[verifier::proof_note("R05.A1v")] assume(false);
+}
 
 /* OBLIGATION LOG — learner-owned after the contract run.
    Fast-channel calls and failed obligations per lemma: ...
