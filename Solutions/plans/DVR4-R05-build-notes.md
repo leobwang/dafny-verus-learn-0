@@ -120,6 +120,6 @@ Run one solver job at a time in `dvl0.slice` under an 8G outer scope (`systemd-r
 - `check_course_map` OK.
 - Leak verifier 8 OK.
 - Rubric pins current.
-- Study workflow: see the end of this section.
+- Study workflow 11/11 on `236c4f23` (`workflow.log`: firsttry, strict, freeze, and the gate and audit of both core units and both agent files). The Python twin gates in a scratch worktree (38 passed, 0 holes) with a clean audit; `wf.py` does not cover Python.
 
 The focused author CI (static, harness, wrappers, rubric) needs the 16G slot and waits for the coordinator.
