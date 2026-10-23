@@ -335,6 +335,7 @@
 | 303 | The user's D64: R04's short Dafny holes re-posed (T1d a length-3 witness, H2d `Star(Cat(Chr('a'), Chr('b')))` against "aba", H3d anchoring on "bba", H5d the mutant witness for a fixed `r`), each with a smallest found proof of at least three one-fact lines; Verus unchanged; H3's `uses:` corrected; H3d's reference made seed-stable | adopted (the user; built in R authoring 2026-10-21 UTC) | the user; DVR4 step 5 lane P1 |
 | 304 | The user's D82 and D83: R04's Dafny H2 and H3 re-posed as universals over the strings a regex matches, each needing a `forall` statement and two `:|` splits (smallest found three one-fact lines); `forall-intro` WRITE in Dafny again; Verus unchanged; R01's H1 and H3 recorded as exceptions under D59's reading | adopted (the user; built in R authoring 2026-10-21 UTC) | the user; DVR4 step 5 lane P1 |
 | 305 | The Verus mirror of D82/D83 (the coordinator, 2026-10-22): H2v and H3v pose Dafny's universals over matches, each needing `assert forall … by` and two `choose` splits (smallest found three lines); `forall-intro` WRITE in both languages again; T1's `exists-elim` tags removed as non-instances; H1d's leak pattern dropped for H3d's | adopted (the coordinator; built in R authoring 2026-10-22 UTC) | DVR4 step 5 lane P1 |
+| 306 | R05 brought to the R module bar (DVR4 step 5): prompts and two hints per hole (Python included), one-statement-per-line twins, agents and specimens (twins mirrored), a chapter with source and captured output inline (37 pins), P3's ten runs per language as recorded quotes, a Q06-schema bank with re-run probes, ten admission rows; two short holes and three WRITE tags with no genuine hole instance reported | adopted in R authoring (2026-10-22 UTC) | DVR4 step 5 systemic lane P1 |
 | 320 | R09 at the R module bar (DVR4 step 5, lane P2): one-statement-per-line files in plan order with prompts, hints and use-site clients; the R04.H2v skeleton removed from a given helper; two seed-stability repairs; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H2 minutes and an H4-bearing Lab α form for decision | adopted in R authoring (2026-10-19 UTC) | DVR4 step 5 lane P2 |
 | 321 | R10 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints and a compiled use-site test; A4's do-not-open header; H3d's lever named in its row; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H3's line band for decision | adopted in R authoring (2026-10-20 UTC) | DVR4 step 5 lane P2 |
 | 322 | R11 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints, a commented T1 check and given use-site checks; H2d/X1d levers named in their rows; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; line-band outliers for decision | adopted in R authoring (2026-10-21 UTC) | DVR4 step 5 lane P2 |
@@ -4889,6 +4890,19 @@ Answers Δ304's two small decisions; record in `Solutions/plans/DVR4-R04-build-n
 - **Tags:** `write_d = write_v = ["forall-intro", "exists-elim"]`, `recognise_v = ["assume"]`, and C1v is `write:forall-intro`. This reverts the rest of Δ303's addendum. T1d and T1v drop `uses: exists-elim`, because each introduces an existential by a witness. Every remaining tag names a step the smallest proof needs.
 - **Leak patterns (cap of 8 kept):** H1d's binding pattern is dropped, because it restates the statement's own string and H1 stays covered by H1v. H3d's split pattern is added, and H2v's is re-cut from the mirror.
 - **Evidence:** see R04 notes §12.
+
+### Δ306 · R05 at the R module bar — adopted in R authoring (2026-10-22 UTC)
+
+The record is in `Solutions/plans/DVR4-R05-build-notes.md` (§1 is the objective map written before any change; §3 is as built).
+
+- **Files.** Plan order, one statement per line, `**Hn.**` prompts with two hints (H1py/H2py included). The learner files are derived from the twins; specimen twins mirror the specimens. Statements are unchanged, and the freeze holds.
+- **Admission.** Seeds 1–3 stable for both core twins and both agent twins; `firsttry.sh R05 --empty-body` 10/10. The 10 registry rows are unchanged (holes 72, Python 24).
+- **Chapter.** 5,156 words, 37 pins (from 19), PLAN §3's three diagrams. P3 is answered by two recorded ten-run quotes (`kind = "recorded"`): the resource count is the same in all runs (136,772 Dafny, 38,681 Verus) and the wall time varies.
+- **Bank and leak patterns.** The bank is at the Q06 schema with its probes re-run. Leak patterns: H4d and A1d re-cut; H1v and H2v also match Lab α forms, which are declared (Δ294); 8 OK.
+- **DECISION NEEDED** (notes §4):
+  - H3d (1 fact) and H4v (2) are under D64's bar. Recommend recording them as exceptions.
+  - `assert-by`, `isolate-assertions` and `spinoff-prover` have no hole whose smallest proof needs them. Recommend moving the two isolation constructs to RECOGNISE if R04's tag rule applies course-wide.
+- **Finding for the R14 lane:** `specimens/R14/card-c4dv-v.rs.specimen` shares H3v's two split-at-the-end subrange facts.
 
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
