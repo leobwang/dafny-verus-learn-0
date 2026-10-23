@@ -85,6 +85,17 @@ class Strata(unittest.TestCase):
                 if d["archive_sha256"] != "PENDING":
                     self.assertEqual(d["files"], 1 * len(d.get("card", [])))
 
+    def test_every_tranche_dafny_card_fails_under_maximal_automation(self):
+        # QPLAN §34.4 (Δ412): a Q32 tranche task is admitted only if maxauto does not close it
+        for st in strata():
+            d = tomllib.loads(st.read_text(encoding="utf-8"))
+            if not re.fullmatch(r"q32-t\d+", d["stratum"]):
+                continue
+            for c in d.get("card", []):
+                if c["lang"] == "dafny":
+                    with self.subTest(stratum=d["stratum"], card=c["id"]):
+                        self.assertIs(c.get("maxauto_fails"), True)
+
     def test_no_answer_in_the_learner_tree(self):
         for st in strata():
             for f in st.parent.rglob("*"):
