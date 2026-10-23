@@ -89,7 +89,7 @@ chapter (→ optional /discuss) → paper problems → make -C paper paper green
 
    | tool | pin | first module | install | check |
    |---|---|---|---|---|
-   | uv and the harness environment | uv 0.12.4 (`sandbox/images.lock`) | Q06, R05 | install uv, then `uv sync --directory harness --frozen` | `uv --version`; `uv run --directory harness python3 -c 'import fvh'` |
+   | uv and the harness environment | uv ≥ 0.11.0, a minimum (`required-version` in `pyproject.toml` and `harness/pyproject.toml`); the sandbox images carry their own pinned uv 0.12.4 (`sandbox/images.lock`) | Q06, R05 | install uv, then `uv sync --directory harness --frozen` | `uv --version`; `uv run --directory harness python3 -c 'import fvh'` |
    | Docker and the course images (`dvl-toolchain`, `dvl-agent`) | `sandbox/images.lock` | Q07 (the local agent replay) | Docker Engine, then `sandbox/build-images.sh` | `sandbox/build-images.sh --check` |
    | Ollama and the local model | `qwen3.8:latest` (`sandbox/apparatus.toml`) | Q07, the labs | Ollama, then `ollama pull qwen3.8:latest` | `ollama list`; `scripts/contract_local.sh Q07 --available` |
    | the course's copy of Claude Code's version file | Claude Code 2.1.306, `[backend.claude]` in `sandbox/apparatus.toml` | Q12 (Lab 1: every `fvh` batch checks it, a Qwen-only one too) | `scripts/get_toolchain.sh claude`, while that version is still in `~/.local/share/claude/versions/` (see below) | `scripts/get_toolchain.sh claude --check` |
