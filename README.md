@@ -106,8 +106,10 @@ The course runs on Linux x86-64 and on macOS on Apple silicon (D77). `PYTHONPATH
 | | Linux x86-64 | macOS on Apple silicon |
 |---|---|---|
 | **T1** the verification loop: `vcheck`, `vaudit`, `specfreeze`, `pins.py`, `firsttry.sh`, chapters, skills, the guard, the written track | yes | yes |
-| **T2** the labs without containers: Ollama and the local model through `harness/fvh` | yes | yes |
+| **T2** the labs without containers: Ollama and the local model through `harness/fvh` | yes | yes, except `fvh` batches (below) |
 | **T3** containers: `scripts/mksandbox-run`, `scripts/contract_local.sh`, the sealed hidden checks, agent replays in Docker | yes | not yet |
+
+**`fvh` batches on macOS: not yet.** `sandbox/apparatus.toml` pins this course host's Claude Code and opencode binaries by path and sha256 (`[backend.*]`), so `fvh apparatus --check`, which every batch runs, refuses on a Mac. A Mac needs its own host-specific `[backend.*]` pins, which the course does not support yet.
 
 **Memory is yours.** The course tools apply no memory management (D78): no cap, no preflight. A verifier job can take several GB. Run long sweeps and `scripts/ci.sh` under a limit of your own, for example on Linux `systemd-run --user --scope -p MemoryMax=32G -p MemorySwapMax=0 scripts/ci.sh`. A job killed by a signal (exit 137 or 143) is recorded as `killed(memory)`, never as a verdict.
 

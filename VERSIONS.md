@@ -135,6 +135,10 @@ The macOS (Apple silicon) vendor assets, which the learner unzips onto PATH:
 
 The versions do differ from one another: 4.12.1 against 4.14.1 matches on 14 of 29. So one set of pins holds on both platforms, including the 17 resource-sensitive pins (13 chapter fences and 4 specimens).
 
+**The macOS self-test** (`scripts/port_selftest.sh`, Δ503) passed all 9 steps on 5bd8374a, macos-arm64, on the user's M4 Max (run `20261023T200629Z`, 2026-10-23): preflight, `--versions`, `--fingerprint`, the contract tests, the hook tests under bash 3.2 and Homebrew's bash, both gates, and the 13 resource-sensitive chapter pins.
+
+**Known limit:** `fvh` batches on macOS need host-specific `[backend.*]` pins in `sandbox/apparatus.toml` (the pinned Claude Code and opencode binaries are this Linux host's, by path and sha256); that is not supported yet.
+
 ## 2. Probe results (DV0, with DV1b and DV1c additions)
 
 ### 2.1 Dafny probes (spec §11.6; D13 and D14 from design §14.2)
