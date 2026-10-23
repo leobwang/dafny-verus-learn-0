@@ -1432,7 +1432,43 @@ def validate_project(project, root):
                 elif project.read_text(encoding="utf-8") != files[rel]:
                     reasons.append(f"{rel}: edited dfyconfig.toml — it differs from "
                                    "scripts/gen_units.py's output")
+        elif rel is not None and rel.startswith("bench/"):
+            reasons += ticket_project_reasons(project, rel, root)
     return reasons
+
+
+def ticket_project_reasons(project, rel, root):
+    """A project file under bench/ is a ticket project (Q33 part B; DELTAS Δ415): accepted only
+    when the nearest STRATUM.toml above it pins it, a [[card]] with `project` (its path relative
+    to the stratum's directory) and `project_sha256` (its bytes). Any other project file there,
+    or a pinned one whose bytes changed, is refused (G21). `include` stays refused in the
+    ticket's files by the lint (G9): the project's `includes` list is the only way files join."""
+    root = Path(root).resolve()
+    stratum = None
+    for d in project.resolve().parents:
+        if d == root or root not in d.parents:
+            break
+        if (d / "STRATUM.toml").is_file():
+            stratum = d
+            break
+    if stratum is None:
+        return [f"{rel}: a dfyconfig.toml under bench/ outside any stratum is refused "
+                "(only a ticket project its stratum pins is used; Δ415, G21)"]
+    try:
+        data = tomllib.loads((stratum / "STRATUM.toml").read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError) as e:
+        return [f"{rel}: its stratum file is unreadable ({e})"]
+    here = project.resolve().relative_to(stratum).as_posix()
+    cards = [c for c in data.get("card", []) if c.get("project") == here]
+    if not cards:
+        return [f"{rel}: unpinned dfyconfig.toml — no card of "
+                f"{stratum.relative_to(root).as_posix()}/STRATUM.toml names it as its ticket "
+                "project (Δ415, G21)"]
+    got = hashlib.sha256(project.read_bytes()).hexdigest()
+    if any(c.get("project_sha256") != got for c in cards):
+        return [f"{rel}: altered dfyconfig.toml — its sha256 differs from the project_sha256 "
+                "its stratum pins (Δ415, G21)"]
+    return []
 
 
 def expand_includes(project):

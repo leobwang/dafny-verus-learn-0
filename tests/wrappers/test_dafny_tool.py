@@ -576,6 +576,81 @@ class ArmedUnits(unittest.TestCase):
             cfg.write_text(text, encoding="utf-8")
 
 
+class TicketProjects(unittest.TestCase):
+    """Δ415: a dfyconfig.toml under bench/ is a ticket project, used only when the nearest
+    STRATUM.toml pins it (its path and sha256); any other, or a pinned one whose bytes
+    changed, is refused, and `include` stays refused in the ticket's files (G9)."""
+
+    SPEC = "module TkSpec {\n  function Twice(x: int): int { 2 * x }\n}\n"
+    IMPL = ("module TkImpl {\n  import TkSpec\n  method DoubleIt(x: int) returns (r: int)\n"
+            "    ensures r == TkSpec.Twice(x)\n  {\n    r := x + x;\n  }\n}\n")
+    CFG = 'includes = ["spec.dfy", "impl.dfy"]\n'
+
+    @classmethod
+    def setUpClass(cls):
+        import hashlib
+        cls.root = common.scratch_dir("dafny-ticket-tree") / "root"
+        cls.root.mkdir(parents=True, exist_ok=True)
+        (cls.root / "MODULES.toml").write_text("schema = 1\n", encoding="utf-8")
+        shutil.copytree(ROOT / "dafny/options", cls.root / "dafny/options", dirs_exist_ok=True)
+        cls.st = cls.root / "bench/local/q/agentic/q99-tickets"
+        for t in ("t1", "t2"):
+            d = cls.st / t / "tasks"
+            d.mkdir(parents=True, exist_ok=True)
+            (d / "spec.dfy").write_text(cls.SPEC, encoding="utf-8")
+            (d / "impl.dfy").write_text(cls.IMPL, encoding="utf-8")
+            (d / "dfyconfig.toml").write_text(cls.CFG, encoding="utf-8")
+        sha = hashlib.sha256(cls.CFG.encode()).hexdigest()
+        (cls.st / "STRATUM.toml").write_text(
+            'schema = 1\nstratum = "q99-tickets"\n\n[[card]]\nid = "t1"\n'
+            f'project = "t1/tasks/dfyconfig.toml"\nproject_sha256 = "{sha}"\n', encoding="utf-8")
+        cls.loose = cls.root / "bench/local/q/loose"
+        cls.loose.mkdir(parents=True, exist_ok=True)
+        for name, text in (("spec.dfy", cls.SPEC), ("impl.dfy", cls.IMPL), ("dfyconfig.toml", cls.CFG)):
+            (cls.loose / name).write_text(text, encoding="utf-8")
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.root.parent, ignore_errors=True)
+
+    def test_a_pinned_ticket_project_verifies_as_one_program(self):
+        prog = D.program(self.st / "t1/tasks")
+        self.assertEqual(prog.kind, "project")
+        self.assertEqual(sorted(Path(f).name for f in prog.files), ["impl.dfy", "spec.dfy"])
+        self.assertEqual(D.verify(self.st / "t1/tasks", gate=True).verdict, "verified")
+
+    def test_an_unpinned_project_under_bench_is_refused(self):
+        r = D.verify(self.st / "t2/tasks", gate=True)
+        self.assertEqual(r.verdict, "refused")
+        self.assertIn("unpinned dfyconfig.toml", r.findings[0].message)
+
+    def test_a_project_outside_any_stratum_is_refused(self):
+        r = D.verify(self.loose, gate=True)
+        self.assertEqual(r.verdict, "refused")
+        self.assertIn("outside any stratum", r.findings[0].message)
+
+    def test_an_altered_pinned_project_is_refused(self):
+        cfg = self.st / "t1/tasks/dfyconfig.toml"
+        cfg.write_text(self.CFG + "[options]\n", encoding="utf-8")
+        try:
+            r = D.verify(self.st / "t1/tasks", gate=True)
+            self.assertEqual(r.verdict, "refused")
+            self.assertIn("altered dfyconfig.toml", r.findings[0].message)
+        finally:
+            cfg.write_text(self.CFG, encoding="utf-8")
+
+    def test_include_is_still_refused_in_a_ticket_file(self):
+        """The Dafny gate is verification only and its lint is vaudit's (Δ4): the audit of a
+        ticket project flags an `include` in one of its files, and a clean one has none."""
+        self.assertNotIn("include", kinds(D.audit(self.st / "t1/tasks")))
+        impl = self.st / "t1/tasks/impl.dfy"
+        impl.write_text('include "spec.dfy"\n' + self.IMPL, encoding="utf-8")
+        try:
+            self.assertIn("include", kinds(D.audit(self.st / "t1/tasks")))
+        finally:
+            impl.write_text(self.IMPL, encoding="utf-8")
+
+
 class Server(unittest.TestCase):
     def test_server_never_writes_into_the_pinned_install(self):
         """Δ33: the server runs from a scratch copy; the pinned tree stays verified."""
