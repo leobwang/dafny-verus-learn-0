@@ -1,0 +1,695 @@
+# bench/local/q/agentic/q33-pairs/STRATUM.toml — Q33's sealed statement pairs (QPLAN §35.4; DELTAS Δ414).
+# Learner-visible: the cards' ids, languages and sources, the counts and the pins only.
+# The task forms (prose, definitions, an implementation with no specification and an empty
+# witness, in Lab 2's form) are SEALED in `archive` (age, to the grader's recipient) and unsealed
+# once, after your frozen pipeline is committed, by `python -m fvh unseal Q33 --part pairs`
+# (single use, QPLAN §31.3). The references (each pair's reference statement and witness, two
+# faithful alternatives and one near-miss, with their intended verdicts) are sealed apart in
+# `refs_archive`; every reference carries a canary token whose hash sandbox/canaries.sha256 lists.
+# No pair has been run through a model.
+#
+# Admission (Solutions/tools/agentic/admit_pair.py, the author's, one solver job at a time): the
+# form verifies as shipped; the reference program passes `scripts/vcheck --gate`, `scripts/vaudit`
+# and `--brittleness`; the frozen Q15 reference oracles (vacuity, implication, classify) find the
+# reference not vacuous and faithful to itself, each faithful alternative FAITHFUL and the
+# near-miss WEAK or STRONG as intended. That host-side run is the admission check; the grader
+# container's `truthcheck judge` pass is a recorded re-check at W1b (Δ414). 30 subjects over the
+# extras and layers (ring buffer, heap indices, decimal and hexadecimal digits, propositional
+# formulas, a While step, JSON characters, limbs), each posed once in Dafny and once in Verus.
+schema = 1
+module = "Q33"
+lab = "Q33"
+stratum = "q33-pairs"
+part = "pairs"
+role = "held-out"
+sealed = true
+target = { total = 60, course_local = 60, public = 0 }
+archive = "Hidden/Agentic/Q33/pairs.tar.age"
+archive_sha256 = "bb7f1b1e0a4a409ac0f5209a60a8d273ccb0f0613212c4f6de63313ea660bb7c"
+recipient = "age1y728sf8x7f4z9spkhslc5a9am6qf9d0dg67c6nk7yf2w539r63mqfcmey9"
+files = 60
+manifest_sha256 = "0c42da139c45f92c7f551f79a17a0936f75fa313bd9d84b67a834546f21e3b05"
+refs_archive = "Hidden/Agentic/Q33/pairs-refs.tar.age"
+refs_sha256 = "69b8759d4ee4909c58c4f9a7d32e3a87e8452e720dc7d2e662679008706d05db"
+refs_files = 60
+refs_manifest_sha256 = "c15bab683e0f7df4bb1a5a95e87da56d708565088ff0eb58a6df5635b4a8439e"
+
+[[card]]
+id = "cl-d101-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d101-q33p/tasks/cl-d101-q33p.dfy"
+form_sha256 = "e439c4c094875f8fc92c83d329e5765f3145181ca4527cf83d4faa98bf1f5610"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "214302e19ee2ad9ef6b2fcd6654e939e91ce287a3aaa1c877579498d072900eb"
+
+[[card]]
+id = "cl-d102-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d102-q33p/tasks/cl-d102-q33p.dfy"
+form_sha256 = "033a7f655b5e8cd1d34b76b6f981d5e4691540b9d6dcc3162ea0342568a16306"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "5075fcffa08f2649616220c62003efa65fafd8494f99b11c120b29b4a251c664"
+
+[[card]]
+id = "cl-d103-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d103-q33p/tasks/cl-d103-q33p.dfy"
+form_sha256 = "ed35306858137f4d8ea68f06d578dfe67a2e9d08fc446c0983c19317d0200ad9"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "1582ff69aeedad1aec47f536cf2450aab8a0005d56cc493a081dfe9f7e639125"
+
+[[card]]
+id = "cl-d104-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d104-q33p/tasks/cl-d104-q33p.dfy"
+form_sha256 = "7753136cc1a59113c404a27cbb676e906e7a58df21043e035225df25b3bb757b"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "5847bc75b8d418b2303c5a7a01b44248ada8e6859d459b344543cb16197fd4f6"
+
+[[card]]
+id = "cl-d105-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d105-q33p/tasks/cl-d105-q33p.dfy"
+form_sha256 = "375188f24a782225e5e3fe57419b3db98b9c301de29357004e9352871c3b4da2"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "badc80df3008459feed9d68e8b5f435f6df8a7281d2b17dafa6fdbfd2be9bfe5"
+
+[[card]]
+id = "cl-d106-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d106-q33p/tasks/cl-d106-q33p.dfy"
+form_sha256 = "efb577c3bd7b704eae0e4301e2c53326b8f5a91a3d1286041e9dc2bc058a4538"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "64e0d381602d783361f5b00f73724b9dd3a22964d5071acff6bdf943624ca886"
+
+[[card]]
+id = "cl-d107-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d107-q33p/tasks/cl-d107-q33p.dfy"
+form_sha256 = "8bd6ac7fe4e684963b0a47a23ae097618d2ba565e61d57a219536f93d0329f8b"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "943b468795e14fadb0890009648e0088e7b8b8910ab439e1193b2a968cc4e139"
+
+[[card]]
+id = "cl-d108-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d108-q33p/tasks/cl-d108-q33p.dfy"
+form_sha256 = "f48de26c938d72951f28861df81468dd6db8b08e83d2872ba0367bcf0f7d1b11"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "5015d361f401f5b5690cd4c0f96e947e1a8c275840f5835495c5bc015e5a958b"
+
+[[card]]
+id = "cl-d109-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d109-q33p/tasks/cl-d109-q33p.dfy"
+form_sha256 = "fdb9625c33455bf14fc84889004a3e3ea96d6d7687fab873a5fff9e3124225bb"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "274e566a5ca3eeb7b732252497f7581caad7a8232171ccbc365f2077e4fd261a"
+
+[[card]]
+id = "cl-d110-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d110-q33p/tasks/cl-d110-q33p.dfy"
+form_sha256 = "f9895e59ac7d84c548764b2cc69264215165d7502c17e5446550abedc1a3368f"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "682e34cf661d56adae780354cfcb7a56cd0166b5e4e611963f2ba793baa355c1"
+
+[[card]]
+id = "cl-d111-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d111-q33p/tasks/cl-d111-q33p.dfy"
+form_sha256 = "3f07542c7d14e1161b3f5cefd790bcd5ea8c8c5b98c11a4f6d2d488c1c091010"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "f6dd8c31ae29b7b32f2be5dfe955db252bef996c6e03192ebcd4511b4c60ef33"
+
+[[card]]
+id = "cl-d112-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d112-q33p/tasks/cl-d112-q33p.dfy"
+form_sha256 = "442f21b57ea67429bf70be6d5fbab6817cccbc3edf58b448161dc969754ec918"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "4e4dc7a2d9e3fad44f2d9b4a231379532b32ccc05beb5914f2745c0268498857"
+
+[[card]]
+id = "cl-d113-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d113-q33p/tasks/cl-d113-q33p.dfy"
+form_sha256 = "9d29cc0d7585602b63d9e1d58c2650c2d4090b4bda26eb217953c83d601dcc01"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "6804749c7756b52f5a5e44402d24bb538e40b51798fc46407e25c5944f19008e"
+
+[[card]]
+id = "cl-d114-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d114-q33p/tasks/cl-d114-q33p.dfy"
+form_sha256 = "32907c5dc78f03e0f8ecb7cfd56651ac346c282162567940910ef9b7417f30f1"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "6222c4eb9d8c5abd73e2c150d2e822a086eccd2afc5a881dcbb93b1d8f33886c"
+
+[[card]]
+id = "cl-d115-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d115-q33p/tasks/cl-d115-q33p.dfy"
+form_sha256 = "304ca3f9850197a458df961cf6e15482e36cb785267c6c18210acd4b6a321dd1"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "775f997536fef2d830e251bb1a5314250eafe894f8385e78af1c0c8bb7c78db2"
+
+[[card]]
+id = "cl-d116-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d116-q33p/tasks/cl-d116-q33p.dfy"
+form_sha256 = "c8a7632d3f18b9408e7a7be4b5155a658065e9e8fe8c95249886c3bd7a63167f"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "6712a3b0cadfd36b802f1a81f739cb718ab29efb68d59aebf4f10b0815e0848f"
+
+[[card]]
+id = "cl-d117-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d117-q33p/tasks/cl-d117-q33p.dfy"
+form_sha256 = "99361d1feac8d50f511441857eb94303a88d5a4547ca11b5bd885871ba96e75f"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "31b624952f00598a84fc73b20eb4d037a1ff4b51455f336b1cf37c25654458f6"
+
+[[card]]
+id = "cl-d118-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d118-q33p/tasks/cl-d118-q33p.dfy"
+form_sha256 = "f1a1865667aef561176bb5e04d91126a28876c5d7770d854c5d271b2003fe293"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "8640cac1cedc53e7a84f5632bf8b9517acfcac04106647e4b7d1695c425d2168"
+
+[[card]]
+id = "cl-d119-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d119-q33p/tasks/cl-d119-q33p.dfy"
+form_sha256 = "aba3360302e70283ad9560a2011732e4e11aaf37c109f178b876ec30d6815985"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "7ccfd02db466dc013f87cd5cda2a0cd96eb2603df8558d375ed597beddbefa73"
+
+[[card]]
+id = "cl-d120-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d120-q33p/tasks/cl-d120-q33p.dfy"
+form_sha256 = "1358c8a27a9bc2b56767ce723bc1fed15b9a2957a96004f88a58d586a2cd2902"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "747acb3040f1cedf7828f5d5e2f433db50337f8353d815be8dae01a189a823cc"
+
+[[card]]
+id = "cl-d121-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d121-q33p/tasks/cl-d121-q33p.dfy"
+form_sha256 = "e00c6df5a139d499c3fe74ba64637da6384ff8e9b89d455b36b8bc247b1b094a"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "8042e3c03af91e84372bf5adcbae455285d1d3a41720b79eed6943959cd15c81"
+
+[[card]]
+id = "cl-d122-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d122-q33p/tasks/cl-d122-q33p.dfy"
+form_sha256 = "43e84b1210734acd2022946f6125af10deb4a3ca57ab64087fbef07fdb68c4db"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "20aaf3e1b016e78b4edd6c663ead22977c2e2a763bfc7d247387a34349c83f61"
+
+[[card]]
+id = "cl-d123-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d123-q33p/tasks/cl-d123-q33p.dfy"
+form_sha256 = "dcc2850df5638b7bcfd51a140e48fde1e8e5c7ca467f90e6c03d9a483b3e4f23"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "ebaa26a3f406bea5a320ee480d391c2e3723d0905f5dfbbcaf40f2ddd2f7a2a2"
+
+[[card]]
+id = "cl-d124-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d124-q33p/tasks/cl-d124-q33p.dfy"
+form_sha256 = "b4e6e02a771bc42935cf77b25b0265b5b0ed8bf92e33282832a8212f9308c727"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "3610dfece5871183e3dd685b61e7b11b8ac36f66b6b20f5164a26a7329b74696"
+
+[[card]]
+id = "cl-d125-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d125-q33p/tasks/cl-d125-q33p.dfy"
+form_sha256 = "c18f7e0c9d429ef8dcd926520362dfc07968dc8af47a916ae420203ef918d582"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "190b1cc34a60718da7ab2a5eb410f14e4661d50d3a9fd7b83e55217afbb8c356"
+
+[[card]]
+id = "cl-d126-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d126-q33p/tasks/cl-d126-q33p.dfy"
+form_sha256 = "03ce5b290a4a8b7f70c3f13de08c0ae296ab8bd91dbad68dbd76305fc23274ac"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "c397a08be03e937c48d73a842f79ace0a87ba414ec93d36afebf3ad55c401138"
+
+[[card]]
+id = "cl-d127-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d127-q33p/tasks/cl-d127-q33p.dfy"
+form_sha256 = "48437107725b8d89574766384e7063e2ba3ee414c73a6f8154fb69e3a06bb0db"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "520536ac5b7c44c4cd9b006eebf7f3be7f73975d419207b69d19792143baba01"
+
+[[card]]
+id = "cl-d128-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d128-q33p/tasks/cl-d128-q33p.dfy"
+form_sha256 = "2328e95b522acf21abc1b749efe9ae8a1983a5e85d176adfee5b17805b21c5cf"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "c867f0a07f472c6a6591e90a75dea45d26ac0fe8b021fd65176bb789c6614338"
+
+[[card]]
+id = "cl-d129-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d129-q33p/tasks/cl-d129-q33p.dfy"
+form_sha256 = "951bae40f457f592a4612ea555e9701b98ea26397dd970b96d35e464159909a6"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "b143b82619e2a43912619091cc5991c57dd6b6dacde7326df6e17abdfc75eecf"
+
+[[card]]
+id = "cl-d130-q33p"
+lang = "dafny"
+source = "course-local"
+form = "labs/Q33/cl-d130-q33p/tasks/cl-d130-q33p.dfy"
+form_sha256 = "c9e4d9fe01626d2dd83936cfd66eaa8925817b10c4f2cd691b26a54c6b05e496"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "1c52e28064fa40bacc795fb5aec1795433c7043381e8022cf8f3f0c5b825a29d"
+
+[[card]]
+id = "cl-v101-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v101-q33p/tasks/cl-v101-q33p.rs"
+form_sha256 = "347708b0d204ec628a4f47b8944b7717889cd8e7adf588929a3e6992a68b97dd"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "80d303f7d065217dc993f754ea256ebd74fa2b7666886f27e3fd33ee7f31d7ba"
+
+[[card]]
+id = "cl-v102-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v102-q33p/tasks/cl-v102-q33p.rs"
+form_sha256 = "db92da0c755caaa5ca6b67217c39685d34f4b3aee497b8cca3b4f601e3bde70d"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "27b1ed53ce2079a7c9f0180c49655d4124dd3bb2dd66cc1ac4fb8f82c2f124b2"
+
+[[card]]
+id = "cl-v103-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v103-q33p/tasks/cl-v103-q33p.rs"
+form_sha256 = "02653e3239ca7c884b3b1e9f81eedfa52660496505be364cf47d1f2e4b5c3ff2"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "899209f65802724d4d36f53591f53cb97870fdefe9fa6a5c6558c07f8f969c75"
+
+[[card]]
+id = "cl-v104-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v104-q33p/tasks/cl-v104-q33p.rs"
+form_sha256 = "8a4975e6de4e15dbb5ee83b2981b076a2bb735e4da947f45380651c85a39767a"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "f2b7fb841cf0ae75760d8b18374a21bfdadd146e93132b5ea6787d350b8de97a"
+
+[[card]]
+id = "cl-v105-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v105-q33p/tasks/cl-v105-q33p.rs"
+form_sha256 = "de2fd683355071d226f75d29c9dca750a406839a4558418fde7c0a4adfeee21e"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "4e035339e8ae810c7cee4a40b3a68b7760eeb91cf14113dbed9cb22ac6a231c8"
+
+[[card]]
+id = "cl-v106-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v106-q33p/tasks/cl-v106-q33p.rs"
+form_sha256 = "e9fe45821920a0aff458402fbb2b9841ac62624896693eb0c655453d2a2e154e"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "b1c068542f445f583ff761181c12b206ab08dc37eaa17bff6567fd1b07220f35"
+
+[[card]]
+id = "cl-v107-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v107-q33p/tasks/cl-v107-q33p.rs"
+form_sha256 = "46083e44f8e020616d013f021aa8967dc9a5bba853d1ef922860537531610e2d"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "1a4f13751bbb08c64a7136fb140a7dfa1cbc066003827b60a64f320c71e41cc5"
+
+[[card]]
+id = "cl-v108-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v108-q33p/tasks/cl-v108-q33p.rs"
+form_sha256 = "78af1c8b6c77576e3412c4444e4548126bd1c3f2917095189d6da160ea4f0156"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "9776b6cadc8f57f1ee2ccd4de6b41a0a1a4884597b7569badda49ab8a0eacddc"
+
+[[card]]
+id = "cl-v109-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v109-q33p/tasks/cl-v109-q33p.rs"
+form_sha256 = "2724cf1b43dbe99a95b0785349898fef3659a55983c32c6a5698b0b6ee21b5ae"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "938a4c94ca0e6071108f7a31c47136034828938f0b9b9084a2ee81949ee6debe"
+
+[[card]]
+id = "cl-v110-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v110-q33p/tasks/cl-v110-q33p.rs"
+form_sha256 = "50c5fcb7c2fde27e6f853f6665d76534656a0cd1524182c79b7388998503b83a"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "cddd04b9a6f675c120171f38f491593784416fd0464ebbf13726978b1dc0cabb"
+
+[[card]]
+id = "cl-v111-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v111-q33p/tasks/cl-v111-q33p.rs"
+form_sha256 = "b257b24a01c87c1a3e9bdc0b8d2e8fd49f7d62901d5f327d3f05c9eed329d590"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "04b8e96c09ab94001963d15c1f72ca8e8ce543384be3aa2bba3c7542e7e072ed"
+
+[[card]]
+id = "cl-v112-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v112-q33p/tasks/cl-v112-q33p.rs"
+form_sha256 = "4633049bf4412dc3b6401093bdc1c528aee97433b51e3dd677c134d4bb6f263c"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "c8b5af51127425e44cdc80a941e2ac2b7e8f12a26cbd57ca58d458007a5e734f"
+
+[[card]]
+id = "cl-v113-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v113-q33p/tasks/cl-v113-q33p.rs"
+form_sha256 = "761c3c5da2487f7941dc86417fe48566c3240efb2aa6bb9c0abbe829d29363bb"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "2ace5be62187694fb159cdd11afdd04db2dcae624c35e4d0f208c362ee790204"
+
+[[card]]
+id = "cl-v114-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v114-q33p/tasks/cl-v114-q33p.rs"
+form_sha256 = "02359abaefead3b5badc7bdac2b00eceb983aaaafdf69bb51e7b90c027bbae22"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "8ddd4f7dee6cfc3353298564afe11648bee5ef621ab23031f054aa03670aab5b"
+
+[[card]]
+id = "cl-v115-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v115-q33p/tasks/cl-v115-q33p.rs"
+form_sha256 = "6cb319194a15171ddfcbeebee4bd59616f073ff68299e23fc865a960bbe54ce2"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "de22ca38244f612886a60898358d81cefe921a140acfb443d1be1d426658bc9a"
+
+[[card]]
+id = "cl-v116-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v116-q33p/tasks/cl-v116-q33p.rs"
+form_sha256 = "22c12e1906e8c20cae9d71ef049d96b0f5be2072143bee9a704a5d154400ceac"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "0e19579b99d729e96a0179edbae7701c87b627066af26c14f6da50c4407ebe42"
+
+[[card]]
+id = "cl-v117-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v117-q33p/tasks/cl-v117-q33p.rs"
+form_sha256 = "479f893e94bf5a7b6d0526ab62a27fe5ed867415e318648a50e5279f5604ad0e"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "c19073b5ef827e682ba66f1e511b9e425caadd0b8b8a1aecfff03a6cd52ca2ea"
+
+[[card]]
+id = "cl-v118-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v118-q33p/tasks/cl-v118-q33p.rs"
+form_sha256 = "cd0bb32e18cc44724ee77d82296b34f94801379b53c78062203437e08d204fa6"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "63f3d7e8549d23239c3e6eecc607b46e6032b29301943f7771a4fac2202ac144"
+
+[[card]]
+id = "cl-v119-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v119-q33p/tasks/cl-v119-q33p.rs"
+form_sha256 = "9b86b8829295b604f80080c7332f744174d8d289aca16d6bd1f8ac33a1e82ea9"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "29e1778d3199859c98ef3972ea754f24fb475c5f366a7e5c3f6409ddaaf96fd4"
+
+[[card]]
+id = "cl-v120-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v120-q33p/tasks/cl-v120-q33p.rs"
+form_sha256 = "5ca65ea3ae55cdd46a288950ee907d11b51486fa584df39ef6f9f301c7324e37"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "c2cb69cdc97c5aaafd91d99d16746240edde4899a11c93ccb6865d2d68cfb361"
+
+[[card]]
+id = "cl-v121-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v121-q33p/tasks/cl-v121-q33p.rs"
+form_sha256 = "d3f0e554088ca5bedba063645ae192b57f24a88cd7a5fe6a8561e9efe72bc426"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "a0f655907c6808b5e53a29d08364ae44f427f2572f637f0200f34691be25d8dd"
+
+[[card]]
+id = "cl-v122-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v122-q33p/tasks/cl-v122-q33p.rs"
+form_sha256 = "7475b5ce75b2e59b79661b24eb8a0ebf97fcfaf3340b066943a5e8953e540b1b"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "64e15210e32c45bd49c60e536ce611c046f0f1587ef6a419e2b0b7f4a153c589"
+
+[[card]]
+id = "cl-v123-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v123-q33p/tasks/cl-v123-q33p.rs"
+form_sha256 = "03758f7464bdd3f14d1b8e3d1b432ea7441b7c7362297d529bddebd01ceb222e"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "34bd2a4007e90167072ce52956f0709eb457fd08b7bf4c38627332f5cd9e9bcd"
+
+[[card]]
+id = "cl-v124-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v124-q33p/tasks/cl-v124-q33p.rs"
+form_sha256 = "7685f19d0883b637e32e1f2cae27152f8910d1c227dda367efe3a81277912355"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "3066e0d483f72b177c97fcc0b17825a562771260f7d445aa175af5cfae3a21a8"
+
+[[card]]
+id = "cl-v125-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v125-q33p/tasks/cl-v125-q33p.rs"
+form_sha256 = "60e2cb20e7d7b4f88fd1c1dc2d2a7acf3d489f10a35f9324d6f3f9a56ae63583"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "4dd78272f7bd52086186c71c05c2ffac7aab8de45bc738922bdcc68cae924042"
+
+[[card]]
+id = "cl-v126-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v126-q33p/tasks/cl-v126-q33p.rs"
+form_sha256 = "2ea30a2ab5d3e83ee0c066ca9a155478696bc2d2e24582c03cdefe4b90f6f35a"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "1534a644b864918db6ebf144c8341cc6ced71cbeea5d50611003ec8a98898313"
+
+[[card]]
+id = "cl-v127-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v127-q33p/tasks/cl-v127-q33p.rs"
+form_sha256 = "8651ca28b720bde4b84adbd8dbc22a46d0edd3c355ad3ec736022b98c56d9d13"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "da6119a2b37d6171f1156bf789374409e699e4c4601fa287eb499e435e73acae"
+
+[[card]]
+id = "cl-v128-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v128-q33p/tasks/cl-v128-q33p.rs"
+form_sha256 = "51d6e17ae5613b1a2f2a829b7b7b6777f1ec131409102477a5f9f6dff10e9f1e"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "ecc3778ae0965db4faac8df404f44cdf65bc092c214ec5a2a4de11c69d1a099a"
+
+[[card]]
+id = "cl-v129-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v129-q33p/tasks/cl-v129-q33p.rs"
+form_sha256 = "977d3f027d4a5934b93f0a15b205f132b46cf61bc9d6821ae6cd6e22bf507f55"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "5371b9728ac0c157ddb1f4b63e19896a7663bbd6f35617cd0b89421fc5bff0aa"
+
+[[card]]
+id = "cl-v130-q33p"
+lang = "verus"
+source = "course-local"
+form = "labs/Q33/cl-v130-q33p/tasks/cl-v130-q33p.rs"
+form_sha256 = "ecd6e95d261d7273f657293f413b4213c66390c809a3efb95020657cbda5211f"
+admitted = true
+admitted_on = "2026-10-22"
+maxauto_fails = false
+admission_sha256 = "b60c45f4a2f27e9c8ca6e2788d4c2de3e9c8ed21623b0c8b8fec753258812f6f"
