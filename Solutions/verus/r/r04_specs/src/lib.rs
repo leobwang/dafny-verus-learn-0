@@ -17,7 +17,6 @@ pub open spec fn occurs(r: Re, s: Seq<char>) -> bool {
 }
 
 // item: R04.T1v
-// uses: exists-elim
 // pair: R04.T1d
 /// Closed book, before reading: give a witness and prove the claim.
 pub proof fn lemma_some_word_matches()
@@ -72,7 +71,7 @@ pub proof fn lemma_cat_chr_nonempty(b: Re, s: Seq<char>)
 // Cards
 // ===========================================================================
 
-// item: R04.C1v recognise:forall-intro
+// item: R04.C1v write:forall-intro
 // The given forall proof introduces an arbitrary s, not a chosen sample.
 // EXPECT: card-c1v.rs.specimen fails: its claim does not hold for every s.
 // item: R04.C2v write:exists-elim
@@ -126,71 +125,87 @@ pub proof fn lemma_witness_abb()
 // item: R04.H2v
 // uses: forall-intro, exists-elim
 // pair: R04.H2d
-/// **H2.** A negative claim: `Cat(Chr('a'), Star(Chr('b')))` does not match
-/// "ba". One failed split proves nothing about the others: which claim about
-/// every prefix of "ba" rules out the `Cat`, and how do you use it against a
-/// split that a match would supply?
-pub proof fn lemma_witness_not_ba()
+/// **H2.** A negative claim about every match: no string that
+/// `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second
+/// place. Prove it for an arbitrary match with `assert forall ... implies ...
+/// by` (W1), and use the match through the splits it guarantees (W2). Which
+/// two splits does a match supply, and what does each `Chr` side force?
+pub proof fn lemma_no_x_in_second_place()
     ensures
-        !matches(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Star(Box::new(Re::Chr('b'))))), seq!['b', 'a']),
+        forall|s: Seq<char>| matches(Re::Cat(Box::new(Re::Chr('x')), Box::new(Re::Cat(Box::new(Re::Chr('y')), Box::new(Re::Star(Box::new(Re::Chr('z'))))))), s) ==> s.len() >= 2 && s[1] != 'x',
 {
     // @hole-begin R04.H2v
-    let s = seq!['b', 'a'];
-    let a = Re::Chr('a');
-    let b = Re::Star(Box::new(Re::Chr('b')));
-    assert forall|i: int| 0 <= i <= s.len() implies !matches(a, #[trigger] s.subrange(0, i)) by {
-        if i == 1 {
-            assert(s.subrange(0, i)[0] == 'b');
-        }
-    }
-    if matches(Re::Cat(Box::new(a), Box::new(b)), s) {
+    let r = Re::Cat(Box::new(Re::Chr('x')), Box::new(Re::Cat(Box::new(Re::Chr('y')), Box::new(Re::Star(Box::new(Re::Chr('z')))))));
+    let yz = Re::Cat(Box::new(Re::Chr('y')), Box::new(Re::Star(Box::new(Re::Chr('z')))));
+    assert forall|s: Seq<char>| matches(r, s) implies s.len() >= 2 && s[1] != 'x' by {
         let i = choose|i: int|
-            0 <= i <= s.len() && matches(a, #[trigger] s.subrange(0, i)) && matches(
-                b,
+            0 <= i <= s.len() && matches(Re::Chr('x'), #[trigger] s.subrange(0, i)) && matches(
+                yz,
                 s.subrange(i, s.len() as int),
             );
-        assert(false);
+        let t = s.subrange(i, s.len() as int);
+        let j = choose|j: int|
+            0 <= j <= t.len() && matches(Re::Chr('y'), #[trigger] t.subrange(0, j)) && matches(
+                Re::Star(Box::new(Re::Chr('z'))),
+                t.subrange(j, t.len() as int),
+            );
+        assert(s.subrange(0, i).len() == 1);
+        assert(i == 1);
+        assert(t.subrange(0, j).len() == 1);
+        assert(j == 1);
+        assert(t.subrange(0, j)[0] == 'y');
+        assert(t[0] == t.subrange(0, j)[0]);
+        assert(s[1] == t[0]);
     }
     // @hole-end R04.H2v
 }
-// Hint(1): prove the claim for every prefix with `assert forall ... implies
-//    ... by` (W1), with a case for the index where the prefix is "b".
-// Hint(2): then assume the match, take its split with `choose` (W2): the
-//    forall fact contradicts it.
+// Hint(1): `assert forall|s: Seq<char>| <the match> implies <the claim> by
+//    { ... }` fixes one arbitrary match; the rest is about that `s`.
+// Hint(2): take the outer split with `choose`, then the split of its suffix;
+//    each `Chr` side pins one character.
 
 // item: R04.H3v
+// uses: forall-intro, exists-elim
 // pair: R04.H3d
-/// **H3.** Anchoring: `Chr('a')` does not match the whole string "ba",
-/// although 'a' occurs in it, and `Cat(Star(Chr('b')), Chr('a'))` does. Which
-/// conjunct is a claim about every candidate, and which needs one split named
-/// and both its sides proved?
+/// **H3.** Anchoring: a whole-string match of `Cat(Cat(Chr('a'),
+/// Star(Chr('b'))), Chr('c'))` begins with 'a' and ends with 'c'; an
+/// occurrence would pin neither end. Prove it for every matching string, from
+/// the splits a match guarantees (W2). Which split pins the last character,
+/// and which pins the first?
 pub proof fn lemma_witness_anchored()
     ensures
-        !matches(Re::Chr('a'), seq!['b', 'a']) && matches(
-            Re::Cat(Box::new(Re::Star(Box::new(Re::Chr('b')))), Box::new(Re::Chr('a'))),
-            seq!['b', 'a'],
-        ),
+        forall|s: Seq<char>| matches(Re::Cat(Box::new(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Star(Box::new(Re::Chr('b')))))), Box::new(Re::Chr('c'))), s) ==> s.len() >= 2 && s[0] == 'a' && s[s.len() - 1] == 'c',
 {
     // @hole-begin R04.H3v
-    let s = seq!['b', 'a'];
-    let t = seq!['b'];
-    let star = Re::Star(Box::new(Re::Chr('b')));
-    assert(!matches(Re::Chr('a'), s));
-    assert(t.subrange(0, 1) =~= seq!['b']);
-    assert(t.subrange(1, 1) =~= Seq::<char>::empty());
-    assert(matches(Re::Chr('b'), t.subrange(0, 1)));
-    assert(matches(star, t.subrange(1, 1)));
-    assert(matches(star, t));
-    assert(s.subrange(0, 1) =~= t);
-    assert(s.subrange(1, 2) =~= seq!['a']);
-    assert(matches(star, s.subrange(0, 1)));
-    assert(matches(Re::Chr('a'), s.subrange(1, 2)));
+    let r = Re::Cat(Box::new(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Star(Box::new(Re::Chr('b')))))), Box::new(Re::Chr('c')));
+    let ab = Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Star(Box::new(Re::Chr('b')))));
+    assert forall|s: Seq<char>| matches(r, s) implies s.len() >= 2 && s[0] == 'a' && s[s.len() - 1] == 'c' by {
+        let i = choose|i: int|
+            0 <= i <= s.len() && matches(ab, #[trigger] s.subrange(0, i)) && matches(
+                Re::Chr('c'),
+                s.subrange(i, s.len() as int),
+            );
+        let u = s.subrange(0, i);
+        let k = choose|k: int|
+            0 <= k <= u.len() && matches(Re::Chr('a'), #[trigger] u.subrange(0, k)) && matches(
+                Re::Star(Box::new(Re::Chr('b'))),
+                u.subrange(k, u.len() as int),
+            );
+        assert(s.subrange(i, s.len() as int).len() == 1);
+        assert(s.len() == i + 1);
+        assert(s[s.len() - 1] == s.subrange(i, s.len() as int)[0]);
+        assert(u.subrange(0, k).len() == 1);
+        assert(k == 1);
+        assert(i >= 1);
+        assert(s[0] == u[0]);
+        assert(u[0] == u.subrange(0, k)[0]);
+    }
     // @hole-end R04.H3v
 }
-// Hint(1): the first conjunct is about the whole string only; the second is
-//    H1's kind of witness with the Star on the left.
-// Hint(2): name the split at 1 by its two subranges with `=~=`, and assert
-//    both sides' matches there.
+// Hint(1): the outer split's right side is `Chr('c')`, which matches one
+//    string only; the left side is itself a `Cat`, whose split you take next.
+// Hint(2): W2 takes a split out of a premise with `choose`; here the premise
+//    is the antecedent of `assert forall ... implies ... by` (W1).
 
 // item: R04.H4v
 // pair: R04.H4d

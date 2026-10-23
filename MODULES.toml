@@ -2023,9 +2023,9 @@ tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
 write_d = ["forall-intro", "exists-elim"]
-write_v = ["exists-elim"]
+write_v = ["forall-intro", "exists-elim"]
 recognise_d = ["expect"]
-recognise_v = ["assume", "forall-intro"]
+recognise_v = ["assume"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = { "R04.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R04.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R04.H1d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H2d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H3d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H4d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H5d" = { admitted = true, minutes = 7, fallback = "" }, "R04.H1v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H2v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H3v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H4v" = { admitted = true, minutes = 7, fallback = "" }, "R04.H5v" = { admitted = true, minutes = 7, fallback = "" } }
 imports = { "dafny/R/R04_Specs/core/R04_Specs.dfy" = "core", "dafny/R/R04_Specs/agent/R04_AgentProver.dfy" = "core", "verus/r/r04_specs/src/lib.rs" = "prelude", "verus/r/r04_specs/src/agent.rs" = "prelude" }

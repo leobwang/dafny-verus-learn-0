@@ -58,24 +58,24 @@ As shipped, both exercise files verify in the learner loop with their holes coun
 ```
 $ scripts/vcheck dafny/R/R04_Specs/core
 vcheck: dafny/R/R04_Specs/core [dafny, learner loop]: verified — 11 verified, 6 holes, 0 errors
-dafny/R/R04_Specs/core/R04_Specs.dfy:30:13: hole bodyless-method R04.T1d
-dafny/R/R04_Specs/core/R04_Specs.dfy:99:20: hole bodyless-method R04.H1d
-dafny/R/R04_Specs/core/R04_Specs.dfy:117:13: hole bodyless-method R04.H2d
-dafny/R/R04_Specs/core/R04_Specs.dfy:135:13: hole bodyless-method R04.H3d
-dafny/R/R04_Specs/core/R04_Specs.dfy:151:13: hole bodyless-function R04.H4d
-dafny/R/R04_Specs/core/R04_Specs.dfy:191:13: hole bodyless-method R04.H5d
+dafny/R/R04_Specs/core/R04_Specs.dfy:29:13: hole bodyless-method R04.T1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:98:20: hole bodyless-method R04.H1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:114:13: hole bodyless-method R04.H2d
+dafny/R/R04_Specs/core/R04_Specs.dfy:130:13: hole bodyless-method R04.H3d
+dafny/R/R04_Specs/core/R04_Specs.dfy:146:13: hole bodyless-function R04.H4d
+dafny/R/R04_Specs/core/R04_Specs.dfy:186:13: hole bodyless-method R04.H5d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r04_specs
 vcheck: verus/r/r04_specs [verus, learner loop]: verified — - verified, 6 holes, 0 errors
-verus/r/r04_specs/src/lib.rs:27:40: hole assume R04.T1v
-verus/r/r04_specs/src/lib.rs:89:40: hole assume R04.H1v
+verus/r/r04_specs/src/lib.rs:26:40: hole assume R04.T1v
+verus/r/r04_specs/src/lib.rs:88:40: hole assume R04.H1v
 verus/r/r04_specs/src/lib.rs:107:40: hole assume R04.H2v
-verus/r/r04_specs/src/lib.rs:127:40: hole assume R04.H3v
-verus/r/r04_specs/src/lib.rs:141:1: hole uninterp R04.H4v
-verus/r/r04_specs/src/lib.rs:179:40: hole assume R04.H5v
+verus/r/r04_specs/src/lib.rs:126:40: hole assume R04.H3v
+verus/r/r04_specs/src/lib.rs:140:1: hole uninterp R04.H4v
+verus/r/r04_specs/src/lib.rs:178:40: hole assume R04.H5v
 ```
 
 Green with six holes is not done; *done* is green with zero tool-counted holes and a clean audit (R01 §5).
@@ -255,7 +255,7 @@ flowchart LR
 
 Draw the bounds before writing a quantifier. The four formulas can agree on a particular input and still answer different questions: on `"z"` all four say yes, and only a string like `"yzy"` separates the occurrence from the others. Two conventions travel with every formula. The empty slice is a slice: a prefix question includes `s[..0]`, and an occurrence includes every `s[i..i]`. And the bounds are part of the claim: replacing `0 <= i <= |s|` by `0 < i <= |s|` excludes the empty prefix, which changes the answer for every regex that accepts the empty string.
 
-H3 is the anchoring item. Verus's H3 shows one regex that occurs in "ba" but does not match it, and another that matches the whole of it. Dafny's H3 proves what anchoring buys: every string that `Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c'))` matches begins with 'a' and ends with 'c', which an occurrence would not guarantee. H4 asks you to write one of these formulas from its prose description, and three given checks test the bounds you chose.
+H3 is the anchoring item. It proves what anchoring buys: every string that `Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c'))` matches begins with 'a' and ends with 'c', which an occurrence would not guarantee. H4 asks you to write one of these formulas from its prose description, and three given checks test the bounds you chose.
 
 ---
 
@@ -288,7 +288,7 @@ pub proof fn lemma_eps_only_empty()
 }
 ```
 
-Nothing about the chosen `s` is special: the proof must work for whatever value satisfies the range, which is what makes the conclusion universal. The card C1 (a WRITE card in Dafny, where H2 and H3 each ask for a `forall` statement over every matching string; a RECOGNISE card in Verus, where only H2 needs `assert forall`) has demos that claim universals that do not hold:
+Nothing about the chosen `s` is special: the proof must work for whatever value satisfies the range, which is what makes the conclusion universal. The WRITE card C1 (H2 and H3 each ask for a `forall` statement or an `assert forall … implies … by` over every matching string) has demos that claim universals that do not hold:
 
 ```dafny
 module R04_ForallDemo {
@@ -569,7 +569,7 @@ $ scripts/vcheck --module R04 yx.rs
 vcheck: yx.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
 
-The `forall` over prefixes is the whole argument here: once no prefix matches `Chr('x')`, no split of the `Cat` can, and Verus's own instantiation finishes the negation. In Verus's H2 the right side is a `Star`, and the proof also takes the split a match would supply and points the prefix fact at it. Dafny's H2 is a different claim of the same kind, because Dafny settles Verus's "ba" claim from one slice fact: no string that `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second place. It is a universal over matches, so the proof is a `forall` statement (§2.1) for one arbitrary match, and inside it the two splits that match guarantees are taken with `:|` (§2.2); each `Chr` side then pins one character. Keep the scope visible either way: the claim is about every index from 0 to `|s|`, the empty prefix and the whole string included.
+The `forall` over prefixes is the whole argument here: once no prefix matches `Chr('x')`, no split of the `Cat` can, and Verus's own instantiation finishes the negation. H2 is a claim of the same kind about every match instead of one string, because Dafny settles a short concrete negative claim from one slice fact: no string that `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second place. It is a universal over matches, so the proof introduces one arbitrary match (a `forall` statement or `assert forall … implies … by`, §2.1), and inside it the two splits that match guarantees are taken with `:|` or `choose` (§2.2); each `Chr` side then pins one character. Keep the scope visible either way: the claim is about every index from 0 to `|s|`, the empty prefix and the whole string included.
 
 ---
 
@@ -978,12 +978,12 @@ Each instrument answers one question about one artifact. Run the gate and the au
 ```
 $ scripts/vcheck --gate dafny/R/R04_Specs/core
 vcheck: dafny/R/R04_Specs/core [dafny, gate]: failed — 11 verified, 6 holes, 0 errors, 1 finding
-dafny/R/R04_Specs/core/R04_Specs.dfy:30:13: hole bodyless-method R04.T1d
-dafny/R/R04_Specs/core/R04_Specs.dfy:99:20: hole bodyless-method R04.H1d
-dafny/R/R04_Specs/core/R04_Specs.dfy:117:13: hole bodyless-method R04.H2d
-dafny/R/R04_Specs/core/R04_Specs.dfy:135:13: hole bodyless-method R04.H3d
-dafny/R/R04_Specs/core/R04_Specs.dfy:151:13: hole bodyless-function R04.H4d
-dafny/R/R04_Specs/core/R04_Specs.dfy:191:13: hole bodyless-method R04.H5d
+dafny/R/R04_Specs/core/R04_Specs.dfy:29:13: hole bodyless-method R04.T1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:98:20: hole bodyless-method R04.H1d
+dafny/R/R04_Specs/core/R04_Specs.dfy:114:13: hole bodyless-method R04.H2d
+dafny/R/R04_Specs/core/R04_Specs.dfy:130:13: hole bodyless-method R04.H3d
+dafny/R/R04_Specs/core/R04_Specs.dfy:146:13: hole bodyless-function R04.H4d
+dafny/R/R04_Specs/core/R04_Specs.dfy:186:13: hole bodyless-method R04.H5d
 dafny/R/R04_Specs/core: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
 ```
 
@@ -991,36 +991,36 @@ dafny/R/R04_Specs/core: warnings-fail-gate: warnings fail the gate (W-D04): hole
 ```
 $ scripts/vcheck --gate verus/r/r04_specs
 vcheck: verus/r/r04_specs [verus, gate]: failed — - verified, 6 holes, 1 error
-verus/r/r04_specs/src/lib.rs:27:40: hole assume R04.T1v
-verus/r/r04_specs/src/lib.rs:89:40: hole assume R04.H1v
+verus/r/r04_specs/src/lib.rs:26:40: hole assume R04.T1v
+verus/r/r04_specs/src/lib.rs:88:40: hole assume R04.H1v
 verus/r/r04_specs/src/lib.rs:107:40: hole assume R04.H2v
-verus/r/r04_specs/src/lib.rs:127:40: hole assume R04.H3v
-verus/r/r04_specs/src/lib.rs:141:1: hole uninterp R04.H4v
-verus/r/r04_specs/src/lib.rs:179:40: hole assume R04.H5v
+verus/r/r04_specs/src/lib.rs:126:40: hole assume R04.H3v
+verus/r/r04_specs/src/lib.rs:140:1: hole uninterp R04.H4v
+verus/r/r04_specs/src/lib.rs:178:40: hole assume R04.H5v
 (no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 6 hole(s); exit 1
 ```
 
 <!-- pin: audit-d -->
 ```
 $ scripts/vaudit dafny/R/R04_Specs/core
-dafny/R/R04_Specs/core/R04_Specs.dfy:29: audit-bodyless-ghost — SomeWordMatches: Ghost declaration has no body and has an ensures clause
-dafny/R/R04_Specs/core/R04_Specs.dfy:98: audit-bodyless-ghost — WitnessAbb: Ghost declaration has no body and has an ensures clause
-dafny/R/R04_Specs/core/R04_Specs.dfy:116: audit-bodyless-ghost — NoXInSecondPlace: Ghost declaration has no body and has an ensures clause
-dafny/R/R04_Specs/core/R04_Specs.dfy:134: audit-bodyless-ghost — WitnessAnchored: Ghost declaration has no body and has an ensures clause
-dafny/R/R04_Specs/core/R04_Specs.dfy:150: audit-bodyless-ghost — PrefixMatch: Ghost declaration has no body and has an ensures clause
-dafny/R/R04_Specs/core/R04_Specs.dfy:190: audit-bodyless-ghost — MutantKilled: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:28: audit-bodyless-ghost — SomeWordMatches: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:97: audit-bodyless-ghost — WitnessAbb: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:113: audit-bodyless-ghost — NoXInSecondPlace: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:129: audit-bodyless-ghost — WitnessAnchored: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:145: audit-bodyless-ghost — PrefixMatch: Ghost declaration has no body and has an ensures clause
+dafny/R/R04_Specs/core/R04_Specs.dfy:185: audit-bodyless-ghost — MutantKilled: Ghost declaration has no body and has an ensures clause
 vaudit: dafny/R/R04_Specs/core [dafny, learner]: 6 finding(s)
 ```
 
 <!-- pin: audit-v -->
 ```
 $ scripts/vaudit verus/r/r04_specs
-verus/r/r04_specs/src/lib.rs:27: hole-assume — an assume hole (in lemma_some_word_matches) not on the trust allowlist
-verus/r/r04_specs/src/lib.rs:89: hole-assume — an assume hole (in lemma_witness_abb) not on the trust allowlist
-verus/r/r04_specs/src/lib.rs:107: hole-assume — an assume hole (in lemma_witness_not_ba) not on the trust allowlist
-verus/r/r04_specs/src/lib.rs:127: hole-assume — an assume hole (in lemma_witness_anchored) not on the trust allowlist
-verus/r/r04_specs/src/lib.rs:141: hole-uninterp — an uninterp hole (in prefix_match) not on the trust allowlist
-verus/r/r04_specs/src/lib.rs:179: hole-assume — an assume hole (in lemma_mutant_killed) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:26: hole-assume — an assume hole (in lemma_some_word_matches) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:88: hole-assume — an assume hole (in lemma_witness_abb) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:107: hole-assume — an assume hole (in lemma_no_x_in_second_place) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:126: hole-assume — an assume hole (in lemma_witness_anchored) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:140: hole-uninterp — an uninterp hole (in prefix_match) not on the trust allowlist
+verus/r/r04_specs/src/lib.rs:178: hole-assume — an assume hole (in lemma_mutant_killed) not on the trust allowlist
 vaudit: verus/r/r04_specs [verus, learner]: 6 finding(s)
 ```
 
@@ -1077,14 +1077,14 @@ Build the pair with `make -C paper paper`. A compiled answers file shows that it
 
 ## 8. The exercise file
 
-The hand work is the test-out T1 and five paired holes, H1–H5, after the worked examples and cards in both exercise files. Four of the pairs (T1, H2, H3, H5) pose a different claim in Dafny than in Verus: Dafny's solver settles the short concrete-string claims with one or two slice facts, so each Dafny statement is changed until its proof needs at least three facts of yours, while the Verus statements stay as they are (the user's decisions D64, D82 and D83). Dafny's H2 and H3 quantify over every matching string, so each needs a `forall` statement and two `:|` splits. Keep the statements, the given `Occurs`, the given checks and the levers fixed; the freeze checks them.
+The hand work is the test-out T1 and five paired holes, H1–H5, after the worked examples and cards in both exercise files. Two of the pairs (T1, H5) pose a longer claim in Dafny than in Verus: Dafny's solver settles the short concrete-string claims with one or two slice facts, so those Dafny statements are stretched until their proofs need at least three facts of yours (the user's decision D64). H2 and H3 pose the same claim in both languages, a universal over every matching string, so each needs a `forall` introduction and two splits taken from the match (the user's decisions D82, D83 and their Verus mirror). Keep the statements, the given `Occurs`, the given checks and the levers fixed; the freeze checks them.
 
 | item | statement (Dafny · Verus) | minutes D / V | uses |
 |---|---|---|---|
 | T1 | `SomeWordMatches` · `lemma_some_word_matches`: some string (Dafny: of length 3) matches `Cat(Chr('o'), Star(Chr('k')))` (closed book) | 5 / 5 | a witness for an existential |
 | H1 | `WitnessAbb` · `lemma_witness_abb`: `Cat(Chr('a'), Star(Chr('b')))` matches "abb" | 7 / 7 | a positive witness (§2.3) |
-| H2 | `NoXInSecondPlace` · `lemma_witness_not_ba`: Dafny, no string that `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second place; Verus, `Cat(Chr('a'), Star(Chr('b')))` does not match "ba" | 7 / 7 | a negative claim over every candidate (§2.4) |
-| H3 | `WitnessAnchored` · `lemma_witness_anchored`: Dafny, every string that `Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c'))` matches begins with 'a' and ends with 'c'; Verus, `Chr('a')` does not match "ba" and `Cat(Star(Chr('b')), Chr('a'))` does | 7 / 7 | anchoring (§1.2): Dafny from a match's splits (§2.2), Verus a positive witness |
+| H2 | `NoXInSecondPlace` · `lemma_no_x_in_second_place`: no string that `Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z'))))` matches has 'x' in second place | 7 / 7 | a negative claim over every candidate (§2.4): a `forall` introduction and two splits |
+| H3 | `WitnessAnchored` · `lemma_witness_anchored`: every string that `Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c'))` matches begins with 'a' and ends with 'c' | 7 / 7 | anchoring (§1.2), from a match's splits (§2.2) |
 | H4 | `PrefixMatch` · `prefix_match`: the definition, from prose, with three given checks | 7 / 7 | which bounds vary (§1.2) |
 | H5 | `MutantKilled` · `lemma_mutant_killed`: a witness that `Nullable(r)` and `Occurs(r, s)` differ (Dafny: for `r = Cat(Chr('a'), Chr('b'))`) | 7 / 7 | a mutant-kill witness (§3.3) |
 

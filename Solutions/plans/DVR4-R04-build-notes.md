@@ -128,3 +128,39 @@ Shapes tried first (`r04/d8283/`): with `s[0] != 'y'` as H2's conclusion one `:|
 
 Probes and logs under `r04/d8283/` and `r04/logs/`. Subsets for H2d: the `forall` with an empty body fails, the `forall` with the outer `:|` only fails, and the three lines verify (`d8283/out.json`, `h2b-0`, `h2b-1`, `h2b-2`). For H3d: `h3-0` and `h3-1` fail and the three lines verify. Core twin stable on seeds 1–3 (`brittle-d8283-core-d.log`; widest spread CV 15.2 %, advisory). `firsttry.sh R04 --empty-body` 12/12 (`empty-body-d8283.log`: every empty body and region gate fails in every run, maximal automation included; the four admission results hold, and the registry rows are unchanged at 7 minutes). Freeze re-pinned (110 statements) and `--check` 0; counts re-pinned; `--shipped` 0; the R04 rubric pins refreshed (R11's two stale pins are P2's and were left); `--lint-hollow` OK; `reference_lint` 0; `avoid.sh` OK; `check_course_map` OK (Dafny `forall-intro` tagged on H2d, H3d). Chapter re-captured (42 pins; `chapter_lint` 0 problems, 6,157 words); `pins.py --ci --module R04` 71 pins 0 problems; `--ref` 6 checks 0. Leak verifier 8 OK over 2,728 public files (H2d re-cut; H3d has no pattern, since the file is at the 8-pattern cap). Answer overlap: H2d's and H3d's 30-token windows that are shared come from the learner file's own statement (a `forall` statement restates the `ensures`) and from Lab α's `r09-copies-split-d`, whose W2 split idiom is a declared later-tier overlap (Δ294). Study workflow 11/11 on `3a721a37` (`workflow-d8283.log`).
 
+## 11. The Verus mirror of D82/D83, honest T1 tags, and the H3d leak pattern (the coordinator, 2026-10-22)
+
+**The decisions.** (1) The R04 holes are paired twins, so H2v and H3v mirror the re-posed H2d and H3d where Verus allows: `forall` introduction with `assert forall … implies … by`, and `exists` elimination with `choose`. T1 is then no longer needed as an `exists-elim` instance and is retagged honestly. If a mirror were impossible or trivial in Verus, the hole would keep its shape, with the probe evidence. The bar is the same as D64's, with the same minutes. (2) R04 stays at the 8-pattern cap: the weakest pattern makes room for H3d's.
+
+**Mirrors (both possible, neither trivial; probes in `r04/d8283v/`).**
+
+| item | old Verus statement | new Verus statement | smallest found (both orders) | proper subsets (all fail) | reference · seeds 1–3 | minutes |
+|---|---|---|---|---|---|---|
+| H2v | `!matches(Cat(Chr('a'), Star(Chr('b'))), "ba")` (`lemma_witness_not_ba`) | `lemma_no_x_in_second_place`: `forall s :: matches(Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z')))), s) ==> s.len() >= 2 && s[1] != 'x'` | 3: the `assert forall`, the outer `choose`, the suffix's `choose` (the `let t` binding not counted) | `assert forall` with an empty body (`h2v-0`), with the outer `choose` only (`h2v-1`); no body at all is the empty-body gate | 21 lines by plan §2.2's counter (each formatted `choose` spans five) · stable | 7 |
+| H3v | `!matches(Chr('a'), "ba") && matches(Cat(Star(Chr('b')), Chr('a')), "ba")` | `lemma_witness_anchored`: `forall s :: matches(Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c')), s) ==> s.len() >= 2 && s[0] == 'a' && s[s.len() - 1] == 'c'` | 3, likewise (binding `u` not counted) | `h3v-0`, `h3v-1` | 22 · stable | 7 |
+
+The Verus minimum is the Dafny one, line for line: Verus unfolds `matches` once at each mentioned term, so the two `choose`s supply every fact the conclusion needs. H2's and H3's objectives are unchanged: H2 is a negative claim over every candidate, H3 is anchoring. The pairs now pose the same claim in both languages, so the chapter's §8 says that only T1 and H5 differ, and the D82/D83 parentheticals are gone from the Dafny prompts. The Verus H2 is renamed after its claim (`lemma_no_x_in_second_place`; `avoid.sh` OK).
+
+**Tags.** `write_d = write_v = ["forall-intro", "exists-elim"]`, `recognise_d = ["expect"]`, `recognise_v = ["assume"]`; C1v is `write:forall-intro` again. T1d and T1v lose `uses: exists-elim`: each introduces an existential by a witness, which the tag vocabulary has no slug for, so they carry no `uses:`. Checked uses: `forall-intro` d H2d, H3d · v H2v, H3v; `exists-elim` d H2d, H3d · v H2v, H3v. Every tag names a step the smallest proof needs.
+
+**Leak patterns.** H1d's pattern (`var s := "abb";`) is dropped. It is the weakest of the eight: it matches a binding of the statement's own string, which carries no proof step, and H1 stays covered by H1v's pattern. H3d's split pattern takes its place, and H2v's pattern is re-cut from the mirror's inner `choose` (the old one was cut from the removed prefix `forall`). The verifier gives 8 OK over 2,728 public files.
+
+**Evidence.** In §12, written after the runs.
+
+## 12. Evidence for the Verus mirror (2026-10-22)
+
+Probes are in `r04/d8283v/` (`out.json`, and `*.min.fwd`/`*.min.rev` from the minimizer in both orders). H2v and H3v: `-0` and `-1` fail, `-2` (the three lines) verifies, and the full bodies verify. Both core twins are stable on seeds 1–3 (`brittle-d8283v-core-v.log`, CV 2.2 %; `brittle-d8283v-core-d.log`, CV 15.2 %, advisory). `firsttry.sh R04 --empty-body` gives 12/12 (`empty-body-d8283v.log`). The registry rows are unchanged at 7 minutes.
+
+Re-pins and checks:
+- Freeze re-pinned (110 statements); `--check` 0.
+- Counts re-pinned; `--shipped` 0.
+- R04 rubric pins refreshed; all 194 pins are current after P2's R11 refresh.
+- `--lint-hollow` OK, `reference_lint` 0, `avoid.sh` OK, `check_course_map` OK.
+- Chapter re-captured (42 pins); `chapter_lint` 0 problems at 6,102 words.
+- `pins.py --ci --module R04` 71 pins, 0 problems; `--ref` 6 checks, 0 problems.
+- Leak verifier 8 OK over 2,728 public files.
+
+Answer overlap: the shared 30-token windows of H2v and H3v are the statement's own regex, which the reference binds as `let r` and which the learner file holds in its `ensures`. H3d's shared windows are with Lab α's W2 split idiom (the overlap declared in Δ294).
+
+Study workflow 11/11 on `f8b36a8b` (`workflow-d8283v.log`).
+

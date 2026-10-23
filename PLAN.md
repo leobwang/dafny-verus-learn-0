@@ -888,8 +888,8 @@ Header counts: **12 holes**, **2 test-out items** (holes), **6 predictions**.
 
 | id | K | format | pair | uses | statement or prompt | form · lever |
 |---|---|---|---|---|---|---|
-| R04.T1d | T | — | R04.T1v | exists-elim | closed book, before reading: `lemma SomeWordMatches() ensures exists s :: Matches(Cat(Chr('o'), Star(Chr('k'))), s)`; record the first try with `scripts/firsttry.sh R04 --check` | bodyless lemma · none |
-| R04.T1v | T | — | R04.T1d | exists-elim | `proof fn lemma_some_word_matches() ensures exists\|s: Seq<char>\| matches(…the same pattern…, s)` | `proof_note` assume · none |
+| R04.T1d | T | — | R04.T1v | — | closed book, before reading: `lemma SomeWordMatches() ensures exists s :: |s| == 3 && Matches(Cat(Chr('o'), Star(Chr('k'))), s)` (D64; an existential introduced by a witness, so no `uses:`); record the first try with `scripts/firsttry.sh R04 --check` | bodyless lemma · none |
+| R04.T1v | T | — | R04.T1d | — | `proof fn lemma_some_word_matches() ensures exists\|s: Seq<char>\| matches(…the same pattern…, s)` | `proof_note` assume · none |
 | R04.P1d | P | verdict | — | — | `method Pos(x: int) returns (y: int) ensures y > 0 { expect x > 0; y := x; }`, outside any test. What does `scripts/vcheck` report? Answer form `D:<v>` (v as in R01.P1dv) | slot · block |
 | R04.P2dv | P | verdict | — | — | Four postconditions for `Find(r, s) returns (b)` (the Verus spellings beside them): [a] `b <==> Occurs(r, s)`; [b] `b <==> Matches(r, s)`; [c] `b ==> Occurs(r, s)`; [d] `b <==> exists i :: 0 <= i <= \|s\| && Matches(r, s[i..])`. With `r := Star(Chr('a'))` and `s := "b"`, which of them force `b == true`? Answer form: the letters in order, separated by single spaces, or `none` (the same answer in both languages; the author proves each claim in both) | slot · block |
 | R04.P3d | P | obligation | — | — | `specimens/R04/P3d.dfy.specimen`: four empty-bodied lemmas: [a] `Occurs(Star(Chr('a')), "b")`, [b] `Occurs(Eps, s)` (for every `s`), [c] `!Occurs(Chr('a'), "b")`, [d] `Occurs(Chr('b'), "ab")`. Which fail? | specimen slot |
@@ -906,10 +906,10 @@ Header counts: **12 holes**, **2 test-out items** (holes), **6 predictions**.
 | R04.C4v | C | `recognise:assume` | — | — | card: `assume` and where the course counts it | given |
 | R04.H1d | H | — | R04.H1v | — | `lemma WitnessAbb() ensures Matches(Cat(Chr('a'), Star(Chr('b'))), "abb")` | bodyless lemma · none |
 | R04.H1v | H | — | R04.H1d | — | `proof fn lemma_witness_abb()`, the same | `proof_note` assume · none |
-| R04.H2d | H | — | R04.H2v | forall-intro, exists-elim | `lemma WitnessNotBa() ensures !Matches(Cat(Chr('a'), Star(Chr('b'))), "ba")` | bodyless lemma · none |
-| R04.H2v | H | — | R04.H2d | forall-intro, exists-elim | `proof fn lemma_witness_not_ba()`, the same | `proof_note` assume · none |
-| R04.H3d | H | — | R04.H3v | forall-intro, exists-elim | `lemma WitnessAnchored() ensures !Matches(Chr('a'), "ba") && Matches(Cat(Star(Chr('b')), Chr('a')), "ba")` | bodyless lemma · none |
-| R04.H3v | H | — | R04.H3d | forall-intro, exists-elim | `proof fn lemma_witness_anchored()`, the same | `proof_note` assume · none |
+| R04.H2d | H | — | R04.H2v | forall-intro, exists-elim | `lemma NoXInSecondPlace() ensures forall s: seq<char> :: Matches(Cat(Chr('x'), Cat(Chr('y'), Star(Chr('z')))), s) ==> |s| >= 2 && s[1] != 'x'` (D82) | bodyless lemma · none |
+| R04.H2v | H | — | R04.H2d | forall-intro, exists-elim | `proof fn lemma_no_x_in_second_place()`, the same (Δ305) | `proof_note` assume · none |
+| R04.H3d | H | — | R04.H3v | forall-intro, exists-elim | `lemma WitnessAnchored() ensures forall s: seq<char> :: Matches(Cat(Cat(Chr('a'), Star(Chr('b'))), Chr('c')), s) ==> |s| >= 2 && s[0] == 'a' && s[|s| - 1] == 'c'` (D83) | bodyless lemma · none |
+| R04.H3v | H | — | R04.H3d | forall-intro, exists-elim | `proof fn lemma_witness_anchored()`, the same (Δ305) | `proof_note` assume · none |
 | R04.H4d | H | — | R04.H4v | — | **From prose:** define `ghost predicate PrefixMatch(r: Re, s: seq<char>)`, "true exactly when some prefix of `s`, the empty prefix included, matches `r`"; then uncomment the three checks under `Uncomment as you go:` (a positive case, a negative case, the empty-prefix case), each a lemma whose proof is given and verifies only with an adequate definition | bodyless predicate (definition open, Δ160) + commented checks · none |
 | R04.H4v | H | — | R04.H4d | — | the same for `pub uninterp spec fn prefix_match(r: Re, s: Seq<char>) -> bool` becoming `open spec fn` | `uninterp spec fn` + commented checks · none |
 | R04.H5d | H | — | R04.H5v | — | **A mutant-kill witness.** The mutant implementation of `Find` returns `Nullable(r)`. `lemma MutantKilled() ensures exists r: Re, s: seq<char> :: Nullable(r) != Occurs(r, s)` | bodyless lemma · none |
@@ -921,8 +921,8 @@ Header counts: **12 holes**, **2 test-out items** (holes), **6 predictions**.
 
 #### Constructs (registry)
 
-- `write_d = ["forall-intro", "exists-elim"]`, `write_v = ["exists-elim"]`; `recognise_d = ["expect"]`, `recognise_v = ["assume", "forall-intro"]` (Δ303 addendum and Δ304, 2026-10-21: D82 and D83 re-pose Dafny's H2 and H3 as universals over matches, so `forall` introduction is WRITE in Dafny again; in Verus only H2 needs it, so it stays RECOGNISE there).
-- Checked uses (≥ 2 per language): forall-intro d H2d, H3d; exists-elim d T1d, H2d, H3d · v T1v, H2v.
+- `write_d = write_v = ["forall-intro", "exists-elim"]` — 2 paired units, 4 slugs; `recognise_d = ["expect"]`, `recognise_v = ["assume"]` (Δ304 and Δ305, 2026-10-22: H2 and H3 are universals over matches in both languages, so Δ303's RECOGNISE move is reverted).
+- Checked uses (≥ 2 per language): forall-intro d H2d, H3d · v H2v, H3v; exists-elim d H2d, H3d · v H2v, H3v. T1 introduces an existential by a witness and carries no `uses:`.
 
 #### Agentic file (rung 6: audited prover)
 
