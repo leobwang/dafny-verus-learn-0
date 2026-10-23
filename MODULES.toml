@@ -1,6 +1,7 @@
 # MODULES.toml — the module registry: one [[module]] table per module, Q01–Q33
 # (the depth-ordered track, studied first) then R01–R16 (the topic-ordered
-# track), then one [[coverage]] table per goal payload.
+# track), then one [[coverage]] table per goal payload, then the [[write_exception]]
+# tables (a WRITE slug the user let stand on one tagged item; check_course_map.py).
 #
 # Skills, hooks, scripts and CI read module facts from here; nothing hard-codes
 # them. Check after every edit (scripts/ci.sh runs the same):
@@ -2062,10 +2063,10 @@ viva_mode = "module"
 tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
-write_d = ["assert-by", "isolate-assertions"]
-write_v = ["assert-by", "spinoff-prover"]
-recognise_d = ["rlimit"]
-recognise_v = ["rlimit"]
+write_d = ["assert-by"]
+write_v = []
+recognise_d = ["rlimit", "isolate-assertions"]
+recognise_v = ["rlimit", "assert-by", "spinoff-prover"]
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
 admissible = { "R05.H1d" = { admitted = true, minutes = 8, fallback = "" }, "R05.H2d" = { admitted = true, minutes = 8, fallback = "" }, "R05.H3d" = { admitted = true, minutes = 8, fallback = "" }, "R05.H4d" = { admitted = true, minutes = 12, fallback = "" }, "R05.H1v" = { admitted = true, minutes = 8, fallback = "" }, "R05.H2v" = { admitted = true, minutes = 8, fallback = "" }, "R05.H3v" = { admitted = true, minutes = 8, fallback = "" }, "R05.H4v" = { admitted = true, minutes = 12, fallback = "" }, "R05.H1py" = { admitted = true, minutes = 12, fallback = "" }, "R05.H2py" = { admitted = true, minutes = 12, fallback = "" } }
 imports = { "dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "core", "dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy" = "core", "verus/r/r05_no_goal_state/src/lib.rs" = "prelude", "verus/r/r05_no_goal_state/src/agent.rs" = "prelude", "harness/r/fvh_r/variance.py" = "py-fvh" }
@@ -3179,3 +3180,15 @@ q_homes = ["Q18.S13"]
 r_homes = ["R16"]
 deepening = []
 gap = ""
+
+# The user's D85 (2026-10-23; DELTAS Δ307): R05 keeps Dafny `assert-by` WRITE on one
+# item. Only H2d's proof needs a `by` block: its reference runs out of resource at the
+# pinned limit without one (author probe d-noby), while every other R05 proof, and every
+# smallest proof, verifies with plain assertions. check_course_map.py accepts this
+# declaration and no other 1-item WRITE slug.
+[[write_exception]]
+module = "R05"
+lang = "d"
+slug = "assert-by"
+item = "R05.H2d"
+reason = "D85: the one Dafny hole whose proof needs a by block (the reference runs out of resource at the pinned limit without it; author probe d-noby, DELTAS Δ307)"

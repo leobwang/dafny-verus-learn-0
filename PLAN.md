@@ -217,7 +217,7 @@ Each record: the registry title; **why** it exists (its design role); the **core
 - **Core payload.** Obligations and their labels; assertion bisection; `assert … by` scoping; per-assertion and per-function isolation (`@IsolateAssertions` \| `#[verifier::spinoff_prover]`, `scripts/vcheck --isolate`); the fast channel (`scripts/vcheck --symbol`) vs the full gate, and their latency; resource limits and the verdict kinds; repeated runs, the coefficient of variation, and a first bootstrap interval composed from the frozen `fvh.stats` (Python, `harness/r/fvh_r/variance.py`).
 - **Diagrams.** From a proof to its obligations to the failing labels; the bisection tree; the latency ladder (editor, fast channel, file, gate).
 - **Written track.** The card; **facts per line** (for a given proof, the fact each line contributes and the obligation it discharges); **first intervals by hand** (CV and a bootstrap interval of five timings, by hand, before the code).
-- **Exercises.** `Cat` associativity in both directions; `StarOne`; a bisect-and-repair proof; the variance log and its two Python holes.
+- **Exercises.** `Cat` associativity in both directions; one match as every chunk of a star (`StarThrice`, D84); a bisect-and-repair proof; the variance log and its two Python holes.
 - **Agentic role.** Rung 6, **obligation prover**: a prover restricted to the fast channel plus one final full gate as its verdict; the learner logs latency and calls.
 - **Whispers.** Plants: obligations as data (→ R12's obligation extractor); variance (→ R07 pass@k and `EVAL.md` R-v0, R14 CV sweeps, R12 Lab α's statistics). Harvests: R02's splits (← the slicing facts bisection finds).
 - **Research tie-in.** 06.3 Xu & Odersky, *Agentic Proof Automation*: agents run the edit→compile→refine loop on compiler feedback alone; R05 is that loop done by hand, with its latency measured.
@@ -1006,18 +1006,18 @@ Header counts: **8 verifier holes + 2 Python holes**, **4 predictions**.
 | R05.W1v | W | — | — | — | the same over `subrange` | given, live |
 | R05.W2d | W | — | — | — | `assert … by` scoping and `@IsolateAssertions` on a small lemma | given, live |
 | R05.W2v | W | — | — | — | `assert … by` scoping and `#[verifier::spinoff_prover]` | given, live |
-| R05.C1d / C1v | C | `write:assert-by` | — | — | card: `assert … by` as a scope | given |
-| R05.C2d | C | `write:isolate-assertions` | — | — | card: `@IsolateAssertions` | given |
-| R05.C3v | C | `write:spinoff-prover` | — | — | card: `#[verifier::spinoff_prover]` | given |
+| R05.C1d / C1v | C | `write:assert-by` (Dafny) · `recognise:assert-by` (Verus) | — | — | card: `assert … by` as a scope (D85) | given |
+| R05.C2d | C | `recognise:isolate-assertions` | — | — | card: `@IsolateAssertions` (D85) | given |
+| R05.C3v | C | `recognise:spinoff-prover` | — | — | card: `#[verifier::spinoff_prover]` (D85) | given |
 | R05.C4dv | C | `recognise:rlimit` | — | — | Rosetta card: resource limits (`{:resource_limit}` / `#[verifier::rlimit]`) and the course pins | given |
-| R05.H1d | H | — | R05.H1v | assert-by, isolate-assertions | `lemma CatAssocLR(a: Re, b: Re, c: Re, s: seq<char>) requires Matches(Cat(Cat(a, b), c), s) ensures Matches(Cat(a, Cat(b, c)), s)` | bodyless lemma · none |
-| R05.H1v | H | — | R05.H1d | assert-by, spinoff-prover | `proof fn lemma_cat_assoc_lr(…)`, the same | `proof_note` assume · none |
+| R05.H1d | H | — | R05.H1v | — | `lemma CatAssocLR(a: Re, b: Re, c: Re, s: seq<char>) requires Matches(Cat(Cat(a, b), c), s) ensures Matches(Cat(a, Cat(b, c)), s)` | bodyless lemma · none |
+| R05.H1v | H | — | R05.H1d | — | `proof fn lemma_cat_assoc_lr(…)`, the same | `proof_note` assume · none |
 | R05.H2d | H | — | R05.H2v | assert-by | `lemma CatAssocRL(…) requires Matches(Cat(a, Cat(b, c)), s) ensures Matches(Cat(Cat(a, b), c), s)` | bodyless lemma · none |
-| R05.H2v | H | — | R05.H2d | assert-by | `proof fn lemma_cat_assoc_rl(…)` | `proof_note` assume · none |
-| R05.H3d | H | — | R05.H3v | — | `lemma StarOne(a: Re, u: seq<char>) requires Matches(a, u) ensures Matches(Star(a), u)` | bodyless lemma · none |
-| R05.H3v | H | — | R05.H3d | — | `proof fn lemma_star_one(a: Re, u: Seq<char>)` | `proof_note` assume · none |
-| R05.H4d | H | — | R05.H4v | assert-by, isolate-assertions | **Bisect and repair.** `lemma StarConcat(a: Re, u: seq<char>, v: seq<char>) requires Matches(Star(a), u) && Matches(Star(a), v) ensures Matches(Star(a), u + v)` (`decreases \|u\|`): the case split, the choice of the first chunk and the recursive call are given; the facts the solver lacks are not. Find them by bisection and add them | annotation hole · none |
-| R05.H4v | H | — | R05.H4d | assert-by, spinoff-prover | the same for `proof fn lemma_star_concat(a: Re, u: Seq<char>, v: Seq<char>)` (`decreases u.len()`), with `choose` | annotation hole · none |
+| R05.H2v | H | — | R05.H2d | — | `proof fn lemma_cat_assoc_rl(…)` | `proof_note` assume · none |
+| R05.H3d | H | — | R05.H3v | — | `lemma StarThrice(a: Re, u: seq<char>) requires Matches(a, u) ensures Matches(Star(a), u + u + u)` (D84; was `StarOne`, `Matches(Star(a), u)`) | bodyless lemma · none |
+| R05.H3v | H | — | R05.H3d | — | `proof fn lemma_star_thrice(a: Re, u: Seq<char>)`, the same (D84) | `proof_note` assume · none |
+| R05.H4d | H | — | R05.H4v | — | **Bisect and repair.** `lemma StarConcat(a: Re, u: seq<char>, v: seq<char>) requires Matches(Star(a), u) && Matches(Star(a), v) ensures Matches(Star(a), u + v)` (`decreases \|u\|`): the case split and the choice of the first chunk are given (D84: the recursive call is the learner's); the facts the solver lacks are not. Find them by bisection and add them | annotation hole · none |
+| R05.H4v | H | — | R05.H4d | — | the same for `proof fn lemma_star_concat(a: Re, u: Seq<char>, v: Seq<char>)` (`decreases u.len()`), with `choose` | annotation hole · none |
 | R05.H1py | H | — | — | — | `def runs_from_log(path: Path) -> list[Run]`: the runs recorded in the variance log (one `scripts/vcheck --json --measures` document per line plus the run's wall time), in order; `ValueError` on a malformed line | Python hole · none |
 | R05.H2py | H | — | — | — | `def variance_summary(runs: Sequence[Run], field: str, *, seed: int) -> Summary`: n, mean, coefficient of variation and a 95 % bootstrap interval of the mean for one numeric field (`wall_s` or `resource_count`), by composing the standard library's `statistics` and `fvh.stats.bootstrap_ci`; `ValueError` for fewer than 2 runs | Python hole · none |
 | R05.C5dv | C | `diverge:r05-c5` | — | — | divergence card (its topic is named in the card). **Final section** | given |
@@ -1027,9 +1027,8 @@ Header counts: **8 verifier holes + 2 Python holes**, **4 predictions**.
 
 #### Constructs (registry)
 
-- `write_d = ["assert-by", "isolate-assertions"]`, `write_v = ["assert-by", "spinoff-prover"]` — 3 units (1 paired + 2 single), 4 slugs.
-- `recognise_d = recognise_v = ["rlimit"]`.
-- Checked uses (≥ 2 per language): assert-by d H1d, H2d, H4d · v H1v, H2v, H4v; isolate-assertions d H1d, H4d; spinoff-prover v H1v, H4v.
+- `write_d = ["assert-by"]`, `write_v = []`; `recognise_d = ["rlimit", "isolate-assertions"]`, `recognise_v = ["rlimit", "assert-by", "spinoff-prover"]` (the user's D85, 2026-10-23, DELTAS Δ307: no hole's proof needs isolation, and only Dafny's H2 needs a `by` block; before D85, `write_d = ["assert-by", "isolate-assertions"]`, `write_v = ["assert-by", "spinoff-prover"]`).
+- Checked uses: assert-by d H2d only, by the registry's one `[[write_exception]]` (D85: H2d's reference runs out of resource at the pinned limit without its `by` block).
 
 #### Agentic file (rung 6: obligation prover)
 

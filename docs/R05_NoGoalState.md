@@ -52,9 +52,9 @@ As shipped, the exercise files verify in the learner loop with their holes count
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R05_NoGoalState/core
-vcheck: dafny/R/R05_NoGoalState/core [dafny, learner loop]: verified — 35 verified, 4 holes, 0 errors
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:88:20: hole bodyless-method R05.H1d
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:104:20: hole bodyless-method R05.H2d
+vcheck: dafny/R/R05_NoGoalState/core [dafny, learner loop]: verified — 20 verified, 4 holes, 0 errors
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:87:20: hole bodyless-method R05.H1d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:103:20: hole bodyless-method R05.H2d
 dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:117:20: hole bodyless-method R05.H3d
 dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139:5: hole assume R05.H4d
 ```
@@ -63,10 +63,10 @@ dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139:5: hole assume R05.H4d
 ```
 $ scripts/vcheck verus/r/r05_no_goal_state
 vcheck: verus/r/r05_no_goal_state [verus, learner loop]: verified — - verified, 4 holes, 0 errors
-verus/r/r05_no_goal_state/src/lib.rs:84:40: hole assume R05.H1v
-verus/r/r05_no_goal_state/src/lib.rs:103:40: hole assume R05.H2v
-verus/r/r05_no_goal_state/src/lib.rs:120:40: hole assume R05.H3v
-verus/r/r05_no_goal_state/src/lib.rs:145:40: hole assume R05.H4v
+verus/r/r05_no_goal_state/src/lib.rs:83:40: hole assume R05.H1v
+verus/r/r05_no_goal_state/src/lib.rs:101:40: hole assume R05.H2v
+verus/r/r05_no_goal_state/src/lib.rs:119:40: hole assume R05.H3v
+verus/r/r05_no_goal_state/src/lib.rs:143:40: hole assume R05.H4v
 ```
 
 <!-- pin: python-shipped -->
@@ -398,7 +398,7 @@ The `var` (Verus `let`) is a binding, not a fact: it names `s[i..]` so that late
 
 ### 3.1 `assert … by` keeps its facts local
 
-`assert P by { … }` proves `P` from the block and makes only `P` available afterwards; whatever the block establishes or reveals stays inside it. The WRITE card C1's demos put a false fact inside the block:
+`assert P by { … }` proves `P` from the block and makes only `P` available afterwards; whatever the block establishes or reveals stays inside it. The card C1 (WRITE in Dafny, RECOGNISE in Verus; see the end of this section) has demos that put a false fact inside the block:
 
 ```dafny
 module R05_AssertScopeCard {
@@ -486,11 +486,11 @@ vcheck: by-local.rs [verus, learner loop]: failed — 0 verified, 0 holes, 1 err
 by-local.rs:14:12: error: assertion failed
 ```
 
-The `by` assertion verifies, and the assertion after it fails: the reveal did its work inside the block and nowhere else. That is the point of the construct. A proof whose facts are scoped to where they are needed gives the solver fewer facts to search everywhere else, and a failure inside a block is a failure about that block's claim only.
+The `by` assertion verifies, and the assertion after it fails: the reveal did its work inside the block and nowhere else. That is the point of the construct. A proof whose facts are scoped to where they are needed gives the solver fewer facts to search everywhere else, and a failure inside a block is a failure about that block's claim only. R05 measured that cost on its own holes: Dafny's reference proof of H2 runs out of resource at the pinned limit when its one `by` block is written as a plain `assert`, while every other R05 proof, and every shortest proof found, verifies without one. So the construct is WRITE in Dafny, where H2 uses it, and RECOGNISE in Verus, where no hole needs it (the user's decision D85).
 
 ### 3.2 Isolating obligations
 
-By default a verifier may check several obligations of one declaration in one solver run, so one hard or false obligation can slow or obscure the others. Dafny's `@IsolateAssertions` gives each assertion its own run; Verus's `#[verifier::spinoff_prover]` gives a function its own solver process; `scripts/vcheck --isolate` applies the same split to a whole run. The WRITE cards C2 and C3 have one true and one false assertion each:
+By default a verifier may check several obligations of one declaration in one solver run, so one hard or false obligation can slow or obscure the others. Dafny's `@IsolateAssertions` gives each assertion its own run; Verus's `#[verifier::spinoff_prover]` gives a function its own solver process; `scripts/vcheck --isolate` applies the same split to a whole run. The RECOGNISE cards C2 and C3 have one true and one false assertion each:
 
 ```dafny
 module R05_IsolationCard {
@@ -525,7 +525,7 @@ vcheck: specimens/R05/card-c3v.rs.specimen [verus, learner loop]: failed — 0 v
 specimens/R05/card-c3v.rs.specimen:8:12: error: assertion failed
 ```
 
-Each names exactly the false assertion. Isolation changes how the obligations are checked, never which: an isolated proof proves the same claims, and a claim that needed a fact established by an earlier assertion still gets it, because assertions earlier on the path remain facts. Use isolation to diagnose (which obligation is slow, which fails) and keep it in a proof whose obligations are independent and heavy, as H1 and H4 do. W2 shows both constructs on a small lemma:
+Each names exactly the false assertion. Isolation changes how the obligations are checked, never which: an isolated proof proves the same claims, and a claim that needed a fact established by an earlier assertion still gets it, because assertions earlier on the path remain facts. Use isolation to diagnose (which obligation is slow, which fails). H1 and H4 carry the attribute as a given lever; neither proof needs it to verify, which is why the constructs are RECOGNISE in R05 (D85). W2 shows both constructs on a small lemma:
 
 ```dafny
 @IsolateAssertions
@@ -798,9 +798,9 @@ Run the gate and the audit on the shipped units and read why they refuse:
 <!-- pin: gate-d -->
 ```
 $ scripts/vcheck --gate dafny/R/R05_NoGoalState/core
-vcheck: dafny/R/R05_NoGoalState/core [dafny, gate]: failed — 35 verified, 4 holes, 0 errors, 1 finding
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:88:20: hole bodyless-method R05.H1d
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:104:20: hole bodyless-method R05.H2d
+vcheck: dafny/R/R05_NoGoalState/core [dafny, gate]: failed — 20 verified, 4 holes, 0 errors, 1 finding
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:87:20: hole bodyless-method R05.H1d
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:103:20: hole bodyless-method R05.H2d
 dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:117:20: hole bodyless-method R05.H3d
 dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139:5: hole assume R05.H4d
 dafny/R/R05_NoGoalState/core: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
@@ -810,19 +810,19 @@ dafny/R/R05_NoGoalState/core: warnings-fail-gate: warnings fail the gate (W-D04)
 ```
 $ scripts/vcheck --gate verus/r/r05_no_goal_state
 vcheck: verus/r/r05_no_goal_state [verus, gate]: failed — - verified, 4 holes, 1 error
-verus/r/r05_no_goal_state/src/lib.rs:84:40: hole assume R05.H1v
-verus/r/r05_no_goal_state/src/lib.rs:103:40: hole assume R05.H2v
-verus/r/r05_no_goal_state/src/lib.rs:120:40: hole assume R05.H3v
-verus/r/r05_no_goal_state/src/lib.rs:145:40: hole assume R05.H4v
+verus/r/r05_no_goal_state/src/lib.rs:83:40: hole assume R05.H1v
+verus/r/r05_no_goal_state/src/lib.rs:101:40: hole assume R05.H2v
+verus/r/r05_no_goal_state/src/lib.rs:119:40: hole assume R05.H3v
+verus/r/r05_no_goal_state/src/lib.rs:143:40: hole assume R05.H4v
 (no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 4 hole(s); exit 1
 ```
 
 <!-- pin: audit-d -->
 ```
 $ scripts/vaudit dafny/R/R05_NoGoalState/core
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:86: audit-bodyless-ghost — CatAssocLR: Ghost declaration has no body and has an ensures clause
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:102: audit-bodyless-ghost — CatAssocRL: Ghost declaration has no body and has an ensures clause
-dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:115: audit-bodyless-ghost — StarOne: Ghost declaration has no body and has an ensures clause
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:85: audit-bodyless-ghost — CatAssocLR: Ghost declaration has no body and has an ensures clause
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:101: audit-bodyless-ghost — CatAssocRL: Ghost declaration has no body and has an ensures clause
+dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:115: audit-bodyless-ghost — StarThrice: Ghost declaration has no body and has an ensures clause
 dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy:139: audit-assume — StarConcat: Definition has `assume` statement in body
 vaudit: dafny/R/R05_NoGoalState/core [dafny, learner]: 4 finding(s)
 ```
@@ -830,14 +830,14 @@ vaudit: dafny/R/R05_NoGoalState/core [dafny, learner]: 4 finding(s)
 <!-- pin: audit-v -->
 ```
 $ scripts/vaudit verus/r/r05_no_goal_state
-verus/r/r05_no_goal_state/src/lib.rs:84: hole-assume — an assume hole (in lemma_cat_assoc_lr) not on the trust allowlist
-verus/r/r05_no_goal_state/src/lib.rs:103: hole-assume — an assume hole (in lemma_cat_assoc_rl) not on the trust allowlist
-verus/r/r05_no_goal_state/src/lib.rs:120: hole-assume — an assume hole (in lemma_star_one) not on the trust allowlist
-verus/r/r05_no_goal_state/src/lib.rs:145: hole-assume — an assume hole (in lemma_star_concat) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:83: hole-assume — an assume hole (in lemma_cat_assoc_lr) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:101: hole-assume — an assume hole (in lemma_cat_assoc_rl) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:119: hole-assume — an assume hole (in lemma_star_thrice) not on the trust allowlist
+verus/r/r05_no_goal_state/src/lib.rs:143: hole-assume — an assume hole (in lemma_star_concat) not on the trust allowlist
 vaudit: verus/r/r05_no_goal_state [verus, learner]: 4 finding(s)
 ```
 
-The statement freeze checks the statements, H4's given skeleton (its case split, its choice of the first chunk, its recursive call and its measure) and the levers, including `@IsolateAssertions` and `#[verifier::spinoff_prover]`:
+The statement freeze checks the statements, H4's given skeleton (its case split, its choice of the first chunk and its measure) and the levers, including `@IsolateAssertions` and `#[verifier::spinoff_prover]`:
 
 <!-- pin: freeze -->
 ```
@@ -881,14 +881,14 @@ The hand work is four paired holes and two Python holes. Keep the statements, H4
 
 | item | statement (Dafny · Verus) | minutes D / V | uses |
 |---|---|---|---|
-| H1 | `CatAssocLR` · `lemma_cat_assoc_lr`: a match of `Cat(Cat(a, b), c)` is a match of `Cat(a, Cat(b, c))` | 8 / 8 | `assert … by`, isolation, two splits taken and one built |
-| H2 | `CatAssocRL` · `lemma_cat_assoc_rl`: the converse | 8 / 8 | `assert … by`, the index shift |
-| H3 | `StarOne` · `lemma_star_one`: a match of `a` is a match of `Star(a)` | 8 / 8 | one chunk and the empty rest |
-| H4 | `StarConcat` · `lemma_star_concat`: two star matches concatenate (bisect and repair) | 12 / 12 | bisection, slice facts about `u + v` |
+| H1 | `CatAssocLR` · `lemma_cat_assoc_lr`: a match of `Cat(Cat(a, b), c)` is a match of `Cat(a, Cat(b, c))` | 8 / 8 | two splits taken and one built (isolation given) |
+| H2 | `CatAssocRL` · `lemma_cat_assoc_rl`: the converse | 8 / 8 | the index shift; in Dafny, an `assert … by` that keeps the proof within budget (§3.1) |
+| H3 | `StarThrice` · `lemma_star_thrice`: if `a` matches `u`, `Star(a)` matches `u + u + u` | 8 / 8 | one match as each chunk of a star, built from the back |
+| H4 | `StarConcat` · `lemma_star_concat`: two star matches concatenate (bisect and repair) | 12 / 12 | bisection, the recursive call, slice facts about `u + v` |
 | H1py | `runs_from_log`: parse the variance log | 12 | the docstring's row schema |
 | H2py | `variance_summary`: n, mean, CV, a bootstrap interval | 12 | `statistics`, `fvh.stats.bootstrap_ci` |
 
-Each hole's doc comment states the task and asks one guiding question; two hints follow it in the file. **The hint dial:** read the question, try, run the fast channel or the learner loop and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the fact or construct to use, never the answer; `/tutor R05` comes after both. H4 is an annotation hole: its case split, its choice of the first chunk, its recursive call and its measure are given and frozen, and you add facts in the marked places only. R05's Dafny unit runs with manual lemma induction, so H4's given call is its only induction hypothesis. Do not raise a resource limit or add an assumption to get past an obligation.
+Each hole's doc comment states the task and asks one guiding question; two hints follow it in the file. **The hint dial:** read the question, try, run the fast channel or the learner loop and read the diagnostic before you read `Hint(1)`; `Hint(2)` names the fact or construct to use, never the answer; `/tutor R05` comes after both. H4 is an annotation hole: its case split, its choice of the first chunk and its measure are given and frozen, and you add the recursive call and the facts in the marked places only. R05's Dafny unit runs with manual lemma induction, so the call you add is its only induction hypothesis (the user's decision D84 left it to you, so that H4 asks at least three lines of you in both languages). Do not raise a resource limit or add an assumption to get past an obligation.
 
 ```bash
 scripts/firsttry.sh R05 --check

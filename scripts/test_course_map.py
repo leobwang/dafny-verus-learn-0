@@ -493,6 +493,28 @@ case("schema version", BASE.replace("schema = 1", "schema = 2", 1), 1, "'schema 
 case("not TOML", BASE + "\n[[module\n", 1, "not valid TOML")
 case("unknown top-level key", BASE.replace("schema = 1", "schema = 1\nextra = 2", 1), 1,
      "top level: unknown key 'extra'")
+# The one WRITE-uses exception (D85): R05's Dafny `assert-by` stands on R05.H2d alone.
+WE_HEAD = '[[write_exception]]\nmodule = "R05"\nlang = "d"\nslug = "assert-by"\nitem = "R05.H2d"\n'
+if WE_HEAD not in BASE:
+    raise SystemExit("test_course_map: the registry no longer declares D85's write exception: "
+                     "update the write-exception cases")
+WE_BLOCK = BASE[BASE.index(WE_HEAD):]
+case("write exception: without the declaration, the 1-item slug fails", sub(BASE, WE_BLOCK, ""), 1,
+     "R05: Dafny WRITE 'assert-by' has 1 tagged item (need ≥ 2 `uses:` in Dafny): R05.H2d")
+case("write exception: an undecided slug is refused",
+     sub(BASE, WE_HEAD, WE_HEAD.replace('slug = "assert-by"', 'slug = "rlimit"')), 1,
+     "is no exception the user decided")
+case("write exception: the other language is refused",
+     sub(BASE, WE_HEAD, WE_HEAD.replace('lang = "d"', 'lang = "v"')), 1,
+     "R05 v 'assert-by' is no exception the user decided")
+case("write exception: another item is refused",
+     sub(BASE, WE_HEAD, WE_HEAD.replace('item = "R05.H2d"', 'item = "R05.H1d"')), 1,
+     "the exception covers R05.H2d, not R05.H1d")
+case("write exception: the reason names the decision",
+     sub(BASE, 'reason = "D85: ', 'reason = "'), 1, "its reason must name the user's decision D85")
+case("write exception: a second 1-item slug is not covered",
+     sub(BASE, 'write_d = ["assert-by"]', 'write_d = ["assert-by", "lemma-call"]'), 1,
+     "R05: Dafny WRITE 'lemma-call' has 0 tagged items")
 case("legacy id that is a current id", setf("R05", "legacy_id", '"R06"'), 1, "legacy_id 'R06'")
 case("legacy id used twice", setf("R06", "legacy_id", '"F06"', setf("R05", "legacy_id", '"F06"')), 1,
      "legacy_id F06 used more than once")

@@ -16,14 +16,14 @@ path = "dafny/R/R05_NoGoalState/core"
 lang = "dafny"
 reference_verified = 78
 min_verified = 6
-symbols = ["R05_NoGoalState.CatAssocLR", "R05_NoGoalState.CatAssocRL", "R05_NoGoalState.ScopedArithmetic", "R05_NoGoalState.SliceBridge", "R05_NoGoalState.StarConcat", "R05_NoGoalState.StarOne"]
+symbols = ["R05_NoGoalState.CatAssocLR", "R05_NoGoalState.CatAssocRL", "R05_NoGoalState.ScopedArithmetic", "R05_NoGoalState.SliceBridge", "R05_NoGoalState.StarConcat", "R05_NoGoalState.StarThrice"]
 
 [[unit]]
 path = "verus/r/r05_no_goal_state"
 lang = "verus"
 reference_verified = 6
 min_verified = 6
-symbols = ["lemma_cat_assoc_lr", "lemma_cat_assoc_rl", "lemma_scoped_arithmetic", "lemma_slice_bridge", "lemma_star_concat", "lemma_star_one"]
+symbols = ["lemma_cat_assoc_lr", "lemma_cat_assoc_rl", "lemma_scoped_arithmetic", "lemma_slice_bridge", "lemma_star_concat", "lemma_star_thrice"]
 
 [[file]]
 path = "dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy"

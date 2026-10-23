@@ -1,9 +1,9 @@
 # R05 protected answer fragments; no prediction answers. Re-cut 2026-10-22 (DVR4 step 5) for the one-statement-per-line twins.
 
 # from Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
-# source: var v := s[k..]; /       assert u[..k] == s[..k] by { } (R05.H1d)
+# source: var v := s[k..]; / assert u[..k] == s[..k]; (R05.H1d; re-cut 2026-10-23: D85 made its by-block a plain assert)
 # verified: solutions=1 public=0
-var\s+v\s+:=\s+s\[k\.\.\];\s+assert\s+u\[\.\.k\]\s+==\s+s\[\.\.k\]\s+by\s+\{\s+\}
+var\s+v\s+:=\s+s\[k\.\.\];\s+assert\s+u\[\.\.k\]\s+==\s+s\[\.\.k\];
 
 # from Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
 # source: var u := s[..k + j]; /       assert u[..k] == s[..k] by { } (R05.H2d)
@@ -11,9 +11,9 @@ var\s+v\s+:=\s+s\[k\.\.\];\s+assert\s+u\[\.\.k\]\s+==\s+s\[\.\.k\]\s+by\s+\{\s+\
 var\s+u\s+:=\s+s\[\.\.k\s+\+\s+j\];\s+assert\s+u\[\.\.k\]\s+==\s+s\[\.\.k\]\s+by\s+\{\s+\}
 
 # from Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy
-# source: assert (u + v)[..i] == u[..i] by { (R05.H4d; re-cut 2026-10-22 for the one-statement-per-line twin)
+# source: StarConcat(a, u[i..], v); / assert (u + v)[..i] == u[..i]; (R05.H4d; re-cut 2026-10-23: D84 made the recursive call the learner's)
 # verified: solutions=1 public=0
-assert\s+\(u\s*\+\s*v\)\[\.\.i\]\s*==\s*u\[\.\.i\]\s+by\s*\{
+StarConcat\(a,\s*u\[i\.\.\],\s*v\);\s*assert\s+\(u\s*\+\s*v\)\[\.\.i\]\s*==\s*u\[\.\.i\];
 
 # from Solutions/verus/r/r05_no_goal_state/src/lib.rs
 # source: assert(u.subrange(k, u.len() as int) =~= v.subrange(0, i - k)); (R05.H1v)

@@ -46,7 +46,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R04 | `R04.txt`: 8 (H2d/v, H3d, H4d/v, H5d/v, H1v) | 2026-10-22 (DVR4 step 5, Δ305: H1d's binding pattern dropped for H3d, since H1 stays covered by H1v and `var s := "abb"` restates the statement's own string; H2d re-cut for D82 and H2v for its Verus mirror; the verifier over R04, 2,728 public files) | 8 OK |
 
-| R05 | `R05.txt`: 8 (H1d, H2d, H4d, H1v, H2v, A1d, H1py, H2py) | 2026-10-22 (DVR4 step 5: H4d and A1d re-cut for the one-statement-per-line twins; H1v and H2v also match Lab α's `a1b-cat-assoc-v` and two r09 forms, listed as declared (Δ294); the verifier over R05, 2,727 public files) | 8 OK |
+| R05 | `R05.txt`: 8 (H1d, H2d, H4d, H1v, H2v, A1d, H1py, H2py) | 2026-10-23 (DVR4 step 5, Δ307: H1d re-cut after D85 made its by-block a plain assert, H4d after D84 made the recursive call the learner's; H1v and H2v also match Lab α's `a1b-cat-assoc-v` and two r09 forms, listed as declared (Δ294); the verifier over R05, 2,728 public files) | 8 OK |
 
 | R06 | `R06.txt`: 8 (H1d/v,T1d/v,H4d/v,X1d,A1v) | 2026-10-17 (DVR1 build; final scan in protected notes) | 8 author controls; live sessions deferred |
 | R07 | `R07.txt`: 8 (H1d/v, H2d/v, H4v, H5v, A1d/v) | 2026-10-17 (D48 port, Δ274: A1d/A1v re-cut from the reformatted agent twins; the verifier over all 30 pattern files, 2,301 public files) | 8 OK |

@@ -11,9 +11,9 @@ cmd = ["scripts/vcheck", "dafny/R/R05_NoGoalState/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "ed4cbabc7ea5f6df8ddd01505f4bd64f985a4e09c88eb54fa00a8f77685efe19"
+body = "34349efcf0fd7fe0ee073e61b10734703c6f74e65afbe278fc7097d6a3038161"
 [entry.pinned.inputs]
-"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "44a3438d240bb7cbe8a8c7683b60d12b1198919a941347ff2675023e1487ff05"
+"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "a75bd19c3a51bde6192818d94fc42d73b518550ea27225d45a6f548515eaee1b"
 "dafny/R/R05_NoGoalState/core/dfyconfig.toml" = "6df0db868ac2975592e1a44391f616b85f716488fa0be0a6e69f76b27943f2df"
 
 [[entry]]
@@ -22,11 +22,11 @@ cmd = ["scripts/vcheck", "verus/r/r05_no_goal_state"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "7c8cd6dd99c9d6fd4eccb5726c8ca78985720665631bc4097279fc3fe2538d9e"
+body = "4a9b29ce31b25f6a8e8850e0c6f044f5ff04e955ee6b2f67bbc228c4904fbb7a"
 [entry.pinned.inputs]
 "verus/r/r05_no_goal_state/Cargo.toml" = "4b151c67663b0bfb7382827d4a32028c341fc21d1de0a16e14a96332f91376a0"
 "verus/r/r05_no_goal_state/src/agent.rs" = "5523f6fd6b0e9d3354609ec7627643320835a1e6a26c15a2918db5c6b56a125f"
-"verus/r/r05_no_goal_state/src/lib.rs" = "525ceedf22363660920903357e7c13005e4f44343611b3ad035da848d0b45144"
+"verus/r/r05_no_goal_state/src/lib.rs" = "e3751d77df8e9bb7f5fc2d55224f6ac87dfd4dfb60b4eeb221e381203a69ef0f"
 
 [[entry]]
 id = "obligation-d"
@@ -416,9 +416,9 @@ cmd = ["scripts/vcheck", "--gate", "dafny/R/R05_NoGoalState/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "c1255c6df5a38b4e37104b4e63c050e63dcba04f44f34ef19125f6e76003213d"
+body = "3d76fd70408233ab056cb66b1e63dd022b96d08c8bca8788412867dafb6686f5"
 [entry.pinned.inputs]
-"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "44a3438d240bb7cbe8a8c7683b60d12b1198919a941347ff2675023e1487ff05"
+"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "a75bd19c3a51bde6192818d94fc42d73b518550ea27225d45a6f548515eaee1b"
 "dafny/R/R05_NoGoalState/core/dfyconfig.toml" = "6df0db868ac2975592e1a44391f616b85f716488fa0be0a6e69f76b27943f2df"
 
 [[entry]]
@@ -427,11 +427,11 @@ cmd = ["scripts/vcheck", "--gate", "verus/r/r05_no_goal_state"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "11b60c36d33de863b96c3484cd67163b5f075492ded5c8afbfa0e2d4b02460ea"
+body = "04bf07887d67325df74bdc2cd7902c736949a1f3c144d4ad1e370a204e100670"
 [entry.pinned.inputs]
 "verus/r/r05_no_goal_state/Cargo.toml" = "4b151c67663b0bfb7382827d4a32028c341fc21d1de0a16e14a96332f91376a0"
 "verus/r/r05_no_goal_state/src/agent.rs" = "5523f6fd6b0e9d3354609ec7627643320835a1e6a26c15a2918db5c6b56a125f"
-"verus/r/r05_no_goal_state/src/lib.rs" = "525ceedf22363660920903357e7c13005e4f44343611b3ad035da848d0b45144"
+"verus/r/r05_no_goal_state/src/lib.rs" = "e3751d77df8e9bb7f5fc2d55224f6ac87dfd4dfb60b4eeb221e381203a69ef0f"
 
 [[entry]]
 id = "audit-d"
@@ -439,9 +439,9 @@ cmd = ["scripts/vaudit", "dafny/R/R05_NoGoalState/core"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "7f4736f12b87838756ccf5800dab86b7c4d0da9321a37a63c22bb447f3fb51fb"
+body = "9c84da2fce027611ac33e083eec6f074e70a4d5620f09aa3ffdcd0c54f606d3e"
 [entry.pinned.inputs]
-"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "44a3438d240bb7cbe8a8c7683b60d12b1198919a941347ff2675023e1487ff05"
+"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "a75bd19c3a51bde6192818d94fc42d73b518550ea27225d45a6f548515eaee1b"
 "dafny/R/R05_NoGoalState/core/dfyconfig.toml" = "6df0db868ac2975592e1a44391f616b85f716488fa0be0a6e69f76b27943f2df"
 
 [[entry]]
@@ -450,11 +450,11 @@ cmd = ["scripts/vaudit", "verus/r/r05_no_goal_state"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "4ae505eecb18de09bf1b61cb602bebdab2899a6b6676447a4dae54b0d0447d15"
+body = "981554291b27b2d847c6e0fdd1753435674bcb9f21d2612afe4ec81ba16a429f"
 [entry.pinned.inputs]
 "verus/r/r05_no_goal_state/Cargo.toml" = "4b151c67663b0bfb7382827d4a32028c341fc21d1de0a16e14a96332f91376a0"
 "verus/r/r05_no_goal_state/src/agent.rs" = "5523f6fd6b0e9d3354609ec7627643320835a1e6a26c15a2918db5c6b56a125f"
-"verus/r/r05_no_goal_state/src/lib.rs" = "525ceedf22363660920903357e7c13005e4f44343611b3ad035da848d0b45144"
+"verus/r/r05_no_goal_state/src/lib.rs" = "e3751d77df8e9bb7f5fc2d55224f6ac87dfd4dfb60b4eeb221e381203a69ef0f"
 
 [[entry]]
 id = "freeze"
@@ -465,7 +465,7 @@ drop = ["^raw output: "]
 body = "955e62587bf32dbd1e8b32dae2f781367ab934103cb1557ffc023b3ff8030f8f"
 [entry.pinned.inputs]
 "dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy" = "ce671494dc4cb1d468f8f54184f8c30824aca763c43f35a57e7f3d2bbf4c3dbd"
-"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "44a3438d240bb7cbe8a8c7683b60d12b1198919a941347ff2675023e1487ff05"
+"dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy" = "a75bd19c3a51bde6192818d94fc42d73b518550ea27225d45a6f548515eaee1b"
 "instructor/calib/R05.tsv" = "absent"
 "slots/R05.slots" = "b819e1e687ef1cfb37618920fb6ffd27928e1bda33021ab5aa0cfbbe4b20cbd9"
 "specimens/R05/P1d.dfy.specimen" = "d5d442e7283877d0a954868a6ea81623c689886a7279bafce09001256004c4a0"
@@ -481,4 +481,4 @@ body = "955e62587bf32dbd1e8b32dae2f781367ab934103cb1557ffc023b3ff8030f8f"
 "specimens/R05/timing-d.dfy.specimen" = "ff0fa25b615323db34459d3b01d48867e9d6a6f71521060db051dbcc3a30f8ba"
 "specimens/R05/timing-v.rs.specimen" = "3997c1d79b29d86359d5d31aeac1528db652e2016e26336c58276affe770a979"
 "verus/r/r05_no_goal_state/src/agent.rs" = "5523f6fd6b0e9d3354609ec7627643320835a1e6a26c15a2918db5c6b56a125f"
-"verus/r/r05_no_goal_state/src/lib.rs" = "525ceedf22363660920903357e7c13005e4f44343611b3ad035da848d0b45144"
+"verus/r/r05_no_goal_state/src/lib.rs" = "e3751d77df8e9bb7f5fc2d55224f6ac87dfd4dfb60b4eeb221e381203a69ef0f"

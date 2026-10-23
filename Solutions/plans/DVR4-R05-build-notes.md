@@ -95,7 +95,7 @@ The objectives ("one match is a star match"; "bisect and repair") and minutes ar
 - (a) Record both as R05 exceptions under the reading D59 gave R02's H5 and R01's H1/H3: H3 as the module's short warm-up, H4 as an annotation hole measured by its region gate.
 - (b) Re-pose them on the D64 bar: H3d, for example, as `StarOne` over a two-chunk star or `Matches(a, u) && Matches(a, w) ==> Matches(Star(a), u + w)` (this overlaps H4); H4v by a skeleton that leaves more facts to the learner. This changes the items.
 
-**Recommend (a).**
+**Recommend (a).** **Resolved by the user's D84 (2026-10-23): re-pose both to the D64 bar; see §6.**
 
 **2 · WRITE tags that no smallest proof needs (non-blocking).** Probes in `tags/`:
 - **Dafny.**
@@ -109,7 +109,7 @@ So under the rule R04 now follows ("every tag names a step the smallest proof ne
 - (b) Move `isolate-assertions` and `spinoff-prover` to RECOGNISE, and keep `assert-by` WRITE with H2d tagged for the budget reason recorded above.
 - (c) Re-pose one hole per language so that a by-block is needed (for example, a local `reveal` of an opaque helper, as `by-local` shows). That changes objectives.
 
-**Recommend (b)** if R04's rule applies course-wide; otherwise (a).
+**Recommend (b)** if R04's rule applies course-wide; otherwise (a). **Resolved by the user's D85 (2026-10-23), the coordinator's option (a): isolation is RECOGNISE in both languages; `assert-by` stays WRITE in Dafny on H2d, under a registry exception; see §6.**
 
 ## 5. Focused checks (2026-10-22)
 
@@ -123,3 +123,50 @@ Run one solver job at a time in `dvl0.slice` under an 8G outer scope (`systemd-r
 - Study workflow 11/11 on `236c4f23` (`workflow.log`: firsttry, strict, freeze, and the gate and audit of both core units and both agent files). The Python twin gates in a scratch worktree (38 passed, 0 holes) with a clean audit; `wf.py` does not cover Python.
 
 The focused author CI (static, harness, wrappers, rubric) needs the 16G slot and waits for the coordinator.
+
+## 6. D84 and D85 (the user, 2026-10-23; built 2026-10-23)
+
+**D84: the short holes re-posed to the D64 bar.** The objectives ("one match is a star match"; "bisect and repair") and minutes (8, 12) are kept, the mirrors are kept, and every proper subset of each smallest found body fails. Probes are in `d84/`; the minimizer ran in both orders.
+
+| item | before | after | smallest found (one-fact lines) | subsets | reference · seeds 1–3 |
+|---|---|---|---|---|---|
+| H3d | `StarOne`: `Matches(a, u) ==> Matches(Star(a), u)` · 1 | `StarThrice`: `Matches(a, u) ==> Matches(Star(a), u + u + u)` | 4 forward (`t[..\|u\|] == u`, `t[\|u\|..] == r`, `u[..\|u\|] == u`, the star match of `r[\|u\|..]`), 5 reverse | all 63 proper subsets of the 6-line set (bindings included) fail | 10 lines · stable |
+| H3v | `lemma_star_one` · 3 | `lemma_star_thrice`, the same claim (mirror) | 8 (5 `=~=` facts, 3 `matches` mentions; 4 `let` bindings not counted), both orders | greedy: each one-line deletion fails | 15 lines · stable |
+| H4d | the given skeleton held the recursive call · 3 | the call is the learner's: the skeleton keeps the case split, the choice of the first chunk and the measure | 4: the empty-case fact, the call, two slice facts | all 15 proper subsets fail | 4 lines · stable |
+| H4v | the given skeleton held the call · 2 | the same skeleton change (mirror) | 3: the call and the two `=~=` facts about `t` | all 7 proper subsets fail | 4 lines · stable |
+
+Other shapes tried for H3d:
+- `Matches(Star(Star(a)), u)`: 2 facts.
+- `Matches(Star(a), u + u)`: 2.
+- `Matches(Star(Star(a)), u + u)`: 3.
+- `Matches(Star(Alt(a, b)), u + w)`: 3, but it changes the objective.
+
+StarThrice is a special case of H4's claim, but its proof is direct (three splits, no induction), and H3 precedes H4 in the file.
+
+The bank's PP2 (parallel to H4) now also leaves the recursive call to the learner. It was re-verified: shipped with one hole; with the hole line deleted, it fails; the reference, now 3 lines in Dafny and 7 in Verus, verifies.
+
+The chapter (§7, §9), the prompts and hints, the file headers, the rubric and PLAN name the new statements and skeleton.
+
+**D85: honest WRITE tags (the coordinator's option (a), which the user chose).**
+- `isolate-assertions` and `spinoff-prover` are RECOGNISE. `assert-by` is WRITE in Dafny only, and RECOGNISE in Verus, where no hole needs it (`v-noby`, `v-flat`).
+- Registry: `write_d = ["assert-by"]`, `write_v = []`, `recognise_d = ["rlimit", "isolate-assertions"]`, `recognise_v = ["rlimit", "assert-by", "spinoff-prover"]`.
+- Cards and tags: C1v is `recognise:assert-by`, and C2d and C3v are `recognise:`. Only H2d keeps `uses: assert-by`; every other R05 `uses:` line is removed.
+- The empty `by` blocks of H1d, H1v and H2v are plain assertions now, so no reference line pretends to need scope. H4's references are plain too.
+- **The user's answer named Dafny H2 only.** The course map's "≥ 2 tagged items" rule therefore needs an exception, and this exception is the decision's consequence:
+  - `MODULES.toml` declares one top-level `[[write_exception]]` (R05, `d`, `assert-by`, R05.H2d, reason naming D85).
+  - `check_course_map.py` accepts that declaration only through its `WRITE_USES_EXCEPTIONS` table, and only when the slug's one tagged item is the declared item.
+  - `scripts/test_course_map.py` gains six cases. Without the declaration, the 1-item slug fails. A declaration for an undecided slug, for the other language or for another item is refused, and so is a reason that does not name D85. A second slug with fewer than two items still fails.
+  - The existing Q04 case still shows an unlisted 1-item slug failing. The suite gives 411 passed, 0 failed.
+  - The coordinator will tell the user. If they prefer option (b), `assert-by` becomes RECOGNISE in Dafny too and the exception goes.
+- **The `d-noby` evidence, re-run on the D84 twin** (`tags/d84-noby`): writing H2d's one `by` block as a plain `assert` makes `CatAssocRL` run out of resource at the pinned limit (`inconclusive`, 77 verified). H2d's smallest found proof needs no `by` block (`tags/H2d-min-plain`); the block is what keeps the readable reference within budget.
+
+**Evidence (2026-10-23).**
+- Freeze re-pinned (34 statements), `--check` 0. Counts re-pinned, `--shipped` 0.
+- Both core twins stable on seeds 1–3 (Dafny CV 14.7 %, Verus 10.7 %). `firsttry.sh R05 --empty-body` 10/10.
+- Chapter re-captured (37 pins; `chapter_lint` 0, 5,287 words). `pins.py --ci --module R05` 58 pins, 0 problems; `--ref` 0.
+- `--lint-hollow` OK. Rubric pins refreshed (2). `check_course_map` OK.
+- Leak patterns: H1d and H4d re-cut, 8 OK over 2,728 public files.
+- The study workflow is recorded below.
+
+The finding for the R14 lane (§3, Overlap) goes to the coordinator's notes for P2.
+

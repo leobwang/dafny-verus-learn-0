@@ -95,7 +95,9 @@ coverage (per armed module; the rows always)
            lists; pairs exist and are mutual
   D4       (Q01–Q09) every cited item exists; every P/H/X/T item is cited;
            every strand has a key
-  uses     every WRITE slug is tagged by ≥ 2 H/X/T items in its language;
+  uses     every WRITE slug is tagged by ≥ 2 H/X/T items in its language,
+           except a 1-item slug the user decided (WRITE_USES_EXCEPTIONS), which
+           the registry also declares in a [[write_exception]] table;
            every `uses:` slug is WRITE or RECOGNISE in that language here or
            earlier in the track
   parity   ≥ 2 cross-language (dv) predicts per concept module (Q01–Q09, R);
@@ -319,6 +321,16 @@ GPU_HOURS_PER_MODULE = 10   # design §3: ≤ 10 GPU-h per lab [A]
 # DELTAS Δ295, superseding Δ176's 10) after the throughput probe measured 72 GPU-s per call.
 # An excepted module counts toward GPU_HOURS_TOTAL at the per-lab cap only.
 GPU_HOURS_EXCEPTIONS = {"R12": 80}
+# WRITE slugs the user let stand on one tagged item (the "uses" rule asks for >= 2), each
+# keyed (module, language, slug) -> (the one item, the user's decision). The registry
+# must declare the same exception in a top-level [[write_exception]] table, whose reason
+# names the decision; the checker refuses a declaration this table does not hold, a
+# declaration whose item is not the one tagged item, and any other 1-item WRITE slug.
+# R05's Dafny `assert-by` (D85, 2026-10-23; DELTAS Δ307): only H2d's reference needs a
+# `by` block (without it the reference runs out of resource at the pinned limit), so the
+# user kept `assert-by` WRITE on that one item.
+WRITE_USES_EXCEPTIONS = {("R05", "d", "assert-by"): ("R05.H2d", "D85")}
+WRITE_EXCEPTION_KEYS = ("module", "lang", "slug", "item", "reason")
 GPU_HOURS_TOTAL = 45        # design §11.3: the six labs' Qwen work in ≤ 45 GPU-h [A]
 # The spoiler-guard's solo (2s) and frozen (2f) path patterns this registry must
 # feed (.claude/hooks/spoiler-guard.sh, class_of): R16's trust-report, Q's gate,
@@ -2038,8 +2050,43 @@ def checked_langs(items, kinds=ci.CHECKED_KINDS):
     return {c for it in items if it["kind"] in kinds for c in ci.covered_langs(it["lang"])}
 
 
+def check_write_exceptions(data):
+    """({(module, lang, slug): item} declared in [[write_exception]], errors). A
+    declaration must be one WRITE_USES_EXCEPTIONS holds, with its item, and a reason
+    that names the user's decision."""
+    errs, out = [], {}
+    rows = data.get("write_exception", [])
+    if not isinstance(rows, list):
+        return out, ["top level: 'write_exception' must be [[write_exception]] tables"]
+    for n, row in enumerate(rows, 1):
+        where = f"write_exception[{n}]"
+        if not isinstance(row, dict) or sorted(row) != sorted(WRITE_EXCEPTION_KEYS) or not all(
+                isinstance(row[k], str) and row[k] for k in WRITE_EXCEPTION_KEYS):
+            errs.append(f"{where}: needs exactly the string keys " + ", ".join(WRITE_EXCEPTION_KEYS))
+            continue
+        key = (row["module"], row["lang"], row["slug"])
+        known = WRITE_USES_EXCEPTIONS.get(key)
+        if known is None:
+            errs.append(f"{where}: {row['module']} {row['lang']} '{row['slug']}' is no exception "
+                        "the user decided (check_course_map.py's WRITE_USES_EXCEPTIONS)")
+            continue
+        if row["item"] != known[0]:
+            errs.append(f"{where}: the exception covers {known[0]}, not {row['item']}")
+            continue
+        if known[1] not in row["reason"]:
+            errs.append(f"{where}: its reason must name the user's decision {known[1]}")
+            continue
+        if key in out:
+            errs.append(f"{where}: {row['module']} {row['lang']} '{row['slug']}' is declared twice")
+            continue
+        out[key] = row["item"]
+    return out, errs
+
+
 def check_coverage(root, good, data):
     errs = []
+    declared_write, werrs = check_write_exceptions(data)
+    errs += werrs
     by_id = {m["id"]: m for m in good}
     items_of = {}
     seen = {"Q": {"d": set(), "v": set()}, "R": {"d": set(), "v": set()}}
@@ -2084,6 +2131,10 @@ def check_coverage(root, good, data):
                 alts = {w, *w.split("/")}
                 tagged = [it["id"] for it in items if it["kind"] in ci.USES_KINDS
                           and lang in ci.covered_langs(it["lang"]) and alts & set(it["uses"])]
+                if len(tagged) == 1 and (mid, lang, w) in declared_write and (
+                        WRITE_USES_EXCEPTIONS.get((mid, lang, w), ("",))[0] == tagged[0]
+                        == declared_write[(mid, lang, w)]):
+                    continue
                 if len(tagged) < 2:
                     errs.append(f"{mid}: {LANG_NAMES[lang]} WRITE '{w}' has {len(tagged)} tagged "
                                 f"item{'' if len(tagged) == 1 else 's'} (need ≥ 2 `uses:` in "
@@ -2401,7 +2452,7 @@ def validate(root, only=None):
         return 1
     run = GROUPS if only is None else (only,)
     errs = []
-    unknown = sorted(set(data) - {"schema", "module", "coverage"})
+    unknown = sorted(set(data) - {"schema", "module", "coverage", "write_exception"})
     if data.get("schema") != SCHEMA:
         errs.append(f"top level: 'schema = {SCHEMA}' is required")
     errs += [f"top level: unknown key '{k}'" for k in unknown]

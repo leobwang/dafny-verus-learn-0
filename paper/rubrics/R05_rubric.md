@@ -6,8 +6,8 @@ deferred under D45, never inferred from local fixtures.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R05_solutions.tex  sha256 5024903c3980a0bed63640d9e6efccbb5d9dc326ab2295f79e7fa300576545f2
 paper/R05_problems.tex  sha256 e3eafd5a817257ea545f492ffb1ca83a8a278bb7c9ebffb46e0a44b078b2684e
-Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy  sha256 69e6f24f8ff7344cecf08d2997f3e82bbcb4e1bce439abb3dfef44449461bc1e
-Solutions/verus/r/r05_no_goal_state/src/lib.rs  sha256 e7b9d983b35d23b04d0676d3135e7346024879847b6f90f2174dec1303b51a48
+Solutions/dafny/R/R05_NoGoalState/core/R05_NoGoalState.dfy  sha256 fd9dd082da9f179f36a9dc4ec16c7391056d5706bffebfc579459fc202a0db07
+Solutions/verus/r/r05_no_goal_state/src/lib.rs  sha256 23816a50a8d95870d0503a76c033a8cb9c23885c12f5b0d23ea58198384ce932
 Solutions/harness/r/fvh_r/variance.py  sha256 edff314cf64487c12648da4c41ab06aaf1b04e479728df4dd4b4c786583977d7
 Solutions/dafny/R/R05_NoGoalState/agent/R05_AgentObligation.dfy  sha256 80ae327456f228e3207e25c274954473423f5d04efe93fc2fa32bb16a27c1a31
 Solutions/verus/r/r05_no_goal_state/src/agent.rs  sha256 0203188c1a0a4486c3240bb3914767da2e9f602df261c1042fb6ede285d55b6e
@@ -50,7 +50,7 @@ Solutions/verus/r/r05_no_goal_state/src/agent.rs  sha256 0203188c1a0a4486c3240bb
 ## Code and agent review
 
 Both native hand units and the Python file gate at zero holes; audits and
-freeze pass. H4 retains its given branch, choice, recursive call and measure.
+freeze pass. H4 retains its given branch, choice and measure (the recursive call is the learner's, D84).
 Helper contracts expose proof steps, assertions have reasons and recursion
 has an intelligible decreasing argument. Missing or altered measurements
 must not become fabricated zero values or silently dropped rows.

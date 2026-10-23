@@ -336,6 +336,7 @@
 | 304 | The user's D82 and D83: R04's Dafny H2 and H3 re-posed as universals over the strings a regex matches, each needing a `forall` statement and two `:|` splits (smallest found three one-fact lines); `forall-intro` WRITE in Dafny again; Verus unchanged; R01's H1 and H3 recorded as exceptions under D59's reading | adopted (the user; built in R authoring 2026-10-21 UTC) | the user; DVR4 step 5 lane P1 |
 | 305 | The Verus mirror of D82/D83 (the coordinator, 2026-10-22): H2v and H3v pose Dafny's universals over matches, each needing `assert forall … by` and two `choose` splits (smallest found three lines); `forall-intro` WRITE in both languages again; T1's `exists-elim` tags removed as non-instances; H1d's leak pattern dropped for H3d's | adopted (the coordinator; built in R authoring 2026-10-22 UTC) | DVR4 step 5 lane P1 |
 | 306 | R05 brought to the R module bar (DVR4 step 5): prompts and two hints per hole (Python included), one-statement-per-line twins, agents and specimens (twins mirrored), a chapter with source and captured output inline (37 pins), P3's ten runs per language as recorded quotes, a Q06-schema bank with re-run probes, ten admission rows; two short holes and three WRITE tags with no genuine hole instance reported | adopted in R authoring (2026-10-22 UTC) | DVR4 step 5 systemic lane P1 |
+| 307 | The user's D84 (R05's H3 re-posed as `StarThrice`, `Star(a)` over `u + u + u`; H4's recursive call left to the learner; both languages, smallest found ≥ 3 one-fact lines) and D85 (isolation RECOGNISE; `assert-by` WRITE in Dafny on H2d alone, by one narrow `[[write_exception]]` the course map accepts and nothing broader; Verus `write_v = []`) | adopted (the user; built in R authoring 2026-10-23 UTC) | the user; DVR4 step 5 lane P1 |
 | 320 | R09 at the R module bar (DVR4 step 5, lane P2): one-statement-per-line files in plan order with prompts, hints and use-site clients; the R04.H2v skeleton removed from a given helper; two seed-stability repairs; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H2 minutes and an H4-bearing Lab α form for decision | adopted in R authoring (2026-10-19 UTC) | DVR4 step 5 lane P2 |
 | 321 | R10 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints and a compiled use-site test; A4's do-not-open header; H3d's lever named in its row; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H3's line band for decision | adopted in R authoring (2026-10-20 UTC) | DVR4 step 5 lane P2 |
 | 322 | R11 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints, a commented T1 check and given use-site checks; H2d/X1d levers named in their rows; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; line-band outliers for decision | adopted in R authoring (2026-10-21 UTC) | DVR4 step 5 lane P2 |
@@ -4903,6 +4904,21 @@ The record is in `Solutions/plans/DVR4-R05-build-notes.md` (§1 is the objective
   - H3d (1 fact) and H4v (2) are under D64's bar. Recommend recording them as exceptions.
   - `assert-by`, `isolate-assertions` and `spinoff-prover` have no hole whose smallest proof needs them. Recommend moving the two isolation constructs to RECOGNISE if R04's tag rule applies course-wide.
 - **Finding for the R14 lane:** `specimens/R14/card-c4dv-v.rs.specimen` shares H3v's two split-at-the-end subrange facts.
+
+### Δ307 · D84, D85: R05's short holes re-posed; honest WRITE tags with one narrow exception — adopted (the user, 2026-10-23; built 2026-10-23 UTC)
+
+Answers Δ306's two decisions; record in `Solutions/plans/DVR4-R05-build-notes.md` §4 and §6.
+
+- **D84 (H3):** H3 is `StarThrice` / `lemma_star_thrice`: `Matches(a, u) ==> Matches(Star(a), u + u + u)`. The smallest found proof is 4 one-fact lines in Dafny (5 in reverse order) and 8 in Verus. Every proper subset of Dafny's 6-line set fails.
+- **D84 (H4):** H4's given skeleton keeps the case split, the choice of the first chunk and the measure. The recursive call is now the learner's. The smallest found proof is 4 lines in Dafny and 3 in Verus, and every proper subset fails.
+- **D84 (unchanged and updated):** objectives, minutes (8, 12) and mirrors are unchanged; the references are stable on seeds 1–3. The bank's PP2 is updated to the new H4 skeleton and re-verified.
+- **D85 (the coordinator's option (a), the user's choice):** `isolate-assertions` and `spinoff-prover` become RECOGNISE. `assert-by` stays WRITE in Dafny on H2d alone, because its reference runs out of resource at the pinned limit without its `by` block (author probe `d-noby`, re-run on the D84 twin). In Verus, `assert-by` is RECOGNISE (`write_v = []`).
+- **The exception:**
+  - The user's answer named Dafny H2 only. So the course map's "≥ 2 tagged items" rule gets one exception, as a consequence of that answer.
+  - The registry carries one top-level `[[write_exception]]` (R05, `d`, `assert-by`, R05.H2d, D85). `check_course_map.py` accepts it only through its `WRITE_USES_EXCEPTIONS` table and only for that one tagged item.
+  - Six new `test_course_map.py` cases show that the slug without the declaration, an undecided slug, the other language, another item, a reason without D85 and a second 1-item slug all fail (411 passed).
+  - If the user prefers option (b), `assert-by` becomes RECOGNISE in Dafny too and the exception is removed.
+- **Evidence:** see the R05 notes §6.
 
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 

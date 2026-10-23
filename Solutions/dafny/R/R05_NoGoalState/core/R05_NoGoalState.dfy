@@ -6,7 +6,7 @@ This file has four holes. The paired crate has four; variance.py has two.
 File order: the prediction block, the worked examples (W1, W2), the cards
 (C1, C2, C4), the holes (H1 to H4), the logs block, then the final divergence
 card (C5). Each hole has a prompt with a guiding question and two hints.
-For H4 keep the given branch, choice, recursive call and measure: add facts.
+For H4 keep the given branch, choice and measure: add the call and facts.
 Done: all native/Python gates, audit, freeze, strict firsttry, variance and
 LATENCY logs, written work, OBLIGATION LOG, fourth bench card and viva.
 */
@@ -63,7 +63,7 @@ module R05_NoGoalState {
   // item: R05.C1d write:assert-by
   // An assertion-by block proves and exports its assertion; local facts stay local.
   // EXPECT: card-c1d.dfy.specimen fails inside its by block.
-  // item: R05.C2d write:isolate-assertions
+  // item: R05.C2d recognise:isolate-assertions
   // @IsolateAssertions splits a lemma's obligations for diagnosis.
   // EXPECT: card-c2d.dfy.specimen names the one false assertion of two.
   // item: R05.C4dv recognise:rlimit
@@ -76,7 +76,6 @@ module R05_NoGoalState {
 
   // item: R05.H1d
   // pair: R05.H1v
-  // uses: assert-by, isolate-assertions
   /** **H1.** Concatenation re-associates left to right: a match of
       `Cat(Cat(a, b), c)` is a match of `Cat(a, Cat(b, c))`. Take the two
       splits the premise guarantees and build the one the goal needs. Which
@@ -92,8 +91,7 @@ module R05_NoGoalState {
     var u := s[..i];
     var k :| 0 <= k <= |u| && Matches(a, u[..k]) && Matches(b, u[k..]);
     var v := s[k..];
-    assert u[..k] == s[..k] by {
-    }
+    assert u[..k] == s[..k];
     assert u[k..] == s[k..i];
     assert v[..i - k] == s[k..i];
     assert v[i - k..] == s[i..];
@@ -135,32 +133,40 @@ module R05_NoGoalState {
 
   // item: R05.H3d
   // pair: R05.H3v
-  /** **H3.** One match is a star match: if `a` matches `u`, `Star(a)` does.
-      How many chunks does the star take, and what is left after the chunk
-      when `u` is not empty? */
-  lemma StarOne(a: Re, u: seq<char>)
+  /** **H3.** One match is a star match, as often as you like: if `a`
+      matches `u`, then `Star(a)` matches `u + u + u`. Each chunk of the star
+      is one copy of `u`. Where does the first chunk end, which string is left
+      after it, and what ends the last one? */
+  lemma StarThrice(a: Re, u: seq<char>)
     requires Matches(a, u)
-    ensures Matches(Star(a), u)
+    ensures Matches(Star(a), u + u + u)
   {
     // @hole-begin R05.H3d
-    if u != [] {
-      assert u[..|u|] == u && u[|u|..] == [];
-    }
+    var t := u + u + u;
+    var r := u + u;
+    assert t[..|u|] == u;
+    assert t[|u|..] == r;
+    assert r[..|u|] == u;
+    assert r[|u|..] == u;
+    assert u[..|u|] == u;
+    assert u[|u|..] == [];
+    assert Matches(Star(a), u);
+    assert Matches(Star(a), r);
     // @hole-end R05.H3d
   }
-  // Hint(1): the empty string is a star match by definition; only a non-empty
-  //    `u` needs a witness.
-  // Hint(2): the whole of `u` is the first chunk; name that split at `|u|`
-  //    by its two slices.
+  // Hint(1): build the star from the back: the last copy of `u` is a star
+  //    match (one chunk and the empty rest), then two copies, then three.
+  // Hint(2): each step splits a string at `|u|`; state its two slices, and
+  //    the star match of the rest.
 
   // item: R05.H4d
   // pair: R05.H4v
-  // uses: assert-by, isolate-assertions
-  /** **H4.** Bisect and repair: two star matches concatenate. The case split,
-      the choice of the first chunk and the recursive call are given and must
-      stay; the facts the solver lacks are not. Run the lemma, read the
-      obligation it names, and add one fact at a time where the comments say.
-      Which facts connect `u + v` to the chunk and to the recursive call's
+  /** **H4.** Bisect and repair: two star matches concatenate. The case split
+      and the choice of the first chunk are given and must stay; the
+      induction step and the facts the solver lacks are not. Run the lemma,
+      read the obligation it names, and add one line at a time where the
+      comments say. Which recursive call gives the rest of `u + v` its star
+      match, and which facts connect `u + v` to the chunk and to that call's
       string? */
   @IsolateAssertions
   lemma StarConcat(a: Re, u: seq<char>, v: seq<char>)
@@ -169,17 +175,16 @@ module R05_NoGoalState {
     decreases |u|
   {
     // @hole-begin R05.H4d
-    assert u == [] ==> u + v == v by {
-    }
+    assert u == [] ==> u + v == v;
     // @hole-end R05.H4d
     if u == [] {
     } else {
       var i :| 0 < i <= |u| && Matches(a, u[..i]) && Matches(Star(a), u[i..]);
-      StarConcat(a, u[i..], v);
-      // Put facts here (and in the empty case) as bisection directs you.
+      // Put the recursive call and the facts here (and in the empty case) as
+      // bisection directs you.
       // @hole-begin R05.H4d
-      assert (u + v)[..i] == u[..i] by {
-      }
+      StarConcat(a, u[i..], v);
+      assert (u + v)[..i] == u[..i];
       assert (u + v)[i..] == u[i..] + v;
       // @hole-end R05.H4d
     }
@@ -187,7 +192,8 @@ module R05_NoGoalState {
   // Hint(1): bisect: add `assert false;` at a point to learn whether the
   //    failure is before or after it, then replace it with the fact you need.
   // Hint(2): the first chunk of `u + v` is the first chunk of `u`, and the rest
-  //    is the recursive call's string; both are slice facts about `u + v`.
+  //    is `u[i..] + v`, a shorter case of the lemma itself (`decreases |u|`);
+  //    call it, then state both slice facts about `u + v`.
 
   /* VARIANCE LOG: ten sequential runs per language on finished H1, pinned
      seed and unchanged inputs. Save each --json --measures document as one
