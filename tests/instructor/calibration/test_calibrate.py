@@ -589,6 +589,23 @@ class GradePaperRules(unittest.TestCase):
             self.assertEqual(len(got), 3, m.group(1))
             self.assertTrue(all(sec[m.group(1)][0] <= n <= sec[m.group(1)][1] for n in got))
 
+    def test_q03_and_q09_flawed_lines_anchor_in_their_problem(self):
+        """Δ502's observation, fixed after it: each planted-flaw recomputation
+        EXPECTED line of Q03's and Q09's flawed fixtures anchors three answer
+        lines inside its own problem, so the location match rests on lines, not
+        on structure words alone (line numbers only)."""
+        for mid in ("Q03", "Q09"):
+            lines = cal.dropin_text(cal.ROOT, mid, "flawed").splitlines()
+            sec = cal.problem_sections(lines)
+            exp = [cal.RX_EXPECTED.match(l) for l in
+                   (cal.FIXTURES / f"{mid}_flawed_answers.tex").read_text().splitlines()]
+            exp = [m for m in exp if m and int(m.group(3)) <= 2 and m.group(2) == "recomputation"]
+            self.assertEqual(len(exp), 1, mid)
+            for m in exp:
+                got = cal.anchor_lines(m.group(4), lines, sec[m.group(1)])
+                self.assertEqual(len(got), 3, (mid, m.group(1)))
+                self.assertTrue(all(sec[m.group(1)][0] <= n <= sec[m.group(1)][1] for n in got))
+
 
 if __name__ == "__main__":
     unittest.main()
