@@ -4109,4 +4109,5 @@
   - **The Verus pool:** the walks have now considered most of the apps/verina pool (T3's Verus walk skipped 52 members as considered by earlier walks). A later part needing more Verus public tasks would have to come from another source.
   - **Sealing and checks:** each tranche and the Q31 held-out part was re-sealed once, with every reference carrying its canary. The sealed-name history check counts 0 hits, with public stems matched at word boundaries: a numbered dataset stem can be a prefix of an open one. Encrypted archives are left out of the pickaxe.
   - Nothing was run through a model.
+- **Constraint for later topics (accepted by the coordinator, 2026-10-22).** The pinned vericoding pool's `verus/apps` and `verus/verina` members are nearly used up by topic (e): the walks have considered 208 of 268. Any later topic that needs public Verus tasks draws them from another source, such as a newly pinned set, or vericoding's other Verus strata after their own strip sample. It does not draw from these members, and it excludes every member considered here.
 - **Owner:** DV7's W3 lane.
