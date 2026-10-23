@@ -166,7 +166,8 @@ The chapter (§7, §9), the prompts and hints, the file headers, the rubric and 
 - Chapter re-captured (37 pins; `chapter_lint` 0, 5,287 words). `pins.py --ci --module R05` 58 pins, 0 problems; `--ref` 0.
 - `--lint-hollow` OK. Rubric pins refreshed (2). `check_course_map` OK.
 - Leak patterns: H1d and H4d re-cut, 8 OK over 2,728 public files.
-- The study workflow is recorded below.
+- Study workflow 11/11 on `0f59c55d` (`workflow-d84.log`).
+- The Python file is unchanged by D84 and D85 (its twin gated on 2026-10-22, §5).
 
 The finding for the R14 lane (§3, Overlap) goes to the coordinator's notes for P2.
 
