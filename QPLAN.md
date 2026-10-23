@@ -3883,6 +3883,9 @@ A wrapper over a role's policy: at a pre-registered injection point (role, turn)
 |---|---|---|---|
 | dev pairs | 20 | public-admitted (vericoding Dafny dafnybench subset with prose; HumanEval-Verus prompts not drawn elsewhere), each with an author-checked reference | open |
 | sealed pairs | 60 (30 D, 30 V) | author-written: prose, reference statement, witness, two faithful alternatives and one near-miss, every alternative judged as intended by `truthcheck judge` before sealing | `Hidden/Agentic/Q33/pairs.tar.age` (with references in the judge's form), single use |
+
+**As built (Δ414):** the 60 pairs are sealed (`bench/local/q/agentic/q33-pairs/`). The judging before sealing is the frozen Q15 reference oracles (vacuity, implication, classify) run host-side by the author's `admit_pair.py`; this is the coordinator's D3, and no model is used. The grader container's `truthcheck judge` pass over the same pairs is a recorded re-check at W1b. The 8 sealed tickets, the 4 public ones and the sealed fixtures are separate entries (Δ415).
+
 | tickets | 12 (8 sealed, 4 public) | multi-file coding tickets over the extras (decimal parser, ring buffer, priority queue, JSON fixtures) | `Hidden/Agentic/Q33/tickets.tar.age` |
 | honest set for FP | ≥ 81 deliveries | the 60 sealed pairs' reference deliveries, the learner's 12 witnesses, the 9 corpus controls | references sealed with the pairs |
 | plant catalog | 13 classes × ≥ 3 injection points ≥ 39 plants | §35.3 | sealed |

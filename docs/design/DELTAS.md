@@ -303,6 +303,7 @@
 | 411 | Q31's public held-out draw (24 cards + 5 Dafny spares) pre-registered with a secret, sha256-pinned seed; D76's unseal-time exclusion and spare replacement in `fvh unseal` | adopted (DV7 W3, 2026-10-21) | DV7's W3 lane |
 | 412 | Q32 tranche admission as §34.4 writes it: maxauto enforced (10 cards replaced; admission and a strata test enforce it), the one-shot leg a census at par-run (D68); a mechanical dev/sealed theme check (tags author-side; 26 clashes found, all replaced) | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane; W1b |
 | 413 | The remaining public draws pre-registered (Q31 dev 16, Q32 dev 20, each tranche 16 + 4 Dafny spares) with a second secret seed; Δ411's walk amended by the theme step and re-walked | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane |
+| 414 | Q33's 60 sealed statement pairs, admitted by the frozen Q15 oracles host-side (the in-container judge a recorded re-check at W1b) | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane; W1b |
 
 ## A. Holes and hole counting
 
@@ -4111,3 +4112,19 @@
   - Nothing was run through a model.
 - **Constraint for later topics (accepted by the coordinator, 2026-10-22).** The pinned vericoding pool's `verus/apps` and `verus/verina` members are nearly used up by topic (e): the walks have considered 208 of 268. Any later topic that needs public Verus tasks draws them from another source, such as a newly pinned set, or vericoding's other Verus strata after their own strip sample. It does not draw from these members, and it excludes every member considered here.
 - **Owner:** DV7's W3 lane.
+
+### Δ414 · Q33's sealed statement pairs (60): authored, admitted by the frozen Q15 oracles host-side, sealed — adopted (DV7 W3, 2026-10-22)
+- **The pairs.** There are 30 subjects over the extras and layers (ring buffer, heap indices, decimal and hexadecimal digits, propositional formulas, a While step, JSON characters, limbs). Each is posed once in Dafny and once in Verus, giving 60 pairs.
+  - The sealed form is in Lab 2's shape: prose, definitions, an implementation with no specification, and an empty witness.
+  - The sealed reference holds the reference statement and witness call, two faithful alternatives and one near-miss, with the intended verdicts in the judge's terms.
+  - Ids are opaque (`cl-d1NN-q33p`, `cl-v1NN-q33p`). Every name passed the course, ref and sealed name checks (word and substring). Every pair carries a `stmt:` theme tag, and none matches a dev tag.
+- **Admission** (`Solutions/tools/agentic/admit_pair.py`, author-only, one solver job at a time under 8 GB). A pair is admitted only when all of the following hold:
+  - the form verifies as shipped;
+  - the reference program passes `vcheck --gate`, `vaudit` and `--brittleness` (with `--solvers` for Dafny);
+  - the frozen Q15 reference oracles (`Solutions/harness/q/fvh_q/oracles.py`: vacuity, implication, classify) find the reference not vacuous and faithful to itself, each faithful alternative FAITHFUL, and the near-miss WEAK or STRONG as intended.
+- **D3 (the coordinator).** This host-side run of the frozen oracles is the admission check. The grader container's `truthcheck judge` pass, the same oracles inside the container, is a recorded re-check at W1b, when the container round trip exists. No model is used.
+- **Result.**
+  - All 60 are admitted. One Dafny alternative needed modular reasoning that an empty lemma body cannot supply; it was replaced by a propositional equivalent and re-admitted.
+  - There are 22 weak and 8 strong near-misses per language. Strong ones come from an added `requires` or an extra conjunct that the behaviour does not meet.
+  - Sealed into `Hidden/Agentic/Q33/pairs.tar.age` and `pairs-refs.tar.age` (commit 5173703). The references carry a new canary, registered in `sandbox/canaries.sha256`. The sealed-name history check counts 0 hits.
+- **Owner:** DV7's W3 lane; W1b for the in-container re-check.
