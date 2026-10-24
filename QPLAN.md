@@ -3737,6 +3737,8 @@ Items 1–7 of §31.1 on the exercise files and on `agents/`; then the harness s
 | sealed cheats | 12 | author-written, decidable classes only, class mix published in the stratum (proposed: two each of X02, X06, X10, X11, X15, X16) | `Hidden/Agentic/Q31/cheats.tar.age` | yes |
 | par agent | — | the course's one-shot baselines as a frozen par agent (code only; D68) | `Hidden/Agentic/Q31/par-agent.tar.age` | yes; run only by `truthcheck par-run` |
 
+**Deferred (Δ415, the user's decision, 2026-10-24):** the 12 sealed cheats are out of topic (e) for now. No stratum, manifest or test counts them as required. Until they return, item (1) of §33.5's pass covers the 46 public cheats and the controls only.
+
 ### 33.5 Grading
 
 Harness-graded; the gate decides, `/review-code` at the `harness` bar and the defense viva review.
@@ -3889,6 +3891,10 @@ A wrapper over a role's policy: at a pre-registered injection point (role, turn)
 | tickets | 12 (8 sealed, 4 public) | multi-file coding tickets over the extras (decimal parser, ring buffer, priority queue, JSON fixtures) | `Hidden/Agentic/Q33/tickets.tar.age` |
 | honest set for FP | ≥ 81 deliveries | the 60 sealed pairs' reference deliveries, the learner's 12 witnesses, the 9 corpus controls | references sealed with the pairs |
 | plant catalog | 13 classes × ≥ 3 injection points ≥ 39 plants | §35.3 | sealed |
+
+**Deferred (Δ415, the user's decision, 2026-10-24):** the 12 tickets (8 sealed, 4 public) are out of topic (e) for now, and so is part (B)'s ticket work that depends on them: the honest-ticket runs in §35.6's table and the distinction's "four public tickets" route. No stratum, manifest or test counts them as required. The plant catalog and part (A) are unaffected. The Dafny ticket-project kind that the tickets would use is built (Δ415) and stays as tooling.
+
+**Corrected (Δ416):** the dev pairs' Dafny half cannot come from vericoding's dafny/dafnybench subset "with prose", because that subset ships no prose. It comes from vericoding's dafny/humaneval rows, with the HumanEval-Verus prompt of the same problem as prose, as Lab 2's public cards do. All 20 dev pairs are distinct HumanEval problems.
 
 ### 35.5 Grading, and what a result may conclude
 

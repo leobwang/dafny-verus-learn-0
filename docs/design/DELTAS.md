@@ -304,6 +304,8 @@
 | 412 | Q32 tranche admission as §34.4 writes it: maxauto enforced (10 cards replaced; admission and a strata test enforce it), the one-shot leg a census at par-run (D68); a mechanical dev/sealed theme check (tags author-side; 26 clashes found, all replaced) | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane; W1b |
 | 413 | The remaining public draws pre-registered (Q31 dev 16, Q32 dev 20, each tranche 16 + 4 Dafny spares) with a second secret seed; Δ411's walk amended by the theme step and re-walked | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane |
 | 414 | Q33's 60 sealed statement pairs, admitted by the frozen Q15 oracles host-side (the in-container judge a recorded re-check at W1b) | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane; W1b |
+| 415 | The Dafny ticket-project kind (D1 (b)); the 12 tickets and the 12 sealed fixtures deferred out of topic (e) (the user's decision) | adopted (DV7 W3, 2026-10-24) | DV7's W3 lane |
+| 416 | Q33's 20 open dev pairs: §35.4's Dafny source corrected (no prose in vericoding's dafny/dafnybench; dafny/humaneval with the HumanEval-Verus prompt instead), the draw pre-registered with a secret seed | adopted (DV7 W3, 2026-10-24) | DV7's W3 lane |
 
 ## A. Holes and hole counting
 
@@ -4128,3 +4130,28 @@
   - There are 22 weak and 8 strong near-misses per language. Strong ones come from an added `requires` or an extra conjunct that the behaviour does not meet.
   - Sealed into `Hidden/Agentic/Q33/pairs.tar.age` and `pairs-refs.tar.age` (commit 5173703). The references carry a new canary, registered in `sandbox/canaries.sha256`. The sealed-name history check counts 0 hits.
 - **Owner:** DV7's W3 lane; W1b for the in-container re-check.
+
+### Δ415 · The Dafny ticket-project kind; the tickets and the sealed fixtures deferred — adopted (DV7 W3, 2026-10-24)
+- **The ticket-project kind (the coordinator's D1 (b); commit 5e24e23).** In `dvl.dafny`, a `dfyconfig.toml` under `bench/` is used only as a ticket project that its nearest `STRATUM.toml` pins: a `[[card]]` with `project`, its path relative to the stratum's directory, and `project_sha256`. A project file there that is unpinned, outside any stratum, or pinned but altered is refused (G21).
+  - Unit projects under `dafny/` keep the generator check. `Solutions/` and scratch are unchanged.
+  - G9 holds. The Dafny gate is verification only and its lint is `vaudit`'s (Δ4), so an `include` in a ticket file is flagged by the audit, which any admission requires.
+  - Tests: `tests/wrappers/test_dafny_tool.py`'s `TicketProjects` (5); the whole file passes, 60 tests.
+- **Deferred (the user's decision, relayed by the coordinator, 2026-10-24).** The 12 Q33 tickets and the 12 sealed Q31 fixtures are out of topic (e) for now (QPLAN §33.4 and §35.4's notes).
+  - No stratum, manifest or test counts them as required. Q33's frozen pipeline interface and its tests use in-memory synthetic tickets only.
+  - Neither was authored in this lane. The fixture design work was stopped early in the lane's turn, and nothing of it was written.
+- **Owner:** DV7's W3 lane; the user for the deferred parts.
+
+### Δ416 · Q33's open dev pairs: the source corrected, the draw pre-registered — adopted (DV7 W3, 2026-10-24; the coordinator's (a))
+- **What was found.** §35.4 sourced the dev pairs' Dafny half from vericoding's dafny/dafnybench subset "with prose", but that subset ships no prose. Its 929 files carry only the preamble, spec, helpers and code markers, and the index has no description column. The only public prose is HumanEval's, which reaches vericoding's dafny/humaneval rows through the HumanEval-Verus file of the same problem, as Lab 2's public cards use it.
+- **The correction (the coordinator's option (a)).** The 10 Dafny dev pairs come from vericoding's dafny/humaneval, and the 10 Verus ones from HumanEval-Verus.
+  - Both use Lab 2's form, built by `scripts/dvl/lab2pub.py`'s transforms (C0–C3).
+  - All 20 are distinct HumanEval problems.
+  - Excluded: Q15's drawn tasks and problems, Lab alpha's HumanEval problems, any member an earlier topic (e) walk considered, and any theme a sealed card carries.
+- **The rule, written before the walk runs.** It is the docstring of the author tool `public_draw4.py`, whose sha256 is `267658b07d74e880470d24714d2276f5c1323f6cf8115ee2190edffb49541b72`. The secret seed's sha256 is `87013abb471dcbaf157e64449f2ac21a3a8b2f9773c8b9443d6634a0c9c5ebc9`. Verus is walked first, then Dafny.
+- **Admission.** The new author tool `Solutions/tools/agentic/admit_public_pair.py` admits a pair only when all of the following hold:
+  - the form resolves (C4);
+  - the reference program, the answer with the author's witness call, passes the gate, the lab gate against the form (C6), `vaudit` and `--brittleness` (C5);
+  - the frozen Q15 oracles, run host-side as the admission check (D3), find its base clean and its statement not vacuous and faithful to itself.
+  - No model is called.
+- **Where.** An open stratum, `bench/local/q/agentic/q33-dev/`. Forms ship with their source and licence in the header. The references, each a reference program and a `reference.toml` in the judge's form, live under `Solutions/` like the dev references.
+- **Owner:** DV7's W3 lane.
