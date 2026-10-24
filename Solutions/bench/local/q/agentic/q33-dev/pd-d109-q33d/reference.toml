@@ -1,0 +1,23 @@
+# Hidden truth, Q33 dev pair pd-d109-q33d: the reference statement of vericoding's
+# DH0136.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d109-q33d"
+lang = "dafny"
+name = "check_if_last_char_is_a_letter"
+task_form = "bench/local/q/agentic/q33-dev/pd-d109-q33d/tasks/pd-d109-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0136.dfy"
+answer_sha256 = "54a8b0e81a32ddcf18a852d15871b3ff468e6d062ef98ea48c3a7de78c6a4240"
+requires = []
+ensures = [
+  "result == ValidLastCharIsStandaloneLetter(txt)",
+]
+definitions = [
+  "predicate ValidLastCharIsStandaloneLetter(txt: string)\n{\n    |txt| > 0 && IsAlpha(txt[|txt| - 1]) && (|txt| == 1 || txt[|txt| - 2] == ' ')\n}",
+]
+definition_names = [
+  "ValidLastCharIsStandaloneLetter",
+]

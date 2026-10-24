@@ -1,0 +1,23 @@
+# Hidden truth, Q33 dev pair pv-v110-q33d: the reference statement of humaneval-verus's
+# human_eval_031.rs (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pv-v110-q33d"
+lang = "verus"
+name = "is_prime_impl"
+task_form = "bench/local/q/agentic/q33-dev/pv-v110-q33d/tasks/pv-v110-q33d.rs"
+source_set = "humaneval-verus"
+source_task = "human_eval_031.rs"
+answer_sha256 = "b5b133def22fad2848d25363fa1aee4cf656b4c451be7f1a2c3617654f4c7cd4"
+requires = []
+ensures = [
+  "res == is_prime(n as nat)",
+]
+definitions = [
+  "pub open spec fn is_prime(n: nat) -> bool {\n    (n > 1) && forall|i| 1 < i < n ==> #[trigger] (n % i) != 0\n}",
+]
+definition_names = [
+  "is_prime",
+]

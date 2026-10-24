@@ -1,0 +1,34 @@
+# Hidden truth, Q33 dev pair pd-d103-q33d: the reference statement of vericoding's
+# DH0049.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d103-q33d"
+lang = "dafny"
+name = "median"
+task_form = "bench/local/q/agentic/q33-dev/pd-d103-q33d/tasks/pd-d103-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0049.dfy"
+answer_sha256 = "100ce70a1e208be742fb77508f8a79cfa5ec01de6ac0ce4e550e7be995f91965"
+requires = [
+  "ValidInput(l)",
+]
+ensures = [
+  "result == MedianValue(l)",
+  "var sorted_list := Sort(l);\n            var n := |sorted_list|;\n            n % 2 == 1 ==> result == sorted_list[n / 2]",
+  "var sorted_list := Sort(l);\n            var n := |sorted_list|;\n            n % 2 == 0 ==> result == (sorted_list[n / 2 - 1] + sorted_list[n / 2]) / 2.0",
+  "IsSorted(Sort(l))",
+  "Multiset(Sort(l)) == Multiset(l)",
+  "|l| == 1 ==> result == l[0]",
+]
+definitions = [
+  "predicate IsSorted(s: seq<real>) {\n    forall i, j :: 0 <= i < j < |s| ==> s[i] <= s[j]\n}",
+  "predicate ValidInput(l: seq<real>) {\n    |l| > 0\n}",
+  "function MedianValue(l: seq<real>): real\n    requires ValidInput(l)\n{\n    var sorted_list := Sort(l);\n    var n := |sorted_list|;\n    if n % 2 == 1 then\n        sorted_list[n / 2]\n    else\n        (sorted_list[n / 2 - 1] + sorted_list[n / 2]) / 2.0\n}",
+]
+definition_names = [
+  "IsSorted",
+  "ValidInput",
+  "MedianValue",
+]

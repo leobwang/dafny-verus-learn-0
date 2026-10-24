@@ -1,0 +1,27 @@
+# Hidden truth, Q33 dev pair pv-v102-q33d: the reference statement of humaneval-verus's
+# human_eval_073.rs (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pv-v102-q33d"
+lang = "verus"
+name = "smallest_change"
+task_form = "bench/local/q/agentic/q33-dev/pv-v102-q33d/tasks/pv-v102-q33d.rs"
+source_set = "humaneval-verus"
+source_task = "human_eval_073.rs"
+answer_sha256 = "1c6fe734000bdaa153ff136d78c2bd09dadb7497ff16aacb76bda4b4f5e5b11b"
+requires = [
+  "v@.len() < usize::MAX",
+]
+ensures = [
+  "change == diff(zip_halves(v@))",
+]
+definitions = [
+  "pub open spec fn zip_halves<T>(v: Seq<T>) -> (ret: Seq<(T, T)>) {\n    v[..v.len() / 2].zip_with(v[(v.len() + 1) / 2..].reverse())\n}",
+  "pub open spec fn diff(s: Seq<(i32, i32)>) -> int {\n    s.fold_left(\n        0,\n        |acc: int, x: (i32, i32)|\n            if (x.0 != x.1) {\n                acc + 1\n            } else {\n                acc\n            },\n    )\n}",
+]
+definition_names = [
+  "zip_halves",
+  "diff",
+]

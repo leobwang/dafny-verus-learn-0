@@ -1,0 +1,28 @@
+# Hidden truth, Q33 dev pair pd-d107-q33d: the reference statement of vericoding's
+# DH0147.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d107-q33d"
+lang = "dafny"
+name = "get_max_triples"
+task_form = "bench/local/q/agentic/q33-dev/pd-d107-q33d/tasks/pd-d107-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0147.dfy"
+answer_sha256 = "3e3f856b4817ed5ae877d22223222236091c13c1f014f802b6643a74db8f6904"
+requires = [
+  "ValidInput(n)",
+]
+ensures = [
+  "result >= 0",
+  "result == count_valid_triples(n)",
+]
+definitions = [
+  "function count_valid_triples(n: int): int\n  requires n >= 1\n{\n  var count_0 := count_elements_mod_0(n);\n  var count_1 := count_elements_mod_1(n);\n  combination(count_0, 3) + combination(count_1, 3)\n}",
+  "predicate ValidInput(n: int)\n{\n  n >= 1\n}",
+]
+definition_names = [
+  "count_valid_triples",
+  "ValidInput",
+]

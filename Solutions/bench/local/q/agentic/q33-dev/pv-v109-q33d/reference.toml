@@ -1,0 +1,21 @@
+# Hidden truth, Q33 dev pair pv-v109-q33d: the reference statement of humaneval-verus's
+# human_eval_020.rs (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pv-v109-q33d"
+lang = "verus"
+name = "closest_pair"
+task_form = "bench/local/q/agentic/q33-dev/pv-v109-q33d/tasks/pv-v109-q33d.rs"
+source_set = "humaneval-verus"
+source_task = "human_eval_020.rs"
+answer_sha256 = "7520152ed6bc4e843efebd64c7d24e805be7534c151e84f5de70849b0fe21ee8"
+requires = [
+  "numbers.len() >= 2",
+]
+ensures = [
+  "res.0 <= res.1,\n        exists|i: int, j: int|\n            (0 <= i < numbers.len()) && (0 <= j < numbers.len()) && (i != j) && (res.0 == numbers[i]\n                && res.1 == numbers[j]),\n        forall|i: int, j: int|\n            (0 <= i < numbers.len()) && (0 <= j < numbers.len()) && (i != j) ==> (abs(\n                numbers[i] - numbers[j],\n            ) >= abs(res.0 - res.1))",
+]
+definitions = []
+definition_names = []

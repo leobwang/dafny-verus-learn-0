@@ -1,0 +1,19 @@
+# Hidden truth, Q33 dev pair pd-d108-q33d: the reference statement of vericoding's
+# DH0060.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d108-q33d"
+lang = "dafny"
+name = "IsMonotonic"
+task_form = "bench/local/q/agentic/q33-dev/pd-d108-q33d/tasks/pd-d108-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0060.dfy"
+answer_sha256 = "3ec2a47f307c4d46309ae25d347995fd0c065e87843fd90d2917dcd3696a6562"
+requires = []
+ensures = [
+  "result == monotonic(l)",
+]
+definitions = []
+definition_names = []

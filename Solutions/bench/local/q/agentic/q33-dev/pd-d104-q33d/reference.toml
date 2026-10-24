@@ -1,0 +1,26 @@
+# Hidden truth, Q33 dev pair pd-d104-q33d: the reference statement of vericoding's
+# DH0048.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d104-q33d"
+lang = "dafny"
+name = "fib4"
+task_form = "bench/local/q/agentic/q33-dev/pd-d104-q33d/tasks/pd-d104-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0048.dfy"
+answer_sha256 = "124c61633efd9a39ce32d0c2b288f1deb8754f062416d5e01b0ecc8cab2ef921"
+requires = [
+  "n >= 0",
+]
+ensures = [
+  "result == fib4_func(n)",
+  "n == 0 ==> result == 0",
+  "n == 1 ==> result == 0",
+  "n == 2 ==> result == 2",
+  "n == 3 ==> result == 0",
+  "n >= 4 ==> result == fib4_func(n-1) + fib4_func(n-2) + fib4_func(n-3) + fib4_func(n-4)",
+]
+definitions = []
+definition_names = []

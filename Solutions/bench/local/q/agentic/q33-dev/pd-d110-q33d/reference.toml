@@ -1,0 +1,29 @@
+# Hidden truth, Q33 dev pair pd-d110-q33d: the reference statement of vericoding's
+# DH0109.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d110-q33d"
+lang = "dafny"
+name = "even_odd_palindrome"
+task_form = "bench/local/q/agentic/q33-dev/pd-d110-q33d/tasks/pd-d110-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0109.dfy"
+answer_sha256 = "3226dceb8021539097121fb759ea54e54c15e503565bf09284627675f48d5e99"
+requires = [
+  "ValidInput(n)",
+]
+ensures = [
+  "result.0 >= 0",
+  "result.1 >= 0",
+  "result.0 == CountEvenPalindromesInRange(1, n)",
+  "result.1 == CountOddPalindromesInRange(1, n)",
+  "result.0 + result.1 == CountPalindromesInRange(1, n)",
+]
+definitions = [
+  "predicate ValidInput(n: nat)\n{\n    n >= 1\n}",
+]
+definition_names = [
+  "ValidInput",
+]

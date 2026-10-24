@@ -1,0 +1,29 @@
+# Hidden truth, Q33 dev pair pd-d105-q33d: the reference statement of vericoding's
+# DH0043.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d105-q33d"
+lang = "dafny"
+name = "car_race_collision"
+task_form = "bench/local/q/agentic/q33-dev/pd-d105-q33d/tasks/pd-d105-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0043.dfy"
+answer_sha256 = "4ab79ea1b9c420018d065b7b1b8f36532b46c2cfab862dcbedf62fc53298b703"
+requires = [
+  "ValidInput(n)",
+]
+ensures = [
+  "ValidResult(n, result)",
+]
+definitions = [
+  "predicate ValidInput(n: int)\n{\n    n >= 0\n}",
+  "function CollisionCount(n: int): int\n    requires ValidInput(n)\n{\n    n * n\n}",
+  "predicate ValidResult(n: int, result: int)\n    requires ValidInput(n)\n{\n    result == CollisionCount(n) && result >= 0\n}",
+]
+definition_names = [
+  "ValidInput",
+  "CollisionCount",
+  "ValidResult",
+]

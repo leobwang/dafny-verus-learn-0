@@ -1,0 +1,19 @@
+# Hidden truth, Q33 dev pair pv-v106-q33d: the reference statement of humaneval-verus's
+# human_eval_017.rs (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pv-v106-q33d"
+lang = "verus"
+name = "parse_music"
+task_form = "bench/local/q/agentic/q33-dev/pv-v106-q33d/tasks/pv-v106-q33d.rs"
+source_set = "humaneval-verus"
+source_task = "human_eval_017.rs"
+answer_sha256 = "c7f1aeedd12316dbda0884a19af137d1b0f02023ff7a7319f043ee2cce553e30"
+requires = []
+ensures = [
+  "res matches Some(res) ==> spec_parse_music(s@) == Some(res@.map_values(|b| b as int)),\n        res is None ==> spec_parse_music(s@) is None",
+]
+definitions = []
+definition_names = []

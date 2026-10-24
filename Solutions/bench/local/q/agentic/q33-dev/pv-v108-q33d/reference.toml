@@ -1,0 +1,25 @@
+# Hidden truth, Q33 dev pair pv-v108-q33d: the reference statement of humaneval-verus's
+# human_eval_008.rs (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pv-v108-q33d"
+lang = "verus"
+name = "sum_product"
+task_form = "bench/local/q/agentic/q33-dev/pv-v108-q33d/tasks/pv-v108-q33d.rs"
+source_set = "humaneval-verus"
+source_task = "human_eval_008.rs"
+answer_sha256 = "08ce0fe69c5d5ef636f3d616ff3d3a2de2d4e9fe24e5a73783a3a28d991b63cf"
+requires = [
+  "numbers.len() < u32::MAX",
+]
+ensures = [
+  "result.0 == sum(numbers@),\n        match result.1 {\n            None =>   // Computing the product overflowed at some point\n            exists|i|\n                #![auto]\n                0 <= i < numbers.len() && product(numbers@[..i]) * numbers[i] as int > u32::MAX,\n            Some(v) => v == product(numbers@),\n        }",
+]
+definitions = [
+  "pub open spec fn sum(numbers: Seq<u32>) -> int {\n    numbers.fold_left(0, |acc: int, x| acc + x)\n}",
+]
+definition_names = [
+  "sum",
+]

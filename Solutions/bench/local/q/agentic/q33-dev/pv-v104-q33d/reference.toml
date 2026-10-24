@@ -1,0 +1,25 @@
+# Hidden truth, Q33 dev pair pv-v104-q33d: the reference statement of humaneval-verus's
+# human_eval_122.rs (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pv-v104-q33d"
+lang = "verus"
+name = "add_elements"
+task_form = "bench/local/q/agentic/q33-dev/pv-v104-q33d/tasks/pv-v104-q33d.rs"
+source_set = "humaneval-verus"
+source_task = "human_eval_122.rs"
+answer_sha256 = "d189ab412317f472c87a3142b0becc31aacccad56d707a9492002aada819a76b"
+requires = [
+  "1 <= arr.len() <= 100,\n        1 <= k <= arr.len()",
+]
+ensures = [
+  "result as int == add_elements_spec(arr@, k as nat)",
+]
+definitions = [
+  "pub open spec fn add_elements_spec(arr: Seq<i32>, k: nat) -> int {\n    arr[..k].fold_left(\n        0,\n        |acc: int, x: i32|\n            {\n                if -99 <= x <= 99 {\n                    acc + x\n                } else {\n                    acc\n                }\n            },\n    )\n}",
+]
+definition_names = [
+  "add_elements_spec",
+]

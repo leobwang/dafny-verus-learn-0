@@ -1,0 +1,22 @@
+# Hidden truth, Q33 dev pair pd-d106-q33d: the reference statement of vericoding's
+# DH0051.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d106-q33d"
+lang = "dafny"
+name = "modp"
+task_form = "bench/local/q/agentic/q33-dev/pd-d106-q33d/tasks/pd-d106-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0051.dfy"
+answer_sha256 = "8ab6bd75bcb2c34d95523bbb39f14ac73b828071eee53ab2a0481b9e864ece9a"
+requires = [
+  "n >= 0 && p > 0",
+]
+ensures = [
+  "result >= 0 && result < p",
+  "result == power(2, n) % p",
+]
+definitions = []
+definition_names = []

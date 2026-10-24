@@ -1,0 +1,32 @@
+# Hidden truth, Q33 dev pair pd-d101-q33d: the reference statement of vericoding's
+# DH0137.dfy (its answer's declaration, as dvl.judge.candidate reads it), as fvh_q.oracles.Spec
+# fields over the task form's declaration, with the definitions the form removed because
+# only the specification used them and they are not recursive (the user's decision D28;
+# the grader renders them renamed beside a delivery's own); the reference program beside
+# it (the answer, the form's header and the author's witness call) passes the lab gate.
+id = "pd-d101-q33d"
+lang = "dafny"
+name = "can_arrange"
+task_form = "bench/local/q/agentic/q33-dev/pd-d101-q33d/tasks/pd-d101-q33d.dfy"
+source_set = "vericoding"
+source_task = "DH0137.dfy"
+answer_sha256 = "ef4470b96c32e91a28accf79ea68e5fb555fbb78284ba2d85330061d2e867773"
+requires = [
+  "ValidInput(arr)",
+]
+ensures = [
+  "result == -1 || (0 < result < |arr|)",
+  "result == -1 ==> IsNonDecreasing(arr)",
+  "result != -1 ==> IsLargestDecreaseIndex(arr, result)",
+  "result != -1 ==> (exists i :: HasDecreaseAt(arr, i))",
+]
+definitions = [
+  "predicate ValidInput(arr: seq<int>) {\n    forall i, j :: 0 <= i < j < |arr| ==> arr[i] != arr[j]\n}",
+  "predicate IsLargestDecreaseIndex(arr: seq<int>, result: int) {\n    HasDecreaseAt(arr, result) && \n    (forall j :: result < j < |arr| ==> arr[j] >= arr[j-1])\n}",
+  "predicate IsNonDecreasing(arr: seq<int>) {\n    forall i :: 1 <= i < |arr| ==> arr[i] >= arr[i-1]\n}",
+]
+definition_names = [
+  "ValidInput",
+  "IsLargestDecreaseIndex",
+  "IsNonDecreasing",
+]
