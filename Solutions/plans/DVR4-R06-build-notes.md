@@ -142,3 +142,14 @@ Brought to the coordinator as decisions 1–4 on 2026-10-24.
 - `invariant`: T1, H2 (and X2).
 - `lemma-decreases`: H1d, X1d, H1v, X1v; each needed, probes `d87/final-nodecr`, `x1d-nodecr`, Verus resolve.
 - `induction-false`: H1d, X1d.
+
+## 5. Focused checks (2026-10-24)
+
+Run one solver job at a time in `dvl0.slice` under an 8G outer scope. No exit 137 or 143.
+- Empty-body 14/14. Seeds 1–3 stable for six twins.
+- Pins: chapter 34; module 60 and `--ref` 6, 0 problems.
+- `chapter_lint` 0. `check_course_map` OK. Leak verifier 8 OK. Rubric pins current.
+- Study workflow 11/11 on `c66b353c` (`workflow.log`): firsttry, strict, freeze, the check unit's test, and the gate and audit of both core units and both agent files.
+- The checkpoint twins gate (Dafny 16 verified, Verus 9, 0 holes) with clean audits in a scratch worktree. With the twins' measures in place, the freeze still reports 0 findings, so the measures the learner writes pass as added measures; `wf.py` does not cover the exits.
+
+The focused author CI (static, harness, wrappers, rubric) needs the 16G slot and waits for the coordinator.
