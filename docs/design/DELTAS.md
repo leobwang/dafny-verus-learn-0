@@ -306,6 +306,7 @@
 | 414 | Q33's 60 sealed statement pairs, admitted by the frozen Q15 oracles host-side (the in-container judge a recorded re-check at W1b) | adopted (DV7 W3, 2026-10-22) | DV7's W3 lane; W1b |
 | 415 | The Dafny ticket-project kind (D1 (b)); the 12 tickets and the 12 sealed fixtures deferred out of topic (e) (the user's decision) | adopted (DV7 W3, 2026-10-24) | DV7's W3 lane |
 | 416 | Q33's 20 open dev pairs: §35.4's Dafny source corrected (no prose in vericoding's dafny/dafnybench; dafny/humaneval with the HumanEval-Verus prompt instead), the draw pre-registered with a secret seed | adopted (DV7 W3, 2026-10-24) | DV7's W3 lane |
+| 417 | Q33's 12 dev prose items and the challenge's statement layout armed (the learner files, the frozen statement files for [[against]], the twins; items gated) | adopted (DV7 W3, 2026-10-24) | DV7's W3 lane |
 
 ## A. Holes and hole counting
 
@@ -4154,4 +4155,31 @@
   - the frozen Q15 oracles, run host-side as the admission check (D3), find its base clean and its statement not vacuous and faithful to itself.
   - No model is called.
 - **Where.** An open stratum, `bench/local/q/agentic/q33-dev/`. Forms ship with their source and licence in the header. The references, each a reference program and a `reference.toml` in the judge's form, live under `Solutions/` like the dev references.
+- **Result (2026-10-24, after the rule's commit d996529).** The 20 dev pairs are drawn and admitted (commit f15dfe7): 10 HumanEval-Verus pairs and 10 vericoding dafny/humaneval pairs, 20 distinct HumanEval problems.
+  - The Verus walk considered 56 members: 26 excluded under X0, 18 skipped by lab2pub's C0–C3, 2 not admitted, and 10 taken.
+  - The Dafny walk considered 33 members: 8 excluded under X0, 13 skipped by C0–C1 (11 for the licence), 2 not admitted, and 10 taken.
+  - The members not admitted are recorded as skips: their statements the frozen oracles could not settle against themselves, or whose base did not verify alone.
+  - The theme check counts these 20 cards as dev tags, and no sealed card shares one. Nothing was run through a model.
+- **Owner:** DV7's W3 lane.
+
+### Δ417 · Q33's dev prose items: the challenge's statement layout armed — adopted (DV7 W3, 2026-10-24; the coordinator approved the layout)
+- **The items (QPLAN §35.1–§35.2).** Six Dafny items, `Q33.H5d`–`H10d`, and six Verus items, `Q33.H5v`–`H10v`, over new subjects:
+  - an insertion point and the leading elements at most x;
+  - dropping leading zeros;
+  - a clause's truth value;
+  - a first run's length;
+  - a merge step;
+  - an ascending prefix.
+  Each is in Q15's Lab2Specs form: code and no specification, a client with one labelled assume and a commented use-site check, and an empty witness. Names and theme tags are clear of Q01–Q18, the dev sets and the sealed sets. The tags are recorded as dev tags (author archive), so a later sealed set must avoid them.
+- **The layout.**
+  - The learner's files are `Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblem.dfy` and the crate `q33_statement_problem/` (`src/lib.rs`), each shipping 6 tool-counted holes.
+  - The frozen statement files are `Q33_StatementProblemStatement.dfy` and `q33_statement_problem/src/statements.rs`.
+  - `Q33_Statement.toml` gains `[min_verified]` (24 and 23, from the twins) and two `[[against]]` pairs. The registry's Q33 record lists the three statement files with their sha256, gates the twelve items (`admitted = false`, minutes 0, fallbacks) and declares the two files' import tiers.
+- **A limit of `[[against]]`, recorded.** `specfreeze --against` compares the declarations the frozen file holds and has no open-spec mode, so a statement added to a prose target would read as a change. The frozen files therefore hold every declaration but the six prose targets in each language. The targets' signatures and code are checked by the use-site checks, /review-code and the grader's judge (its signature check), not by the challenge gate's freeze. Lab 2's prose-aware code check (`vcheck --lab-task`) is not part of `dvl.challenge`; adding it is a tools item for when Q33 leaves planned.
+- **Checks.**
+  - The reference twins under `Solutions/` verify (Dafny 24, Verus 23; 0 holes), pass `vaudit` and are stable (Dafny over both bundled Z3s).
+  - The shipped learner files hold exactly their 6 + 6 labelled holes and nothing else.
+  - Each frozen file pairs cleanly with both the learner file and the twin (`specfreeze --against`: 0 findings).
+  - `check_course_map` and `test_course_map` pass (401). `test_course_map`'s baseline now skips `Challenges/` as it skips `agents/`: the cases' scratch trees copy neither.
+- **Not done here.** The items' hidden references for the grader container are left for W1b with the judge's archive. The twins hold the reference statements now.
 - **Owner:** DV7's W3 lane.
