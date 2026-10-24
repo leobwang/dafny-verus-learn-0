@@ -19,36 +19,37 @@ function Deriv(r: Re, c: char): Re
       if Nullable(a) then Alt(Cat(Deriv(a, c), b), Deriv(b, c)) else Cat(Deriv(a, c), b)
     case Star(a) => Cat(Deriv(a, c), Star(a))
   }
-  function Derivs(r: Re,s: seq<char>): Re
+  function Derivs(r: Re, s: seq<char>): Re
     decreases |s|
-  { if |s| == 0 then r else Derivs(Deriv(r,s[0]),s[1..]) }
+  { if |s| == 0 then r else Derivs(Deriv(r, s[0]), s[1..]) }
 
   function SumNC(rs: seq<Re>): nat
     decreases |rs|
-  { if |rs| == 0 then 0 else SumNC(rs[..|rs|-1])+NodeCount(rs[|rs|-1]) }
+  { if |rs| == 0 then 0 else SumNC(rs[..|rs| - 1]) + NodeCount(rs[|rs| - 1]) }
 
   // item: R06.X1d
   // uses: lemma-decreases, induction-false
-  // Budget:5.5min. Prove the exact general statement.
-  lemma {:induction false} DerivsAppend(r: Re,u: seq<char>,v: seq<char>)
-    ensures Derivs(r,u+v) == Derivs(Derivs(r,u),v)
-    decreases |u|
+  /** **X1.** Budget 5.5 minutes. Prove the exact general statement, and
+      write the measure its recursion needs. */
+  lemma {:induction false} DerivsAppend(r: Re, u: seq<char>, v: seq<char>)
+    ensures Derivs(r, u + v) == Derivs(Derivs(r, u), v)
 
   // item: R06.X2d
   // uses: invariant
-  // Budget:5.5min. Keep the given loop; supply its invariant and bridge fact.
+  /** **X2.** Budget 5.5 minutes. Keep the given loop; supply its invariants
+      and the facts that connect them. */
   method SumNodeCounts(rs: seq<Re>) returns (n: nat)
     ensures n == SumNC(rs)
   {
     assume false;
-    n := 0;var i := 0;
+
+    n := 0;
+    var i := 0;
     while i < |rs|
-
-      decreases |rs|-i
+      decreases |rs| - i
     {
-
-      n := n+NodeCount(rs[i]);
-      i := i+1;
+      n := n + NodeCount(rs[i]);
+      i := i + 1;
     }
   }
 }

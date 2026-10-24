@@ -68,42 +68,28 @@ module RG_A1_Re {
 }
 
 // item: R06.P4d obligation
-// One-directional invariant. Derivative correctness is supplied explicitly
-// as a premise, so this prediction does not depend on your unfinished H1.
-// The loop uses that relation at each step, without importing an H1 proof.
-// FAILS c
+// A loop with a one-directional invariant: n is at least the number of
+// regexes visited, since every regex has at least one node. Which of the
+// labelled assertions [a]-[d] fail?
+// FAILS d
 module R06_LoopPrediction {
   import opened RG_A1_Re
-function Deriv(r: Re, c: char): Re
-    decreases r
+
+  lemma OneWayCountR06(rs: seq<Re>)
   {
-    match r
-    case Empty => Empty
-    case Eps => Empty
-    case Chr(d) => if c == d then Eps else Empty
-    case Alt(a, b) => Alt(Deriv(a, c), Deriv(b, c))
-    case Cat(a, b) =>
-      if Nullable(a) then Alt(Cat(Deriv(a, c), b), Deriv(b, c)) else Cat(Deriv(a, c), b)
-    case Star(a) => Cat(Deriv(a, c), Star(a))
-  }
-  lemma OneWayLoopR06(r: Re,s: seq<char>)
-    requires forall q: Re,c: char,t: seq<char> :: Matches(Deriv(q,c),t) <==> Matches(q,[c]+t)
-  {
-    var cur := r;var i := 0;
-    assert s[0..] == s;
-    assert Matches(r,s) ==> Matches(cur,s[i..]); // [a]
-    while i < |s|
-      invariant 0 <= i <= |s|
-      invariant Matches(r,s) ==> Matches(cur,s[i..])
-      decreases |s|-i
+    var n := 0;
+    var i := 0;
+    assert n >= i; // [a]
+    while i < |rs|
+      invariant 0 <= i <= |rs|
+      invariant n >= i
+      decreases |rs| - i
     {
-      assert Matches(Deriv(cur,s[i]),s[i+1..]) <==> Matches(cur,[s[i]]+s[i+1..]);
-      assert [s[i]]+s[i+1..] == s[i..];
-      cur := Deriv(cur,s[i]);i := i+1;
-      assert Matches(r,s) ==> Matches(cur,s[i..]); // [b]
+      n := n + NodeCount(rs[i]);
+      i := i + 1;
+      assert n >= i; // [b]
     }
-    assert s[i..] == [];
-    assert Matches(cur,[]) ==> Matches(r,s); // [c]
-    assert Matches(r,s) ==> Matches(cur,[]); // [d]
+    assert n >= |rs|; // [c]
+    assert n == |rs|; // [d]
   }
 }

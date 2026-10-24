@@ -18,9 +18,12 @@ use rg_re_a1::*;
 use rg_re_a1b::*;
 verus! {
 // item: R06.A1v
-pub proof fn lemma_backwards_correct(r: Re,s: Seq<char>)
-    ensures matches(backwards(r),backwards_str(s)) <==> matches(r,s),
-{ #[verifier::proof_note("R06.A1v")] assume(false); }
+pub proof fn lemma_backwards_correct(r: Re, s: Seq<char>)
+    ensures
+        matches(backwards(r), backwards_str(s)) <==> matches(r, s),
+{
+    #[verifier::proof_note("R06.A1v")] assume(false);
+}
 }
 
 /* DECOMPOSITION — learner-owned,22 min after the run.

@@ -70,19 +70,19 @@ module RG_A1_Re {
 // after: R06.P3dv
 module R06_MeasurePrediction {
   import opened RG_A1_Re
-  lemma StarRepeat(r: Re,s: seq<char>)
+  lemma StarRepeat(r: Re, s: seq<char>)
     requires r == Star(Chr('a'))
     requires forall k :: 0 <= k < |s| ==> s[k] == 'a'
-    ensures Matches(r,s)
+    ensures Matches(r, s)
     decreases r
   {
     if s != [] {
       forall k | 0 <= k < |s[1..]| ensures s[1..][k] == 'a' {
-        assert s[1..][k] == s[k+1];
+        assert s[1..][k] == s[k + 1];
       }
-      StarRepeat(r,s[1..]);
+      StarRepeat(r, s[1..]);
       assert s[..1] == ['a'];
-      assert Matches(Chr('a'),s[..1]);
+      assert Matches(Chr('a'), s[..1]);
     }
   }
 }

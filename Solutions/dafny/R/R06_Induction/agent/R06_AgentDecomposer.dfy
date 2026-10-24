@@ -16,8 +16,6 @@ module R06_AgentDecomposer {
   import opened RG_A1_Re
   import opened RG_A1b_Facts
 
-
-
   lemma BackwardsStrAppend(u: seq<char>, v: seq<char>)
     ensures BackwardsStr(u + v) == BackwardsStr(v) + BackwardsStr(u)
     decreases |u|

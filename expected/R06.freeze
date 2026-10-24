@@ -20,7 +20,7 @@ open_specs = ["R06_Induction.StarUnfold"]
 "R06_Induction.AllSame" = "73474f7af79c5df87b372b522084bc1f7076405b9b1461f8a0686cd5db3dfd40"
 "R06_Induction.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
 "R06_Induction.DerivBase" = "3836a8b0b87207c5c1815ea4930adfc7a3ed5610f1d1ebd1111454424cde2d5d"
-"R06_Induction.DerivCorrect" = "76d5aa636653caa7dd0e2cf5a03068b0b0f241b4e4db0930a416f6fb0007939c"
+"R06_Induction.DerivCorrect" = "9b49af53739e61687bb4d21f48b39e16a67452f5e41bb4f35e96f759e1125a83"
 "R06_Induction.DerivMatch" = "0460bf5d0302a9bb3bfa460072bf781d7ac25e705a98373a89797d94662b84d4"
 "R06_Induction.StarUnfold" = "488bf0a76a8ecdd07c2f450322594248d868f72ade5608d7537a082c10d5e039"
 "R06_Induction.StarUnfoldRefuted" = "821ce4c1cfbf4807bfb1d8a74a104c579407a10f235ac8e73ad3a8fbd1d99558"
@@ -47,7 +47,7 @@ open_specs = ["lemma_star_unfold"]
 "deriv_exec" = "78829b30ec63d9bb7cb60f374ecd789ddf25d59afe00770a26fa788fc58fa42c"
 "deriv_match" = "8b7cb03ef33e7a318d651a59e038d0112a26b5ae590a91d85414b4b9c18b2a9d"
 "lemma_deriv_base" = "e2850b7ca76cacc3d3ff1fd967436df06ac33bd90d091fbae959cf5a427a3e95"
-"lemma_deriv_correct" = "03ccbc9e417ab83b07d428723e50691850c6261bb1fe8b7e6bd62c1b3dd3fb0b"
+"lemma_deriv_correct" = "8e25f0f56ec604a1b7aec36a8271f69aed71f25853b78f476a256ce0e9f77d25"
 "lemma_star_unfold" = "3f9f8ae5aa7d26d4a889c5ea78b643504572598c49b6c644842f5894e9437a6b"
 "lemma_star_unfold_refuted" = "be6b679f7c11bd0cd4e74dbb9aeaa11659b3412bff0488cf2fc3960bb30e97f8"
 [file.spec_clauses]
@@ -74,8 +74,7 @@ path = "specimens/R06/P4d.dfy.specimen"
 lang = "d"
 open_bodies = []
 [file.statements]
-"R06_LoopPrediction.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
-"R06_LoopPrediction.OneWayLoopR06" = "4c2c7cb017e4a58e8f7b7ff77ba75bc85dc4f65558ab00cb3e12edc552a566f3"
+"R06_LoopPrediction.OneWayCountR06" = "112a3efea8d2a117b8207d90ce660607a2d548f175102d3d6d8ed57ed6448659"
 "RG_A1_Re.Backwards" = "9c13c7719addc5820b7662e9d05661afb925bcdfe516d4108b31dbae1ba4e951"
 "RG_A1_Re.BackwardsStr" = "b0760ab21b0aa323f3de151cf311122a8e350eec25179e5a4ad54d2667b5a4d2"
 "RG_A1_Re.Matches" = "cb91e8f44e58a8584709bc5a269bfd256d27d178ef2cda10ba8a8d8cdd491b3e"
@@ -92,13 +91,11 @@ open_bodies = []
 "backwards" = "78c191a1119cf217e9705f6f98d9a2193c2cf89d3b82cf6106effc433061ae8e"
 "backwards_str" = "9867a368be370174f2376e5b443096176373ea611f9dcc9432961607b7cfc242"
 "copy_re" = "48bc325109582a5f978d78a1d3d35fb268f27918d1b02b722092efe9cbce11d0"
-"deriv" = "a344b031de36ef18bd405ae79241778e42d82cfcdb5ee06b2e5e134c03b6d62c"
-"deriv_exec" = "78829b30ec63d9bb7cb60f374ecd789ddf25d59afe00770a26fa788fc58fa42c"
 "is_nullable" = "206862626c0671195e85d24f890bb2466d1145946293d8969bf8adaedc66d704"
 "matches" = "6edbb630a7b670a86c969181a53c277def8f83ea5bea37d960cf3123f4fbd356"
 "node_count" = "46cd97f8826d59b2f7ef92aa740db43b9e5731b93170041d5ae1c90061b33cdb"
 "nullable" = "6d70e28b32cfa997286a3e32651aa017a0561784613429bb3c7bcd8136fe944c"
-"one_way_loop_r06" = "464debf60fe6f1867d440f7ebb3a24aeb4abf3fbd43c158de5397773a0b349f3"
+"one_way_count_r06" = "d4ecf25d38840fe09e49c26171dcc9ce36c0646d5ebb7577ac3c83243b80c967"
 
 [[file]]
 path = "specimens/R06/card-c1d.dfy.specimen"
@@ -213,7 +210,7 @@ frozen_levers = ["R06_Checkpoint.DerivsAppend {:induction false}"]
 [file.statements]
 "R06_Checkpoint.Deriv" = "ab1cfb8a09f82dc04f19f7263b60a0f80eb88bd26b8e0cc760f99330167e9cfa"
 "R06_Checkpoint.Derivs" = "715792305020b65cc8b41b9789f4f166e9cd5ade3ea1a7b87a6fe71be03e72ce"
-"R06_Checkpoint.DerivsAppend" = "033b9af05da41449ca34501563f6dd0c1809da4fb5bbeaea3c33b8b239853fa5"
+"R06_Checkpoint.DerivsAppend" = "a406f43487f82435347e63f4d5e0fb92f516b353f87d58d0e599f0f88196c224"
 "R06_Checkpoint.SumNC" = "674e9eea880350de75a9812362352382ebf6b51873958a3446b8048894a92938"
 "R06_Checkpoint.SumNodeCounts" = "cb4cb25b4c6bcae6f6621af76c572eeef03e97510ac76b7e3301e300eeb4065f"
 
@@ -224,7 +221,7 @@ open_bodies = []
 [file.statements]
 "deriv" = "a344b031de36ef18bd405ae79241778e42d82cfcdb5ee06b2e5e134c03b6d62c"
 "derivs" = "94bb44f5b44803f3b235eebef532e91df9e60a5361e01078531d0606e1abdf03"
-"lemma_derivs_append" = "7b5d298d86005d7d902321b4312ece415a3e0145d16140fbe0207634a82ae348"
+"lemma_derivs_append" = "48aa4605b99a8cbc0153cde2af834848b84a89020813f455864ac96189dd4e2c"
 "lemma_node_bounded_by_sum" = "e887400ac7cbc6b7736e2a7f2213dd395a8dd6ad4fd0b55d617343b1e17d63a9"
 "lemma_sum_nc_prefix" = "b5a0b18766ceee70ec581f101136dc33178b5176dca7d9a6cc68346141b2c9a6"
 "node_count_exec" = "6d6e86b54b0cc618e4371b025d96856cecf44bdb118e259344bdd79cf5e12dbe"

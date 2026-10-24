@@ -1,5 +1,11 @@
 module R06_CalcCard {
   lemma CalcBridgeR06(n: int) {
-    calc { n+1; == { assert false; } n+1; }
+    calc {
+      n + 1;
+      == {
+        assert false;
+      }
+      n + 1;
+    }
   }
 }

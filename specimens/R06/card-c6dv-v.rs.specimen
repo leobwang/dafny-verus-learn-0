@@ -4,6 +4,14 @@ use vstd::prelude::*;
 use vstd::calc;
 verus! {
 proof fn shift_r06(n: int)
-    ensures n+2 == 2+n,
-{ calc! { (==) n+2; { } 2+n; } }
+    ensures
+        n + 2 == 2 + n,
+{
+    calc! {
+        (==) n + 2;
+        {
+        }
+        2 + n;
+    }
+}
 }

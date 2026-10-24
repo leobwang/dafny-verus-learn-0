@@ -122,67 +122,28 @@ pub fn copy_re(r: &Re) -> (out: Re)
 } // verus!
 
 // item: R06.P5v obligation
-// Same loop question as P4d, with the supplied derivative relation as an
-// explicit premise. No later given layer or learner H1 proof is imported.
-// FAILS c
-use vstd::prelude::*;
+// The same loop question as P4d, over a vector, with n a ghost counter.
+// FAILS d
 verus! {
-pub open spec fn deriv(r: Re, c: char) -> Re
-    decreases r,
-{
-    match r {
-        Re::Empty => Re::Empty,
-        Re::Eps => Re::Empty,
-        Re::Chr(d) => if c == d { Re::Eps } else { Re::Empty },
-        Re::Alt(a, b) => Re::Alt(Box::new(deriv(*a, c)), Box::new(deriv(*b, c))),
-        Re::Cat(a, b) => if nullable(*a) {
-            Re::Alt(Box::new(Re::Cat(Box::new(deriv(*a, c)), b)), Box::new(deriv(*b, c)))
-        } else {
-            Re::Cat(Box::new(deriv(*a, c)), b)
-        },
-        Re::Star(a) => Re::Cat(Box::new(deriv(*a, c)), Box::new(Re::Star(a))),
-    }
-}
-pub fn deriv_exec(r: &Re, c: char) -> (out: Re)
-    ensures
-        out == deriv(*r, c),
-    decreases r,
-{
-    match r {
-        Re::Empty => Re::Empty,
-        Re::Eps => Re::Empty,
-        Re::Chr(d) => if c == *d { Re::Eps } else { Re::Empty },
-        Re::Alt(a, b) => Re::Alt(Box::new(deriv_exec(a, c)), Box::new(deriv_exec(b, c))),
-        Re::Cat(a, b) => if is_nullable(a) {
-            Re::Alt(
-                Box::new(Re::Cat(Box::new(deriv_exec(a, c)), Box::new(copy_re(b)))),
-                Box::new(deriv_exec(b, c)),
-            )
-        } else {
-            Re::Cat(Box::new(deriv_exec(a, c)), Box::new(copy_re(b)))
-        },
-        Re::Star(a) => Re::Cat(Box::new(deriv_exec(a, c)), Box::new(Re::Star(Box::new(copy_re(a))))),
-    }
-}
-fn one_way_loop_r06(r: &Re,s: &Vec<char>)
-    requires forall|q:Re,c:char,t:Seq<char>| #[trigger] matches(deriv(q,c),t) <==> matches(q,seq![c]+t),
-{
-    let mut cur=copy_re(r);let mut i:usize=0;
-    assert(s@.subrange(0,s@.len() as int) =~= s@);
-    assert(matches(*r,s@) ==> matches(cur,s@.subrange(i as int,s@.len() as int))); // [a]
-    while i < s.len()
-        invariant 0 <= i <= s.len(),
-            matches(*r,s@) ==> matches(cur,s@.subrange(i as int,s@.len() as int)),
-            forall|q:Re,c:char,t:Seq<char>| #[trigger] matches(deriv(q,c),t) <==> matches(q,seq![c]+t),
-        decreases s.len()-i,
+
+fn one_way_count_r06(rs: &Vec<Re>) {
+    let ghost mut n: int = 0;
+    let mut i: usize = 0;
+    assert(n >= i); // [a]
+    while i < rs.len()
+        invariant
+            i <= rs.len(),
+            n >= i,
+        decreases rs.len() - i,
     {
-        assert(matches(deriv(cur,s@[i as int]),s@.subrange(i+1,s@.len() as int)) == matches(cur,seq![s@[i as int]]+s@.subrange(i+1,s@.len() as int)));
-        assert(seq![s@[i as int]]+s@.subrange(i+1,s@.len() as int) =~= s@.subrange(i as int,s@.len() as int));
-        cur=deriv_exec(&cur,s[i]);i=i+1;
-        assert(matches(*r,s@) ==> matches(cur,s@.subrange(i as int,s@.len() as int))); // [b]
+        proof {
+            n = n + node_count(rs@[i as int]);
+        }
+        i = i + 1;
+        assert(n >= i); // [b]
     }
-    assert(s@.subrange(i as int,s@.len() as int) =~= Seq::<char>::empty());
-    assert(matches(cur,Seq::<char>::empty()) ==> matches(*r,s@)); // [c]
-    assert(matches(*r,s@) ==> matches(cur,Seq::<char>::empty())); // [d]
+    assert(n >= rs.len()); // [c]
+    assert(n == rs.len()); // [d]
 }
-}
+
+} // verus!

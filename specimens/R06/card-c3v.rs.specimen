@@ -1,7 +1,11 @@
 // after: R06.P3dv
 use vstd::prelude::*;
 verus! {
-proof fn descend_r06(n: nat,k: nat)
+proof fn descend_r06(n: nat, k: nat)
     decreases k,
-{ if n > 0 { descend_r06((n-1) as nat,k); } }
+{
+    if n > 0 {
+        descend_r06((n - 1) as nat, k);
+    }
+}
 }

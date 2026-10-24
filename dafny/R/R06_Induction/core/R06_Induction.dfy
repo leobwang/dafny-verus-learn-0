@@ -31,10 +31,14 @@ module R06_Induction {
   // item: R06.T1d
   // pair: R06.T1v
   // uses: invariant
-  // Closed book before reading; implement with a while loop.
+  /** **T1.** Closed book, before reading: implement `AllNullable` with a
+      `while` loop. What must the invariant say about the prefix of `rs` the
+      loop has visited, and which quantity does each iteration make smaller? */
   method AllNullable(rs: seq<Re>) returns (b: bool)
     ensures b <==> forall i :: 0 <= i < |rs| ==> Nullable(rs[i])
-  { assume false; }
+  {
+    assume false;
+  }
 
   // item: R06.P3dv verdict
   // StarRepeat calls itself on s[1..] with r unchanged, naming the split.
@@ -45,28 +49,37 @@ module R06_Induction {
   // calling derivative correctness on the prefixes needed. D:<v> V:<v>.
   // SLOT: CHECK P6dv
   // item: R06.W1d
-  lemma DerivBase(r: Re,c: char,s: seq<char>)
+  lemma DerivBase(r: Re, c: char, s: seq<char>)
     requires r.Empty? || r.Eps? || r.Chr?
-    ensures Matches(Deriv(r,c),s) <==> Matches(r,[c]+s)
+    ensures Matches(Deriv(r, c), s) <==> Matches(r, [c] + s)
   {
     if r.Chr? {
-      var w := [c]+s;
-      if w == [r.c] { assert w[1..] == s; assert w[0] == c; }
-      if s == [] { assert w == [c]; }
+      var w := [c] + s;
+      if w == [r.c] {
+        assert w[1..] == s;
+        assert w[0] == c;
+      }
+      if s == [] {
+        assert w == [c];
+      }
     }
   }
   // item: R06.W2d
-  method AllSame(s: seq<char>,c: char) returns (b: bool)
+  method AllSame(s: seq<char>, c: char) returns (b: bool)
     ensures b <==> forall j :: 0 <= j < |s| ==> s[j] == c
   {
-    b := true; var i := 0;
+    b := true;
+    var i := 0;
     while i < |s|
       invariant 0 <= i <= |s|
       invariant b <==> forall j :: 0 <= j < i ==> s[j] == c
-      decreases |s|-i
-    { b := b && s[i] == c; i := i+1; }
+      decreases |s| - i
+    {
+      b := b && s[i] == c;
+      i := i + 1;
+    }
   }
-  // item: R06.C1d write:calc
+  // item: R06.C1d recognise:calc
   // A calc chain names expressions and justifies each relation's bridge.
   // item: R06.C2d write:invariant
   // The invariant is the loop-counter induction hypothesis.
@@ -79,44 +92,74 @@ module R06_Induction {
 
   // item: R06.H1d
   // pair: R06.H1v
-  // uses: lemma-decreases, calc, induction-false
-  // The measure is yours; prove the full datatype, including nullable Cat and Star.
-  lemma {:induction false} DerivCorrect(r: Re,c: char,s: seq<char>)
-    ensures Matches(Deriv(r,c),s) <==> Matches(r,[c]+s)
+  // uses: lemma-decreases, induction-false
+  /** **H1.** The flagship: the derivative is correct. `Deriv(r, c)` matches
+      `s` exactly when `r` matches `[c] + s`, for every regex, a nullable left
+      operand of `Cat` and `Star` included. `{:induction false}` makes every
+      induction hypothesis a recursive call you write, and the measure is
+      yours: write the `decreases` clause the recursion needs. Which sub-regex
+      does each case recurse on, and which slices of `[c] + s` match the two
+      sides of a `Cat`? */
+  lemma {:induction false} DerivCorrect(c: char, s: seq<char>, r: Re)
+    ensures Matches(Deriv(r, c), s) <==> Matches(r, [c] + s)
+  // Hint(1): case on `r`; for `Cat` and `Star`, prove each direction of the
+  //    `<==>` on its own, taking the split a match supplies with `:|`.
+  // Hint(2): a split of `[c] + s` at `i > 0` is a split of `s` at `i - 1`:
+  //    state both slice facts, then recurse on `a` with `s[..i - 1]`.
 
   // item: R06.H2d
   // pair: R06.H2v
   // uses: invariant
-  // Keep the loop, measure and correctness call; supply annotations and bridges.
-  method DerivMatch(r: Re,s: seq<char>) returns (b: bool)
-    ensures b == Matches(r,s)
+  /** **H2.** The matcher loop: `DerivMatch` takes one derivative per
+      character of `s` and answers `Nullable` of the result. The loop, its
+      measure and the proof call in its body are given and must stay; the
+      invariants and the facts that connect them are yours. What does the
+      invariant say about `cur` and the unread suffix `s[i..]`, and what does
+      it give you when `i == |s|`? */
+  method DerivMatch(r: Re, s: seq<char>) returns (b: bool)
+    ensures b == Matches(r, s)
   {
     assume false;
-    var cur := r; var i := 0;
+
+    var cur := r;
+    var i := 0;
     while i < |s|
-
-      decreases |s|-i
+      decreases |s| - i
     {
-      DerivCorrect(cur,s[i],s[i+1..]);
-
-      cur := Deriv(cur,s[i]);
-      i := i+1;
+      DerivCorrect(s[i], s[i + 1..], cur);
+      cur := Deriv(cur, s[i]);
+      i := i + 1;
     }
-
     b := Nullable(cur);
   }
+  // Hint(1): the invariant is an induction hypothesis on `i`: `cur` matches
+  //    the rest of `s` exactly when `r` matches all of `s`.
+  // Hint(2): the body's call is about `[s[i]] + s[i + 1..]`; say that it is
+  //    `s[i..]`, and after the loop relate `Nullable(cur)` to the empty rest.
 
   // item: R06.H3d
   // pair: R06.H3v
+  /** **H3.** Refute: unfolding a star once is not always valid. Name a regex
+      `a` and a string `s` that `Star(a)` matches and `Cat(a, Star(a))` does
+      not. Which string does every star match, and which `a` can never match
+      it? */
   lemma StarUnfoldRefuted()
-    ensures exists a: Re,s: seq<char> :: Matches(Star(a),s) && !Matches(Cat(a,Star(a)),s)
+    ensures exists a: Re, s: seq<char> :: Matches(Star(a), s) && !Matches(Cat(a, Star(a)), s)
+  // Hint(1): a star matches the empty string by definition.
+  // Hint(2): a `Cat` matches the empty string only if both sides do.
 
   // item: R06.H4d
   // pair: R06.H4v
-  // uses: calc
-  // REPAIR: add the weakest sufficient requires; do not narrow more than needed.
-  lemma StarUnfold(a: Re,s: seq<char>)
-    ensures Matches(Star(a),s) <==> Matches(Cat(a,Star(a)),s)
+  /** **H4.** Repair, then prove: H3 refuted this unfolding for some `a` and
+      `s`. Add the weakest `requires` under which it holds, no stronger one,
+      and prove the equivalence. Which inputs did H3's counterexample use, and
+      why is every other input safe? */
+  lemma StarUnfold(a: Re, s: seq<char>)
+    ensures Matches(Star(a), s) <==> Matches(Cat(a, Star(a)), s)
+  // Hint(1): exclude exactly what H3's counterexample used: the empty string
+  //    with a non-nullable `a`.
+  // Hint(2): prove the two directions on their own; a `Cat` split at 0 is the
+  //    one case that needs more than the star's definition.
 
   /* CALIBRATION — estimated / actual minutes, first-try confidence,
      mathematical idea / native obstacle / correction: ...

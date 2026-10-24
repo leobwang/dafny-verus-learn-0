@@ -5,7 +5,9 @@ module R06_InvariantCard {
   {
     i := 0;
     while i < n
-      decreases n-i
-    { i := i+1; }
+      decreases n - i
+    {
+      i := i + 1;
+    }
   }
 }

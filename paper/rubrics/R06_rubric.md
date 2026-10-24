@@ -6,12 +6,12 @@ remains D45 debt, not a consequence of fixture compilation.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R06_solutions.tex  sha256 00f97ab79978fb81dc6798588e652685249049b1ccd79e8d78c4573770bb936b
 paper/R06_problems.tex  sha256 bfd8cb435bb5a4d92796f45e56828c650732c28de5cf0264c0c3a9d7c781cbfd
-Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy  sha256 a8617036828c37231ef205f7a86d832f790a53700112620bda784cd42de5d93f
-Solutions/verus/r/r06_induction/src/lib.rs  sha256 91ce38ff1da3f1e589dd9a853944af8c521a3195919ccbc9dc6eaa1d5966310d
-Solutions/dafny/R/R06_Induction/exit/R06_Checkpoint.dfy  sha256 d046e63feacc8fddb3d95b278f3db78eab7a66cd1fa73e5600122fb87efe8711
-Solutions/verus/r/r06_induction/src/exit.rs  sha256 debd8706c587b99187bf76911d349a2d6d02e1409730d36c4538be2880135534
-Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy  sha256 50a1bd075a4df788eb6654051bda28d4cb89dec83ec686d3a676082afdd0c1be
-Solutions/verus/r/r06_induction/src/agent.rs  sha256 858d06bf582d143e700f404cd57eb913c8d67a4765b3647ae5a6e6a844b4ad69
+Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy  sha256 c724c7dbc4783067d17ed08f5d2eb52149eb2d2caf55b5bcf7b43e4c072f319a
+Solutions/verus/r/r06_induction/src/lib.rs  sha256 c418832187848e630674f1a8b2bd5b74f72f7d37207af719a127b3632c1ca165
+Solutions/dafny/R/R06_Induction/exit/R06_Checkpoint.dfy  sha256 5e8e9f92920ebe0b1b3daf5b96497e6c4b2a23d789c5f36d90b7881fccec4aa0
+Solutions/verus/r/r06_induction/src/exit.rs  sha256 8f8d4c9a01a5e2f442bc99b93f009a0b65e0ebfda6f0e9b824743745b9d15ee7
+Solutions/dafny/R/R06_Induction/agent/R06_AgentDecomposer.dfy  sha256 930669c81be97c34b51a3e269843957be36dc9e1ebc60609763c876e3a60fed9
+Solutions/verus/r/r06_induction/src/agent.rs  sha256 266a8be5306f5ba20c8a8e538226f79a94ce05ebdbc02f978845215013c69b49
 
 ## Verifier anchors
 

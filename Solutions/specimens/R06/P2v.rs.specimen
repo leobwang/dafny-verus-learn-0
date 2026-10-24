@@ -142,6 +142,6 @@ pub open spec fn deriv(r: Re, c: char) -> Re
     }
 }
 proof fn deriv_value_r06() {
-    assert(nullable(deriv(deriv(Re::Cat(Box::new(Re::Star(Box::new(Re::Chr('a')))),Box::new(Re::Chr('b'))),'a'),'b')) == true) by (compute_only);
+    assert(nullable(deriv(deriv(Re::Cat(Box::new(Re::Star(Box::new(Re::Chr('a')))), Box::new(Re::Chr('b'))), 'a'), 'b')) == true) by (compute_only);
 }
 }

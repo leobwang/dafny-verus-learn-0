@@ -17,7 +17,7 @@ function Deriv(r: Re, c: char): Re
   // item: R06.P1d value
   // Answer form: constructors (A1 term, no spaces).
   @Test method DerivShapeR06() {
-    var pattern := Cat(Star(Chr('a')),Chr('b'));
+    var pattern := Cat(Star(Chr('a')), Chr('b'));
     // SLOT: expect Deriv(pattern,'a') == ???;
   }
 }

@@ -1,6 +1,10 @@
 // after: R06.P3dv
 module R06_LemmaMeasureCard {
-  lemma DescendR06(n: nat,k: nat)
+  lemma DescendR06(n: nat, k: nat)
     decreases k
-  { if n > 0 { DescendR06(n-1,k); } }
+  {
+    if n > 0 {
+      DescendR06(n - 1, k);
+    }
+  }
 }

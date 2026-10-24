@@ -2,6 +2,13 @@
 // after: R06.P6dv
 module R06_CalcSyntaxCard {
   lemma ShiftR06(n: int)
-    ensures n+2 == 2+n
-  { calc { n+2; == { } 2+n; } }
+    ensures n + 2 == 2 + n
+  {
+    calc {
+      n + 2;
+      == {
+      }
+      2 + n;
+    }
+  }
 }

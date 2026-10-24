@@ -1114,25 +1114,25 @@ Header counts: **10 holes**, **2 test-out items** (holes), **6 predictions**, **
 | R06.P6dv | P | verdict | — | — | A shortcut for stars: `lemma StarShortcut(a: Re, c: char, s: seq<char>) ensures Matches(Star(a), [c] + s) <==> Matches(Star(Deriv(a, c)), s)`, whose body calls `DerivCorrect(a, c, …)` on every prefix of `s` it needs. `D:<v> V:<v>` | slot · block |
 | R06.P1d | P | value | — | — | `dafny/checks/R06_checks.dfy`: `expect Deriv(Cat(Star(Chr('a')), Chr('b')), 'a') == ???;`. Answer form: the term in the constructor syntax of A1, no spaces | check-unit slot |
 | R06.P2v | P | value | — | — | `specimens/R06/P2v.rs.specimen`: `assert(nullable(deriv(deriv(R, 'a'), 'b')) == ???) by (compute_only);` for the pattern `R` of P1d. Answer form `true` or `false` | specimen slot |
-| R06.P4d | P | obligation | — | — | `specimens/R06/P4d.dfy.specimen`: a loop that advances `cur := Deriv(cur, s[i])` over `s` with the invariant `Matches(r, s) ==> Matches(cur, s[i..])` (and the bounds), the body's proof call as H2 ships it, and after the loop two labelled asserts. Labels: [a] the invariant on entry, [b] the invariant preserved, [c] `Matches(cur, []) ==> Matches(r, s)`, [d] `Matches(r, s) ==> Matches(cur, [])`. Which fail? | specimen slot |
+| R06.P4d | P | obligation | — | — | `specimens/R06/P4d.dfy.specimen` (D89, 2026-10-24): a loop that sums `NodeCount` over a sequence of regexes with the one-directional invariant `n >= i` (and the bounds). Labels: [a] `n >= i` on entry, [b] `n >= i` at the end of the body, [c] `n >= |rs|` after the loop, [d] `n == |rs|` after the loop. Which fail? | specimen slot |
 | R06.P5v | P | obligation | — | — | `specimens/R06/P5v.rs.specimen`: the same for the Verus matcher | specimen slot |
 | R06.W1d | W | — | — | — | `lemma DerivBase(r: Re, c: char, s: seq<char>) requires r.Empty? \|\| r.Eps? \|\| r.Chr? ensures Matches(Deriv(r, c), s) <==> Matches(r, [c] + s)`: the base cases, worked | given, live |
 | R06.W1v | W | — | — | — | `proof fn lemma_deriv_base(…)`, the same | given, live |
 | R06.W2d | W | — | — | — | a loop with its invariant read as the induction hypothesis of an induction on the counter (`AllSame(s, c)`: every character of `s` is `c`) | given, live |
 | R06.W2v | W | — | — | — | the same over `&Vec<char>` | given, live |
-| R06.C1d / C1v | C | `write:calc` | — | — | card: `calc` / `calc!` | given |
+| R06.C1d / C1v | C | `recognise:calc` (D86) | — | — | card: `calc` / `calc!` | given |
 | R06.C2d / C2v | C | `write:invariant` | — | — | card: loop invariants and loop `decreases` | given |
 | R06.C3d / C3v | C | `write:lemma-decreases` | — | — | card: a measure on a recursive lemma / proof fn | given |
 | R06.C4d | C | `write:induction-false` | — | — | card: `{:induction false}` and the recursive call it makes you write | given |
 | R06.C5d | C | `recognise:induction-auto` | — | — | card: Dafny's automatic induction, stated (a fact this track does not ask you to predict) | given |
-| R06.H1d | H | — | R06.H1v | lemma-decreases, calc, induction-false | **The flagship.** `lemma {:induction false} DerivCorrect(r: Re, c: char, s: seq<char>) ensures Matches(Deriv(r, c), s) <==> Matches(r, [c] + s)` (the measure is yours) | bodyless lemma · `{:induction false}` · gate pending |
-| R06.H1v | H | — | R06.H1d | lemma-decreases, calc | `pub proof fn lemma_deriv_correct(r: Re, c: char, s: Seq<char>) ensures matches(deriv(r, c), s) <==> matches(r, seq![c] + s)` (the measure is yours) | `proof_note` assume · none · gate pending |
+| R06.H1d | H | — | R06.H1v | lemma-decreases, induction-false | **The flagship.** `lemma {:induction false} DerivCorrect(c: char, s: seq<char>, r: Re) ensures Matches(Deriv(r, c), s) <==> Matches(r, [c] + s)` (the measure is yours; D87: the regex last, so Dafny's default measure fails; A2 re-supplies it as `DerivCorrect(r, c, s)`) | bodyless lemma · `{:induction false}` · gate pending |
+| R06.H1v | H | — | R06.H1d | lemma-decreases | `pub proof fn lemma_deriv_correct(c: char, s: Seq<char>, r: Re) ensures matches(deriv(r, c), s) <==> matches(r, seq![c] + s)` (the measure is yours) | `proof_note` assume · none · gate pending |
 | R06.H2d | H | — | R06.H2v | invariant | **The matcher loop.** `method DerivMatch(r: Re, s: seq<char>) returns (b: bool) ensures b == Matches(r, s)`: the loop (one `Deriv` per character, then `Nullable`), its `decreases` and the proof call in its body are given; the loop invariants and the facts after the loop are yours | annotation hole · none · gate pending |
 | R06.H2v | H | — | R06.H2d | invariant | `pub fn deriv_match(r: &Re, s: &Vec<char>) -> (b: bool) ensures b == matches(*r, s@)`, the same | annotation hole · none · gate pending |
 | R06.H3d | H | — | R06.H3v | — | **Refute.** `lemma StarUnfoldRefuted() ensures exists a: Re, s: seq<char> :: Matches(Star(a), s) && !Matches(Cat(a, Star(a)), s)` | bodyless lemma · none · gate pending |
 | R06.H3v | H | — | R06.H3d | — | `proof fn lemma_star_unfold_refuted()`, the same | `proof_note` assume · none · gate pending |
-| R06.H4d | H | — | R06.H4v | calc | **Repair and prove.** `lemma StarUnfold(a: Re, s: seq<char>) ensures Matches(Star(a), s) <==> Matches(Cat(a, Star(a)), s)`: add the hypothesis that makes the claim true, and no stronger one (the `requires` is open in the freeze pin, Δ160), then prove it | bodyless lemma (`requires` open) · none · gate pending |
-| R06.H4v | H | — | R06.H4d | calc | `proof fn lemma_star_unfold(a: Re, s: Seq<char>)`, the same | `proof_note` assume (`requires` open) · none · gate pending |
+| R06.H4d | H | — | R06.H4v | — | **Repair and prove.** `lemma StarUnfold(a: Re, s: seq<char>) ensures Matches(Star(a), s) <==> Matches(Cat(a, Star(a)), s)`: add the hypothesis that makes the claim true, and no stronger one (the `requires` is open in the freeze pin, Δ160), then prove it | bodyless lemma (`requires` open) · none · gate pending |
+| R06.H4v | H | — | R06.H4d | — | `proof fn lemma_star_unfold(a: Re, s: Seq<char>)`, the same | `proof_note` assume (`requires` open) · none · gate pending |
 | R06.C6dv | C | `diverge:r06-c6` | — | — | divergence card (its topic is named in the card). **Final section** | given |
 | R06.A1d / A1v | A | — | — | — | `/contract R06` (decomposer) on the agent files, under R-v0 | contract |
 
@@ -1147,9 +1147,8 @@ Header counts: **10 holes**, **2 test-out items** (holes), **6 predictions**, **
 
 #### Constructs (registry)
 
-- `write_d = ["calc", "invariant", "lemma-decreases", "induction-false"]`, `write_v = ["calc", "invariant", "lemma-decreases"]` — 4 units (3 paired + 1 Dafny), 7 slugs.
-- `recognise_d = ["induction-auto"]`, `recognise_v = []`.
-- Checked uses (≥ 2 per language): calc d H1d, H4d · v H1v, H4v; invariant d T1d, H2d · v T1v, H2v; lemma-decreases d H1d, X1d · v H1v, X1v; induction-false d H1d, X1d (the checkpoint items' `uses:` lines are in the author notes).
+- `write_d = ["invariant", "lemma-decreases", "induction-false"]`, `write_v = ["invariant", "lemma-decreases"]`; `recognise_d = ["induction-auto", "calc"]`, `recognise_v = ["calc"]` (D86: no hole needs a `calc` chain; D87: every measure the learner writes is needed).
+- Checked uses (≥ 2 per language): invariant d T1d, H2d · v T1v, H2v; lemma-decreases d H1d, X1d · v H1v, X1v (the checkpoint's measures are the learner's, D87); induction-false d H1d, X1d.
 
 #### Agentic file (decomposer)
 
@@ -1191,10 +1190,10 @@ units = ["dafny/R/R06_Induction/core", "verus/r/r06_induction"]
 layer = "A1b"
 langs = ["d", "v"]
 engines = ["contract"]
-write_d = ["calc", "invariant", "lemma-decreases", "induction-false"]
-write_v = ["calc", "invariant", "lemma-decreases"]
-recognise_d = ["induction-auto"]
-recognise_v = []
+write_d = ["invariant", "lemma-decreases", "induction-false"]
+write_v = ["invariant", "lemma-decreases"]
+recognise_d = ["induction-auto", "calc"]
+recognise_v = ["calc"]
 
 [module.imports]
 "dafny/given/R/RG_A1b_Facts.dfy" = "core"

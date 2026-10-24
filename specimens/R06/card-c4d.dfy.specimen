@@ -2,7 +2,7 @@
 module R06_ManualCallCard {
   ghost function StampR06(s: seq<int>): seq<int>
     decreases |s|
-  { if s == [] then [] else [s[0]]+StampR06(s[1..]) }
+  { if s == [] then [] else [s[0]] + StampR06(s[1..]) }
   lemma {:induction false} StampIdentityR06(s: seq<int>)
     ensures StampR06(s) == s
   { }
