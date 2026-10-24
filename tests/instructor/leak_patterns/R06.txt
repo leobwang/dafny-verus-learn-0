@@ -1,9 +1,9 @@
 # R06 protected H/T/X/A fragments; no prediction answers.
 
 # from Solutions/dafny/R/R06_Induction/core/R06_Induction.dfy
-# source: NullableCorrect(a); (R06.H1d)
+# source: NullableCorrect(a); / DerivCorrect(c, s, b); (R06.H1d; re-cut 2026-10-24 for D87's parameter order)
 # verified: solutions=1 public=0
-NullableCorrect\s*\(\s*a\s*\)\s*;\s*DerivCorrect\s*\(\s*b\s*,\s*c\s*,\s*s\s*\)\s*;
+NullableCorrect\s*\(\s*a\s*\)\s*;\s*DerivCorrect\s*\(\s*c\s*,\s*s\s*,\s*b\s*\)\s*;
 
 # from Solutions/verus/r/r06_induction/src/lib.rs
 # source: assert(w.subrange(0, 0) =~= Seq::<char>::empty()); (R06.H1v)

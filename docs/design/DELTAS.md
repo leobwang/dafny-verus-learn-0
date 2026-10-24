@@ -337,6 +337,7 @@
 | 305 | The Verus mirror of D82/D83 (the coordinator, 2026-10-22): H2v and H3v pose Dafny's universals over matches, each needing `assert forall … by` and two `choose` splits (smallest found three lines); `forall-intro` WRITE in both languages again; T1's `exists-elim` tags removed as non-instances; H1d's leak pattern dropped for H3d's | adopted (the coordinator; built in R authoring 2026-10-22 UTC) | DVR4 step 5 lane P1 |
 | 306 | R05 brought to the R module bar (DVR4 step 5): prompts and two hints per hole (Python included), one-statement-per-line twins, agents and specimens (twins mirrored), a chapter with source and captured output inline (37 pins), P3's ten runs per language as recorded quotes, a Q06-schema bank with re-run probes, ten admission rows; two short holes and three WRITE tags with no genuine hole instance reported | adopted in R authoring (2026-10-22 UTC) | DVR4 step 5 systemic lane P1 |
 | 307 | The user's D84 (R05's H3 re-posed as `StarThrice`, `Star(a)` over `u + u + u`; H4's recursive call left to the learner; both languages, smallest found ≥ 3 one-fact lines) and D85 (isolation RECOGNISE; `assert-by` WRITE in Dafny on H2d alone, by one narrow `[[write_exception]]` the course map accepts and nothing broader; Verus `write_v = []`) | adopted (the user; built in R authoring 2026-10-23 UTC) | the user; DVR4 step 5 lane P1 |
+| 308 | R06 brought to the R module bar (DVR4 step 5), with the user's D86 (`calc` RECOGNISE), D87 (the learner writes every measure: H1's parameters reordered so Dafny's default fails, the checkpoint's measures stripped), D88 (H3 a refutation-witness exception) and the coordinator's D89 (P4d/P5v rewritten as one `NodeCount` loop pair): one-statement-per-line files with prompts and hints, a chapter with source and captures inline (34 pins), a Q06-schema bank, fourteen admission rows | adopted in R authoring (2026-10-24 UTC) | the user; DVR4 step 5 lane P1 |
 | 320 | R09 at the R module bar (DVR4 step 5, lane P2): one-statement-per-line files in plan order with prompts, hints and use-site clients; the R04.H2v skeleton removed from a given helper; two seed-stability repairs; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H2 minutes and an H4-bearing Lab α form for decision | adopted in R authoring (2026-10-19 UTC) | DVR4 step 5 lane P2 |
 | 321 | R10 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints and a compiled use-site test; A4's do-not-open header; H3d's lever named in its row; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H3's line band for decision | adopted in R authoring (2026-10-20 UTC) | DVR4 step 5 lane P2 |
 | 322 | R11 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints, a commented T1 check and given use-site checks; H2d/X1d levers named in their rows; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; line-band outliers for decision | adopted in R authoring (2026-10-21 UTC) | DVR4 step 5 lane P2 |
@@ -4919,6 +4920,22 @@ Answers Δ306's two decisions; record in `Solutions/plans/DVR4-R05-build-notes.m
   - Six new `test_course_map.py` cases show that the slug without the declaration, an undecided slug, the other language, another item, a reason without D85 and a second 1-item slug all fail (411 passed).
   - If the user prefers option (b), `assert-by` becomes RECOGNISE in Dafny too and the exception is removed.
 - **Evidence:** see the R05 notes §6.
+
+### Δ308 · R06 at the R module bar; D86–D89 — adopted (the user and the coordinator, 2026-10-24; built 2026-10-24 UTC)
+
+The record is in `Solutions/plans/DVR4-R06-build-notes.md` (§1 is the objective map written before any change; §2 the measurements; §3 the decisions; §4 as built).
+
+- **D86 (the user): `calc` is RECOGNISE in both languages.** No R06 hole needs a chain: H1's and H4's one-step wrappers verify without it. The C1 cards are `recognise:calc`.
+- **D87 (the user): every measure is the learner's and genuinely needed, with no exception.**
+  - H1's parameters are reordered to `(c, s, r)` in both languages, so Dafny's default measure fails at the prefix calls and the learner must write `decreases r`.
+  - The checkpoint's measures (X1d `decreases |u|`, X1v `decreases u.len()`) are no longer given.
+  - A2 stays byte-identical, re-supplying `DerivCorrect(r, c, s)`. R06's chapter says so; the matching line in A2's header is deferred to A2's next planned change, because an edit would stale R08–R14's chapter pin inputs.
+- **D88 (the user):** H3d/H3v (1 and 2 facts) are refutation-witness exceptions under D59's reading, judged by the empty-body gate.
+- **D89 (the coordinator):** P4d and P5v, whose bridge lines were H2d's and H2v's answers verbatim, are one new pair: a `NodeCount` sum with the one-directional invariant `n >= i`, answer `FAILS d`.
+- **Build.**
+  - Files: one statement per line, prompts and two hints per hole. Admission: seeds 1–3 stable for all six twins; empty-body 14/14; registry rows unchanged.
+  - Chapter: 5,195 words, 34 pins, every prediction captured. Bank: Q06 schema, 12 questions, two parallel problems.
+  - Leak patterns: 8 OK. Freeze, counts, sidecars and rubric are re-pinned.
 
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
