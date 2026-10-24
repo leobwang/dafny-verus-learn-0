@@ -110,6 +110,14 @@ lock, rust, rustup, oc, src, snap, uvs, ages, uvl = sys.argv[1:]
 data = tomllib.load(open(lock, "rb"))
 bad = []
 imgs = {i["name"]: i for i in data.get("image", [])}
+def where():
+    """The Docker context the CLI looked in (DOCKER_CONTEXT, DOCKER_HOST or the
+    current context), with its endpoint: images live per daemon."""
+    c = subprocess.run(["docker", "context", "show"], capture_output=True, text=True)
+    name = c.stdout.strip() or "?"
+    e = subprocess.run(["docker", "context", "inspect", "--format",
+                        "{{.Endpoints.docker.Host}}", name], capture_output=True, text=True)
+    return f"Docker context {name!r} ({e.stdout.strip() or 'endpoint unknown'})"
 for name in ("dvl-toolchain", "dvl-agent"):
     i = imgs.get(name)
     if not i:
@@ -117,7 +125,8 @@ for name in ("dvl-toolchain", "dvl-agent"):
     p = subprocess.run(["docker", "image", "inspect", "--format", "{{.Id}}", f"{name}@{i['digest']}"],
                        capture_output=True, text=True)
     if p.returncode != 0 or p.stdout.strip() != i["digest"]:
-        bad.append(f"{name}@{i['digest']} is not a local image")
+        bad.append(f"{name}@{i['digest']} is not a local image in {where()}; "
+                   "set DOCKER_CONTEXT to the context that holds the course images, or build them")
     want = {"rust_toolchain_tree": rust, "rustup_sha256": rustup, "image_sources_sha256": src,
             "apt_snapshot": snap, "uv_sha256": uvs, "age_sha256": ages, "uv_lock_sha256": uvl}
     if name == "dvl-agent":
