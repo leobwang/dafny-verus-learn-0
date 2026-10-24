@@ -1,14 +1,26 @@
 # Q33_Statement.toml: the frozen statement manifest of Q33 — Statement problem (QPLAN §31.0;
 # DELTAS Δ402, Δ403). Guard rule 2f freezes it by its name; once the module leaves planned
 # the registry's `statements` pins its sha256 beside the statement files', and
-# scripts/challenge_gate.sh Q33 reads it (dvl.challenge). W2 fixes the interface; the
-# statement files, [min_verified] and [[against]] arrive with W3's witness tasks.
+# scripts/challenge_gate.sh Q33 reads it (dvl.challenge). W2 fixes the interface; W3 adds the
+# dev prose items' statement files, [min_verified] and [[against]] (DELTAS Δ417).
 schema = 1
 module = "Q33"
 trust = "research/TRUST.md"
 solver_swap = true
 cv_gates = false
 distinction = "grader"
+
+[min_verified]
+"Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblem.dfy" = 24
+"Challenges/Agentic/Q33_StatementProblem/q33_statement_problem" = 23
+
+[[against]]
+statement = "Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblemStatement.dfy"
+file = "Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblem.dfy"
+
+[[against]]
+statement = "Challenges/Agentic/Q33_StatementProblem/q33_statement_problem/src/statements.rs"
+file = "Challenges/Agentic/Q33_StatementProblem/q33_statement_problem/src/lib.rs"
 
 [interface."agents/q33_statement_problem/pipeline.py"]
 "AuditVerdict" = "3c236ac18a02003aadc4a3428f0ef411e8afbbfda4615dd288d8dd2ad39b6011"

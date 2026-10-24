@@ -1,0 +1,16 @@
+# Q33 — the statement problem's Verus crate (QPLAN §35.2; DELTAS Δ417): out of the workspace, verified as it stands.
+[package]
+name = "q33_statement_problem"
+version = "0.1.0"
+edition = "2021"
+publish = false
+build = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+
+[package.metadata.verus]
+verify = true

@@ -229,10 +229,11 @@ def _baseline(text):
     import tomllib
     mods = [m for m in tomllib.loads(text).get("module", []) if isinstance(m, dict)]
     real = [m for m in mods if m.get("id") != "Q04" and m.get("status") != "planned"]
-    # the cases' scratch trees copy no agents/ (the challenge stubs, Δ402), so their
-    # declared files are not on disk there
+    # the cases' scratch trees copy no agents/ (the challenge stubs, Δ402) and no
+    # Challenges/ (the challenges' statement and exercise files, Δ417), so their declared
+    # files are not on disk there
     declared = {p for m in mods for p in (m.get("imports") or {}) if (ROOT / p).is_file()
-                and not p.startswith("agents/")}
+                and not p.startswith(("agents/", "Challenges/"))}
     own = {p for m in real for p in (m.get("imports") or {}) if (ROOT / p).is_file()}
     given = re.compile(r"dafny/given/|verus/given/")
     return ([m["id"] for m in real], sum(m.get("status") == "authoring" for m in real),

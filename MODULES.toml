@@ -1849,7 +1849,7 @@ build_target = "Challenges"
 units = []
 layer = ""
 engines = []
-statements = []
+statements = [{ path = "Challenges/Agentic/Q33_StatementProblem/Q33_Statement.toml", sha256 = "44a1469d00fd9567dcef55d38c230a1f7024b2baa03b3f5ff17a49f2c521af94" }, { path = "Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblemStatement.dfy", sha256 = "104904d00cfdaf98c5245f7d1c929c34d558fd60805153ea19dca18f67481292" }, { path = "Challenges/Agentic/Q33_StatementProblem/q33_statement_problem/src/statements.rs", sha256 = "9de7c1dab27c0bc43fa4e9d8bb69bee51d92fdf2ec261231e98c2c4a7062d0c1" }]
 deep_dive = []
 review_bar = "harness"
 persona = "eval-skeptic"
@@ -1862,8 +1862,8 @@ write_v = []
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 0, qwen_runs = 0, gpu_hours = 0 }
-admissible = {}
-imports = { "agents/q33_statement_problem/pipeline.py" = "py-agents" }
+admissible = { "Q33.H5d" = { admitted = false, minutes = 0, fallback = "F-H5d: gated while Q33 is planned; InsertPoint's statement by hand (Δ417)" }, "Q33.H5v" = { admitted = false, minutes = 0, fallback = "F-H5v: gated while Q33 is planned; leading_at_most's statement by hand (Δ417)" }, "Q33.H6d" = { admitted = false, minutes = 0, fallback = "F-H6d: gated while Q33 is planned; DropLeadingZeros's statement by hand (Δ417)" }, "Q33.H6v" = { admitted = false, minutes = 0, fallback = "F-H6v: gated while Q33 is planned; merge_from_a's statement by hand (Δ417)" }, "Q33.H7d" = { admitted = false, minutes = 0, fallback = "F-H7d: gated while Q33 is planned; ClauseHolds's statement by hand (Δ417)" }, "Q33.H7v" = { admitted = false, minutes = 0, fallback = "F-H7v: gated while Q33 is planned; first_run_length's statement by hand (Δ417)" }, "Q33.H8d" = { admitted = false, minutes = 0, fallback = "F-H8d: gated while Q33 is planned; FirstRunLength's statement by hand (Δ417)" }, "Q33.H8v" = { admitted = false, minutes = 0, fallback = "F-H8v: gated while Q33 is planned; ascending_prefix's statement by hand (Δ417)" }, "Q33.H9d" = { admitted = false, minutes = 0, fallback = "F-H9d: gated while Q33 is planned; MergeFromA's statement by hand (Δ417)" }, "Q33.H9v" = { admitted = false, minutes = 0, fallback = "F-H9v: gated while Q33 is planned; clause_holds's statement by hand (Δ417)" }, "Q33.H10d" = { admitted = false, minutes = 0, fallback = "F-H10d: gated while Q33 is planned; SortedPrefix's statement by hand (Δ417)" }, "Q33.H10v" = { admitted = false, minutes = 0, fallback = "F-H10v: gated while Q33 is planned; first_nonzero's statement by hand (Δ417)" } }
+imports = { "agents/q33_statement_problem/pipeline.py" = "py-agents", "Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblem.dfy" = "core", "Challenges/Agentic/Q33_StatementProblem/q33_statement_problem/src/lib.rs" = "prelude" }
 concept_items = {}
 
 
