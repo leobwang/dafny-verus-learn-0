@@ -1525,6 +1525,24 @@ class ReferenceLint(RootCase):
         for line in out.strip().splitlines()[:-1]:          # `path:line: rule` only
             self.assertRegex(line, r"^[\w./-]+:\d+: [a-z-]+$")
 
+    def test_twin_only_declaration_in_a_learner_region(self):
+        """D92 (Δ310): a declaration the twin adds inside an item's
+        @hole-begin/@hole-end region is the learner's, as R08's H1/H4 engine
+        modules are, and is not extra; the same declaration outside a region
+        is."""
+        S = "Solutions/"
+        twin = S + "dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy"
+        self.rep(twin, "  function Sum", "  // @hole-begin Q04.H1d\n"
+                                         "  lemma LearnerWritten()\n    ensures true\n  {\n  }\n"
+                                         "  // @hole-end Q04.H1d\n\n"
+                                         "  lemma NotInARegion()\n    ensures true\n  {\n  }\n\n"
+                                         "  function Sum")
+        rc, out, err = self.lint()
+        self.assertEqual(rc, 1, out + err)
+        L = self.line_of
+        self.assertIn(f"{twin}:{L(twin, 'lemma NotInARegion()')}: declaration-extra", out)
+        self.assertNotIn(f"{twin}:{L(twin, 'lemma LearnerWritten()')}:", out)
+
     def test_slot_sidecar_flagged(self):
         sc = self.root / "expected" / "specimens" / "Q04" / "P4d.dfy.specimen.expect"
         sc.parent.mkdir(parents=True)

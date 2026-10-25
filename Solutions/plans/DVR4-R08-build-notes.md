@@ -59,7 +59,7 @@ Every hole meets D64. The twins keep a few readable asserts the minimizer drops 
 
 **reveal is genuine** (D82/D85): dropping `reveal AltRes();` / `reveal(alt_res);` fails in H3 and H4 in both languages, so the tag names a step two smallest proofs need per language.
 
-**refines / trait-spec have no hole instance** (brought to the coordinator, 2026-10-25): H1–H4 are each engine's own lemmas, none is declared in `RG_A2_StepMatcher` or the trait, and no smallest proof uses the refinement (the interface's laws are discharged in the given engine bodies by one call each). Options: (a) RECOGNISE both, write lists `["reveal"]` (recommended); (b) re-pose a hole so the learner writes the refinement or impl; (c) keep them under a recorded exception.
+**refines / trait-spec had no hole instance** (brought to the coordinator, 2026-10-25; settled by D92, §4 below): H1–H4 are each engine's own lemmas, none is declared in `RG_A2_StepMatcher` or the trait, and no smallest proof uses the refinement (the interface's laws are discharged in the given engine bodies by one call each). Options: (a) RECOGNISE both, write lists `["reveal"]` (recommended); (b) re-pose a hole so the learner writes the refinement or impl; (c) keep them under a recorded exception.
 
 ### 3. Admission (2026-10-25)
 
@@ -70,3 +70,55 @@ Every hole meets D64. The twins keep a few readable asserts the minimizer drops 
 - Chapter: every prediction (P1d, P2v, P3dv, P4v, P5dv) is answered by a pinned capture after its box.
 - Bank: 12 questions at the Q06 schema, 12 Reread lines (each names a chapter heading exactly), two parallel problems, every tag known.
 - Leak patterns: 8 OK on the current twins (the verifier over 2,731 public files; its only public hits were the minimizer's git-ignored `instructor/scratch/probe.dfy`, cleared).
+
+### 4. D92: H1 and H4 re-posed as refinements the learner writes (the user, 2026-10-25)
+
+**Decision.** H1 and H4 become "write the engine": in Dafny the whole `module … refines RG_A2_StepMatcher`, in Verus the whole `impl StepMatcher for …`. The learner supplies the types and the definitions (each the given part of the same role) and the three law bodies, which call a given lemma or the item's own lemma. Two genuine items per language, so no exception; A2's interface byte-identical; only R08's files change.
+
+**Shape (both languages, mirrored).**
+- Each engine's parts are given in a plain module / free items over concrete types: Dafny `R08_RangeStarParts` (`StarState`, `InSomeRange`, `RangesClass`, `RangesLang`, `StarRes`, `StarStart`, `StarFeed`, `StarFinal`) and `R08_AltSetParts` (`Parts`, `AnyMatches`, `FeedAll`, `AnyNullable`, the opaque `AltRes`); Verus `range_lang`, `star_model`, `star_res`, `star_start_spec`, `star_feed_spec`, `star_final_spec`, `star_start`, `star_feed`, `star_is_final`, and `alt_res`, `parts_exec`, `alt_feed`, `alt_is_final`.
+- **H1**: the lemma `RangesClassLaw` (its own module `R08_RangeStarClassFact`) / `lemma_ranges_set_law` is the hole form; after it, the learner region is the engine (`R08_RangeStarEngine refines …` / `impl StepMatcher for RangeStarEngine`) and its client, which ships commented under `Uncomment as you go:` (`MatchRanges` / `match_range_star`, promising `RangesLang` / `range_lang`).
+- H2 and H3 move into the plain module `R08_AltSetLaws` (Verus: free fns as before); their `uses:` lose `refines`/`trait-spec` (they never needed them) and keep `reveal` on H3.
+- **H4**: the lemma `AltFinalLaw` (module `R08_AltSetFinalFact`) / `lemma_alt_final_law` is the hole form; the learner region is the engine (`R08_AltSetEngine refines …` / `impl StepMatcher for AltSetEngine`) and its client (`MatchAlternatives` / `match_alt`). The start law reveals `AltRes` and calls H2, the step law calls H3, the final law calls the lemma (a refining lemma cannot recurse on the abstract-typed state: P3, chapter §3).
+- Why the learner writes the whole module and not bodies in a shipped skeleton: a refining module that inherits a bodyless law is counted by vcheck as a hole at the interface's line (probe `r08/d92/p-ship.dfy`: 7 holes, 3 of them at `RG_A2_MatcherStatement.dfy:29/33/37`), and a Verus impl cannot ship partial. With the module absent the shipped files count 4 holes each, as before.
+- Tags: `write_d = ["refines", "reveal"]`, `write_v = ["trait-spec", "reveal"]` unchanged and now honest: refines/trait-spec on H1 and H4, reveal on H3 and H4, per language.
+
+**Probes** (`r08/d92`; one job at a time, 6G scope, memgate ≥20G; no exit 137/143):
+
+| variant | Dafny | Verus |
+|---|---|---|
+| twin | verified, 58 verified | verified, 38 verified |
+| engine region removed (client kept) | resolve: `module R08_RangeStarEngine does not exist` / `… R08_AltSetEngine …` | resolve: `the trait bound RangeStarEngine: StepMatcher is not satisfied` (and AltSetEngine) |
+| `refines` dropped / inherent impl | resolve: `unresolved identifier: MatchWord` (both engines) | resolve: `inherent associated types are unstable` + the trait bound |
+| each whole declaration of the engine removed (types, definitions, laws, `forall`/`assert forall` blocks) | every one fails: 11 + 10 variants (a removed law leaves the inherited one bodyless: 1 hole, refused by the gate) | every one fails: 17 + 15 variants |
+
+**Smallest proofs found** (the greedy minimizer over both regions, structural lines kept; counted lines: calls, picks, reveals, asserts; bindings not counted):
+
+| item | the lemma | the laws | in all | declarations (each needed) |
+|---|---|---|---|---|
+| H1d | 3 (call, two picks) | 3 (StartLaw's call, FeedLaw's two asserts) | 6 | 2 types, 5 definitions, 3 laws |
+| H1v | 4 (call, two picks, one assert) | 4 (the call, `cw[0]`, two `assert forall` blocks) | 8 | 3 types, 6 spec fns, 3 exec fns, 3 laws |
+| H4d | 3 (reveal, two calls) | 4 (reveal, three calls) | 7 | 2 types, 5 definitions, 3 laws |
+| H4v | 4 (reveal, two calls, the `assert forall`) | 4 (reveal, three calls) | 8 | 3 types, 6 spec fns, 3 exec fns, 3 laws |
+
+Every proper subset fails (minimizer, both orders of the line pass; the declaration test above). `reveal` is kept in H3 (both languages) and in both of H4's regions (both languages), so it stays genuine on two items per language.
+
+**Tooling for the re-pose.**
+- The engine region holds the client too: the region mode of the empty-body gate counts a resolve error as no verdict, so with a live client outside the region the blanked twin "errors"; inside the region, the blanked twin resolves and fails on the lemma, and the probes above show that the engine is needed. `firsttry.sh R08 --empty-body` 8/8.
+- `scripts/reference_lint.py`: a twin-only declaration inside an item's `@hole-begin`/`@hole-end` region is the learner's and is allowed (in_learner_region), as a `reference-only` marker allows one; otherwise each of the ~30 declarations of the two engines would need its own marker. Test: `tests/wrappers/test_tools_static.py` (a declaration added inside a region passes, the same outside fails).
+- `--strict` already requires every commented check uncommented, so a finished file runs the clients, which pin each engine's `Lang`.
+
+**Minutes.** H1 10 → 15 and H4 5 → 10 in each language (the refinement adds about five minutes of one-line declarations to each lemma); the refinement lab 30 → 10, because its "write the refinement you would like" half is now H1 and H4. R08 stays 354 minutes; hand holes 110 (55 per language). Registry, chapter §0 and PLAN §3/§10 updated.
+
+**Not touched (reported).** Lab α's `bench/local/r/labalpha/r08-alt-final-law-d` and `r08-alt-feed-law-d` task files still hold the old given alternative-set engine, including its start law `reveal AltRes(); PartsLaw(p, w);`, which the learner now writes in H4. It is covered by the declared later-tier overlap; the Lab α lane decides whether to re-cut.
+
+**Admission after D92 (2026-10-25).**
+- Seeds 1–3 stable on the new core twins: Dafny's widest spread is 25.7 % (a declaration outside the files, advisory), Verus's 8.3 %. The agent twins are unchanged (§3).
+- `firsttry.sh R08 --empty-body` 8/8: each hole's empty body fails, and each twin without its learner regions fails. `--lint-hollow` OK (22 files).
+- `specfreeze --pin`: 282 statements; the engines the learner writes are not frozen, and their clients check `Lang`. `--check` gives 0.
+- Counts re-pinned; `vcheck --shipped` 0: 4 holes per hand file, as before.
+- `reference_lint` 0 over all 311 twins. `chapter_lint` 0: 30 pins, 6,507 words. `pins.py --ci --module R08` 47/47.
+- Leak patterns: 8 OK over 2,731 public files. Rubric pins are refreshed, and the rubric's hole paragraph describes the refinements.
+- Course map OK; avoid.sh OK.
+- Study workflow 12/12 on a disposable clone of `b306db7a` plus this diff: first tries, strict, freeze, the check unit, then gate and audit for both units and both agents.
+- Chapter: §4 and §6 are rewritten around the two refinements, with three new pins. `plain-d` shows that without `refines`, `MatchWord` does not resolve. `refining-d` shows the same declarations with `refines` verify. `noimpl-v` shows that without the impl, the trait bound fails. §0, §8 (lab, 10 minutes) and §10 are updated. The bank's reread titles, the K4 insight and PP2's diagnostic are updated.

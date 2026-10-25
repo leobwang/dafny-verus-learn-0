@@ -22,8 +22,10 @@ the dvl statement tables:
                          another order
   declaration-*          the declarations differ: missing, extra (a twin-only
                          declaration is allowed when it is a test, follows the
-                         agent reference heading, or carries a
-                         `reference-only` comment), statement-differs (the
+                         agent reference heading, carries a
+                         `reference-only` comment, or lies inside an item's
+                         `@hole-begin`/`@hole-end` region, which the learner
+                         writes: D92), statement-differs (the
                          learner's bodyless function holes, and a Dafny
                          function or predicate shipped with a placeholder
                          body the twin replaces, QPLAN §30 Q52, compared by
@@ -163,14 +165,29 @@ def learner_files(root, rec):
     return req, opt
 
 
+def in_learner_region(raw, line):
+    """True when `line` lies inside an item's `@hole-begin`/`@hole-end` region
+    of the twin: the learner writes it (D92, Δ310: a refinement module or a
+    trait implementation the learner writes whole). Broken markers never
+    excuse a declaration (the marker rules report them)."""
+    try:
+        regions = core.common.hole_regions("\n".join(raw))
+    except ValueError:
+        return False
+    return any(b < line < e for _, b, e in regions)
+
+
 def twin_only_ok(raw, line, lang, decl_attrs=()):
     """A twin-only declaration is allowed: a test, anything after the agent
-    reference heading, or a declaration marked `reference-only`."""
+    reference heading, a declaration marked `reference-only`, or one inside a
+    learner region (in_learner_region)."""
     if any(AGENT_HEADING.search(x) for x in raw[:max(line - 1, 0)]):
         return True
     for ln in (line, line - 1):
         if 1 <= ln <= len(raw) and REFERENCE_ONLY.search(raw[ln - 1]):
             return True
+    if in_learner_region(raw, line):
+        return True
     return any(a in ("test", "Test") for a in decl_attrs)
 
 

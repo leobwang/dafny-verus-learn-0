@@ -11,9 +11,10 @@ How to work this file:
    verdict answers go in slots/R08.slots), of dafny/checks/R08_checks.dfy and
    of specimens/R08/P*.specimen, then record the first tries with
    `scripts/firsttry.sh R08 --check`, before you run anything they are about.
-2. Read the worked derivative engine (W1), then replace each hole, H1 to H4,
-   in order. Every hole is a lemma that one of an engine's interface laws
-   rests on.
+2. Read the worked derivative engine (W1), then work H1 to H4 in order. H1
+   and H4 are engines you write as refinements of the interface, each with
+   the lemma its laws rest on; H2 and H3 are the alternative-set engine's
+   own lemmas. Uncomment each engine's client check as you finish it.
 3. Done = `scripts/vcheck --gate dafny/R/R08_Abstraction/std` prints only the
    summary line and exits 0, `scripts/vaudit dafny/R/R08_Abstraction/std`
    reports no finding, AND `scripts/firsttry.sh R08 --report --strict` exits 0.
@@ -115,20 +116,19 @@ module R08_DerivClient {
 }
 
 // =============================================================================
-// The range-star engine: a second refinement, over A2's class API
+// Given: the parts of the two engines you write (H1 and H4)
 // =============================================================================
 
-// A pattern is a list of character ranges `(lo, hi)`; a word matches when each of
-// its characters lies in one of the ranges (the regex `[a-cx-z]*` for the list
-// `[('a', 'c'), ('x', 'z')]`). The language speaks of ranges; the engine builds
-// one A2 class at the start and only tests membership afterwards.
-module R08_RangeStarEngine refines RG_A2_StepMatcher {
+// A pattern of the range-star engine is a list of character ranges `(lo, hi)`;
+// a word matches when each of its characters lies in one of the ranges (the
+// regex `[a-cx-z]*` for the list `[('a', 'c'), ('x', 'z')]`). The language
+// speaks of ranges; the engine builds one A2 class at the start and only tests
+// membership afterwards. Everything here is over concrete types; the
+// refinement (H1) maps the interface onto it.
+module R08_RangeStarParts {
   import A2 = RG_A2_Deriv
 
   datatype StarState = StarState(alive: bool, cls: A2.CharClass)
-
-  type Pattern = seq<(char, char)>
-  type Config = StarState
 
   // Given: c lies in one of the ranges.
   ghost predicate InSomeRange(rs: seq<(char, char)>, c: char)
@@ -143,83 +143,40 @@ module R08_RangeStarEngine refines RG_A2_StepMatcher {
     if rs == [] then A2.ClassEmpty() else A2.ClassUnion(A2.ClassRange(rs[0].0, rs[0].1), RangesClass(rs[1..]))
   }
 
-  ghost predicate Lang(p: Pattern, w: seq<char>)
+  // Given: the engine's language, its model of a state, and its steps.
+  ghost predicate RangesLang(rs: seq<(char, char)>, w: seq<char>)
   {
-    forall i | 0 <= i < |w| :: InSomeRange(p, w[i])
+    forall i | 0 <= i < |w| :: InSomeRange(rs, w[i])
   }
 
-  ghost predicate Res(st: Config, w: seq<char>)
+  ghost predicate StarRes(st: StarState, w: seq<char>)
   {
     st.alive && forall i | 0 <= i < |w| :: A2.InClass(st.cls, w[i])
   }
 
-  function Start(p: Pattern): Config
+  function StarStart(rs: seq<(char, char)>): StarState
   {
-    StarState(true, RangesClass(p))
+    StarState(true, RangesClass(rs))
   }
 
-  function Feed(st: Config, c: char): Config
+  function StarFeed(st: StarState, c: char): StarState
   {
     if st.alive && A2.ClassMember(st.cls, c) then st else StarState(false, st.cls)
   }
 
-  predicate Final(st: Config)
+  predicate StarFinal(st: StarState)
   {
     st.alive
   }
-
-  // The start law rests on a fact about the class RangesClass builds; the
-  // engine proves it in a lemma of its own (H1), and the law calls it.
-  lemma StartLaw(p: Pattern, w: seq<char>)
-  {
-    forall c {
-      RangesClassLaw(p, c);
-    }
-  }
-
-  lemma FeedLaw(st: Config, c: char, w: seq<char>)
-  {
-    var cw := [c] + w;
-    assert cw[0] == c;
-    assert forall i | 0 <= i < |w| :: cw[i + 1] == w[i];
-  }
-
-  lemma FinalLaw(st: Config)
-  {
-  }
-
-  // item: R08.H1d
-  // uses: refines
-  // pair: R08.H1v
-  /** **H1.** The class the engine builds holds exactly the characters of the
-      pattern's ranges. RangesClass unions one ClassRange per range: what do
-      ClassUnion's and ClassRange's postconditions say about membership, what
-      does the recursive call give you for `rs[1..]`, and which index of `rs`
-      is range `j` of `rs[1..]`? */
-  lemma {:induction false} RangesClassLaw(rs: seq<(char, char)>, c: char)
-    ensures A2.InClass(RangesClass(rs), c) <==> InSomeRange(rs, c)
-  // Hint(1): induction on `rs` (this lemma has `{:induction false}`): call
-  //          RangesClassLaw on `rs[1..]`, then handle the witnesses yourself.
-  // Hint(2): `var j :| …` picks a witness range; relate `rs[1..][j]` to
-  //          `rs[j + 1]` in one direction and `rs[j]` to `rs[1..][j - 1]` in
-  //          the other.
-
 }
 
-// =============================================================================
-// The alternative-set engine: a state is a list of alternatives
-// =============================================================================
-
-// The state is the list of the pattern's top-level alternatives; a step takes
-// the derivative of each and splits the results again. Res is the opaque
-// AltRes: its existential stays out of every proof that does not reveal it.
-module R08_AltSetEngine refines RG_A2_StepMatcher {
+// The state of the alternative-set engine is the list of the pattern's
+// top-level alternatives; a step takes the derivative of each and splits the
+// results again. Its model is the opaque AltRes: the existential stays out of
+// every proof that does not reveal it.
+module R08_AltSetParts {
   import opened RG_A1_Re
-  import B = RG_A1b_Facts
   import A2 = RG_A2_Deriv
-
-  type Pattern = Re
-  type Config = seq<Re>
 
   // Given: split the top-level Alt nodes, drop the literal Empty parts.
   function Parts(r: Re): seq<Re>
@@ -248,57 +205,75 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
     st != [] && (Nullable(st[0]) || AnyNullable(st[1..]))
   }
 
-  ghost predicate Lang(p: Pattern, w: seq<char>)
-  {
-    Matches(p, w)
-  }
-
-  // The engine's model, opaque: its existential stays out of every proof that
-  // does not reveal it. (The opacity sits on a predicate of the engine's own:
-  // Dafny does not make a refining declaration opaque.)
+  // Given: the engine's model, opaque. (The opacity sits on a predicate
+  // outside the refinement: Dafny does not make a refining declaration
+  // opaque.)
   opaque ghost predicate AltRes(st: seq<Re>, w: seq<char>)
   {
     AnyMatches(st, w)
   }
+}
 
-  ghost predicate Res(st: Config, w: seq<char>)
-  {
-    AltRes(st, w)
-  }
+// =============================================================================
+// H1: the range-star engine, a refinement you write
+// =============================================================================
 
-  function Start(p: Pattern): Config
-  {
-    Parts(p)
-  }
+// item: R08.H1d
+// uses: refines
+// pair: R08.H1v
+/** **H1.** Write the range-star engine as a refinement of the step-matcher
+    interface: after the class fact below, a module
+    `R08_RangeStarEngine refines RG_A2_StepMatcher` that imports
+    `R08_RangeStarParts` and `R08_RangeStarClassFact`. Its `Pattern` is the
+    list of ranges and its `Config` is `StarState`; `Lang`, `Res`, `Start`,
+    `Feed` and `Final` are the given `RangesLang`, `StarRes`, `StarStart`,
+    `StarFeed` and `StarFinal`; then each of the three laws gets a body. The
+    start law rests on `RangesClassLaw`, which you prove first: RangesClass
+    unions one ClassRange per range. What do ClassUnion's and ClassRange's
+    postconditions say about membership, what does the recursive call give
+    you for `rs[1..]`, and which index of `rs` is range `j` of `rs[1..]`?
+    Which law needs no proof at all? */
+module R08_RangeStarClassFact {
+  import A2 = RG_A2_Deriv
+  import opened R08_RangeStarParts
 
-  function Feed(st: Config, c: char): Config
-  {
-    FeedAll(st, c)
-  }
+  lemma {:induction false} RangesClassLaw(rs: seq<(char, char)>, c: char)
+    ensures A2.InClass(RangesClass(rs), c) <==> InSomeRange(rs, c)
+  // Hint(1): induction on `rs` (this lemma has `{:induction false}`): call
+  //          RangesClassLaw on `rs[1..]`; `var j :| …` picks a witness range;
+  //          relate `rs[1..][j]` to `rs[j + 1]` one way and `rs[j]` to
+  //          `rs[1..][j - 1]` the other.
+  // Hint(2): a refining module restates each declaration's signature without
+  //          its contract (the interface's are inherited) and gives it a body;
+  //          StartLaw calls RangesClassLaw for every character (`forall c`),
+  //          FeedLaw relates index `i + 1` of `[c] + w` to index `i` of `w`.
+}
 
-  predicate Final(st: Config)
-  {
-    AnyNullable(st)
-  }
+// Your refinement (H1), here: module R08_RangeStarEngine refines RG_A2_StepMatcher { … }
 
-  lemma StartLaw(p: Pattern, w: seq<char>)
-  {
-    reveal AltRes();
-    PartsLaw(p, w);
-  }
+// A client of the range-star engine: it knows only MatchWord's contract.
+// Uncomment as you go:
+// module R08_RangeStarClient {
+//   import opened R08_RangeStarParts
+//   import E = R08_RangeStarEngine
+//   method MatchRanges(rs: seq<(char, char)>, w: seq<char>) returns (b: bool)
+//     ensures b == RangesLang(rs, w)
+//   {
+//     b := E.MatchWord(rs, w);
+//   }
+// }
 
-  lemma FeedLaw(st: Config, c: char, w: seq<char>)
-  {
-    AltFeedLaw(st, c, w);
-  }
+// =============================================================================
+// H2 and H3: the alternative-set engine's own lemmas
+// =============================================================================
 
-  lemma FinalLaw(st: Config)
-  {
-    AltFinalLaw(st);
-  }
+// item: R08.H2d
+// pair: R08.H2v
+module R08_AltSetLaws {
+  import opened RG_A1_Re
+  import A2 = RG_A2_Deriv
+  import opened R08_AltSetParts
 
-  // item: R08.H2d
-  // pair: R08.H2v
   /** **H2.** Splitting a pattern into its parts keeps its language:
       some part matches `w` exactly when the pattern does. In the `Alt`
       case the parts of `Alt(a, b)` are `Parts(a) + Parts(b)`: where in the
@@ -306,17 +281,16 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
       `b`? Going back, how do you tell from an index which half it is in? */
   lemma {:induction false} PartsLaw(r: Re, w: seq<char>)
     ensures AnyMatches(Parts(r), w) <==> Matches(r, w)
-  // Hint(1): induction on `r` (this lemma has `{:induction false}`): call
+// Hint(1): induction on `r` (this lemma has `{:induction false}`): call
   //          PartsLaw on `a` and `b`, then give the witnesses by hand.
   // Hint(2): `(pa + pb)[i] == pa[i]` for `i < |pa|`, and
   //          `(pa + pb)[|pa| + i] == pb[i]`; the non-Alt, non-Empty case
   //          has the one-element list `[r]`.
 
-
   // item: R08.H3d
-  // uses: refines, reveal
+  // uses: reveal
   // pair: R08.H3v
-  /** **H3.** The alternative-set engine's step law. `FeedAll(st, c)` is
+  /** **H3.** The alternative-set engine's step fact. `FeedAll(st, c)` is
       `Parts(Deriv(st[0], c))` followed by `FeedAll(st[1..], c)`; `Res` is
       the opaque `AltRes`. Which given lemmas say what a part of the derivative of
       `st[0]` matches, which call covers the rest of the list, and where
@@ -324,28 +298,60 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
   lemma {:induction false} AltFeedLaw(st: seq<Re>, c: char, w: seq<char>)
     ensures AltRes(FeedAll(st, c), w) <==> AltRes(st, [c] + w)
     decreases |st|
-  // Hint(1): reveal AltRes in this lemma, then induction on |st|; the
+// Hint(1): reveal AltRes in this lemma, then induction on |st|; the
   //          recursive call on st[1..] is your induction hypothesis.
   // Hint(2): PartsLaw (H2) and A2.DerivCorrect on st[0]; then move one
   //          witness across `head + tail` and across st[0] / st[1..].
+}
 
+// =============================================================================
+// H4: the alternative-set engine, a refinement you write
+// =============================================================================
 
-  // item: R08.H4d
-  // uses: refines, reveal
-  // pair: R08.H4v
-  /** **H4.** The alternative-set engine's final law: the state is final
-      exactly when some alternative accepts the empty word. `AltRes` is
-      opaque for every lemma that does not reveal it. Where does the reveal belong,
-      and which A1b fact turns `Nullable` into a match of `[]`? */
+// item: R08.H4d
+// uses: refines, reveal
+// pair: R08.H4v
+/** **H4.** Write the alternative-set engine as a refinement of the
+    interface: after the final fact below, a module
+    `R08_AltSetEngine refines RG_A2_StepMatcher` that imports `RG_A1_Re`,
+    `R08_AltSetParts`, `R08_AltSetLaws` and `R08_AltSetFinalFact`. Its
+    `Pattern` is `Re` and its `Config` is `seq<Re>`; `Lang` is `Matches`,
+    `Res` the opaque `AltRes`, `Start` is `Parts`, `Feed` is `FeedAll` and
+    `Final` is `AnyNullable`. The start law rests on PartsLaw (H2), the step
+    law on AltFeedLaw (H3), the final law on `AltFinalLaw`, which you prove
+    first: the state is final exactly when some alternative accepts the
+    empty word. Why can the final law not do the induction itself, where
+    does each reveal of `AltRes` belong, and which A1b fact turns
+    `Nullable` into a match of `[]`? */
+module R08_AltSetFinalFact {
+  import opened RG_A1_Re
+  import B = RG_A1b_Facts
+  import opened R08_AltSetParts
+
   lemma {:induction false} AltFinalLaw(st: seq<Re>)
     ensures AnyNullable(st) <==> AltRes(st, [])
     decreases |st|
-  // Hint(1): reveal AltRes here, in this lemma only; induction on |st|.
-  // Hint(2): RG_A1b_Facts.NullableCorrect on st[0]; index i + 1 of st is
+  // Hint(1): reveal AltRes in AltFinalLaw only; induction on |st|:
+  //          RG_A1b_Facts.NullableCorrect on st[0]; index i + 1 of st is
   //          index i of st[1..].
-
-
+  // Hint(2): an inherited law takes its measure from the interface's
+  //          abstract Config, so FinalLaw calls AltFinalLaw (P3); StartLaw's
+  //          goal mentions AltRes, PartsLaw's AnyMatches: reveal AltRes there.
 }
+
+// Your refinement (H4), here: module R08_AltSetEngine refines RG_A2_StepMatcher { … }
+
+// A client of the alternative-set engine: it knows only MatchWord's contract.
+// Uncomment as you go:
+// module R08_AltSetClient {
+//   import opened RG_A1_Re
+//   import E = R08_AltSetEngine
+//   method MatchAlternatives(r: Re, w: seq<char>) returns (b: bool)
+//     ensures b == Matches(r, w)
+//   {
+//     b := E.MatchWord(r, w);
+//   }
+// }
 
 // =============================================================================
 // Cards (read; the WRITE cards are specimens)

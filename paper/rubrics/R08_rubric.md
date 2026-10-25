@@ -6,8 +6,8 @@ local validation; live model grading and contractor sessions remain D45 debt.
 Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R08_solutions.tex  sha256 b02d56103f8076cb10f3a25b5cfc61c843482535a4412684242cf11c99438801
 paper/R08_problems.tex  sha256 7fd6855e551a72f428c28eaab424f6166dd3b9c4333ca1e9e8e660f53fc4c29c
-Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 fab5ec1e6ccb0fa330aead58cc08c95c8259c7193b5188a81651e7e0ce4cb73e
-Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 313af9fa4f11cad9e767b575354ae714b7e3aefa5cf87a6336806e2052f2caf7
+Solutions/dafny/R/R08_Abstraction/std/R08_Abstraction.dfy  sha256 0f07b4ba06ff2262a7c99a08e546c486f7b30b4d5991eefbdaaff1b2777575fa
+Solutions/verus/r/r08_abstraction/src/lib.rs  sha256 2eccac9dab04e8371f0329d5011c4db41807005ac50a6a0f1440f46e51512659
 Solutions/dafny/R/R08_Abstraction/agent/R08_AgentInfra.dfy  sha256 5304f661af07633faa2ba9fcac79e225aa8df1feb9364b08499c71d729dd6e62
 Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 8cf139beb333088a2d8535c93a5567b4c40ddf7329571830c9a40b5d883868c9
 
@@ -65,10 +65,14 @@ Solutions/verus/r/r08_abstraction/src/agent.rs  sha256 8cf139beb333088a2d8535c93
 
 All hand references and final deliveries gate at zero counted holes, audit clean, and
 preserve the shipped statements (`scripts/specfreeze --check R08`). H1 is the range-star
-engine's start fact over A2's class API, H2 `PartsLaw`, H3 the alternative-set step law,
-H4 its final law with the engine's own opaque model revealed in H4 alone. Under
-library-conventions, look for: given helpers used as given (no re-implementation of
-`Parts`, `FeedAll`, `RangesClass`), reveals scoped to the proof that needs them, witness
+engine, written whole as a refinement (`refines RG_A2_StepMatcher` / `impl StepMatcher`),
+with its start fact over A2's class API; H2 `PartsLaw`; H3 the alternative-set step fact;
+H4 the alternative-set engine, written whole the same way, with its final fact and the
+engine's own opaque model revealed only in the proofs that need it (H4's lemma and its
+start law). Under library-conventions, look for: given parts used as given (each interface
+name mapped onto the given part of the same role; no re-implementation of `Parts`,
+`FeedAll`, `RangesClass`), the shipped clients uncommented and verifying (they pin each
+engine's `Lang`), reveals scoped to the proof that needs them, witness
 indices named rather than left to the solver, and no lever (`{:induction}`, resource
 attributes) added. The agent's defect is in the engine (`Prune` / `prune_exec` drops `Eps`
 alternatives); the faithful repair edits the pruning rule and keeps `Lang`, `Res` and the model;

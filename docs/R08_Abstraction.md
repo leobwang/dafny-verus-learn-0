@@ -8,11 +8,11 @@ Three ideas do all the work:
 
 ## 0. How this module works
 
-Allow 354 minutes: setup 10, reading 60, worked example and WRITE cards 30, other cards 7, predictions 15, hand holes 90, refinement lab 30, agent follow-up 25, written work 30, seventh bench card 20, viva 30 and calibration 7. The four hand holes take 45 minutes in each language: H1 10, H2 15, H3 15 and H4 5. These are planning estimates; record your own times.
+Allow 354 minutes: setup 10, reading 60, worked example and WRITE cards 30, other cards 7, predictions 15, hand holes 110, refinement lab 10, agent follow-up 25, written work 30, seventh bench card 20, viva 30 and calibration 7. The four hand holes take 55 minutes in each language: H1 15, H2 15, H3 15 and H4 10. These are planning estimates; record your own times.
 
 R08 is standalone. It declares layer A2, which re-supplies the regex semantics (A1), the band-1 facts (A1b), the derivative matcher and the character-class API, and, new in this module, the step-matcher interface: `dafny/given/R/RG_A2_MatcherStatement.dfy` (Dafny, the abstract module `RG_A2_StepMatcher`, a frozen statement file whose digest the registry pins) and `rg_re_a2::step_matcher` (Verus, the trait `StepMatcher` and the generic `match_word`). No earlier learner file is imported.
 
-You build three engines for that interface. The derivative engine is worked (W1). The range-star engine (H1) matches words whose every character lies in one of a list of ranges, through one A2 class built at the start. The alternative-set engine (H2–H4) keeps a list of alternatives as its state. A fourth engine, a pruning engine with a planted semantic fault, is the agent exercise.
+You build three engines for that interface. The derivative engine is worked (W1). The other two you write yourself, as refinements of the interface (Dafny) and implementations of the trait (Verus): the range-star engine (H1) matches words whose every character lies in one of a list of ranges, through one A2 class built at the start; the alternative-set engine (H4) keeps a list of alternatives as its state, and H2 and H3 are the lemmas its laws rest on. Each engine's parts (its state type, its model and its steps) are given over concrete types; your refinement maps the interface onto them and proves the three laws. A fourth engine, a pruning engine with a planted semantic fault, is the agent exercise.
 
 **This module's files** separate the hand work, the predictions, the given interface and the agent task.
 
@@ -45,21 +45,21 @@ The shipped files run in the learner loop: the holes are counted, the rest verif
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R08_Abstraction/std
-vcheck: dafny/R/R08_Abstraction/std [dafny, learner loop]: verified — 52 verified, 4 holes, 0 errors
-dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:200:44: hole bodyless-method R08.H1d
-dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:308:37: hole bodyless-method R08.H2d
-dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:325:39: hole bodyless-method R08.H3d
-dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:341:29: hole bodyless-method R08.H4d
+vcheck: dafny/R/R08_Abstraction/std [dafny, learner loop]: verified — 46 verified, 4 holes, 0 errors
+dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:241:44: hole bodyless-method R08.H1d
+dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:283:37: hole bodyless-method R08.H2d
+dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:299:39: hole bodyless-method R08.H3d
+dafny/R/R08_Abstraction/std/R08_Abstraction.dfy:332:29: hole bodyless-method R08.H4d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r08_abstraction
 vcheck: verus/r/r08_abstraction [verus, learner loop]: verified — - verified, 4 holes, 0 errors
-verus/r/r08_abstraction/src/lib.rs:245:40: hole assume R08.H1v
-verus/r/r08_abstraction/src/lib.rs:436:40: hole assume R08.H2v
-verus/r/r08_abstraction/src/lib.rs:455:40: hole assume R08.H3v
-verus/r/r08_abstraction/src/lib.rs:474:40: hole assume R08.H4v
+verus/r/r08_abstraction/src/lib.rs:383:40: hole assume R08.H1v
+verus/r/r08_abstraction/src/lib.rs:415:40: hole assume R08.H2v
+verus/r/r08_abstraction/src/lib.rs:434:40: hole assume R08.H3v
+verus/r/r08_abstraction/src/lib.rs:464:40: hole assume R08.H4v
 ```
 
 <!-- pin: checks-d -->
@@ -567,36 +567,118 @@ Both recursive calls fail their termination check, the function's and the lemma'
 
 ---
 
-## 4. A second refinement, over A2's class API (H1)
+## 4. A refinement you write: the range-star engine (H1)
 
 The range-star engine matches the words whose every character lies in one of a list of character ranges: the pattern `[('a', 'c'), ('x', 'z')]` is the regex `[a-cx-z]*`. Its language speaks of ranges; its state speaks of one A2 class, built at the start with `ClassRange` and `ClassUnion`, after which a step is one `ClassMember` test. The abstraction is the point of the engine: the client sees ranges, the engine runs on a class whose representation A2 hides, and the start law is the bridge.
 
+The engine's parts are given, in a plain module over concrete types (`R08_RangeStarParts`): the state, the language, the model and the steps.
+
 ```dafny
+  datatype StarState = StarState(alive: bool, cls: A2.CharClass)
+
+  // Given: c lies in one of the ranges.
   ghost predicate InSomeRange(rs: seq<(char, char)>, c: char)
   {
     exists j | 0 <= j < |rs| :: rs[j].0 <= c <= rs[j].1
   }
 
+  // Given: the class of all the ranges, built with A2's class API.
   function RangesClass(rs: seq<(char, char)>): (cls: A2.CharClass)
     ensures A2.ClassValid(cls)
   {
     if rs == [] then A2.ClassEmpty() else A2.ClassUnion(A2.ClassRange(rs[0].0, rs[0].1), RangesClass(rs[1..]))
   }
 
-  ghost predicate Lang(p: Pattern, w: seq<char>)
+  // Given: the engine's language, its model of a state, and its steps.
+  ghost predicate RangesLang(rs: seq<(char, char)>, w: seq<char>)
   {
-    forall i | 0 <= i < |w| :: InSomeRange(p, w[i])
+    forall i | 0 <= i < |w| :: InSomeRange(rs, w[i])
   }
 
-  ghost predicate Res(st: Config, w: seq<char>)
+  ghost predicate StarRes(st: StarState, w: seq<char>)
   {
     st.alive && forall i | 0 <= i < |w| :: A2.InClass(st.cls, w[i])
   }
 ```
 
-`RangesClass` states `ensures A2.ClassValid(cls)` for a reason of A2's: `ClassUnion` requires both of its arguments to be valid. `ClassRange` and `ClassEmpty` return valid classes, and the `ensures` carries validity up the recursion for every caller. (Dafny could find it without the `ensures`, by unfolding the recursive call one level; the Verus `ranges_class` below is an executable function, which a caller sees only through its contract, so there the `ensures cls.valid()` is required.) The engine's `FeedLaw` is given (two assertions about `[c] + w`), and its `FinalLaw` holds as stated. `StartLaw` is the one with content: `Res(Start(p), w)` says every character of `w` is in the class, `Lang(p, w)` says every character is in some range, and the two agree exactly when the class holds the characters of the ranges and nothing else. That fact is **H1d**, `RangesClassLaw(rs, c)`; the given `StartLaw` applies it to every character.
+`StarStart(rs)` is `StarState(true, RangesClass(rs))`, `StarFeed` keeps the state when the character is a member and kills it otherwise, and `StarFinal(st)` is `st.alive`. None of these is an engine yet: nothing connects them to `MatchWord`. **H1d** is that connection. You write the module `R08_RangeStarEngine refines RG_A2_StepMatcher`: its two types, its five definitions (each the given part of the same role), and a body for each of the three laws. A refining declaration restates its signature only; the `ensures` of a law is the interface's, inherited, and the law's body must prove it with the engine's definitions substituted.
 
-The Verus engine cannot state H1 over the class itself: A2's Verus class API is executable, with view contracts (`class_union`'s `ensures u@ == self@.union(other@)`), and has no spec function that builds a class. So the Verus model is the view: `type Model = (bool, ISet<char>)`, `model(st) = (st.alive, st.cls@)`, and the start model is a spec-level set built range by range.
+The `refines` clause is what makes such a module an engine. Here is the parity engine of §6, every declaration in place, but without `refines`, and a client that calls `MatchWord`:
+
+```dafny
+module R08_ParityPlain {
+  type Pattern = bool
+  type Config = bool
+
+  ghost predicate Lang(p: Pattern, w: seq<char>) { (|w| % 2 == 0) == p }
+  ghost predicate Res(st: Config, w: seq<char>) { (|w| % 2 == 0) == st }
+  function Start(p: Pattern): Config { p }
+  function Feed(st: Config, c: char): Config { !st }
+  predicate Final(st: Config) { st }
+  lemma StartLaw(p: Pattern, w: seq<char>) { }
+  lemma FeedLaw(st: Config, c: char, w: seq<char>) { }
+  lemma FinalLaw(st: Config) { }
+}
+
+module R08_ParityClient {
+  import E = R08_ParityPlain
+
+  method EvenLength(w: seq<char>) returns (b: bool)
+    ensures b == (|w| % 2 == 0)
+  {
+    b := E.MatchWord(true, w);
+  }
+}
+```
+
+<!-- pin: plain-d -->
+```
+$ scripts/vcheck --module R08 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
+probe.dfy:21:12: error: unresolved identifier: MatchWord
+```
+
+The declarations are only names until the module refines the interface: `MatchWord`, its loop and its contract come from `RG_A2_StepMatcher`, and the laws are the obligations that the loop's proof rests on. Add `refines RG_A2_StepMatcher` and the same module is an engine whose laws are checked and whose `MatchWord` the client may call:
+
+```dafny
+module R08_ParityRefining refines RG_A2_StepMatcher {
+  type Pattern = bool
+  type Config = bool
+
+  ghost predicate Lang(p: Pattern, w: seq<char>) { (|w| % 2 == 0) == p }
+  ghost predicate Res(st: Config, w: seq<char>) { (|w| % 2 == 0) == st }
+  function Start(p: Pattern): Config { p }
+  function Feed(st: Config, c: char): Config { !st }
+  predicate Final(st: Config) { st }
+  lemma StartLaw(p: Pattern, w: seq<char>) { }
+  lemma FeedLaw(st: Config, c: char, w: seq<char>) { }
+  lemma FinalLaw(st: Config) { }
+}
+
+module R08_ParityClient {
+  import E = R08_ParityRefining
+
+  method EvenLength(w: seq<char>) returns (b: bool)
+    ensures b == (|w| % 2 == 0)
+  {
+    b := E.MatchWord(true, w);
+  }
+}
+```
+
+<!-- pin: refining-d -->
+```
+$ scripts/vcheck --module R08 probe.dfy
+vcheck: probe.dfy [dafny, learner loop]: verified — 41 verified, 0 holes, 0 errors
+```
+
+The hand file ships H1's client the same way, commented under `Uncomment as you go:`: `MatchRanges(rs, w)` promises `RangesLang(rs, w)` and returns `E.MatchWord(rs, w)`. Uncommented before your refinement exists, it does not resolve; uncommented after it, it verifies only if your `Lang` is the ranges' language. The first-try record runs it either way.
+
+Of the three laws, `FinalLaw` holds as stated once the definitions are in place, and `FeedLaw` needs two facts about `[c] + w` (its first character, and its index `i + 1` as `w`'s index `i`). `StartLaw` is the one with content: `Res(Start(p), w)` says every character of `w` is in the class, `Lang(p, w)` says every character is in some range, and the two agree exactly when the class holds the characters of the ranges and nothing else. That fact is H1's lemma, `RangesClassLaw(rs, c)`, shipped as a statement in its own module before the refinement; your `StartLaw` applies it to every character.
+
+`RangesClass` states `ensures A2.ClassValid(cls)` for a reason of A2's: `ClassUnion` requires both of its arguments to be valid. `ClassRange` and `ClassEmpty` return valid classes, and the `ensures` carries validity up the recursion for every caller. (Dafny could find it without the `ensures`, by unfolding the recursive call one level; the Verus `ranges_class` below is an executable function, which a caller sees only through its contract, so there the `ensures cls.valid()` is required.)
+
+The Verus engine cannot state H1 over the class itself: A2's Verus class API is executable, with view contracts (`class_union`'s `ensures u@ == self@.union(other@)`), and has no spec function that builds a class. So the Verus model is the view: `Model = (bool, ISet<char>)`, the given `star_model(st)` is `(st.alive, st.cls@)`, and the start model is a spec-level set built range by range.
 
 ```rust
 pub open spec fn ranges_set(rs: Seq<(char, char)>) -> ISet<char>
@@ -609,14 +691,40 @@ pub open spec fn ranges_set(rs: Seq<(char, char)>) -> ISet<char>
     }
 }
 
-    open spec fn start_spec(p: Vec<(char, char)>) -> (bool, ISet<char>) {
-        (true, ranges_set(p@))
-    }
+pub open spec fn star_start_spec(rs: Seq<(char, char)>) -> (bool, ISet<char>) {
+    (true, ranges_set(rs))
+}
+
+pub fn star_start(p: Vec<(char, char)>) -> (st: StarState)
+    ensures
+        star_model(st) == star_start_spec(p@),
 ```
 
-The given executable `start` builds the class with `class_range` and `class_union` and proves that its view is `ranges_set(p@)`; **H1v**, `lemma_ranges_set_law(rs, c)`, proves that `ranges_set(rs)` holds exactly the characters of the ranges. C5dv is this divergence: Dafny's state is its own model, because a Dafny function can build the class; a Verus engine with an executable class states its laws over the class's view, and `model` is the abstraction function of the square.
+**H1v** is the mirror: `impl StepMatcher for RangeStarEngine`, with its three types, its six spec functions and three executable functions (each the given part of the same role), and the three law bodies. A trait implementation, like a refining module, restates signatures only: the trait's `ensures` on `start`, `feed`, `is_final` and the laws are inherited, and the given `star_start`, `star_feed` and `star_is_final` promise exactly what the trait asks of the executable three. Without the implementation, the client is refused at the trait bound; a struct and a client are all this specimen holds:
 
-Both H1 items are inductions over the list with an existential to move: a range `j` of `rs[1..]` is range `j + 1` of `rs`. Neither verifier finds the shifted witness on its own, and Dafny's file says `{:induction false}` because, with default induction on, Dafny proves H1d unaided; the shipped lever is part of the task.
+```rust
+pub struct ParityEngine;
+
+// A client that needs `impl StepMatcher for ParityEngine`, which is not here.
+pub fn even_length(w: &Vec<char>) -> (b: bool)
+    ensures
+        b == (w@.len() % 2 == 0),
+{
+    match_word::<ParityEngine>(true, w)
+}
+```
+
+<!-- pin: noimpl-v -->
+```
+$ scripts/vcheck specimens/R08/demo-noimpl-v.rs.specimen
+vcheck: specimens/R08/demo-noimpl-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 2 errors, stage resolve
+specimens/R08/demo-noimpl-v.rs.specimen:14:18: error: the trait bound `ParityEngine: rg_re_a2::step_matcher::StepMatcher` is not satisfied
+specimens/R08/demo-noimpl-v.rs.specimen:14:32: error: the trait bound `ParityEngine: rg_re_a2::step_matcher::StepMatcher` is not satisfied
+```
+
+H1v's lemma, `lemma_ranges_set_law(rs, c)`, proves that `ranges_set(rs)` holds exactly the characters of the ranges, and the start law applies it at every index of `w` inside an `assert forall`. C5dv is this divergence: Dafny's state is its own model, because a Dafny function can build the class; a Verus engine with an executable class states its laws over the class's view, and `model` is the abstraction function of the square.
+
+Both H1 lemmas are inductions over the list with an existential to move: a range `j` of `rs[1..]` is range `j + 1` of `rs`. Neither verifier finds the shifted witness on its own, and Dafny's file says `{:induction false}` because, with default induction on, Dafny proves `RangesClassLaw` unaided; the shipped lever is part of the task.
 
 Now P4. *Commit your prediction first.* The specimen's engine lives in `mod engine`, with `closed spec fn res`; the proof below it is outside that module:
 
@@ -642,7 +750,7 @@ specimens/R08/P4v.rs.specimen:83:12: error: assertion failed
 
 ---
 
-## 5. The alternative-set engine (H2, H3)
+## 5. The alternative-set engine's parts and lemmas (H2, H3)
 
 The third engine keeps the alternatives of a pattern apart. Its state is a list of regexes, read as their union: the state accepts `w` when some alternative does. It starts from the pattern's top-level alternatives, and a step takes the derivative of each and splits the results again.
 
@@ -668,19 +776,16 @@ The third engine keeps the alternatives of a pattern apart. Its state is a list 
     if st == [] then [] else Parts(A2.Deriv(st[0], c)) + FeedAll(st[1..], c)
   }
 
-  // The engine's model, opaque: its existential stays out of every proof that
-  // does not reveal it. (The opacity sits on a predicate of the engine's own:
-  // Dafny does not make a refining declaration opaque.)
+  // Given: the engine's model, opaque. (The opacity sits on a predicate
+  // outside the refinement: Dafny does not make a refining declaration
+  // opaque.)
   opaque ghost predicate AltRes(st: seq<Re>, w: seq<char>)
   {
     AnyMatches(st, w)
   }
-
-  ghost predicate Res(st: Config, w: seq<char>)
-  {
-    AltRes(st, w)
-  }
 ```
+
+These live in the plain module `R08_AltSetParts`, with `AnyNullable` (some alternative is nullable). H2 and H3 are lemmas about them, in a second plain module, `R08_AltSetLaws`; the refinement that turns the parts into an engine is H4 (§6), and its laws call H2 and H3.
 
 `Parts` drops only the literal `Empty` and splits only top-level `Alt`s. Everything else stays, whatever it can still match. P1 and P2 ask what that means after one step. *Commit both predictions first.*
 
@@ -715,11 +820,11 @@ vcheck: specimens/R08/demo-p2-v.rs.specimen [verus, learner loop]: verified — 
 
 P2's answer is 1. `deriv(Re::Eps, 'a')` is `Re::Empty`, which `parts` drops; `deriv(Re::Chr('a'), 'a')` is `Re::Eps`, a part of its own. The two answers together are the rule `Parts` follows: the literal `Empty` disappears, every other dead regex stays. `by (compute_only)` asks Verus to evaluate the assertion by running the spec functions on these values, without the solver; the Dafny check shows the same with a lemma whose empty body the solver closes by unfolding.
 
-The engine's start law needs one fact about `Parts`: splitting a pattern keeps its language. That is **H2**, `PartsLaw(r, w)` / `lemma_parts_law(r, w)`: `AnyMatches(Parts(r), w) <==> Matches(r, w)`. The `Alt` case is where the work is. A matching part of `a` sits at its own index of `Parts(a) + Parts(b)`; a matching part of `b` sits `|Parts(a)|` places later; and an index of the concatenation is in one half or the other. The solver can do the arithmetic once you name the index; it does not invent the index.
+The engine's start law will need one fact about `Parts`: splitting a pattern keeps its language. That is **H2**, `PartsLaw(r, w)` / `lemma_parts_law(r, w)`: `AnyMatches(Parts(r), w) <==> Matches(r, w)`. The `Alt` case is where the work is. A matching part of `a` sits at its own index of `Parts(a) + Parts(b)`; a matching part of `b` sits `|Parts(a)|` places later; and an index of the concatenation is in one half or the other. The solver can do the arithmetic once you name the index; it does not invent the index.
 
-The step law is **H3**, `AltFeedLaw(st, c, w)` / `lemma_alt_feed_law(m, c, w)`: `AltRes(FeedAll(st, c), w) <==> AltRes(st, [c] + w)`, by induction on the list. This is the module's flagship obligation, and the reason the engine needs H2: the stepped list is `head + tail`, where `head = Parts(Deriv(st[0], c))`. H2 and A2's `DerivCorrect` together say what a part of `head` matches; the induction hypothesis says what a part of `tail` matches; and the two directions of the `<==>` each move one witness index across `head + tail` and across `st[0]` / `st[1..]`. Write the four witness moves down before you write the proof.
+The step law will rest on **H3**, `AltFeedLaw(st, c, w)` / `lemma_alt_feed_law(m, c, w)`: `AltRes(FeedAll(st, c), w) <==> AltRes(st, [c] + w)`, by induction on the list. This is the module's flagship obligation, and the reason the engine needs H2: the stepped list is `head + tail`, where `head = Parts(Deriv(st[0], c))`. H2 and A2's `DerivCorrect` together say what a part of `head` matches; the induction hypothesis says what a part of `tail` matches; and the two directions of the `<==>` each move one witness index across `head + tail` and across `st[0]` / `st[1..]`. Write the four witness moves down before you write the proof.
 
-The Verus engine has the same definitions over `Seq<Re>` (`parts`, `any_matches`, `feed_all`), an executable state `Vec<Re>` with `model(st) = st@`, and given executable `start`, `feed` and `is_final` that are proved against `parts`, `feed_all` and `any_nullable`:
+The Verus engine has the same definitions over `Seq<Re>` (`parts`, `any_matches`, `feed_all`, `any_nullable`), an executable state `Vec<Re>` whose model is its view `st@`, and given executable steps proved against the spec ones, ready for the implementation to call:
 
 ```rust
 #[verifier::opaque]
@@ -727,30 +832,24 @@ pub open spec fn alt_res(m: Seq<Re>, w: Seq<char>) -> bool {
     any_matches(m, w)
 }
 
-impl StepMatcher for AltSetEngine {
-    type Pattern = Re;
-    type Config = Vec<Re>;
-    type Model = Seq<Re>;
+pub fn parts_exec(r: &Re) -> (out: Vec<Re>)
+    ensures
+        out@ == parts(*r),
 
-    open spec fn res(m: Seq<Re>, w: Seq<char>) -> bool {
-        alt_res(m, w)
-    }
+pub fn alt_feed(st: Vec<Re>, c: char) -> (out: Vec<Re>)
+    ensures
+        out@ == feed_all(st@, c),
 
-    open spec fn feed_spec(m: Seq<Re>, c: char) -> Seq<Re> {
-        feed_all(m, c)
-    }
-
-    proof fn lemma_feed_law(m: Seq<Re>, c: char, w: Seq<char>) {
-        lemma_alt_feed_law(m, c, w);
-    }
-}
+pub fn alt_is_final(st: &Vec<Re>) -> (b: bool)
+    ensures
+        b == any_nullable(st@),
 ```
 
 ---
 
-## 6. Opacity: one reveal, in one lemma (H4)
+## 6. Opacity, and the second refinement you write (H4)
 
-The alternative-set engine's model is opaque. Its body is an existential over `Matches`, and `Matches` is recursive with existentials of its own; left transparent, it would sit in the context of every proof in the module, including the given `StartLaw` and the client code, and offer the solver instances it never needs. Opaque, `AltRes` (Verus `alt_res`) is a name with no meaning until a proof says `reveal AltRes();` (Dafny) or `reveal(alt_res);` (Verus). The reveal lasts to the end of the proof that contains it.
+The alternative-set engine's model is opaque. Its body is an existential over `Matches`, and `Matches` is recursive with existentials of its own; left transparent, it would sit in the context of every proof that can see it, including the laws that only pass it on and the client code, and offer the solver instances it never needs. Opaque, `AltRes` (Verus `alt_res`) is a name with no meaning until a proof says `reveal AltRes();` (Dafny) or `reveal(alt_res);` (Verus). The reveal lasts to the end of the proof that contains it.
 
 Why a predicate of the engine's own, and not `opaque` on `Res` itself? Because Dafny does not make a refining declaration opaque. In this parity engine `Res` is declared `opaque`, no proof reveals it, and every law still verifies, which it could not if `Res` were hidden:
 
@@ -847,7 +946,13 @@ vcheck: specimens/R08/card-c2v.rs.specimen [verus, learner loop]: failed — 0 v
 specimens/R08/card-c2v.rs.specimen:8:10: error: postcondition not satisfied
 ```
 
-Both report the lemma's postcondition, and neither says why: an opaque definition looks exactly like a definition that does not imply the statement. That is the cost of opacity, and the reason a reveal belongs next to the proof that needs it, where a reader can see it. **H4** is the engine's final law, `AltFinalLaw(st)` / `lemma_alt_final_law(m)`: a list is final (some alternative is nullable) exactly when it accepts the empty word. It is short, an induction with A1b's `NullableCorrect` per element, and its lesson is the scope: reveal `AltRes` in H4 itself. A `reveal` at the top of the module is not possible in Dafny (a reveal is a statement inside a proof), and adding one to every proof that does not need it would undo what the opacity bought. H3 needs the reveal too; H2 does not, because it is stated over the transparent `AnyMatches`.
+Both report the lemma's postcondition, and neither says why: an opaque definition looks exactly like a definition that does not imply the statement. That is the cost of opacity, and the reason a reveal belongs next to the proof that needs it, where a reader can see it.
+
+**H4** is the alternative-set engine itself. You write `R08_AltSetEngine refines RG_A2_StepMatcher` (Verus: `impl StepMatcher for AltSetEngine`): `Pattern = Re`, `Config = seq<Re>` (Verus `Vec<Re>`, with `Model = Seq<Re>`), and the definitions are the parts of §5: `Lang` is `Matches`, `Res` the opaque `AltRes`, `Start` is `Parts`, `Feed` is `FeedAll`, `Final` is `AnyNullable`. Each law rests on one lemma. The step law calls H3, whose statement is already over `AltRes`, so it needs no reveal. The start law's goal is `AltRes(Parts(p), w) <==> Matches(p, w)` and H2 speaks of `AnyMatches`, so it reveals `AltRes` and calls H2. The final law rests on H4's own lemma, `AltFinalLaw(st)` / `lemma_alt_final_law(m)`: a list is final (some alternative is nullable) exactly when it accepts the empty word, an induction with A1b's `NullableCorrect` per element, with the reveal inside it.
+
+Why a separate lemma, and not the induction in `FinalLaw` itself? Because a law inherited from the interface takes its measure from the interface's parameters, and there `Config` is an abstract type with no order: a refining lemma may not state its own `decreases` (P3, §3), and recursion on the state alone does not decrease. So the induction lives in a lemma of the engine's own, with its own `decreases |st|`, and the law calls it.
+
+The lesson is the scope: each reveal is in the one proof that needs it. A `reveal` at the top of the module is not possible in Dafny (a reveal is a statement inside a proof), and adding one to every proof that does not need it would undo what the opacity bought. H3 needs the reveal too; H2 does not, because it is stated over the transparent `AnyMatches`. H4's client, `MatchAlternatives(r, w)` (Verus `match_alt`), ships commented like H1's and promises `Matches(r, w)`.
 
 ---
 
@@ -970,16 +1075,16 @@ That is the kind of failure this module's agent task contains, from the other si
 
 ## 8. Refinement lab
 
-Spend 30 minutes on one table for the three engines you proved and the agent's: one row per obligation. For each row write the obligation as stated (the interface's law, with this engine's definitions substituted), the side that discharges it (interface, engine, given helper, layer lemma), the instrument that checks it (resolution, verification, specification freeze), and the edit that would break it without changing a line of the interface.
+Spend 10 minutes on one table for the three engines and the agent's (you wrote two of the engines in H1 and H4, so most rows are ones you have already discharged): one row per obligation. For each row write the obligation as stated (the interface's law, with this engine's definitions substituted), the side that discharges it (interface, engine, given helper, layer lemma), the instrument that checks it (resolution, verification, specification freeze), and the edit that would break it without changing a line of the interface.
 
 | engine | obligation | discharged by | checked by | breaks if |
 |---|---|---|---|---|
 | derivative | `FeedLaw`: `Matches(Deriv(st, c), w) <==> Matches(st, [c] + w)` | A2's `DerivCorrect` | verification | `Feed` stops being `Deriv` |
 | … | … | … | … | … |
 
-Fill the derivative engine's three rows first, then the range-star engine's, where the start law carries the work; then the alternative-set engine's, where H3's row depends on H2's; then the pruning engine's, where one row is false. Add two rows that are not laws: `MatchWord`'s own postcondition (discharged once, by the interface, from the laws) and a client's postcondition (discharged by `MatchWord`'s, if and only if the engine's `Lang` is what the client needs). Mark the rows whose failure the verifier reports at a location in the given file rather than in yours, and say why.
+Fill the derivative engine's three rows first, then the range-star engine's, where the start law carries the work; then the alternative-set engine's, where the start law's row depends on H2 and the step law's on H3; then the pruning engine's, where one row is false. Add two rows that are not laws: `MatchWord`'s own postcondition (discharged once, by the interface, from the laws) and a client's postcondition (discharged by `MatchWord`'s, if and only if the engine's `Lang` is what the client needs). Mark the rows whose failure the verifier reports at a location in the given file rather than in yours, and say why.
 
-The lab's second half is the directions. For one engine, write the refinement you would like to make (a stronger `ensures` on `MatchWord`, a `requires` on a word's alphabet), predict what each language does with it, and check the prediction against §3's outputs. The table, not a summary, is what you bring to `/review R08`.
+The lab's second half is the directions. For one engine, name the refinement you would like to make (a stronger `ensures` on `MatchWord`, a `requires` on a word's alphabet), predict what each language does with it, and check the prediction against §3's outputs. The table, not a summary, is what you bring to `/review R08`.
 
 ---
 
@@ -993,9 +1098,9 @@ Open `paper/R08_problems.tex` and answer in `paper/R08_answers.tex`; allow 15 mi
 
 ## 10. The exercise file
 
-Run `scripts/firsttry.sh R08 --check` once your five predictions are committed, then work the holes in order. **H1** (`RangesClassLaw` / `lemma_ranges_set_law`) is the range-star engine's start fact; **H2** (`PartsLaw` / `lemma_parts_law`) and **H3** (`AltFeedLaw` / `lemma_alt_feed_law`) are the alternative-set engine's start fact and step law; **H4** (`AltFinalLaw` / `lemma_alt_final_law`) is its final law. Each hole has a prompt with a guiding question and two hints under it; the second hint names the fact or the layer lemma, never the proof. WRITE cards C1d (`specimens/R08/card-c1d.dfy.specimen`, the star engine's two laws), C1v, C2d and C2v are short; do them when the construct is new to you.
+Run `scripts/firsttry.sh R08 --check` once your five predictions are committed, then work the holes in order. **H1** is the range-star engine: the refinement `R08_RangeStarEngine refines RG_A2_StepMatcher` / `impl StepMatcher for RangeStarEngine`, and the class fact its start law rests on (`RangesClassLaw` / `lemma_ranges_set_law`). **H2** (`PartsLaw` / `lemma_parts_law`) and **H3** (`AltFeedLaw` / `lemma_alt_feed_law`) are the alternative-set engine's start and step facts. **H4** is the alternative-set engine itself: the refinement `R08_AltSetEngine refines RG_A2_StepMatcher` / `impl StepMatcher for AltSetEngine`, and the final fact (`AltFinalLaw` / `lemma_alt_final_law`). Prove each lemma first, then write its refinement after it, where the file says `Your refinement (H1), here`, and uncomment the engine's client check below it. Each hole has a prompt with a guiding question and two hints under it; the second hint names the fact or the layer lemma, never the proof. WRITE cards C1d (`specimens/R08/card-c1d.dfy.specimen`, the star engine's two laws), C1v, C2d and C2v are short; do them when the construct is new to you.
 
-The holes use what the sections above showed: H1 the refinement's start law and an existential witness (§4), H2 and H3 the alternative-set definitions and the index arithmetic of a concatenation (§5), H3 and H4 the scoped reveal (§6). WRITE `refines` and `trait-spec` are used by H1, H3 and H4, `reveal` by H3 and H4.
+The holes use what the sections above showed: H1 the refinement itself, its start law and an existential witness (§4); H2 and H3 the alternative-set definitions and the index arithmetic of a concatenation (§5); H3 and H4 the scoped reveal, and H4 the second refinement (§6). WRITE `refines` (Dafny) and `trait-spec` (Verus) are used by H1 and H4, the two items whose module or implementation you write; `reveal` by H3 and H4.
 
 Done = `scripts/vcheck --gate dafny/R/R08_Abstraction/std` and `scripts/vcheck --gate verus/r/r08_abstraction` print only their summary lines and exit 0, `scripts/vaudit` on both reports no finding, `scripts/specfreeze --check R08` reports none, AND `scripts/firsttry.sh R08 --report --strict` exits 0. The gate runs the whole unit; a hole that verifies only under a selected symbol, or a file whose statements changed, is not done.
 

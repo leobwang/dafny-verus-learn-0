@@ -4956,6 +4956,22 @@ The record is in `Solutions/plans/DVR4-R07-build-notes.md` (§1 is the objective
   - Objectives and minutes (5, 5) are kept.
 - **Build.** Files at the bar; seeds 1–3 stable; empty-body 10/10. The chapter has source inline, 28 pins, with P1, P2 and P4 captured. The bank is at the Q06 schema. Leak patterns: 8 OK. Freeze, counts, sidecars and rubric are re-pinned. Workflow 11/11.
 
+### Δ310 · R08 at the R module bar; D92 — adopted (the user, 2026-10-25; built 2026-10-25 UTC)
+
+The record is in `Solutions/plans/DVR4-R08-build-notes.md` ("DVR4 step 5": §1 the objective map, §2 the measurements, §3 admission, §4 D92).
+
+- **The finding.** `refines` (Dafny) and `trait-spec` (Verus) had no genuine hole instance: H1–H4 were the engines' own lemmas, the refinements were given, and no smallest proof used them.
+- **D92 (the user): H1 and H4 re-posed so that the learner writes the refinement.**
+  - H1 is the range-star engine and H4 the alternative-set engine. The learner writes each whole: `module … refines RG_A2_StepMatcher` / `impl StepMatcher for …`, with types, definitions (each the given part of the same role, from a plain parts module) and the three law bodies. Each item keeps its lemma (`RangesClassLaw` / `lemma_ranges_set_law`; `AltFinalLaw` / `lemma_alt_final_law`) as the hole form, and its client ships commented under `Uncomment as you go:`.
+  - The whole module is the learner's because a refining module that inherits a bodyless law is counted as a hole at the interface's line, and a Verus impl cannot ship partial; the shipped files still count 4 holes each.
+  - Probes: the engine region removed, `refines` dropped or the trait missing, is refused at resolution; each whole declaration of the engine removed fails. Smallest proofs (lemma + laws): H1 6 / 8, H4 7 / 8 one-fact lines (D/V). `reveal` stays genuine on H3 and H4 in each language. Two items per language, no exception.
+  - H2/H3 move into a plain module `R08_AltSetLaws` (Dafny) and drop the `refines`/`trait-spec` uses they never had. Tags unchanged: `write_d = ["refines", "reveal"]`, `write_v = ["trait-spec", "reveal"]`.
+  - Minutes: H1 10 → 15, H4 5 → 10 per language; refinement lab 30 → 10. R08 stays 354.
+  - A2's interface is byte-identical.
+- **Tools.** `scripts/reference_lint.py` allows a twin-only declaration inside an item's `@hole-begin`/`@hole-end` region, which the learner writes (test in `tests/wrappers/test_tools_static.py`). Each engine's client sits inside its region so that the empty-body gate's region mode fails on the lemma instead of erroring at resolution.
+- **Build.** Hole markers on both twins; seeds 1–3 stable; empty-body 8/8. The chapter's §4 and §6 are rewritten around the refinements you write, with three new pins (`plain-d`, `refining-d`, `noimpl-v`): 30 pins, 6,507 words. The bank's reread titles and H4 notes are updated. Leak patterns: 8 OK. Freeze, counts, chapter pins (47/47) and rubric are re-pinned.
+- **Reported, not changed.** Lab α's R08 task files and cluster `source` strings name the old modules (`R08_AltSetEngine.AltFeedLaw`, …), and `r08-alt-f*-law-d` still show the old given alternative-set start law. These belong to the Lab α lane, under the declared later-tier overlap.
+
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
 DVR4 step 5's systemic pass on R09 (plan §2's row: **revise**; §4.2's bar as R02 met it, Δ283; the user's D58 accepted R02 as the exemplar). Objectives, items and minutes are PLAN §3/§11's, unchanged; build notes `Solutions/plans/DVR4-R09-build-notes.md` (the objective-to-exercise map first); evidence `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p2/r09/`.

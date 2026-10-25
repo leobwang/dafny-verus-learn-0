@@ -11,9 +11,9 @@ cmd = ["scripts/vcheck", "dafny/R/R08_Abstraction/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "e62846eb8205bf895b2ebbd089b73d63207caf87c2d18c85daacbae495f1e51e"
+body = "ab646c99d16dd07e0fc1b7cf0a8a7bdbcc738b800933969eea16252e622b0b16"
 [entry.pinned.inputs]
-"dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "38980796165eeae68e935e25df11d1d3288ecf1dbca7edb2552150799605907f"
+"dafny/R/R08_Abstraction/std/R08_Abstraction.dfy" = "f84ae76304e45652c6cc3d4509b3a3f1e3d92d80b1db8564ae6ef57ed5e34f3b"
 "dafny/R/R08_Abstraction/std/dfyconfig.toml" = "e8e0434c8bf5e2211eca8c316dbfba3a5e0e11ac7274bb7fe60c058ae7d2a6bb"
 
 [[entry]]
@@ -22,11 +22,11 @@ cmd = ["scripts/vcheck", "verus/r/r08_abstraction"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "11690d427ff34d06b53c05751b2c13c183f2afe1243ed2276170722ca01d35e4"
+body = "0bfb2e495277dbfd4eab12dcabc13b356d51d33d26d35bf8a39f1805f5554746"
 [entry.pinned.inputs]
 "verus/r/r08_abstraction/Cargo.toml" = "45401b0369d3bff1957a0d62486365d401bdead474908b7ca5fb99b253e25f01"
 "verus/r/r08_abstraction/src/agent.rs" = "b3ee1961ee5b07b3e36ef667599f9e15a1a6803885814e13b54c262af3966921"
-"verus/r/r08_abstraction/src/lib.rs" = "c9442763897ee0ab824a26cb6d557ac3dfbcd6294ed95c64ea2611614ffa477a"
+"verus/r/r08_abstraction/src/lib.rs" = "730beb4bbcd8a85fddad1b94e7dc8118181e8d7aa97967d17a2032e9e5c537b8"
 
 [[entry]]
 id = "checks-d"
@@ -418,3 +418,56 @@ body = "eb85ec798107850153574d15b4e0d30b910066ff95703272bce268fbc1e0a8a3"
 "dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
 "scratch:probe.dfy" = "6a22d787e291f5b4d36623918ed88802196a39eeba2a1395932ca7f6dc86bbc5"
+
+[[entry]]
+id = "plain-d"
+cmd = ["scripts/vcheck", "--module", "R08", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy"]
+note = "The source shown above the pin, run in the given context of R08: an engine's declarations without `refines` (D92)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "8112002598997aa6e5be40d03d71de7bf5fb3323f79f4a5bbc817dbec0b86f16"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "3ce08cc69099c969af51dd0b2bd904dd970b33f4fe8876c853aef9b370408441"
+
+[[entry]]
+id = "refining-d"
+cmd = ["scripts/vcheck", "--module", "R08", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml", "dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy"]
+note = "The source shown above the pin, run in the given context of R08: the same declarations with `refines` (D92)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "99b93c6762d0939d555b82fe089051ae27000bda5016861b848580412c408b03"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "f8c63d367916f4996fccfa19e46f13189c0b42a2863463334b3be7ca7ffa21e6"
+
+[[entry]]
+id = "noimpl-v"
+cmd = ["scripts/vcheck", "specimens/R08/demo-noimpl-v.rs.specimen"]
+note = "A client of match_word for a struct with no StepMatcher implementation (D92)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "35f8c7045fb6e5c2329f52b1b897c7605a1dda27cd38710db587975daa3f3371"
+[entry.pinned.inputs]
+"specimens/R08/demo-noimpl-v.rs.specimen" = "2dc1e9e98da2444ca5069209108701dd46da16bb474563819d84f83b06024433"

@@ -50,7 +50,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R06 | `R06.txt`: 8 (H1d, H1v, T1d, T1v, H4d, H4v, X1d, A1v) | 2026-10-24 (DVR4 step 5, Δ308: H1d re-cut for D87's parameter order; H1d, H1v, H4d and H4v also match Lab α forms, listed as declared (Δ294); the verifier over R06, 2,728 public files) | 8 OK |
 | R07 | `R07.txt`: 8 (H1d, H2d, H1v, H2v, H4v, H5v, A1d, A1v) | 2026-10-25 (DVR4 step 5, Δ309: the hand-hole patterns re-cut for the one-statement-per-line twins and D91's re-posed H4v/H5v; the verifier over R07, 2,730 public files) | 8 OK |
-| R08 | `R08.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-18 (DVR4 step 3 rebuild: the step-matcher interface; the verifier over R08, 2,305 public files) | 8 OK |
+| R08 | `R08.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-25 (DVR4 step 5, Δ310: the eight patterns re-verified on the one-statement-per-line twins after D92 re-posed H1 and H4 as refinements the learner writes; each lemma's pattern still cuts the withheld proof; the verifier over R08, 2,731 public files) | 8 OK |
 
 | R09 | `R09.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-19 (DVR4 step 5, lane P2: re-cut with `# source:` lines from the one-statement-per-line twins; the verifier over R09, 2,583 public files; the Lab α forms `bench/local/r/labalpha/r09-rep-range-correct-{d,v}` hold H4's witness skeleton without any pattern line: reported for decision) | 8 OK |
 

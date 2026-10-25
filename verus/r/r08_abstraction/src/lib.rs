@@ -9,8 +9,10 @@
 //! 1. Predictions first: fill every slot of specimens/R08/P*.specimen and of the Dafny
 //!    file's prediction block (slots/R08.slots), then record the first tries with
 //!    `scripts/firsttry.sh R08 --check`, before you run anything they are about.
-//! 2. Read the worked derivative engine (W1), then replace each hole, H1 to H4, in order.
-//!    Every hole is a lemma that one of an engine's trait laws rests on.
+//! 2. Read the worked derivative engine (W1), then work H1 to H4 in order. H1 and H4 are
+//!    engines you write as implementations of the trait, each with the lemma its laws rest
+//!    on; H2 and H3 are the alternative-set engine's own lemmas. Uncomment each engine's
+//!    client check as you finish it.
 //! 3. Done = `scripts/vcheck --gate verus/r/r08_abstraction` prints only the summary
 //!    line and exits 0, `scripts/vaudit verus/r/r08_abstraction` reports no finding,
 //!    AND `scripts/firsttry.sh R08 --report --strict` exits 0.
@@ -103,9 +105,13 @@ pub fn match_deriv(r: Re, w: &Vec<char>) -> (b: bool)
 }
 
 // =========================================================================================
-// The range-star engine: a second implementation, over A2's class API
+// Given: the parts of the two engines you write (H1 and H4)
 // =========================================================================================
 
+// A pattern of the range-star engine is a list of character ranges `(lo, hi)`; a word matches
+// when each of its characters lies in one of the ranges. The language speaks of ranges; the
+// engine builds one A2 class at the start and only tests membership afterwards. Everything
+// here is over concrete types; the trait implementation (H1) maps the trait onto it.
 /// Given: `c` lies in one of the ranges.
 pub open spec fn in_char_ranges(rs: Seq<(char, char)>, c: char) -> bool {
     exists|j: int| 0 <= j < rs.len() && (#[trigger] rs[j]).0 <= c && c <= rs[j].1
@@ -161,97 +167,66 @@ pub struct StarState {
 
 pub struct RangeStarEngine;
 
-impl StepMatcher for RangeStarEngine {
-    type Pattern = Vec<(char, char)>;
-    type Config = StarState;
-    type Model = (bool, ISet<char>);
+/// Given: the engine's language, its model of a state, and its steps (spec and exec).
+pub open spec fn range_lang(rs: Seq<(char, char)>, w: Seq<char>) -> bool {
+    forall|i: int| 0 <= i < w.len() ==> in_char_ranges(rs, #[trigger] w[i])
+}
 
-    open spec fn lang(p: Vec<(char, char)>, w: Seq<char>) -> bool {
-        forall|i: int| 0 <= i < w.len() ==> in_char_ranges(p@, #[trigger] w[i])
-    }
+pub open spec fn star_model(st: StarState) -> (bool, ISet<char>) {
+    (st.alive, st.cls@)
+}
 
-    open spec fn model(st: StarState) -> (bool, ISet<char>) {
-        (st.alive, st.cls@)
-    }
+pub open spec fn star_res(m: (bool, ISet<char>), w: Seq<char>) -> bool {
+    m.0 && forall|i: int| 0 <= i < w.len() ==> m.1.contains(#[trigger] w[i])
+}
 
-    open spec fn res(m: (bool, ISet<char>), w: Seq<char>) -> bool {
-        m.0 && forall|i: int| 0 <= i < w.len() ==> m.1.contains(#[trigger] w[i])
-    }
+pub open spec fn star_start_spec(rs: Seq<(char, char)>) -> (bool, ISet<char>) {
+    (true, ranges_set(rs))
+}
 
-    open spec fn start_spec(p: Vec<(char, char)>) -> (bool, ISet<char>) {
-        (true, ranges_set(p@))
-    }
-
-    open spec fn feed_spec(m: (bool, ISet<char>), c: char) -> (bool, ISet<char>) {
-        if m.0 && m.1.contains(c) {
-            m
-        } else {
-            (false, m.1)
-        }
-    }
-
-    open spec fn final_spec(m: (bool, ISet<char>)) -> bool {
-        m.0
-    }
-
-    fn start(p: Vec<(char, char)>) -> (st: StarState) {
-        proof {
-            assert(p@.subrange(0, p@.len() as int) =~= p@);
-        }
-        StarState { alive: true, cls: ranges_class(&p, 0) }
-    }
-
-    fn feed(st: StarState, c: char) -> (r: StarState) {
-        if st.alive && st.cls.class_member(c) {
-            st
-        } else {
-            StarState { alive: false, cls: st.cls }
-        }
-    }
-
-    fn is_final(st: &StarState) -> (b: bool) {
-        st.alive
-    }
-
-    proof fn lemma_start_law(p: Vec<(char, char)>, w: Seq<char>) {
-        assert forall|i: int| 0 <= i < w.len() implies ranges_set(p@).contains(#[trigger] w[i])
-            == in_char_ranges(p@, w[i]) by {
-            lemma_ranges_set_law(p@, w[i]);
-        }
-    }
-
-    proof fn lemma_feed_law(m: (bool, ISet<char>), c: char, w: Seq<char>) {
-        let cw = seq![c] + w;
-        assert(cw[0] == c);
-        assert forall|i: int| 0 <= i < w.len() implies cw[i + 1] == w[i] by {
-        }
-    }
-
-    proof fn lemma_final_law(m: (bool, ISet<char>)) {
+pub open spec fn star_feed_spec(m: (bool, ISet<char>), c: char) -> (bool, ISet<char>) {
+    if m.0 && m.1.contains(c) {
+        m
+    } else {
+        (false, m.1)
     }
 }
 
-// item: R08.H1v
-// uses: trait-spec
-// pair: R08.H1d
-/// **H1.** The set the engine's start model holds is exactly the characters of the
-/// pattern's ranges. `ranges_set` adds one range at a time: what does the recursive call
-/// give you for `rs.drop_first()`, and which index of `rs` is range `j` of the tail?
-pub proof fn lemma_ranges_set_law(rs: Seq<(char, char)>, c: char)
+pub open spec fn star_final_spec(m: (bool, ISet<char>)) -> bool {
+    m.0
+}
+
+pub fn star_start(p: Vec<(char, char)>) -> (st: StarState)
     ensures
-        ranges_set(rs).contains(c) == in_char_ranges(rs, c),
-    decreases rs.len(),
+        star_model(st) == star_start_spec(p@),
 {
-    #[verifier::proof_note("R08.H1v")] assume(false);  // HOLE: replace this line
+    proof {
+        assert(p@.subrange(0, p@.len() as int) =~= p@);
+    }
+    StarState { alive: true, cls: ranges_class(&p, 0) }
 }
-// Hint(1): the recursive call on `rs.drop_first()` is the induction hypothesis; `choose`
-//          a witness range from each `in_char_ranges` you need to use.
-// Hint(2): the trigger of `in_char_ranges` is `rs[j]`: assert the indexing fact that
-//          relates `tail[j]` to `rs[j + 1]` (and `rs[j]` to `tail[j - 1]`).
 
-// =========================================================================================
-// The alternative-set engine: a state is a list of alternatives
-// =========================================================================================
+pub fn star_feed(st: StarState, c: char) -> (r: StarState)
+    ensures
+        star_model(r) == star_feed_spec(star_model(st), c),
+{
+    if st.alive && st.cls.class_member(c) {
+        st
+    } else {
+        StarState { alive: false, cls: st.cls }
+    }
+}
+
+pub fn star_is_final(st: &StarState) -> (b: bool)
+    ensures
+        b == star_final_spec(star_model(*st)),
+{
+    st.alive
+}
+
+// The state of the alternative-set engine is the list of the pattern's top-level
+// alternatives; a step takes the derivative of each and splits the results again. Its model
+// is the opaque `alt_res`: the existential stays out of every proof that does not reveal it.
 
 /// Given: split the top-level `Alt` nodes, drop the literal `Empty` parts.
 pub open spec fn parts(r: Re) -> Seq<Re>
@@ -346,81 +321,85 @@ pub open spec fn alt_res(m: Seq<Re>, w: Seq<char>) -> bool {
 
 pub struct AltSetEngine;
 
-impl StepMatcher for AltSetEngine {
-    type Pattern = Re;
-    type Config = Vec<Re>;
-    type Model = Seq<Re>;
-
-    open spec fn lang(p: Re, w: Seq<char>) -> bool {
-        matches(p, w)
+/// Given: one step of the engine, executable.
+pub fn alt_feed(st: Vec<Re>, c: char) -> (out: Vec<Re>)
+    ensures
+        out@ == feed_all(st@, c),
+{
+    proof {
+        assert(st@.subrange(0, st@.len() as int) =~= st@);
     }
-
-    open spec fn model(st: Vec<Re>) -> Seq<Re> {
-        st@
-    }
-
-    open spec fn res(m: Seq<Re>, w: Seq<char>) -> bool {
-        alt_res(m, w)
-    }
-
-    open spec fn start_spec(p: Re) -> Seq<Re> {
-        parts(p)
-    }
-
-    open spec fn feed_spec(m: Seq<Re>, c: char) -> Seq<Re> {
-        feed_all(m, c)
-    }
-
-    open spec fn final_spec(m: Seq<Re>) -> bool {
-        any_nullable(m)
-    }
-
-    fn start(p: Re) -> (st: Vec<Re>) {
-        parts_exec(&p)
-    }
-
-    fn feed(st: Vec<Re>, c: char) -> (r: Vec<Re>) {
-        proof {
-            assert(st@.subrange(0, st@.len() as int) =~= st@);
-        }
-        feed_from(&st, 0, c)
-    }
-
-    fn is_final(st: &Vec<Re>) -> (b: bool) {
-        let mut i = st.len();
-        let mut b = false;
-        while i > 0
-            invariant
-                i <= st.len(),
-                b == any_nullable(st@.subrange(i as int, st@.len() as int)),
-            decreases i,
-        {
-            i = i - 1;
-            proof {
-                let s = st@.subrange(i as int, st@.len() as int);
-                assert(s.drop_first() =~= st@.subrange(i + 1, st@.len() as int));
-            }
-            b = is_nullable(&st[i]) || b;
-        }
-        proof {
-            assert(st@.subrange(0, st@.len() as int) =~= st@);
-        }
-        b
-    }
-
-    proof fn lemma_start_law(p: Re, w: Seq<char>) {
-        reveal(alt_res);
-        lemma_parts_law(p, w);
-    }
-
-    proof fn lemma_feed_law(m: Seq<Re>, c: char, w: Seq<char>) {
-        lemma_alt_feed_law(m, c, w);
-    }
-
-    proof fn lemma_final_law(m: Seq<Re>) {
-        lemma_alt_final_law(m);
-    }
+    feed_from(&st, 0, c)
 }
+
+/// Given: is some alternative nullable, executable.
+pub fn alt_is_final(st: &Vec<Re>) -> (b: bool)
+    ensures
+        b == any_nullable(st@),
+{
+    let mut i = st.len();
+    let mut b = false;
+    while i > 0
+        invariant
+            i <= st.len(),
+            b == any_nullable(st@.subrange(i as int, st@.len() as int)),
+        decreases i,
+    {
+        i = i - 1;
+        proof {
+            let s = st@.subrange(i as int, st@.len() as int);
+            assert(s.drop_first() =~= st@.subrange(i + 1, st@.len() as int));
+        }
+        b = is_nullable(&st[i]) || b;
+    }
+    proof {
+        assert(st@.subrange(0, st@.len() as int) =~= st@);
+    }
+    b
+}
+
+// =========================================================================================
+// H1: the range-star engine, a trait implementation you write
+// =========================================================================================
+
+// item: R08.H1v
+// uses: trait-spec
+// pair: R08.H1d
+/// **H1.** Write the range-star engine as an implementation of `StepMatcher`: after the set
+/// fact below, `impl StepMatcher for RangeStarEngine`. Its `Pattern` is `Vec<(char, char)>`,
+/// its `Config` is `StarState` and its `Model` is `(bool, ISet<char>)`; `lang`, `model`,
+/// `res`, `start_spec`, `feed_spec` and `final_spec` are the given `range_lang` (of `p@`),
+/// `star_model`, `star_res`, `star_start_spec` (of `p@`), `star_feed_spec` and
+/// `star_final_spec`; `start`, `feed` and `is_final` call `star_start`, `star_feed` and
+/// `star_is_final`; then each of the three laws gets a body. The start law rests on
+/// `lemma_ranges_set_law`, which you prove first: `ranges_set` adds one range at a time.
+/// What does the recursive call give you for `rs.drop_first()`, and which index of `rs` is
+/// range `j` of the tail? Which law needs no proof at all?
+pub proof fn lemma_ranges_set_law(rs: Seq<(char, char)>, c: char)
+    ensures
+        ranges_set(rs).contains(c) == in_char_ranges(rs, c),
+    decreases rs.len(),
+{
+    #[verifier::proof_note("R08.H1v")] assume(false);  // HOLE: replace this line
+}
+// Hint(1): the recursive call on `rs.drop_first()` is the induction hypothesis; `choose`
+//          a witness range from each `in_char_ranges` you need, and assert the indexing
+//          fact that relates `tail[j]` to `rs[j + 1]` (and `rs[j]` to `tail[j - 1]`).
+// Hint(2): a trait implementation restates each item's signature without its contract (the
+//          trait's are inherited); the start law calls `lemma_ranges_set_law` inside an
+//          `assert forall` over the indices of `w`, the feed law relates index `i + 1` of
+//          `seq![c] + w` to index `i` of `w`.
+
+// Your implementation (H1), here: impl StepMatcher for RangeStarEngine { … }
+
+// A client of the range-star engine: it knows only `match_word`'s contract.
+// Uncomment as you go:
+// pub fn match_range_star(p: Vec<(char, char)>, w: &Vec<char>) -> (b: bool)
+//     ensures
+//         b == range_lang(p@, w@),
+// {
+//     match_word::<RangeStarEngine>(p, w)
+// }
 
 // item: R08.H2v
 // pair: R08.H2d
@@ -441,9 +420,9 @@ pub proof fn lemma_parts_law(r: Re, w: Seq<char>)
 //          `i - pa.len()` in `pb`; the other non-Empty cases have the list `seq![r]`.
 
 // item: R08.H3v
-// uses: trait-spec, reveal
+// uses: reveal
 // pair: R08.H3d
-/// **H3.** The alternative-set engine's step law. `feed_all(m, c)` is
+/// **H3.** The alternative-set engine's step fact. `feed_all(m, c)` is
 /// `parts(deriv(m[0], c))` followed by `feed_all(m.drop_first(), c)`, and `alt_res` is opaque.
 /// Which given lemmas say what a part of the derivative of `m[0]` matches, which call
 /// covers the rest of the list, and where must the witness index go in each direction?
@@ -459,13 +438,24 @@ pub proof fn lemma_alt_feed_law(m: Seq<Re>, c: char, w: Seq<char>)
 // Hint(2): `lemma_parts_law` (H2) and `lemma_deriv_correct` on `m[0]`; then move one
 //          witness across `head + tail` and across `m[0]` / `m.drop_first()`.
 
+
+// =========================================================================================
+// H4: the alternative-set engine, a trait implementation you write
+// =========================================================================================
+
 // item: R08.H4v
 // uses: trait-spec, reveal
 // pair: R08.H4d
-/// **H4.** The alternative-set engine's final law: the model is final exactly when some
-/// alternative accepts the empty word. `alt_res` is opaque for every proof that does not
-/// reveal it. Where does the reveal belong, and which A1b fact turns `nullable` into a
-/// match of the empty word?
+/// **H4.** Write the alternative-set engine as an implementation of `StepMatcher`: after the
+/// final fact below, `impl StepMatcher for AltSetEngine`. Its `Pattern` is `Re`, its
+/// `Config` is `Vec<Re>` and its `Model` is `Seq<Re>`; `lang` is `matches`, `model` is
+/// `st@`, `res` the opaque `alt_res`, `start_spec` is `parts`, `feed_spec` is `feed_all` and
+/// `final_spec` is `any_nullable`; `start`, `feed` and `is_final` call `parts_exec`,
+/// `alt_feed` and `alt_is_final`. The start law rests on `lemma_parts_law` (H2), the feed law
+/// on `lemma_alt_feed_law` (H3), the final law on `lemma_alt_final_law`, which you prove
+/// first: the model is final exactly when some alternative accepts the empty word. Where
+/// does each reveal of `alt_res` belong, and which A1b fact turns `nullable` into a match of
+/// the empty word?
 pub proof fn lemma_alt_final_law(m: Seq<Re>)
     ensures
         any_nullable(m) == alt_res(m, Seq::<char>::empty()),
@@ -473,25 +463,24 @@ pub proof fn lemma_alt_final_law(m: Seq<Re>)
 {
     #[verifier::proof_note("R08.H4v")] assume(false);  // HOLE: replace this line
 }
-// Hint(1): reveal `alt_res` here (in this proof fn, nowhere wider); induction on `m.len()`.
-// Hint(2): `lemma_nullable_correct(m[0])`; index `i + 1` of `m` is index `i` of
+// Hint(1): reveal `alt_res` in `lemma_alt_final_law` only; induction on `m.len()`:
+//          `lemma_nullable_correct(m[0])`; index `i + 1` of `m` is index `i` of
 //          `m.drop_first()`.
+// Hint(2): the start law's goal mentions `alt_res`, `lemma_parts_law`'s `any_matches`:
+//          reveal `alt_res` there; the other two laws call their lemmas.
 
-/// A client of the alternative-set engine: the same contract as `match_deriv`.
-pub fn match_alt(r: Re, w: &Vec<char>) -> (b: bool)
-    ensures
-        b == matches(r, w@),
-{
-    match_word::<AltSetEngine>(r, w)
-}
 
-/// A client of the range-star engine.
-pub fn match_range_star(p: Vec<(char, char)>, w: &Vec<char>) -> (b: bool)
-    ensures
-        b == (forall|i: int| 0 <= i < w@.len() ==> in_char_ranges(p@, #[trigger] w@[i])),
-{
-    match_word::<RangeStarEngine>(p, w)
-}
+// Your implementation (H4), here: impl StepMatcher for AltSetEngine { … }
+
+// A client of the alternative-set engine: the same contract as `match_deriv`.
+// Uncomment as you go:
+// pub fn match_alt(r: Re, w: &Vec<char>) -> (b: bool)
+//     ensures
+//         b == matches(r, w@),
+// {
+//     match_word::<AltSetEngine>(r, w)
+// }
+
 
 } // verus!
 

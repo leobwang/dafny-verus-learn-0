@@ -1,0 +1,17 @@
+// A struct and a client of `match_word`, with no `impl StepMatcher` for the struct.
+use vstd::prelude::*;
+use rg_re_a2::step_matcher::{StepMatcher, match_word};
+
+verus! {
+
+pub struct ParityEngine;
+
+// A client that needs `impl StepMatcher for ParityEngine`, which is not here.
+pub fn even_length(w: &Vec<char>) -> (b: bool)
+    ensures
+        b == (w@.len() % 2 == 0),
+{
+    match_word::<ParityEngine>(true, w)
+}
+
+} // verus!

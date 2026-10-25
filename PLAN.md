@@ -255,11 +255,11 @@ Each record: the registry title; **why** it exists (its design role); the **core
 - **Core payload.** A `Matcher` interface (`abstract module` + `refines`, the abstract module in a given-role file, §2.4 F6 \| a trait with spec methods and an implementation) refined by the derivative matcher; opacity (`opaque`/`reveal` \| `#[verifier::opaque]`/`reveal`); what a refinement may change (weaken `requires`, strengthen `ensures`) and why; the obligations a refinement generates.
 - **Diagrams.** The refinement square (interface spec ↔ implementation); the direction of `requires`/`ensures` changes allowed by refinement.
 - **Written track.** The card; **refinement obligations** (list, for a given refinement, every obligation and which side discharges it).
-- **Exercises.** The derivative matcher as a `Matcher` refinement; a second refinement over A2's class API; opacity repairs.
+- **Exercises.** The derivative matcher as a `Matcher` refinement (worked); two refinements the learner writes (D92): one over A2's class API, one over the alternative-set state; opacity repairs.
 - **Agentic role.** Rung 5, **infra debugger (semantic)**: a refinement that fails for a semantic reason, which the agent must diagnose without weakening the interface.
 - **Whispers.** Plants: the interface (→ R11's certifying matcher, R16's VM refining the same interface). Harvests: R03's strengthened `requires` (← the refinement directions), R06's matcher.
 - **Research tie-in.** 06.7 Ringer et al., *QED at Large*: proof engineering, maintenance and repair, where the theorem is always available as the spec.
-- **Hours.** 354 min (5.9 h), D/V 50/50; seventh bench card. Itemized [A]: setup 10, read 60, worked 30, cards 7, predicts 15, holes 90, refinement lab 30, agent 25, paper 30, bench 20, viva 30, calib 7.
+- **Hours.** 354 min (5.9 h), D/V 50/50; seventh bench card. Itemized [A]: setup 10, read 60, worked 30, cards 7, predicts 15, holes 110, refinement lab 10, agent 25, paper 30, bench 20, viva 30, calib 7 (D92, Δ310: H1 and H4 are refinements the learner writes; 20 lab minutes moved to them).
 - **Coverage.** S6 abstraction-and-opacity, traits-and-interfaces, refinement.
 
 #### R09 — Effects
@@ -1397,8 +1397,9 @@ completed abstraction goal, retaining its fixed interface and course-derived
 provenance. Live model/contractor validation remains D45 debt.
 
 The354-minute record remains: setup10, read60, worked30, other cards7,
-predicts15, holes90, refinement lab30, agent25, paper30, bench20, viva30 and
-calibration7. The two language-specific hole totals remain45minutes each.
+predicts15, holes110, refinement lab10, agent25, paper30, bench20, viva30 and
+calibration7. The two language-specific hole totals are55minutes each (D92,
+Δ310: H1 15 and H4 10, the refinements the learner writes; the lab gave 20).
 
 **R08 as-built prediction scope.** P3 now contrasts the same literal execution
 under a whole-word model and a consistent shortened-word model. It directly
