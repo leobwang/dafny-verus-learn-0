@@ -3,14 +3,22 @@ use vstd::prelude::*;
 use vstd::seq_lib::*;
 verus! {
 // GIVEN: understand this explicit call before the scoped broadcast version.
-proof fn filter_map_origin_named_r07(xs: Seq<char>,f: spec_fn(char)->Option<char>,out:char)
- requires xs.filter_map(f).contains(out),
- ensures exists|c:char| xs.contains(c) && f(c) == Some(out),
-{ xs.lemma_filter_map_contains(f,out); }
+proof fn filter_map_origin_named_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, out: char)
+    requires
+        xs.filter_map(f).contains(out),
+    ensures
+        exists|c: char| xs.contains(c) && f(c) == Some(out),
+{
+    xs.lemma_filter_map_contains(f, out);
+}
 // item: R07.C2v write:broadcast-use
 // WRITE: a single qualified broadcast use, scoped only to this proof.
-proof fn filter_map_origin_scoped_r07(xs: Seq<char>,f: spec_fn(char)->Option<char>,out:char)
- requires xs.filter_map(f).contains(out),
- ensures exists|c:char| xs.contains(c) && f(c) == Some(out),
-{ broadcast use vstd::seq::Seq::lemma_filter_map_contains; }
+proof fn filter_map_origin_scoped_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, out: char)
+    requires
+        xs.filter_map(f).contains(out),
+    ensures
+        exists|c: char| xs.contains(c) && f(c) == Some(out),
+{
+    broadcast use vstd::seq::Seq::lemma_filter_map_contains;
+}
 }

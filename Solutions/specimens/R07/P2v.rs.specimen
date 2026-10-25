@@ -5,7 +5,7 @@ verus! {
 // item: R07.P2v value
 // Answer form: numeral.
 proof fn filtered_scalar_count_r07() {
- reveal_with_fuel(Seq::filter,5);
- assert(seq!['β','a','β','b'].filter(|c:char| c == 'β').len() == 2) by (compute_only);
+    reveal_with_fuel(Seq::filter, 5);
+ assert(seq!['β', 'a', 'β', 'b'].filter(|c: char| c == 'β').len() == 2) by (compute_only);
 }
 }

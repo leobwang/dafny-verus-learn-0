@@ -5,11 +5,12 @@ verus! {
 // item: R07.P4v obligation
 // Commit labels before enabling the switch.
 // FAILS a b
-proof fn filtered_indices_r07(xs: Seq<char>,i: int)
- requires 0 <= i < xs.len(),
+proof fn filtered_indices_r07(xs: Seq<char>, i: int)
+    requires
+        0 <= i < xs.len(),
 {
- xs.lemma_filter_contains(|c:char| c == 'x',i); // [a]
- xs.lemma_filter_pred(|c:char| c == 'x',i); // [b]
- xs.lemma_filter_len(|c:char| c == 'x'); // [c]
+    xs.lemma_filter_contains(|c: char| c == 'x', i); // [a]
+    xs.lemma_filter_pred(|c: char| c == 'x', i); // [b]
+    xs.lemma_filter_len(|c: char| c == 'x'); // [c]
 }
 }

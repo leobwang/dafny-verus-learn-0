@@ -1,24 +1,24 @@
 # R07 withheld H/A proof windows; no prediction answers.
 # from Solutions/dafny/R/R07_Libraries/std/R07_Libraries.dfy
-# source: assert ys == xs + ys[|xs|..]; (R07.H1d)
+# source: S.LemmaFilterDistributesOverConcat(c => InClass(cc, c), xs, ys[|xs|..]); (R07.H1d; re-cut 2026-10-25 for the one-statement-per-line twin)
 # verified: solutions=1 public=0
-\{\s*assert\s*ys\s*==\s*xs\s*\+\s*ys\[\|xs\|\.\.\];\s*S\.LemmaFilterDistributesOverConcat\(c\s*=>\s*InClass\(cc,c\),xs,ys\[\|xs\|\.\.\]\);\s*\}
-# source: var filtered := S.Filter(c => InClass(cc,c),xs); (R07.H2d)
+S\.LemmaFilterDistributesOverConcat\(c\s*=>\s*InClass\(cc,\s*c\),\s*xs,\s*ys\[\|xs\|\.\.\]\)
+# source: S.LemmaCardinalityOfSetNoDuplicates(filtered); ... S.LemmaNoDuplicatesCardinalityOfSet(filtered); (R07.H2d; re-cut 2026-10-25)
 # verified: solutions=1 public=0
-\{\s*var\s*filtered\s*:=\s*S\.Filter\(c\s*=>\s*InClass\(cc,c\),xs\);\s*if\s*S\.HasNoDuplicates\(filtered\)\s*\{\s*S\.LemmaCardinalityOfSetNoDuplicates\(filtered\);\s*\}\s*if\s*\|S\.ToSet\(filtered\)\|\s*==\s*\|filtered\|\s*\{\s*S\.LemmaNoDuplicatesCardinalityOfSet\(filtered\);\s*\}\s*\}
+S\.LemmaCardinalityOfSetNoDuplicates\(filtered\);[\s\S]{0,200}?S\.LemmaNoDuplicatesCardinalityOfSet\(filtered\)
 # from Solutions/verus/r/r07_libraries/src/lib.rs
-# source: { xs.lemma_filter_monotone(ys,|c: char| cc@.contains(c)); } (R07.H1v)
+# source: xs.lemma_filter_monotone(ys, |c: char| cc@.contains(c)); (R07.H1v; re-cut 2026-10-25)
 # verified: solutions=1 public=0
-\{\s*xs\.lemma_filter_monotone\(ys,\|c:\s*char\|\s*cc@\.contains\(c\)\);\s*\}
-# source: let filtered=xs.filter(|c: char| cc@.contains(c)); (R07.H2v)
+xs\.lemma_filter_monotone\(ys,\s*\|c:\s*char\|\s*cc@\.contains\(c\)\)
+# source: filtered.unique_seq_to_set(); ... filtered.lemma_no_dup_set_cardinality(); (R07.H2v; re-cut 2026-10-25)
 # verified: solutions=1 public=0
-\{\s*let\s*filtered=xs\.filter\(\|c:\s*char\|\s*cc@\.contains\(c\)\);\s*if\s*filtered\.no_duplicates\(\)\s*\{\s*filtered\.unique_seq_to_set\(\);\s*\}\s*if\s*filtered\.to_set\(\)\.len\(\)\s*==\s*filtered\.len\(\)\s*\{\s*filtered\.lemma_no_dup_set_cardinality\(\);\s*\}\s*\}
-# source: { broadcast use vstd::seq::Seq::lemma_filter_map_contains; } (R07.H4v)
+filtered\.unique_seq_to_set\(\);[\s\S]{0,200}?filtered\.lemma_no_dup_set_cardinality\(\)
+# source: broadcast use vstd::seq::Seq::lemma_filter_map_contains; (R07.H4v; re-cut 2026-10-25 for D91)
 # verified: solutions=1 public=0
-\{\s*broadcast\s*use\s*vstd::seq::Seq::lemma_filter_map_contains;\s*\}
-# source: { broadcast use vstd::seq::Seq::lemma_filter_map_take_succ; } (R07.H5v)
+broadcast\s+use\s+vstd::seq::Seq::lemma_filter_map_contains\s*;
+# source: broadcast use vstd::seq::Seq::lemma_filter_map_take_succ; (R07.H5v; re-cut 2026-10-25 for D91)
 # verified: solutions=1 public=0
-\{\s*broadcast\s*use\s*vstd::seq::Seq::lemma_filter_map_take_succ;\s*\}
+broadcast\s+use\s+vstd::seq::Seq::lemma_filter_map_take_succ\s*;
 # from Solutions/dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy
 # source: S.LemmaFlattenConcat(left, right); // found-by: grep (R07.A1d)
 # verified: solutions=1 public=0

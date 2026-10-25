@@ -49,22 +49,22 @@ After the first-try record, the following source runs establish the learner-loop
 ```
 $ scripts/vcheck dafny/R/R07_Libraries/std
 vcheck: dafny/R/R07_Libraries/std [dafny, learner loop]: verified — 39 verified, 4 holes, 0 errors
-dafny/R/R07_Libraries/std/R07_Libraries.dfy:19:25: hole bodyless-method R07.T1d
-dafny/R/R07_Libraries/std/R07_Libraries.dfy:44:82: hole bodyless-method R07.H1d
-dafny/R/R07_Libraries/std/R07_Libraries.dfy:51:62: hole bodyless-method R07.H2d
-dafny/R/R07_Libraries/std/R07_Libraries.dfy:58:31: hole bodyless-method R07.H3d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:25:27: hole bodyless-method R07.T1d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:72:88: hole bodyless-method R07.H1d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:87:66: hole bodyless-method R07.H2d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:103:33: hole bodyless-method R07.H3d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r07_libraries
 vcheck: verus/r/r07_libraries [verus, learner loop]: verified — - verified, 6 holes, 0 errors
-verus/r/r07_libraries/src/lib.rs:21:38: hole assume R07.T1v
-verus/r/r07_libraries/src/lib.rs:47:39: hole assume R07.H1v
-verus/r/r07_libraries/src/lib.rs:53:38: hole assume R07.H2v
-verus/r/r07_libraries/src/lib.rs:60:38: hole assume R07.H3v
-verus/r/r07_libraries/src/lib.rs:66:38: hole assume R07.H4v
-verus/r/r07_libraries/src/lib.rs:72:38: hole assume R07.H5v
+verus/r/r07_libraries/src/lib.rs:29:40: hole assume R07.T1v
+verus/r/r07_libraries/src/lib.rs:97:40: hole assume R07.H1v
+verus/r/r07_libraries/src/lib.rs:114:40: hole assume R07.H2v
+verus/r/r07_libraries/src/lib.rs:135:40: hole assume R07.H3v
+verus/r/r07_libraries/src/lib.rs:152:40: hole assume R07.H4v
+verus/r/r07_libraries/src/lib.rs:173:40: hole assume R07.H5v
 ```
 
 <!-- pin: checks-d -->
@@ -72,6 +72,62 @@ verus/r/r07_libraries/src/lib.rs:72:38: hole assume R07.H5v
 $ scripts/vcheck dafny/checks/R07_checks.dfy
 vcheck: dafny/checks/R07_checks.dfy [dafny, learner loop]: verified — 34 verified, 0 holes, 0 errors
 ```
+
+After the first-try record, the two value predictions are settled by runs. P1's check filters `"cab?"` by the class `ClassRange('a', 'c')`: the filter keeps, in order, every character the class contains, so the answer is `"cab"`, and `?` is dropped. The check unit's own test runs only once your answer is in its slot, so the lemma below states the same value, one step per character. `Std.Collections.Seq.Filter` is opaque, and `reveal S.Filter();` lets the solver unfold it; `ClassMember`'s contract (`b == InClass(cc, c)`) and `ClassRange`'s (`InClass(r, c) <==> lo <= c <= hi`) decide each character:
+
+```dafny
+module R07_ChP1 {
+  import opened RG_A2_Deriv
+  import S = Std.Collections.Seq
+
+  // P1's scenario with its answer: the filter keeps the class's characters, in order.
+  lemma P1Value()
+  {
+    var cc := ClassRange('a', 'c');
+    var keep := c => ClassMember(cc, c);
+    reveal S.Filter();
+    assert keep('c') && keep('a') && keep('b') && !keep('?');
+    assert "cab?" == ['c'] + "ab?";
+    assert "ab?" == ['a'] + "b?";
+    assert "b?" == ['b'] + "?";
+    assert "?" == ['?'] + "";
+    assert S.Filter(keep, "?") == "";
+    assert S.Filter(keep, "b?") == "b";
+    assert S.Filter(keep, "ab?") == "ab";
+    assert S.Filter(keep, "cab?") == "cab";
+  }
+}
+```
+
+<!-- pin: p1-d -->
+```
+$ scripts/vcheck --module R07 p1.dfy
+vcheck: p1.dfy [dafny, learner loop]: verified — 35 verified, 0 holes, 0 errors
+```
+
+P2 counts the `'β'`s of `seq!['β', 'a', 'β', 'b']`: two. `by (compute_only)` evaluates the closed expression; the `reveal_with_fuel` gives `filter` enough unfoldings for a four-element sequence.
+
+```rust
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+
+verus! {
+
+proof fn p2_value() {
+    reveal_with_fuel(Seq::filter, 5);
+    assert(seq!['β', 'a', 'β', 'b'].filter(|c: char| c == 'β').len() == 2) by (compute_only);
+}
+
+} // verus!
+```
+
+<!-- pin: p2-v -->
+```
+$ scripts/vcheck --module R07 p2.rs
+vcheck: p2.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+The answers are `"cab"` and `2`. Both are values of closed expressions; neither is a lemma about every sample, which is what the holes ask for.
 
 ---
 
@@ -106,29 +162,67 @@ The search is complete only when the named contract supplies the target relation
 
 Complete C1d and C1v with an explicit named call and its actual arguments. The compact specimens deliberately leave the step absent. They isolate calling syntax and contract instantiation; leave the mathematical statement fixed. Before running, say which clause the call contributes. After running, retain the native result and explain the scope of the checked declaration.
 
+```dafny
+module R07_ExplicitCard {
+  import S = Std.Collections.Seq
+  // item: R07.C1d write:library-call
+  // WRITE: instantiate the named empty-alphabet lemma; leave the contract fixed.
+  lemma EmptyAlphabetCardR07(xs: seq<char>)
+    ensures |S.ToSet(xs)| == 0 <==> |xs| == 0
+  {
+  }
+}
+```
+
 <!-- pin: explicit-d -->
 ```
 $ scripts/vcheck specimens/R07/card-c1d.dfy.specimen
 vcheck: specimens/R07/card-c1d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R07/card-c1d.dfy.specimen:7:2: error: a postcondition could not be proved on this return path
-specimens/R07/card-c1d.dfy.specimen:6:30: related: this is the postcondition that could not be proved
+specimens/R07/card-c1d.dfy.specimen:7:3: error: a postcondition could not be proved on this return path
+specimens/R07/card-c1d.dfy.specimen:6:32: related: this is the postcondition that could not be proved
+```
+
+```rust
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+verus! {
+// item: R07.C1v write:library-call
+// WRITE: instantiate the named empty-alphabet lemma.
+proof fn empty_alphabet_card_r07(xs: Seq<char>)
+    ensures
+        xs.to_set().len() == 0 <==> xs.len() == 0,
+{}
+}
 ```
 
 <!-- pin: explicit-v -->
 ```
 $ scripts/vcheck specimens/R07/card-c1v.rs.specimen
 vcheck: specimens/R07/card-c1v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R07/card-c1v.rs.specimen:7:10: error: postcondition not satisfied
+specimens/R07/card-c1v.rs.specimen:8:9: error: postcondition not satisfied
 ```
 
 C3d asks for a qualified set-library fact and a reproducible search note. Write the namespace exactly and record which rung found it. The note is provenance for your choice, not a mathematical premise. A correct proof should still consist of checked code and justified library contracts when the note is removed.
+
+```dafny
+module R07_SearchCard {
+  import Sets = Std.Collections.Set
+  // item: R07.C3d write:library-call
+  // WRITE: name the qualified library fact; record the source-search rung.
+  lemma SameObservedAlphabetR07(a: set<char>, b: set<char>)
+    requires a <= b && |a| == |b|
+    ensures a == b
+  {
+  }
+}
+```
 
 <!-- pin: search-d -->
 ```
 $ scripts/vcheck specimens/R07/card-c3d.dfy.specimen
 vcheck: specimens/R07/card-c3d.dfy.specimen [dafny, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R07/card-c3d.dfy.specimen:8:2: error: a postcondition could not be proved on this return path
-specimens/R07/card-c3d.dfy.specimen:7:13: related: this is the postcondition that could not be proved
+specimens/R07/card-c3d.dfy.specimen:8:3: error: a postcondition could not be proved on this return path
+specimens/R07/card-c3d.dfy.specimen:7:15: related: this is the postcondition that could not be proved
 ```
 
 ---
@@ -147,19 +241,69 @@ Follow the hand-first rule. Read and run the named-call version of the card befo
 
 C2v presents the explicit filter-map origin argument and then asks for one scoped broadcast. C3v repeats the discipline for a different step relation and adds the qualified-source search note. The examples concern character observations and their optional mappings. Read the exact output-origin or prefix statement; do not substitute a theorem about an ordinary filter because the names look related.
 
+```rust
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+verus! {
+// GIVEN: understand this explicit call before the scoped broadcast version.
+proof fn filter_map_origin_named_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, out: char)
+    requires
+        xs.filter_map(f).contains(out),
+    ensures
+        exists|c: char| xs.contains(c) && f(c) == Some(out),
+{
+    xs.lemma_filter_map_contains(f, out);
+}
+// item: R07.C2v write:broadcast-use
+// WRITE: a single qualified broadcast use, scoped only to this proof.
+proof fn filter_map_origin_scoped_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, out: char)
+    requires
+        xs.filter_map(f).contains(out),
+    ensures
+        exists|c: char| xs.contains(c) && f(c) == Some(out),
+{}
+}
+```
+
 <!-- pin: scoped-origin-v -->
 ```
 $ scripts/vcheck specimens/R07/card-c2v.rs.specimen
 vcheck: specimens/R07/card-c2v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R07/card-c2v.rs.specimen:13:10: error: postcondition not satisfied
+specimens/R07/card-c2v.rs.specimen:19:9: error: postcondition not satisfied
+```
+
+```rust
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+verus! {
+// GIVEN: the explicit instantiation, before scoped automation.
+proof fn filter_map_step_named_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, i: int)
+    requires
+        0 <= i < xs.len(),
+    ensures
+        xs[..i + 1].filter_map(f) == xs[..i].filter_map(f) + (match f(xs[i]) { Some(c) => seq![c], None => Seq::empty() }),
+{
+    xs.lemma_filter_map_take_succ(f, i);
+}
+// item: R07.C3v write:broadcast-use
+// WRITE: locate the qualified symbol, record found-by, and scope its broadcast.
+proof fn filter_map_step_scoped_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, i: int)
+    requires
+        0 <= i < xs.len(),
+    ensures
+        xs[..i + 1].filter_map(f) == xs[..i].filter_map(f) + (match f(xs[i]) { Some(c) => seq![c], None => Seq::empty() }),
+{}
+}
 ```
 
 <!-- pin: scoped-step-v -->
 ```
 $ scripts/vcheck specimens/R07/card-c3v.rs.specimen
 vcheck: specimens/R07/card-c3v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R07/card-c3v.rs.specimen:13:10: error: postcondition not satisfied
+specimens/R07/card-c3v.rs.specimen:19:9: error: postcondition not satisfied
 ```
+
+H4 and H5 ask for a `broadcast use` where it is the smallest proof, not merely an allowed one (the user's decision D91). Each states W3's or W4's fact for every element at once: `forall|out: char| xs.filter_map(f).contains(out) ==> …` and `forall|i: int| 0 <= i < xs.len() ==> …`. A named call proves one instance; covering the quantifier with named calls needs an `assert forall … by { call }`, while a scoped `broadcast use` of the same lemma lets the solver instantiate it at every element the goal mentions. The empty body fails, the named-call version is longer, and the one-line broadcast verifies (§8 records the probes). The scope stays the proof's body: the broadcast does not leak into the rest of the file.
 
 Your review should be able to reconstruct the proof without running a search engine. It should find the called symbol, its pinned source and the reason its requirements hold. For automation, add the group or broadcast symbol and its scope. Avoid a sentence such as the solver knows all sequence facts: it hides the very boundary you need when a proof breaks after an import change.
 
@@ -186,17 +330,46 @@ The class API's semantic view uses ISet. A finite observed alphabet produced fro
 
 C4 compares a finite Dafny set insertion with an ISet insertion theorem in Verus. The first contract uses the finite-set interface. The second call needs the library's explicit finiteness premise; the source supplies only nonmembership. Inspect the actual unmet requirement and native stage. This is a comparison of printed collection interfaces, not a claim that one language lacks finite cardinality or that ISet has no length operation.
 
+```dafny
+// after: R07.P3dv
+module R07_FiniteAlphabetCard {
+  // item: R07.C4dv diverge:r07-collections
+  // This finite-set insertion law has no separate finiteness premise.
+  lemma FiniteObservedInsertR07(s: set<char>, c: char)
+    requires c !in s
+    ensures |s+{c}| == |s|+1
+  {
+  }
+}
+```
+
 <!-- pin: collection-d -->
 ```
 $ scripts/vcheck specimens/R07/card-c4dv-d.dfy.specimen
 vcheck: specimens/R07/card-c4dv-d.dfy.specimen [dafny, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
 
+```rust
+// after: R07.P3dv
+use vstd::prelude::*;
+verus! {
+// ISet has len() at this pin; its useful size laws require finite().
+proof fn class_insert_count_r07(s: ISet<char>, c: char)
+    requires
+        !s.contains(c),
+    ensures
+        s.insert(c).len() == s.len() + 1,
+{
+    vstd::iset::lemma_iset_insert_len(s, c);
+}
+}
+```
+
 <!-- pin: collection-v -->
 ```
 $ scripts/vcheck specimens/R07/card-c4dv-v.rs.specimen
 vcheck: specimens/R07/card-c4dv-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R07/card-c4dv-v.rs.specimen:8:3: error: precondition not satisfied
+specimens/R07/card-c4dv-v.rs.specimen:11:5: error: precondition not satisfied
 ```
 
 This distinction matters during H2. Read the filtered object, the finite observed alphabet and the duplicate-free predicate separately. When proving an equivalence, identify both directions before searching. A theorem that proves one direction is useful but does not silently establish its converse. Keep your completed statement fixed and let the full gate check the entire requested relationship.
@@ -229,10 +402,29 @@ Finally, try the interface-level refusal control below. The nonexistent path is 
 scripts/vcheck specimens/R07/toolchain-d.dfy.specimen -- --solver-path /tmp/r07-no-course-solver
 ```
 
+```dafny
+module R07_ToolchainControl {
+  lemma ClassPairControlR07(c: char)
+    ensures (c in {'a', 'b'}) <==> (c == 'a' || c == 'b')
+  {
+  }
+}
+```
+
 <!-- pin: toolchain-d -->
 ```
 $ scripts/vcheck specimens/R07/toolchain-d.dfy.specimen
 vcheck: specimens/R07/toolchain-d.dfy.specimen [dafny, learner loop]: verified — 1 verified, 0 holes, 0 errors
+```
+
+```rust
+use vstd::prelude::*;
+verus! {
+proof fn class_pair_control_r07(c: char)
+    ensures
+        set!['a', 'b'].contains(c) <==> (c == 'a' || c == 'b'),
+{}
+}
 ```
 
 <!-- pin: toolchain-v -->
@@ -324,12 +516,34 @@ Work through the pinned wrapper in short edits. After each call, read the actual
 
 After recording and enabling the prediction switches, retain the native scenario observations for your debrief. Explain each one from the printed context. When a result contradicts your guess, isolate the relation or index domain that your interpretation changed. Do not turn a single failed run into an assertion that no valid proof exists, and do not turn a successful contract check into a claim about an unmodelled external requirement.
 
+```dafny
+// after: R07.P3dv
+module R07_PredictFilterx {
+  import S = Std.Collections.Seq
+  lemma FilterSizeR07(allowed: set<char>, xs: seq<char>)
+    ensures |S.Filter(c => c in allowed, xs)| == |xs|
+  {
+  }
+}
+```
+
 <!-- pin: filter-x-d -->
 ```
 $ scripts/vcheck specimens/R07/filter-size-x-d.dfy.specimen
 vcheck: specimens/R07/filter-size-x-d.dfy.specimen [dafny, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R07/filter-size-x-d.dfy.specimen:6:2: error: a postcondition could not be proved on this return path
-specimens/R07/filter-size-x-d.dfy.specimen:5:44: related: this is the postcondition that could not be proved
+specimens/R07/filter-size-x-d.dfy.specimen:6:3: error: a postcondition could not be proved on this return path
+specimens/R07/filter-size-x-d.dfy.specimen:5:47: related: this is the postcondition that could not be proved
+```
+
+```dafny
+// after: R07.P3dv
+module R07_PredictFiltery {
+  import S = Std.Collections.Seq
+  lemma FilterSizeR07(allowed: set<char>, xs: seq<char>)
+    ensures |S.Filter(c => c in allowed, xs)| <= |xs|
+  {
+  }
+}
 ```
 
 <!-- pin: filter-y-d -->
@@ -338,11 +552,37 @@ $ scripts/vcheck specimens/R07/filter-size-y-d.dfy.specimen
 vcheck: specimens/R07/filter-size-y-d.dfy.specimen [dafny, learner loop]: verified — 2 verified, 0 holes, 0 errors
 ```
 
+```rust
+// after: R07.P3dv
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+verus! {
+proof fn filter_size_r07(allowed: ISet<char>, xs: Seq<char>)
+    ensures
+        xs.filter(|c: char| allowed.contains(c)).len() == xs.len(),
+{
+}
+}
+```
+
 <!-- pin: filter-x-v -->
 ```
 $ scripts/vcheck specimens/R07/filter-size-x-v.rs.specimen
 vcheck: specimens/R07/filter-size-x-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R07/filter-size-x-v.rs.specimen:6:10: error: postcondition not satisfied
+specimens/R07/filter-size-x-v.rs.specimen:7:9: error: postcondition not satisfied
+```
+
+```rust
+// after: R07.P3dv
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+verus! {
+proof fn filter_size_r07(allowed: ISet<char>, xs: Seq<char>)
+    ensures
+        xs.filter(|c: char| allowed.contains(c)).len() <= xs.len(),
+{
+}
+}
 ```
 
 <!-- pin: filter-y-v -->
@@ -351,24 +591,148 @@ $ scripts/vcheck specimens/R07/filter-size-y-v.rs.specimen
 vcheck: specimens/R07/filter-size-y-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
 
+```dafny
+// after: R07.P5dv
+module R07_PredictBatch {
+  lemma BatchCountAsBoundR07(blocks: seq<seq<char>>, limit: nat)
+    requires forall i :: 0 <= i < |blocks| ==> |blocks[i]| <= limit
+    ensures forall i :: 0 <= i < |blocks| ==> |blocks[i]| <= |blocks|
+  {
+  }
+}
+```
+
 <!-- pin: batch-d -->
 ```
 $ scripts/vcheck specimens/R07/batch-bound-d.dfy.specimen
 vcheck: specimens/R07/batch-bound-d.dfy.specimen [dafny, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R07/batch-bound-d.dfy.specimen:6:2: error: a postcondition could not be proved on this return path
-specimens/R07/batch-bound-d.dfy.specimen:5:11: related: this is the postcondition that could not be proved
+specimens/R07/batch-bound-d.dfy.specimen:6:3: error: a postcondition could not be proved on this return path
+specimens/R07/batch-bound-d.dfy.specimen:5:13: related: this is the postcondition that could not be proved
+```
+
+```rust
+// after: R07.P5dv
+use vstd::prelude::*;
+verus! {
+proof fn batch_count_as_bound_r07(blocks: Seq<Seq<char>>, limit: nat)
+    requires
+        forall|i: int| 0 <= i < blocks.len() ==> (#[trigger] blocks[i]).len() <= limit,
+    ensures
+        forall|i: int| 0 <= i < blocks.len() ==> (#[trigger] blocks[i]).len() <= blocks.len(),
+{
+}
+}
 ```
 
 <!-- pin: batch-v -->
 ```
 $ scripts/vcheck specimens/R07/batch-bound-v.rs.specimen
 vcheck: specimens/R07/batch-bound-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R07/batch-bound-v.rs.specimen:6:10: error: postcondition not satisfied
+specimens/R07/batch-bound-v.rs.specimen:8:9: error: postcondition not satisfied
 ```
+
+P4's three calls share one sample and one index. Each library lemma has its own precondition, and the index `i` is an index of `xs`, not of the filtered sequence:
+
+```rust
+use vstd::prelude::*;
+use vstd::seq_lib::*;
+verus! {
+// item: R07.P4v obligation
+// Commit labels before enabling the switch.
+// SLOT: FAILS ???
+proof fn filtered_indices_r07(xs: Seq<char>, i: int)
+    requires
+        0 <= i < xs.len(),
+{
+    xs.lemma_filter_contains(|c: char| c == 'x', i); // [a]
+    xs.lemma_filter_pred(|c: char| c == 'x', i); // [b]
+    xs.lemma_filter_len(|c: char| c == 'x'); // [c]
+}
+}
+```
+
+<!-- pin: p4-v -->
+```
+$ scripts/vcheck specimens/R07/P4v.rs.specimen
+vcheck: specimens/R07/P4v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 2 errors
+specimens/R07/P4v.rs.specimen:12:5: error: precondition not satisfied
+specimens/R07/P4v.rs.specimen:11:5: error: precondition not satisfied
+```
+
+The answer is `FAILS a b`. [a] `lemma_filter_contains` requires the predicate to hold at `xs[i]`, which nothing establishes; [b] `lemma_filter_pred` requires `i` to be an index of the *filtered* sequence, and an index of `xs` need not be one; [c] `lemma_filter_len` has no precondition (the filter is never longer than its input). Read a library lemma's `requires` before calling it, and keep an input index separate from an index into the output.
+
+### The named-call gate
+
+R07's holes are short by design: each reference is one or two named library calls, and the skill is the search, not the length of the proof. The user's decision D90 replaces the three-fact bar for these holes with the **named-call gate**. A hole marked `// gate: named-calls` passes when its body is a sequence of named library calls, each with a `// found-by:` note naming the rung that found it (`ide`, `grep`, `docs`, `source`, `llm` or `memory`), and the gate shows that every call is needed: the empty body fails (the empty-body gate), and the body with any one call removed fails. The reference records one such removal per call, and `scripts/firsttry.sh R07 --empty-body` runs each of them. Your own delivery is judged the same way: keep the found-by notes, and expect a reviewer to delete each call and re-run.
+
+| item | statement (Dafny · Verus) | minutes D / V | the named calls |
+|---|---|---|---|
+| T1 | `ObservedAlphabetBound` · `lemma_observed_alphabet_bound`: the observed alphabet is no larger than the sample (closed book) | 5 / 5 | one cardinality lemma |
+| H1 | `FilteredSamplePrefix` · `lemma_filtered_sample_prefix`: filtering keeps prefixes | 8 / 6 | Dafny: a split of `ys` and the filter-concat lemma; Verus: the monotonicity lemma |
+| H2 | `FilteredAlphabetExact` · `lemma_filtered_alphabet_exact`: no duplicates exactly when the set is as large as the sequence | 11 / 7 | one lemma per direction |
+| H3 | `SampleBatchBound` · `lemma_sample_batch_bound`: a batch flattens to at most `|blocks| * limit` | 12 / 8 | the bound, and the bridge between the two flattenings |
+| H4v | `filter_map_origins_scoped`: every output of a `filter_map` comes from an input (Verus) | — / 5 | one scoped `broadcast use` |
+| H5v | `filter_map_steps_scoped`: every one-element extension of a `filter_map` (Verus) | — / 5 | one scoped `broadcast use` |
 
 Done means every required proof is complete, all five predictions and T1 first tries are recorded, the written card and reviews are complete, and the actual full gates and audits pass. Run `scripts/firsttry.sh R07 --check` before enabling the prediction switches.
 
 ### What the instruments can and cannot see
+
+Run the gate and the audit on the shipped units and read why they refuse:
+
+<!-- pin: gate-d -->
+```
+$ scripts/vcheck --gate dafny/R/R07_Libraries/std
+vcheck: dafny/R/R07_Libraries/std [dafny, gate]: failed — 39 verified, 4 holes, 0 errors, 1 finding
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:25:27: hole bodyless-method R07.T1d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:72:88: hole bodyless-method R07.H1d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:87:66: hole bodyless-method R07.H2d
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:103:33: hole bodyless-method R07.H3d
+dafny/R/R07_Libraries/std: warnings-fail-gate: warnings fail the gate (W-D04): holes and every other warning must be gone
+```
+
+<!-- pin: gate-v -->
+```
+$ scripts/vcheck --gate verus/r/r07_libraries
+vcheck: verus/r/r07_libraries [verus, gate]: failed — - verified, 6 holes, 1 error
+verus/r/r07_libraries/src/lib.rs:29:40: hole assume R07.T1v
+verus/r/r07_libraries/src/lib.rs:97:40: hole assume R07.H1v
+verus/r/r07_libraries/src/lib.rs:114:40: hole assume R07.H2v
+verus/r/r07_libraries/src/lib.rs:135:40: hole assume R07.H3v
+verus/r/r07_libraries/src/lib.rs:152:40: hole assume R07.H4v
+verus/r/r07_libraries/src/lib.rs:173:40: hole assume R07.H5v
+(no file): error: gate: 'success' is false, not true; --output-json lacks 'is-verifying-entire-crate'; 'encountered-vir-error' is true, not false; --output-json lacks 'verified'; 6 hole(s); exit 1
+```
+
+<!-- pin: audit-d -->
+```
+$ scripts/vaudit dafny/R/R07_Libraries/std
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:24: audit-bodyless-ghost — ObservedAlphabetBound: Ghost declaration has no body and has an ensures clause
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:70: audit-bodyless-ghost — FilteredSamplePrefix: Ghost declaration has no body and has an ensures clause
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:86: audit-bodyless-ghost — FilteredAlphabetExact: Ghost declaration has no body and has an ensures clause
+dafny/R/R07_Libraries/std/R07_Libraries.dfy:101: audit-bodyless-ghost — SampleBatchBound: Ghost declaration has no body and has an ensures clause
+vaudit: dafny/R/R07_Libraries/std [dafny, learner]: 4 finding(s)
+```
+
+<!-- pin: audit-v -->
+```
+$ scripts/vaudit verus/r/r07_libraries
+verus/r/r07_libraries/src/lib.rs:29: hole-assume — an assume hole (in lemma_observed_alphabet_bound) not on the trust allowlist
+verus/r/r07_libraries/src/lib.rs:97: hole-assume — an assume hole (in lemma_filtered_sample_prefix) not on the trust allowlist
+verus/r/r07_libraries/src/lib.rs:114: hole-assume — an assume hole (in lemma_filtered_alphabet_exact) not on the trust allowlist
+verus/r/r07_libraries/src/lib.rs:135: hole-assume — an assume hole (in lemma_sample_batch_bound) not on the trust allowlist
+verus/r/r07_libraries/src/lib.rs:152: hole-assume — an assume hole (in filter_map_origins_scoped) not on the trust allowlist
+verus/r/r07_libraries/src/lib.rs:173: hole-assume — an assume hole (in filter_map_steps_scoped) not on the trust allowlist
+vaudit: verus/r/r07_libraries [verus, learner]: 6 finding(s)
+```
+
+<!-- pin: freeze -->
+```
+$ scripts/specfreeze --check R07
+specimens/R07/p1-value-d.dfy.specimen:0: freeze-file-missing — (file)
+specfreeze: R07: 1 finding(s)
+```
+
 
 Use the completion instruments on the whole files: `scripts/vcheck --gate dafny/R/R07_Libraries/std`, `scripts/vcheck --gate verus/r/r07_libraries`, `scripts/vaudit` on those same targets, `scripts/specfreeze --check R07`, and `scripts/firsttry.sh R07 --report --strict`. Check the given-only value unit after its switch is enabled, and apply the agent contract's gate, audit and saved snapshot to each selected delivery. Preserve commands and scope with their results.
 

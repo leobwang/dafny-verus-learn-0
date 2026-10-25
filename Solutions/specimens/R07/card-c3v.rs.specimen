@@ -3,14 +3,22 @@ use vstd::prelude::*;
 use vstd::seq_lib::*;
 verus! {
 // GIVEN: the explicit instantiation, before scoped automation.
-proof fn filter_map_step_named_r07(xs: Seq<char>,f:spec_fn(char)->Option<char>,i:int)
- requires 0 <= i < xs.len(),
- ensures xs[..i+1].filter_map(f) == xs[..i].filter_map(f)+(match f(xs[i]) { Some(c)=>seq![c],None=>Seq::empty() }),
-{ xs.lemma_filter_map_take_succ(f,i); }
+proof fn filter_map_step_named_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, i: int)
+    requires
+        0 <= i < xs.len(),
+    ensures
+        xs[..i + 1].filter_map(f) == xs[..i].filter_map(f) + (match f(xs[i]) { Some(c) => seq![c], None => Seq::empty() }),
+{
+    xs.lemma_filter_map_take_succ(f, i);
+}
 // item: R07.C3v write:broadcast-use
 // WRITE: locate the qualified symbol, record found-by, and scope its broadcast.
-proof fn filter_map_step_scoped_r07(xs: Seq<char>,f:spec_fn(char)->Option<char>,i:int)
- requires 0 <= i < xs.len(),
- ensures xs[..i+1].filter_map(f) == xs[..i].filter_map(f)+(match f(xs[i]) { Some(c)=>seq![c],None=>Seq::empty() }),
-{ broadcast use vstd::seq::Seq::lemma_filter_map_take_succ; } // found-by: grep
+proof fn filter_map_step_scoped_r07(xs: Seq<char>, f: spec_fn(char) -> Option<char>, i: int)
+    requires
+        0 <= i < xs.len(),
+    ensures
+        xs[..i + 1].filter_map(f) == xs[..i].filter_map(f) + (match f(xs[i]) { Some(c) => seq![c], None => Seq::empty() }),
+{
+    broadcast use vstd::seq::Seq::lemma_filter_map_take_succ;
+} // found-by: grep
 }

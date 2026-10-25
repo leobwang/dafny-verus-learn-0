@@ -11,9 +11,9 @@ cmd = ["scripts/vcheck", "dafny/R/R07_Libraries/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "67871a7dd3b6c9c31c53df34338b42ec9a41054c6ccca132e485bbc17f5e9468"
+body = "6e277a2e495f03b645351d1fb17c8df7e65dbccb349e09ea334b6d4a38f52abd"
 [entry.pinned.inputs]
-"dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "566ed0591862d0d8b21dfd54879e9cabfc48e7f76bd4a2378cb32b4a39e7c9f4"
+"dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "8e75e350d194de0f567ff0bde73cd33120ca4644c8f6a29d6673f430f6adee86"
 "dafny/R/R07_Libraries/std/dfyconfig.toml" = "47d4d9fba809651f8aa2e15dc8eaab34dcb1d2673e7bdea6c0f448b210de8aff"
 
 [[entry]]
@@ -22,11 +22,11 @@ cmd = ["scripts/vcheck", "verus/r/r07_libraries"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "43145c6c8e965ac9f0183231df6c0a267d2960ebc51323cec3ed7e822350ac81"
+body = "c5d49faf1e83453c257e2d79299bb84579e7787a815a99e8744c601308a31512"
 [entry.pinned.inputs]
 "verus/r/r07_libraries/Cargo.toml" = "073a2bd748c04a9e2426753f12c4800f913b0f5a031f3d9a2a027bed141e8978"
 "verus/r/r07_libraries/src/agent.rs" = "d62466c57424f6ee1ffe0ae5a6a1dd7c729dbe17d09fb66f7ca7a9e3cdbbc3e2"
-"verus/r/r07_libraries/src/lib.rs" = "30d4978dcb53cb98298cbd8386c64be8935a2c32f9515e9a9484f708ea166f43"
+"verus/r/r07_libraries/src/lib.rs" = "848ab1fc1d226923e8dad0acccf9e79d7281e006492fa328ac305c5f97349f09"
 
 [[entry]]
 id = "checks-d"
@@ -64,9 +64,9 @@ cmd = ["scripts/vcheck", "specimens/R07/card-c1d.dfy.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "c0ac490a44f92e6bebcd0adfb8c7f4000a116b9c4fa58d2b8dcf27ac768f4966"
+body = "d470b32a293e1f3fda5622ee4ff5e2f8ac3e96b4d92ada6ea170ff2a110f7af5"
 [entry.pinned.inputs]
-"specimens/R07/card-c1d.dfy.specimen" = "57861a9e5a096ec1feb76e0df1ab56cb8b6676f3e48d6fe90b6183ab7e80cb41"
+"specimens/R07/card-c1d.dfy.specimen" = "9e0f686434ae4ba98314a386e982ab4e2e1764fb0882cb7e76f667f280dd76df"
 
 [[entry]]
 id = "explicit-v"
@@ -74,9 +74,9 @@ cmd = ["scripts/vcheck", "specimens/R07/card-c1v.rs.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "a733fb861d0d9d2850e64bd28fb3688aaf8a54e0ac77e2e477035fee6ae55725"
+body = "87a1ca57e9970bcf2b38af3b2974892632d25bd893fb92fb68f2d3f46a743249"
 [entry.pinned.inputs]
-"specimens/R07/card-c1v.rs.specimen" = "15223de907306d132f86624217925f0cdee51f03e27813ba23a380687e485182"
+"specimens/R07/card-c1v.rs.specimen" = "0e7b75e8f7d88a7382b9db0a3f63b7ead9759d7c0f515088ed072c860f961351"
 
 [[entry]]
 id = "search-d"
@@ -84,9 +84,9 @@ cmd = ["scripts/vcheck", "specimens/R07/card-c3d.dfy.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "a0433e64a50374c5398575c72970978c2c5bcaf7fcf83aa84cac56098a03509f"
+body = "69cee461466080d68613ba396bbc353f13d7a4b4b58864424fe2f3996efbb486"
 [entry.pinned.inputs]
-"specimens/R07/card-c3d.dfy.specimen" = "3cb52b5804934b7a663182abfbf18a4a5f9916d697df951d45ba1daf869d7e05"
+"specimens/R07/card-c3d.dfy.specimen" = "4e7006ccd658b44b8e18febc1b510530bb78078e464146b5a19d45adc92be878"
 
 [[entry]]
 id = "scoped-origin-v"
@@ -94,9 +94,9 @@ cmd = ["scripts/vcheck", "specimens/R07/card-c2v.rs.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "81a00e80f246c301f8b1a9d76b15be388a0121534bbc161b09f2a26c72a3213b"
+body = "3a4ffffc52fd4eef8048dfd197a29ed48422726280ae52966a571af5767d24ff"
 [entry.pinned.inputs]
-"specimens/R07/card-c2v.rs.specimen" = "e5b75a7d4d78b94cb5f2461eb75aa619f98e4e6a97c3f637530aee4bd097babc"
+"specimens/R07/card-c2v.rs.specimen" = "904941a017f71429a9332df012f55b2be0f41112076057403e13672f21812c23"
 
 [[entry]]
 id = "scoped-step-v"
@@ -104,9 +104,9 @@ cmd = ["scripts/vcheck", "specimens/R07/card-c3v.rs.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "cb0d4c806ab42a5a8272da92555a8bc84e6ff0b041d8b47a23546abfd76fcc09"
+body = "e28772f787926ffd0c788549631ea0d532d39216dbc4b61ce845c40124fedfd0"
 [entry.pinned.inputs]
-"specimens/R07/card-c3v.rs.specimen" = "8583751d5e71947587f2fe944231d8669f53051972b08db35ff74eb2a1d69348"
+"specimens/R07/card-c3v.rs.specimen" = "5762b74580cd18b2d362aa3d8dc1bc63798e746b16356fe2db87ffbddb014316"
 
 [[entry]]
 id = "collection-d"
@@ -117,7 +117,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "a8621c129afe1e4730817fc61436ba1199257e79f817d68a40bc356f12bf96a6"
 [entry.pinned.inputs]
-"specimens/R07/card-c4dv-d.dfy.specimen" = "46622a7135d7a09f1e6a4fdb3acf1b834a090f7632a195bff36162f115718ab2"
+"specimens/R07/card-c4dv-d.dfy.specimen" = "180509068cf67a8cc236895f3fc1205acd311953ac3949a1c9b70e5160e38e51"
 
 [[entry]]
 id = "collection-v"
@@ -126,9 +126,9 @@ answers = ["R07.P3dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "c67f042e73530e7791ae3b55a5140d5d91ee36d57d162f2429296f447096a697"
+body = "dd89d7b6b4380f40b964c45bb7545c8f4bdfe32a9fa3950464ec93e6b2db84a3"
 [entry.pinned.inputs]
-"specimens/R07/card-c4dv-v.rs.specimen" = "37bfd4e21a7baabb9a44ea2ccb9e7e65d09580491235716e9e05ff682c75319f"
+"specimens/R07/card-c4dv-v.rs.specimen" = "7f0b9f0042c15a894ff68a21b23d9b9ce98e8d015b194caa7d502a14c8611336"
 
 [[entry]]
 id = "filter-x-d"
@@ -137,9 +137,9 @@ answers = ["R07.P3dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "69ee768827c425d6826f5936d1934789082a5e299be020a98e78ecbf0f7c010e"
+body = "c10575d0353f1605547c7efb2005a620c1b25fed5e8a58ef9a56629d8d23c33d"
 [entry.pinned.inputs]
-"specimens/R07/filter-size-x-d.dfy.specimen" = "2cfb8926cfc33c20d962e2ef9f6b95620aaaa899cf0287775dea3a4ee439aa2a"
+"specimens/R07/filter-size-x-d.dfy.specimen" = "1533b70d4cea2a6d69ad8f92fb3c0ad6bb8c257dbf3e3b9d132b38bf8b4a0ab5"
 
 [[entry]]
 id = "filter-y-d"
@@ -150,7 +150,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "9ea4eff50dd8cd3f2739cd2f377db7a0d4a8d27cb762384f0a855dad2be86286"
 [entry.pinned.inputs]
-"specimens/R07/filter-size-y-d.dfy.specimen" = "ec6793434057489d82b57ad234c06ae8c6dab187905bbeb7591b9341dab20552"
+"specimens/R07/filter-size-y-d.dfy.specimen" = "6c3985743d7ce0729b26966c4d7af5193c5f35480f4554dad5ab9cf94b497179"
 
 [[entry]]
 id = "batch-d"
@@ -159,9 +159,9 @@ answers = ["R07.P5dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "098ee9580e9e95bd9cf57cba5b71b9d422c80cf4e52a4b18f4c3fa2b124171d0"
+body = "a7944880a457373ee3b263024e8cca66b12703b3ed0be011fbdcd38f00449b2d"
 [entry.pinned.inputs]
-"specimens/R07/batch-bound-d.dfy.specimen" = "a58a8c7f837806aa6e55c33d9113c8a850fc79ca29d7faf737abf0bd37b443fc"
+"specimens/R07/batch-bound-d.dfy.specimen" = "f11c8ba27c1960c1c382924c83895fa80094d53ef59420752de2b15309a14230"
 
 [[entry]]
 id = "filter-x-v"
@@ -170,9 +170,9 @@ answers = ["R07.P3dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "978c458794798a6a83bfa54512febffb918a56aa4ba8b0ace31647d3f3d4cb25"
+body = "90fd8eeffc8875e55808a744e4678a967ded79a90e7efe423e15f26a02e539cf"
 [entry.pinned.inputs]
-"specimens/R07/filter-size-x-v.rs.specimen" = "1743beca8966cc980232a083dfc7a409cd0f4738856ac76f9c3babdf57cb8287"
+"specimens/R07/filter-size-x-v.rs.specimen" = "57aef38f5e62e0f36493d0b32e06b5993687b43ddf78e3c76dfabb9eca2f46a4"
 
 [[entry]]
 id = "filter-y-v"
@@ -183,7 +183,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "b2611bbcd5d2e971299c7be8eef3cebe4f0639e104f608e40e2a9f007767fab3"
 [entry.pinned.inputs]
-"specimens/R07/filter-size-y-v.rs.specimen" = "5336685466bb818b59add5825171cce4021ba05e174bdbd20f9a2ef833073c6c"
+"specimens/R07/filter-size-y-v.rs.specimen" = "26f79d07da065b6e26255a13a324fafc239a3f5c224b70fdd8259467397353ce"
 
 [[entry]]
 id = "batch-v"
@@ -192,9 +192,9 @@ answers = ["R07.P5dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "f50e2e53cd05c1911b088e2d5d8721e99ea15c4b0c9d9146f11e96033f67ae10"
+body = "521837ec09a2f56d91287763e19d0d8ba4c69bf57a513ad0ed446ec2a572cd9a"
 [entry.pinned.inputs]
-"specimens/R07/batch-bound-v.rs.specimen" = "08a0a37da9b9886c96846371830327c1e34d0cb6de2b742ea42202ab5e1e3948"
+"specimens/R07/batch-bound-v.rs.specimen" = "3243a2b9276b3c0eb295025e636b0d1480f253cf595191b0aa2efe1d56a11720"
 
 [[entry]]
 id = "toolchain-d"
@@ -204,7 +204,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "62aeebb150282f3cb29893e4c142e717331fbf79ad60b40f46b832c31ec57bc3"
 [entry.pinned.inputs]
-"specimens/R07/toolchain-d.dfy.specimen" = "a677c19d8b33d2fc10f0a7cdcfd56ce9a83d3d99b65ce83658fd0e00b6108537"
+"specimens/R07/toolchain-d.dfy.specimen" = "568531661a65419b01e9319dbe9f3eb50522077de5a5b64264ffec6a9524e8d4"
 
 [[entry]]
 id = "toolchain-v"
@@ -214,4 +214,129 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "ea44c6a902dd239ed8671b4833a7f3a34d8faf9d7530e6643b3e6a3c2ddb7aa2"
 [entry.pinned.inputs]
-"specimens/R07/toolchain-v.rs.specimen" = "384202d7d759b1837200a06885e02c9733deb2c747d154565c50b15e93d8da6c"
+"specimens/R07/toolchain-v.rs.specimen" = "12449ae1ff6eebe7c4acd17762cf84443479af7d845f73247826bd2b5d043092"
+
+[[entry]]
+id = "p1-d"
+cmd = ["scripts/vcheck", "--module", "R07", "p1.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A2_Deriv.dfy"]
+answers = ["R07.P1d"]
+note = "The source shown above the pin, run in R07's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p1.dfy"]
+fence = "above"
+[entry.pinned]
+body = "f7e1230ee3343c9d17ba5813b154b2fab27cd3613690ed9a30a323957da130c4"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:p1.dfy" = "124291252939b6ef2f7ef6291b21e45fb0cb2424469d504427de6fdc05b4daf0"
+
+[[entry]]
+id = "p2-v"
+cmd = ["scripts/vcheck", "--module", "R07", "p2.rs"]
+cwd = "scratch"
+inputs = ["verus/given/rg_re_a1/src/lib.rs"]
+answers = ["R07.P2v"]
+note = "The source shown above the pin, run in R07's given context."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."p2.rs"]
+fence = "above"
+[entry.pinned]
+body = "c3446419fb810f49e80441be274e9cfea462febd33455c3422b639fef7438308"
+[entry.pinned.inputs]
+"scratch:p2.rs" = "ac61b5e18298b9f84de1f352153f108bd7b33b16d80a0340b1bd72ae60a56099"
+"verus/given/rg_re_a1/src/lib.rs" = "e6b97dc442752384e1555a4d67ff764b0d7579a88cc472e23eacc50fbfb4e94b"
+
+[[entry]]
+id = "p4-v"
+cmd = ["scripts/vcheck", "specimens/R07/P4v.rs.specimen"]
+answers = ["R07.P4v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "5db6c00f2ca572e0b94573e409d8847df8f8447fef40631a64d6cf8e8d70fbe9"
+[entry.pinned.inputs]
+"specimens/R07/P4v.rs.specimen" = "f79ecbf2b51f1ac510c4b73cfd275ca0364882d11c735f4d85cc6827afb6ecbd"
+
+[[entry]]
+id = "gate-d"
+cmd = ["scripts/vcheck", "--gate", "dafny/R/R07_Libraries/std"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3b637eede37cd832fad68278e1d67e07a6a1ae8a54951b20b8298afe1cdc2a7b"
+[entry.pinned.inputs]
+"dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "8e75e350d194de0f567ff0bde73cd33120ca4644c8f6a29d6673f430f6adee86"
+"dafny/R/R07_Libraries/std/dfyconfig.toml" = "47d4d9fba809651f8aa2e15dc8eaab34dcb1d2673e7bdea6c0f448b210de8aff"
+
+[[entry]]
+id = "gate-v"
+cmd = ["scripts/vcheck", "--gate", "verus/r/r07_libraries"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "4c7f4e3b24b6c2a739562689989ca8b81fbc73688570065f75c0cc4550af4034"
+[entry.pinned.inputs]
+"verus/r/r07_libraries/Cargo.toml" = "073a2bd748c04a9e2426753f12c4800f913b0f5a031f3d9a2a027bed141e8978"
+"verus/r/r07_libraries/src/agent.rs" = "d62466c57424f6ee1ffe0ae5a6a1dd7c729dbe17d09fb66f7ca7a9e3cdbbc3e2"
+"verus/r/r07_libraries/src/lib.rs" = "848ab1fc1d226923e8dad0acccf9e79d7281e006492fa328ac305c5f97349f09"
+
+[[entry]]
+id = "audit-d"
+cmd = ["scripts/vaudit", "dafny/R/R07_Libraries/std"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "061905d229dd15ddfe6d4d361165b4898242a95fc9789730eb3bc9329a5b3db9"
+[entry.pinned.inputs]
+"dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "8e75e350d194de0f567ff0bde73cd33120ca4644c8f6a29d6673f430f6adee86"
+"dafny/R/R07_Libraries/std/dfyconfig.toml" = "47d4d9fba809651f8aa2e15dc8eaab34dcb1d2673e7bdea6c0f448b210de8aff"
+
+[[entry]]
+id = "audit-v"
+cmd = ["scripts/vaudit", "verus/r/r07_libraries"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "14863cbe5770a2ecf6d77dccc7024c92c51967e4cb1763a4dcd6fe5903f74fd0"
+[entry.pinned.inputs]
+"verus/r/r07_libraries/Cargo.toml" = "073a2bd748c04a9e2426753f12c4800f913b0f5a031f3d9a2a027bed141e8978"
+"verus/r/r07_libraries/src/agent.rs" = "d62466c57424f6ee1ffe0ae5a6a1dd7c729dbe17d09fb66f7ca7a9e3cdbbc3e2"
+"verus/r/r07_libraries/src/lib.rs" = "848ab1fc1d226923e8dad0acccf9e79d7281e006492fa328ac305c5f97349f09"
+
+[[entry]]
+id = "freeze"
+cmd = ["scripts/specfreeze", "--check", "R07"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "fe9b1ea05f39005e5db51eaf9cab84b3aee3e1101884cbf12147acb6406541c3"
+[entry.pinned.inputs]
+"dafny/R/R07_Libraries/agent/R07_AgentRetriever.dfy" = "308444be352eb3af609db49fb545b7e51e2bd345fd0953fb70475adf1709bee4"
+"dafny/R/R07_Libraries/std/R07_Libraries.dfy" = "8e75e350d194de0f567ff0bde73cd33120ca4644c8f6a29d6673f430f6adee86"
+"dafny/checks/R07_checks.dfy" = "1c9442d147ae334f721ce82d7bff290d923fc040010105cd99435e678ba595b4"
+"instructor/calib/R07.tsv" = "absent"
+"slots/R07.slots" = "2e4d3e14d070af84bba23e924c15806d5a776d76e53d26ab87cb04644b6e1467"
+"specimens/R07/P2v.rs.specimen" = "3915b073b191dc3e03977228129c6fe0c84038be5c86034dccd3a11c06b1307e"
+"specimens/R07/P4v.rs.specimen" = "f79ecbf2b51f1ac510c4b73cfd275ca0364882d11c735f4d85cc6827afb6ecbd"
+"specimens/R07/batch-bound-d.dfy.specimen" = "f11c8ba27c1960c1c382924c83895fa80094d53ef59420752de2b15309a14230"
+"specimens/R07/batch-bound-v.rs.specimen" = "3243a2b9276b3c0eb295025e636b0d1480f253cf595191b0aa2efe1d56a11720"
+"specimens/R07/card-c1d.dfy.specimen" = "9e0f686434ae4ba98314a386e982ab4e2e1764fb0882cb7e76f667f280dd76df"
+"specimens/R07/card-c1v.rs.specimen" = "0e7b75e8f7d88a7382b9db0a3f63b7ead9759d7c0f515088ed072c860f961351"
+"specimens/R07/card-c2v.rs.specimen" = "904941a017f71429a9332df012f55b2be0f41112076057403e13672f21812c23"
+"specimens/R07/card-c3d.dfy.specimen" = "4e7006ccd658b44b8e18febc1b510530bb78078e464146b5a19d45adc92be878"
+"specimens/R07/card-c3v.rs.specimen" = "5762b74580cd18b2d362aa3d8dc1bc63798e746b16356fe2db87ffbddb014316"
+"specimens/R07/card-c4dv-d.dfy.specimen" = "180509068cf67a8cc236895f3fc1205acd311953ac3949a1c9b70e5160e38e51"
+"specimens/R07/card-c4dv-v.rs.specimen" = "7f0b9f0042c15a894ff68a21b23d9b9ce98e8d015b194caa7d502a14c8611336"
+"specimens/R07/filter-size-x-d.dfy.specimen" = "1533b70d4cea2a6d69ad8f92fb3c0ad6bb8c257dbf3e3b9d132b38bf8b4a0ab5"
+"specimens/R07/filter-size-x-v.rs.specimen" = "57aef38f5e62e0f36493d0b32e06b5993687b43ddf78e3c76dfabb9eca2f46a4"
+"specimens/R07/filter-size-y-d.dfy.specimen" = "6c3985743d7ce0729b26966c4d7af5193c5f35480f4554dad5ab9cf94b497179"
+"specimens/R07/filter-size-y-v.rs.specimen" = "26f79d07da065b6e26255a13a324fafc239a3f5c224b70fdd8259467397353ce"
+"specimens/R07/toolchain-d.dfy.specimen" = "568531661a65419b01e9319dbe9f3eb50522077de5a5b64264ffec6a9524e8d4"
+"specimens/R07/toolchain-v.rs.specimen" = "12449ae1ff6eebe7c4acd17762cf84443479af7d845f73247826bd2b5d043092"
+"verus/r/r07_libraries/src/agent.rs" = "d62466c57424f6ee1ffe0ae5a6a1dd7c729dbe17d09fb66f7ca7a9e3cdbbc3e2"
+"verus/r/r07_libraries/src/lib.rs" = "848ab1fc1d226923e8dad0acccf9e79d7281e006492fa328ac305c5f97349f09"

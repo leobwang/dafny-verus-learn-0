@@ -4,6 +4,7 @@ verus! {
 // item: R07.C1v write:library-call
 // WRITE: instantiate the named empty-alphabet lemma.
 proof fn empty_alphabet_card_r07(xs: Seq<char>)
- ensures xs.to_set().len() == 0 <==> xs.len() == 0,
+    ensures
+        xs.to_set().len() == 0 <==> xs.len() == 0,
 {}
 }

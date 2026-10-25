@@ -1,8 +1,9 @@
 // after: R07.P3dv
 // Reference Solution.
 module R07_PredictFilterx {
- import S = Std.Collections.Seq
- lemma FilterSizeR07(allowed: set<char>,xs: seq<char>)
-  ensures |S.Filter(c => c in allowed,xs)| == |xs|
- {}
+  import S = Std.Collections.Seq
+  lemma FilterSizeR07(allowed: set<char>, xs: seq<char>)
+    ensures |S.Filter(c => c in allowed, xs)| == |xs|
+  {
+  }
 }

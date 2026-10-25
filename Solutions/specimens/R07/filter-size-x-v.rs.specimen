@@ -3,7 +3,9 @@
 use vstd::prelude::*;
 use vstd::seq_lib::*;
 verus! {
-proof fn filter_size_r07(allowed: ISet<char>,xs: Seq<char>)
- ensures xs.filter(|c:char| allowed.contains(c)).len() == xs.len(),
- {}
+proof fn filter_size_r07(allowed: ISet<char>, xs: Seq<char>)
+    ensures
+        xs.filter(|c: char| allowed.contains(c)).len() == xs.len(),
+{
+}
 }

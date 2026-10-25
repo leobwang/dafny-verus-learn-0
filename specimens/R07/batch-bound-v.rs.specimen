@@ -1,8 +1,11 @@
 // after: R07.P5dv
 use vstd::prelude::*;
 verus! {
-proof fn batch_count_as_bound_r07(blocks: Seq<Seq<char>>,limit: nat)
- requires forall|i:int| 0 <= i < blocks.len() ==> (#[trigger] blocks[i]).len() <= limit,
- ensures forall|i:int| 0 <= i < blocks.len() ==> (#[trigger] blocks[i]).len() <= blocks.len(),
- {}
+proof fn batch_count_as_bound_r07(blocks: Seq<Seq<char>>, limit: nat)
+    requires
+        forall|i: int| 0 <= i < blocks.len() ==> (#[trigger] blocks[i]).len() <= limit,
+    ensures
+        forall|i: int| 0 <= i < blocks.len() ==> (#[trigger] blocks[i]).len() <= blocks.len(),
+{
+}
 }
