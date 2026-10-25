@@ -338,6 +338,7 @@
 | 306 | R05 brought to the R module bar (DVR4 step 5): prompts and two hints per hole (Python included), one-statement-per-line twins, agents and specimens (twins mirrored), a chapter with source and captured output inline (37 pins), P3's ten runs per language as recorded quotes, a Q06-schema bank with re-run probes, ten admission rows; two short holes and three WRITE tags with no genuine hole instance reported | adopted in R authoring (2026-10-22 UTC) | DVR4 step 5 systemic lane P1 |
 | 307 | The user's D84 (R05's H3 re-posed as `StarThrice`, `Star(a)` over `u + u + u`; H4's recursive call left to the learner; both languages, smallest found ≥ 3 one-fact lines) and D85 (isolation RECOGNISE; `assert-by` WRITE in Dafny on H2d alone, by one narrow `[[write_exception]]` the course map accepts and nothing broader; Verus `write_v = []`) | adopted (the user; built in R authoring 2026-10-23 UTC) | the user; DVR4 step 5 lane P1 |
 | 308 | R06 brought to the R module bar (DVR4 step 5), with the user's D86 (`calc` RECOGNISE), D87 (the learner writes every measure: H1's parameters reordered so Dafny's default fails, the checkpoint's measures stripped), D88 (H3 a refutation-witness exception) and the coordinator's D89 (P4d/P5v rewritten as one `NodeCount` loop pair): one-statement-per-line files with prompts and hints, a chapter with source and captures inline (34 pins), a Q06-schema bank, fourteen admission rows | adopted in R authoring (2026-10-24 UTC) | the user; DVR4 step 5 lane P1 |
+| 309 | R07 brought to the R module bar (DVR4 step 5), with the user's D90 (library-call holes judged by a mechanical named-call gate: per-item `gate: named-calls`, found-by notes, one recorded call-removal answer per call run by the empty-body gate, `scripts/named_call_gate.py` and its test) and D91 (H4v/H5v re-posed over quantified goals so `broadcast use` is the smallest proof); chapter with source inline (28 pins), Q06-schema bank, ten admission rows | adopted in R authoring (2026-10-25 UTC) | the user; DVR4 step 5 lane P1 |
 | 320 | R09 at the R module bar (DVR4 step 5, lane P2): one-statement-per-line files in plan order with prompts, hints and use-site clients; the R04.H2v skeleton removed from a given helper; two seed-stability repairs; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H2 minutes and an H4-bearing Lab α form for decision | adopted in R authoring (2026-10-19 UTC) | DVR4 step 5 lane P2 |
 | 321 | R10 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints and a compiled use-site test; A4's do-not-open header; H3d's lever named in its row; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; H3's line band for decision | adopted in R authoring (2026-10-20 UTC) | DVR4 step 5 lane P2 |
 | 322 | R11 at the R module bar (DVR4 step 5, lane P2): files in plan order with prompts, hints, a commented T1 check and given use-site checks; H2d/X1d levers named in their rows; a chapter with source and captures inline; a Q06-schema bank; re-cut leak patterns; line-band outliers for decision | adopted in R authoring (2026-10-21 UTC) | DVR4 step 5 lane P2 |
@@ -4936,6 +4937,24 @@ The record is in `Solutions/plans/DVR4-R06-build-notes.md` (§1 is the objective
   - Files: one statement per line, prompts and two hints per hole. Admission: seeds 1–3 stable for all six twins; empty-body 14/14; registry rows unchanged.
   - Chapter: 5,195 words, 34 pins, every prediction captured. Bank: Q06 schema, 12 questions, two parallel problems.
   - Leak patterns: 8 OK. Freeze, counts, sidecars and rubric are re-pinned.
+
+### Δ309 · R07 at the R module bar; D90, D91 — adopted (the user, 2026-10-25; built 2026-10-25 UTC)
+
+The record is in `Solutions/plans/DVR4-R07-build-notes.md` (§1 is the objective map, §2 the measurements, §3 the decisions, §4 as built).
+
+- **D90 (the user): the named-call gate.**
+  - R07's library-call holes are short by design: one or two named calls, every call necessary. They are judged by the gate instead of D64's three-fact bar:
+    1. the empty body fails;
+    2. removing any one call fails;
+    3. every call keeps its found-by note.
+  - It is mechanical: a per-item `// gate: named-calls` line; found-by notes on the twin's calls; one `// cfree:` answer per call, which `firsttry.sh --empty-body` runs and requires to fail (14/14 in R07).
+  - `scripts/named_call_gate.py` checks that the records are complete. `tests/ci/test_named_call_gate.py` checks it on the committed twins and on six fixtures.
+  - Items and minutes are unchanged.
+- **D91 (the user): H4v and H5v re-posed over quantified goals.**
+  - The new statements are `filter_map_origins_scoped` (every output) and `filter_map_steps_scoped` (every index).
+  - The probes show that the empty body fails, the named-call form needs an `assert forall … by { call }`, and the one-line scoped `broadcast use` verifies. So the broadcast is genuinely the smallest proof, and broadcast-use stays WRITE in Verus.
+  - Objectives and minutes (5, 5) are kept.
+- **Build.** Files at the bar; seeds 1–3 stable; empty-body 10/10. The chapter has source inline, 28 pins, with P1, P2 and P4 captured. The bank is at the Q06 schema. Leak patterns: 8 OK. Freeze, counts, sidecars and rubric are re-pinned. Workflow 11/11.
 
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 

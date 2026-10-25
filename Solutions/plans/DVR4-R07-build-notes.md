@@ -65,3 +65,55 @@ Items and minutes are unchanged. The gate is mechanical and recorded per item:
   - an ungated item is not checked.
 
 **D91: H4v and H5v re-posed so that `broadcast use` is the smallest proof.** Each now states W3's or W4's fact for every element at once, so the lemma is needed at every index of a quantified goal. The objectives (scoped automation after named calls) and minutes (5, 5) are kept, and broadcast-use stays WRITE in Verus. Evidence is in §4.
+
+## 4. As built and evidence (2026-10-25)
+
+Every solver job ran one at a time under a 6G outer scope. Each waited for at least 20G available (`bin/memgate.sh`, the coordinator's low-memory rule). There was no exit 137 or 143.
+
+**D91 probes** (`r07/d91`):
+
+| item | broadcast one-liner | named-call `assert forall … by { call }` | empty body |
+|---|---|---|---|
+| H4v `filter_map_origins_scoped` | verifies | verifies (4 lines) | fails |
+| H5v `filter_map_steps_scoped` | verifies | verifies (7 lines) | fails |
+
+H5v's quantifier needs a `#[trigger]` on `xs[..i + 1].filter_map(f)`. Without one, all three variants stop at resolve.
+
+**Files.**
+- Both hand files are one statement per line, in plan order. T1 and H1–H5 have prompts with a guiding question; the holes have two hints (T1 is closed book).
+- The twins carry `@hole` markers, found-by notes, `// did:` receipts on the two broadcasts, and the named-call gate records (14 `cfree:` answers over 10 items).
+- The learner files are derived from the twins.
+- The agents, the check unit and every specimen (twins mirrored) are re-laid out.
+
+**Admission.**
+- Seeds 1–3 are stable for all four twins: core d/v, agent d/v. Verus CV ≤ 0.1 %; Dafny 25.7 % from a declaration outside the files, advisory.
+- `firsttry.sh R07 --empty-body` gives 10/10, and every construct-free (call-removed) answer fails, 14/14: the named-call gate.
+- The registry's 10 rows are unchanged.
+- Freeze re-pinned (40 statements); `--check` 0. Counts and `--shipped` 0. `--lint-hollow` OK. `reference_lint` 0.
+- `named_call_gate.py`: 10 gated items, 0 problems. `test_named_call_gate.py`: 7 tests OK.
+
+**Chapter.**
+- Every pinned specimen now has its source inline (15 blocks). The captures added:
+  - P1: a scratch lemma, which needs `reveal S.Filter();` because Std's `Filter` is opaque;
+  - P2: a scratch `compute_only`;
+  - P4: the specimen. The answer is `FAILS a b`, from `lemma_filter_contains`'s and `lemma_filter_pred`'s `requires`.
+- New sections: D91's quantified broadcasts (§2), and the named-call gate with the items table (§8).
+- Gate, audit and freeze pins.
+- 28 pins, 6,871 words, PLAN §3's three diagrams. `chapter_lint` 0; `pins.py --ci --module R07` 54 pins 0 problems; `--ref` 5 checks 0.
+- A first P1 specimen was dropped because specimens do not see A2.
+
+**Bank.**
+- Rewritten at the Q06 schema: 12 questions, all `viva: yes`. Draws A (live K3, K7) and B (live K2, K4); 7 backward edges.
+- Every tag is in `concepts.md`; every Reread resolves; every probe ran on the pins. K9 and K10 ran against the frozen `fvh.stats`; K6 is audited with `vaudit`.
+- K3 broadcasts a lemma the probe declares itself, over an opaque function. A broadcast of W3's library lemma would have matched H4v's leak pattern.
+- One parallel problem (PP1, parallel to H1–H3), verified as shipped, empty and reference. No H4v/H5v parallel: `lemma_filter_contains` is in `vstd`'s default broadcast group, so its empty body verifies.
+
+**Leak patterns.** All six hand-hole patterns are re-cut for the new layout and D91; the A1d/A1v patterns are kept. 8 OK over 2,730 public files.
+
+**Overlap.** No answer region shares any 24-token window with a public file (excluding Lab α); the public-answer calibration maximum is 0.
+
+**Rubric.** 2 pins refreshed; all current.
+
+**Study workflow.** 11/11 on `373d12d5`.
+
+The focused author CI waits for the coordinator: no 16G CI while host memory is low.
