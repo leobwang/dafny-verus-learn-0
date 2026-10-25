@@ -247,6 +247,7 @@ pub proof fn lemma_ranges_set_law(rs: Seq<(char, char)>, c: char)
         ranges_set(rs).contains(c) == in_char_ranges(rs, c),
     decreases rs.len(),
 {
+    // @hole-begin R08.H1v
     if rs.len() > 0 {
         let tail = rs.drop_first();
         lemma_ranges_set_law(tail, c);
@@ -261,6 +262,7 @@ pub proof fn lemma_ranges_set_law(rs: Seq<(char, char)>, c: char)
             }
         }
     }
+    // @hole-end R08.H1v
 }
 
 // =========================================================================================
@@ -450,6 +452,7 @@ pub proof fn lemma_parts_law(r: Re, w: Seq<char>)
         any_matches(parts(r), w) == matches(r, w),
     decreases r,
 {
+    // @hole-begin R08.H2v
     match r {
         Re::Empty => {},
         Re::Alt(a, b) => {
@@ -482,6 +485,7 @@ pub proof fn lemma_parts_law(r: Re, w: Seq<char>)
             }
         },
     }
+    // @hole-end R08.H2v
 }
 
 // item: R08.H3v
@@ -500,6 +504,7 @@ pub proof fn lemma_alt_feed_law(m: Seq<Re>, c: char, w: Seq<char>)
         alt_res(feed_all(m, c), w) == alt_res(m, seq![c] + w),
     decreases m.len(),
 {
+    // @hole-begin R08.H3v
     // did: reveal the engine's model here, in this proof only
     reveal(alt_res);
     if m.len() > 0 {
@@ -535,6 +540,7 @@ pub proof fn lemma_alt_feed_law(m: Seq<Re>, c: char, w: Seq<char>)
             }
         }
     }
+    // @hole-end R08.H3v
 }
 
 // item: R08.H4v
@@ -551,6 +557,7 @@ pub proof fn lemma_alt_final_law(m: Seq<Re>)
         any_nullable(m) == alt_res(m, Seq::<char>::empty()),
     decreases m.len(),
 {
+    // @hole-begin R08.H4v
     // did: reveal the engine's model here, in this proof only
     reveal(alt_res);
     if m.len() > 0 {
@@ -559,6 +566,7 @@ pub proof fn lemma_alt_final_law(m: Seq<Re>)
         assert forall|i: int| 0 < i < m.len() implies m[i] == m.drop_first()[i - 1] by {
         }
     }
+    // @hole-end R08.H4v
 }
 
 /// A client of the alternative-set engine: the same contract as `match_deriv`.

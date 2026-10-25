@@ -31,3 +31,42 @@ Item ids follow file order (difficulty ramp): plan §2.3's table lists the same 
 - **Dafny ignores `opaque` on a refining declaration** (an `opaque ghost predicate Res` that refines the abstract one stays transparent: every law verifies with no reveal). The alternative-set engine therefore puts the opacity on its own predicate `AltRes` (Verus: the free `alt_res`); the chapter shows both behaviours with pinned captures. With the reveals removed, H3 and H4's references fail in both languages.
 - **A refining lemma may recurse** when a concrete-typed parameter shrinks (the inherited default decreases is the parameter tuple; abstract-typed parameters carry no order); recursion on the state alone fails ("decreases clause might not decrease"), and an explicit `decreases` on a refining lemma is a resolve error (P3's answer). Verus checks each function's own `decreases`.
 - **Agent and the freeze.** A definition's body is part of its statement for `specfreeze`, so a repair of a planted defect inside a Dafny function or a Verus spec fn fails `specfreeze --against <snapshot>` exactly as a changed `Lang` does. The agent is built so the freeze separates them: Dafny `Prune` is a function with the promise `ensures forall w :: Matches(out, w) <==> Matches(r, w)`, and the module freeze pin (from the twin) lists `Prune`'s body under `open_bodies`; Verus's model of a state is its language (`words_of`), the laws are definitions, and the rule lives in the executable `prune_exec` with the same promise. The acceptance line is `scripts/specfreeze --check R08`. Checked: the faithful repairs pass `--check` with 0 findings; a changed `lang` / `Lang` gives one `freeze-changed` per language.
+
+## DVR4 step 5: the systemic pass (lane P1, 2026-10-25)
+
+Binding inputs: plan §4.2's bar as R02 met it; the course-wide rules (D64/D84: every hole's smallest proof has at least three one-fact lines unless an exception is recorded; D82/D85: every WRITE tag names a step a smallest proof needs; twins mirrored). Scratch: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p1/r08/`. Every solver job ran one at a time under a 6G outer scope after `free -g` showed at least 20G available (`bin/memgate.sh`); there was no exit 137 or 143.
+
+### 1. Objective-to-exercise map (before any change)
+
+The step-3 table above stands: objectives, items (W1, H1–H4, C3–C5, A1) and minutes (H1 10, H2 15, H3 15, H4 5 per language) are unchanged by this pass. The registry tags at the start: `write_d = ["refines", "reveal"]`, `write_v = ["trait-spec", "reveal"]`, `recognise_d = ["abstract-module"]`, `recognise_v = ["open-spec"]`.
+
+### 2. Measurements (`r08/min`)
+
+The twins now carry `@hole-begin/@hole-end` markers for H1–H4 in each language. Smallest proofs found by the greedy minimizer (structural lines kept; bindings not counted; `:|`/`choose`, calls, `reveal` and asserts counted):
+
+| item | one-fact lines (smallest found) | of which |
+|---|---|---|
+| H1d `RangesClassLaw` | 3 | the recursive call, two witness picks |
+| H1v `lemma_ranges_set_law` | 4 | the call, two picks, one index shift |
+| H2d `PartsLaw` | 9 | two calls, three picks, four asserts |
+| H2v `lemma_parts_law` | 8 | two calls, three picks, three asserts |
+| H3d `AltFeedLaw` | 11 | `reveal`, three calls, five picks, two asserts |
+| H3v `lemma_alt_feed_law` | 12 | `reveal`, three calls, five picks, three asserts |
+| H4d `AltFinalLaw` | 3 | `reveal`, two calls |
+| H4v `lemma_alt_final_law` | 4 | `reveal`, two calls, the index-shift `assert forall` (without it the body fails) |
+
+Every hole meets D64. The twins keep a few readable asserts the minimizer drops (H1d 2, H2d 2, H3d 4, H4d 1, H1v 1, H2v 2), as in R05–R07.
+
+**reveal is genuine** (D82/D85): dropping `reveal AltRes();` / `reveal(alt_res);` fails in H3 and H4 in both languages, so the tag names a step two smallest proofs need per language.
+
+**refines / trait-spec have no hole instance** (brought to the coordinator, 2026-10-25): H1–H4 are each engine's own lemmas, none is declared in `RG_A2_StepMatcher` or the trait, and no smallest proof uses the refinement (the interface's laws are discharged in the given engine bodies by one call each). Options: (a) RECOGNISE both, write lists `["reveal"]` (recommended); (b) re-pose a hole so the learner writes the refinement or impl; (c) keep them under a recorded exception.
+
+### 3. Admission (2026-10-25)
+
+- Seeds 1–3 stable for all four twins (core d/v, agent d/v). Widest spreads advisory: Dafny 25.7 % on a declaration outside the files; Verus 20.4 % at `lib.rs:450`; the Verus agent 0 %.
+- `firsttry.sh R08 --empty-body` 8/8; `--lint-hollow` OK (21 files).
+- `specfreeze --check R08` 0; `vcheck --shipped` 0 against `expected/R08.counts`; `reference_lint` 0; `chapter_lint` 0 (5,708 words, 27 pins, 5 predict boxes, 3 diagrams); `pins.py --ci --module R08` 44/44.
+- Layout: both hand files, the twins, the agents and the specimens are one statement per line.
+- Chapter: every prediction (P1d, P2v, P3dv, P4v, P5dv) is answered by a pinned capture after its box.
+- Bank: 12 questions at the Q06 schema, 12 Reread lines (each names a chapter heading exactly), two parallel problems, every tag known.
+- Leak patterns: 8 OK on the current twins (the verifier over 2,731 public files; its only public hits were the minimizer's git-ignored `instructor/scratch/probe.dfy`, cleared).

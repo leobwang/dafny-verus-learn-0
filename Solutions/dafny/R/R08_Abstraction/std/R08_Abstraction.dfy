@@ -203,6 +203,7 @@ module R08_RangeStarEngine refines RG_A2_StepMatcher {
   lemma {:induction false} RangesClassLaw(rs: seq<(char, char)>, c: char)
     ensures A2.InClass(RangesClass(rs), c) <==> InSomeRange(rs, c)
   {
+    // @hole-begin R08.H1d
     if rs != [] {
       RangesClassLaw(rs[1..], c);
       if InSomeRange(rs[1..], c) {
@@ -216,6 +217,7 @@ module R08_RangeStarEngine refines RG_A2_StepMatcher {
         }
       }
     }
+    // @hole-end R08.H1d
   }
 }
 
@@ -324,6 +326,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
   lemma {:induction false} PartsLaw(r: Re, w: seq<char>)
     ensures AnyMatches(Parts(r), w) <==> Matches(r, w)
   {
+    // @hole-begin R08.H2d
     match r
     case Empty =>
     case Alt(a, b) =>
@@ -351,6 +354,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
       if Matches(r, w) {
         assert Matches(Parts(r)[0], w);
       }
+    // @hole-end R08.H2d
   }
 
   // item: R08.H3d
@@ -369,6 +373,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
     ensures AltRes(FeedAll(st, c), w) <==> AltRes(st, [c] + w)
     decreases |st|
   {
+    // @hole-begin R08.H3d
     // did: reveal the engine's model here, in this proof only
     reveal AltRes();
     if st != [] {
@@ -398,6 +403,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
         }
       }
     }
+    // @hole-end R08.H3d
   }
 
   // item: R08.H4d
@@ -414,6 +420,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
     ensures AnyNullable(st) <==> AltRes(st, [])
     decreases |st|
   {
+    // @hole-begin R08.H4d
     // did: reveal the engine's model here, in this proof only
     reveal AltRes();
     if st != [] {
@@ -421,6 +428,7 @@ module R08_AltSetEngine refines RG_A2_StepMatcher {
       B.NullableCorrect(st[0]);
       assert forall i | 0 < i < |st| :: st[i] == st[1..][i - 1];
     }
+    // @hole-end R08.H4d
   }
 
 }
