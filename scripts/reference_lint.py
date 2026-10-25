@@ -23,9 +23,11 @@ the dvl statement tables:
   declaration-*          the declarations differ: missing, extra (a twin-only
                          declaration is allowed when it is a test, follows the
                          agent reference heading, carries a
-                         `reference-only` comment, or lies inside an item's
-                         `@hole-begin`/`@hole-end` region, which the learner
-                         writes: D92), statement-differs (the
+                         `reference-only` comment, or lies inside a
+                         `@hole-begin`/`@hole-end` region of an item whose
+                         admissible row says `writes = "module"`: the
+                         learner writes those declarations, D92),
+                         statement-differs (the
                          learner's bodyless function holes, and a Dafny
                          function or predicate shipped with a placeholder
                          body the twin replaces, QPLAN §30 Q52, compared by
@@ -165,28 +167,39 @@ def learner_files(root, rec):
     return req, opt
 
 
-def in_learner_region(raw, line):
-    """True when `line` lies inside an item's `@hole-begin`/`@hole-end` region
-    of the twin: the learner writes it (D92, Δ310: a refinement module or a
-    trait implementation the learner writes whole). Broken markers never
-    excuse a declaration (the marker rules report them)."""
+def module_writing_items(rec):
+    """The item ids whose learner writes whole declarations: the registry's
+    admissible rows with `writes = "module"` (D92, Δ310: R08.H1/H4, a
+    refinement module or a trait implementation the learner writes whole)."""
+    return {k for k, v in (rec.get("admissible") or {}).items()
+            if isinstance(v, dict) and v.get("writes") == "module"}
+
+
+def in_learner_region(raw, line, writers):
+    """True when `line` lies inside a `@hole-begin`/`@hole-end` region of the
+    twin that belongs to an item of `writers` (module_writing_items): that
+    learner writes the declarations there. An ordinary annotation region
+    never excuses a twin-only declaration, and broken markers never do (the
+    marker rules report them)."""
+    if not writers:
+        return False
     try:
         regions = core.common.hole_regions("\n".join(raw))
     except ValueError:
         return False
-    return any(b < line < e for _, b, e in regions)
+    return any(iid in writers and b < line < e for iid, b, e in regions)
 
 
-def twin_only_ok(raw, line, lang, decl_attrs=()):
+def twin_only_ok(raw, line, lang, decl_attrs=(), writers=frozenset()):
     """A twin-only declaration is allowed: a test, anything after the agent
     reference heading, a declaration marked `reference-only`, or one inside a
-    learner region (in_learner_region)."""
+    learner region of a module-writing item (in_learner_region)."""
     if any(AGENT_HEADING.search(x) for x in raw[:max(line - 1, 0)]):
         return True
     for ln in (line, line - 1):
         if 1 <= ln <= len(raw) and REFERENCE_ONLY.search(raw[ln - 1]):
             return True
-    if in_learner_region(raw, line):
+    if in_learner_region(raw, line, writers):
         return True
     return any(a in ("test", "Test") for a in decl_attrs)
 
@@ -206,7 +219,7 @@ def dafny_tests(text, path):
             if any((a.style, a.name) in (("{:", "test"), ("@", "Test")) for a in d.attrs)}
 
 
-def compare_declarations(L, rel, lang, ltext, ttext, tpath):
+def compare_declarations(L, rel, lang, ltext, ttext, tpath, writers=frozenset()):
     raw = ttext.split("\n")
     lpath = L.root / rel
     # a frame annotation hole (QPLAN §6 Q22, Δ135): a Dafny twin whose header
@@ -244,7 +257,8 @@ def compare_declarations(L, rel, lang, ltext, ttext, tpath):
     for sym in sorted(set(lh) - set(th), key=lambda s: llines.get(s, 0)):
         L.add(lpath, llines.get(sym, 0), "declaration-missing")
     for sym in sorted(set(th) - set(lh), key=lambda s: tlines.get(s, 0)):
-        if not twin_only_ok(raw, tlines.get(sym, 0), lang, ("test",) if sym in tests else ()):
+        if not twin_only_ok(raw, tlines.get(sym, 0), lang, ("test",) if sym in tests else (),
+                            writers):
             L.add(tpath, tlines.get(sym, 0), "declaration-extra")
     for sym in sorted(set(lh) & set(th)):
         if lh[sym] not in (th[sym], tm.get(sym)) or (sym in lop) != (sym in top) or (
@@ -382,7 +396,7 @@ def check_twin_slots(L, trel, ttext, tpath, titems, verdict_values):
                 L.add(tpath, it["line_start"], "answer-missing")
 
 
-def lint_twin(L, mid, rel, slot_file, verdict_values):
+def lint_twin(L, mid, rel, slot_file, verdict_values, writers=frozenset()):
     lang = ci.file_lang(rel)
     trel = ref(rel)
     tpath = L.root / trel
@@ -395,7 +409,7 @@ def lint_twin(L, mid, rel, slot_file, verdict_values):
     titems = compare_markers(L, rel, ltext, trel, ttext, tpath, slot_file)
     if lang in ("d", "v"):
         try:
-            compare_declarations(L, rel, lang, ltext, ttext, tpath)
+            compare_declarations(L, rel, lang, ltext, ttext, tpath, writers)
         except V.vs.ParseError as e:
             L.add(tpath, e.line, "parse-error")
         found = core.lib(lang).lint([tpath], "reference")
@@ -435,7 +449,7 @@ def lint_module(L, mid):
             if rel in req:
                 L.add(L.root / ref(rel), 0, "twin-missing")
             continue
-        lint_twin(L, rec["id"], rel, slot_file, verdict_values)
+        lint_twin(L, rec["id"], rel, slot_file, verdict_values, module_writing_items(rec))
     items, _ = core.module_items(L.root, rec)
     has_verdicts = any(it["format"] == "verdict" for it in items)
     if has_verdicts and not rslot_path.is_file():

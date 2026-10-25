@@ -235,6 +235,12 @@ ADMISSIBLE_KEYS = ("admitted", "minutes", "fallback")
 STATEMENT_ITEM_KIND = "statement-item"
 HIDDEN_CHECK_KIND = "hidden-check spec"
 ADMISSIBLE_EXCEPTION_KINDS = ("short-format band", STATEMENT_ITEM_KIND, HIDDEN_CHECK_KIND)
+# An optional key `writes` after `fallback` (the user's decision D92,
+# 2026-10-25; DELTAS Δ310): `writes = "module"` marks an H item of Dafny or
+# Verus whose learner writes whole declarations (R08.H1/H4: a refinement
+# module or a trait implementation), so reference_lint.py allows the twin's
+# declarations inside that item's @hole regions. No other value exists.
+ADMISSIBLE_WRITES = ("module",)
 # The prose items whose hidden check is recorded as holding: DELTAS Δ220 (DV5d's
 # judging lane, 2026-10-12; archive dv5d/judge/): in the grader container, on
 # the final image, each item's sealed reference was judged faithful against
@@ -789,11 +795,17 @@ def check_model_fields(m):
             continue
         if im.group(2) not in ci.CHECKED_KINDS:
             err(f"admissible: '{k}' is a {im.group(2)} item; only checked items carry minutes")
-        if not isinstance(v, dict) or list(v) not in (list(ADMISSIBLE_KEYS),
-                                                      list(ADMISSIBLE_KEYS) + ["exception"]):
+        if not isinstance(v, dict) or list(v) not in (
+                list(ADMISSIBLE_KEYS), list(ADMISSIBLE_KEYS) + ["exception"],
+                list(ADMISSIBLE_KEYS) + ["writes"], list(ADMISSIBLE_KEYS) + ["writes", "exception"]):
             err(f"admissible: '{k}' must be {{ admitted = …, minutes = …, fallback = \"…\" }}"
-                " (and, for an admitted item outside its band, exception = \"<kind>: <why>\")")
+                " (then, for a learner-written module, writes = \"module\"; and, for an "
+                "admitted item outside its band, exception = \"<kind>: <why>\")")
             continue
+        if "writes" in v and (v["writes"] not in ADMISSIBLE_WRITES or im.group(2) != "H"
+                              or im.group(4) not in ("d", "v")):
+            err(f"admissible: '{k}': writes = \"module\" is the only value, on an H item of "
+                "Dafny or Verus (D92)")
         a, mins, fb = v["admitted"], v["minutes"], v["fallback"]
         if "exception" in v:
             ex = v["exception"]

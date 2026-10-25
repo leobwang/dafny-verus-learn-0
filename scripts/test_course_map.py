@@ -515,6 +515,23 @@ case("write exception: the reason names the decision",
 case("write exception: a second 1-item slug is not covered",
      sub(BASE, 'write_d = ["assert-by"]', 'write_d = ["assert-by", "lemma-call"]'), 1,
      "R05: Dafny WRITE 'lemma-call' has 0 tagged items")
+# D92 (Δ310): `writes = "module"` marks R08's H1/H4 rows, whose learner writes whole
+# declarations (reference_lint.py allows the twin's inside their @hole regions).
+WR_ROW = '"R08.H4d" = { admitted = true, minutes = 10, fallback = "", writes = "module" }'
+if WR_ROW not in BASE:
+    raise SystemExit("test_course_map: R08.H4d's admissible row no longer carries D92's "
+                     "writes = \"module\": update the writes cases")
+case("writes: another value is refused",
+     sub(BASE, WR_ROW, WR_ROW.replace('writes = "module"', 'writes = "lines"')), 1,
+     "'R08.H4d': writes = \"module\" is the only value")
+case("writes: on a T item is refused",
+     sub(BASE, '"R11.T1d" = { admitted = true, minutes = 5, fallback = "" }',
+         '"R11.T1d" = { admitted = true, minutes = 5, fallback = "", writes = "module" }'), 1,
+     "'R11.T1d': writes = \"module\" is the only value, on an H item")
+case("writes: after the exception is refused (writes comes first)",
+     sub(BASE, WR_ROW, WR_ROW.replace('writes = "module" }',
+                                      'exception = "short-format band: x", writes = "module" }')),
+     1, "'R08.H4d' must be")
 case("legacy id that is a current id", setf("R05", "legacy_id", '"R06"'), 1, "legacy_id 'R06'")
 case("legacy id used twice", setf("R06", "legacy_id", '"F06"', setf("R05", "legacy_id", '"F06"')), 1,
      "legacy_id F06 used more than once")
