@@ -10,7 +10,7 @@ Read `.claude/skills/instructor/CORE.md` first and operate under it: you are the
 
 | mode | when | grades |
 |---|---|---|
-| (none) | after `make -C paper paper` is green, before formalizing and before any lab run | every answered problem except `[lab-report]` ones: proofs and blueprints, hand calculations, concept answers, paper cards, pre-registrations |
+| (none) | after `make -C paper paper` is green, before formalizing and before any lab run | every problem except `[lab-report]` ones: proofs and blueprints, hand calculations, concept answers, paper cards, pre-registrations; an unanswered one scores 1 (§Unanswered problems) |
 | `--post` | after the learner's own formal proof is done | blueprint quality only, diffed against that proof |
 | `--report` | after a lab's runs | the `[lab-report]` problems |
 | `--fixture <path>` | a grade-the-grader exercise (Q12's S12) | one given pre-registration fixture under `paper/fixtures/`, on the method dimensions only; it never unlocks a run |
@@ -38,7 +38,7 @@ Written problems are labelled `B<n>` on both tracks (`\label{prob:B1}`, `\label{
 4. **blueprint-quality**: the operational test: *could a contractor formalize this without inventing any statement?* Every helper lemma named with a precise statement; every step justified or declared a gap.
 5. **gap-accounting**: declared gaps are honest (score-3 territory); undeclared holes are flaws once confirmed (≤2).
 
-**`[hand-calculation]`** (weakest preconditions, VCs for a small loop, unfolding a recursive spec a few steps, "what does the verifier know after this line?", trigger matching by hand): recompute through the rubric's verifier anchors, never by eye, and diff the learner's trace step by step. Write each anchor to `instructor/scratch/`, run it with `scripts/vcheck`, paste the output verbatim. Under the asymmetry rule a verified anchor confirms a step, but an error verdict alone never fails one: a flawed step needs an executable counterexample (a concrete state run through compiled code with a runtime check) or a verified refutation. Dimension label: `recomputation`.
+**`[hand-calculation]`** (weakest preconditions, VCs for a small loop, unfolding a recursive spec a few steps, "what does the verifier know after this line?", trigger matching by hand): recompute through the rubric's verifier anchors, never by eye, and diff the learner's trace step by step. Write each anchor as a probe (§Probes), run it with `scripts/vcheck`, paste the output verbatim. Under the asymmetry rule a verified anchor confirms a step, but an error verdict alone never fails one: a flawed step needs an executable counterexample (a concrete state run through compiled code with a runtime check) or a verified refutation. Dimension label: `recomputation`.
 
 **`[concept]`**: actively try to counterexample the learner's claim, with an executable counterexample or a verified refutation where it is formal. If the claim survives an honest attempt, it scores ≥3. Dimension label: `correctness`.
 
@@ -53,11 +53,24 @@ Written problems are labelled `B<n>` on both tracks (`\label{prob:B1}`, `\label{
 
 **Rubric-declared dimensions.** Where a problem fits none of the types above (a Q18 proposal, an R16 memo, a challenge blueprint or sketch), the module's rubric declares its dimension labels. Grade against the labels the rubric declares, and use them verbatim in the `% GRADER[…]` lines and the gradebook; never invent a label the rubric does not name.
 
+## Probes (hard)
+
+A probe is how you exhibit an instance; it is never a delivery. This section replaces the probe location of CORE.md's recipe for this skill (its other rules hold).
+
+1. **Where.** Every probe lives outside the checkout, in `"${DVL_SCRATCH:-/tmp/dvl-$(id -u)}/grade-paper/<ID>/"`: create it with `mkdir -p`, print its absolute path once, and write each probe there by that path. Never write a probe, or anything else, under `instructor/scratch/` or elsewhere in the learner's tree. Run a probe with `scripts/vcheck --module <ID> <absolute probe path>` (the module's given layers come with it; a learner file the probe needs is included by its absolute path), or `scripts/vcheck --test <absolute probe path>` for compiled checks. Before you write the report's last line, delete the directory with `rm -rf` on that absolute path: no probe outlives the session.
+2. **What a probe may state.** One of two things. It replays one step of a hand calculation (an anchor: that step's check on the problem's own small program, as the rubric's anchor lines give it), or it exhibits the failing instance of the learner's claim at concrete values: an executable counterexample (compiled code, a `{:test}` method or a test function, whose runtime checks run on one concrete state) or a verified refutation of a closed statement about those values. It calls the given layers' lemmas (the record's layer and below) and the learner's own statements, and nothing more. It never proves a general lemma that an exercise asks for: no lemma or `proof fn` of this module's holes, of a later module's, or of a capstone or lab delivery, and none restating the learner's blueprint in Dafny or Verus. Where the refutation needs a general fact, assert its concrete instance instead. Never turn the learner's prose invariant, measure or helper statement into code: that formula is the hole's answer. Check a claimed invariant by computing its terms at the concrete states of a run, one value per check, and keep the formula itself in the learner's own words.
+3. **What the feedback quotes.** The probe's command, its `vcheck` summary line and verdict, and the counterexample's concrete values ("fails at `n = 3`, `s = [2, 0]`", "recomputed 0.25 against the answer's 0.5"). Never the probe's source: no proof body, lemma, invariant or code line of a probe in the feedback, the margin notes or a reply. A learner who asks for the probe gets its verdict and values again.
+4. **Confirming a sound step needs no probe.** Under the asymmetry rule, a step you cannot refute scores ≥3 on the evidence of an honest attempt; do not formalize it to show that it holds. The hand-calculation anchors above confirm a recomputation; they never prove the problem's own claim.
+
 ## Verdict rules (hard)
 
 - Per-problem grade = **MINIMUM across its dimensions**. Averages hide holes.
 - **Confirmed flaw, or it's a gap**: any score ≤2 REQUIRES the finding to exhibit the concrete failing instance (CORE.md §Grading vocabulary): for a formal claim, an executable counterexample, a verified refutation or a replayed model, never "the verifier could not prove it"; for prose and method, the quoted text, the recomputation or the reproduce output that fails. Cannot exhibit it → score 3 and record a gap.
 - Research problems are graded on method and reproducibility, **never on matching numbers**: never compare a learner's result with an expected value, and say in the report that Claude is both the grader and one of the experiment's subjects.
+
+## Unanswered problems
+
+An unanswered problem (blank, or still the skeleton's placeholder) is graded, never skipped: it scores **1 on each of its dimensions**, with one margin note per dimension, `% GRADER[B<n>][<dimension>][1]: not attempted`, and its row in the per-problem table. It counts in the gradebook `paper` row like any graded problem, so a wholly unanswered file still gets its feedback file and its own gradebook row, `| YYYY-MM-DD | <ID> | paper | 1 | <open findings count> |`; an unanswered pre-registration is `PREREG <ID>: HELD — <first method dimension> at 1`. "Not attempted" is not an error the learner made: it gets no ledger line (below). The report's summary names the problem to attempt first.
 
 ## Feedback format
 
@@ -72,7 +85,11 @@ The spoiler-guard hook keeps you out of `paper/<ID>_answers.tex` (it is learner-
 - `| YYYY-MM-DD | <ID> | paper | <min grade over the graded non-research problems> | <open findings count> |` when any such problem was graded;
 - `| YYYY-MM-DD | <ID> | prereg | <min over its method dimensions> sha256 <first 16 hex> | <open findings count> |` when a pre-registration was graded; the full sha256 goes into the feedback file.
 
-Finally, append ONE `instructor/ledger.md` line per finding scored ≤2 (CORE.md schema, `source: grade-paper`, `hint-depth: 0`, box 1, `due:` tomorrow), tagged `<ID>/<tag>` from the module bank's controlled vocabulary. Record the ERROR (the concrete thing that was wrong), never the problem, so `/review` can generate a fresh variant. Declared gaps (score 3) do not enter the ledger.
+Finally, append the ledger lines (CORE.md schema, `source: grade-paper`, `hint-depth: 0`, box 1, `due:` tomorrow), tagged `<ID>/<tag>` from the module bank's controlled vocabulary. Record the ERROR (the concrete thing that was wrong), never the problem, so `/review` can generate a fresh variant.
+
+- **The count is mechanical: one ledger line for each distinct `% GRADER[…][…][1|2]` margin note**, except the "not attempted" notes of §Unanswered problems. Before closing, count your margin notes scored ≤2 and the ledger lines you appended; the two numbers must be equal.
+- **A finding that restates or follows from another finding's error still gets its own line.** Never merge two margin notes into one line, even when one error causes both. Example (invented): `% GRADER[B2][induction-soundness][2]: the step uses the invariant k <= n at k = n + 1, past the guard` and `% GRADER[B2][gap-accounting][2]: declares no gap beside that broken step` are two margin notes, so they are two ledger lines, `- tag: <ID>/loop-invariant | error: used an invariant one step past the loop guard | …` and `- tag: <ID>/gap-accounting | error: declared no gap beside a broken step | …`, even though the second follows from the first.
+- Declared gaps (score 3) do not enter the ledger.
 
 ## --post mode (blueprint diff)
 

@@ -163,9 +163,9 @@ def check_trust(a, root):
               "nothing to check (passing loudly)")
         return core.EXIT_OK
     found = V.check_trust(str(a.trust) if a.trust else None, root=root)
-    if any(f.kind == "audit-incomplete" and "get_toolchain" in f.message for f in found):
-        print("vaudit: a pinned toolchain is missing or altered: run "
-              "scripts/get_toolchain.sh verus", file=sys.stderr)
+    if any(f.kind == "audit-incomplete" and _toolchain_msg(f.message) for f in found):
+        print("vaudit: no usable verus on PATH: install the pinned Verus and put it on PATH "
+              "(README, Setup)", file=sys.stderr)
         return core.EXIT_REFUSED
     if a.json:
         print(json.dumps({"check_trust": True, "given_crates": len(crates),
@@ -195,6 +195,11 @@ def read_report(path):
             lines.append(s)
     return sorted(set(lines))
 
+
+
+def _toolchain_msg(m):
+    """A finding message from a missing toolchain (PATH, D78; or the sandbox's pinned install)."""
+    return "get_toolchain" in m or "on PATH" in m or "not on PATH" in m
 
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="vaudit", description="The assumption audit.")
@@ -280,10 +285,10 @@ def main(argv=None):
                           file=sys.stderr)
             return core.EXIT_REFUSED
         if any(f.kind in ("toolchain",) or (f.kind == "audit-incomplete" and
-                                            "get_toolchain" in f.message)
+                                            _toolchain_msg(f.message))
                for f in all_findings):
-            print("vaudit: a pinned toolchain is missing or altered: run "
-                  "scripts/get_toolchain.sh dafny|verus", file=sys.stderr)
+            print("vaudit: no usable dafny or verus on PATH: install the pinned toolchain and "
+                  "put it on PATH (README, Setup)", file=sys.stderr)
             return core.EXIT_REFUSED
         lines = report_lines(all_findings, root)
         if a.write:
@@ -333,7 +338,7 @@ def main(argv=None):
         print(f"vaudit: refused: {e}", file=sys.stderr)
         return core.EXIT_REFUSED
     except common.ToolchainError as e:
-        print(f"vaudit: {e}; run scripts/get_toolchain.sh dafny|verus", file=sys.stderr)
+        print(f"vaudit: {e}", file=sys.stderr)
         return core.EXIT_REFUSED
     except common.CapError as e:
         print(f"vaudit: {e}", file=sys.stderr)

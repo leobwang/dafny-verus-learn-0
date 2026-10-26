@@ -21,3 +21,10 @@ Import it with scripts/ on sys.path:
 The package never prints. Callers (scripts/vcheck, scripts/vaudit, pins.py,
 firsttry) print locations, never content that could be an answer.
 """
+
+import sys as _sys
+
+if _sys.version_info < (3, 12):      # tomllib (3.11) and the harness's floor (3.12)
+    raise SystemExit(f"the course tools need Python >= 3.12, not {_sys.version.split()[0]}; "
+                     "see README.md, Platforms (macOS: uv python install 3.12)")
+

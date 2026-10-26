@@ -1,0 +1,106 @@
+# portability.yml — the advisory platform matrix (DELTAS Δ503: D75, D77-D79).
+#
+# Advisory only: the merge gate stays the local scripts/ci.sh run recorded in
+# each "basic: " merge commit (Δ67). It never calls a model and starts no
+# container. As a learner does (D78), each runner unzips the pinned Dafny and
+# Verus releases onto PATH; the course applies no memory management, and the
+# runner's own size is the limit (16 GB Linux, 7 GB macOS), so only the jobs a
+# small host carries run here.
+
+name: portability
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [basic, port]
+  pull_request:
+    branches: [basic]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portability-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  platform:
+    name: ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            platform: linux-x86_64
+            dafny_zip: dafny-4.11.0-x64-ubuntu-22.04.zip
+            verus_zip: verus-0.2026.09.27.3cf1832-x86-linux.zip
+            verus_dir: verus-x86-linux
+            rust: 1.98.1-x86_64-unknown-linux-gnu
+          - os: macos-14
+            platform: macos-arm64
+            dafny_zip: dafny-4.11.0-arm64-macos-13.zip
+            verus_zip: verus-0.2026.09.27.3cf1832-arm64-macos.zip
+            verus_dir: verus-arm64-macos
+            rust: 1.98.1-aarch64-apple-darwin
+    env:
+      DVL_DAFNY_JOBS: "1"
+      DVL_VERUS_JOBS: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # check_release_history.py reads basic and main
+
+      - name: System packages
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then
+            brew install bash jq
+          else
+            sudo apt-get update && sudo apt-get install -y --no-install-recommends jq unzip python3.12
+          fi
+
+      - name: uv 0.11
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.11"     # the oldest series the course supports is 0.11.x (required-version >=0.11.0)
+
+      - name: The pinned Dafny and Verus on PATH
+        run: |
+          mkdir -p "$HOME/opt" && cd "$HOME/opt"
+          curl -fsSLO "https://github.com/dafny-lang/dafny/releases/download/v4.11.0/${{ matrix.dafny_zip }}"
+          curl -fsSLO "https://github.com/verus-lang/verus/releases/download/release/0.2026.09.27.3cf1832/${{ matrix.verus_zip }}"
+          unzip -q "${{ matrix.dafny_zip }}" && unzip -q "${{ matrix.verus_zip }}"
+          echo "$HOME/opt/dafny" >> "$GITHUB_PATH"
+          echo "$HOME/opt/${{ matrix.verus_dir }}" >> "$GITHUB_PATH"
+
+      - name: rustup and Verus's Rust
+        run: |
+          command -v rustup || curl -fsSL --proto '=https' https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          "$HOME/.cargo/bin/rustup" toolchain install "${{ matrix.rust }}" --profile minimal --no-self-update
+
+      - name: The course environment
+        run: |
+          uv python install 3.12
+          uv sync --frozen
+
+      - name: Versions (D79) and the Z3 fingerprint
+        run: |
+          uv run scripts/vcheck --versions
+          uv run scripts/vcheck --fingerprint
+
+      - name: Toolchain-contract tests
+        run: uv run python3 -B -m unittest discover -s tests/wrappers -p test_platform.py -v
+
+      - name: CI jobs for a small host
+        run: uv run scripts/ci.sh --job static --job hook-test --job verify-q-dafny --log-dir build/ci/portability
+
+      - name: Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs-${{ matrix.platform }}
+          path: build/ci/portability
+          if-no-files-found: ignore

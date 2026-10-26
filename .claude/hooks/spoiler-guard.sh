@@ -432,7 +432,9 @@ if [ -z "${SPOILER_GUARD_NO_JQ:-}" ] && command -v jq >/dev/null 2>&1; then
                    (if $t == "Grep" then $i.pattern else empty end)] | s | join("\n"))"
   ' 2>/dev/null)" 2>/dev/null
 else
-  unescape() { sed -e 's/\\n/\n/g' -e 's/\\t/\t/g' -e 's/\\"/"/g' -e 's#\\/#/#g' -e 's/\\\\/\\/g'; }
+  # POSIX sed: a newline in a replacement is backslash-newline and a tab is a
+  # literal tab (GNU sed's \n and \t there are extensions BSD sed lacks).
+  unescape() { sed -e $'s/\\\\n/\\\n/g' -e $'s/\\\\t/\t/g' -e 's/\\"/"/g' -e 's#\\/#/#g' -e 's/\\\\/\\/g'; }
   jvals() {   # every JSON string value of the given keys, roughly unescaped
     local k
     for k in "$@"; do
@@ -597,7 +599,11 @@ normpath() {
   for c in "${parts[@]}"; do
     case "$c" in
       ''|.) ;;
-      ..) [ "${#out[@]}" -gt 0 ] && out=("${out[@]:0:${#out[@]}-1}") ;;
+      ..) if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then
+            [ "${#out[@]}" -gt 0 ] && out=("${out[@]:0:${#out[@]}-1}")
+          elif [ "${#out[@]}" -gt 0 ]; then
+            unset "out[${#out[@]}-1]"   # bash 3.2 joins a slice of an array into one word under IFS=/
+          fi ;;
       *) out+=("$c") ;;
     esac
   done
@@ -633,7 +639,27 @@ abspath() {
   normpath "$p"; ABS="$NORM"
 }
 # realp P → REAL: P with symlinks resolved (P itself when that fails).
-realp() { REAL="$(realpath -m -- "$1" 2>/dev/null || readlink -f -- "$1" 2>/dev/null || printf '%s' "$1")"; }
+# Each attempt's output is kept only when it succeeds: a realpath without -m
+# may print before it fails (busybox), and `a || b` would join both outputs.
+realp() {
+  REAL="$(realpath -m -- "$1" 2>/dev/null)" && [ -n "$REAL" ] && return 0
+  REAL="$(readlink -f -- "$1" 2>/dev/null)" && [ -n "$REAL" ] && return 0
+  REAL="$(realpath_m "$1")" && [ -n "$REAL" ] && return 0
+  REAL="$1"
+}
+# realpath_m P: `realpath -m` where coreutils is absent (macOS): the longest
+# existing prefix of P with its symlinks resolved, then the rest of P as written.
+realpath_m() {
+  local p="$1" rest="" d
+  case "$p" in /*) ;; *) p="$PWD/$p" ;; esac
+  while [ ! -e "$p" ] && [ ! -L "$p" ] && [ "$p" != / ] && [ -n "$p" ]; do
+    rest="/${p##*/}$rest"; p="${p%/*}"
+  done
+  [ -n "$p" ] || p=/
+  if [ -d "$p" ]; then d="$(cd -P -- "$p" 2>/dev/null && pwd -P)" || return 1
+  else d="$(readlink -f -- "$p" 2>/dev/null)" || d="$p"; fi
+  printf '%s\n' "${d%/}$rest"
+}
 in_spoiler() { [[ "$1" =~ $RX_SPOIL_DIR ]]; }
 rel_of() {   # X → REL: X relative to the checkout (empty when outside it)
   REL=""
@@ -661,6 +687,7 @@ if [ -n "$SCRATCH" ]; then
   [ -n "$t" ] && [ "$t" != / ] && TMPROOTS+=("$t")
 fi
 for t in "${TMPDIR:-/tmp}" /tmp; do abspath "$t/claude-$uid" /; TMPROOTS+=("$ABS"); done
+case "${OSTYPE:-}" in darwin*) TMPROOTS+=("/private/tmp/claude-$uid") ;; esac   # macOS: /tmp is /private/tmp
 if [ -n "$SID" ]; then for t in "${TMPROOTS[@]}"; do OWNTMP+=("$t/$SLUG/$SID"); done; fi
 STATE_DIRS=(file-history paste-cache debug sessions jobs todos backups)
 # The sandbox's run state (DV4): relay sockets, credential snapshots, a CA key;
@@ -756,7 +783,7 @@ reaches() {
   for r in fixtures instructor/fixtures tests/instructor/fixtures; do
     [ -d "$d/$r" ] || continue
     in_spoiler "$d/$r" && return 0
-    in_spoiler "$(realpath -m -- "$d/$r" 2>/dev/null)" && return 0
+    in_spoiler "$(realp "$d/$r"; printf '%s' "$REAL")" && return 0
   done
   [ -d "$d/Solutions" ] || [ -d "$d/solutions" ] || [ -d "$d/Hidden" ] || [ -d "$d/leak_patterns" ] \
     || [ -d "$d/instructor/leak_patterns" ] || [ -d "$d/paper/solutions" ] \
@@ -1206,7 +1233,12 @@ tokenize() {   # LINE [STATE] — STATE: the quote the line starts inside (defau
   [ "$st" = 0 ] || have=1
   local -a P
   TK=()
-  for c in '\' "'" '"' '$' ' ' $'\t'; do t="${t//"$c"/"$nl$c$nl"}"; done
+  if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then
+    for c in '\' "'" '"' '$' ' ' $'\t'; do t="${t//"$c"/"$nl$c$nl"}"; done
+  else   # bash 3.2 (macOS) keeps quotes inside a ${x//p/r} replacement literally
+    local rep
+    for c in '\' "'" '"' '$' ' ' $'\t'; do rep="$nl$c$nl"; t="${t//"$c"/$rep}"; done
+  fi
   IFS=$'\n' read -rd '' -a P <<<"$t" || true
   np="${#P[@]}"
   while [ "$j" -lt "$np" ]; do
@@ -2096,7 +2128,10 @@ bash_checks() {
     -e 's/`[[:space:]]*git[[:space:]]+rev-parse[[:space:]]+--show-toplevel[[:space:]]*`/$CLAUDE_PROJECT_DIR/g')"
   # Cut the line at && || $( ; | & ` ( ), keeping each delimiter (marked by
   # \037) so a cut made inside a quoted string can be undone below.
-  local us=$'\037' line i j n m pend=0
+  local us=$'\037' line i j n m pend=0 cutscript
+  # The cut, as POSIX sed: each delimiter on a line of its own behind \037
+  # (backslash-newline in the replacement; GNU sed's \n there is an extension).
+  cutscript="$(printf 's/(&&|\\|\\||\\$\\(|[;|&`()])/\\\n%s\\1\\\n/g' "$us")"
   local -a FR=() DL=()
   body="${body//$us/}"
   while IFS= read -r line; do
@@ -2108,7 +2143,7 @@ bash_checks() {
       FR+=("$line"); pend=0
     fi
   done <<EOF
-$(printf '%s\n' "$body" | sed -E "s/(&&|\|\||\\\$\(|[;|&\`()])/\n${us}\1\n/g")
+$(printf '%s\n' "$body" | sed -E "$cutscript")
 EOF
   # The quote state at each cut, in one pass (a cut does not change it).
   # Every fragment is checked on its own, except one that starts outside

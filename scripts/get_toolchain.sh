@@ -4,6 +4,16 @@
 #
 #   scripts/get_toolchain.sh dafny|verus|claude [--check]
 #
+# Since DELTAS Δ503 (D78) the course tools do NOT use the `dafny` and `verus`
+# installs: they call the dafny and verus on PATH, which the learner provides
+# (README, Setup), and only warn when their versions differ from the pins
+# (D79). `dafny` and `verus` here are an optional helper for Linux x86-64: they
+# install the pinned vendor releases into .toolchain/, which the sandbox image
+# build (sandbox/build-images.sh) copies into its images and which a learner
+# may put on PATH (.toolchain/dafny-4.11.0/dafny and
+# .toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux). `claude` runs on
+# Linux and macOS.
+#
 # `claude` (Δ500) differs from the two verifiers: nothing is downloaded. The
 # pin is sandbox/apparatus.toml's [backend.claude] (version, binary, sha256;
 # FVH_APPARATUS names another apparatus file, as for fvh), never a constant
@@ -147,7 +157,23 @@ assert_platform() {
   [[ $os == Linux && $arch == x86_64 ]] || die "pinned assets are linux x86_64 only (host: $os $arch)"
 }
 
-sha256_of() { sha256sum -- "$1" | cut -d' ' -f1; }
+# sha256sum (coreutils) where it exists, else macOS's shasum; the same output.
+if command -v sha256sum >/dev/null 2>&1; then SHA256=(sha256sum); else SHA256=(shasum -a 256); fi
+sha256_of() { "${SHA256[@]}" -- "$1" | cut -d' ' -f1; }
+
+# An exclusive lock on fd 9: flock(1) where it exists (util-linux), else the
+# same flock(2) taken by Python on the inherited descriptor (macOS); the lock
+# belongs to the open file description, so it outlives the Python process.
+lock_fd9() {
+  if command -v flock >/dev/null 2>&1; then flock 9; return; fi
+  python3 -I -c 'import fcntl; fcntl.flock(9, fcntl.LOCK_EX)'
+}
+
+# mv -T (GNU) where it exists; elsewhere a plain mv, safe because $2 was just
+# checked absent under the lock.
+move_into_place() {
+  if mv --version >/dev/null 2>&1; then mv -T -- "$1" "$2"; else mv -- "$1" "$2"; fi
+}
 
 # Prints the per-file manifest of tree $1: "<sha256>  ./<path>", sorted by path,
 # excluding the pin record. Fails if the tree holds anything but regular files
@@ -381,7 +407,7 @@ verify_claude_file() {
 claude_main() {
   local check=$1 store final src stage
   [[ -n ${HOME:-} && $HOME == /* ]] || die "HOME is unset or not absolute"
-  need sha256sum python3
+  need "${SHA256[0]}" python3
   claude_pins
   store="$HOME/$CLAUDE_STORE_REL" final="$HOME/$CLAUDE_STORE_REL/$C_VERSION"
   if (( check )); then
@@ -390,13 +416,12 @@ claude_main() {
     printf '%s\n' "$final"
     return 0
   fi
-  need flock
   mkdir -p -m 0755 "$store"
   trap cleanup EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
   exec 9>"$store/.lock"
-  flock 9 || die "cannot lock $store/.lock"
+  lock_fd9 || die "cannot lock $store/.lock"
   if [[ -e $final || -L $final ]]; then
     verify_claude_file "$final" \
       || die "existing copy $final fails verification; remove it and rerun (nothing was changed)"
@@ -413,7 +438,7 @@ claude_main() {
   chmod 0555 "$stage"
   verify_claude_file "$stage" || die "the copy of $src fails verification (nothing was installed)"
   [[ ! -e $final ]] || die "$final appeared during install"
-  mv -T -- "$stage" "$final"
+  move_into_place "$stage" "$final"
   log "installed $final"
   printf '%s\n' "$final"
 }

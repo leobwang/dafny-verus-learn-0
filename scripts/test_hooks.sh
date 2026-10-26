@@ -69,6 +69,17 @@
 #          copy and install it only when this suite is green.
 # Needs jq (to unpack the fixtures), git and python3.
 
+# bash >= 4 (associative arrays below). macOS ships 3.2: re-exec under a newer
+# bash when one is installed (Homebrew), else refuse (README §Platforms). The
+# guard itself stays bash-3.2-clean; this runner exercises it under both.
+if [ -z "${BASH_VERSINFO:-}" ] || [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
+  for _b in /opt/homebrew/bin/bash /usr/local/bin/bash; do
+    if [ -x "$_b" ]; then exec "$_b" "$0" "$@"; fi
+  done
+  echo "test_hooks.sh: refused: needs bash >= 4 (macOS: brew install bash)" >&2
+  exit 3
+fi
+
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 HOOK="${SPOILER_GUARD_HOOK:-$ROOT/.claude/hooks/spoiler-guard.sh}"
@@ -448,12 +459,14 @@ printf -- '- Q04 carry due: 2000-01-01\n- Q05 frame due: 2999-01-01\n' > "$TMP/s
 expect "[banner] a past-due ledger item is counted" "$(CLAUDE_PROJECT_DIR="$TMP/session" bash "$BANNER" | grep -c 'Review queue: 1 item(s) due')" 1
 printf -- '- Q05 frame due: 2999-01-01\n' > "$TMP/session/instructor/ledger.md"
 expect "[banner] future items are not due" "$(banner "$TMP/session" 'Review queue')" 0
+# age_2d FILE: its mtime two days back (GNU `touch -d '2 days ago'` is not on macOS)
+age_2d() { python3 -c 'import os, sys, time; t = time.time() - 2 * 86400; os.utime(sys.argv[1], (t, t))' "$1"; }
 printf 'dafny/Q/Q04_Proofs/core/Q04_AgentRepair.dfy\n' > "$TMP/session/.claude/state/contract-allowlist"
 expect "[banner] a fresh allowlist is not flagged" "$(banner "$TMP/session" 'Contract allowlist')" 0
-touch -d '2 days ago' "$TMP/session/.claude/state/contract-allowlist"
+age_2d "$TMP/session/.claude/state/contract-allowlist"
 expect "[banner] a day-old non-empty allowlist is flagged" "$(banner "$TMP/session" 'Contract allowlist')" 1
 : > "$TMP/session/.claude/state/contract-allowlist"
-touch -d '2 days ago' "$TMP/session/.claude/state/contract-allowlist"
+age_2d "$TMP/session/.claude/state/contract-allowlist"
 expect "[banner] an emptied allowlist is not flagged" "$(banner "$TMP/session" 'Contract allowlist')" 0
 expect "[banner] no mode file, no authoring banner" "$(banner "$TMP/session" 'AUTHORING')" 0
 printf 'authoring\n' > "$TMP/session/.claude/state/mode"
@@ -555,11 +568,11 @@ expect "[settings] every hook has the 15 s timeout" "$(wiring timeout)" True
 expect "[settings] the SessionStart matcher is startup|resume|clear" "$(wiring session)" True
 expect "[settings] settings.json does not set disableAllHooks" "$(wiring disable)" False
 expect "[settings] the hook header carries the honesty clause" "$(grep -c 'This is a tripwire, not a sandbox' "$HOOK")" 1
-expect "[ide] .vscode/settings.json pins Dafny 4.11.0 and the pinned verus binary" "$(python3 - "$ROOT/.vscode/settings.json" <<'PY'
+expect "[ide] .vscode/settings.json pins Dafny 4.11.0 and the verus on PATH (Δ503, D78)" "$(python3 - "$ROOT/.vscode/settings.json" <<'PY'
 import json, sys
 d = json.load(open(sys.argv[1]))
 print(d.get("dafny.version") == "4.11.0"
-      and d.get("verus-analyzer.verus.verusBinary", "").endswith(".toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux/verus"))
+      and d.get("verus-analyzer.verus.verusBinary", "") == "verus")
 PY
 )" True
 

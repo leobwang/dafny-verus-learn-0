@@ -102,7 +102,7 @@ These rules bind every skill:
 
 Any dispute about formal behaviour goes to the verifier, never to rhetoric:
 
-1. Write a minimal probe to `instructor/scratch/probe.dfy` or `instructor/scratch/probe.rs` (`instructor/scratch/probe_test.py` for harness code, from Q06 and R05). The directory is gitignored and instructor-writable. Keep probes on TOY terms, never the learner's exercise statement verbatim if a hint would leak; a probe never includes, imports or names reference material.
+1. Write a minimal probe to `instructor/scratch/probe.dfy` or `instructor/scratch/probe.rs` (`instructor/scratch/probe_test.py` for harness code, from Q06 and R05). The directory is gitignored and instructor-writable. `/grade-paper` keeps its probes outside the checkout instead, under `DVL_SCRATCH`, and deletes them before it ends (its SKILL.md §Probes). Keep probes on TOY terms, never the learner's exercise statement verbatim if a hint would leak; a probe never includes, imports or names reference material.
 2. Run `scripts/vcheck instructor/scratch/probe.<ext>` (after Step 0), or `scripts/vcheck --module <ID> instructor/scratch/probe.<ext>` when the probe needs the module's given layers and unit settings.
 3. Paste the output **verbatim**: never paraphrase tool output.
 4. The learner interprets the output first; you comment second, naming its verdict kind.

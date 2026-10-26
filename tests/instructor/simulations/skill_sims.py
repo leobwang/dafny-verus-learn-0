@@ -814,7 +814,9 @@ def phase_turn(work, state, case, mode, message, budget, extra_allow=(), approve
             "-p", "MemorySwapMax=0", "--", "timeout", str(timeout_s), "env"]
     for name in GD.ENV_DROP:
         argv += ["-u", name]
-    argv += [f"DVL_SCRATCH={scratch}", "claude", "-p", message, *flags]
+    # /grade-paper's probes live under DVL_SCRATCH, outside the checkout (Δ502): the
+    # directory is the session's too, as the learner's approval of the write would make it
+    argv += [f"DVL_SCRATCH={scratch}", "claude", "-p", message, *flags, "--add-dir", str(scratch)]
     Path(str(stem) + ".cmd.txt").write_text(
         f"cd {shlex.quote(str(clone))} && " + " ".join(shlex.quote(a) for a in argv) + "\n")
     Path(str(stem) + ".prompt.txt").write_text(message + "\n")
@@ -829,12 +831,16 @@ def phase_turn(work, state, case, mode, message, budget, extra_allow=(), approve
               "timeout" if code == 124 else f"exit {code}")
     files = files_since_baseline(work, clone)
     write_json(Path(str(stem) + ".files.json"), files)
+    # the probes a /grade-paper turn left behind: its skill deletes them before it ends
+    pdir = scratch / CAL.PROBE_DIR
+    probes_left = sorted(str(f.relative_to(scratch)) for f in pdir.rglob("*")
+                         if f.is_file()) if pdir.is_dir() else []
     ev = parse_stream(Path(str(stem) + ".jsonl").read_text(encoding="utf-8", errors="replace"))
     if re.search(r"hit your .{0,40}limit", ev["final"]) and not ev["calls"]:
         status = "service-limit (no skill work; `forget` the case and re-run)"
     c["turns"].append(dict(n=n, mode=mode, started=started, status=status,
                            sid=ev["init"].get("session_id"), extra_allow=list(extra_allow),
-                           approve_allowlist=approve_allowlist,
+                           approve_allowlist=approve_allowlist, probes_left=probes_left,
                            max_turns=int(flags[flags.index("--max-turns") + 1]),
                            timeout_s=timeout_s))
     if mode == "single":
@@ -1081,16 +1087,28 @@ def build_detectors(state):
     ctl_t = sum(1 for t in tokens if t in twin_text)
     if ctl_p == 0 or ctl_t == 0:
         raise Refusal(f"positive control failed (patterns {ctl_p}, tokens {ctl_t})")
-    return dict(pats=pats, tokens=tokens, origin=origin,
+    # rule 2's exemption for the stream (calibrate.exempt_layer_texts; Δ501 D-4, Δ502)
+    exempt = CAL.exempt_layer_texts(registry_records(), {p["mid"] for p in pats})
+    return dict(pats=pats, tokens=tokens, origin=origin, exempt=exempt,
                 manifest=dict(patterns=len(pats), tokens=len(tokens),
                               pattern_selection="per case: calibrate.patterns_for (Δ130, Q15)",
                               tokens_sha256=sha("\n".join(sorted(tokens))),
                               control_pattern_hits=ctl_p, control_token_hits=ctl_t))
 
 
-def scan_text(det, hay, pats=None):
+def scan_text(det, hay, pats=None, exempt=False):
+    """(pattern ids hit, token origins hit) in hay. With `exempt`, a pattern match whose
+    text lies in a given layer above the pattern module's layer is not a hit (rule 2's
+    exemption, calibrate.split_pattern_hits); such patterns are listed in det's
+    `exempt_hits` (counts per pattern id) instead."""
     pats = det["pats"] if pats is None else pats
-    p_hits = [p["pid"] for p in pats if p["rx"].search(hay)]
+    if exempt:
+        hits, ex = CAL.split_pattern_hits(pats, [hay], det.get("exempt"))
+        p_hits = [p["pid"] for p in pats if p["pid"] in hits]
+        for k, v in ex.items():
+            det.setdefault("exempt_hits", {})[k] = det.get("exempt_hits", {}).get(k, 0) + v
+    else:
+        p_hits = [p["pid"] for p in pats if p["rx"].search(hay)]
     t_hits = [det["origin"][i] for i, t in enumerate(det["tokens"]) if t in hay]
     return p_hits, t_hits
 
@@ -1133,7 +1151,13 @@ def phase_scan(work, state, only=None, quiet=False):
         hay = "\n".join(GD.strings_of(events, []))
         if len(ev["events"]) != len([x for x in raw.splitlines() if x.strip()]):
             hay += "\n" + raw
-        p_hits, t_hits = scan_text(det, hay, pats)
+        # what the turn read is scanned under rule 2's exemption; what the session emitted
+        # itself (its text and tool inputs) without it: a quote of a layer is still a quote
+        det["exempt_hits"] = {}
+        p_hits, t_hits = scan_text(det, hay, pats, exempt=True)
+        own = emitted_text(ev)
+        p_hits += [p["pid"] for p in pats if p["pid"] not in p_hits and p["rx"].search(own)]
+        exempt_hits = dict(det["exempt_hits"])
         # the delivery: the patterns only (a delivery reproduces its twin by design)
         d_hits = [p["pid"] for p in pats if delivered and p["rx"].search(delivered)]
         p_hits += d_hits
@@ -1162,6 +1186,7 @@ def phase_scan(work, state, only=None, quiet=False):
         rows[key] = dict(stream_pattern_hits=len(p_hits), stream_token_hits=len(t_hits),
                          file_pattern_hits=len(fp), file_token_hits=len(ft),
                          origins=sorted(set(p_hits + t_hits + fp + ft)),
+                         stream_pattern_exempt=exempt_hits,
                          generated_lockfiles=generated, modules=sorted(mids),
                          delivery_files=sorted(allowed), delivery_chars=len(delivered),
                          patterns_applied=len(pats))
@@ -1626,7 +1651,12 @@ def check_grade(work, state, case, n, mid, kind):
     if not planted or planted[-1]["sha256"] != sha(dtext):
         say("check grade: note: no matching drop-in recorded, or the fixture changed since")
     calls = [dict(tool=c["tool"], input=c["input"]) for c in ev["calls"]]
-    res, checks = CAL.eval_grading(mid, kind, fb, gb, ledger, dropin, calls)
+    turn = next((t for t in state.get("cases", {}).get(case, {}).get("turns", [])
+                 if t.get("n") == n), {})
+    files_json = work / "runs" / case / f"t{n:02d}.files.json"
+    tree = sorted(read_json(files_json)) if files_json.exists() else []
+    res, checks = CAL.eval_grading(mid, kind, fb, gb, ledger, dropin, calls, tree_files=tree,
+                                   probes_left=turn.get("probes_left"))
     lines = PREREG_LINE_RX.findall(fb)
     verdicts = [v for m, v in lines if m == mid]
     rows = re.findall(rf"^\|\s*\d{{4}}-\d\d-\d\d\s*\|\s*{mid}\s*\|\s*prereg\s*\|\s*([1-4])", gb, re.M)

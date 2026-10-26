@@ -368,7 +368,7 @@ def job_env(run_dir):
     home = env.get("HOME") or "/tmp"
     cargo_home = os.environ.get("CARGO_HOME") or os.path.join(home, ".cargo")
     env["PATH"] = f"{cargo_home}/bin:{env.get('PATH', '/usr/bin:/bin')}"
-    env["RUSTUP_TOOLCHAIN"] = p["rust_toolchain"]
+    env["RUSTUP_TOOLCHAIN"] = common.rust_toolchain()   # the pinned Rust, for this host (D77)
     env["TMPDIR"] = str(run_dir)
     for k in ("RUSTUP_HOME", "CARGO_HOME"):
         if os.environ.get(k):
@@ -964,7 +964,7 @@ def _classify(run, job, crate_name, gate, min_verified, findings, partial, srcs=
 
     if job.killed == "memory":
         return res("killed(memory)", "verify", [Diag(
-            "", 0, 0, "error", f"killed by the memory cap ({pins()['mem_gb']}G, exit {job.exit}): "
+            "", 0, 0, "error", f"killed by a signal (exit {job.exit}; a memory kill): "
             "not a verdict (Δ57)", "killed(memory)")])
     if job.killed == "wallclock":
         return res("inconclusive", "verify", [Diag(
@@ -1933,7 +1933,7 @@ TEST_STATUS = {"ok": "passed", "FAILED": "failed", "ignored": "ignored"}
 def test(target, names=None, *, layer=None, timeout_s=None, root=None):
     """Compiled checks (Δ42): verify the crate in the normal mode (proof holes
     do not block tests), build its libtest binary with `verus --compile
-    --test`, run every test once (--test-threads 1) under the memory cap, and
+    --test`, run every test once (--test-threads 1) as a plain job (no course memory cap, Δ503), and
     judge the requested names: each must match exactly one test (its full
     path, or its trailing `::`-segments) and pass. A name that matches
     nothing, or no test at all, fails (Δ11: never exit 0 alone). per_symbol:
@@ -2044,7 +2044,7 @@ def run_bin(target, args=(), *, timeout_s=None, root=None):
     library verified in the normal mode (proof holes do not block it, as for
     test(); the done gate is verify(gate=True)) and compiled to an rlib, its
     one `[[bin]]` root compiled against it with `verus --crate-type=bin
-    --compile`, then the binary run once with `args` under the memory cap and
+    --compile`, then the binary run once with `args` as a plain job (no course memory cap, Δ503) and
     the wall clock. Cargo is never used. Returns (Result, BinRun or None):
     the Result's stage is `run` and its verdict `verified` when the binary
     was built and exited 0 (`failed` for another exit; killed(memory) and
@@ -2118,8 +2118,8 @@ def _bin_run(run, target, vb, args, timeout_s, root=None):
                  lib_verified, [], [], [], {name: f"exit {rjob.exit}"}, str(run.dir), rjob.argv)
     if rjob.killed == "memory":
         res.verdict = "killed(memory)"
-        res.diagnostics.append(Diag("", 0, 0, "error", f"killed by the memory cap (exit "
-                                    f"{rjob.exit}): not a verdict (Δ57)", "killed(memory)"))
+        res.diagnostics.append(Diag("", 0, 0, "error", f"killed by a signal (exit "
+                                    f"{rjob.exit}; a memory kill): not a verdict (Δ57)", "killed(memory)"))
     elif rjob.killed == "wallclock":
         res.verdict = "inconclusive"
         res.diagnostics.append(Diag("", 0, 0, "error", "the binary was killed by the "

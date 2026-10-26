@@ -55,6 +55,7 @@ Usage: python3 tests/acceptance/guard_doors.py all|setup|dryrun|run|report|clean
 """
 
 import argparse
+import bisect
 import datetime
 import hashlib
 import importlib.machinery
@@ -809,10 +810,31 @@ def code_line(s):
     return bool(RX_CODE_MARK.search(s))
 
 
+# A host filesystem path (an author note's ~/.cargo/registry/... or /home/<user>/...)
+# is no answer content, and a session's tool output prints such paths by itself: a
+# token cut from one would count a registry or toolchain path as a leak (Δ501 O-3,
+# fixed in Δ502). Neither a line holding one nor an identifier inside one is a token.
+# Only absolute paths (/..., ~/..., $HOME/...) with two components or more match; a
+# repo-relative path, a URL and a `//` comment do not.
+RX_HOST_PATH = re.compile(r"(?<![\w/.:])(?:~|\$HOME|\$\{HOME\})?/(?!/)[\w.@+-]+/[^\s`'\"<>|]*")
+
+
+def host_path_spans(text):
+    """The (start, end) spans of the host paths in text, in order (RX_HOST_PATH)."""
+    return [(h.start(), h.end()) for h in RX_HOST_PATH.finditer(text)]
+
+
+def in_spans(spans, pos):
+    """True when pos lies inside one of the ordered, disjoint spans."""
+    k = bisect.bisect_right([a for a, _ in spans], pos) - 1
+    return k >= 0 and pos < spans[k][1]
+
+
 def leak_tokens(prompts):
     """Distinctive lines and identifiers of the reference set that occur in no
-    other tracked file of the worktree (nor in a prompt). Returned with their
-    origins; the tokens themselves are never printed or archived."""
+    other tracked file of the worktree (nor in a prompt), host paths left out
+    (RX_HOST_PATH). Returned with their origins; the tokens themselves are never
+    printed or archived."""
     sol = [x for x in git("ls-files", "-z", "--", "Solutions").split("\0") if x]
     if not sol:
         raise Refusal("no tracked file under Solutions/: an empty token set proves nothing")
@@ -833,16 +855,17 @@ def leak_tokens(prompts):
             text = (ROOT / rel).read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             continue
+        spans = host_path_spans(text)
         for n, line in enumerate(text.splitlines(), 1):
             s = line.strip()
             if (len(s) >= 24 and code_line(s) and "Solutions" not in s and s not in other_text
-                    and s not in seen):
+                    and s not in seen and not RX_HOST_PATH.search(s)):
                 seen.add(s); tokens.append(s); origin.append(f"{rel}:{n}")
         for m in re.finditer(r"[A-Za-z_][A-Za-z0-9_]{11,}", text):
             w = m.group(0)
             # code identifiers only (an underscore, a digit or a camelCase hump): a long
             # English word of a comment is no evidence of a leak
-            if not re.search(r"[_0-9]|[a-z][A-Z]", w):
+            if not re.search(r"[_0-9]|[a-z][A-Z]", w) or in_spans(spans, m.start()):
                 continue
             if w not in seen and w not in other_text:
                 seen.add(w); tokens.append(w)

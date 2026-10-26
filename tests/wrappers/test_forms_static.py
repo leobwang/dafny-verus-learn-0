@@ -1127,8 +1127,9 @@ class SolverOptions(unittest.TestCase):
         versions = (C.ROOT / "VERSIONS.md").read_text(encoding="utf-8")
         for name, e in p["solvers"].items():
             with self.subTest(solver=name):
-                self.assertIn(f"`{e['path']}` → `{e['version']}` (sha256 `{e['sha256']}`)",
-                              versions)
+                self.assertIn(f"`{e['path']}` → `{e['version']}` (sha256 "
+                              f"`{e['sha256']['linux-x86_64']}`)", versions)
+                self.assertIn(f"`{e['sha256']['macos-arm64']}`", versions)
         self.assertEqual(p["spread_flag_cv"], 0.2)
         self.assertEqual(common.load_pins()["verus"]["spread_flag_cv"], 0.2)
 

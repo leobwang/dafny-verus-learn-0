@@ -1483,7 +1483,7 @@ Design §10.3 and §14.1 place a frozen core and learner packages in one `uv` pr
 
 | path | class | content |
 |---|---|---|
-| `harness/pyproject.toml`, `harness/uv.lock` | 2g | project `fvh`, `requires-python >= 3.12` (the host's `python3`), **no runtime dependency** (the standard library only, so `fvh.stats` is auditable); a pinned `pytest` in a dev group; `[tool.pytest.ini_options] testpaths = ["tests"]`, `pythonpath = [".", "q", "r"]`, `addopts = "-p no:cacheprovider"`, so one process imports `fvh`, `fvh_q` and `fvh_r` (design §14.2 rule 5) and no `.pytest_cache` is written. `uv` 0.12.4 is the pinned host tool (`VERSIONS.md`) |
+| `harness/pyproject.toml`, `harness/uv.lock` | 2g | project `fvh`, `requires-python >= 3.12` (the host's `python3`), **no runtime dependency** (the standard library only, so `fvh.stats` is auditable); a pinned `pytest` in a dev group; `[tool.pytest.ini_options] testpaths = ["tests"]`, `pythonpath = [".", "q", "r"]`, `addopts = "-p no:cacheprovider"`, so one process imports `fvh`, `fvh_q` and `fvh_r` (design §14.2 rule 5) and no `.pytest_cache` is written. `uv` 0.12.4 is the pinned host tool (`VERSIONS.md`; since Δ503 the host's uv is a minimum, `required-version = ">=0.11.0"`, and 0.12.4 stays the sandbox images' pin) |
 | `.gitignore` entries | 2g | `harness/.venv/` and `__pycache__/` at any depth; the course tools run pytest with `PYTHONDONTWRITEBYTECODE=1`, so the frozen `harness/tests/` gains no bytecode files |
 | `harness/fvh/__init__.py`, `stats.py`, `records.py`, `holes.py` | 2f, frozen | the core modules below |
 | `harness/q/fvh_q/__init__.py` | learner package scaffolding | empty (the checker declares `__init__.py` files itself) |

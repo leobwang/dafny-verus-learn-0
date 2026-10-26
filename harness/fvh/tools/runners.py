@@ -493,6 +493,8 @@ def _pin(root, lang, key):
 
 
 def mem_available_gb():
+    if sys.platform == "darwin":            # as scripts/dvl/platform.py: no /proc there
+        return _darwin_available_gb()
     try:
         with open("/proc/meminfo", encoding="ascii") as fh:
             for line in fh:
@@ -501,6 +503,22 @@ def mem_available_gb():
     except (OSError, ValueError, IndexError):
         pass
     return None
+
+
+def _darwin_available_gb():
+    """free + inactive + speculative + purgeable pages of vm_stat, in whole GiB."""
+    try:
+        out = subprocess.run(["vm_stat"], capture_output=True, text=True, timeout=10).stdout
+        m = re.search(r"page size of (\d+) bytes", out)
+        page = int(m.group(1)) if m else 16384
+        n = 0
+        for line in out.splitlines():
+            k, _, v = line.partition(":")
+            if k.strip() in ("Pages free", "Pages inactive", "Pages speculative", "Pages purgeable"):
+                n += int(v.strip().rstrip("."))
+        return n * page // (1 << 30)
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return None
 
 
 def preflight(root, lang):
