@@ -65,13 +65,13 @@ from a helper process exit code: inspect its Result's verdict and stage.
 
 > **Predict (P1) — commit in the file before reading on.** The given-only Dafny source-span check stores two inclusive line ranges. Which numeral is the first line of the second declaration? Distinguish the list index from the native source coordinate.
 
-> **Predict (P2) — commit in the file before reading on.** A Verus ghost predicate requires the verification phase, a positive count and zero unfinished holes. The printed record has compilation phase, count7and no holes. Which Boolean belongs in its value slot? This is an illustrative field model, not an authenticated native document.
+> **Predict (P2) — commit in the file before reading on.** A Verus ghost predicate requires the verification phase, a positive count and zero unfinished holes. The printed record has compilation phase, count 7 and no holes. Which Boolean belongs in its value slot? This is an illustrative field model, not an authenticated native document.
 
 > **Predict (P3) — commit in the file before reading on.** The same source has one true and one false declaration. Compare the selected good declaration with a full-target check. Commit `D:<x>,<y> V:<x>,<y>` in that order, preserving both original declarations.
 
-> **Predict (P4) — commit in the file before reading on.** A synthetic record has count0and holes0. Three labelled assertions inspect zero holes, zero count and positive count. Which original labelled obligations fail? Keep the distinction between a field value and a full acceptance rule.
+> **Predict (P4) — commit in the file before reading on.** A synthetic record has count 0 and holes 0. Three labelled assertions inspect zero holes, zero count and positive count. Which original labelled obligations fail? Keep the distinction between a field value and a full acceptance rule.
 
-> **Predict (P5) — commit in the file before reading on.** A synthetic verified record with positive count and no holes names revision17, while the original subject is revision23. Compare a fields-only consumer with a consumer also requiring the original revision. Commit the ordered verdicts for each language. Revision numbers illustrate identity; they are not cryptographic authentication.
+> **Predict (P5) — commit in the file before reading on.** A synthetic verified record with positive count and no holes names revision 17, while the original subject is revision 23. Compare a fields-only consumer with a consumer also requiring the original revision. Commit the ordered verdicts for each language. Revision numbers illustrate identity; they are not cryptographic authentication.
 
 The learner loop accepts typed unfinished holes as an editing mechanism. The
 full gate refuses them. This is a stated course fact, not a hidden discovery in
@@ -112,6 +112,21 @@ each language. The following captures name the command and preserve its native
 outcome; a failed proof remains a failed proof even when another declaration
 was selected successfully first.
 
+```dafny
+// after: R12.P3dv
+module R12_SelectionProbe {
+  lemma GoodR12()
+    ensures 2 + 2 == 4
+  {
+  }
+
+  lemma BadR12()
+    ensures 2 + 2 == 5
+  {
+  }
+}
+```
+
 <!-- pin: selection-d-fast -->
 ```
 $ scripts/vcheck --module R12 --symbol R12_SelectionProbe.GoodR12 selection-d.dfy
@@ -123,8 +138,29 @@ symbol R12_SelectionProbe.GoodR12: verified
 ```
 $ scripts/vcheck --module R12 selection-d.dfy
 vcheck: selection-d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
-selection-d.dfy:4:32: error: a postcondition could not be proved on this return path
-selection-d.dfy:4:28: related: this is the postcondition that could not be proved
+selection-d.dfy:10:3: error: a postcondition could not be proved on this return path
+selection-d.dfy:9:19: related: this is the postcondition that could not be proved
+```
+
+```rust
+// after: R12.P3dv
+use vstd::prelude::*;
+
+verus! {
+
+proof fn good_r12()
+    ensures
+        2 + 2 == 4,
+{
+}
+
+proof fn bad_r12()
+    ensures
+        2 + 2 == 5,
+{
+}
+
+} // verus!
 ```
 
 <!-- pin: selection-v-fast -->
@@ -138,8 +174,10 @@ symbol good_r12: verified
 ```
 $ scripts/vcheck specimens/R12/selection-v.rs.specimen
 vcheck: specimens/R12/selection-v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R12/selection-v.rs.specimen:5:28: error: postcondition not satisfied
+specimens/R12/selection-v.rs.specimen:14:9: error: postcondition not satisfied
 ```
+
+**The answer to P3:** `D:ok,fail V:ok,fail`. The selected run checks only the good declaration; the full run checks both and fails on the false one.
 
 A full-target failure does not contradict a selected true claim. Their scopes
 differ. Conversely, a selected success does not license deleting the other
@@ -243,8 +281,8 @@ Each item ships with a counted hole, `assume false;` in Dafny and a `proof_note`
 $ scripts/vcheck dafny/R/R12_Driving/std
 vcheck: dafny/R/R12_Driving/std [dafny, learner loop]: verified — 66 verified, 3 holes, 0 errors
 dafny/R/R12_Driving/std/R12_Driving.dfy:47:5: hole assume R12.T1d
-dafny/R/R12_Driving/std/R12_Driving.dfy:63:5: hole assume R12.H1d
-dafny/R/R12_Driving/std/R12_Driving.dfy:86:5: hole assume R12.H2d
+dafny/R/R12_Driving/std/R12_Driving.dfy:72:5: hole assume R12.H1d
+dafny/R/R12_Driving/std/R12_Driving.dfy:95:5: hole assume R12.H2d
 ```
 
 <!-- pin: shipped-v -->
@@ -252,8 +290,8 @@ dafny/R/R12_Driving/std/R12_Driving.dfy:86:5: hole assume R12.H2d
 $ scripts/vcheck verus/r/r12_driving
 vcheck: verus/r/r12_driving [verus, learner loop]: verified — - verified, 3 holes, 0 errors
 verus/r/r12_driving/src/lib.rs:39:40: hole assume R12.T1v
-verus/r/r12_driving/src/lib.rs:58:40: hole assume R12.H1v
-verus/r/r12_driving/src/lib.rs:89:40: hole assume R12.H2v
+verus/r/r12_driving/src/lib.rs:66:40: hole assume R12.H1v
+verus/r/r12_driving/src/lib.rs:97:40: hole assume R12.H2v
 ```
 
 After filling the sites, run both full gates and their audits and `scripts/specfreeze --check R12` (the statements are frozen); keep a diff of your file against the shipped one for the review, which reads it for changes outside the sites. None of these lemmas enters Lab α's corpus: the engine's tasks are other modules' lemmas, so your hand fills are never a lab measurement.
@@ -285,15 +323,30 @@ snapshot boundary instead of relying on the word `frozen` in a type decorator.
 
 H2py turns preserved results into obligations. A trusted source span includes
 language, exact file, symbol and inclusive line bounds. The first source line
-is coordinate1, while a Python list selecting the second span uses index1.
+is coordinate 1, while a Python list selecting the second span uses index 1.
 P1d isolates that distinction without asking the parser to infer a declaration
 from text. Its given-only observation is captured here after the commitment.
+
+```dafny
+/*! R12 given-only source-span observation: native lines are one-based. */
+module R12_SpanObservation {
+  @Test
+  method SecondDeclarationR12()
+  {
+    var spans: seq<seq<nat>> := [[7, 12], [15, 29]];
+    var line := spans[1][0];
+    assert line == 15;
+  }
+}
+```
 
 <!-- pin: span-value -->
 ```
 $ scripts/vcheck --module R12 span-value.dfy
 vcheck: span-value.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
+
+**The answer to P1:** `15`. The second span is index 1 of the list, and its first line is the one-based source line 15.
 
 A diagnostic maps to a symbol only when its language and file agree and one
 innermost trusted span owns the location. Nested declarations require the
@@ -310,11 +363,35 @@ reviewer can distinguish a genuine native error from the localizer's summary.
 
 The illustrative phase model makes one necessary condition concrete.
 
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+pub enum ProbePhaseR12 {
+    Verification,
+    Compilation,
+}
+
+// This is an illustrative field predicate, not authenticated native evidence.
+pub open spec fn proof_fields_r12(phase: ProbePhaseR12, count: nat, holes: nat) -> bool {
+    phase is Verification && count > 0 && holes == 0
+}
+
+proof fn phase_value_r12() {
+    assert(proof_fields_r12(ProbePhaseR12::Compilation, 7, 0) == false) by (compute_only);
+}
+
+} // verus!
+```
+
 <!-- pin: phase-value -->
 ```
 $ scripts/vcheck --module R12 phase-value.rs
 vcheck: phase-value.rs [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
+
+**The answer to P2:** `false`. The record names the compilation phase, so the predicate fails whatever its counts say.
 
 The printed Boolean concerns those supplied fields only. Actual acceptance also
 requires original-source binding, full scope and trusted executor provenance.
@@ -325,12 +402,33 @@ from multiple possible origins.
 
 The labelled zero-count specimen checks a different boundary of the same idea.
 
+```rust
+use vstd::prelude::*;
+
+verus! {
+
+// item: R12.P4v obligation
+// Select failing labelled checks on the printed synthetic record fields.
+// SLOT: FAILS ???
+proof fn labelled_fields_r12() {
+    let count: nat = 0;
+    let holes: nat = 0;
+    assert(holes == 0); // [a]
+    assert(count == 0); // [b]
+    assert(count > 0); // [c]
+}
+
+} // verus!
+```
+
 <!-- pin: count-labels -->
 ```
 $ scripts/vcheck specimens/R12/P4v.rs.specimen
 vcheck: specimens/R12/P4v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R12/P4v.rs.specimen:10:9: error: assertion failed
+specimens/R12/P4v.rs.specimen:13:12: error: assertion failed
 ```
+
+**The answer to P4:** `FAILS c`. With a count of 0, [a] and [b] hold and [c] (`count > 0`) fails.
 
 A missing or zero proof count cannot be repaired by counting warning messages,
 assuming the wrapper was probably successful or dropping the failed label.
@@ -349,10 +447,10 @@ lets you inspect the model's output without granting it a new way to declare
 its own success.
 
 H4py implements one engine parameterized by width, depth and priority. Independent
-search uses10/1/fifo; sequential repair1/10/lifo; best-first3/10/best. Best-first/raw
+search uses 10/1/fifo; sequential repair 1/10/lifo; best-first 3/10/best. Best-first/raw
 keeps the last configuration and changes the feedback representation. Stable
 node ids resolve ties. Unknown obligation counts sort after known counts; a
-score of0still does not set accepted. The model can improve a heuristic without
+score of 0 still does not set accepted. The model can improve a heuristic without
 having completed the original proof.
 
 The engine stages a request before observing its outcome. Staging selects an
@@ -470,18 +568,96 @@ P5 illustrates why a fields-only consumer lacks an original-subject condition.
 Both consumers see the same synthetic record; the second also requires the
 specified original revision. The comparisons preserve the original domain.
 
+```dafny
+// after: R12.P5dv
+// Synthetic revision numbers illustrate identity, not cryptographic hash strength.
+module R12_RevisionProbe {
+  datatype ReportR12 = ReportR12(verified: bool, count: nat, holes: nat, revision: nat)
+
+  ghost predicate FieldsR12(r: ReportR12)
+  {
+    r.verified && r.count > 0 && r.holes == 0
+  }
+
+  ghost predicate BoundR12(r: ReportR12, original: nat)
+  {
+    FieldsR12(r) && r.revision == original
+  }
+
+  lemma CompareR12()
+  {
+    var report := ReportR12(true, 3, 0, 17);
+    assert FieldsR12(report);
+  }
+}
+```
+
 <!-- pin: fields-d -->
 ```
 $ scripts/vcheck --module R12 fields-d.dfy
 vcheck: fields-d.dfy [dafny, learner loop]: verified — 63 verified, 0 holes, 0 errors
 ```
 
+```dafny
+// after: R12.P5dv
+// Synthetic revision numbers illustrate identity, not cryptographic hash strength.
+module R12_RevisionProbe {
+  datatype ReportR12 = ReportR12(verified: bool, count: nat, holes: nat, revision: nat)
+
+  ghost predicate FieldsR12(r: ReportR12)
+  {
+    r.verified && r.count > 0 && r.holes == 0
+  }
+
+  ghost predicate BoundR12(r: ReportR12, original: nat)
+  {
+    FieldsR12(r) && r.revision == original
+  }
+
+  lemma CompareR12()
+  {
+    var report := ReportR12(true, 3, 0, 17);
+    assert BoundR12(report, 23);
+  }
+}
+```
+
 <!-- pin: bound-d -->
 ```
 $ scripts/vcheck --module R12 bound-d.dfy
 vcheck: bound-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
-bound-d.dfy:9:18: error: assertion might not hold
-bound-d.dfy:6:80: related: this proposition could not be proved
+bound-d.dfy:19:20: error: assertion might not hold
+bound-d.dfy:13:32: related: this proposition could not be proved
+```
+
+```rust
+// after: R12.P5dv
+// Synthetic revision numbers illustrate identity, not cryptographic hash strength.
+use vstd::prelude::*;
+
+verus! {
+
+pub struct ReportR12 {
+    pub verified: bool,
+    pub count: usize,
+    pub holes: usize,
+    pub revision: usize,
+}
+
+pub open spec fn fields_r12(r: ReportR12) -> bool {
+    r.verified && r.count > 0 && r.holes == 0
+}
+
+pub open spec fn bound_r12(r: ReportR12, original: usize) -> bool {
+    fields_r12(r) && r.revision == original
+}
+
+proof fn compare_r12() {
+    let report = ReportR12 { verified: true, count: 3, holes: 0, revision: 17 };
+    assert(fields_r12(report));
+}
+
+} // verus!
 ```
 
 <!-- pin: fields-v -->
@@ -490,12 +666,44 @@ $ scripts/vcheck specimens/R12/fields-v.rs.specimen
 vcheck: specimens/R12/fields-v.rs.specimen [verus, learner loop]: verified — 1 verified, 0 holes, 0 errors
 ```
 
+```rust
+// after: R12.P5dv
+// Synthetic revision numbers illustrate identity, not cryptographic hash strength.
+use vstd::prelude::*;
+
+verus! {
+
+pub struct ReportR12 {
+    pub verified: bool,
+    pub count: usize,
+    pub holes: usize,
+    pub revision: usize,
+}
+
+pub open spec fn fields_r12(r: ReportR12) -> bool {
+    r.verified && r.count > 0 && r.holes == 0
+}
+
+pub open spec fn bound_r12(r: ReportR12, original: usize) -> bool {
+    fields_r12(r) && r.revision == original
+}
+
+proof fn compare_r12() {
+    let report = ReportR12 { verified: true, count: 3, holes: 0, revision: 17 };
+    assert(bound_r12(report, 23));
+}
+
+} // verus!
+```
+
 <!-- pin: bound-v -->
 ```
 $ scripts/vcheck specimens/R12/bound-v.rs.specimen
 vcheck: specimens/R12/bound-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R12/bound-v.rs.specimen:10:9: error: assertion failed
+specimens/R12/bound-v.rs.specimen:24:12: error: assertion failed
 ```
+
+**The answer to P5:** `D:ok,fail V:ok,fail`. The fields predicate holds for the synthetic record; the bound predicate fails, because revision 17 is not the original 23.
 
 The numeric revisions are an explanatory model. They do not authenticate native
 evidence, quantify hash security or establish freshness of an actual run. The
@@ -517,7 +725,7 @@ A JSON-RPC body is framed by an ASCII `Content-Length` header, a blank CRLF line
 and exactly that many UTF-8 body bytes. Byte length differs from character count
 when text contains non-ASCII characters. Parsing until the next newline is not
 a correct substitute: JSON bodies can contain escaped newlines, and multiple
-frames can arrive in one transport read. The wire bytes are retained in base64
+frames can arrive in one transport read. The wire bytes are retained in base 64
 beside decoded documents so you can independently check the framing.
 
 Requests have ids that connect responses to requests. Notifications do not need
@@ -643,7 +851,7 @@ and continue independent construction without weakening any acceptance rule.
 
 ## 8. On paper, before the keyboard
 
-Read the exact local06.10Cobblestone and01.12HyperTree excerpts pinned in the
+Read the exact local 06.10Cobblestone and 01.12HyperTree excerpts pinned in the
 problem file. Fill all eight card fields in your own words: task shape, oracle,
 trust, cheat surface, metric, budget, variance and artifact. Keep denominators
 attached to each system, benchmark and sample budget. A union of several systems'
@@ -661,7 +869,7 @@ without claiming a replication of mechanisms that are absent from the code.
 Complete B1's pre-registration before any live lab run. State the falsifiable
 contrasts, estimands, arms, exposure strata, budgets, costs, seeds, settings,
 MDE, multiplicity, exclusions, stopping rule, prediction intervals, integrity
-controls and disclosure. Finalize the actual batch plan, write its64hex digest
+controls and disclosure. Finalize the actual batch plan, write its 64 hex digest
 inside the unique PREREG block and obtain a genuine matching grade. Editing
 that block or changing the bound plan requires re-grading. Calibration fixtures
 can teach the method without creating an unlock row.
@@ -681,7 +889,9 @@ native test-out and the two hint-site lemmas in order, T1, H1, H2, in each
 language: delete the item's counted `assume`, fill its sites and nothing else.
 Before you fill a site, read the obligation the verifier reports with the site
 left `true` (or the call site empty) and say which witness, branch or call it
-lacks. Keep all receipts, including a wrong first prediction or a site text that
+lacks. T1 ships a commented check under `Uncomment as you go:` in each
+language; keep it commented for your first try, so that `firsttry` records the
+attempt as one, and enable it afterwards. Keep all receipts, including a wrong first prediction or a site text that
 did not close its obligation.
 
 In Python, implement the stream parser and localizer before the bounded loop,

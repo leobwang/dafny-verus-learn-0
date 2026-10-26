@@ -25,10 +25,11 @@ verus! {
 
 // item: R12.T1v
 // pair: R12.T1d
-/// **T1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`.
-///
-/// Reference: the Cat existential is triggered by a subrange of `u + v`; site t1 names the
-/// split at `u.len()` as two extensional equalities.
+/// **T1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`. The failing
+/// obligation is `matches`'s Cat existential: which subrange of `u + v` is its trigger
+/// term, and how do you name the split with extensional equalities only?
+// Hint(1): site t1 is one boolean expression over u and v.
+// Hint(2): two subranges of u + v, each =~= one of the words.
 pub proof fn lemma_cat_witness_r12(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
     requires
         matches(a, u),
@@ -39,14 +40,24 @@ pub proof fn lemma_cat_witness_r12(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
     // did: the split of u + v at u.len(), which instantiates the Cat existential.
     assert(/*R12_HINT:t1*/ (u + v).subrange(0, u.len() as int) =~= u && (u + v).subrange(u.len() as int, (u + v).len() as int) =~= v);
 }
+// Reference checks (enabled):
+// reference-only: enabled shipped check
+proof fn cat_witness_check_r12() {
+    assert(matches(Re::Chr('a'), seq!['a']));
+    assert(matches(Re::Chr('b'), seq!['b']));
+    lemma_cat_witness_r12(Re::Chr('a'), Re::Chr('b'), seq!['a'], seq!['b']);
+    assert(seq!['a'] + seq!['b'] =~= seq!['a', 'b']);
+    assert(matches(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Chr('b'))), seq!['a', 'b']));
+}
+// end reference checks
 
 // item: R12.H1v
 // pair: R12.H1d
-/// **H1.** `n` copies then `m` copies make `n + m` copies.
-///
-/// Reference: induction on `n`. The skeleton chooses the split `i` of `u` from
-/// `copies(r, n)`'s Cat existential. Site h1a is the induction call on the tail; site h1b
-/// says that the head, the tail and `v` regroup as `u + v`.
+/// **H1.** `n` copies then `m` copies make `n + m` copies. The skeleton chooses the
+/// split `i` of `u`. Which call does the tail need (site h1a), and which equality turns
+/// the provided Cat witness into `u + v` (h1b)?
+// Hint(1): h1a is one call of lemma_copies_append_r12 itself, on a smaller n.
+// Hint(2): h1b is an extensional equality built from the two subranges of u and v.
 pub proof fn lemma_copies_append_r12(r: Re, n: nat, m: nat, u: Seq<char>, v: Seq<char>)
     requires
         matches(copies(r, n), u),
@@ -73,11 +84,11 @@ pub proof fn lemma_copies_append_r12(r: Re, n: nat, m: nat, u: Seq<char>, v: Seq
 
 // item: R12.H2v
 // pair: R12.H2d
-/// **H2.** A word of at most `j` copies is a word of at most `k >= j` copies.
-///
-/// Reference: induction on `j`. The empty word is the `Eps` branch's at every bound. A
-/// non-empty word is the Cat branch's (site h2a), and the induction call lifts its tail
-/// from `j - 1` to `k - 1` (site h2b).
+/// **H2.** A word of at most `j` copies is a word of at most `k >= j` copies. For a
+/// non-empty word, which branch of `copies_up_to(r, j)`'s `Alt` holds (site h2a), and
+/// which bounds does the induction call need (h2b)?
+// Hint(1): h2a names a matches fact about the Alt's second operand.
+// Hint(2): h2b lowers both bounds by one, on the tail chosen by the skeleton.
 pub proof fn lemma_up_to_mono_r12(r: Re, j: nat, k: nat, w: Seq<char>)
     requires
         j <= k,

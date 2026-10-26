@@ -25,9 +25,9 @@ Three ideas do all the work:
 
 ## 0. How this module works
 
-**390 minutes, about 6.5 hours, D/V 50/50.** Setup8 · test-out10 · reading60 ·
-worked observations25 · cards8 · predictions15 · repairs60 · stage attribution30 ·
-forensics60 · TRUST.md R-v0 20 · agent25 · paper30 · viva30 · calibration9.
+**390 minutes, about 6.5 hours, D/V 50/50.** Setup 8 · test-out 10 · reading 60 ·
+worked observations 25 · cards 8 · predictions 15 · repairs 60 · stage attribution 30 ·
+forensics 60 · TRUST.md R-v0 20 · agent 25 · paper 30 · viva 30 · calibration 9.
 The three repair items cost ten minutes each per language, including their
 original-claim review and forensic explanation. These are planning allocations,
 not measured learner times. The admission gate precedes the allocated minutes.
@@ -49,7 +49,7 @@ invent for the slot. Do not open the observations below before committing.
 
 Attempt T1d and T1v closed book, before reading the worked material. Record
 both with firsttry again. If both first attempts pass, the Q-credit rule allows
-you to skip the fresh-process rerun explanation, saving about25minutes. It does
+you to skip the fresh-process rerun explanation, saving about 25 minutes. It does
 not waive the original-source gate, audit, forensics, written trust section or
 viva. There is no R13 checkpoint and no permission to reuse a contractor's
 transcript as your own test-out work.
@@ -65,8 +65,8 @@ on it. Never write a fictional grade, claim, successful run or provider event.
 
 | file | purpose and shipped state |
 |---|---|
-| `dafny/R/R13_Pipelines/std/R13_Pipelines.dfy` | T1 and H1–H3, **4 holes**, and the paired P3 switch |
-| `verus/r/r13_pipelines/src/lib.rs` | T1 and H1–H3, **4 holes** |
+| `dafny/R/R13_Pipelines/std/R13_Pipelines.dfy` | the P3 and P6 switches, T1 and H1–H3, **4 holes**, and a given compiled test of T1 and H2 |
+| `verus/r/r13_pipelines/src/lib.rs` | T1 and H1–H3, **4 holes**, and a given compiled test of T1 and H2 |
 | `dafny/R/R13_Pipelines/agent/R13_AgentForensic.dfy` | forensic delivery, **1 hole** in a helper, no planted source errors |
 | `verus/r/r13_pipelines/src/agent.rs` | forensic delivery, **1 hole** in a helper, no planted source errors |
 | `specimens/R13/`, `slots/R13.slots` | own pipeline subjects and six committed verdict answers; the four fake deliveries are in §8 |
@@ -116,12 +116,27 @@ barrier was crossed. The exact native tool may group barriers in one invocation.
 Commit your prediction first. Read the source, then replay this source-bound
 observation. There is no counted hole to repair by adding an assumption.
 
+```dafny
+// item: R13.P1d verdict
+// Predict the native verdict and stage; do not guess from message wording.
+// SLOT: CHECK P1d
+// after: R13.P1d
+module R13_EarlyD {
+  lemma ReadForeignR13()
+  {
+    assert AbsentStageTokenR13;
+  }
+}
+```
+
 <!-- pin: p1d -->
 ```
 $ scripts/vcheck --module R13 P1d.dfy
 vcheck: P1d.dfy [dafny, learner loop]: failed — - verified, 0 holes, 1 error, stage resolve
-P1d.dfy:6:33: error: unresolved identifier: AbsentStageTokenR13
+P1d.dfy:8:12: error: unresolved identifier: AbsentStageTokenR13
 ```
+
+**The answer to P1d:** `failed,resolve`. The run stops at name resolution, before any obligation exists.
 
 Name lookup has to succeed before a proof obligation about that expression is
 meaningful. Increasing solver resources cannot define a missing identifier.
@@ -133,12 +148,30 @@ it says where this exact pinned run stopped.
 Commit your prediction first. Verus's combined front end has a coarser public
 stage vocabulary than the conceptual pipeline in the diagram.
 
+```rust
+// item: R13.P2v verdict
+// Predict the native verdict and stage on this exact source.
+// SLOT: CHECK P2v
+// after: R13.P2v
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn read_syntax_r13() {
+    assert(5 === 5);
+}
+
+} // verus!
+```
+
 <!-- pin: p2v -->
 ```
 $ scripts/vcheck specimens/R13/P2v.rs.specimen
 vcheck: specimens/R13/P2v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error, stage resolve
-specimens/R13/P2v.rs.specimen:7:41: error: type annotations needed
+specimens/R13/P2v.rs.specimen:10:12: error: type annotations needed
 ```
+
+**The answer to P2v:** `failed,resolve`. The wrapper reports the combined front end as `resolve`, whatever the native message says.
 
 Preserve the reported field. A native parser diagnostic and a wrapper stage
 can describe different levels of detail without authorizing you to rewrite
@@ -149,20 +182,47 @@ one as the other. Record both when they matter to the research question.
 Commit your prediction first. The declarations are well formed, and these
 commands ask the proof question on the original unrestricted mathematical input.
 
+```dafny
+// after: R13.P3dv
+module R13_ProofD {
+  lemma RequireEvidenceR13(n: int)
+    ensures n == 19
+  {
+  }
+}
+```
+
 <!-- pin: proof-d -->
 ```
 $ scripts/vcheck --module R13 proof-d.dfy
 vcheck: proof-d.dfy [dafny, learner loop]: failed — 62 verified, 0 holes, 1 error
-proof-d.dfy:3:48: error: a postcondition could not be proved on this return path
-proof-d.dfy:3:43: related: this is the postcondition that could not be proved
+proof-d.dfy:5:3: error: a postcondition could not be proved on this return path
+proof-d.dfy:4:15: related: this is the postcondition that could not be proved
+```
+
+```rust
+// after: R13.P3dv
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn require_evidence_r13(n: int)
+    ensures
+        n == 19,
+{
+}
+
+} // verus!
 ```
 
 <!-- pin: proof-v -->
 ```
 $ scripts/vcheck specimens/R13/proof-v.rs.specimen
 vcheck: specimens/R13/proof-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 1 error
-specimens/R13/proof-v.rs.specimen:3:58: error: postcondition not satisfied
+specimens/R13/proof-v.rs.specimen:8:9: error: postcondition not satisfied
 ```
+
+**The answer to P3dv:** `D:failed,verify V:failed,verify`. Both declarations are well formed; the solver refutes the unsupported postcondition.
 
 A zero-hole failure is valuable evidence: it distinguishes an unsupported
 claim from a counted placeholder. It does not by itself identify a repair.
@@ -191,6 +251,24 @@ that actually ran. It cannot substitute for a universally quantified contract.
 Commit your prediction first. `expect` is an executable check. The source and
 contract remain the same while the command changes which evidence is requested.
 
+```dafny
+// item: R13.P4d verdict
+// Predict the verification stage, then --test on the same file.
+// SLOT: CHECK P4d
+// after: R13.P4d
+module R13_RuntimeD {
+  lemma ProvedBoundR13()
+    ensures 8 > 3
+  {
+  }
+
+  method {:test} CheckRuntimeR13()
+  {
+    expect 8 < 3;
+  }
+}
+```
+
 <!-- pin: p4d-verify -->
 ```
 $ scripts/vcheck --module R13 P4d.dfy
@@ -203,8 +281,10 @@ $ scripts/vcheck --test specimens/R13/P4d.dfy.specimen
 vcheck: specimens/R13/P4d.dfy.specimen [dafny, test]: failed — 0 passed, 1 failed
 FAILED R13_RuntimeD.CheckRuntimeR13
 specimens/R13/P4d.dfy.specimen:5:1: error: Test failures occurred: see above.
-specimens/R13/P4d.dfy.specimen:7:36: error: expectation violation
+specimens/R13/P4d.dfy.specimen:13:5: error: expectation violation
 ```
+
+**The answer to P4d:** `verified,verify;failed,test`. The proof run is green, and the compiled run of the same file fails its expectation.
 
 Count the proved declaration separately from the failing runtime expectation.
 No successful test is present merely because the earlier command was green.
@@ -216,6 +296,35 @@ audit on the original statements.
 
 Commit your prediction first. The test module declares a library dependency;
 it does not call an attack, replace a tool or install anything on the host.
+
+```rust
+// item: R13.P5v verdict
+// Predict verification, then --test on the complete file.
+// SLOT: CHECK P5v
+// after: R13.P5v
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn checked_identity_r13() {
+    assert(6 + 7 == 13);
+}
+
+} // verus!
+
+#[cfg(test)]
+mod build_probe {
+    #[link(name = "r13_unavailable_library")]
+    extern "C" {
+        fn unavailable_r13();
+    }
+
+    #[test]
+    fn exercise_identity_r13() {
+        assert_eq!(6 + 7, 13);
+    }
+}
+```
 
 <!-- pin: p5v-verify -->
 ```
@@ -230,6 +339,8 @@ vcheck: specimens/R13/P5v.rs.specimen [verus, test]: failed — 0 passed, 0 fail
 NO-ERROR checked_identity_r13
 (no file): error: linking with `cc` failed: exit status: 1
 ```
+
+**The answer to P5v:** `verified,verify;failed,link`. The proof is accepted; the test build stops at linking, so no test runs.
 
 The pinned wrapper reports the failing combined test build at `stage=link`:
 its proof count is positive, its overall exit is nonzero, and the native
@@ -265,6 +376,21 @@ a scope distinction, not a disagreement between solvers about the same claim.
 The following commands use the same own sources. Read the selected scope,
 then the complete scope, and bind each observation to the command that made it.
 
+```dafny
+// after: R13.P6dv
+module R13_SelectedD {
+  lemma CleanDeclarationR13()
+    ensures 11 < 12
+  {
+  }
+
+  lemma UnfinishedDeclarationR13(n: int)
+    ensures n == 11
+  {
+  }
+}
+```
+
 <!-- pin: scope-d-selected -->
 ```
 $ scripts/vcheck --module R13 --symbol R13_SelectedD.CleanDeclarationR13 scope-d.dfy
@@ -276,8 +402,29 @@ symbol R13_SelectedD.CleanDeclarationR13: verified
 ```
 $ scripts/vcheck --module R13 scope-d.dfy
 vcheck: scope-d.dfy [dafny, learner loop]: failed — 63 verified, 0 holes, 1 error
-scope-d.dfy:4:54: error: a postcondition could not be proved on this return path
-scope-d.dfy:4:49: related: this is the postcondition that could not be proved
+scope-d.dfy:10:3: error: a postcondition could not be proved on this return path
+scope-d.dfy:9:15: related: this is the postcondition that could not be proved
+```
+
+```rust
+// after: R13.P6dv
+use vstd::prelude::*;
+
+verus! {
+
+pub proof fn clean_declaration_r13()
+    ensures
+        11 < 12,
+{
+}
+
+pub proof fn unfinished_declaration_r13(n: int)
+    ensures
+        n == 11,
+{
+}
+
+} // verus!
 ```
 
 <!-- pin: scope-v-selected -->
@@ -291,8 +438,10 @@ symbol clean_declaration_r13: verified
 ```
 $ scripts/vcheck specimens/R13/selection-v.rs.specimen
 vcheck: specimens/R13/selection-v.rs.specimen [verus, learner loop]: failed — 1 verified, 0 holes, 1 error
-specimens/R13/selection-v.rs.specimen:5:57: error: postcondition not satisfied
+specimens/R13/selection-v.rs.specimen:14:9: error: postcondition not satisfied
 ```
+
+**The answer to P6dv:** `D:verified,verify;failed,verify V:verified,verify;failed,verify`. The selected run sees only the clean declaration; the full run sees the file.
 
 Build an evidence table with target, selected symbol, source digest, stage,
 verified count, unfinished holes, findings and overall exit. If the fields do
@@ -427,7 +576,7 @@ why the alleged construct is absent. A harmless unfamiliar definition is not
 a cheat. If a check stops early, record its actual stop and choose an instrument
 that can address the remaining question without running untrusted build code.
 
-The complete R index currently has52rows:34source constructs, eight healthy
+The complete R index currently has 52 rows: 34 source constructs, eight healthy
 controls and ten refusal-only rows. A selected R replay does not by itself
 run the whole-corpus checks of half coverage, catalog membership and control
 counts. Keep those validation scopes separate. The source corpus covers fourteen
@@ -484,8 +633,8 @@ in its solo report; R13 gives you the observations and boundaries, not its code.
 
 ## 7. On paper, before the keyboard
 
-Complete B1–B3 in `paper/R13_answers.tex`. Card12.3 uses the exact local
-lines5238–5266 and the SHA256 printed in the problem. If your local bytes differ,
+Complete B1–B3 in `paper/R13_answers.tex`. Card 12.3 uses the exact local
+lines 5238–5266 and the SHA256 printed in the problem. If your local bytes differ,
 record the mismatch before using a different excerpt. The next card is outside
 the range. The reference is a source-bound reading aid, not an independent
 reproduction of the position paper's cases.
@@ -520,21 +669,21 @@ source observations, before your work.
 <!-- pin: shipped-d -->
 ```
 $ scripts/vcheck dafny/R/R13_Pipelines/std
-vcheck: dafny/R/R13_Pipelines/std [dafny, learner loop]: verified — 66 verified, 4 holes, 0 errors
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:48:5: hole assume R13.T1d
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:62:30: hole bodyless-method R13.H1d
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:78:5: hole assume R13.H2d
-dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:91:36: hole bodyless-method R13.H3d
+vcheck: dafny/R/R13_Pipelines/std [dafny, learner loop]: verified — 67 verified, 4 holes, 0 errors
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:62:5: hole assume R13.T1d
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:91:30: hole bodyless-method R13.H1d
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:104:5: hole assume R13.H2d
+dafny/R/R13_Pipelines/std/R13_Pipelines.dfy:116:36: hole bodyless-method R13.H3d
 ```
 
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r13_pipelines
 vcheck: verus/r/r13_pipelines [verus, learner loop]: verified — - verified, 4 holes, 0 errors
-verus/r/r13_pipelines/src/lib.rs:47:44: hole assume R13.T1v
-verus/r/r13_pipelines/src/lib.rs:65:40: hole assume R13.H1v
-verus/r/r13_pipelines/src/lib.rs:81:44: hole assume R13.H2v
-verus/r/r13_pipelines/src/lib.rs:98:40: hole assume R13.H3v
+verus/r/r13_pipelines/src/lib.rs:43:44: hole assume R13.T1v
+verus/r/r13_pipelines/src/lib.rs:87:40: hole assume R13.H1v
+verus/r/r13_pipelines/src/lib.rs:102:44: hole assume R13.H2v
+verus/r/r13_pipelines/src/lib.rs:119:40: hole assume R13.H3v
 ```
 
 Run `scripts/firsttry.sh R13 --check` after your committed prediction slots and
@@ -565,6 +714,8 @@ For each repair, keep the statement as shipped: the requires, the ensures,
 the imported models and the types. A precondition that removes the hard
 cases, an axiom, an external body or a contradictory assumption is not a
 repair; it is one of the fake deliveries.
+
+Each file ends with a given compiled test (`RepairSampleTest`, `repair_sample_test`) that runs your T1 and H2 bodies on fixed cases: `scripts/vcheck --test dafny/R/R13_Pipelines/std` and `scripts/vcheck --test verus/r/r13_pipelines` execute it once they are done. T1 also ships a commented check under `Uncomment as you go:`: keep it commented for your first try, so that `firsttry` records the attempt as one.
 
 Use `python3 tools/R13/check_repairs.py --output <your-output-directory>` for
 finite compiled observations of the two executable items after your complete

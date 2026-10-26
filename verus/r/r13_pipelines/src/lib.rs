@@ -1,25 +1,65 @@
 //! # R13 — Pipelines and trust (Exercises)
 //!
-//! Imports: the given regex spine `rg_re_a1`, `rg_re_a1b`, `rg_re_a2`; nothing else: no
-//! earlier exercise file.
+//! Standalone R track. Import only the frozen layers A1 to A4; no earlier learner file is
+//! needed. The paired exercise is dafny/R/R13_Pipelines/std/R13_Pipelines.dfy.
 //!
-//! Each item below comes with a fake delivery, shown and run in the chapter (§8): a
-//! version of the same task that some instrument reports as fine while it is not. Run
-//! its instruments and attribute it in `research/r13_forensics.md` first, then replace
-//! the hole with the honest proof; the statement stays as shipped.
+//! Record the six predictions first (scripts/firsttry.sh R13 --check), then attempt T1
+//! closed book. Four typed holes ship in this crate.
 //!
-//! Done = `scripts/vcheck --gate verus/r/r13_pipelines` prints only the summary line and
-//! exits 0, `scripts/vaudit verus/r/r13_pipelines` reports no finding,
-//! `scripts/specfreeze --check R13` reports none, AND
-//! `scripts/firsttry.sh R13 --report --strict` exits 0.
+//! Each item comes with a fake delivery, shown and run in the chapter (§8): a version of
+//! the same task that some instrument reports as fine while it is not. Run its
+//! instruments and attribute it in research/r13_forensics.md first, then replace the hole
+//! with the honest proof; the statement stays as shipped.
 //!
-//! This file ships with exactly 4 holes: T1 (closed-book test-out) and H1–H3.
+//! File order: the test-out (T1), then H1 (derivatives of a concatenation), H2 (a class
+//! loop) and H3 (nullable derivatives), and a given compiled use-site test of T1 and H2.
+//!
+//! Done: scripts/vcheck --gate verus/r/r13_pipelines exits 0 with zero holes,
+//! scripts/vaudit verus/r/r13_pipelines reports no finding, scripts/specfreeze --check R13
+//! reports none, and scripts/firsttry.sh R13 --report --strict exits 0.
 #![allow(unused_imports)]
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a1b::*;
 use rg_re_a2::*;
 use rg_re_a2::char_class::CharClass;
+
+// =============================================================================
+// Test-out (closed book)
+// =============================================================================
+
+verus! {
+
+// item: R13.T1v
+// pair: R13.T1d
+/// **T1.** Closed book: an executable matcher with the regex semantics as its contract.
+/// `matches` is a spec fn: what may an exec fn call instead, and which layer supplies an
+/// executable matcher with this postcondition?
+pub fn accepts_r13(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b == matches(*r, s@),
+{
+    proof {
+        #[verifier::proof_note("R13.T1v")] assume(false);  // HOLE: replace this block
+    }
+    false
+}
+// Hint(1): the chapter's fake delivery for T1 (§8) shows the call that is refused, and the stage that refuses it.
+// Hint(2): A2 re-supplies the derivative matcher.
+// Uncomment as you go:
+// fn accepts_check_r13() {
+//     let mut s: Vec<char> = Vec::new();
+//     s.push('a');
+//     let b = accepts_r13(&Re::Chr('a'), &s);
+//     assert(s@ =~= seq!['a']);
+//     assert(b);
+// }
+
+} // verus!
+
+// =============================================================================
+// The repairs
+// =============================================================================
 
 verus! {
 
@@ -34,24 +74,6 @@ pub open spec fn derivs(r: Re, u: Seq<char>) -> Re
     }
 }
 
-// item: R13.T1v
-// pair: R13.T1d
-/// **T1.** (closed book) An executable matcher with the regex semantics as its contract.
-/// `matches` is a spec fn: what may an exec fn call instead, and which layer supplies an
-/// executable matcher with this postcondition?
-pub fn accepts_r13(r: &Re, s: &Vec<char>) -> (b: bool)
-    ensures
-        b == matches(*r, s@),
-{
-    proof {
-        #[verifier::proof_note("R13.T1v")] assume(false);  // HOLE: replace this block
-    }
-    false
-}
-// Hint(1): the chapter's fake delivery for T1 (§8) shows the call that is refused,
-//          and the stage that refuses it.
-// Hint(2): A2 re-supplies the derivative matcher.
-
 // item: R13.H1v
 // pair: R13.H1d
 /// **H1.** Taking derivatives by `u + v` is taking them by `u`, then by `v`. The fake
@@ -62,11 +84,10 @@ pub proof fn lemma_derivs_cat_r13(r: Re, u: Seq<char>, v: Seq<char>)
         derivs(r, u + v) == derivs(derivs(r, u), v),
     decreases u.len(),
 {
-    #[verifier::proof_note("R13.H1v")] assume(false);  // HOLE: replace this line
+    #[verifier::proof_note("R13.H1v")] assume(false);
 }
-// Hint(1): induction on `u.len()`; the base case needs `u + v =~= v`.
-// Hint(2): assert `(u + v)[0] == u[0]` and `(u + v).drop_first() =~= u.drop_first() + v`,
-//          then call the lemma on `deriv(r, u[0])`.
+// Hint(1): induction on u.len() with a recursive call; the base case needs `u + v =~= v`.
+// Hint(2): state what `(u + v)[0]` and `(u + v).drop_first()` are, then recurse on the derivative by u[0].
 
 // item: R13.H2v
 // pair: R13.H2d
@@ -82,8 +103,8 @@ pub fn class_covers_r13(cc: &CharClass, s: &Vec<char>) -> (b: bool)
     }
     false
 }
-// Hint(1): a `while` loop with an invariant over the indices below `k`.
-// Hint(2): `cc.class_member(c)` promises `cc@.contains(c)`.
+// Hint(1): a `while` loop over k with an invariant about the indices below k.
+// Hint(2): `cc.class_member(c)` is executable and promises `cc@.contains(c)`.
 
 // item: R13.H3v
 // pair: R13.H3d
@@ -95,10 +116,21 @@ pub proof fn lemma_nullable_derivs_r13(r: Re, u: Seq<char>)
         nullable(derivs(r, u)) == matches(r, u),
     decreases u.len(),
 {
-    #[verifier::proof_note("R13.H3v")] assume(false);  // HOLE: replace this line
+    #[verifier::proof_note("R13.H3v")] assume(false);
 }
-// Hint(1): induction on `u.len()`; the base case is `lemma_nullable_correct`.
-// Hint(2): `lemma_deriv_correct(r, u[0], u.drop_first())`, and
-//          `seq![u[0]] + u.drop_first() =~= u`.
+// Hint(1): induction on u.len(); the base case is A1b's `lemma_nullable_correct`.
+// Hint(2): A2's `lemma_deriv_correct` on (r, u[0], u.drop_first()), and the word rebuilt from its first character and the rest.
 
 } // verus!
+
+// Given (not an item): the compiled use-site check of T1 and H2. It runs your bodies;
+// `scripts/vcheck --test` executes it once they are done.
+#[test]
+fn repair_sample_test() {
+    let ab = Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Star(Box::new(Re::Chr('b')))));
+    assert!(accepts_r13(&ab, &vec!['a', 'b', 'b']));
+    assert!(!accepts_r13(&ab, &vec!['b']));
+    let af = CharClass::class_range('a', 'f');
+    assert!(class_covers_r13(&af, &vec!['c', 'a', 'f']));
+    assert!(!class_covers_r13(&af, &vec!['c', 'z']));
+}

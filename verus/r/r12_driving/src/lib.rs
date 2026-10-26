@@ -39,6 +39,14 @@ pub proof fn lemma_cat_witness_r12(a: Re, b: Re, u: Seq<char>, v: Seq<char>)
     #[verifier::proof_note("R12.T1v")] assume(false);  // HOLE: delete this line
     assert(/*R12_HINT:t1*/ true);
 }
+// Uncomment as you go:
+// proof fn cat_witness_check_r12() {
+//     assert(matches(Re::Chr('a'), seq!['a']));
+//     assert(matches(Re::Chr('b'), seq!['b']));
+//     lemma_cat_witness_r12(Re::Chr('a'), Re::Chr('b'), seq!['a'], seq!['b']);
+//     assert(seq!['a'] + seq!['b'] =~= seq!['a', 'b']);
+//     assert(matches(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Chr('b'))), seq!['a', 'b']));
+// }
 
 // item: R12.H1v
 // pair: R12.H1d

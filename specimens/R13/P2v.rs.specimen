@@ -3,6 +3,11 @@
 // SLOT: CHECK P2v
 // after: R13.P2v
 use vstd::prelude::*;
+
 verus! {
- pub proof fn read_syntax_r13() {assert(5===5);}
+
+pub proof fn read_syntax_r13() {
+    assert(5 === 5);
 }
+
+} // verus!

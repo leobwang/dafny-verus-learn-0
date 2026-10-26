@@ -16,11 +16,11 @@ drop = ["^raw output: "]
 [entry.scratch."P1d.dfy"]
 copy = "specimens/R13/P1d.dfy.specimen"
 [entry.pinned]
-body = "50194a7b4804ad2dbd87f8f39e56ee56386bf996608d8dc59d4caa31df39c7e5"
+body = "6f2aac11ee3fbeae3267aa046fa9535442802576b882ad7e7b43fc211c32ff92"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:P1d.dfy" = "e24954a094b7458bafe13c0a1407670fd5f358031cc07fcd6d4a7898d6696a91"
-"specimens/R13/P1d.dfy.specimen" = "e24954a094b7458bafe13c0a1407670fd5f358031cc07fcd6d4a7898d6696a91"
+"scratch:P1d.dfy" = "c0e41056de349e3153e31c2c768b34fda8eba3df2bde7ae93d47322c4842d335"
+"specimens/R13/P1d.dfy.specimen" = "c0e41056de349e3153e31c2c768b34fda8eba3df2bde7ae93d47322c4842d335"
 
 [[entry]]
 id = "p2v"
@@ -29,9 +29,9 @@ answers = ["R13.P2v"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "a7c41125a1c4bfeac855f633ff675cde645dfebc59202444527fd30961ac0b94"
+body = "e1774640eddbce4c4e6c85fb95e6ef12e5a98dc2e8c9903e819e343acfd271cf"
 [entry.pinned.inputs]
-"specimens/R13/P2v.rs.specimen" = "6d08ece36c590e3704ec57763641d1ebce164e53490729522bf5405f4a4e2290"
+"specimens/R13/P2v.rs.specimen" = "6651545603f0cd6edf7030d4d8883947ba550143966f79164e849edb6fdc2c8b"
 
 [[entry]]
 id = "proof-d"
@@ -44,11 +44,11 @@ drop = ["^raw output: "]
 [entry.scratch."proof-d.dfy"]
 copy = "specimens/R13/proof-d.dfy.specimen"
 [entry.pinned]
-body = "61f06c0aa3d29e3a9d96f4ed956d4040b8b4d25e0289a0f6453e4b8103870ea3"
+body = "6738e07d052588a3200c814a90a645962ffde75352c7be970f6f21686bace9d3"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:proof-d.dfy" = "1e13de320139a26c566a39a8aae83c84150959446501698eb1a57479653d8175"
-"specimens/R13/proof-d.dfy.specimen" = "1e13de320139a26c566a39a8aae83c84150959446501698eb1a57479653d8175"
+"scratch:proof-d.dfy" = "05cdb02b4de256d519ef60dde4d6b07756d1a57302103d64d5aae527983042ab"
+"specimens/R13/proof-d.dfy.specimen" = "05cdb02b4de256d519ef60dde4d6b07756d1a57302103d64d5aae527983042ab"
 
 [[entry]]
 id = "proof-v"
@@ -57,9 +57,9 @@ answers = ["R13.P3dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "f138445ab6ef6aae751500cdb73740e9b442e6b3781aa54df9c21281eed52323"
+body = "760127d58f3f26d814a7cc0072d37737484c5044204ac47f1f7ea05e1ddd0f00"
 [entry.pinned.inputs]
-"specimens/R13/proof-v.rs.specimen" = "71da8e2b018e899f5ae9852bcee6a254d5f30aa6e44f6e93b984d61cd7f79d8d"
+"specimens/R13/proof-v.rs.specimen" = "c9ccd42ac679833fbd3b9ef934289944818b0966f77a125a7b814852cdbf40cc"
 
 [[entry]]
 id = "p4d-verify"
@@ -75,8 +75,8 @@ copy = "specimens/R13/P4d.dfy.specimen"
 body = "97078fdaee4120bb2a5fd4dc145f5ac35807393a5b1f0f777da4b9e5ae66cdb8"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:P4d.dfy" = "e9375aae4349a8de855fe6699e5c198ba71031c690137b0776b6fe6f832521fb"
-"specimens/R13/P4d.dfy.specimen" = "e9375aae4349a8de855fe6699e5c198ba71031c690137b0776b6fe6f832521fb"
+"scratch:P4d.dfy" = "57930e64dca5dd64e295526d56860bc6f3d5cddad98edf86a807a5463b8a6ec6"
+"specimens/R13/P4d.dfy.specimen" = "57930e64dca5dd64e295526d56860bc6f3d5cddad98edf86a807a5463b8a6ec6"
 
 [[entry]]
 id = "p4d-test"
@@ -85,9 +85,9 @@ answers = ["R13.P4d"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "1cadb47de59bacd7b2821ddad6a2d8694acfda182a00900acf91c004e6aa995d"
+body = "6ba90f3486d7ef663b91023569c420ad349974f0087ecd8831dbcd39ff0704a0"
 [entry.pinned.inputs]
-"specimens/R13/P4d.dfy.specimen" = "e9375aae4349a8de855fe6699e5c198ba71031c690137b0776b6fe6f832521fb"
+"specimens/R13/P4d.dfy.specimen" = "57930e64dca5dd64e295526d56860bc6f3d5cddad98edf86a807a5463b8a6ec6"
 
 [[entry]]
 id = "p5v-verify"
@@ -98,7 +98,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "ada0967096bdebd08d5cb63847e28ec961282a5690d74b450f6f99ce8a16f4c2"
 [entry.pinned.inputs]
-"specimens/R13/P5v.rs.specimen" = "7fd47fa7fbae172c9d5ef549573cee5b66b672c24ebc393e78e5ff65eff5106f"
+"specimens/R13/P5v.rs.specimen" = "14403c7fd09e229f0ab838f26bcc52f6c8b2286f71a3f78aee7bda7760e21bc0"
 
 [[entry]]
 id = "p5v-test"
@@ -109,7 +109,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "2508b1d34594e5e7027478107721dc784672be65498e12985e8ae3e83c6cef5b"
 [entry.pinned.inputs]
-"specimens/R13/P5v.rs.specimen" = "7fd47fa7fbae172c9d5ef549573cee5b66b672c24ebc393e78e5ff65eff5106f"
+"specimens/R13/P5v.rs.specimen" = "14403c7fd09e229f0ab838f26bcc52f6c8b2286f71a3f78aee7bda7760e21bc0"
 
 [[entry]]
 id = "scope-d-selected"
@@ -125,8 +125,8 @@ copy = "specimens/R13/selection-d.dfy.specimen"
 body = "2c71b2534cdb9d97b4d7279156b29ddedafe4e608a31bfdfb7d76e9e1174764b"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:scope-d.dfy" = "fdc93aa80f3c442e2c3fb1c5732ca3dfdf230e2673371e37dacd2d1b018e0335"
-"specimens/R13/selection-d.dfy.specimen" = "fdc93aa80f3c442e2c3fb1c5732ca3dfdf230e2673371e37dacd2d1b018e0335"
+"scratch:scope-d.dfy" = "7253442796d5d3ebde5eda84e0e65ede81f7bd6d963f8202e983d35b88b06110"
+"specimens/R13/selection-d.dfy.specimen" = "7253442796d5d3ebde5eda84e0e65ede81f7bd6d963f8202e983d35b88b06110"
 
 [[entry]]
 id = "scope-d-full"
@@ -139,11 +139,11 @@ drop = ["^raw output: "]
 [entry.scratch."scope-d.dfy"]
 copy = "specimens/R13/selection-d.dfy.specimen"
 [entry.pinned]
-body = "d56ccd12b67aaeb45d863fbaaa400ba94340d67bae23bd097c76607d283d9c77"
+body = "3d1f53b93be89b8fbd855e792aa1a210bd14309c401c938264ec70fd1aa7c022"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:scope-d.dfy" = "fdc93aa80f3c442e2c3fb1c5732ca3dfdf230e2673371e37dacd2d1b018e0335"
-"specimens/R13/selection-d.dfy.specimen" = "fdc93aa80f3c442e2c3fb1c5732ca3dfdf230e2673371e37dacd2d1b018e0335"
+"scratch:scope-d.dfy" = "7253442796d5d3ebde5eda84e0e65ede81f7bd6d963f8202e983d35b88b06110"
+"specimens/R13/selection-d.dfy.specimen" = "7253442796d5d3ebde5eda84e0e65ede81f7bd6d963f8202e983d35b88b06110"
 
 [[entry]]
 id = "scope-v-selected"
@@ -154,7 +154,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "aa74b4c446d269447263b11e3fd133ae2d3ee7664a4ea5d1ae473ee8537e6087"
 [entry.pinned.inputs]
-"specimens/R13/selection-v.rs.specimen" = "754e92a213b2203c6b2899e63061b79a27b7a33b76908e2cd2b790252b99bda3"
+"specimens/R13/selection-v.rs.specimen" = "daf062f3a8a35d741c6745bb123bb945cdf64b39afbece2967b6844794679bbb"
 
 [[entry]]
 id = "scope-v-full"
@@ -163,9 +163,9 @@ answers = ["R13.P6dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "cf943df3117258fcd5fc5c8c72865d6bf52a5185e59301896550bb293e48be2c"
+body = "4476c155ca776606c6cf12e99f5f68803370a9bd7ad6cb838cfdf39b934db260"
 [entry.pinned.inputs]
-"specimens/R13/selection-v.rs.specimen" = "754e92a213b2203c6b2899e63061b79a27b7a33b76908e2cd2b790252b99bda3"
+"specimens/R13/selection-v.rs.specimen" = "daf062f3a8a35d741c6745bb123bb945cdf64b39afbece2967b6844794679bbb"
 
 [[entry]]
 id = "shipped-d"
@@ -173,9 +173,9 @@ cmd = ["scripts/vcheck", "dafny/R/R13_Pipelines/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "608213a9830b02dd64793697c81682d39260be34a0e6043855c02a8c3b6cf0f9"
+body = "3e904839fbfb7bea68602a2929697b27e69cf772feb0414702a8340e1cf7658b"
 [entry.pinned.inputs]
-"dafny/R/R13_Pipelines/std/R13_Pipelines.dfy" = "fdeab598fdeabb01a79512831faa3398ad22aa1ec5944e175774576ed23c0bb5"
+"dafny/R/R13_Pipelines/std/R13_Pipelines.dfy" = "39b6bac72e1f9dc56a0a81adb44548debc2c342e87607446c043435124e7eb26"
 "dafny/R/R13_Pipelines/std/dfyconfig.toml" = "09b824058706b994ebc220adc4ba6bf74a3996f4ed8ce39986d523f6544dbe18"
 
 [[entry]]
@@ -184,11 +184,11 @@ cmd = ["scripts/vcheck", "verus/r/r13_pipelines"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "c876441f7759748eddc0d90652879ce7de1839132126f9620095934664244ade"
+body = "cc99598bd054d4bba9c4faebc49f4da46b65ff7c3b0ad6023546ed9cfa40f8a2"
 [entry.pinned.inputs]
 "verus/r/r13_pipelines/Cargo.toml" = "f0672c3aa5b65dc079dce02f71c53003fe203ef38d62952a0282947b140f66ab"
-"verus/r/r13_pipelines/src/agent.rs" = "489cea1e4d25755cba55bde99ae3f227e2d56d2bb9244509f8cfa455e985f70c"
-"verus/r/r13_pipelines/src/lib.rs" = "9fd12baa9f683b92b00ea275f7b4d0a3bc090cf77515fd945a12227581ae3132"
+"verus/r/r13_pipelines/src/agent.rs" = "f4dc525b62d5fb6a57f077bba5bdd6e0197a3edd765b33e23fc88c5d89e5042e"
+"verus/r/r13_pipelines/src/lib.rs" = "d44ee8e1f6b06284f9400eca7d88a187d132b6f26c8685a296a63d3d04fd2b20"
 
 [[entry]]
 id = "fake-t1-d"

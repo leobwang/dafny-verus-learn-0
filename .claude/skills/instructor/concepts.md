@@ -105,6 +105,12 @@ and `R06/loop-invariant` are one concept to it. Never rename a tag once a ledger
 | `matched-compute` | | comparing search regimes at equal calls, not equal attempts | Q12, R12 |
 | `frozen-statements` | | frozen, hash-pinned statements; statement-only review | Q18, R15, R16 |
 | `agent-output-is-data` | | agent output comes back as data, is judged in a sandbox, and is never merged | Q12, R12 |
+| `hint-sites` | | `expr`, `calls` and `decreases` sites in a frozen skeleton: what a site may contain and what it must name | R12 |
+| `unavailable-not-zero` | | a missing count, an empty stream or a Boolean is not a measurement of zero or success | R12 |
+| `source-spans` | | one-based inclusive source spans, innermost ownership, unlocalized diagnostics kept | R12 |
+| `node-accounting` | | a search budget counts every generation and failure, well formed or not | R12 |
+| `original-binding` | | a result belongs to the source revision it was computed on; fields alone do not bind it | R12 |
+| `profiling` | | per-symbol measurements, their scope, and why they are not an acceptance gate | R12 |
 | `statistics` | | pass@k, confidence intervals, paired tests, minimum detectable effect | Q06, Q09, Q18, R05, R07 |
 | `variance` | | run-to-run variance and the CV of verifier and agent results | Q06, R05 |
 | `eval-reporting` | | `EVAL.md` reports with full disclosure | Q06, Q09, R07, R12 |

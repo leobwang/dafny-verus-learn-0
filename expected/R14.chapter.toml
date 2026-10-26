@@ -11,9 +11,9 @@ cmd = ["scripts/vcheck", "dafny/R/R14_Smt/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "2e1a48230d52caff9fa67de64c0617276a6f700dc11ebb097a8a4921179c4290"
+body = "2752c82dfcca3bfd4ce866366ba7f5c6a02758922595a9b2d6fbad8f4b1e3b34"
 [entry.pinned.inputs]
-"dafny/R/R14_Smt/std/R14_Smt.dfy" = "e357c1c6f338445edb014c04c93e0068d199b1ae04fc8bf8355f823ff5a6f4ec"
+"dafny/R/R14_Smt/std/R14_Smt.dfy" = "d4bb45be96e729d4f3c2a9ce5a5949aeac0bef56d36f57dd81cd4a7990b91e0d"
 "dafny/R/R14_Smt/std/dfyconfig.toml" = "db2503838912ff39a81e7d8ab4d829780d72759a85666daba99c5822e3f07479"
 
 [[entry]]
@@ -22,10 +22,10 @@ cmd = ["scripts/vcheck", "verus/r/r14_smt"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "5e242d0b2473b083d98922b389f4065b84e2c887af293ad95272cbd9b62339e1"
+body = "fc16c979bcd441f1ce37d91aab1ec714e0b06435b15712e495ae3d91ff841452"
 [entry.pinned.inputs]
 "verus/r/r14_smt/Cargo.toml" = "490b136433188c648df757cbfe7cf41cb6d7bc3c622ae5a0eef315c4c849e5f8"
-"verus/r/r14_smt/src/lib.rs" = "40b1480633533a7aecbd24c10be51c68e561841e6c15f8d41e683e6b91848ead"
+"verus/r/r14_smt/src/lib.rs" = "e567e4da58537165a2a8fe5a9154e7291566623973b1273a31ed39a50b8ae35b"
 
 [[entry]]
 id = "trigger-none-d"

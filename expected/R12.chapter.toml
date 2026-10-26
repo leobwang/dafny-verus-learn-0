@@ -19,8 +19,8 @@ copy = "specimens/R12/selection-d.dfy.specimen"
 body = "6d986e16562dc147cf92b7744f6f1f74eb7e9b954b6ae09948a117c5a4068e30"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:selection-d.dfy" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
-"specimens/R12/selection-d.dfy.specimen" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
+"scratch:selection-d.dfy" = "255342bdde25382e53f52012629b8b145a90752c32d0d20dfc03cf6f6b3c6ea8"
+"specimens/R12/selection-d.dfy.specimen" = "255342bdde25382e53f52012629b8b145a90752c32d0d20dfc03cf6f6b3c6ea8"
 
 [[entry]]
 id = "selection-d-full"
@@ -33,11 +33,11 @@ drop = ["^raw output: "]
 [entry.scratch."selection-d.dfy"]
 copy = "specimens/R12/selection-d.dfy.specimen"
 [entry.pinned]
-body = "3306516021ac0ded0796d7b61d3bb15dbfb835e628a2964b96ead2f34d7dfcd6"
+body = "99f884882221c85f7033caeb6ca652e40e3e03f7d3d34feeb75675bdac40aa77"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:selection-d.dfy" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
-"specimens/R12/selection-d.dfy.specimen" = "8ac48469ecc97fc7aaca0943d4e60d1f19ba5a8bb14d0ffb22d0269d4167de3f"
+"scratch:selection-d.dfy" = "255342bdde25382e53f52012629b8b145a90752c32d0d20dfc03cf6f6b3c6ea8"
+"specimens/R12/selection-d.dfy.specimen" = "255342bdde25382e53f52012629b8b145a90752c32d0d20dfc03cf6f6b3c6ea8"
 
 [[entry]]
 id = "selection-v-fast"
@@ -48,7 +48,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "5ec7e338ac7cf5882acb6188131b9f55dd252404db5b044718427091e4b1bfae"
 [entry.pinned.inputs]
-"specimens/R12/selection-v.rs.specimen" = "96edbe5477c08206b6ee9e72cd57ba9256b1d2d3be287645dab4842d943c227f"
+"specimens/R12/selection-v.rs.specimen" = "9d743b14d04638559a01af0b56b9eab93b14234463202fb20213e55985f77761"
 
 [[entry]]
 id = "selection-v-full"
@@ -57,9 +57,9 @@ answers = ["R12.P3dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "1c4d448faca831a953d41eb747894f425161d1ecaeb4aeabf4490e5b4d9d68e7"
+body = "eb8f878c6f2b997447353661227d7a663e201268312c63cdeb3ae27ceab4422a"
 [entry.pinned.inputs]
-"specimens/R12/selection-v.rs.specimen" = "96edbe5477c08206b6ee9e72cd57ba9256b1d2d3be287645dab4842d943c227f"
+"specimens/R12/selection-v.rs.specimen" = "9d743b14d04638559a01af0b56b9eab93b14234463202fb20213e55985f77761"
 
 [[entry]]
 id = "shipped-d"
@@ -67,9 +67,9 @@ cmd = ["scripts/vcheck", "dafny/R/R12_Driving/std"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "4ca28a6a88d9e1540f208f13917ddc06a18633e0e8aa0954c0f30357983189f9"
+body = "1513e0a2088d6728b1cf4734a5919530d2711af5ef8cc70915d8f0e871424ca2"
 [entry.pinned.inputs]
-"dafny/R/R12_Driving/std/R12_Driving.dfy" = "0d6239c8bc5cb823570f9fed0cc95c5b49f0ee0aa47785f1be3ea409d1a6c9b7"
+"dafny/R/R12_Driving/std/R12_Driving.dfy" = "300caa11e9ef835bf97db46807086550b17d2aa43cb12e3b06b316d758ad2089"
 "dafny/R/R12_Driving/std/dfyconfig.toml" = "704e2555eb7014cd062d9853b5d730d32c75b967b2966b03be505ea96eaa0d7c"
 
 [[entry]]
@@ -78,10 +78,10 @@ cmd = ["scripts/vcheck", "verus/r/r12_driving"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "8ac1897d39f48590f64b7a660c0a6fbf41ad720293a94df076ca54743a84642e"
+body = "0adc6c4d1298ab916fce67de5efe6754179fcc5c36d6383e2f3afa428c254d30"
 [entry.pinned.inputs]
 "verus/r/r12_driving/Cargo.toml" = "5e7fc49cdc4a054981ac213b007cde26180f21b2ae99a2a29b14814ef5ffddf7"
-"verus/r/r12_driving/src/lib.rs" = "fcb5db032ea57c740010fa8b0d1055cd5897b17f1dda662cacc4142747da064d"
+"verus/r/r12_driving/src/lib.rs" = "e811c979defd6f2d00311a7ed5c88a7c594c2af84bb90675d4d21205bb3fe0e7"
 
 [[entry]]
 id = "site-blank-d"
@@ -138,12 +138,12 @@ answers = ["R12.P1d"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.scratch."span-value.dfy"]
-text = "/*! R12 given-only source-span observation: native lines are one-based. */\nmodule R12_SpanObservation {\n // item: R12.P1d value\n // Answer form: numeral.\n @Test method SecondDeclarationR12() {\n  var spans:seq<seq<nat>>:=[[7,12],[15,29]];\n  var line:=spans[1][0];\n  assert line == 15;\n }\n}\n"
+fence = "above"
 [entry.pinned]
 body = "5b52e3ede1dad38706a0beec6a77d9d79aa7f3afcf63add42c522877afe77a58"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:span-value.dfy" = "3c0a65348d4421868f75441c9ed8a28194b0b92949b0830348ee9d70ccbf3217"
+"scratch:span-value.dfy" = "653cb2d3c1ab38ffd2ded82c676ccaafc9ab721ffd6f53d041faae64462b9809"
 
 [[entry]]
 id = "phase-value"
@@ -154,11 +154,11 @@ answers = ["R12.P2v"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.scratch."phase-value.rs"]
-text = "use vstd::prelude::*;\nverus! {\npub enum ProbePhaseR12 {Verification,Compilation}\n// This is an illustrative field predicate, not authenticated native evidence.\npub open spec fn proof_fields_r12(phase:ProbePhaseR12,count:nat,holes:nat)->bool {\n phase is Verification && count>0 && holes==0\n}\n// item: R12.P2v value\n// Answer form: bool literal.\nproof fn phase_value_r12() {\n assert(proof_fields_r12(ProbePhaseR12::Compilation,7,0)==false) by (compute_only);\n}\n}\n"
+fence = "above"
 [entry.pinned]
 body = "88d5edbfac9f4a5877cd6fbacc4d4f88a219e1aeec58f635e01d91f78e20f5f6"
 [entry.pinned.inputs]
-"scratch:phase-value.rs" = "b104cbc0c04e22f37c7572227153ca5cc7b7036041228ba80f70eac3c2c78432"
+"scratch:phase-value.rs" = "f96f47c1ed4e1af8974be1582b17ae3d9640681460cf4a3fb9fd47c18c866c64"
 
 [[entry]]
 id = "count-labels"
@@ -167,9 +167,9 @@ answers = ["R12.P4v"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "4b2453425424d70fecd12ddcddf23e6a48b501f09b71c239f81dac7bb251f81c"
+body = "796d64f135996b4bc8e60f57573e3c6c38a5fc619c92133c5fb1933d92002c16"
 [entry.pinned.inputs]
-"specimens/R12/P4v.rs.specimen" = "74ab01e34557b3724574e97d33127fc2f82ee2d0cc1b65a80678a25a60d9c497"
+"specimens/R12/P4v.rs.specimen" = "ea165ac602dbb765f48456656c3d5a2ac56e1d99040c3947cfef98beb5f2b908"
 
 [[entry]]
 id = "shipped-python"
@@ -205,8 +205,8 @@ copy = "specimens/R12/fields-d.dfy.specimen"
 body = "622eb1dca50a81dd54ba7b89a594c1ff0a354cfe3fd5339fa6b37c4a89f6f66d"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:fields-d.dfy" = "cb80ea786d8f003933ffda25f4e3773f6cd7f7c1caad719fe31401f46483097f"
-"specimens/R12/fields-d.dfy.specimen" = "cb80ea786d8f003933ffda25f4e3773f6cd7f7c1caad719fe31401f46483097f"
+"scratch:fields-d.dfy" = "c56c57abc062422f67fe803a67aa393362952d6575000ca87fdda83f27261c2e"
+"specimens/R12/fields-d.dfy.specimen" = "c56c57abc062422f67fe803a67aa393362952d6575000ca87fdda83f27261c2e"
 
 [[entry]]
 id = "bound-d"
@@ -219,11 +219,11 @@ drop = ["^raw output: "]
 [entry.scratch."bound-d.dfy"]
 copy = "specimens/R12/bound-d.dfy.specimen"
 [entry.pinned]
-body = "561dea77525b90e741990ea7453ad26dbc69e715c559a25a832e2f81d6cd2678"
+body = "76d6f57283911aa336c9bcf6601bec6a2916ef8287af26d86e60c6b7358596a2"
 [entry.pinned.inputs]
 "dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
-"scratch:bound-d.dfy" = "eeb8687861eb1196c88e539fdaebc49f23657f3e9ed0fd14b3cd187bcb8010c3"
-"specimens/R12/bound-d.dfy.specimen" = "eeb8687861eb1196c88e539fdaebc49f23657f3e9ed0fd14b3cd187bcb8010c3"
+"scratch:bound-d.dfy" = "69f1bd91bb142d18d05fe71bc73986a531debab36322524aefd7350e0fc13752"
+"specimens/R12/bound-d.dfy.specimen" = "69f1bd91bb142d18d05fe71bc73986a531debab36322524aefd7350e0fc13752"
 
 [[entry]]
 id = "fields-v"
@@ -234,7 +234,7 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "9a032f6b663764644dd3e53b0b9a166f6c6591bb3179aff4754a75aa4dd902e9"
 [entry.pinned.inputs]
-"specimens/R12/fields-v.rs.specimen" = "7d1d91d351be9052505c8b504d4ab1bcda1da201b3c7302e5b05a5be9fcdc71f"
+"specimens/R12/fields-v.rs.specimen" = "b72694795558cae63a8a365c5df97a0bf0f3a1ad42ce78a96e621702e7396bcb"
 
 [[entry]]
 id = "bound-v"
@@ -243,6 +243,6 @@ answers = ["R12.P5dv"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "be218a3c14eca13cac756cdbf487242cc2d148693b450a815d414976eb449fbb"
+body = "81a8fea896cc70902a7d3d1e8ab0819de63523c165b23ad77178ccf875f7edf2"
 [entry.pinned.inputs]
-"specimens/R12/bound-v.rs.specimen" = "8653a0b276430d0b9bd9f778ea42c8a885d823bdd5f3c233a57b226ac704828e"
+"specimens/R12/bound-v.rs.specimen" = "082a4d09b4c72c46abf8e5c3ea8b893c8cf1a299e53d50af0ffb31730de373fb"

@@ -1,5 +1,8 @@
 // Reference Solution.
 // after: R13.P3dv
 module R13_ProofD {
- lemma RequireEvidenceR13(n:int) ensures n==19 {}
+  lemma RequireEvidenceR13(n: int)
+    ensures n == 19
+  {
+  }
 }

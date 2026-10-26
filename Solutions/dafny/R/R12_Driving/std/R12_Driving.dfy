@@ -36,9 +36,10 @@ module R12_HintSites {
   // item: R12.T1d
   // pair: R12.T1v
   /** **T1.** A word of `a` followed by a word of `b` matches `Cat(a, b)`.
-
-      Reference: the Cat existential needs its witness `i = |u|` named as two
-      slice facts about `u + v`; the rest is the two hypotheses. */
+      The failing obligation is `Matches`'s Cat existential: which split of
+      `u + v` is its witness, and how do you name it with slice facts only? */
+  // Hint(1): site t1 is one boolean expression over u and v.
+  // Hint(2): two slices of u + v, each equal to one of the words.
   lemma CatWitnessR12(a: Re, b: Re, u: seq<char>, v: seq<char>)
     requires Matches(a, u) && Matches(b, v)
     ensures Matches(Cat(a, b), u + v)
@@ -46,14 +47,25 @@ module R12_HintSites {
     // did: the split of u + v at |u|, which instantiates the Cat existential.
     assert /*R12_HINT:t1*/ (u + v)[..|u|] == u && (u + v)[|u|..] == v;
   }
+  // Reference checks (enabled):
+  // reference-only: enabled shipped check
+  lemma CatWitnessCheckR12()
+  {
+    assert Matches(Chr('a'), ['a']);
+    assert Matches(Chr('b'), ['b']);
+    CatWitnessR12(Chr('a'), Chr('b'), ['a'], ['b']);
+    assert ['a'] + ['b'] == ['a', 'b'];
+    assert Matches(Cat(Chr('a'), Chr('b')), ['a', 'b']);
+  }
+  // end reference checks
 
   // item: R12.H1d
   // pair: R12.H1v
-  /** **H1.** `n` copies then `m` copies make `n + m` copies.
-
-      Reference: induction on `n`. The skeleton picks the split `i` of `u` from
-      `Copies(r, n)`'s Cat existential. Site h1a is the induction call on the
-      tail; site h1b says that the head, the tail and `v` regroup as `u + v`. */
+  /** **H1.** `n` copies then `m` copies make `n + m` copies. The skeleton
+      chooses the split `i` of `u`. Which call does the tail need (site h1a),
+      and which equation turns the provided Cat witness into `u + v` (h1b)? */
+  // Hint(1): h1a is one call of CopiesAppendR12 itself, on a smaller n.
+  // Hint(2): h1b is an equation between sequences built from u[..i], u[i..] and v.
   lemma CopiesAppendR12(r: Re, n: nat, m: nat, u: seq<char>, v: seq<char>)
     requires Matches(Copies(r, n), u) && Matches(Copies(r, m), v)
     ensures Matches(Copies(r, n + m), u + v)
@@ -72,11 +84,11 @@ module R12_HintSites {
 
   // item: R12.H2d
   // pair: R12.H2v
-  /** **H2.** A word of at most `j` copies is a word of at most `k >= j` copies.
-
-      Reference: induction on `j`. The empty word is the `Eps` branch's at every
-      bound. A non-empty word is the Cat branch's (site h2a), and the induction
-      call lifts its tail from `j - 1` to `k - 1` (site h2b). */
+  /** **H2.** A word of at most `j` copies is a word of at most `k >= j`
+      copies. For a non-empty word, which branch of `CopiesUpTo(r, j)`'s `Alt`
+      holds (site h2a), and which bounds does the induction call need (h2b)? */
+  // Hint(1): h2a names a Matches fact about the Alt's second operand.
+  // Hint(2): h2b lowers both bounds by one, on the tail chosen by the skeleton.
   lemma UpToMonoR12(r: Re, j: nat, k: nat, w: seq<char>)
     requires j <= k && Matches(CopiesUpTo(r, j), w)
     ensures Matches(CopiesUpTo(r, k), w)
