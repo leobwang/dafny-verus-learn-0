@@ -3559,6 +3559,14 @@ def _empty_body_items(ctx, todo, modes, shipped_modes, run_forms, shadows, seeds
 # =====================================================================================
 
 def main(argv=None):
+    rc = _main(argv)
+    if core.common.trust_note():
+        print(f"firsttry: {core.common.trust_note()}: every result above ran on a toolchain other "
+              "than the pinned one, so none of it is the course's pinned result (DELTAS Δ503, D79)")
+    return rc
+
+
+def _main(argv=None):
     ap = argparse.ArgumentParser(prog="firsttry", description="The prediction-slot gate.")
     ap.add_argument("id", nargs="?", help="module id (Q04, R06); --lint-hollow also takes --all")
     m = ap.add_mutually_exclusive_group()
@@ -3622,7 +3630,7 @@ def main(argv=None):
     except SystemExit as e:
         return e.code
     except core.common.ToolchainError as e:
-        print(f"firsttry: {e}; run scripts/get_toolchain.sh dafny|verus", file=sys.stderr)
+        print(f"firsttry: {e}", file=sys.stderr)
         return core.EXIT_REFUSED
     except core.common.CapError as e:
         print(f"firsttry: {e}", file=sys.stderr)

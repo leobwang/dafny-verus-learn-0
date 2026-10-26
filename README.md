@@ -60,34 +60,79 @@ chapter (→ optional /discuss) → paper problems → make -C paper paper green
 
 ## Setup
 
-1. **Prerequisites.** git, bash, `curl`, `unzip`, `sha256sum`, Python 3.12 or newer (the course scripts read `MODULES.toml` with `tomllib`, and the harness's `pyproject.toml` asks for 3.12; this host has 3.12.3), rustup (for step 2's pinned Rust), and Claude Code, the `claude` command line. Every `/skill` in this course is typed into a `claude` session started in the repository root.
-2. **Toolchains.** Each verifier is pinned to one release and installed into `.toolchain/` (gitignored); the install script checks the release tag, the commit, the asset's sha256 and a digest of the installed tree, and prints only the binary path:
+1. **Prerequisites** (Linux x86-64 or macOS on Apple silicon; see [Platforms](#platforms)):
+   - git, bash (bash 4 or newer for `scripts/ci.sh` and `scripts/test_hooks.sh`; macOS ships 3.2, so `brew install bash`), `curl` and `unzip`;
+   - [uv](https://docs.astral.sh/uv/) 0.11.0 or newer;
+   - Python 3.12 or newer: Ubuntu's `python3.12`, or uv's own (`uv python install 3.12`; the system Python of macOS is 3.9);
+   - rustup, for Verus's Rust 1.98.1;
+   - Claude Code, the `claude` command line. Every `/skill` in this course is typed into a `claude` session started in the repository root.
+
+   Run the course scripts through uv from the repository root: `uv sync` once, then `uv run scripts/vcheck …`. Or `source .venv/bin/activate` once per shell and run them bare, as this README writes them.
+2. **Toolchains on your PATH** (DELTAS Δ503, D78). You provide the pinned verifiers on `PATH`, and the course calls them as plain processes:
+   - **`dafny` 4.11.0** (`dafny --version` prints `4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2`). Use the release zip, which bundles the Z3 solvers 4.12.1 (the course's pin) and 4.14.1. If you install with `dotnet tool install --global dafny --version 4.11.0` (on .NET 8) instead, also put a Z3 4.12.1 on `PATH` as `z3-4.12.1`.
+   - **`verus` 0.2026.09.27.3cf1832**, the weekly release zip. It bundles Z3 4.16.0 and needs Rust `1.98.1`.
+
+   On Linux x86-64:
    ```
-   rustup set auto-self-update disable   # once: rustup must not replace itself (the sandbox's image lock pins its sha256)
-   rustup toolchain install 1.98.1-x86_64-unknown-linux-gnu --profile minimal --no-self-update   # Verus needs exactly this Rust
-   scripts/get_toolchain.sh dafny     # Dafny 4.11.0 (about 65 MB); no .NET needed
-   scripts/get_toolchain.sh verus     # Verus 0.2026.09.27.3cf1832 (about 486 MB; 1.6 GB installed)
-   scripts/get_toolchain.sh dafny --check   # re-verify offline at any time; the same for verus
+   curl -LO https://github.com/dafny-lang/dafny/releases/download/v4.11.0/dafny-4.11.0-x64-ubuntu-22.04.zip
+   curl -LO https://github.com/verus-lang/verus/releases/download/release/0.2026.09.27.3cf1832/verus-0.2026.09.27.3cf1832-x86-linux.zip
+   unzip -q dafny-4.11.0-x64-ubuntu-22.04.zip -d ~/opt && unzip -q verus-0.2026.09.27.3cf1832-x86-linux.zip -d ~/opt
+   export PATH="$HOME/opt/dafny:$HOME/opt/verus-x86-linux:$PATH"     # in your shell's startup file
+   rustup toolchain install 1.98.1-x86_64-unknown-linux-gnu --profile minimal --no-self-update
    ```
-   The course runs only these binaries, through `scripts/vcheck`; never put another `dafny`, `verus` or `z3` on your `PATH` for course work. `scripts/vcheck --selftest` confirms the install.
+   On macOS (Apple silicon): use the same release pages' `dafny-4.11.0-arm64-macos-13.zip` and `verus-0.2026.09.27.3cf1832-arm64-macos.zip`. The directories are `dafny` and `verus-arm64-macos`, and the Rust toolchain is `1.98.1-aarch64-apple-darwin`.
+
+   Then run `scripts/vcheck --versions`, which checks each tool and its Z3 against the pins, and `scripts/vcheck --selftest`. A different version is not refused. Every command warns (expected against found) and continues, but it marks everything whose meaning depends on the exact toolchain as **UNTRUSTED**, in its output and its JSON (D79): the done gate's verdict, pins, first tries and brittleness figures. `scripts/vcheck --fingerprint` is an optional diagnostic: it checks that your solvers count resources exactly as the reference builds do. On Linux x86-64, `scripts/get_toolchain.sh dafny|verus` still installs the pinned vendor releases into `.toolchain/`, which the sandbox images use; put its `dafny` and `verus-x86-linux` directories on `PATH` if you like. Never put another `dafny`, `verus` or `z3` on `PATH` for course work.
 3. **Your own branch.** Once, before your first module: `git switch -c leobwang-<name> basic`, from the local branch `basic` (the learner branch prefix is `leobwang-`; once `basic` is pushed, `git fetch origin` and `git switch -c leobwang-<name> origin/basic` do the same). `basic` is the course as shipped (the Q core now; the R track is added to it next) and `challenge` adds the challenges to it; `main` holds only the design. Commit course work on your branch, never on `basic` or `challenge`: they keep every file as shipped, and `scripts/firsttry.sh` and the rubrics compare your files with the newer of the two that your branch contains. To take a course update, merge the newest of `basic` and `challenge` into your branch (`challenge` once it exists: it holds `basic` and every fix to it; once they are pushed, `git fetch origin` first and merge `origin/basic` or `origin/challenge`); changes never flow back.
 4. **TeX** (for the written track): TeX Live with `latexmk`, `pdflatex`, and the `mathpartir`, `listings`, `xcolor` and `stmaryrd` packages (on Ubuntu 24.04 they come from the `latexmk`, `texlive-latex-recommended` and `texlive-science` packages, or with `texlive-full`). `make -C paper paper` builds every problems/answers pair of both tracks and fails loudly while there is none, or when a file lacks its partner. Reference solutions have their own author-only target, `paper-solutions`, so your build never compiles one.
 5. **Later**, each when its first module needs it (the module's chapter points back here):
 
    | tool | pin | first module | install | check |
    |---|---|---|---|---|
-   | uv and the harness environment | uv 0.12.4 (`sandbox/images.lock`) | Q06, R05 | install uv, then `uv sync --directory harness --frozen` | `uv --version`; `uv run --directory harness python3 -c 'import fvh'` |
+   | uv and the harness environment | uv ≥ 0.11.0, a minimum (`required-version` in `pyproject.toml` and `harness/pyproject.toml`); the sandbox images carry their own pinned uv 0.12.4 (`sandbox/images.lock`) | Q06, R05 | install uv, then `uv sync --directory harness --frozen` | `uv --version`; `uv run --directory harness python3 -c 'import fvh'` |
    | Docker and the course images (`dvl-toolchain`, `dvl-agent`) | `sandbox/images.lock` | Q07 (the local agent replay) | Docker Engine, then `sandbox/build-images.sh` | `sandbox/build-images.sh --check` |
    | Ollama and the local model | `qwen3.8:latest` (`sandbox/apparatus.toml`) | Q07, the labs | Ollama, then `ollama pull qwen3.8:latest` | `ollama list`; `scripts/contract_local.sh Q07 --available` |
-   | age and the grader's key | age v1.3.2 at `~/.local/bin/age` (`sandbox/truth.toml`) | Q13 (the hidden checks) | the pinned release binary, and the key where `sandbox/truth.toml` names it | `sha256sum ~/.local/bin/age` against `age_sha256` |
+   | the course's copy of Claude Code's version file | Claude Code 2.1.306, `[backend.claude]` in `sandbox/apparatus.toml` | Q12 (Lab 1: every `fvh` batch checks it, a Qwen-only one too) | `scripts/get_toolchain.sh claude`, while that version is still in `~/.local/share/claude/versions/` (see below) | `scripts/get_toolchain.sh claude --check` |
+   | age and the grader's key | age v1.3.2 at `~/.local/bin/age` (`sandbox/truth.toml`) | Q13 (the hidden checks) | the pinned release binary for your platform (linux-amd64 or darwin-arm64), and the key where `sandbox/truth.toml` names it | `sha256sum ~/.local/bin/age` (macOS: `shasum -a 256`) against this platform's `age_sha256` |
    | the public benchmark sets | `bench/manifest.toml`, `bench/public/POOLS.toml` | Q12 (Lab 1) | `scripts/get_bench.sh --all` | `scripts/get_bench.sh --check` |
    | the editor | the Dafny extension at 4.11.0 and verus-analyzer on the pinned `verus` (`.vscode/settings.json`) | Q01 (its language-server door), Q04 (the IDE rung) | VS Code with both extensions; open the repository root | hover a symbol in `dafny/Q/Q01_Hello/core/Q01_Hello.dfy` |
+
+   Claude Code updates itself and deletes old version files, so `fvh` never runs the `claude` link or the updater's files: it runs the course's own copy of the pinned version, `~/.local/share/dafny-verus-learn-0/claude/versions/<version>`, which `scripts/get_toolchain.sh claude` makes once (it checks the pinned sha256) and which survives every later update. Your Claude Code and its auto-updater stay as they are. When a course update moves the pin, run `scripts/get_toolchain.sh claude` again; if your CLI has already deleted that version, it says so and how to put it back (`VERSIONS.md` §1.3).
+
+## Platforms
+
+The course runs on Linux x86-64 and on macOS on Apple silicon (D77). `PYTHONPATH=scripts python3 -m dvl.host id` names the host.
+
+| | Linux x86-64 | macOS on Apple silicon |
+|---|---|---|
+| **T1** the verification loop: `vcheck`, `vaudit`, `specfreeze`, `pins.py`, `firsttry.sh`, chapters, skills, the guard, the written track | yes | yes |
+| **T2** the labs without containers: Ollama and the local model through `harness/fvh` | yes | yes, except `fvh` batches (below) |
+| **T3** containers: `scripts/mksandbox-run`, `scripts/contract_local.sh`, the sealed hidden checks, agent replays in Docker | yes | not yet |
+
+**`fvh` batches on macOS: not yet.** `sandbox/apparatus.toml` pins this course host's Claude Code and opencode binaries by path and sha256 (`[backend.*]`), so `fvh apparatus --check`, which every batch runs, refuses on a Mac. A Mac needs its own host-specific `[backend.*]` pins, which the course does not support yet.
+
+**Memory is yours.** The course tools apply no memory management (D78): no cap, no preflight. A verifier job can take several GB. Run long sweeps and `scripts/ci.sh` under a limit of your own, for example on Linux `systemd-run --user --scope -p MemoryMax=32G -p MemorySwapMax=0 scripts/ci.sh`. A job killed by a signal (exit 137 or 143) is recorded as `killed(memory)`, never as a verdict.
+
+**The same results on both.** Every build of one Z3 version that was measured gives the identical rlimit count and verdict on every query of `tests/fingerprint/z3/`: vendor x64 and arm64, Dafny's own build, and macOS. The macOS arm64 builds of 4.12.1, 4.14.1 and 4.16.0 matched the x86 baselines on all 129 queries. So one set of pins holds on both platforms, including the 17 that depend on resource counts. `scripts/vcheck --fingerprint` checks your solvers.
+
+**macOS setup.**
+```
+brew install bash jq uv               # or uv's own installer; any uv >= 0.11.0
+uv python install 3.12
+curl --proto '=https' -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable --profile minimal
+rustup toolchain install 1.98.1-aarch64-apple-darwin --profile minimal --no-self-update
+# unzip the arm64 Dafny and Verus release zips (step 2) and put dafny/ and verus-arm64-macos/ on PATH
+uv sync && uv run scripts/vcheck --versions && uv run scripts/port_selftest.sh
+```
+macOS needs no GNU coreutils. The guard runs under the system bash 3.2, and `ci.sh` and `test_hooks.sh` re-run themselves under Homebrew's bash. The editor setting `verus-analyzer.verus.verusBinary` is `verus`, resolved on `PATH`.
+
+**Hosted CI (advisory).** `.github/workflows/portability.yml` runs on `ubuntu-24.04` and `macos-14`, with no model and no container. It unzips the pinned releases onto `PATH`, then runs `vcheck --versions`, the fingerprint, the toolchain-contract tests and `scripts/ci.sh --job static --job hook-test --job verify-q-dafny`. The merge gate stays the local `scripts/ci.sh` run.
 
 ## Verifying, memory, and the local CI
 
 - **`scripts/vcheck`** is the only way the course runs Dafny and Verus: it pins the binary, the solver, a deterministic resource limit (never a wall-clock limit), the thread count and the flags, and it refuses flags that would weaken a gate. `scripts/vaudit` is the assumption audit.
-- **Memory.** A single verifier job can take several GB; `CLAUDE.md` §Resources sets the host's solver memory budget and binds every session, agent and script. Run one verifier job at a time; the wrapper applies a memory cap, and a job killed by memory is recorded as `killed(memory)`, never as a verdict.
-- **Local CI.** There is no hosted CI. `scripts/ci.sh` runs every course check on this machine: the registry and its checker, the guard's hook tests, verification of both tracks in both languages (hole counts taken from the tools), golden pins, the cheat corpus, the tool suites, the two tracks resolving together, and the written track. `scripts/ci.sh --quick` runs only the first two jobs (about ten minutes), `--list` names the jobs and `--job NAME` runs one of them. It runs one verifier job at a time under the memory caps and checks free memory before it starts one. Each job prints one `PASS`, `FAIL`, `SKIP` or `ABSENT` line, the logs go to `build/ci/<run>/` with only their locations on the console, and any failure gives a non-zero exit. The steps that read reference material run only in the course author's run (`--author`), which refuses in your checkout, so your run reports them as skipped. It runs before every merge into a shipped branch (`basic` first, then merged forward into `challenge`); you do not need it to study, and its output (the console and `build/ci/`) is on the *Predictions first* list.
+- **Memory.** A single verifier job can take several GB. The course applies no memory cap (D78): memory is yours, so run one verifier job at a time (the default) and long runs under a limit of your own. A job killed by a signal is recorded as `killed(memory)`, never as a verdict.
+- **Local CI.** The merge gate is local (the advisory hosted matrix is under [Platforms](#platforms)). `scripts/ci.sh` runs every course check on this machine: the registry and its checker, the guard's hook tests, verification of both tracks in both languages (hole counts taken from the tools), golden pins, the cheat corpus, the tool suites, the two tracks resolving together, and the written track. `scripts/ci.sh --quick` runs only the first two jobs (about ten minutes), `--list` names the jobs and `--job NAME` runs one of them. It runs one verifier job at a time under the memory caps and checks free memory before it starts one. Each job prints one `PASS`, `FAIL`, `SKIP` or `ABSENT` line, the logs go to `build/ci/<run>/` with only their locations on the console, and any failure gives a non-zero exit. The steps that read reference material run only in the course author's run (`--author`), which refuses in your checkout, so your run reports them as skipped. It runs before every merge into a shipped branch (`basic` first, then merged forward into `challenge`); you do not need it to study, and its output (the console and `build/ci/`) is on the *Predictions first* list.
 
 ## Agents and models: no usage-billed API
 

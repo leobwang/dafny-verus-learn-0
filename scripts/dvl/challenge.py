@@ -56,7 +56,8 @@ The manifest (TOML, schema 1):
 Exit: 0 PASS or DISTINCTION · 1 FAIL · 2 usage · 3 refused (a planned module: nothing
 to gate; a broken record or manifest) · 137/143 a tool killed by memory, recorded as
 killed(memory), never a verdict (CLAUDE.md §Resources). Standard library only; every
-solver job runs inside the wrappers' own caps (dvl0.slice), one at a time.
+solver job runs through the wrappers (dvl.common.run_capped), one at a time; the course
+applies no memory management of its own (Δ503: the memory is the host's).
 """
 
 from __future__ import annotations

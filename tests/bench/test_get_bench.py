@@ -315,12 +315,6 @@ class Validate(unittest.TestCase):
     pin = GetBench.pin
 
     def setUp(self):
-        avail = 0
-        for line in Path("/proc/meminfo").read_text().splitlines():
-            if line.startswith("MemAvailable:"):
-                avail = int(line.split()[1]) / (1024 * 1024)
-        if avail < 23:
-            self.skipTest("MemAvailable is below the Dafny cap plus 15 GB")
         self.setUp_base()
         write(self.root, "scripts/vcheck", FAKE_TOOL)
         write(self.root, "scripts/vaudit", FAKE_TOOL)
@@ -498,13 +492,8 @@ class Validate(unittest.TestCase):
         self.assertEqual(p.returncode, 3)
         self.assertIn("differs from the pool pinned", p.stderr)
 
-    def test_workers_must_fit_the_memory_share(self):
-        self.pin()
-        p = self.gb("--validate", "toyset", "--workers", "2")
-        self.assertEqual(p.returncode, 3)
-        self.assertIn("exceeds the memory share", p.stderr)
-        p = self.gb("--validate", "toyset", "--workers", "5", "--mem-gb", "64")
-        self.assertEqual(p.returncode, 3)
+    def test_workers_take_no_memory_share(self):
+        """D78: no course-side memory management; --workers alone needs --validate."""
         self.assertEqual(self.gb("--workers", "2", "--list").returncode, 2)
 
 

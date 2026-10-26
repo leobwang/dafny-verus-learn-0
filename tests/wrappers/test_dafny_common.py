@@ -1,6 +1,6 @@
-"""Tests for dvl.common: the memory-capped runner, the toolchain paths and the
-pins loader. The runner tests run tiny shell and Python jobs (no solver)
-under real `systemd-run --user --scope` caps.
+"""Tests for dvl.common: the job runner, the toolchain paths and the pins
+loader. The runner tests run tiny shell and Python jobs (no solver) as plain
+processes (DELTAS Δ503, D78: the course applies no memory management).
 
 Run: python3 -m unittest discover -s tests/wrappers -p 'test_dafny*.py'
 """
@@ -31,9 +31,9 @@ class RunCapped(unittest.TestCase):
         self.assertEqual((so.parent / "cmd.txt").read_text(),
                          "bash -c 'echo out; echo err >&2; exit 3'\n")
 
-    def test_memory_kill_is_137(self):
-        rc, _, _ = common.run_capped(
-            [sys.executable, "-c", "x = bytearray(400 * 1024 * 1024)"], 0.1, 60)
+    def test_a_sigkill_death_is_137_killed_memory(self):
+        """The host's OOM killer (or any SIGKILL) is killed(memory), never a verdict."""
+        rc, _, _ = common.run_capped(["bash", "-c", "kill -KILL $$"], 1, 60)
         self.assertEqual(rc, 137)
         self.assertTrue(common.is_killed(rc))
 
@@ -57,7 +57,7 @@ class RunCapped(unittest.TestCase):
         return subprocess.run(["pgrep", "-f", pattern], capture_output=True,
                               text=True).stdout.split()
 
-    def _orphan_parent(self, marker, timeout_s, grace_s):
+    def _orphan_parent(self, marker, timeout_s):
         """A Python parent running one capped job: a driver (`<marker>-main`)
         that started a child of its own (`<marker>-solver`, standing in for a
         solver its driver spawned), both `sleep 300`. Returns the parent once
@@ -68,8 +68,8 @@ class RunCapped(unittest.TestCase):
         # ignored, and Python then installs no handler (DV3b integration)
         code = ("import signal; signal.signal(signal.SIGINT, signal.default_int_handler)\n"
                 "import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"
-                "common.run_capped(['bash', '-c', %r], 0.1, %r, grace_s=%r)\n"
-                % (str(ROOT / "scripts"), job, timeout_s, grace_s))
+                "common.run_capped(['bash', '-c', %r], 0.1, %r)\n"
+                % (str(ROOT / "scripts"), job, timeout_s))
         parent = subprocess.Popen([sys.executable, "-B", "-c", code], env=dict(os.environ),
                                   stderr=subprocess.DEVNULL)   # a killed parent's traceback
         t0 = time.monotonic()
@@ -80,33 +80,20 @@ class RunCapped(unittest.TestCase):
             time.sleep(0.05)
         return parent
 
-    def _units_of(self, pid):
-        return subprocess.run(["systemctl", "--user", "list-units", "--all", "--no-legend",
-                               f"dvl-bash-{pid}-*"], capture_output=True, text=True).stdout.strip()
-
-    def test_parent_death_stops_the_whole_scope_at_once(self):
+    def test_parent_death_kills_the_whole_job_at_once(self):
         """No orphan: the parent is SIGKILLed while its job (a driver and the
-        solver it started) runs with a 600 s limit and a 600 s systemd net;
-        the lifeline watcher stops the whole scope within seconds."""
+        solver it started) runs with a 600 s limit; the lifeline watcher kills
+        the job's process group within seconds, then exits."""
         marker = f"dvl-lifeline-test-{os.getpid()}"
-        parent = self._orphan_parent(marker, 600, 600)
+        parent = self._orphan_parent(marker, 600)
         try:
-            self.assertTrue(self._units_of(parent.pid), "no scope for the job")
             killed = time.monotonic()
             parent.kill()
             parent.wait()
             while self._alive(f"^{marker}-"):
                 self.assertLess(time.monotonic() - killed, 10, "a solver outlived its dead "
-                                "parent: the scope was not stopped")
+                                "parent")
                 time.sleep(0.05)
-            t0 = time.monotonic()
-            while self._units_of(parent.pid):
-                self.assertLess(time.monotonic() - t0, 10, "the scope is still loaded")
-                time.sleep(0.1)
-            t0 = time.monotonic()
-            while self._alive(f"dvl-lifeline-dvl-bash-{parent.pid}-"):
-                self.assertLess(time.monotonic() - t0, 15, "the watcher never exited")
-                time.sleep(0.1)
         finally:
             parent.kill()
             subprocess.run(["pkill", "-f", f"^{marker}-"], capture_output=True)
@@ -115,7 +102,7 @@ class RunCapped(unittest.TestCase):
         """SIGINT to the parent (Ctrl-C; the job is in its own session, so the
         signal reaches only the parent): the scope is stopped as well."""
         marker = f"dvl-sigint-test-{os.getpid()}"
-        parent = self._orphan_parent(marker, 600, 600)
+        parent = self._orphan_parent(marker, 600)
         try:
             sent = time.monotonic()
             parent.send_signal(2)
@@ -130,7 +117,7 @@ class RunCapped(unittest.TestCase):
     def test_stragglers_are_stopped_after_a_normal_return(self):
         """A job that exits leaving a process behind in its scope (a solver
         whose driver returned): the process is stopped once run_capped
-        returns, not left to run to the systemd net."""
+        returns, not left running."""
         marker = f"dvl-straggler-test-{os.getpid()}"
         rc, so, _ = common.run_capped(
             ["bash", "-c", f"(exec -a {marker} sleep 300) & sleep 0.3; echo $!; exit 0"], 1, 600)
@@ -141,50 +128,24 @@ class RunCapped(unittest.TestCase):
             self.assertLess(time.monotonic() - t0, 10, "the straggler outlived its job")
             time.sleep(0.05)
 
-    def test_systemd_enforces_the_wall_clock_net_when_the_watcher_dies_too(self):
-        """Δ58: RuntimeMaxSec = timeout_s + grace_s on the scope, so a job whose
-        parent AND lifeline watcher were both SIGKILLed (a kill of the whole
-        process tree) is still stopped (here 2 + 2 s)."""
-        marker = f"dvl-orphan-test-{os.getpid()}"
-        parent = self._orphan_parent(marker, 2, 2)
-        try:
-            watcher = self._alive(f"dvl-lifeline-dvl-bash-{parent.pid}-")
-            self.assertEqual(len(watcher), 1, watcher)
-            started = time.monotonic()
-            os.kill(int(watcher[0]), 9)
-            parent.kill()
-            parent.wait()
-            time.sleep(0.5)
-            self.assertTrue(self._alive(f"^{marker}-main"),
-                            "the job died with its parent: the test proves nothing")
-            while self._alive(f"^{marker}-"):
-                self.assertLess(time.monotonic() - started, 15, "the orphaned job outlived "
-                                "timeout_s + grace_s: no systemd net")
-                time.sleep(0.2)
-        finally:
-            parent.kill()
-            subprocess.run(["pkill", "-f", f"^{marker}-"], capture_output=True)
-
     def test_no_lifeline_no_run(self):
         """A watcher that cannot start refuses the job (it could outlive us)."""
         code = ("import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"
-                "common._cap_works()\n"
                 "import subprocess\nreal = subprocess.run\n"
                 "def fake(argv, *a, **k):\n"
                 "    if argv[:1] == ['setsid']:\n"
                 "        raise FileNotFoundError('setsid')\n"
                 "    return real(argv, *a, **k)\n"
                 "subprocess.run = fake\n"
-                "try:\n    common.run_capped(['true'], 1, 10)\nexcept common.CapError as e:\n"
+                "try:\n    common.run_capped(['true'], 1, 10)\nexcept common.DvlError as e:\n"
                 "    print('refused')\n" % str(ROOT / "scripts"))
         p = subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True,
                            env=dict(os.environ))
         self.assertEqual(p.stdout.strip(), "refused", p.stderr)
 
-    def test_a_systemd_stop_at_the_limit_is_the_wall_clock_net(self):
-        """With no grace, systemd's SIGTERM can beat the parent's kill: still 124,
-        never killed(memory)."""
-        rc, _, _ = common.run_capped(["bash", "-c", "sleep 30"], 1, 2, grace_s=0)
+    def test_a_job_killed_at_the_limit_is_the_wall_clock_net(self):
+        """A job SIGTERMed at or after its limit is 124, never killed(memory)."""
+        rc, _, _ = common.run_capped(["bash", "-c", "trap '' TERM; sleep 30"], 1, 2)
         self.assertEqual(rc, common.WALL_CLOCK_EXIT)
 
     def test_environment_is_scrubbed(self):
@@ -226,101 +187,11 @@ class RunCapped(unittest.TestCase):
         self.assertFalse(self._overlap(1))
         self.assertTrue(self._overlap(2))
 
-    def test_no_cap_no_run(self):
-        code = ("import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"
-                "try:\n    common.run_capped(['true'], 1, 10)\nexcept common.CapError:\n"
-                "    print('refused')\n" % str(ROOT / "scripts"))
-        p = subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True,
-                           env={"PATH": "/nonexistent", "HOME": os.environ.get("HOME", "/tmp"),
-                                "DVL_SCRATCH": os.environ["DVL_SCRATCH"]})
-        self.assertEqual(p.stdout.strip(), "refused", p.stderr)
-
-
-class SolverSlice(unittest.TestCase):
-    """Every capped job's scope lies in the user slice dvl0.slice, whose own MemoryMax=48G
-    bounds all solver jobs together (CLAUDE.md §Resources), while each job keeps its cap."""
-
-    SHIM = r"""#!/bin/sh
-printf '%s' "$(basename "$0")" >> "$SHIM_LOG"
-for a in "$@"; do printf ' %s' "$a" >> "$SHIM_LOG"; done
-printf '\n' >> "$SHIM_LOG"
-case "$(basename "$0")" in
-  systemctl)
-    case " $* " in
-      *" set-property "*) exit "${SHIM_SET_EXIT:-0}" ;;
-      *" show "*) printf 'MemoryMax=%s\nMemorySwapMax=0\n' "${SHIM_SHOW_MAX:-51539607552}"; exit 0 ;;
-      *) exit 0 ;;
-    esac ;;
-  systemd-run)
-    while [ "$#" -gt 0 ] && [ "$1" != "--" ]; do shift; done
-    shift
-    exec "$@" ;;
-esac
-"""
-
-    def _shimmed(self, code, **env):
-        """Run `code` (after `from dvl import common`) with fake systemctl and systemd-run
-        first on PATH; returns (stdout, the shims' argv log lines)."""
-        import tempfile
-        with tempfile.TemporaryDirectory(prefix="dvl-slice-shim-") as t:
-            shim = Path(t) / "bin"
-            shim.mkdir()
-            for name in ("systemctl", "systemd-run"):
-                (shim / name).write_text(self.SHIM)
-                (shim / name).chmod(0o755)
-            log = Path(t) / "argv.log"
-            log.write_text("")
-            full = ("import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"
-                    % str(ROOT / "scripts")) + code
-            e = dict(os.environ, PATH=f"{shim}:{os.environ['PATH']}", SHIM_LOG=str(log),
-                     DVL_SCRATCH=os.environ["DVL_SCRATCH"], **env)
-            p = subprocess.run([sys.executable, "-B", "-c", full], capture_output=True,
-                               text=True, env=e, timeout=120)
-            time.sleep(0.3)          # the detached lifeline watcher's last systemctl call
-            return p.stdout.strip(), [x for x in log.read_text().splitlines() if x], p.stderr
-
-    def test_the_job_argv_names_the_slice_and_keeps_its_own_cap(self):
-        argv = common.cap_argv(8, "dvl-test-unit", {"PATH": "/usr/bin"})
-        self.assertIn("--slice=dvl0.slice", argv)
-        self.assertEqual(argv[argv.index("MemoryMax=8G") - 1], "-p")
-        self.assertIn("MemorySwapMax=0", argv)
-        self.assertLess(argv.index("--slice=dvl0.slice"), argv.index("--"))
-        self.assertEqual((common.SOLVER_SLICE, common.SOLVER_BUDGET_GB), ("dvl0.slice", 48))
-
-    def test_the_slice_is_bounded_once_before_the_first_job(self):
-        out, log, err = self._shimmed(
-            "for _ in range(2):\n    print(common.run_capped(['true'], 1, 30)[0])\n")
-        self.assertEqual(out.split(), ["0", "0"], err)
-        sets = [x for x in log if " set-property " in x]
-        self.assertEqual(sets, ["systemctl --user set-property --runtime dvl0.slice "
-                                "MemoryMax=48G MemorySwapMax=0"])
-        self.assertLess(log.index(sets[0]), min(i for i, x in enumerate(log)
-                                                if x.startswith("systemd-run")))
-        runs = [x for x in log if x.startswith("systemd-run")]
-        self.assertEqual(len(runs), 3, runs)            # the cap probe and the two jobs
-        for x in runs:
-            self.assertIn(" --slice=dvl0.slice ", x)
-        for x in runs[1:]:
-            self.assertIn(" -p MemoryMax=1G -p MemorySwapMax=0 ", x)
-
-    def test_a_slice_that_cannot_be_bounded_refuses_the_job(self):
-        code = ("try:\n    common.run_capped(['true'], 1, 30)\n"
-                "except common.CapError as e:\n    print('refused:', e)\n")
-        for env in ({"SHIM_SET_EXIT": "1"}, {"SHIM_SHOW_MAX": "infinity"},
-                    {"SHIM_SHOW_MAX": str(64 * 1024 ** 3)}):
-            with self.subTest(env=env):
-                out, log, err = self._shimmed(code, **env)
-                self.assertTrue(out.startswith("refused:"), (out, err))
-                self.assertFalse([x for x in log if x.startswith("systemd-run")], log)
-
-    def test_a_real_job_runs_in_the_bounded_slice(self):
-        rc, so, _ = common.run_capped(["cat", "/proc/self/cgroup"], 1, 60)
+    def test_no_memory_cap_on_the_host(self):
+        """D78: a job that allocates past any former cap runs to its own end."""
+        rc, _, _ = common.run_capped(
+            [sys.executable, "-c", "x = bytearray(300 * 1024 * 1024)"], 0.1, 60)
         self.assertEqual(rc, 0)
-        self.assertRegex(so.read_text(), r"/dvl0\.slice/dvl-cat-\d+-[0-9a-f]+\.scope$")
-        show = subprocess.run(["systemctl", "--user", "show", "dvl0.slice", "-p", "MemoryMax",
-                               "-p", "MemorySwapMax"], capture_output=True, text=True).stdout
-        self.assertIn(f"MemoryMax={48 * 1024 ** 3}", show)
-        self.assertIn("MemorySwapMax=0", show)
 
 
 class Toolchain(unittest.TestCase):
@@ -334,6 +205,25 @@ class Toolchain(unittest.TestCase):
         self.assertEqual({"dafny", "verus", "cargo_verus", "verus_z3"} - set(both), set())
         with self.assertRaises(ValueError):
             common.toolchain("lean")
+
+    def test_dafny_and_verus_come_from_path(self):
+        """D78: the tools are the ones on PATH (resolved), not .toolchain lookups."""
+        import shutil
+        tc = common.toolchain(fresh=True)
+        for t in ("dafny", "verus"):
+            w = Path(shutil.which(t)).absolute()
+            self.assertEqual(tc[t], w.resolve() if w.is_symlink() else w)
+        self.assertEqual(tc["verus_z3"], tc["verus"].parent / "z3")
+
+    def test_a_tool_missing_from_path_is_refused(self):
+        code = ("import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"
+                "try:\n    common.toolchain('dafny')\nexcept common.ToolchainError as e:\n"
+                "    print('refused', 'PATH' in str(e))\n" % str(ROOT / "scripts"))
+        env = {k: v for k, v in os.environ.items() if k != "DVL_TOOLCHAIN_DIR"}
+        env["PATH"] = "/usr/bin:/bin"
+        p = subprocess.run([sys.executable, "-B", "-c", code], capture_output=True, text=True,
+                           env=env)
+        self.assertEqual(p.stdout.strip(), "refused True", p.stderr)
 
     def test_a_missing_install_is_refused(self):
         code = ("import sys; sys.path.insert(0, %r)\nfrom dvl import common\n"

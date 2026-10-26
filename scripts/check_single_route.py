@@ -55,6 +55,10 @@ ALLOWLIST = {
     "tests/sandbox/": "the sandbox suites: a fake docker that refuses",
     "tests/ci/test_ci_dv4.py": "this check's own cases plant the words",
     "scripts/check_single_route.py": "this check names the words",
+    "scripts/get_toolchain.sh": "`claude` copies the pinned Claude Code version file into the course's store "
+                                "and runs only its --version (Δ500); no session, no model call",
+    "tests/wrappers/test_get_toolchain_claude_static.py": "get_toolchain.sh claude's tests, on an "
+                                                          "invented version file (Δ500)",
 }
 
 CODE_EXT = (".py", ".sh", ".bash", ".rs", ".dfy", ".js", ".ts", ".mjs")

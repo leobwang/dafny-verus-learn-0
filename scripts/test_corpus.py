@@ -113,7 +113,6 @@ ID_CATALOG = {"dafny": re.compile(r"G(0[1-9]|1\d|2[0-2])[a-z]?"),
 ID_DELTA = {"dafny": re.compile(r"D-\d+"), "verus": re.compile(r"V-\d+")}   # D-01 or D-1
 ID_CONTROL = re.compile(r"C-\d+")
 MIN_CONTROLS = 6           # Δ106: at least 6 healthy decoys per language
-RESERVE_GB = 15            # CLAUDE.md §Resources: the free-memory reserve
 SHA = re.compile(r"[0-9a-f]{64}")
 TOP_KEYS = {"id", "lang", "half", "xclass", "kind", "title", "files", "plain_exit", "target",
             "expect"}
@@ -955,38 +954,18 @@ def select(fixtures, sels):
     return sorted(out, key=sort_key), unknown
 
 
-def mem_available_gb():
-    try:
-        with open("/proc/meminfo", encoding="ascii") as fh:
-            for line in fh:
-                if line.startswith("MemAvailable:"):
-                    return int(line.split()[1]) // 1048576
-    except (OSError, ValueError, IndexError):
-        pass
-    return None
-
-
 def preflight(langs, jobs):
-    """(ok, message): the toolchains of the langs check out, and memory holds
-    the caps that can run at once plus the reserve."""
+    """(ok, message): the toolchains of the langs are on PATH. No memory check:
+    memory is the host's and the user's (DELTAS Δ503, D78)."""
     from dvl import common
-    pins = common.load_pins()
     for lang in langs:
         try:
             common.toolchain(lang)
         except common.DvlError as e:
-            raise Refused(f"the pinned {lang} toolchain is not usable ({e}); install it with "
-                          f"scripts/get_toolchain.sh {lang}") from None
-    caps = [int(pins[lang]["mem_gb"]) for lang in langs]
-    need = (sum(caps) if jobs > 1 else max(caps)) + RESERVE_GB
-    have = mem_available_gb()
-    if have is None:
-        return False, "MemAvailable is unreadable (/proc/meminfo); no solver job was started"
-    if have < need:
-        return False, (f"{have} GB available, {need} GB needed (the solver caps that can run at "
-                       f"once plus the {RESERVE_GB} GB reserve, CLAUDE.md §Resources); no solver "
-                       "job was started")
-    return True, f"memory preflight: {have} GB available, {need} GB needed"
+            raise Refused(f"no usable {lang} ({e}); install the pinned {lang} and put it on "
+                          "PATH (README, Setup)") from None
+    note = common.trust_note()
+    return True, "toolchains on PATH" + (f"; {note}" if note else "")
 
 
 def author_gate():

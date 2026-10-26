@@ -1,7 +1,33 @@
 #!/usr/bin/env bash
-# get_toolchain.sh — install or verify the pinned Dafny / Verus toolchain.
+# get_toolchain.sh — install or verify the pinned Dafny / Verus toolchain, and
+# the course's own copy of the pinned Claude Code version file.
 #
-#   scripts/get_toolchain.sh dafny|verus [--check]
+#   scripts/get_toolchain.sh dafny|verus|claude [--check]
+#
+# Since DELTAS Δ503 (D78) the course tools do NOT use the `dafny` and `verus`
+# installs: they call the dafny and verus on PATH, which the learner provides
+# (README, Setup), and only warn when their versions differ from the pins
+# (D79). `dafny` and `verus` here are an optional helper for Linux x86-64: they
+# install the pinned vendor releases into .toolchain/, which the sandbox image
+# build (sandbox/build-images.sh) copies into its images and which a learner
+# may put on PATH (.toolchain/dafny-4.11.0/dafny and
+# .toolchain/verus-0.2026.09.27.3cf1832/verus-x86-linux). `claude` runs on
+# Linux and macOS.
+#
+# `claude` (Δ500) differs from the two verifiers: nothing is downloaded. The
+# pin is sandbox/apparatus.toml's [backend.claude] (version, binary, sha256;
+# FVH_APPARATUS names another apparatus file, as for fvh), never a constant
+# here. Claude Code's auto-updater deletes old version files from
+# ~/.local/share/claude/versions/, so the pin names a copy in the course's own
+# store, ~/.local/share/dafny-verus-learn-0/claude/versions/<version> (under
+# HOME, as fvh resolves every pinned binary; one copy for every checkout of the
+# course), which the updater never touches. `claude` copies the version file
+# of the pinned version from the updater's directory into the store, checks
+# the copy's sha256 against the pin and its `--version` line, and renames it
+# into place read-only (0555). With the copy in place it only verifies; the
+# store keeps every copy it installed, so a re-pin can be rolled back after
+# the updater has deleted the old file. `--check` verifies the copy alone. The
+# user's Claude Code settings and its auto-updater are left as they are.
 #
 # Contract (spec §8.3, §8.6, §11.1 row 19; design §14.5):
 #   * Downloads the pinned release asset into <repo>/.toolchain/ (gitignored),
@@ -31,6 +57,9 @@
 # Environment:
 #   DVL_TOOLCHAIN_DIR   install root (default <repo>/.toolchain); for tests.
 #   GITHUB_TOKEN/GH_TOKEN  optional, raises the GitHub API rate limit.
+#   HOME                the Claude store and the updater's directory lie under it.
+#   FVH_APPARATUS       the apparatus file `claude` reads (default
+#                       <repo>/sandbox/apparatus.toml).
 
 set -euo pipefail
 
@@ -80,7 +109,7 @@ PIN_RECORD=".get_toolchain.pin"   # written inside the install dir; not in the t
 log() { printf 'get_toolchain: %s\n' "$*" >&2; }
 die() { printf 'get_toolchain: REFUSED: %s\n' "$*" >&2; exit 1; }
 usage() {
-  printf 'usage: %s dafny|verus [--check]\n' "${0##*/}" >&2
+  printf 'usage: %s dafny|verus|claude [--check]\n' "${0##*/}" >&2
   exit 2
 }
 
@@ -128,7 +157,23 @@ assert_platform() {
   [[ $os == Linux && $arch == x86_64 ]] || die "pinned assets are linux x86_64 only (host: $os $arch)"
 }
 
-sha256_of() { sha256sum -- "$1" | cut -d' ' -f1; }
+# sha256sum (coreutils) where it exists, else macOS's shasum; the same output.
+if command -v sha256sum >/dev/null 2>&1; then SHA256=(sha256sum); else SHA256=(shasum -a 256); fi
+sha256_of() { "${SHA256[@]}" -- "$1" | cut -d' ' -f1; }
+
+# An exclusive lock on fd 9: flock(1) where it exists (util-linux), else the
+# same flock(2) taken by Python on the inherited descriptor (macOS); the lock
+# belongs to the open file description, so it outlives the Python process.
+lock_fd9() {
+  if command -v flock >/dev/null 2>&1; then flock 9; return; fi
+  python3 -I -c 'import fcntl; fcntl.flock(9, fcntl.LOCK_EX)'
+}
+
+# mv -T (GNU) where it exists; elsewhere a plain mv, safe because $2 was just
+# checked absent under the lock.
+move_into_place() {
+  if mv --version >/dev/null 2>&1; then mv -T -- "$1" "$2"; else mv -- "$1" "$2"; fi
+}
 
 # Prints the per-file manifest of tree $1: "<sha256>  ./<path>", sorted by path,
 # excluding the pin record. Fails if the tree holds anything but regular files
@@ -318,6 +363,86 @@ install_tool() {
   log "installed $final"
 }
 
+# ------------------------------------------------------- claude (Δ500) ----
+
+# The updater's directory and the course's store, both relative to HOME. The
+# apparatus file's [backend.claude] binary must be "~/$CLAUDE_STORE_REL/<version>".
+CLAUDE_UPSTREAM_REL=".local/share/claude/versions"
+CLAUDE_STORE_REL=".local/share/dafny-verus-learn-0/claude/versions"
+# The environment `--version` runs in: the switches fvh's transport sets
+# (fvh.backends.claude), so the check itself never updates anything.
+CLAUDE_ENV=(env -i PATH=/usr/bin:/bin LANG=C.UTF-8 TERM=dumb DISABLE_AUTOUPDATER=1
+            CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 DISABLE_TELEMETRY=1
+            DISABLE_ERROR_REPORTING=1)
+
+# Reads [backend.claude] into C_VERSION, C_BINARY, C_SHA256 (refuses a malformed pin).
+claude_pins() {
+  local app=${FVH_APPARATUS:-"$(dirname "$(script_dir)")/sandbox/apparatus.toml"} out
+  [[ -f $app ]] || die "no apparatus file at $app"
+  out=$(python3 - "$app" <<'PY'
+import sys, tomllib
+t = tomllib.load(open(sys.argv[1], "rb")).get("backend", {}).get("claude") or {}
+print("\n".join(str(t.get(k, "")) for k in ("version", "binary", "sha256")))
+PY
+  ) || die "$app: unreadable apparatus file"
+  { read -r C_VERSION; read -r C_BINARY; read -r C_SHA256; } <<<"$out"
+  [[ $C_VERSION =~ ^[0-9]+(\.[0-9]+)+$ ]] || die "$app: [backend.claude] version '${C_VERSION}' is not a version"
+  [[ $C_SHA256 =~ ^[0-9a-f]{64}$ ]] || die "$app: [backend.claude] sha256 is not 64 hex digits"
+  [[ $C_BINARY == "~/$CLAUDE_STORE_REL/$C_VERSION" ]] \
+    || die "$app: [backend.claude] binary is '$C_BINARY'; it must name the course's copy, ~/$CLAUDE_STORE_REL/$C_VERSION (never the updater's ~/$CLAUDE_UPSTREAM_REL/, which an auto-update deletes)"
+}
+
+# Verifies the version file $1: a regular file (no symlink), executable, the
+# pinned sha256, and `--version` printing "<version> (Claude Code)".
+verify_claude_file() {
+  local f=$1 got out
+  [[ -f $f && ! -L $f ]] || { log "not installed (or not a regular file): $f"; return 1; }
+  [[ -x $f ]] || { log "not executable: $f"; return 1; }
+  got=$(sha256_of "$f")
+  [[ $got == "$C_SHA256" ]] || { log "$f has sha256 $got, pinned $C_SHA256"; return 1; }
+  out=$("${CLAUDE_ENV[@]}" HOME="$HOME" "$f" --version 2>/dev/null | head -n 1) || true
+  [[ $out == "$C_VERSION (Claude Code)" ]] || { log "$f --version: '$out', pinned '$C_VERSION (Claude Code)'"; return 1; }
+}
+
+claude_main() {
+  local check=$1 store final src stage
+  [[ -n ${HOME:-} && $HOME == /* ]] || die "HOME is unset or not absolute"
+  need "${SHA256[0]}" python3
+  claude_pins
+  store="$HOME/$CLAUDE_STORE_REL" final="$HOME/$CLAUDE_STORE_REL/$C_VERSION"
+  if (( check )); then
+    verify_claude_file "$final" || die "--check failed for $final (install it with: scripts/get_toolchain.sh claude)"
+    log "verified $final"
+    printf '%s\n' "$final"
+    return 0
+  fi
+  mkdir -p -m 0755 "$store"
+  trap cleanup EXIT
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  exec 9>"$store/.lock"
+  lock_fd9 || die "cannot lock $store/.lock"
+  if [[ -e $final || -L $final ]]; then
+    verify_claude_file "$final" \
+      || die "existing copy $final fails verification; remove it and rerun (nothing was changed)"
+    log "already installed and verified: $final"
+    printf '%s\n' "$final"
+    return 0
+  fi
+  src="$HOME/$CLAUDE_UPSTREAM_REL/$C_VERSION"
+  [[ -f $src ]] || die "Claude Code $C_VERSION is not in ~/$CLAUDE_UPSTREAM_REL/ (the updater may have deleted it) and the store has no copy: re-pin to a version that is there (VERSIONS.md §1.4), or put $C_VERSION back with \`claude install $C_VERSION\` (which also moves the \`claude\` link) and rerun"
+  stage=$(mktemp "$store/.staging-$C_VERSION.XXXXXX")
+  CLEANUP+=("$stage")
+  log "copying $src"
+  cp -- "$src" "$stage" || die "cannot copy $src"
+  chmod 0555 "$stage"
+  verify_claude_file "$stage" || die "the copy of $src fails verification (nothing was installed)"
+  [[ ! -e $final ]] || die "$final appeared during install"
+  move_into_place "$stage" "$final"
+  log "installed $final"
+  printf '%s\n' "$final"
+}
+
 # ---------------------------------------------------------------- main -----
 
 CLEANUP=()
@@ -327,13 +452,17 @@ main() {
   local tool="" check=0 a
   for a in "$@"; do
     case $a in
-      dafny|verus) [[ -z $tool ]] || usage; tool=$a ;;
+      dafny|verus|claude) [[ -z $tool ]] || usage; tool=$a ;;
       --check) check=1 ;;
       -h|--help) usage ;;
       *) usage ;;
     esac
   done
   [[ -n $tool ]] || usage
+  if [[ $tool == claude ]]; then
+    claude_main "$check"
+    return 0
+  fi
 
   select_tool "$tool"
   assert_platform

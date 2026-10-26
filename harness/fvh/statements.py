@@ -81,6 +81,25 @@ LEDGER = "research/unseals.jsonl"
 GENESIS = "0" * 64
 TRUTH_FILE = "sandbox/truth.toml"
 AGE = "~/.local/bin/age"
+
+
+def _platform():
+    """This host's platform id, as scripts/dvl/host.py current() names it."""
+    u = os.uname()
+    if u.sysname == "Linux" and u.machine == "x86_64":
+        return "linux-x86_64"
+    if u.sysname == "Darwin" and u.machine == "arm64":
+        return "macos-arm64"
+    return f"unsupported-{u.sysname.lower()}-{u.machine}"
+
+
+def _pinned(value, platform=None):
+    """A per-platform pin here (dvl.host.pinned's rule): a table {platform id:
+    value} gives this platform's entry; a plain value holds on linux-x86_64 only."""
+    platform = platform or _platform()
+    if isinstance(value, dict):
+        return value.get(platform)
+    return value if platform == "linux-x86_64" else None
 MAX_PLAIN = 64 << 20
 _CARD = re.compile(r"[a-z0-9][a-z0-9-]{0,63}")
 _SHA = re.compile(r"[0-9a-f]{64}")
@@ -376,7 +395,7 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
             if pin is None:
                 raise StatementsRefused(f"{rel_sp}: no [[lab]] of {TRUTH_FILE} pins the age "
                                         "binary and key of its recipient")
-            binary, want = Path(os.path.expanduser(AGE)), pin.get("age_sha256")
+            binary, want = Path(os.path.expanduser(AGE)), _pinned(pin.get("age_sha256"))
         else:
             binary, want = Path(age[0]), age[1]
         if not binary.is_file() or _sha(binary.read_bytes()) != want:

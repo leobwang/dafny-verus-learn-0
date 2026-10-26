@@ -427,8 +427,8 @@ def acceptance_tests(target, *, root=None):
 # =====================================================================================
 
 def uv_binary():
-    """The host's uv (the pinned host tool, VERSIONS.md §1.4; harness/pyproject.toml's
-    required-version refuses any other version)."""
+    """The host's uv (VERSIONS.md §1.4; harness/pyproject.toml's required-version
+    refuses one older than 0.11.0, DELTAS Δ503)."""
     for cand in (shutil.which("uv"), str(Path.home() / ".local" / "bin" / "uv")):
         if cand and Path(cand).is_file() and os.access(cand, os.X_OK):
             return str(Path(cand).resolve())

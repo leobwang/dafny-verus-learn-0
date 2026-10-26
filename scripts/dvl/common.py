@@ -46,28 +46,27 @@ Plumbing:
   load_pins()          the parsed scripts/dvl/pins.toml ([dafny] and [verus]):
                        the ONE place pinned flags, limits, caps and message
                        wordings live (spec §3.1 rule 6).
-  toolchain(tool)      pinned paths, after scripts/get_toolchain.sh <tool> --check.
+  toolchain(tool)      the tool paths: `dafny` and `verus` from PATH (DELTAS Δ503,
+                       D78), each version compared with the pins once per
+                       process; a mismatch warns and marks the run untrusted
+                       (D79: untrusted(), trust_note()). With DVL_TOOLCHAIN_DIR
+                       set (the sandbox images), the pinned install there.
   run_capped(argv, mem_gb, timeout_s, env, cwd)
-                       runs one solver job under `systemd-run --user --scope
-                       --slice=dvl0.slice -p MemoryMax=<cap> -p MemorySwapMax=0
-                       -p RuntimeMaxSec=<timeout_s + grace>` (CLAUDE.md
-                       §Resources; the slice's own MemoryMax=48G bounds every
-                       capped job of the user together, SOLVER_BUDGET_GB),
-                       with a cross-process concurrency limit per
+                       runs one tool job as a plain process (D78: the course
+                       applies no memory management; memory is the host's and
+                       the user's), with a cross-process concurrency limit per
                        pool (env DVL_<POOL>_JOBS, default from the pins: 1), a
-                       scrubbed environment and a wall-clock safety kill that
-                       systemd enforces even when the Python parent dies. A
-                       lifeline watcher stops the whole scope as soon as the
-                       parent dies (SIGKILL, Ctrl-C, a crash) and, after a
-                       normal exit, any process the job left behind in it, so
-                       no solver outlives its caller. Returns (exit_code,
-                       stdout_path, stderr_path); callers map 137/143 to
-                       killed(memory). Inside a sandbox container
-                       (DVL_CAP=container-verify or container-agent, set by
-                       scripts/mksandbox-run) it runs the job without
-                       systemd, only when the container's own cgroup
-                       memory.max is within the bound pins.toml [container]
-                       gives (see CAP_MODES below; DV4-PLAN §5.9).
+                       scrubbed environment, the Δ58 wall-clock kill (124) and a
+                       lifeline watcher that kills the job's process group when
+                       the caller dies, so no solver outlives its caller.
+                       Returns (exit_code, stdout_path, stderr_path); callers
+                       map 137/143 to killed(memory). Inside a sandbox
+                       container (DVL_CAP=container-verify or container-agent,
+                       set by scripts/mksandbox-run) it runs the job only when
+                       the container's own cgroup memory.max is within the
+                       bound pins.toml [container] gives (see CAP_MODES below;
+                       DV4-PLAN §5.9): container configuration, not course-side
+                       management.
 
   hole_regions(text, item_id=None), strip_regions(text, item_id)
                        the `@hole-begin`/`@hole-end` learner regions of a
@@ -80,7 +79,8 @@ Environment:
                      (default /tmp/dvl-<uid>; never inside a course tree).
   DVL_DAFNY_JOBS, DVL_VERUS_JOBS
                      concurrent jobs per pool (default 1 each, from the pins).
-  DVL_TOOLCHAIN_DIR  passed through to scripts/get_toolchain.sh (tests only).
+  DVL_TOOLCHAIN_DIR  the pinned install to use instead of PATH (the sandbox
+                     images, tests), through scripts/get_toolchain.sh --check.
 """
 
 from __future__ import annotations
@@ -89,12 +89,15 @@ import copy
 import dataclasses
 import fcntl
 import functools
+import hashlib
 import json
 import math
 import os
 import re
 import shlex
+import shutil
 import signal
+import sys
 import subprocess
 import tempfile
 import time
@@ -102,6 +105,8 @@ import tomllib
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from dvl import host as plat
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = REPO_ROOT / "scripts"
@@ -114,11 +119,6 @@ SEVERITIES = ("error", "warning", "info", "hint", "related")
 KILLED_EXITS = (137, 143)     # SIGKILL / SIGTERM: a memory kill, never a verdict
 WALL_CLOCK_EXIT = 124         # dvl's own wall-clock safety kill (Δ58), as timeout(1) reports
 TIMEOUT_EXIT = WALL_CLOCK_EXIT  # the same code under the name dvl.verus reads
-# Seconds systemd waits past a job's timeout_s before it stops the scope itself
-# (RuntimeMaxSec). The parent kills the scope at timeout_s and reports 124; the
-# systemd net only fires when the parent is gone (SIGKILL, Ctrl-C, a crash), so
-# an orphaned job never outlives its wall-clock limit by more than this.
-RUNTIME_GRACE_S = 30
 
 
 class DvlError(Exception):
@@ -245,8 +245,83 @@ def load_pins():
 
 
 # --- toolchain ---------------------------------------------------------------------------
+#
+# DELTAS Δ503 (D78, D79): the learner provides `dafny` (4.11.0) and `verus`
+# (0.2026.09.27.3cf1832) on PATH; the wrappers call them as plain processes.
+# At first use each tool's version is compared with the pins; a mismatch is a
+# WARNING and the run continues, but everything whose meaning depends on the
+# exact toolchain (the done gate's verdict, pins, first tries, brittleness
+# figures) says it is UNTRUSTED (untrusted(), trust_note()). The Dafny solver
+# is the Z3 4.12.1 its release zip bundles next to it (dafny/z3/bin/), else a
+# `z3-4.12.1` or `z3` on PATH (a `dotnet tool` install brings none); its version
+# is checked the same way. With DVL_TOOLCHAIN_DIR set (the sandbox images and
+# their tests) the pinned install under that directory is used instead, after
+# scripts/get_toolchain.sh <tool> --check, as before.
+#
+# Each Z3 bundled with Dafny (pins.toml [dafny.solvers]) is also compared by
+# its sha256, against the release zip's own binary for this platform (one pin
+# per supported platform, dvl.host.current(); Δ503). That comparison is part of
+# toolchain("dafny") (dafny_solvers()), so `vcheck --versions` and every run
+# see the same mismatches.
 
 _TOOLCHAIN_CACHE: dict[str, dict[str, Path]] = {}
+_SOLVERS: dict[str, Path] = {}        # bundled solver name -> the binary used
+_MISMATCH: dict[str, list] = {}       # tool -> ["<what>: found …, pinned …", …]
+_WARNED: set = set()
+
+
+def pinned_solver_sha256(entry, platform=None):
+    """A bundled Dafny solver's pinned sha256 on `platform` (default: this host,
+    dvl.host.current()): pins.toml [dafny.solvers] keeps one per supported
+    platform, the binary in that platform's pinned release zip. None when the
+    pins name none for the platform."""
+    return plat.pinned(entry.get("sha256"), platform)
+
+
+def solver_hash_mismatch(name, path, entry, platform=None):
+    """None when the solver `name` at `path` is the pinned binary for `platform`,
+    else the mismatch line (D79: a warning and UNTRUSTED, never a refusal)."""
+    platform = platform or plat.current()
+    digest = hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    want = pinned_solver_sha256(entry, platform)
+    if digest == want:
+        return None
+    if want is None:
+        return f"the solver {name} at {path} has sha256 {digest}; no sha256 is pinned for {platform}"
+    return f"the solver {name} at {path} has sha256 {digest}, not the pinned {want} ({platform})"
+
+
+def _locate_solver(root, entry):
+    """A bundled solver's binary: in the release zip's layout under `root`, else
+    on PATH by its file name (z3-<version>); None when neither exists."""
+    p = Path(root) / entry["path"]
+    if p.is_file():
+        return p
+    found = shutil.which(Path(entry["path"]).name)
+    return Path(found).resolve() if found else None
+
+
+def _bundled_solvers(root, pinned_z3, pins):
+    """({name: path} of the bundled solvers found, [mismatch, …]): the pinned
+    one is the solver toolchain() resolved; a missing other one is no
+    mismatch (dafny.solver_path() refuses it when a run names it)."""
+    paths, bad = {}, []
+    for name, entry in (pins.get("solvers") or {}).items():
+        path = Path(pinned_z3) if entry["path"] == pins["solver"] else _locate_solver(root, entry)
+        if path is None:
+            continue
+        paths[name] = path
+        m = solver_hash_mismatch(name, path, entry)
+        if m:
+            bad.append(m)
+    return paths, bad
+
+
+def dafny_solvers():
+    """{name: path} of the Z3 binaries bundled with Dafny that toolchain("dafny")
+    found and checked (their hash mismatches are in untrusted())."""
+    toolchain("dafny")
+    return dict(_SOLVERS)
 
 
 def _check_tool(tool):
@@ -274,24 +349,154 @@ def _check_tool(tool):
     for k, v in out.items():
         if not v.exists():
             raise ToolchainError(f"pinned path {k} does not exist: {v}")
+    bad = []                              # the pinned install: verified by its own check,
+    if tool == "dafny":                   # its bundled solvers compared as on PATH
+        found, bad = _bundled_solvers(root, out["dafny_z3"], pins)
+        _SOLVERS.clear()
+        _SOLVERS.update(found)
+    _MISMATCH[tool] = bad
+    _warn(tool, bad)
     return out
 
 
-def toolchain(tool=None, fresh=False):
-    """Pinned paths after `scripts/get_toolchain.sh <tool> --check`.
+def _first_line(argv, env=None):
+    try:
+        p = subprocess.run(argv, capture_output=True, text=True, timeout=120, env=env,
+                           stdin=subprocess.DEVNULL)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    lines = (p.stdout or "").strip().splitlines()
+    return lines[0].strip() if p.returncode == 0 and lines else None
 
-    tool "dafny" → {dafny, dafny_root, dafny_z3}; "verus" → {verus, verus_root,
-    verus_z3, cargo_verus}; None → both. The check runs once per process unless
-    `fresh` (a gate re-checks the tree digest first, Δ10). Raises ToolchainError."""
+
+def rust_toolchain():
+    """The Rust toolchain Verus's jobs run with: the pinned one, for this host's triple."""
+    pinned = load_pins()["verus"]["rust_toolchain"]
+    return pinned.split("-", 1)[0] + "-" + plat.rust_host_triple()
+
+
+def _on_path(tool):
+    found = shutil.which(tool)
+    if found is None:
+        raise ToolchainError(f"`{tool}` is not on PATH; install the pinned {tool} and put it on "
+                             "PATH (README, Setup)")
+    p = Path(found).absolute()
+    # A symlinked command (/usr/local/bin/dafny → the install) is followed to the
+    # install, whose layout locates the bundled solvers; a PATH entry naming the
+    # install directory itself keeps its spelling, as the paths in outputs do.
+    return p.resolve() if p.is_symlink() else p
+
+
+def _dafny_solver(binary, pins):
+    """The Z3 for --solver-path: the release zip's bundled one, else one on PATH."""
+    for c in (binary.parent.parent / pins["solver"], binary.parent / "z3" / "bin" /
+              Path(pins["solver"]).name):
+        if c.is_file():
+            return c
+    for name in (Path(pins["solver"]).name, "z3"):
+        found = shutil.which(name)
+        if found:
+            return Path(found).resolve()
+    raise ToolchainError(f"no Z3 for Dafny: neither {Path(pins['solver']).name} next to "
+                         f"{binary} (the release zip's layout) nor `z3-4.12.1` or `z3` on PATH "
+                         "(README, Setup)")
+
+
+def _path_tool(tool):
+    pins = load_pins()[tool]
+    bad = []
+    if tool == "dafny":
+        binary = _on_path("dafny")
+        root = binary.parent.parent if binary.parent.name == "dafny" else binary.parent
+        z3 = _dafny_solver(binary, pins)
+        got = _first_line([str(binary), "--version"])
+        if got != pins["version_output"]:
+            bad.append(f"dafny --version: found {got!r}, pinned {pins['version_output']!r}")
+        out = {"dafny": binary, "dafny_root": root, "dafny_z3": z3}
+        found, sbad = _bundled_solvers(root, z3, pins)
+        _SOLVERS.clear()
+        _SOLVERS.update(found)
+    else:
+        binary = _on_path("verus")
+        root = binary.parent
+        z3 = root / "z3"
+        env = dict(os.environ, RUSTUP_TOOLCHAIN=rust_toolchain())
+        raw = None
+        try:
+            p = subprocess.run([str(binary), "--version", "--output-json"], capture_output=True,
+                               text=True, timeout=120, env=env, stdin=subprocess.DEVNULL)
+            raw = json.loads(p.stdout)["verus"]
+            got = f"{raw.get('version')} {raw.get('commit')}"
+        except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError):
+            got = None
+        want = f"{pins['version']} {pins['commit']}"
+        if got != want:
+            bad.append(f"verus --version: found {got!r}, pinned {want!r}")
+        if not z3.is_file():
+            raise ToolchainError(f"no z3 next to {binary} (the Verus release layout)")
+        out = {"verus": binary, "verus_root": root, "verus_z3": z3,
+               "cargo_verus": root / "cargo-verus"}
+    zv = _first_line([str(z3), "--version"])
+    if zv != pins["solver_version"]:
+        bad.append(f"{z3.name} --version: found {zv!r}, pinned {pins['solver_version']!r}")
+    if tool == "dafny":
+        bad += sbad
+    _MISMATCH[tool] = bad
+    _warn(tool, bad)
+    return out
+
+
+def _warn(tool, bad):
+    if bad and tool not in _WARNED:
+        _WARNED.add(tool)
+        print(f"dvl: WARNING: {tool} is not the pinned toolchain ({'; '.join(bad)}). The run "
+              "continues, but its verdicts, pins, first tries and brittleness figures are "
+              "UNTRUSTED (DELTAS Δ503, D79).", file=sys.stderr)
+
+
+def toolchain(tool=None, fresh=False):
+    """The tool paths. tool "dafny" → {dafny, dafny_root, dafny_z3}; "verus" →
+    {verus, verus_root, verus_z3, cargo_verus}; None → both. From PATH (D78),
+    with the version check of D79 (a mismatch warns once and marks the run
+    untrusted); with DVL_TOOLCHAIN_DIR set, the pinned install there after
+    get_toolchain.sh --check. Once per process unless `fresh` (the done gate
+    re-checks, Δ10). Raises ToolchainError when a tool is missing."""
     tools = ("dafny", "verus") if tool is None else (tool,)
     out = {}
     for t in tools:
         if t not in REQUIRED_PINS:
             raise ValueError(f"unknown tool {t!r}")
         if fresh or t not in _TOOLCHAIN_CACHE:
-            _TOOLCHAIN_CACHE[t] = _check_tool(t)
+            _TOOLCHAIN_CACHE[t] = _check_tool(t) if os.environ.get("DVL_TOOLCHAIN_DIR") \
+                else _path_tool(t)
         out.update(_TOOLCHAIN_CACHE[t])
     return out
+
+
+def note_mismatch(tool, what):
+    """Record one more way `tool` differs from the pins (a solver's hash, say):
+    a warning, never a refusal (D79)."""
+    _MISMATCH.setdefault(tool, [])
+    if what not in _MISMATCH[tool]:
+        _MISMATCH[tool].append(what)
+        print(f"dvl: WARNING: {what}; this run's results are UNTRUSTED (DELTAS Δ503, D79).",
+              file=sys.stderr)
+
+
+def untrusted(tool=None):
+    """{tool: [mismatch, …]} of the tools checked so far whose version is not the
+    pinned one (D79); only `tool`'s when given. Empty: every checked tool is pinned."""
+    return {t: list(v) for t, v in _MISMATCH.items() if v and (tool is None or t == tool)}
+
+
+def trust_note(tool=None):
+    """'' when trusted, else the one-line UNTRUSTED note every exact-behaviour
+    output carries (D79)."""
+    u = untrusted(tool)
+    if not u:
+        return ""
+    return ("UNTRUSTED (toolchain version mismatch: "
+            + "; ".join(m for v in u.values() for m in v) + ")")
 
 
 # --- scratch ------------------------------------------------------------------------------
@@ -299,6 +504,8 @@ def toolchain(tool=None, fresh=False):
 def scratch_root():
     """The scratch root: $DVL_SCRATCH, else /tmp/dvl-<uid>. Created 0700."""
     root = Path(os.environ.get("DVL_SCRATCH") or f"/tmp/dvl-{os.getuid()}").absolute()
+    if plat.is_macos():
+        root = root.resolve()       # /tmp is /private/tmp there: one spelling for every tool
     try:
         root.resolve().relative_to(REPO_ROOT.resolve())
     except ValueError:
@@ -317,12 +524,14 @@ def scratch_dir(prefix):
     return Path(tempfile.mkdtemp(prefix=f"{prefix}-{stamp}-", dir=runs))
 
 
-# --- the capped runner -------------------------------------------------------------------------
+# --- the job runner ----------------------------------------------------------------------------
 
 def default_env():
     """A minimal environment for a solver job: nothing that could steer a verifier."""
-    return {"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "LC_ALL": "C.UTF-8",
-            "HOME": os.environ.get("HOME", "/tmp")}
+    env = plat.default_env(os.environ.get("HOME", "/tmp"))
+    if os.environ.get("DOTNET_ROOT"):          # a `dotnet tool` Dafny finds its runtime here
+        env["DOTNET_ROOT"] = os.environ["DOTNET_ROOT"]
+    return env
 
 
 def pool_of(argv):
@@ -379,244 +588,149 @@ class _Slot:
             self.fd = None
 
 
-# The shared solver budget (CLAUDE.md §Resources: at most 48 GB of solver memory across all
-# lanes, agents and scripts at once). Every capped job's scope starts inside this one user
-# slice, whose own MemoryMax bounds all of them together, while each scope keeps its own
-# job cap. An outer `systemd-run --user --scope` around a caller does not contain a job:
-# systemd-run starts each scope as a sibling, so the shared bound must be the parent slice.
-SOLVER_SLICE = "dvl0.slice"
-SOLVER_BUDGET_GB = 48
-
-
-@functools.lru_cache(maxsize=1)
-def _slice_ready():
-    """Set the shared solver slice's bound (MemoryMax=SOLVER_BUDGET_GB, MemorySwapMax=0,
-    runtime only: no root privileges, no unit file) and check that it took. Once per process;
-    otherwise CapError (a solver never runs outside the shared bound)."""
-    want = SOLVER_BUDGET_GB * 1024 ** 3
+def _killpg(pid):
     try:
-        p = subprocess.run(["systemctl", "--user", "set-property", "--runtime", SOLVER_SLICE,
-                            f"MemoryMax={SOLVER_BUDGET_GB}G", "MemorySwapMax=0"],
-                           capture_output=True, text=True, timeout=60)
-        if p.returncode != 0:
-            msg = (p.stderr.strip().splitlines() or ["no message"])[-1]
-            raise CapError(f"systemctl --user set-property {SOLVER_SLICE} failed (exit "
-                           f"{p.returncode}: {msg}); refusing to run a solver outside the "
-                           f"shared {SOLVER_BUDGET_GB} GB budget")
-        q = subprocess.run(["systemctl", "--user", "show", SOLVER_SLICE, "-p", "MemoryMax",
-                            "-p", "MemorySwapMax"], capture_output=True, text=True, timeout=60)
-    except (OSError, subprocess.TimeoutExpired) as e:
-        raise CapError(f"systemctl is unavailable ({e}); refusing to run a solver outside the "
-                       f"shared {SOLVER_BUDGET_GB} GB budget") from None
-    got = dict(line.split("=", 1) for line in q.stdout.splitlines() if "=" in line)
-    try:
-        mem, swap = int(got.get("MemoryMax", "")), int(got.get("MemorySwapMax", ""))
-    except ValueError:
-        mem = swap = None
-    if q.returncode != 0 or mem is None or not 0 < mem <= want or swap != 0:
-        raise CapError(f"{SOLVER_SLICE} reports MemoryMax={got.get('MemoryMax')} and "
-                       f"MemorySwapMax={got.get('MemorySwapMax')}, not at most "
-                       f"{SOLVER_BUDGET_GB}G and 0; refusing to run a solver outside the shared "
-                       "budget")
-    return True
-
-
-@functools.lru_cache(maxsize=1)
-def _cap_works():
-    """True once a capped no-op scope has run in the solver slice; otherwise CapError
-    (never uncapped)."""
-    _slice_ready()
-    try:
-        p = subprocess.run(["systemd-run", "--user", "--scope", "--quiet", "--collect",
-                            f"--slice={SOLVER_SLICE}", "-p", "MemoryMax=64M",
-                            "-p", "MemorySwapMax=0", "--", "true"],
-                           capture_output=True, text=True, timeout=60)
-    except (OSError, subprocess.TimeoutExpired) as e:
-        raise CapError(f"systemd-run is unavailable ({e}); refusing to run a solver uncapped") from None
-    if p.returncode != 0:
-        msg = (p.stderr.strip().splitlines() or ["no message"])[-1]
-        raise CapError(f"systemd-run --user --scope failed (exit {p.returncode}: {msg}); "
-                       "refusing to run a solver uncapped")
-    return True
-
-
-def cap_argv(mem_gb, unit, env, runtime_max_s=None):
-    """The cap wrapper in front of every solver command. `runtime_max_s` (whole
-    seconds, rounded up) makes systemd stop the scope after that long, whoever
-    is still waiting for it (Δ58: the net holds when the parent dies)."""
-    gb = float(mem_gb)
-    if not gb > 0:
-        raise ValueError(f"memory cap must be positive, not {mem_gb!r}")
-    mem = f"{int(gb)}G" if gb.is_integer() else f"{int(gb * 1024)}M"
-    props = ["-p", f"MemoryMax={mem}", "-p", "MemorySwapMax=0"]
-    if runtime_max_s is not None:
-        secs = math.ceil(float(runtime_max_s))
-        if secs < 1:
-            raise ValueError(f"runtime limit must be at least 1 s, not {runtime_max_s!r}")
-        props += ["-p", f"RuntimeMaxSec={secs}"]
-    return (["systemd-run", "--user", "--scope", "--quiet", "--collect", f"--unit={unit}",
-             f"--slice={SOLVER_SLICE}"]
-            + props + ["--", "env", "-i"] + [f"{k}={v}" for k, v in sorted(env.items())])
-
-
-def run_capped(argv, mem_gb, timeout_s, env=None, cwd=None, *, pool=None, out_dir=None,
-               grace_s=RUNTIME_GRACE_S):
-    """Run one solver job under the memory cap. Returns (exit_code, stdout_path,
-    stderr_path).
-
-    - The job runs as `systemd-run --user --scope --slice=dvl0.slice
-      -p MemoryMax=<mem_gb>G -p MemorySwapMax=0 -p RuntimeMaxSec=<timeout_s +
-      grace_s> -- env -i <env> <argv>`: one cgroup holds the tool and every
-      solver it starts, and every such scope of this user lies in the slice
-      dvl0.slice, whose MemoryMax=48G and MemorySwapMax=0 (set per user, at
-      runtime, before the first job: _slice_ready) bound all capped jobs
-      together (CLAUDE.md §Resources). If either bound cannot be applied,
-      CapError.
-    - `env` is the job's COMPLETE environment (default: default_env()); nothing
-      else from the caller's environment reaches the tool.
-    - At most jobs(pool) jobs of a pool run at once across all processes of this
-      user (pool defaults to pool_of(argv)); a caller waits for a free slot.
-    - After `timeout_s` seconds the whole scope is killed and 124 is returned
-      (the Δ58 safety net: a failure, never a verdict). A signal death is
-      returned as 128 + signal (SIGKILL 137, SIGTERM 143): killed(memory),
-      unless it came at or after `timeout_s` (then it is the wall-clock net:
-      124).
-    - No orphan: a lifeline watcher (_lifeline, a detached `sh` in its own
-      session, outside the scope and its cap) holds the read end of a pipe
-      whose write end only this process holds. When the job returns, the
-      parent writes `done` and the watcher kills the scope once (a process
-      the job left behind, such as a solver whose driver exited, dies with
-      it). When the parent dies first (SIGKILL, a crash, Ctrl-C), the pipe
-      reaches EOF with nothing written and the watcher kills the scope at
-      once, retrying for LIFELINE_RETRY_S while systemd-run may still be
-      registering it. An exception in the parent (KeyboardInterrupt) kills
-      the scope directly too. systemd's RuntimeMaxSec = timeout_s + grace_s
-      stays as the last net, for the case where the watcher dies with the
-      parent (a kill of the whole process tree).
-    - stdout and stderr go to files in `out_dir` (default: a fresh scratch dir),
-      next to cmd.txt (the argv) and exit.txt.
-    """
-    if not argv:
-        raise ValueError("empty argv")
-    if not float(timeout_s) > 0 or float(grace_s) < 0:
-        raise ValueError(f"timeout_s must be positive and grace_s non-negative, not "
-                         f"{timeout_s!r}, {grace_s!r}")
-    mode = cap_mode()
-    if mode != "host":
-        return _run_in_container(argv, mem_gb, timeout_s, env, cwd, pool=pool, out_dir=out_dir,
-                                 mode=mode)
-    _cap_works()
-    env = default_env() if env is None else dict(env)
-    out = Path(out_dir) if out_dir else scratch_dir(f"job-{pool_of(argv)}")
-    out.mkdir(parents=True, exist_ok=True)
-    cwd = Path(cwd) if cwd else out
-    stdout_path, stderr_path = out / "stdout.txt", out / "stderr.txt"
-    unit = f"dvl-{pool_of(argv)}-{os.getpid()}-{uuid.uuid4().hex[:12]}"
-    full = cap_argv(mem_gb, unit, env, runtime_max_s=float(timeout_s) + float(grace_s)) \
-        + [str(a) for a in argv]
-    (out / "cmd.txt").write_text(shlex.join(str(a) for a in argv) + "\n", encoding="utf-8")
-    pool = pool or pool_of(argv)
-    with _Slot(pool, jobs(pool)):
-        lifeline = _lifeline(unit)
-        finished = False
-        try:
-            with open(stdout_path, "wb") as so, open(stderr_path, "wb") as se:
-                started = time.monotonic()
-                proc = None
-                try:
-                    proc = subprocess.Popen(full, stdout=so, stderr=se,
-                                            stdin=subprocess.DEVNULL, cwd=cwd,
-                                            start_new_session=True)
-                    rc = proc.wait(timeout=timeout_s)
-                    timed_out = False
-                except subprocess.TimeoutExpired:
-                    timed_out = True
-                    _kill_scope(proc, unit)
-                    rc = proc.wait()
-                except BaseException:
-                    if proc is None:
-                        finished = True     # nothing started: the watcher has nothing to stop
-                    else:
-                        _kill_scope(proc, unit)
-                    raise
-                elapsed = time.monotonic() - started
-            finished = True
-        finally:
-            _cut_lifeline(lifeline, finished)
-    if rc < 0:
-        rc = 128 - rc
-    if timed_out or (rc in KILLED_EXITS and elapsed >= float(timeout_s)):
-        rc = WALL_CLOCK_EXIT   # the parent's kill, or systemd's RuntimeMaxSec net
-    (out / "exit.txt").write_text(f"{rc}\n", encoding="utf-8")
-    return rc, stdout_path, stderr_path
-
-
-def _kill_scope(proc, unit):
-    """Kill every process of the job: the scope's cgroup, then its process group."""
-    subprocess.run(["systemctl", "--user", "kill", "--signal=SIGKILL", f"{unit}.scope"],
-                   capture_output=True, timeout=30)
-    try:
-        os.killpg(proc.pid, signal.SIGKILL)
+        os.killpg(pid, signal.SIGKILL)
     except (ProcessLookupError, PermissionError):
         pass
 
 
-# How long a watcher whose parent died keeps trying to kill a scope that is not
-# (yet) loaded: systemd-run registers it within milliseconds of its start.
-LIFELINE_RETRY_S = 10
-# The watcher (POSIX sh; $1 = the unit, $2 = tries at 0.1 s). `done` on stdin:
-# the job returned, so kill the scope once (stragglers). EOF with nothing read:
-# the parent died, so kill the scope now and again while it still exists, and
-# wait for it to appear if it was not loaded yet (once seen and gone: done).
+# The host lifeline (POSIX sh; $1 = the job's process group): `done` on stdin
+# after a normal return kills the group once (stragglers, such as a solver
+# whose driver exited); EOF with nothing read (the parent died: SIGKILL,
+# Ctrl-C, a crash) kills it at once. `kill -s KILL -- -<pgid>` is the POSIX
+# form, which dash (Ubuntu's /bin/sh) and macOS's sh both accept.
 _LIFELINE_SH = r"""
-unit="$1.scope"; tries="$2"
-if IFS= read -r line && [ "$line" = done ]; then
-  systemctl --user kill --signal=SIGKILL "$unit" >/dev/null 2>&1
-  exit 0
-fi
-seen=0; i=0
-while [ "$i" -lt "$tries" ]; do
-  if systemctl --user kill --signal=SIGKILL "$unit" >/dev/null 2>&1; then
-    seen=1
-  elif [ "$seen" = 1 ]; then
-    exit 0
-  fi
-  sleep 0.1
-  i=$((i + 1))
-done
+pgid="$1"
+IFS= read -r line
+kill -s KILL -- "-$pgid" >/dev/null 2>&1
 exit 0
 """
 
 
-def _lifeline(unit):
-    """Start the watcher of `unit` (see run_capped) and return the write end of
-    its pipe. `setsid -f` detaches it at once (its own session, re-parented),
-    so neither a signal to this process group nor a kill of this process's
-    children reaches it. Both pipe ends are close-on-exec here, so no other
-    child of this process (the job included) holds the write end."""
+def _lifeline(pgid):
+    """Start the watcher of process group `pgid` and return the write end of its
+    pipe. It runs detached (its own session, re-parented), so neither a signal to
+    this process group nor a kill of this process's children reaches it; both
+    pipe ends are close-on-exec here, so no other child holds the write end."""
     r, w = os.pipe()
     try:
-        subprocess.run(["setsid", "-f", "sh", "-c", _LIFELINE_SH, f"dvl-lifeline-{unit}", unit,
-                        str(int(LIFELINE_RETRY_S * 10))],
+        subprocess.run(plat.detach_argv() + ["sh", "-c", _LIFELINE_SH, f"dvl-lifeline-{pgid}",
+                                             str(pgid)],
                        stdin=r, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                        close_fds=True, check=True, timeout=30)
     except (OSError, subprocess.SubprocessError) as e:
         os.close(w)
-        raise CapError(f"cannot start the lifeline watcher of a capped job ({e}); refusing to "
-                       "run a solver that could outlive its caller") from None
+        raise DvlError(f"cannot start the lifeline watcher of a job ({e}); refusing to run a "
+                       "solver that could outlive its caller") from None
     finally:
         os.close(r)
     return w
 
 
+def run_capped(argv, mem_gb, timeout_s, env=None, cwd=None, *, pool=None, out_dir=None):
+    """Run one tool job. Returns (exit_code, stdout_path, stderr_path).
+
+    On the host (D78) the job is a plain process: the course applies no memory
+    management (memory is the host's and the user's; `mem_gb` is read only by
+    the sandbox's container modes, below). What stays:
+    - `env` is the job's COMPLETE environment (default: default_env()).
+    - At most jobs(pool) jobs of a pool run at once across all processes of this
+      user (DVL_<POOL>_JOBS; pool defaults to pool_of(argv)).
+    - After `timeout_s` seconds the job's process group is killed and 124 is
+      returned (the Δ58 wall-clock net: a failure, never a verdict). A signal
+      death is 128 + signal; 137/143 (SIGKILL/SIGTERM, e.g. the host's OOM
+      killer) is killed(memory), never a verdict.
+    - No orphan: the job runs in its own process group, and a detached lifeline
+      watcher kills that group when the job returns (stragglers) or when this
+      process dies first.
+    - stdout and stderr go to files in `out_dir` (default: a fresh scratch dir),
+      next to cmd.txt (the argv) and exit.txt."""
+    if not argv:
+        raise ValueError("empty argv")
+    if not float(timeout_s) > 0:
+        raise ValueError(f"timeout_s must be positive, not {timeout_s!r}")
+    mode = cap_mode()
+    if mode != "host":
+        return _run_in_container(argv, mem_gb, timeout_s, env, cwd, pool=pool, out_dir=out_dir,
+                                 mode=mode)
+    env = default_env() if env is None else dict(env)
+    out = Path(out_dir) if out_dir else scratch_dir(f"job-{pool_of(argv)}")
+    out.mkdir(parents=True, exist_ok=True)
+    cwd = Path(cwd) if cwd else out
+    stdout_path, stderr_path = out / "stdout.txt", out / "stderr.txt"
+    (out / "cmd.txt").write_text(shlex.join(str(a) for a in argv) + "\n", encoding="utf-8")
+    pool = pool or pool_of(argv)
+    with _Slot(pool, jobs(pool)):
+        with open(stdout_path, "wb") as so, open(stderr_path, "wb") as se:
+            started = time.monotonic()
+            proc = subprocess.Popen([str(a) for a in argv], stdout=so, stderr=se,
+                                    stdin=subprocess.DEVNULL, cwd=cwd, env=env,
+                                    start_new_session=True)
+            try:
+                lifeline = _lifeline(proc.pid)
+            except DvlError:
+                _killpg(proc.pid)
+                proc.wait()
+                raise
+            finished = False
+            try:
+                try:
+                    rc = proc.wait(timeout=timeout_s)
+                    timed_out = False
+                except subprocess.TimeoutExpired:
+                    timed_out = True
+                    _killpg(proc.pid)
+                    rc = proc.wait()
+                except BaseException:
+                    _killpg(proc.pid)
+                    proc.wait()
+                    raise
+                elapsed = time.monotonic() - started
+                finished = True
+            finally:
+                _cut_lifeline(lifeline, finished)
+    if rc < 0:
+        rc = 128 - rc
+    if timed_out or (rc in KILLED_EXITS and elapsed >= float(timeout_s)):
+        rc = WALL_CLOCK_EXIT
+    (out / "exit.txt").write_text(f"{rc}\n", encoding="utf-8")
+    return rc, stdout_path, stderr_path
+
+
+def run_attached(argv, runtime_s, env):
+    """A server on this process's stdin and stdout (scripts/dafny-server): the
+    child inherits both, runs in its own process group, and is killed after
+    runtime_s (124) or when this process dies (the lifeline). Returns its exit code."""
+    proc = subprocess.Popen([str(a) for a in argv], env=dict(env), start_new_session=True)
+    try:
+        lifeline = _lifeline(proc.pid)
+    except DvlError:
+        _killpg(proc.pid)
+        proc.wait()
+        raise
+    for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
+        signal.signal(sig, lambda *_, s=sig: (_killpg(proc.pid), os._exit(128 + s)))
+    try:
+        try:
+            rc = proc.wait(timeout=runtime_s)
+        except subprocess.TimeoutExpired:
+            _killpg(proc.pid)
+            proc.wait()
+            return WALL_CLOCK_EXIT
+    finally:
+        _cut_lifeline(lifeline, True)
+    return 128 - rc if rc < 0 else rc
+
+
 def _cut_lifeline(w, finished):
-    """Release the watcher: `done` after a normal return (it kills the scope
+    """Release the watcher: `done` after a normal return (it kills the group
     once, for stragglers), plain EOF otherwise (it treats the parent as dead)."""
     try:
         if finished:
             os.write(w, b"done\n")
     except OSError:
-        pass                      # the watcher is gone; RuntimeMaxSec remains the net
+        pass                      # the watcher is gone
     finally:
         os.close(w)
 
@@ -628,7 +742,7 @@ def is_killed(exit_code):
 
 # --- the container modes (DV4-PLAN §5.9; DV4 step 1c) -------------------------------------
 #
-# Inside a sandbox container systemd-run is not available: the container's
+# Inside a sandbox container the job's bound is the container's own: the container's
 # processes live under the Docker daemon's cgroup, and the container's
 # --memory (= --memory-swap) is the hard bound. scripts/mksandbox-run sets
 # DVL_CAP to one of two modes, and run_capped then runs a job only when the
@@ -640,9 +754,8 @@ def is_killed(exit_code):
 # killed(memory) (137), whatever its own exit; the wall-clock net (124) and
 # the exit map stay as in host mode (Δ57, Δ58, Δ100). container-agent runs
 # one solver job at a time across every pool (one flock), since the agent
-# shares the container. Unsetting or changing DVL_CAP gains nothing: host
-# mode needs systemd-run, and both container bounds are checked against the
-# container's own memory.max.
+# shares the container. Unsetting DVL_CAP inside a container gains nothing:
+# the container's --memory still bounds every process in it.
 
 CAP_MODES = ("container-verify", "container-agent")
 CGROUP_DIR = Path("/sys/fs/cgroup")   # the container's own cgroup (cgroupns); tests patch it
@@ -719,8 +832,8 @@ exit 0
 def _container_lifeline(pgid):
     r, w = os.pipe()
     try:
-        subprocess.run(["setsid", "-f", "sh", "-c", _CONTAINER_LIFELINE_SH,
-                        f"dvl-lifeline-{pgid}", str(pgid)],
+        subprocess.run(plat.detach_argv() + ["sh", "-c", _CONTAINER_LIFELINE_SH,
+                                             f"dvl-lifeline-{pgid}", str(pgid)],
                        stdin=r, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                        close_fds=True, check=True, timeout=30)
     except (OSError, subprocess.SubprocessError) as e:

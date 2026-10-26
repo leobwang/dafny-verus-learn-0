@@ -1,11 +1,10 @@
 """Tool tests for the DV1b tools against the real pinned Dafny 4.11.0 and Verus
-0.2026.09.27.3cf1832 (scripts/get_toolchain.sh): scripts/vcheck, scripts/vaudit,
+0.2026.09.27.3cf1832 on PATH (DELTAS Δ503, D78): scripts/vcheck, scripts/vaudit,
 scripts/specfreeze --against, scripts/firsttry.py (--check, --report, --exit,
 --empty-body) and scripts/pins.py (learner mode, --update, --ci, --ref).
 
-Every job runs through the dvl libraries, so it runs under the CLAUDE.md
-§Resources memory cap (Dafny 8G, Verus 16G) one at a time unless
-DVL_DAFNY_JOBS / DVL_VERUS_JOBS say otherwise. The suite fails, never skips,
+Every job runs through the dvl libraries, one at a time unless
+DVL_DAFNY_JOBS / DVL_VERUS_JOBS say otherwise (no course memory cap: D78). The suite fails, never skips,
 without the pinned toolchains. Every expectation below was observed on a real
 run of these fixtures (invented programs: the wrapper fixtures of the library
 lanes, the synthetic armed Q04, and tests/wrappers/fixtures/tools/).

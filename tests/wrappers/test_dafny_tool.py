@@ -663,7 +663,7 @@ class Server(unittest.TestCase):
         logs = list((D.server_install() / "dafny").glob("DafnyLanguageServerLog*"))
         self.assertTrue(logs)
         self.assertEqual(list(pinned.glob("DafnyLanguageServerLog*")), [])
-        common.toolchain("dafny", fresh=True)   # get_toolchain.sh --check still passes
+        common.toolchain("dafny", fresh=True)   # the install on PATH still answers
 
 
 if __name__ == "__main__":

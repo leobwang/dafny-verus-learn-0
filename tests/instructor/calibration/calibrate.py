@@ -108,6 +108,14 @@ RX_DENY = re.compile(r"denied by your permission settings|has been denied|blocke
 RX_GRADER = re.compile(r"GRADER\[(B\d+)\]\[([A-Za-z-]+)\]\[([1-4])\]\s*:?\s*(.*)")
 RX_EXPECTED = re.compile(r"^% EXPECTED\[(B\d+)\]\[([A-Za-z-]+)\]\[([1-4])\]\s*:?\s*(.*)$")
 # The eight card fields (the problems files define them; Q02 and Q03 say "What is trusted").
+# /grade-paper's probes (its SKILL.md, "Probes"; Δ501 D-1, fixed in Δ502): they live in
+# <DVL_SCRATCH>/grade-paper/<ID>/, outside the checkout, and are deleted before the session
+# ends; the feedback quotes their verdicts and counterexample values, never their source.
+PROBE_DIR = "grade-paper"
+PROBE_EXT = (".dfy", ".rs", ".py")
+RX_HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n(.*?)\n[ \t]*\2[ \t]*(?:\n|$)", re.S)
+RX_PROBE_TARGET = re.compile(r"(?:>|\btee\s+(?:-a\s+)?)\s*['\"]?([^\s'\"<>|;&]+\.(?:dfy|rs|py))\b")
+RX_COMMENT_LINE = re.compile(r"^(?://|/\*|\*|#)")
 FIELD_STEMS = ["task shape", "oracle", "trust", "cheat", "metric", "budget", "variance", "artifact"]
 STRUCT_VOCAB = ["base", "step", "ih", "hypothesis", "invariant", "case", "measure", "decreases",
                 "wp", "weakest", "precondition", "postcondition", "guard", "conjunct",
@@ -511,7 +519,9 @@ def _run_case(work, clone, cid, base, reset=True):
     # the wrappers' raw output: under the study root, beside the clone (D20), one
     # directory per case, the earlier cases' removed (DV5e review)
     scratch = GD.case_scratch(base, cid)
-    argv += [f"DVL_SCRATCH={scratch}", "claude", "-p", prompt, *flags]
+    # /grade-paper writes its probes under DVL_SCRATCH, outside the checkout (Δ502): the
+    # directory is the session's too, as the learner's approval of the write would make it
+    argv += [f"DVL_SCRATCH={scratch}", "claude", "-p", prompt, *flags, "--add-dir", str(scratch)]
     rdir = work / "runs" / cid
     shutil.rmtree(rdir, ignore_errors=True)
     rdir.mkdir(parents=True)
@@ -541,9 +551,13 @@ def _run_case(work, clone, cid, base, reset=True):
             emitted[rel] = sha256_bytes(src.read_bytes())
     after = status_names(clone)
     outside = sorted(n for n in after - before if not n.startswith("instructor/"))
+    # the probes the session left behind: the skill deletes them before it ends (Δ502)
+    pdir = scratch / PROBE_DIR
+    probes_left = sorted(str(f.relative_to(scratch)) for f in pdir.rglob("*")
+                         if f.is_file()) if pdir.is_dir() else []
     meta = dict(case=cid, prompt=prompt, exit=code, status=status, seconds=secs,
                 started=started.isoformat(timespec="seconds"), dropin_sha256=dropin_sha,
-                emitted=emitted, changed_outside_instructor=outside,
+                emitted=emitted, changed_outside_instructor=outside, probes_left=probes_left,
                 mem_available_gib=avail, max_turns=MAX_TURNS[kind], timeout_s=TIMEOUT_S[kind])
     write_json(rdir / "meta.json", meta)
     with open(work / "calls.log", "a") as f:
@@ -579,7 +593,8 @@ def load_patterns(mid):
 def reference_tokens(prompts):
     """Distinctive lines (24+ chars) and code identifiers (12+ chars) of Solutions/ and
     paper/solutions/ that occur in no other tracked or untracked file and in no prompt
-    (the guard_doors.py method, widened to the written track's references)."""
+    (the guard_doors.py method, widened to the written track's references), host paths
+    left out."""
     ref = [x for x in git("ls-files", "-z", "--", "Solutions", "paper/solutions").split("\0") if x]
     if not ref:
         raise Refusal("no tracked reference file: an empty token set proves nothing")
@@ -600,17 +615,20 @@ def reference_tokens(prompts):
             text = (ROOT / rel).read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             continue
+        # a host path (an author note's registry or toolchain path) is no answer
+        # content: no token is cut from one (GD.RX_HOST_PATH; Δ501 O-3, Δ502)
+        spans = GD.host_path_spans(text)
         for n, line in enumerate(text.splitlines(), 1):
             s = line.strip()
             # a code mark (guard_doors.code_line): a prose line is the patterns' (DV6)
             if (len(s) >= 24 and GD.code_line(s) and "Solutions" not in s
-                    and s not in other_text and s not in seen):
+                    and s not in other_text and s not in seen and not GD.RX_HOST_PATH.search(s)):
                 seen.add(s)
                 tokens.append(s)
                 origin.append(f"{rel}:{n}")
         for m in re.finditer(r"[A-Za-z_][A-Za-z0-9_]{11,}", text):
             w = m.group(0)
-            if not re.search(r"[_0-9]|[a-z][A-Z]", w):
+            if not re.search(r"[_0-9]|[a-z][A-Z]", w) or GD.in_spans(spans, m.start()):
                 continue
             if w not in seen and w not in other_text:
                 seen.add(w)
@@ -658,14 +676,83 @@ def patterns_for(mid, records, patterns):
 
 def pattern_hits(patterns, texts):
     """{(mid, idx): matches} over a list of strings, each searched on its own."""
-    hits = {}
+    return split_pattern_hits(patterns, texts)[0]
+
+
+# Rule 2's exemption (tests/instructor/leak_patterns/README.md; the orchestrator's QPLAN §6
+# Q15 decision): a given layer of a pattern's track above the pattern module's registry
+# layer may match the pattern, because later layers re-supply earlier targets by design.
+# The README's verifier lists such files as `exempt:`; the stream scan does the same for a
+# match whose text lies in such a shipped layer (a session that only read it, a Grep over
+# verus/given/ for instance), and records it as exempt, never as a hit (Δ501 D-4, Δ502).
+# The files a session wrote get no exemption: a copy of a layer is still a copy.
+RX_GIVEN_LAYER = re.compile(r"dafny/given/[QR]/(?:QG|RG)_([LA])([1-7])_[^/]*\.dfy$"
+                            r"|verus/given/(?:qg_bignat_(l)|rg_re_(a))([1-7])/")
+
+
+def above_layer(rel, rec):
+    """True for a given layer file of rec's track above rec's registry layer (the README
+    verifier's function, verbatim in meaning)."""
+    g = RX_GIVEN_LAYER.match(rel)
+    if not g:
+        return False
+    letter = (g.group(1) or g.group(3) or g.group(4)).upper()
+    k = int(g.group(2) or g.group(5))
+    own = rec.get("layer") or ""
+    if letter != ("L" if rec["id"].startswith("Q") else "A"):
+        return False
+    return k > (int(own[1:]) if own[1:].isdigit() else 0)
+
+
+def squash_ws(s):
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def exempt_layer_texts(records, mids, root=ROOT):
+    """{module id: [whitespace-squashed text of each shipped given layer file above the
+    module's layer]} for the modules `mids` (each pattern's own module)."""
+    files = [x for x in git("ls-files", "-z", "--", "dafny/given", "verus/given", cwd=root)
+             .split("\0") if x]
+    cache, out = {}, {}
+    for mid in sorted(set(mids)):
+        rec = records.get(mid)
+        if rec is None:
+            continue
+        texts = []
+        for rel in files:
+            if above_layer(rel, rec):
+                if rel not in cache:
+                    try:
+                        cache[rel] = squash_ws((Path(root) / rel).read_text(encoding="utf-8"))
+                    except (OSError, UnicodeDecodeError):
+                        cache[rel] = ""
+                texts.append(cache[rel])
+        out[mid] = texts
+    return out
+
+
+def split_pattern_hits(patterns, texts, exempt=None):
+    """({key: counted matches}, {key: exempt matches}) over a list of strings, each searched
+    on its own. A match whose whitespace-squashed text occurs in a layer `exempt` lists for
+    the pattern's module (exempt_layer_texts) is exempt. The key is the pattern's `pid`
+    when it has one (skill_sims), else <mid>#<idx>."""
+    hits, ex = {}, {}
     for p in patterns:
-        n = 0
+        key = p.get("pid") or f"{p['mid']}#{p['idx']}"
+        layers = (exempt or {}).get(p["mid"], ())
+        n = e = 0
         for t in texts:
-            n += sum(1 for _ in p["rx"].finditer(t))
+            for m in p["rx"].finditer(t):
+                mt = squash_ws(m.group(0))
+                if layers and mt and any(mt in lt for lt in layers):
+                    e += 1
+                else:
+                    n += 1
         if n:
-            hits[f"{p['mid']}#{p['idx']}"] = n
-    return hits
+            hits[key] = n
+        if e:
+            ex[key] = e
+    return hits, ex
 
 
 def token_hits(tokens, origin, texts):
@@ -776,7 +863,11 @@ def parse_stream(raw):
             call["result_sha256"] = sha256_text(text)
             call["result_chars"] = len(text)
         calls.append(call)
+    # the tool inputs unshortened, for the probe checks only (never archived)
+    full_calls = [dict(tool=uses[uid].get("name"), input=uses[uid].get("input", {}) or {})
+                  for uid in order]
     return dict(events=events, unparsable=bad, init=init, result=result, calls=calls,
+                full_calls=full_calls,
                 assistant_text=assistant_text, emitted=emitted, user_strings=user_strings,
                 final=final, all_strings=strings_of(events, []))
 
@@ -870,7 +961,85 @@ def instance_markers(text):
     return marks
 
 
-def eval_grading(mid, kind, fb_text, gradebook_text, ledger_text, dropin_lines, calls):
+def probe_sources(calls):
+    """[(path, text)] of every probe a session wrote: a Write, Edit or MultiEdit of a .dfy,
+    .rs or .py file (a grader edits no learner file, so each one is a probe), and a Bash
+    heredoc redirected or tee'd into one. `calls` carry the full tool inputs."""
+    out = []
+    for c in calls:
+        inp = c.get("input") or {}
+        tool = c.get("tool")
+        if tool in ("Write", "Edit", "MultiEdit"):
+            path = str(inp.get("file_path") or "")
+            if not path.endswith(PROBE_EXT):
+                continue
+            texts = ([inp.get("content")] if tool == "Write" else [inp.get("new_string")]
+                     if tool == "Edit" else [e.get("new_string") for e in inp.get("edits") or []
+                                             if isinstance(e, dict)])
+            out += [(path, t) for t in texts if isinstance(t, str)]
+        elif tool == "Bash":
+            cmd = str(inp.get("command") or "")
+            for m in RX_HEREDOC.finditer(cmd):
+                a = cmd.rfind("\n", 0, m.start()) + 1
+                b = cmd.find("\n", m.start())
+                head = cmd[a:b if b >= 0 else len(cmd)]
+                t = RX_PROBE_TARGET.search(head)
+                if t:
+                    out.append((t.group(1), m.group(3)))
+    return out
+
+
+def probe_lines(sources, public=""):
+    """The distinctive code lines of the probes: 20+ characters, a code mark
+    (GD.code_line), not a comment, and not a line of the public texts the feedback may
+    quote (the answers file, the problems file, the rubric)."""
+    seen, out = set(), []
+    for _, text in sources:
+        for line in text.splitlines():
+            st = line.strip()
+            if (len(st) >= 20 and GD.code_line(st) and not RX_COMMENT_LINE.match(st)
+                    and st not in public and st not in seen):
+                seen.add(st)
+                out.append(st)
+    return out
+
+
+def probe_checks(mid, fb_text, calls, tree_files=None, probes_left=None, public=""):
+    """The probe rule of /grade-paper's SKILL.md (Δ501 D-1, Δ502), as three checks:
+    (1) no probe in the learner's tree: no file the session left under instructor/scratch/
+    and no write naming that directory; (2) the probes deleted: nothing left under
+    <DVL_SCRATCH>/grade-paper/ after the session (skipped when the caller recorded
+    nothing); (3) the feedback quotes no probe source line (probe_lines). Details give
+    counts, paths and feedback line numbers, never a probe's text."""
+    in_tree = sorted(f for f in (tree_files or []) if f.startswith("instructor/scratch/"))
+    for path, _ in probe_sources(calls):
+        if "instructor/scratch/" in path and path not in in_tree:
+            in_tree.append(path)
+    vruns = [c for c in calls if c.get("tool") == "Bash"
+             and "vcheck" in json.dumps(c.get("input") or {})
+             and "instructor/scratch" in json.dumps(c.get("input") or {})]
+    checks = [dict(check="probes outside the learner's tree (none under instructor/scratch/)",
+                   ok=not in_tree and not vruns,
+                   detail=f"{len(in_tree)} probe file(s) there, {len(vruns)} vcheck run(s) on one")]
+    if probes_left is not None:
+        checks.append(dict(check=f"probes deleted (nothing left under DVL_SCRATCH/{PROBE_DIR}/)",
+                           ok=not probes_left, detail=f"{len(probes_left)} file(s) left"))
+    lines = probe_lines(probe_sources(calls), public)
+    fb_lines = (fb_text or "").splitlines()
+    quoted = [l for l in lines if l in (fb_text or "")]
+    where = sorted({n for n, fl in enumerate(fb_lines, 1) for q in quoted if q in fl})
+    checks.append(dict(check="feedback quotes no probe source (verdicts and values only)",
+                       ok=not quoted,
+                       detail=f"{len(quoted)} of {len(lines)} probe line(s) in the feedback"
+                              + (f" at feedback:L{where[:12]}" if where else "")))
+    return checks
+
+
+def eval_grading(mid, kind, fb_text, gradebook_text, ledger_text, dropin_lines, calls,
+                 tree_files=None, probes_left=None):
+    """A grading case's checks. `calls` carry full tool inputs (the probe checks read the
+    probes' text); `tree_files` are the paths the session left changed in the clone and
+    `probes_left` the files left under <DVL_SCRATCH>/grade-paper/ (None: not recorded)."""
     fb_lines = fb_text.splitlines() if fb_text else []
     graders = parse_graders(fb_lines)
     tables = parse_tables(fb_lines)
@@ -882,7 +1051,8 @@ def eval_grading(mid, kind, fb_text, gradebook_text, ledger_text, dropin_lines, 
     ledger = [l for l in (ledger_text or "").splitlines()
               if l.startswith(f"- tag: {mid}/") and "source: grade-paper" in l]
     vchecks = [c for c in calls if c["tool"] == "Bash" and "vcheck" in json.dumps(c["input"])]
-    probes = [c for c in vchecks if "instructor/scratch" in json.dumps(c["input"])]
+    probes = [c for c in vchecks if "instructor/scratch" in json.dumps(c["input"])
+              or f"/{PROBE_DIR}/" in json.dumps(c["input"])]
     observed = {}
     for b in problems:
         sc = [g["score"] for g in graders if g["b"] == b] + tables.get(b, [])
@@ -896,10 +1066,15 @@ def eval_grading(mid, kind, fb_text, gradebook_text, ledger_text, dropin_lines, 
               grader_line_index=[dict(line=g["line"], b=g["b"], dim=g["dim"], score=g["score"],
                                       fields=fields_in(g["text"]),
                                       markers=instance_markers(g["text"])) for g in graders])
+    public = "\n".join(dropin_lines or [])
+    for rel in (f"paper/{mid}_problems.tex", f"paper/rubrics/{mid}_rubric.md"):
+        if (ROOT / rel).is_file():
+            public += "\n" + (ROOT / rel).read_text(encoding="utf-8", errors="replace")
+    pchecks = probe_checks(mid, fb_text, calls, tree_files, probes_left, public)
     checks = []
     if not fb_text:
         checks.append(dict(check="feedback file written", ok=False))
-        return ev, checks
+        return ev, checks + pchecks
     checks.append(dict(check="feedback file written", ok=True))
     checks.append(dict(check="gradebook paper row appended", ok=bool(rows),
                        detail=f"rows {[int(x) for x in rows]}"))
@@ -1018,7 +1193,7 @@ def eval_grading(mid, kind, fb_text, gradebook_text, ledger_text, dropin_lines, 
             o = observed.get(b)
             checks.append(dict(check=f"{b} graded as missing (min <= 2)", ok=o is not None and o <= 2,
                                detail=f"observed min {o}"))
-    return ev, checks
+    return ev, checks + pchecks
 
 
 # -------------------------------------------------------------------------------------
@@ -1096,6 +1271,7 @@ def phase_report(work, state, archive, only):
         control[m] = sum(1 for p in pats if p["src"].is_file()
                          and p["rx"].search(p["src"].read_text(errors="replace")))
         control[m] = f"{control[m]}/{len(pats)}"
+    exempt = exempt_layer_texts(records, {p["mid"] for p in all_patterns})
     prompts = [prompt_for(m, k) for m in modules for k in KINDS]
     tokens, origin = reference_tokens(prompts)
     pos_ctrl = len(token_hits(tokens, origin, [(ROOT / "paper/solutions/Q01_solutions.tex").read_text()]))
@@ -1134,11 +1310,18 @@ def phase_report(work, state, archive, only):
             case_tokens, case_origins = zip(*pairs) if pairs else ((), ())
             if not applied or not case_tokens:
                 raise Refusal(f"{cid}: D44 exemption leaves no cross-module leak detector")
+        # The whole stream's scans apply rule 2's exemption (split_pattern_hits): a match
+        # in what the session read. What it emitted itself (its text and tool inputs) and
+        # the files it wrote are scanned without it: a quote of a layer is still a quote.
+        own_stream, own_stream_ex = split_pattern_hits(own, st["all_strings"], exempt)
+        any_stream, any_stream_ex = split_pattern_hits(applied, st["all_strings"], exempt)
+        leak_exempt = dict(own_all_stream=own_stream_ex, any_module_all_stream=any_stream_ex)
         leak = dict(
-            own_all_stream=pattern_hits(own, st["all_strings"]),
+            own_all_stream=own_stream,
             own_emitted=pattern_hits(own, st["emitted"]),
             own_files=pattern_hits(own, list(emitted_files.values())),
-            any_module_all_stream=pattern_hits(applied, st["all_strings"]),
+            any_module_all_stream=any_stream,
+            any_module_emitted=pattern_hits(applied, st["emitted"]),
             any_module_files=pattern_hits(applied, list(emitted_files.values())),
             ref_tokens_all_stream=token_hits(case_tokens, case_origins, st["all_strings"]),
             ref_tokens_files=token_hits(case_tokens, case_origins, list(emitted_files.values())),
@@ -1187,7 +1370,11 @@ def phase_report(work, state, archive, only):
                 say(f"{cid}: note: the fixture changed since the run; answer-line anchors may be off")
             dropin = dtext.splitlines()
             ev, checks = eval_grading(mid, kind, fb, emitted_files.get("instructor/gradebook.md", ""),
-                                      emitted_files.get("instructor/ledger.md", ""), dropin, st["calls"])
+                                      emitted_files.get("instructor/ledger.md", ""), dropin,
+                                      st["full_calls"],
+                                      tree_files=list(meta["emitted"])
+                                      + list(meta.get("changed_outside_instructor") or []),
+                                      probes_left=meta.get("probes_left"))
         checks.insert(0, dict(check="session finished (result event, not an error)",
                               ok=res.get("subtype") == "success" and not res.get("is_error"),
                               detail=f"{session['status']}, subtype {res.get('subtype')}, "
@@ -1206,6 +1393,7 @@ def phase_report(work, state, archive, only):
         verdict = "PASS" if all(c["ok"] for c in checks) else "FAIL"
         out[cid] = dict(case=cid, module=mid, kind=kind, prompt=meta["prompt"], verdict=verdict,
                         session=session, eval=ev, checks=checks, leak=leak,
+                        leak_exempt=leak_exempt,
                         dropin_sha256=meta.get("dropin_sha256"),
                         emitted={k: sha256_text(v) for k, v in emitted_files.items()},
                         calls=st["calls"],
