@@ -729,8 +729,7 @@ vaudit: verus/r/r07_libraries [verus, learner]: 6 finding(s)
 <!-- pin: freeze -->
 ```
 $ scripts/specfreeze --check R07
-specimens/R07/p1-value-d.dfy.specimen:0: freeze-file-missing — (file)
-specfreeze: R07: 1 finding(s)
+specfreeze: R07: 0 finding(s)
 ```
 
 

@@ -117,3 +117,5 @@ H5v's quantifier needs a `#[trigger]` on `xs[..i + 1].filter_map(f)`. Without on
 **Study workflow.** 11/11 on `373d12d5`.
 
 The focused author CI waits for the coordinator: no 16G CI while host memory is low.
+
+**Chapter pin `freeze` re-captured (2026-10-26).** The accumulated full author CI (`20261026T012833Z-4089449` @ `873440e9`) failed its pins job at `docs/R07_Libraries.md`'s `freeze` pin, and only there (1,536 pins, 1 problem). The pin had been captured while `specfreeze --check R07` still reported `freeze-file-missing` for the P1 specimen, which was removed and replaced by a scratch capture. The freeze was then re-pinned (0 findings), but the chapter fence was not, and R07's focused CI did not run the pins job. Re-captured: `specfreeze: R07: 0 finding(s)`. `pins.py --ci --module R07` 54/54, `chapter_lint` 0.
