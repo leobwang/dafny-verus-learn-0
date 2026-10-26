@@ -124,3 +124,8 @@ Every proper subset fails (minimizer, both orders of the line pass; the declarat
 - Course map OK; avoid.sh OK.
 - Study workflow 12/12 on a disposable clone of `b306db7a` plus this diff: first tries, strict, freeze, the check unit, then gate and audit for both units and both agents.
 - Chapter: §4 and §6 are rewritten around the two refinements, with three new pins. `plain-d` shows that without `refines`, `MatchWord` does not resolve. `refining-d` shows the same declarations with `refines` verify. `noimpl-v` shows that without the impl, the trait bound fails. §0, §8 (lab, 10 minutes) and §10 are updated. The bank's reread titles, the K4 insight and PP2's diagnostic are updated.
+
+**Focused author CI** (`scripts/ci.sh --author --job static --job harness --job wrappers --job rubric`, run `20261025T230157Z-2368857`, authoring @ `1f6e1497`, clean tree, 12G scope, `DVL_VERUS_JOBS=1`, 4,109 s):
+- static PASS (899 s), rubric PASS, harness PASS (86 s).
+- wrappers FAIL, on one test only. `tests/wrappers` ran 637 OK. In `tests/ci`, 89 of 90 passed; the 90th, `test_ci_tool.ArmedRoot.test_ci_never_reaches_a_study_run`, stopped at ci.sh's memory preflight ("30 GB available, 31 GB needed"), with host memory shared with DV7's CI. That is the environment, not a verdict.
+- Rerun alone at 32 GB available, under the same 12G scope: OK (23 s).
