@@ -1,0 +1,216 @@
+# expected/R03.chapter.toml — the chapter pins of R03's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R03 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "obligation-d"
+cmd = ["scripts/vcheck", "specimens/R03/P1d.dfy.specimen"]
+answers = ["R03.P1d"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "8a3ebc76bb7516510c3e8aaf04d8221ee4527c53e9027857f27805f32cb2629e"
+[entry.pinned.inputs]
+"specimens/R03/P1d.dfy.specimen" = "d322121742e9d0e82a54f87378a01a495c2a1da3c7d0a9d99d901b2491e3db98"
+
+[[entry]]
+id = "obligation-v"
+cmd = ["scripts/vcheck", "specimens/R03/P2v.rs.specimen"]
+answers = ["R03.P2v"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "628fb0cb38d8101ffc9ff447c069ff34d5b9e094b8770b969dbcccbbbacd11fb"
+[entry.pinned.inputs]
+"specimens/R03/P2v.rs.specimen" = "a511144719c7a6a7564ad6e8fefb744a3d8abbd4cf042824973e6483f865d17d"
+
+[[entry]]
+id = "p3-d"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p3-d.dfy.specimen"]
+answers = ["R03.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "9449c0455869bb1a14963777a986dfe1a13cc98a5dac7abf95ac83778436e0a1"
+[entry.pinned.inputs]
+"specimens/R03/chapter-p3-d.dfy.specimen" = "5bd6e72156f0140c240bb6e22fc9509977a8d5bf3227b063451763566dde2e7d"
+
+[[entry]]
+id = "p3-v"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p3-v.rs.specimen"]
+answers = ["R03.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2d250407b9a6d43f5cac42fc4287dcfdcacc873071fd0a4923c8a7ead84e61f7"
+[entry.pinned.inputs]
+"specimens/R03/chapter-p3-v.rs.specimen" = "aa770d34dd873f7a9ae5771631647832a374874f81a2d9c441b5a687c6bfc6d0"
+
+[[entry]]
+id = "p4-d"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p4-d.dfy.specimen"]
+answers = ["R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3fa3872a1edfb5cbce7436fb2caff01f6bcb4a5181cab00b502dc6492b4f11b4"
+[entry.pinned.inputs]
+"specimens/R03/chapter-p4-d.dfy.specimen" = "74573a38b51f1d56a9e05d2f32371703361ceb4a98918180046def76c3d2b678"
+
+[[entry]]
+id = "p4-v"
+cmd = ["scripts/vcheck", "specimens/R03/chapter-p4-v.rs.specimen"]
+answers = ["R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6f804bcaa0d0397e47e8c0a102c588d342ff9e28c9cd5df0f536825d40ad173d"
+[entry.pinned.inputs]
+"specimens/R03/chapter-p4-v.rs.specimen" = "84589791294437ea24cda225cc17ae76f8ca4b64f1ba74c99ad63b325afc9e63"
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R03_Modules/core"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "bb40d02781a83574c2ac07e2f7eb881777ca7b15be2022b83da306691cd338cc"
+[entry.pinned.inputs]
+"dafny/R/R03_Modules/core/R03_Modules.dfy" = "b1ca45c3749f6dc300216c503163820e28359450e783a588d6eff72d70e1f21a"
+"dafny/R/R03_Modules/core/dfyconfig.toml" = "aae89b87b66ba54b8e49239ab3f3daeaffa4ec0f3b7f2e067ea33e63b7e036f0"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r03_modules"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "33a7a657424abbfa462abd2c0c2facd958017f91ea4c7fc2b2f3da2db3e19379"
+[entry.pinned.inputs]
+"verus/r/r03_modules/Cargo.toml" = "cf2fbbdf9f3c02d8afd36184c56a1b08dfb665a76fab9d8edc9719024b7b1a05"
+"verus/r/r03_modules/src/agent.rs" = "ddd3ea32280e044241fd6fa9e43e7300f4857eb8e2c1826f62c90c260de8b89d"
+"verus/r/r03_modules/src/lib.rs" = "fdd51d7e19bb8c183f70fe13903edc79dd27c55d24826f280757d4db371c564a"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R03_Modules/agent/R03_AgentApi.dfy"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "453885b924aba0f3d37a336b786509026e3a8b619db3b4fb331d60ec5db7d4a7"
+[entry.pinned.inputs]
+"dafny/R/R03_Modules/agent/R03_AgentApi.dfy" = "8fddd54c8c1058ad3d0e0e2d4aa622645a1f21afbefef7fe2d5949b1a407d490"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r03_modules/src/agent.rs"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "68deb6e0167a8b7fdbfaf105ebbbf2ea104e2d517b87fa7de5d8b1273aac27d1"
+[entry.pinned.inputs]
+"verus/r/r03_modules/src/agent.rs" = "ddd3ea32280e044241fd6fa9e43e7300f4857eb8e2c1826f62c90c260de8b89d"
+
+[[entry]]
+id = "card-export"
+cmd = ["scripts/vcheck", "specimens/R03/card-c1d.dfy.specimen"]
+answers = ["R03.P3dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "158cbb78e1933514086a5b29a0f20e3c8395b17b34b7d29251bfa8ef8673abb2"
+[entry.pinned.inputs]
+"specimens/R03/card-c1d.dfy.specimen" = "0d293c4d3f8990d1c0ed9513139f5ee23205e979ae8780490eee48d04cdb6df4"
+
+[[entry]]
+id = "card-view"
+cmd = ["scripts/vcheck", "specimens/R03/card-c3v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3346efbc04d35f39fe38e8e06d17c1c17db5b2688834e7ce46f31ace533297e3"
+[entry.pinned.inputs]
+"specimens/R03/card-c3v.rs.specimen" = "17dd31184417bcd82d88b08aed0ddd200a89b239e8180e6b31c586a32772b724"
+
+[[entry]]
+id = "card-closed"
+cmd = ["scripts/vcheck", "specimens/R03/card-c4v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "2ae95041d0164ee89c816d87850c77d1f7a7d13b92d9f6b52c73f10b52900bcb"
+[entry.pinned.inputs]
+"specimens/R03/card-c4v.rs.specimen" = "5dcc7e20a981e1a3ef9db02be345c166d01e3e03ed354c0241c6a34e1796bc23"
+
+[[entry]]
+id = "card-visibility"
+cmd = ["scripts/vcheck", "specimens/R03/card-c5v.rs.specimen"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "8ba09f37ff2ff5fc67808cbfd0dd210c6541e8ba405f49cd05bb112d89840126"
+[entry.pinned.inputs]
+"specimens/R03/card-c5v.rs.specimen" = "ef15901dccdc2c2497e66f475a86e6d66d6e56b66006aa9d2c95d7322d9b96a4"
+
+[[entry]]
+id = "divergence-d"
+cmd = ["scripts/vcheck", "specimens/R03/card-c8dv-d.dfy.specimen"]
+answers = ["R03.P3dv", "R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "6f0de1ef5879e3b4e8229400ed8dd719d905186eb1669f40c2bad07a66526a93"
+[entry.pinned.inputs]
+"specimens/R03/card-c8dv-d.dfy.specimen" = "52288d7bfbd59c9374360cbbf4df89774b85d953fc8f7903b26d3268c964a806"
+
+[[entry]]
+id = "divergence-v"
+cmd = ["scripts/vcheck", "specimens/R03/card-c8dv-v.rs.specimen"]
+answers = ["R03.P3dv", "R03.P4dv"]
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "b34a2d65045574555abe8ec9b9f2fc86ed0a24397a213afb49faab3ce1f72c64"
+[entry.pinned.inputs]
+"specimens/R03/card-c8dv-v.rs.specimen" = "cf19c4475a7ee7dc05ecb3c75ce0ffcfdb3b55054a8ea5045252ea9b08574a31"
+
+[[entry]]
+id = "opaque-d"
+cmd = ["scripts/vcheck", "--module", "R03", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/core.toml"]
+note = "The source shown above the pin, run in R03's context: an opaque function's contract hides a fact its body has (D93)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+fence = "above"
+[entry.pinned]
+body = "75db8d77e56d06f4ada4a1b84f64ed4020e3ba848f16bf0704d598bf980c582e"
+[entry.pinned.inputs]
+"dafny/options/core.toml" = "76ff1eb8104e688563d0cf0a847676f09a94a56eadeb38cea513a5a640a0c8a4"
+"scratch:probe.dfy" = "4c65aed2a7477c36f25f1e766df7c5d7318cf11614ba2ac13bf8775604484a7f"
+
+[[entry]]
+id = "open-private-v"
+cmd = ["scripts/vcheck", "specimens/R03/demo-open-private-v.rs.specimen"]
+note = "A public open spec fn that reads a private field is refused (D95)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "d7b36e1d2ec2f8d03749b962a62d4391726c83766809c626f86e0a93a0a5bda4"
+[entry.pinned.inputs]
+"specimens/R03/demo-open-private-v.rs.specimen" = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+[[entry]]
+id = "private-call-v"
+cmd = ["scripts/vcheck", "specimens/R03/demo-private-call-v.rs.specimen"]
+note = "A client call to a function its module did not make pub is refused (D94)."
+[entry.normalize]
+drop = ["^raw output: "]
+[entry.pinned]
+body = "3c7d09555d517cd528c329fd74335c35d561ba6f49d8ea767dd83b614e30af26"
+[entry.pinned.inputs]
+"specimens/R03/demo-private-call-v.rs.specimen" = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"

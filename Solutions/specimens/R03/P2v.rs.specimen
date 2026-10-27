@@ -1,0 +1,105 @@
+// item: R03.P2v obligation
+// Which labelled calls fail the validity precondition?
+// FAILS c d
+#![allow(unused_imports)]
+use vstd::prelude::*;
+
+verus! {
+
+pub mod char_class {
+use vstd::prelude::*;
+
+verus! {
+
+pub struct CharClass {
+    ranges: Vec<(u32, u32)>,
+}
+
+impl View for CharClass {
+    type V = ISet<char>;
+
+    closed spec fn view(&self) -> ISet<char> {
+        ISet::new(|c: char| exists|i: int| 0 <= i < self.ranges@.len() && self.ranges@[i].0 <= (c as u32) && (c as u32) <= self.ranges@[i].1)
+    }
+}
+
+impl CharClass {
+    /// This scenario's invariant: every range is non-empty.
+    pub closed spec fn valid(&self) -> bool {
+        forall|i: int| 0 <= i < self.ranges@.len() ==> (#[trigger] self.ranges@[i]).0 <= self.ranges@[i].1
+    }
+
+    pub fn class_single(c: char) -> (r: CharClass)
+        ensures
+            r.valid(),
+    {
+        let mut rs = Vec::new();
+        rs.push((c as u32, c as u32));
+        CharClass { ranges: rs }
+    }
+
+    pub fn class_span(lo: u32, hi: u32) -> (r: CharClass)
+        ensures
+            r.valid(),
+    {
+        let mut rs = Vec::new();
+        if lo <= hi {
+            rs.push((lo, hi));
+        }
+        CharClass { ranges: rs }
+    }
+
+    /// For this prediction, membership is a proof fn whose body is its definition;
+    /// only its `requires` is in question at the call sites.
+    pub proof fn member_contract(&self, c: char) -> (b: bool)
+        requires
+            self.valid(),
+        ensures
+            b == self@.contains(c),
+    {
+        self@.contains(c)
+    }
+}
+
+fn case_c() {
+    let mut rs = Vec::new();
+    rs.push(('c' as u32, 'a' as u32));
+    let cc = CharClass { ranges: rs };
+    proof {
+        let b = cc.member_contract('b'); // [c]
+    }
+}
+
+} // verus!
+}
+
+pub mod client {
+use vstd::prelude::*;
+use super::char_class::CharClass;
+
+verus! {
+
+fn case_a() {
+    let cc = CharClass::class_single('x');
+    proof {
+        let b = cc.member_contract('x'); // [a]
+    }
+}
+
+fn case_b() {
+    let cc = CharClass::class_span('a' as u32, 'f' as u32);
+    proof {
+        let b = cc.member_contract('b'); // [b]
+    }
+}
+
+fn case_d(cc: &CharClass) {
+    proof {
+        let b = cc.member_contract('b'); // [d]
+    }
+}
+
+} // verus!
+}
+
+} // verus!

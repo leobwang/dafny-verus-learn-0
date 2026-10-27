@@ -1,0 +1,7 @@
+use vstd::prelude::*;
+verus! {
+pub mod api { pub struct Boxed { value: u32, } }
+pub mod client {
+  fn demo(b: super::api::Boxed) { let x=b.value; }
+}
+}

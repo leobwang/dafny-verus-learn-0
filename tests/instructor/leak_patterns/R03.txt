@@ -1,0 +1,29 @@
+# R03 withheld hole proofs (H1d, H2d, H4d, H5d, H1v, H3v, H4v, H5v); no prediction answers.
+# H6v and H7v are not cut: their definitions are stated in their prompts, and the agent
+# file (opened after the holes, with a do-not-open header) copies the given class code.
+# from Solutions/dafny/R/R03_Modules/core/R03_Modules.dfy
+# source: var rest := ClassMember(CharClass(cc.ranges[1..]), c); (R03.H1d)
+# verified: solutions=1 public=0
+var\s+rest\s*:=\s*ClassMember\(CharClass\(cc\.ranges\[1\.\.\]\),\s*c\);
+# source: assert InRange(r.ranges[0], c); (R03.H2d)
+# verified: solutions=1 public=0
+assert\s+InRange\(r\.ranges\[0\],\s*c\);
+# source: var rest := UnionOfClasses(cs[1..]); u := ClassUnion(cs[0], rest); (R03.H4d)
+# verified: solutions=1 public=0
+var\s+rest\s*:=\s*UnionOfClasses\(cs\[1\.\.\]\);\s*u\s*:=\s*ClassUnion\(cs\[0\],\s*rest\);
+# source: var tail := ClassOfString(s[1..]); (R03.H5d)
+# verified: solutions=1 public=0
+var\s+tail\s*:=\s*ClassOfString\(s\[1\.\.\]\);
+# from Solutions/verus/r/r03_modules/src/lib.rs
+# source: u = u.class_insert(a, b); (R03.H3v)
+# verified: solutions=1 public=0
+u\s*=\s*u\.class_insert\(a,\s*b\);
+# source: u = u.class_union(&cs[k]); (R03.H4v)
+# verified: solutions=1 public=0
+u\s*=\s*u\.class_union\(&cs\[k\]\);
+# source: (lo <= code && code <= hi) || self.member_from(c, i + 1) (R03.H1v)
+# verified: solutions=1 public=0
+\(lo\s*<=\s*code\s*&&\s*code\s*<=\s*hi\)\s*\|\|\s*self\.member_from\(c,\s*i\s*\+\s*1\)
+# source: u = u.class_insert(c as u32, c as u32); (R03.H5v)
+# verified: solutions=1 public=0
+u\s*=\s*u\.class_insert\(c\s+as\s+u32,\s*c\s+as\s+u32\);

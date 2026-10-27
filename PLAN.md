@@ -39,10 +39,10 @@
 
 | band | modules | `/discuss` persona | `/review-code` bar | minutes | hours |
 |---|---|---|---|---|---|
-| 1 Foundations | R01–R06 | sharp-dev ("sharp dev, zero verifier") | it-reads (R01–R03) → proof-shape (R04–R06) | 276 + 342 + 300 + 360 + 402 + 462 = **2,142** | 35.7 |
+| 1 Foundations | R01–R06 | sharp-dev ("sharp dev, zero verifier") | it-reads (R01–R03) → proof-shape (R04–R06) | 276 + 342 + 326 + 360 + 402 + 462 = **2,168** | 36.1 |
 | 2 Abstraction and theory | R07–R11 | smt-skeptic ("Rust dev who distrusts SMT") | library-conventions (R07–R09) → design-judgment (R10–R11) | 360 + 354 + 444 + 408 + 540 = **2,106** | 35.1 |
 | 3 Machine, loop, capstone | R12–R16 | ml-engineer ("ML engineer who thinks tests are proofs") | harness (R12, R15) / production (R13, R14, R16) | 786 + 390 + 390 + 744 + 936 = **3,246** | 54.1 |
-| **R** | | | | **7,494** | **124.9** (≈ 119.1 with Q-credit, §1.4) |
+| **R** | | | | **7,520** | **125.3** (≈ 119.5 with Q-credit, §1.4; R03 +26 min by D93–D95, Δ311) |
 
 The bars and personas are the registry's (`review_bar`, `persona`); `viva_mode = "module"` and `tutor_max_rung = 5` on every R record.
 
@@ -197,7 +197,7 @@ Each record: the registry title; **why** it exists (its design role); the **core
 - **Agentic role.** Rung 2 at API scale, **API implementer** (intersection and difference from their statements) + the learner's adversarial review of the delivered API (totality, contracts, hidden `requires`).
 - **Whispers.** Plants: the strengthened `requires` (→ R08 refinement, R15 statement review); `closed` views (→ R08's `Matcher` interface); `char` ranges (→ R09's encoding divergences). Harvests: R02's datatype and recursion skills.
 - **Research tie-in.** 03.2 Lahiri, *Intent Formalization*: the spectrum from tests to logical contracts and the sound/complete measures of a spec; R03's API contracts are the "logical contracts" rung.
-- **Hours.** 300 min (5.0 h), D/V 50/50; second bench card.
+- **Hours.** 326 min (5.4 h), D/V 48/52; second bench card (D93–D95, Δ311: H2 and H4 re-posed, the Verus-only H6v/H7v definition holes).
 - **Coverage.** S1 spec-and-exec-code; S6 modules-and-visibility; S7 ghost-code-and-modes.
 
 #### R04 — Specs as logic
@@ -763,7 +763,7 @@ recognise_v = ["test", "ghost", "box"]
 
 ### 6.3 R03 — Modules and APIs
 
-*Layer A1, 300 min (viva included). Agent rung 2 at API scale: API implementer. Second bench card. The character-class API is module-local here; A2 re-supplies it from R07.*
+*Layer A1, 326 min (viva included; 300 before D93–D95, Δ311). Agent rung 2 at API scale: API implementer. Second bench card. The character-class API is module-local here; A2 re-supplies it from R07.*
 
 #### Files
 
@@ -777,7 +777,7 @@ recognise_v = ["test", "ghost", "box"]
 | agent | `dafny/R/R03_Modules/agent/R03_AgentApi.dfy`, `verus/r/r03_modules/src/agent.rs` | RED: two API statements with hole bodies over a copy of the given class code |
 | pins, twins | `expected/R03.*`, `Solutions/…` | — |
 
-Header counts: **10 holes**, **4 predictions**.
+Header counts: **12 hole items** (Dafny H1d–H5d, Verus H1v–H7v; D93–D95), **4 predictions**. The Verus file's counted holes also include the four GATED attributes until H6v and H7v are written (11 as shipped).
 
 #### Items
 
@@ -799,12 +799,14 @@ Header counts: **10 holes**, **4 predictions**.
 | R03.C6d / C7v | C | `recognise:opaque` | — | — | cards: `opaque` functions and `reveal` (WRITE in R08) | given |
 | R03.H1d | H | — | R03.H1v | export | `function ClassMember(cc: CharClass, c: char): (b: bool) ensures b == InClass(cc, c)`: a recursion over the ranges | bodyless function hole · none |
 | R03.H1v | H | — | R03.H1d | view | `fn member_from(&self, c: char, i: usize) -> (b: bool) requires i <= self.ranges.len(), ensures b == (exists\|j: int\| i <= j < self.ranges.len() && …the range at j contains c…)` (`decreases` is yours); the given `class_member` calls it | `external_body` + `unimplemented!()` · none |
-| R03.H2d | H | — | R03.H2v | export | `function ClassRange(lo: char, hi: char): (r: CharClass) ensures ClassValid(r) && forall c :: InClass(r, c) <==> lo <= c <= hi`: total, no `requires`; add it to the export set | bodyless function hole · none |
-| R03.H2v | H | — | R03.H2d | view, closed-spec, pub-visibility | `pub fn class_range(lo: char, hi: char) -> (r: CharClass) ensures r.valid(), forall\|c: char\| r@.contains(c) <==> (lo <= c && c <= hi)` | `external_body` + `unimplemented!()` · none |
+| R03.H2d | H | — | R03.H2v | export | `function ClassRange(lo: char, hi: char): (r: CharClass) ensures ClassValid(r) && ClassRank(r) <= 1 && forall c :: InClass(r, c) <==> lo <= c <= hi`: total, at most one range (D93: `ClassInsert` is opaque, so the learner builds the range and proves membership with its witness); add it to the export set | bodyless function hole · none |
+| R03.H2v | H | — | R03.H2d | view, pub-visibility | `fn class_range(lo: char, hi: char) -> (r: CharClass) ensures r.valid(), r.rank() <= 1, forall\|c: char\| r@.contains(c) <==> (lo <= c && c <= hi)`: built directly (D93); ships without `pub`, which the client needs (D94) | `external_body` + `unimplemented!()` · none |
 | R03.H3d | H | — | R03.H3v | export | `function ClassUnion(a: CharClass, b: CharClass): (u: CharClass) requires ClassValid(a) && ClassValid(b) ensures ClassValid(u) && forall c :: InClass(u, c) <==> InClass(a, c) \|\| InClass(b, c)`, over `ClassInsert` | bodyless function hole · none |
 | R03.H3v | H | — | R03.H3d | view, closed-spec | `pub fn class_union(&self, other: &CharClass) -> (u: CharClass) requires self.valid(), other.valid(), ensures u.valid(), u@ == self@.union(other@)` | `external_body` + `unimplemented!()` · none |
-| R03.H4d | H | — | R03.H4v | — | in `module Client`, using only the exported API: `method Union3(a: CharClass, b: CharClass, c: CharClass) returns (u: CharClass) requires ClassValid(a) && ClassValid(b) && ClassValid(c) ensures ClassValid(u) && forall x :: InClass(u, x) <==> InClass(a, x) \|\| InClass(b, x) \|\| InClass(c, x)` | exec hole `{ assume false; }` · none |
-| R03.H4v | H | — | R03.H4d | pub-visibility | in `mod client`: `pub fn union3(a: &CharClass, b: &CharClass, c: &CharClass) -> (u: CharClass) requires … ensures u.valid(), u@ == a@.union(b@).union(c@)` | `external_body` + `unimplemented!()` · none |
+| R03.H4d | H | — | R03.H4v | — | in `module Client`, using only the exported API: `method UnionOfClasses(cs: seq<CharClass>) returns (u: CharClass) requires forall i | 0 <= i < \|cs\| :: ClassValid(cs[i]) ensures ClassValid(u) && forall x :: InClass(u, x) <==> exists i | 0 <= i < \|cs\| :: InClass(cs[i], x)` (D93: a recursion with two witness picks) | exec hole `{ assume false; }` · none |
+| R03.H4v | H | — | R03.H4d | view | in `mod client`: `pub fn union_of_classes(cs: &Vec<CharClass>) -> (u: CharClass) requires forall\|i: int\| 0 <= i < cs.len() ==> cs[i].valid() ensures u.valid(), forall\|x: char\| u@.contains(x) <==> exists\|i: int\| 0 <= i < cs.len() && cs[i]@.contains(x)` (D93: a loop with four invariant clauses) | `external_body` + `unimplemented!()` · none |
+| R03.H6v | H | — | — | closed-spec | `pub closed spec fn valid(&self) -> bool`: the representation invariant (D95); ships `uninterp`; until H6v and H7v exist, `class_empty`, `copy_class`, `class_member` and W2v's `class_insert` ship GATED (`external_body`, counted by `--strict`) | spec-definition hole · none |
+| R03.H7v | H | — | — | closed-spec | `pub closed spec fn chars(&self) -> ISet<char>`: the view's set (D95); ships `uninterp` | spec-definition hole · none |
 | R03.H5d | H | — | R03.H5v | — | `function ClassOfString(s: seq<char>): (r: CharClass) ensures ClassValid(r) && forall c :: InClass(r, c) <==> c in s` | bodyless function hole · none |
 | R03.H5v | H | — | R03.H5d | view | `pub fn class_of_string(s: &Vec<char>) -> (r: CharClass) ensures r.valid(), forall\|c: char\| r@.contains(c) <==> s@.contains(c)` | `external_body` + `unimplemented!()` · none |
 | R03.C8dv | C | `diverge:r03-c8` | — | — | divergence card (its topic is named in the card). **Final section** | given |
@@ -814,9 +816,9 @@ Header counts: **10 holes**, **4 predictions**.
 
 #### Constructs (registry)
 
-- `write_d = ["export"]`, `write_v = ["view", "closed-spec", "pub-visibility"]` — 4 single-language units, 4 slugs.
+- `write_d = ["export"]`, `write_v = ["view", "closed-spec", "pub-visibility"]` — 4 single-language units, 4 slugs (D94, D95: each a step the smallest answers write).
 - `recognise_d = ["import", "opaque"]`, `recognise_v = ["opaque"]`.
-- Checked uses (≥ 2 per language): export d H1d, H2d, H3d; view v H1v, H2v, H3v, H5v; closed-spec v H2v, H3v; pub-visibility v H2v, H4v.
+- Checked uses (≥ 2 per language): export d H1d, H2d, H3d; view v H2v, H3v, H4v, H5v; closed-spec v H6v, H7v; pub-visibility v H2v, H3v (D94, D95).
 
 #### Agentic file (rung 2 at API scale: API implementer)
 
@@ -824,7 +826,7 @@ Header counts: **10 holes**, **4 predictions**.
 - **CONTRACT** `goal:` implement both functions so that their statements verify · `allowed-files:` the agent file · `acceptance:` `scripts/vcheck --gate <file>` exits 0 · zero holes · `scripts/specfreeze --against <snapshot> <file>` reports the two statements unchanged (no `requires` added, no `ensures` weakened) · `scripts/vaudit` reports no finding.
 - **Learner follow-up (30 min):** the adversarial review, in an `ADVERSARIAL REVIEW` block: is the delivered API total; are the contracts strong enough for a client; what happens at the character boundaries (the smallest and largest `char`); would a client of the delivered API verify where a client of the statement does.
 
-#### Itemized minutes (total 300)
+#### Itemized minutes (total 326)
 
 | line | items | min |
 |---|---|---|
@@ -833,14 +835,14 @@ Header counts: **10 holes**, **4 predictions**.
 | worked | W1d, W1v (2 × 4) + W2d, W2v (2 × 6) + WRITE cards C1d, C3v, C4v, C5v (4 × 2.5) | 30 |
 | cards | C2d, C6d, C7v (3 × 1.5) + C8dv (3.5) | 8 |
 | predicts | P1d–P4dv (4 × 3) | 12 |
-| holes | H1d–H5v (10 × 7) | 70 |
+| holes | H1 7, H2 10, H3 7, H4 12, H5 7 in each language, and H6v, H7v 5 each (D93–D95) | 96 |
 | API review | the `API REVIEW` block | 15 |
 | agent | A1d/A1v audit and adversarial review | 30 |
 | paper | card 03.2 (cards only, Δ74) | 15 |
 | bench card | | 20 |
 | viva | 6 of 12 | 30 |
 | calib | | 5 |
-| **total** | | **300** |
+| **total** | | **326** |
 
 #### Registry fields (R03)
 
@@ -1221,9 +1223,9 @@ recognise_v = ["calc"]
 | checkpoint | R06: 2 D + 2 V, ≥ 3/4, ≥ 1 per language | — | — | — | — | — | X1d, X2d, X1v, X2v |
 | import tiers | Dafny `core`, Verus `prelude` throughout band 1 (no library before R07) | yes | yes | yes | yes | yes (+ `py-fvh`) | yes |
 | layer | R01 none; R02–R05 A1; R06 A1 + A1b | — | A1 (declares) | A1 | A1 | A1 | A1b (declares) |
-| minutes | design §8.2 | 276 | 342 | 300 | 360 | 402 | 462 |
+| minutes | design §8.2 (R03 326 since Δ311) | 276 | 342 | 326 | 360 | 402 | 462 |
 
-**Band total** 2,142 min = 35.7 h, as design §8.1. **Marker-level check (DVR1's records lane):** marker-only stubs of every item above, at these paths, in a scratch copy of the registry with §6's fields applied, must pass `check_course_map.py --only registry` and `--only coverage`; the full checker on the real files is DVR1's integration lane's.
+**Band total** 2,168 min = 36.1 h (design §8.1's 2,142 plus R03's 26 from D93–D95, Δ311). **Marker-level check (DVR1's records lane):** marker-only stubs of every item above, at these paths, in a scratch copy of the registry with §6's fields applied, must pass `check_course_map.py --only registry` and `--only coverage`; the full checker on the real files is DVR1's integration lane's.
 
 **Ordering and naming rule for cards** (as `QPLAN.md` §5): a divergence or false-friends card sits in its file's final section, under a heading that tells the learner to record the module's predictions first; its slug and demo files are named by item id, never by topic; its demos state no outcome in prose; a demo whose output settles a prediction carries `// after: <item id>`.
 

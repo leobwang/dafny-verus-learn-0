@@ -1,0 +1,30 @@
+// after: R03.P4dv
+module R03_P4 {
+  module API {
+    export reveals ClassSingle, InClass, Cp, CharClass, CRange provides ClassValid
+    newtype Cp = x: int | 0 <= x < 0x1_0000_0000
+    datatype CRange = CRange(lo: Cp, hi: Cp)
+    datatype CharClass = CharClass(ranges: seq<CRange>)
+    predicate ClassValid(cc: CharClass)
+    {
+      (forall i | 0 <= i < |cc.ranges| :: cc.ranges[i].lo <= cc.ranges[i].hi) &&
+      (forall i, j | 0 <= i < j < |cc.ranges| :: cc.ranges[i].hi as int + 1 < cc.ranges[j].lo as int)
+    }
+    ghost predicate InClass(cc: CharClass, c: char)
+    {
+      exists i | 0 <= i < |cc.ranges| :: cc.ranges[i].lo as int <= c as int <= cc.ranges[i].hi as int
+    }
+    function ClassSingle(c: char): (r: CharClass)
+      ensures ClassValid(r)
+    {
+      CharClass([CRange(c as int as Cp, c as int as Cp)])
+    }
+  }
+  module Client {
+    import opened API
+    lemma SingleHoldsItsCharR03()
+    {
+      assert InClass(ClassSingle('b'), 'b');
+    }
+  }
+}

@@ -1,0 +1,10 @@
+// after: R03.P3dv
+// after: R03.P4dv
+module API {
+  export reveals Seven
+  function Seven(): int { 7 }
+}
+module Client {
+  import opened API
+  lemma Demo() { assert Seven() == 7; }
+}
