@@ -944,6 +944,14 @@ def file_findings(ctx, rel, shipped):
                                           "`did:` receipt"))
     for ln in sr_commented_checks(raw, rel):
         f["commented"].append((rel, ln, "commented check"))
+    # a GATED attribute (D95, Δ311; R03): given code that ships `external_body` until
+    # the learner's definitions exist, marked `// GATED`; anywhere in the file, inside
+    # an item block or not, it is unfinished work
+    for ln, line in enumerate(raw, 1):
+        if GATED_LINE.search(line):
+            f["banned"].append((rel, ln, "a GATED `#[verifier::external_body]` is still in "
+                                         "place: delete it once the definitions it waits for "
+                                         "are written"))
     # banned constructs: the learner-mode lint's findings inside H/X/T blocks
     if core.lang_of(rel):
         try:
@@ -2295,6 +2303,9 @@ def lint_hollow_module(ctx):
     return probs
 
 
+# A gate attribute on given code (D95, Δ311): `#[verifier::external_body]` followed by
+# a `// GATED` comment on the same line; --strict counts every one left in place.
+GATED_LINE = re.compile(r"#\[verifier::external_body\]\s*//\s*GATED\b")
 TWIN_ONLY_LINE = re.compile(r"^\s*(?://|#)\s*(cfree|cfree-decl|triv):")
 
 

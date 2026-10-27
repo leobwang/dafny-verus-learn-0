@@ -1024,6 +1024,40 @@ def measure_free_text(text, lang, path="<text>"):
     return text
 
 
+# Open visibility (the user's decision D94, 2026-10-27; DELTAS Δ311): a Verus file
+# whose text carries the marker line `// specfreeze: open-visibility` may ship a fn
+# without `pub` that its reference twin declares `pub` (R03: the client module needs
+# the learner to add it, as Dafny's frozen-exports admits added `provides` entries).
+# Only an added `pub` on such a fn is no change; everything else stays frozen.
+OPEN_VISIBILITY_MARKER = re.compile(r"(?m)^\s*//\s*specfreeze:\s*open-visibility\s*$")
+_FN_HEAD = re.compile(r"(?m)^(\s*)(pub\s+)?((?:open\s+|closed\s+)?(?:spec\s+|proof\s+)?fn\s+([A-Za-z_][A-Za-z0-9_]*)\b)")
+
+
+def open_visibility_names(ltext, ttext):
+    """The fn names a marked Verus learner text ships without `pub` whose twin
+    text declares them `pub` (each name declared once in both). Static."""
+    if not OPEN_VISIBILITY_MARKER.search(ltext or ""):
+        return []
+    def heads(text):
+        out = {}
+        for m in _FN_HEAD.finditer(text):
+            out.setdefault(m.group(4), []).append(bool(m.group(2)))
+        return out
+    lh, th = heads(ltext), heads(ttext)
+    return sorted(n for n, v in lh.items()
+                  if v == [False] and th.get(n) == [True])
+
+
+def pub_free_text(text, names):
+    """`text` with `pub` dropped from the headers of the fns named in `names` (the
+    open-visibility comparison: an added `pub` is no change). Static."""
+    names = set(names or ())
+    if not names:
+        return text
+    return _FN_HEAD.sub(lambda m: m.group(1) + m.group(3) if m.group(4) in names
+                        else m.group(0), text)
+
+
 def open_spec_symbols(lpath, lang, ltext=None, ttext=None, tpath=None, exclude=()):
     """The symbols of a learner file whose reference twin's statement differs
     from the shipped one by added requires and ensures clauses only (the same

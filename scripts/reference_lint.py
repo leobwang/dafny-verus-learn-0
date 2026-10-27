@@ -251,6 +251,14 @@ def compare_declarations(L, rel, lang, ltext, ttext, tpath, writers=frozenset())
     tm, _, _ = core.statement_table(tpath, lang, set(lbodyless),
                                     text=core.measure_free_text(ttext, lang, tpath),
                                     open_frames=frames, open_specs=specs)
+    # an added `pub` on an open-visibility fn is no statement change (D94; specfreeze)
+    tv = {}
+    if lang == "v":
+        vis = core.open_visibility_names(ltext, ttext)
+        if vis:
+            tv, _, _ = core.statement_table(tpath, lang, set(lbodyless),
+                                            text=core.pub_free_text(ttext, vis),
+                                            open_frames=frames, open_specs=specs)
     tests = dafny_tests(ttext, tpath) if lang == "d" else set()
     lop = dafny_opaque(ltext, lpath) if lang == "d" else set()
     top = dafny_opaque(ttext, tpath) if lang == "d" else set()
@@ -261,7 +269,7 @@ def compare_declarations(L, rel, lang, ltext, ttext, tpath, writers=frozenset())
                             writers):
             L.add(tpath, tlines.get(sym, 0), "declaration-extra")
     for sym in sorted(set(lh) & set(th)):
-        if lh[sym] not in (th[sym], tm.get(sym)) or (sym in lop) != (sym in top) or (
+        if lh[sym] not in (th[sym], tm.get(sym), tv.get(sym)) or (sym in lop) != (sym in top) or (
                 sym in frames and not core.is_subsequence(
                     core.frame_ensures(lpath, ltext, {sym}).get(sym, []),
                     core.frame_ensures(tpath, ttext, {sym}).get(sym, []))):

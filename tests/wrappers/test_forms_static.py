@@ -871,6 +871,22 @@ class FormsInFirstTry(unittest.TestCase):
         rc, out, err = C.tool("firsttry.py", "Q04", "--report", root=self.root)
         self.assertIn("forms not met 0", out)
 
+    def test_strict_counts_a_gated_attribute_anywhere(self):
+        """D95 (Δ311): a `#[verifier::external_body]  // GATED` line, inside an item
+        block or outside every block, fails --strict until it is deleted."""
+        gated = ("#[verifier::external_body]  // GATED until H6v and H7v: then delete this line\n"
+                 "pub fn given_helper(x: u8) -> (r: u8)\n    ensures\n        r == x,\n{\n    x\n}\n\n")
+        self.rep(LIB_RS, "// item: Q04.H1v", gated + "// item: Q04.H1v")
+        rc, out, err = C.tool("firsttry.py", "Q04", "--report", "--strict", root=self.root)
+        self.assertEqual(rc, 1, out + err)
+        line = self.line_of(LIB_RS, "// GATED until")
+        self.assertIn(f"{LIB_RS}:{line}: banned: a GATED `#[verifier::external_body]` is still "
+                      "in place", out)
+        self.rep(LIB_RS, "#[verifier::external_body]  // GATED until H6v and H7v: then delete "
+                         "this line\n", "")
+        rc, out, err = C.tool("firsttry.py", "Q04", "--report", "--strict", root=self.root)
+        self.assertNotIn("GATED", out)
+
     def test_judge_block_and_report_note(self):
         self.rep(EXIT_RS, "// need: pub proof fn double_is_twice(n: nat)\n",
                  "// need: pub proof fn double_is_twice(n: nat)\n// form: stable\n")

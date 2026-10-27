@@ -93,6 +93,15 @@ open-body definitions may be added. Existing opacity, wildcards, set names
 and inheritance stay fixed. Unmarked modules retain the existing behaviour.
 Both --check and --against enforce the boundary, even if a marker is removed.
 
+Open visibility (R03, D94). A Verus file carrying the marker line
+`// specfreeze: open-visibility` may ship a fn without `pub` that its reference
+twin declares `pub` (the client module needs the learner to add it, as Dafny's
+frozen-exports admits added `provides` entries). `--pin` lists those fn names
+under `open_visibility` (vcheck open_visibility_names); `--check` compares a
+statement that differs from its pin a second time with `pub` dropped from those
+fns' headers (vcheck pub_free_text), so an added `pub` is no change and anything
+else on them stays frozen. reference_lint.py judges the twin the same way.
+
 Python statements (the registry's `harness` files, DV4): dvl.python.spec_hash,
 each function's and class's signature (name, parameters with annotations and
 defaults, return annotation, decorators, bases), never a body or docstring,
@@ -322,6 +331,17 @@ def open_specs_of(root, rel, lang, learner_hashes, exclude=()):
     return sorted(syms), {s: parts[s][1] for s in sorted(syms)}
 
 
+def open_visibility_of(root, rel, lang):
+    """The fn names of a Verus learner file marked `// specfreeze: open-visibility`
+    that ship without `pub` where the reference twin declares them `pub` (vcheck
+    open_visibility_names; D94): only an added `pub` on them is no change."""
+    twin = Path(root) / core.REF_DIR / rel
+    if lang != "v" or not twin.is_file():
+        return []
+    return core.open_visibility_names((Path(root) / rel).read_text(encoding="utf-8"),
+                                      twin.read_text(encoding="utf-8"))
+
+
 # --- the pin file -------------------------------------------------------------------------
 
 def freeze_path(root, mid):
@@ -360,6 +380,7 @@ def render_freeze(mid, entries, unfrozen):
         fimports = entry[8] if len(entry) > 8 else {}
         flevers = entry[9] if len(entry) > 9 else []
         fexports = entry[10] if len(entry) > 10 else {}
+        opvis = entry[11] if len(entry) > 11 else []
         out += ["[[file]]", f"path = {toml_str(rel)}", f"lang = {toml_str(lang)}",
                 "open_bodies = [" + ", ".join(toml_str(b) for b in bodyless) + "]"]
         if flevers:
@@ -368,6 +389,8 @@ def render_freeze(mid, entries, unfrozen):
             out.append("open_frames = [" + ", ".join(toml_str(f) for f in frames) + "]")
         if specs:
             out.append("open_specs = [" + ", ".join(toml_str(s) for s in specs) + "]")
+        if opvis:
+            out.append("open_visibility = [" + ", ".join(toml_str(n) for n in opvis) + "]")
         out.append("[file.statements]")
         out += [f"{toml_str(sym)} = {toml_str(h)}" for sym, h in sorted(hashes.items())]
         if frames:
@@ -499,7 +522,8 @@ def mode_pin(root, mid):
         entries.append((rel, lang, hashes, opened, frames, fens, specs, sclauses,
                         frozen_imports_of(Path(root) / rel, lang),
                         LEV.off_levers(Path(root) / rel) if lang in ("d", "v") else [],
-                        frozen_exports_of(Path(root) / rel, lang)))
+                        frozen_exports_of(Path(root) / rel, lang),
+                        open_visibility_of(root, rel, lang)))
     if not entries:
         print(f"specfreeze: {rec['id']}: no statement in any Dafny, Verus or Python file of the "
               "module (an empty pin fails)", file=sys.stderr)
@@ -564,6 +588,9 @@ def check_module(root, rec):
             # an added measure is no change (vcheck measure_free_text): a statement
             # that differs is compared again with the file's measures blanked
             text = f.read_text(encoding="utf-8")
+            # an added `pub` on an open-visibility fn is no change either (D94)
+            text = core.pub_free_text(text, e.get("open_visibility", [])) if lang == "v" \
+                else text
             alt, _, _ = statements(f, lang, set(e.get("open_bodies", [])), frames, specs,
                                    text=core.measure_free_text(text, lang, f))
             have = {s: (frozen[s] if s in frozen and alt.get(s) == frozen[s] else h)

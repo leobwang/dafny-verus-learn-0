@@ -150,6 +150,74 @@ class DafnyExports(RootCase):
                                              ["export provides T, Hidden"], ["Make"]))
 
 
+class VerusOpenVisibility(RootCase):
+    """D94 (Δ311): a Verus file marked `// specfreeze: open-visibility` may ship a fn
+    without `pub` that its twin declares `pub`; only the added `pub` is no change."""
+    LIB = "verus/q/q04_proof_craft/src/lib.rs"
+    TEXT = """use vstd::prelude::*;
+verus! {
+pub mod api {
+// specfreeze: open-visibility
+use vstd::prelude::*;
+verus! {
+fn widen(x: u8) -> (r: u16)
+    ensures
+        r == x as u16,
+{
+    x as u16
+}
+pub fn kept(x: u8) -> (r: u8)
+    ensures
+        r == x,
+{
+    x
+}
+} // verus!
+}
+} // verus!
+"""
+    TWIN = TEXT.replace("fn widen(", "pub fn widen(")
+
+    def pin(self):
+        (self.root / self.LIB).write_text(self.TEXT)
+        twin = self.root / "Solutions" / self.LIB
+        twin.parent.mkdir(parents=True, exist_ok=True)
+        twin.write_text(self.TWIN)
+        rc, out, err = self.tool("specfreeze", "--pin", "Q04", env={"CI": "true"})
+        self.assertEqual(rc, 0, out + err)
+        return next(f for f in tomllib.loads((self.root / "expected/Q04.freeze").read_text())[
+            "file"] if f["path"] == self.LIB)
+
+    def check(self, text):
+        (self.root / self.LIB).write_text(text)
+        rc, out, err = self.tool("specfreeze", "--check", "Q04")
+        return rc, out + err
+
+    def test_an_added_pub_is_no_change(self):
+        self.assertEqual(self.pin()["open_visibility"], ["widen"])
+        self.assertEqual(self.check(self.TWIN)[0], 0)
+
+    def test_everything_else_stays_frozen(self):
+        self.pin()
+        for text in (self.TWIN.replace("r == x as u16", "r >= x as u16"),
+                     self.TWIN.replace("fn widen(x: u8)", "fn widen(x: u8, y: u8)"),
+                     self.TEXT.replace("pub fn kept(", "fn kept(")):
+            with self.subTest(text=text):
+                rc, out = self.check(text)
+                self.assertEqual(rc, 1, out)
+                self.assertIn("freeze-changed", out)
+
+    def test_without_the_marker_nothing_is_open(self):
+        self.TEXT, saved = self.TEXT.replace("// specfreeze: open-visibility", "// no marker"), self.TEXT
+        try:
+            self.TWIN = self.TEXT.replace("fn widen(", "pub fn widen(")
+            self.assertNotIn("open_visibility", self.pin())
+            rc, out = self.check(self.TWIN)
+            self.assertEqual(rc, 1, out)
+        finally:
+            self.TEXT, self.TWIN = saved, saved.replace("fn widen(", "pub fn widen(")
+
+
 class DafnyImports(unittest.TestCase):
     TEXT = ("module A { const x := 1 }\n"
             "module B {\n  import opened A\n  import Z = A\n}\n"
