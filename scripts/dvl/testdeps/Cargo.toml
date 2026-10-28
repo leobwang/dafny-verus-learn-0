@@ -1,0 +1,15 @@
+# The pinned compiled-test dependencies (D98, Δ316; pins.toml [verus.test_deps]).
+# `vcheck --test` copies this directory into a run's scratch and builds it with
+# `cargo build --offline --locked --release` on the pinned Rust, from the local
+# cargo cache; [dependencies] here equals [verus.test_deps].allowed.
+[package]
+name = "dvl_test_deps"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+regex = "=1.13.1"

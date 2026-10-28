@@ -20,5 +20,10 @@ rg_re_a2 = { path = "../../given/rg_re_a2" }
 rg_re_a3 = { path = "../../given/rg_re_a3" }
 rg_re_a4 = { path = "../../given/rg_re_a4" }
 
+# Compiled tests only (D98): built offline by `scripts/vcheck --test`; the
+# verifier never sees them.
+[dev-dependencies]
+regex = "=1.13.1"
+
 [package.metadata.verus]
 verify = true

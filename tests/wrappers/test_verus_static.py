@@ -788,6 +788,62 @@ class Trust(unittest.TestCase):
                           ("b", 2, "hole-assume")])
 
 
+class TestDepsStatic(unittest.TestCase):
+    """D98 (Δ316): the pinned compiled-test dependency and the test-todo hole kind
+    (no tool runs)."""
+
+    def test_the_pin_and_its_manifest_agree(self):
+        import tomllib
+        allowed = V.test_dep_pins()
+        self.assertEqual(allowed, {"regex": "=1.13.1"})
+        man = ROOT / V.pins()["test_deps"]["manifest"]
+        meta = tomllib.loads(man.read_text())
+        self.assertEqual(meta["dependencies"], allowed)
+        lock = tomllib.loads((man.parent / "Cargo.lock").read_text())
+        vers = {pk["name"]: pk["version"] for pk in lock["package"]}
+        self.assertEqual(vers["regex"], allowed["regex"].lstrip("="))
+        self.assertFalse((man.parent / "target").exists())
+
+    def test_load_crate_reads_and_refuses_dev_dependencies(self):
+        c = V.load_crate(FX / "testdeps_crate")
+        self.assertEqual(c.dev_deps, {"regex": "=1.13.1"})
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "src").mkdir()
+            (Path(d) / "src/lib.rs").write_text("")
+            for dev in ('regex = "1"', 'regex = "=1.12.0"', 'serde = "=1.0.0"',
+                        'regex = { version = "=1.13.1" }'):
+                (Path(d) / "Cargo.toml").write_text(
+                    f'[package]\nname = "x"\nversion = "0.1.0"\n[dev-dependencies]\n{dev}\n')
+                with self.subTest(dev=dev), self.assertRaises(V.Refused) as e:
+                    V.load_crate(d)
+                self.assertIn("pinned test dependencies", str(e.exception))
+
+    def test_r15_crate_declares_the_pin(self):
+        self.assertEqual(V.load_crate(ROOT / "verus/r/r15_verifier_loop").dev_deps,
+                         {"regex": "=1.13.1"})
+
+    def test_test_todos(self):
+        text = (
+            'use vstd::prelude::*;\n'
+            'verus! {\n'
+            'pub fn f() { todo!("NOT.A") }\n'
+            '}\n'
+            'fn plain() { todo!("NOT.B") }\n'
+            '#[cfg(test)]\n'
+            'mod tests {\n'
+            '    fn h() -> u8 { todo!("R15.H2v") }\n'
+            '    fn bare() { todo!() }\n'
+            '    mod deeper { fn g() { todo!("R15.H3v") } }\n'
+            '}\n'
+            '#[test]\n'
+            'fn t() { let _ = todo!("X.T1v"); }\n')
+        self.assertEqual(V.test_todos(text), [(8, "R15.H2v"), (9, ""), (10, "R15.H3v"),
+                                              (13, "X.T1v")])
+        self.assertEqual(V.test_todos('fn h() { todo!("Y") }\n', test_only=True), [(1, "Y")])
+        self.assertEqual(V.test_todos('#[cfg(test)]\nmod t { fn h() { unimplemented!() } }\n'),
+                         [])
+
+
 class Scratch(unittest.TestCase):
     """_discard keeps a run's job logs only, and only inside the scratch root."""
 

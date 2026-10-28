@@ -448,6 +448,29 @@ class Tests(unittest.TestCase):
                 self.assertEqual(r.per_symbol["sum_thirteen"], "no-error")
 
 
+class TestDeps(unittest.TestCase):
+    """D98 (Δ316): a crate's pinned [dev-dependencies] built offline for its compiled
+    tests, and the test-todo hole kind."""
+
+    def test_regex_dev_dependency_builds_and_links(self):
+        r = V.test(FX / "testdeps_crate")
+        self.assertEqual((r.verdict, r.stage), ("failed", "test"), r.diagnostics)
+        self.assertEqual(r.per_symbol, {"tests::hole_panics": "failed",
+                                        "tests::regex_agrees": "passed"})
+        self.assertIn("test-deps", " ".join(steps(r.raw_dir)))
+        self.assertEqual(V.test(FX / "testdeps_crate", names=["regex_agrees"]).verdict,
+                         "verified")
+
+    def test_a_test_todo_is_a_hole_and_fails_the_gate(self):
+        r = V.verify(FX / "testdeps_crate")
+        self.assertEqual(r.verdict, "verified")
+        self.assertEqual([(Path(h.file).name, h.kind, h.label) for h in r.holes],
+                         [("lib.rs", "test-todo", "FX.H2v")])
+        g = V.verify(FX / "testdeps_crate", gate=True)
+        self.assertEqual(g.verdict, "failed")
+        self.assertEqual(len(V.holes(FX / "testdeps_crate")), 1)
+
+
 class EmptyBody(unittest.TestCase):
     """The empty-body gate (Δ45, Δ47); verdict failed = the hole is real."""
 

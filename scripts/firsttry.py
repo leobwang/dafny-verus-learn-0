@@ -2240,7 +2240,17 @@ def static_holes(text, rel, it, root=None):
             if re.search(r"\bassume\s*\(|\badmit\s*\(|\buninterp\s+spec\s+fn\b", c) \
                     or "verifier::external_body" in r or "verifier(external_body)" in r:
                 out.append(ln)
+        # D98 (Δ316): a plain-Rust hole inside #[cfg(test)], `todo!("<item id>")`
+        out += [ln for ln, _ in test_todo_lines(text) if lo <= ln <= hi]
     return sorted(set(out))
+
+
+def test_todo_lines(text):
+    """[(line, label)] of the file's test-todo holes (dvl.verus.test_todos; D98)."""
+    try:
+        return V.test_todos(text)
+    except V.vs.ParseError:
+        return []
 
 
 def lint_hollow_module(ctx):
@@ -2570,6 +2580,10 @@ def _first_fn(text, it):
 
 
 STATEMENT_SKIP = "a statement hole"
+# D98 (Δ316): a test hole, whose every hole form is a `todo!("<item id>")` inside
+# #[cfg(test)] (plain Rust the verifier never sees): there is no verified body to empty;
+# its gate is the crate's compiled tests on the shipped file, which must fail (test_gate).
+TEST_SKIP = "a test hole"
 # A prose item (QPLAN §19.0): its block names the declaration the learner writes
 # from prose, `// prose: <name>`; its hole is a given client's labelled assume, and
 # its use-site check ships commented.
@@ -2652,6 +2666,11 @@ def eb_skip_reason(text, rel, it, open_specs=None):
         return _dafny_skip_reason(text, rel, it, open_specs)
     if core.lang_of(rel) != "v":
         return None
+    t_holes = static_holes(text, rel, it)
+    if t_holes and set(t_holes) <= {ln for ln, _ in test_todo_lines(text)}:
+        return (f"{TEST_SKIP}: its hole forms are `todo!` calls inside #[cfg(test)], which the "
+                "verifier never sees; its gate is the crate's compiled tests on the shipped "
+                "file (test_gate, D98)")
     try:
         src, fn = _first_fn(text, it)
     except V.vs.ParseError:
@@ -3254,6 +3273,28 @@ def forms_gate(ctx, shadows, it, rel, lang, seeds):
     return ok, out
 
 
+def test_gate(ctx, it, rel):
+    """(ok, lines) of a test hole's gate (TEST_SKIP, D98): `vcheck --test` on the
+    crate as shipped, whose `todo!` bodies panic, must not pass (verdict failed)."""
+    target = ctx.root / rel
+    crate = crate_dir_rel(ctx.root, rel)
+    if crate:
+        target = ctx.root / crate
+    res = core.lib("v").test(str(target))
+    passed = sorted(k for k, v in res.per_symbol.items() if v == "passed")
+    failed = sorted(k for k, v in res.per_symbol.items() if v == "failed")
+    label = core.show(target, ctx.root)
+    if res.verdict == "failed" and failed:
+        return True, [f"  ✓ {it['id']}  the shipped test hole fails its compiled tests "
+                      f"({len(failed)} failed, {len(passed)} passed: `scripts/vcheck --test "
+                      f"{label}`)"]
+    if res.verdict == "verified":
+        return False, [f"  ✗ {it['id']}  the shipped test hole passes every compiled test "
+                       f"({len(passed)} passed): the tests do not reach its `todo!`"]
+    return False, [f"  ? {it['id']}  no test-gate verdict ({res.verdict}, stage {res.stage}); "
+                   f"raw output: {res.raw_dir}"]
+
+
 def gate_line(it, rel, res, what):
     """(ok, lines) for one gate result."""
     out = []
@@ -3512,6 +3553,10 @@ def _empty_body_items(ctx, todo, modes, shipped_modes, run_forms, shadows, seeds
         if skip:
             run_shipped = False
             lines.append(f"  - {it['id']}  shipped gate skipped: {skip} ({rel})")
+        if skip and skip.startswith(TEST_SKIP):
+            ran += 1
+            t_ok, t_lines = test_gate(ctx, it, rel)
+            ok, lines = ok and t_ok, lines + t_lines
         if skip and skip.startswith(STATEMENT_SKIP):
             ran += 1
             c_ok, c_lines = client_gate(ctx, it, rel)

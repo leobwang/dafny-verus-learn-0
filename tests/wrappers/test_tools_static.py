@@ -435,6 +435,28 @@ class LintHollow(RootCase):
         self.assertEqual(firsttry.static_holes(shipped, "verus/q/x/src/lib.rs", it), [2])
         self.assertEqual(firsttry.static_holes(filled, "verus/q/x/src/lib.rs", it), [])
 
+    def test_static_holes_sees_a_test_todo(self):
+        """D98 (Δ316): `todo!("<item id>")` inside #[cfg(test)] is a shipped hole form (the
+        tool's test-todo kind); the empty-body gate skips the block as a test hole and
+        runs its compiled tests instead; a `todo!` outside every test item is no form."""
+        text = ("use vstd::prelude::*;\n"
+                "verus! { pub fn f() -> u8 { 1 } }\n"
+                "#[cfg(test)]\n"
+                "mod tests {\n"
+                "    // item: R99.H2v\n"
+                "    fn pattern(n: u8) -> String {\n"
+                "        todo!(\"R99.H2v\")\n"
+                "    }\n"
+                "}\n")
+        it = {"id": "R99.H2v", "line_start": 5, "line_end": 8}
+        rel = "verus/r/x/src/lib.rs"
+        self.assertEqual(firsttry.static_holes(text, rel, it), [7])
+        self.assertTrue(firsttry.eb_skip_reason(text, rel, it).startswith(firsttry.TEST_SKIP))
+        filled = text.replace('todo!(\"R99.H2v\")', '"a".repeat(n as usize)')
+        self.assertEqual(firsttry.static_holes(filled, rel, it), [])
+        outside = text.replace("#[cfg(test)]\n", "")
+        self.assertEqual(firsttry.static_holes(outside, rel, it), [])
+
     def test_dafny_value_slot_outside_a_check_unit(self):
         self.rep("dafny/Q/Q04_ProofCraft/core/Q04_ProofCraft.dfy", "  method {:test} CheckSum() {",
                  "  // item: Q04.P12d S1 value\n  // Answer form: numeral\n"

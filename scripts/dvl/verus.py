@@ -12,6 +12,8 @@ for both language libraries (types and plumbing in dvl.common):
   spec_hash(path, symbols=None) -> {symbol: sha256}
   freeze_check(frozen, candidate) -> list[Finding]
   test(target, names=None) -> Result       verus --compile --test, then the binary
+                                           (a crate's pinned [dev-dependencies],
+                                           built offline and --locked: D98)
   run_bin(target, args=()) -> (Result, BinRun | None)
                                            a crate's [[bin]] target: the library
                                            verified and compiled, the binary root
@@ -423,6 +425,7 @@ class Crate:
     root: Path
     dir: Path | None
     deps: list = field(default_factory=list)       # direct path dependencies
+    dev_deps: dict = field(default_factory=dict)   # [dev-dependencies]: name -> pinned version
 
     def chain(self):
         """Transitive path dependencies, lowest first, each once."""
@@ -472,7 +475,22 @@ def load_crate(cdir, _stack=()):
         if dep.name != _crate_name(key):
             raise Refused(f"{manifest}: dependency {key} names crate {dep.name}")
         deps.append(dep)
-    return Crate(name, root.resolve(), cdir, deps)
+    dev = {}
+    allowed = test_dep_pins()
+    for key, spec in sorted(meta.get("dev-dependencies", {}).items()):
+        if key not in allowed or spec != allowed[key]:
+            raise Refused(f"{manifest}: dev-dependency {key} = {spec!r}: a course crate declares "
+                          "only the pinned test dependencies ("
+                          + (", ".join(f"{k} = {v!r}" for k, v in sorted(allowed.items()))
+                             or "none") + "; D98)")
+        dev[key] = spec
+    return Crate(name, root.resolve(), cdir, deps, dev)
+
+
+def test_dep_pins():
+    """The pinned compiled-test dependencies (pins.toml [verus.test_deps].allowed):
+    {crate name: exact version requirement}. D98: `regex` only."""
+    return dict((pins().get("test_deps") or {}).get("allowed") or {})
 
 
 def crate_files(root):
@@ -610,7 +628,7 @@ def resolve(target, run, layer=None, root=None):
         files = crate_files(c.root)
         if any(f == t for f, _, _ in files):
             return Plan(c, files, False, layer)
-        own = Crate(_crate_name(f"{c.name}_{t.stem}"), t, cdir, c.deps)
+        own = Crate(_crate_name(f"{c.name}_{t.stem}"), t, cdir, c.deps, c.dev_deps)
         return Plan(own, crate_files(t), True, layer)
     deps = _layer_crates(layer, croot) if layer else []
     return Plan(Crate(_crate_name(t.stem), t, None, deps), crate_files(t), True, layer)
@@ -930,15 +948,18 @@ def _split_dependency_holes(run, srcs, holes, own, trust):
 
 
 def _classify(run, job, crate_name, gate, min_verified, findings, partial, srcs=None, *,
-              own=None, trust=None):
+              own=None, trust=None, extra_holes=()):
     """One target job → Result (verdicts and stages: the module docstring).
     own: the target's own files as shown (None: every hole is the target's);
-    holes elsewhere are dependency holes, matched against `trust`."""
+    holes elsewhere are dependency holes, matched against `trust`.
+    extra_holes: the target's holes the solver never sees (test-todo, D98)."""
     srcs = srcs or _Sources()
     jd = parse_json_doc(job.out)
     jdiags, raw = parse_stderr(job.err)
     all_holes = _holes(run, jdiags, srcs)
     holes, dep_found, dep_info = _split_dependency_holes(run, srcs, all_holes, own, trust)
+    if extra_holes:
+        holes = sorted(list(holes) + list(extra_holes), key=lambda h: (h.file, h.line, h.col))
     findings = list(findings) + dep_found
     diags = list(dep_info)
     for d in jdiags:
@@ -1237,7 +1258,7 @@ def _verify_run(run, target, vb, gate, symbol, seed, isolate, fast, extra_args, 
     job = _job(run, "target", argv, timeout_s)
     cls = functools.partial(_classify, run, crate_name=plan.crate.name, min_verified=min_verified,
                             findings=findings, partial=symbol or None, srcs=srcs, own=own,
-                            trust=trust)
+                            trust=trust, extra_holes=_test_todo_holes(run, plan))
     first = cls(job=job, gate=False)
     trusted = [d for d in first.diagnostics if d.code == "trusted-dependency-hole"]
     if not (trusted and first.verdict == "verified" and not first.holes and
@@ -1959,11 +1980,14 @@ def _test_run(run, target, vb, names, layer, timeout_s, root=None):
     bad = _build_chain(run, plan.crate, None, timeout_s)
     if bad:
         return bad
+    ext, bad = _build_test_deps(run, plan.crate, timeout_s)
+    if bad:
+        return bad
     p = pins()
     tbin = run.dir / "testbin"
     argv = [vb, plan.crate.root, "--crate-type=lib", "--crate-name", plan.crate.name,
-            *_base_args(p), *_link_args(plan.crate, run.dir / "deps"), "--compile", "--test",
-            "-o", tbin, "--output-json", "--error-format=json"]
+            *_base_args(p), *_link_args(plan.crate, run.dir / "deps"), *ext, "--compile",
+            "--test", "-o", tbin, "--output-json", "--error-format=json"]
     job = _job(run, "compile-test", argv, timeout_s)
     r = _classify(run, job, plan.crate.name, False, None, [], None)
     if r.verdict != "verified" or job.exit != 0 or not tbin.is_file():
@@ -2006,6 +2030,107 @@ def _test_run(run, target, vb, names, layer, timeout_s, root=None):
     elif diags:
         res.verdict = "failed"
     return res
+
+
+def _build_test_deps(run, crate, timeout_s=None):
+    """(extern args, None) for the crate's pinned [dev-dependencies] (D98): the
+    pinned manifest and lock (pins.toml [verus.test_deps]), copied into the run's
+    scratch, built by cargo on the pinned Rust (job_env's RUSTUP_TOOLCHAIN) with
+    --offline --locked --release from the local cargo cache, as a plain job; each
+    declared crate's rlib is passed to `verus --compile --test` as --extern, and its
+    dependencies through -L dependency=. ([], None) when the crate declares none;
+    ([], failing Result) when the build fails (error, or killed(memory))."""
+    if not crate.dev_deps:
+        return [], None
+    t = pins().get("test_deps") or {}
+    man = REPO / t.get("manifest", "")
+    if not man.is_file() or not (man.parent / "Cargo.lock").is_file():
+        return [], _refused(run.target, f"the pinned test-dependency manifest {man} or its "
+                            "Cargo.lock is missing (pins.toml [verus.test_deps])")
+    work = run.dir / "test-deps"
+    shutil.copytree(man.parent, work, ignore=shutil.ignore_patterns("target"))
+    tdir = work / "target"
+    argv = ["cargo", "build", "--offline", "--locked", "--release", "--message-format=json",
+            "--manifest-path", work / "Cargo.toml", "--target-dir", tdir,
+            "-j", str(int(t.get("jobs", 1)))]
+    job = _job(run, "test-deps", argv, timeout_s)
+    rlibs = {}
+    for line in job.out.splitlines():
+        try:
+            d = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(d, dict) and d.get("reason") == "compiler-artifact":
+            for f in d.get("filenames") or []:
+                if f.endswith(".rlib"):
+                    rlibs[(d.get("target") or {}).get("name")] = f
+    missing = [k for k in sorted(crate.dev_deps) if _crate_name(k) not in rlibs]
+    if job.exit != 0 or missing:
+        tail = [ln for ln in job.err.splitlines() if ln.strip()][-3:]
+        res = Result(LANG, run.target, job.exit, "error", "compile", None, [], [Diag(
+            "", 0, 0, "error", "the pinned test dependencies (" + ", ".join(sorted(crate.dev_deps))
+            + ") did not build offline from the local cargo cache"
+            + (f" (no rlib for {', '.join(missing)})" if missing and job.exit == 0 else "")
+            + (": " + " | ".join(tail) if tail else ""), "test-deps")], [], {}, str(run.dir),
+            job.argv)
+        if job.killed == "memory":
+            res.verdict = "killed(memory)"
+        return [], res
+    ext = []
+    for k in sorted(crate.dev_deps):
+        ext += ["--extern", f"{_crate_name(k)}={rlibs[_crate_name(k)]}"]
+    return ext + ["-L", f"dependency={tdir / 'release' / 'deps'}"], None
+
+
+# --- test-todo holes (D98): plain-Rust holes inside #[cfg(test)] -------------------------------
+
+TEST_TODO = "test-todo"
+TEST_ATTRS = ("cfg(test)", "test")
+
+
+def test_todos(text, test_only=False):
+    """[(line, label)] of every `todo!(…)` call inside a `#[cfg(test)]` or `#[test]`
+    item (anywhere when the file itself is test-only): the hole kind `test-todo` (D98),
+    counted from the token stream, never grep. label: the call's single string
+    literal (the item id, `todo!("R15.H2v")`), else ""."""
+    src = vs.parse(text)
+    t = src.toks
+    spans = [(0, len(t))] if test_only else []
+
+    def rec(items):
+        for it in items:
+            if any(vs._attr_is(src, a, TEST_ATTRS) for a in it.attrs):
+                spans.append((it.start, it.end))
+            else:
+                rec(it.children)
+    if not test_only:
+        rec(src.items)
+    out = []
+    for a, b in spans:
+        for k in range(a, min(b, len(t)) - 2):
+            if t[k].kind == "id" and t[k].text == "todo" and t[k + 1].text == "!" and \
+                    t[k + 2].text == "(":
+                close = src.pairs.get(k + 2, k + 3)
+                inner = t[k + 3:close]
+                label = ""
+                if len(inner) == 1 and inner[0].kind == "lit" and inner[0].text.startswith('"'):
+                    label = inner[0].text[1:-1]
+                out.append((t[k].line, label))
+    return sorted(set(out))
+
+
+def _test_todo_holes(run, plan):
+    """The target's own test-todo holes (D98), as Hole records."""
+    out = []
+    for f, _, test_only in plan.files:
+        try:
+            text = Path(f).read_text(encoding="utf-8")
+            found = test_todos(text, test_only)
+        except (OSError, UnicodeDecodeError, vs.ParseError):
+            continue
+        shown = run.orig(str(f))
+        out += [Hole(shown, line, 0, TEST_TODO, label) for line, label in found]
+    return out
 
 
 # --- a crate's binary target (the user's decision D16, 2026-10-12; QPLAN §30 Q59) ----------------

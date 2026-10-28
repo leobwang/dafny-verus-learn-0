@@ -1,0 +1,15 @@
+# Fixture (D98, Δ316): a crate declaring the pinned compiled-test dependency.
+[package]
+name = "testdeps_crate"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = "=0.0.0-2026-09-20-0158"
+
+[dev-dependencies]
+regex = "=1.13.1"
