@@ -2468,7 +2468,7 @@ write_v = ["invariant"]
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 90, claude_runs = 20, qwen_calls = 960, qwen_runs = 288, gpu_hours = 3 }
-admissible = { "R15.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R15.H1d" = { admitted = true, minutes = 20, fallback = "" }, "R15.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R15.H1v" = { admitted = true, minutes = 20, fallback = "" } }
+admissible = { "R15.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R15.H1d" = { admitted = true, minutes = 20, fallback = "" }, "R15.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R15.H1v" = { admitted = true, minutes = 20, fallback = "" }, "R15.H1py" = { admitted = true, minutes = 35, fallback = "" }, "R15.H2py" = { admitted = true, minutes = 40, fallback = "" }, "R15.H3py" = { admitted = true, minutes = 65, fallback = "" } }
 imports = { "dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy" = "std", "dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy" = "std", "verus/r/r15_verifier_loop/src/lib.rs" = "all", "verus/r/r15_verifier_loop/src/agent.rs" = "all", "harness/r/fvh_r/spectest.py" = "py-fvh", "harness/r/fvh_r/roundtrip.py" = "py-fvh" }
 concept_items = {}
 
