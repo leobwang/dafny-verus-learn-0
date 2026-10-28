@@ -504,7 +504,7 @@ proof fn lemma_from_shortcut(p: Seq<Inst>, pc: int, w: Seq<char>, f: nat) -> (g:
 }
 // @hole-end R16.H4v
 // Hint(1): one fuelled helper per direction, each by induction on the fuel, with one case per instruction kind at `pc`; the threaded jump is the only case where the two programs differ.
-// Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, rebuild the skipped jump with `lemma_accepts_jmp(p, a as int, w, g1 + 1)`.
+// Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, the skipped jump costs one more step of the original, taken at the jump's own target.
 
 // =============================================================================
 // rexc: the whole-program theorem and the matcher

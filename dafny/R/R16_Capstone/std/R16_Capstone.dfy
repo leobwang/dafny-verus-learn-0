@@ -64,7 +64,7 @@ module R16_Capstone {
     assume false;
   }
   // Hint(1): induction on `r`, one call per child; this unit proves no lemma by induction on its own (manual-lemma-induction).
-  // Hint(2): read the addresses off `Emit`: an `Alt`'s right child sits at `pc + 2 + |Emit(a, pc + 1)|`, a `Cat`'s at `pc + |Emit(a, pc)|`.
+  // Hint(2): A5's `EmitLenAlt`, `EmitLenCat` and `EmitLenStar` state each constructor's length and name the address of every child's code.
 
   // ===========================================================================
   // Completeness
@@ -146,7 +146,7 @@ module R16_Capstone {
 
   // Your helper lemmas (H4), here.
   // Hint(1): one fuelled helper per direction, each by induction on the fuel, with one case per instruction kind at `pc`; the threaded jump is the only case where the two programs differ.
-  // Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, rebuild the skipped jump with `AcceptsJmp(p, a, w, g1 + 1)`.
+  // Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, the skipped jump costs one more step of the original, taken at the jump's own target.
 
   // ===========================================================================
   // The whole-program theorem

@@ -1,0 +1,5 @@
+# expected/R16.pins — one salted sha256 per verdict answer: sha256 of "R16:<item id>:<answer>",
+# the answer normalized (trimmed, whitespace collapsed). Written by
+# `scripts/pins.py --update --ref --module R16` from the reference answers. Never the answer itself.
+P1dv  salted-sha256 a633b5ea5dfd76e183f62a7fc0490b53ab9fe8a56606a38bdc6edf75efc6f319
+P2dv  salted-sha256 b32c13ba3cf05711ffae8002fd2c4968a372f423ab7a43fe56e6231ddac47b93

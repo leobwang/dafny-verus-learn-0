@@ -68,17 +68,20 @@ module R16_Capstone {
     case Eps =>
     case Chr(_) =>
     case Alt(a, b) =>
+      EmitLenAlt(a, b, pc);
       EmitSizeR16(a, pc + 1);
       EmitSizeR16(b, pc + 2 + |Emit(a, pc + 1)|);
     case Cat(a, b) =>
+      EmitLenCat(a, b, pc);
       EmitSizeR16(a, pc);
       EmitSizeR16(b, pc + |Emit(a, pc)|);
     case Star(a) =>
+      EmitLenStar(a, pc);
       EmitSizeR16(a, pc + 1);
     // @hole-end R16.T1d
   }
   // Hint(1): induction on `r`, one call per child; this unit proves no lemma by induction on its own (manual-lemma-induction).
-  // Hint(2): read the addresses off `Emit`: an `Alt`'s right child sits at `pc + 2 + |Emit(a, pc + 1)|`, a `Cat`'s at `pc + |Emit(a, pc)|`.
+  // Hint(2): A5's `EmitLenAlt`, `EmitLenCat` and `EmitLenStar` state each constructor's length and name the address of every child's code.
 
   // ===========================================================================
   // Completeness
@@ -158,9 +161,7 @@ module R16_Capstone {
     decreases Cat(a, b), |u|, 0
   {
     LayoutCat(p, pc, a, b);
-    var ca := Emit(a, pc);
-    var cb := Emit(b, pc + |ca|);
-    assert |Emit(Cat(a, b), pc)| == |ca| + |cb|;
+    EmitLenCat(a, b, pc);
     var k :| 0 <= k <= |u| && Matches(a, u[..k]) && Matches(b, u[k..]);
     var f1 := CompleteFuel(p, b, pc + |Emit(a, pc)|, u[k..], v, f);
     f2 := CompleteFuel(p, a, pc, u[..k], u[k..] + v, f1);
@@ -278,9 +279,7 @@ module R16_Capstone {
     decreases f, Cat(a, b), 0
   {
     LayoutCat(p, pc, a, b);
-    var ca := Emit(a, pc);
-    var cb := Emit(b, pc + |ca|);
-    assert |Emit(Cat(a, b), pc)| == |ca| + |cb|;
+    EmitLenCat(a, b, pc);
     var k1, f1 := SoundFuel(p, a, pc, w, f);
     var k2;
     k2, f2 := SoundFuel(p, b, pc + |Emit(a, pc)|, w[k1..], f1);
@@ -445,7 +444,7 @@ module R16_Capstone {
   }
   // @hole-end R16.H4d
   // Hint(1): one fuelled helper per direction, each by induction on the fuel, with one case per instruction kind at `pc`; the threaded jump is the only case where the two programs differ.
-  // Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, rebuild the skipped jump with `AcceptsJmp(p, a, w, g1 + 1)`.
+  // Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, the skipped jump costs one more step of the original, taken at the jump's own target.
 
   // ===========================================================================
   // The whole-program theorem

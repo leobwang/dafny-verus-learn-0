@@ -138,6 +138,22 @@ module RG_A5_VM {
     ensures var ca := Emit(a, pc + 1);
             |Emit(Alt(a, b), pc)| == 2 + |ca| + |Emit(b, pc + 2 + |ca|)|
   {
+    var ca := Emit(a, pc + 1);
+    var cb := Emit(b, pc + 2 + |ca|);
+    assert Emit(Alt(a, b), pc) == [ISplit(pc + 1, pc + 2 + |ca|)] + ca + [IJmp(pc + 2 + |ca| + |cb|)] + cb;
+  }
+
+  lemma EmitLenCat(a: Re, b: Re, pc: int)
+    ensures |Emit(Cat(a, b), pc)| == |Emit(a, pc)| + |Emit(b, pc + |Emit(a, pc)|)|
+  {
+    assert Emit(Cat(a, b), pc) == Emit(a, pc) + Emit(b, pc + |Emit(a, pc)|);
+  }
+
+  lemma EmitLenStar(a: Re, pc: int)
+    ensures |Emit(Star(a), pc)| == 2 + |Emit(a, pc + 1)|
+  {
+    var ca := Emit(a, pc + 1);
+    assert Emit(Star(a), pc) == [ISplit(pc + 1, pc + 2 + |ca|)] + ca + [IJmp(pc)];
   }
 
   lemma LayoutCat(p: Prog, pc: int, a: Re, b: Re)
