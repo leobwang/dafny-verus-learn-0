@@ -140,7 +140,7 @@ mod property_r15 {
     struct SeedR15(u64);
 
     impl SeedR15 {
-        fn below(&mut self, n: u64) -> u64 {
+        fn below_r15(&mut self, n: u64) -> u64 {
             self.0 ^= self.0 << 13;
             self.0 ^= self.0 >> 7;
             self.0 ^= self.0 << 17;
@@ -151,15 +151,15 @@ mod property_r15 {
     const ALPHABET_R15: [char; 3] = ['a', 'b', '.'];
 
     fn gen_re_r15(g: &mut SeedR15, depth: u32) -> Re {
-        let k = if depth == 0 { g.below(3) } else { g.below(6) };
+        let k = if depth == 0 { g.below_r15(3) } else { g.below_r15(6) };
         match k {
-            0 => Re::Chr(ALPHABET_R15[g.below(3) as usize]),
+            0 => Re::Chr(ALPHABET_R15[g.below_r15(3) as usize]),
             1 => Re::Eps,
             2 => {
-                if g.below(3) == 0 {
+                if g.below_r15(3) == 0 {
                     Re::Empty
                 } else {
-                    Re::Chr(ALPHABET_R15[g.below(3) as usize])
+                    Re::Chr(ALPHABET_R15[g.below_r15(3) as usize])
                 }
             }
             3 => Re::Alt(Box::new(gen_re_r15(g, depth - 1)), Box::new(gen_re_r15(g, depth - 1))),
@@ -169,8 +169,8 @@ mod property_r15 {
     }
 
     fn gen_text_r15(g: &mut SeedR15) -> Vec<char> {
-        let n = g.below(7);
-        (0..n).map(|_| ALPHABET_R15[g.below(3) as usize]).collect()
+        let n = g.below_r15(7);
+        (0..n).map(|_| ALPHABET_R15[g.below_r15(3) as usize]).collect()
     }
 
     #[test]

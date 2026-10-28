@@ -196,16 +196,6 @@ exit_usage = 255
 exit_panic = 134
 exit_cargo = 101
 
-# D98 (Δ316): the compiled-test dependencies a module crate may declare under
-# [dev-dependencies] (exact versions), for `vcheck --test` only: built by cargo on the
-# pinned Rust with --offline --locked --release from the local cargo cache, from this
-# manifest and its Cargo.lock (copied into the run's scratch), and passed to
-# `verus --compile --test` as --extern. Verification never sees them.
-[verus.test_deps]
-manifest = "scripts/dvl/testdeps/Cargo.toml"
-allowed = { regex = "=1.13.1" }
-jobs = 2
-
 # VERSIONS.md §2.4, verbatim as rendered (rustc JSON `message` fields carry the
 # text after the `error: ` / `warning: ` / `note: ` level prefix).
 [verus.messages]

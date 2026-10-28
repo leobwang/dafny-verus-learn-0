@@ -487,10 +487,22 @@ def load_crate(cdir, _stack=()):
     return Crate(name, root.resolve(), cdir, deps, dev)
 
 
+TEST_DEPS_PIN = REPO / "scripts" / "dvl" / "testdeps" / "pin.toml"
+
+
+def test_deps():
+    """The compiled-test dependency pin (scripts/dvl/testdeps/pin.toml, D98): manifest,
+    allowed, jobs. {} when the file is absent."""
+    try:
+        return tomllib.loads(TEST_DEPS_PIN.read_text())
+    except (OSError, tomllib.TOMLDecodeError):
+        return {}
+
+
 def test_dep_pins():
-    """The pinned compiled-test dependencies (pins.toml [verus.test_deps].allowed):
+    """The pinned compiled-test dependencies (testdeps/pin.toml `allowed`):
     {crate name: exact version requirement}. D98: `regex` only."""
-    return dict((pins().get("test_deps") or {}).get("allowed") or {})
+    return dict(test_deps().get("allowed") or {})
 
 
 def crate_files(root):
@@ -2034,7 +2046,7 @@ def _test_run(run, target, vb, names, layer, timeout_s, root=None):
 
 def _build_test_deps(run, crate, timeout_s=None):
     """(extern args, None) for the crate's pinned [dev-dependencies] (D98): the
-    pinned manifest and lock (pins.toml [verus.test_deps]), copied into the run's
+    pinned manifest and lock (scripts/dvl/testdeps/pin.toml), copied into the run's
     scratch, built by cargo on the pinned Rust (job_env's RUSTUP_TOOLCHAIN) with
     --offline --locked --release from the local cargo cache, as a plain job; each
     declared crate's rlib is passed to `verus --compile --test` as --extern, and its
@@ -2042,11 +2054,11 @@ def _build_test_deps(run, crate, timeout_s=None):
     ([], failing Result) when the build fails (error, or killed(memory))."""
     if not crate.dev_deps:
         return [], None
-    t = pins().get("test_deps") or {}
+    t = test_deps()
     man = REPO / t.get("manifest", "")
     if not man.is_file() or not (man.parent / "Cargo.lock").is_file():
         return [], _refused(run.target, f"the pinned test-dependency manifest {man} or its "
-                            "Cargo.lock is missing (pins.toml [verus.test_deps])")
+                            "Cargo.lock is missing (scripts/dvl/testdeps/pin.toml)")
     work = run.dir / "test-deps"
     shutil.copytree(man.parent, work, ignore=shutil.ignore_patterns("target"))
     tdir = work / "target"

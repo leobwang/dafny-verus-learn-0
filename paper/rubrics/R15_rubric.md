@@ -11,7 +11,7 @@ Solution pins (filled by scripts/update_rubric_pins.sh):
 paper/solutions/R15_solutions.tex  sha256 65033e133ffc5f80f7f0f2636111548685f0ea60b642f5961a16486be82b4529
 paper/R15_problems.tex  sha256 f829e3930c2597ef1ac5a76217943b41fd59c2f6127481f23b28a67187f01eac
 Solutions/dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy  sha256 753c7572c20a42bb4c8a4381cb7d55e4465c10baf0a2a3ce61fdac928bfb3da7
-Solutions/verus/r/r15_verifier_loop/src/lib.rs  sha256 f9df9a28ee52d2881e8f6ee137cd4ed5fc365b9052f93f11f1e478195cdfa85c
+Solutions/verus/r/r15_verifier_loop/src/lib.rs  sha256 8e3082a7db36704542508d4260b8b6253a1afcf0dc7c705f0ab7e8f83869940b
 Solutions/dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy  sha256 169512d487f316f812eb722783d0e0ef183a7f09a33c8badd0a2f706c6b58d3e
 Solutions/verus/r/r15_verifier_loop/src/agent.rs  sha256 7a886d3c9ec31ff6c3b77cad719a5d9a2ceb5f8ef45973ad214723c816538ffd
 

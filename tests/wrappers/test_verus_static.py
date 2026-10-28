@@ -796,7 +796,8 @@ class TestDepsStatic(unittest.TestCase):
         import tomllib
         allowed = V.test_dep_pins()
         self.assertEqual(allowed, {"regex": "=1.13.1"})
-        man = ROOT / V.pins()["test_deps"]["manifest"]
+        man = ROOT / V.test_deps()["manifest"]
+        self.assertNotIn("test_deps", V.pins())       # kept out of pins.toml (chapter pins)
         meta = tomllib.loads(man.read_text())
         self.assertEqual(meta["dependencies"], allowed)
         lock = tomllib.loads((man.parent / "Cargo.lock").read_text())

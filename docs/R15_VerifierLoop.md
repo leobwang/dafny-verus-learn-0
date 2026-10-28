@@ -67,7 +67,7 @@ red-team exercise, Lab β and the viva remain.
 | file | purpose and shipped state |
 |---|---|
 | `dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy` | the P1dv and P2dv switches, T1 and H1, **2 holes**, with commented use-site checks |
-| `verus/r/r15_verifier_loop/src/lib.rs` | T1 and H1, **2 holes**, and a given compiled test of both (`search_sample_test`); H2, the property rung, in the test-only module `property_r15`, **2 test holes**, with the given property test `oracle_agrees_r15` |
+| `verus/r/r15_verifier_loop/src/lib.rs` | T1, H1 and H2, **4 holes**: T1 and H1 with a given compiled test of both (`search_sample_test`); H2, the property rung, as two `todo!` holes in the test-only module `property_r15`, with the given property test `oracle_agrees_r15` |
 | `dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy` | red-teamed contractor, `FirstMatchEndR15`, **1 hole** |
 | `verus/r/r15_verifier_loop/src/agent.rs` | red-teamed contractor, `first_match_end_r15`, **1 hole** |
 | `harness/r/fvh_r/spectest.py` | Lab β's first oracle, H1py and H2py, **2 holes**; frozen tests in `harness/tests/r/r15_cases/` |

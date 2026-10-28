@@ -1,0 +1,9 @@
+# D98 (Δ316): the compiled-test dependencies a module crate may declare under
+# [dev-dependencies] (exact versions), for `vcheck --test` only: built by cargo on the
+# pinned Rust with --offline --locked --release from the local cargo cache, from the
+# manifest beside this file and its Cargo.lock (copied into the run's scratch), and
+# passed to `verus --compile --test` as --extern. Verification never sees them.
+# Kept out of scripts/dvl/pins.toml so that chapter pins hashing that file stay current.
+manifest = "scripts/dvl/testdeps/Cargo.toml"
+allowed = { regex = "=1.13.1" }
+jobs = 2
