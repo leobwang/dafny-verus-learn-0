@@ -12,6 +12,12 @@ build = false
 [lib]
 path = "src/lib.rs"
 
+# The command-line tool (D16): code outside verus!, trusted; built and run only by
+# `scripts/vcheck --bin <this crate> -- <arguments>`.
+[[bin]]
+name = "rexc"
+path = "src/main.rs"
+
 [dependencies]
 vstd = "=0.0.0-2026-09-20-0158"
 rg_re_a1 = { path = "../../given/rg_re_a1" }

@@ -44,28 +44,29 @@ GEN = ROOT / "scripts/gen_units.py"
 FIXTURE = ROOT / "tests/course_map/armed"
 BASE = (ROOT / "MODULES.toml").read_text(encoding="utf-8")
 LINKED = ("docs", "paper", ".claude", "harness", "tools", "specimens", "slots", "instructor",
-          "sandbox", "Hidden")  # sandbox/truth.toml and its archives (ciphertext, hashed
+          "sandbox", "Hidden", "expected")  # expected/: R16's statements pin file (D97)  # sandbox/truth.toml and its archives (ciphertext, hashed
 #                                 only): the hidden-check spec kind reads its pins (D21)
 COPIED = ("dafny", "verus")
 CONCEPTS = ".claude/skills/instructor/concepts.md"
 BANKS = ".claude/skills/instructor/banks"
 ENV = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
 
-# The planned stand-in: a module still `planned` in the committed registry,
-# with a paper pair and both verifier trees, used by the cases that need one
-# (paper pair, units, pending homes). It was Q10/Q11 until DV5a armed Q10-Q12,
-# then Q18 until DV5c armed it; R16 (the R track's capstone, planned until DVR3)
-# is the stand-in now, and PLANNED_ROW names a coverage row with an R16 home.
-# The admissible case below arms Q13 in its own text, for the same reason.
+# The planned stand-in, used by the cases that need a planned module with a
+# paper pair and both verifier trees (paper pair, units, pending homes). It was
+# Q10/Q11 until DV5a armed Q10-Q12, then Q18 until DV5c armed it, then R16 until
+# DVR4 step 7 armed it. Only the challenges Q19-Q33 are still planned, and they
+# have neither a paper pair nor verifier units, so the stand-in is now
+# synthetic: PLANNED_TEXT is the registry with R16's record set back to its
+# planned form, and PLANNED_FILES removes R16's trees from the case root and
+# writes the workspace the generator gives without R16's crate. PLANNED_ROW
+# names a coverage row with an R16 home.
 PLANNED = "R16"
 PLANNED_D = "dafny/R/R16_Capstone"
 PLANNED_V = "verus/r/r16_capstone"
 PLANNED_HOME = "R16"
 PLANNED_ROW = "S10.build-tool-poisoning"
-if f'id = "{PLANNED}"\n' not in BASE or \
-        BASE.split(f'id = "{PLANNED}"\n', 1)[1].split("[[module]]", 1)[0].count('status = "planned"') != 1:
-    raise SystemExit(f"test_course_map: the planned stand-in {PLANNED} is no longer planned: "
-                     "move the stand-in cases to a module still planned")
+if f'id = "{PLANNED}"\n' not in BASE:
+    raise SystemExit(f"test_course_map: the planned stand-in {PLANNED} is missing from the registry")
 
 
 def span(kind, key, value, text):
@@ -137,6 +138,27 @@ def setf(mid, key, value, text=BASE):
 def cov_edit(pid, old, new, text=BASE):
     return replace_in(*span("coverage", "payload_id", pid, text), f"{pid}'s coverage row", old,
                       new, text)
+
+
+def planned_stand_in(text=BASE):
+    """text with R16's record back in its planned form (the synthetic stand-in)."""
+    for key, value in (("status", '"planned"'),
+                       ("exercises", f'["{PLANNED_D}/std/R16_Capstone.dfy", '
+                                     f'"{PLANNED_V}/src/lib.rs", "specimens/R16/"]'),
+                       ("statements", "[]"), ("write_d", "[]"), ("write_v", "[]"),
+                       ("recognise_d", "[]"), ("recognise_v", "[]"), ("admissible", "{}"),
+                       ("imports", '{ "dafny/given/R/RG_A5_VM.dfy" = "std", '
+                                   '"verus/given/rg_re_a5/src/lib.rs" = "all" }')):
+        text = setf(PLANNED, key, value, text)
+    return text
+
+
+PLANNED_TEXT = planned_stand_in()
+_WORKSPACE = (ROOT / "verus/Cargo.toml").read_text(encoding="utf-8")
+PLANNED_FILES = {PLANNED_D: None, PLANNED_V: None, "specimens/R16": None, "slots/R16.slots": None,
+                 f"paper/{PLANNED}_problems.tex": None, f"paper/{PLANNED}_answers.tex": None,
+                 "verus/Cargo.toml": _WORKSPACE.replace(f', "{PLANNED_V[6:]}"', "")
+                                              .replace(', "given/rg_re_a5"', "")}
 
 
 def drop(kind, key, value, text=BASE):
@@ -731,7 +753,8 @@ case("an R harness gate is ordinary learner work (R's gate is Rust)",
 case("a trust-report outside R16",
      setf("R15", "harness", '["harness/r/fvh_r/spectest.py", "harness/r/fvh_r/trust_report.py"]'), 1,
      "matches R16's trust-report pattern")
-case("R16 past planned without its trust-report", setf("R16", "status", '"authoring"'), 1,
+case("R16 past planned without its trust-report",
+     edit("R16", ', "verus/r/r16_capstone/src/trust_report.rs"', ""), 1,
      "R16 past planned lists its trust-report")
 case("R16's trust-report as a contract file",
      edit("R16", '"verus/r/r16_capstone/src/agent.rs"', '"verus/r/r16_capstone/src/trust_report.rs"'), 1,
@@ -744,8 +767,8 @@ case("R16's Dafny trust-report as a contract file",
      edit("R16", '"dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy"',
           '"dafny/R/R16_Capstone/agent/R16_trust_report.dfy"'), 1,
      "agentic: R16's trust-report is solo work")
-case("half the pair in a planned module", BASE, 1, "only half of the paper pair exists",
-     files={f"paper/{PLANNED}_problems.tex": ""})
+case("half the pair in a planned module", PLANNED_TEXT, 1, "only half of the paper pair exists",
+     files={**PLANNED_FILES, f"paper/{PLANNED}_problems.tex": ""})
 
 # --- engines, budget, statements, admissible -----------------------------------------------------
 case("engines out of order", setf("Q18", "engines", '["policy", "contract", "agent"]'), 1,
@@ -824,7 +847,8 @@ case("R07: provided statements remain disallowed", setf("R07", "statements", R08
 R16_ST_D = "dafny/R/R16_Capstone/std/R16_Statements.dfy"
 R16_ST_V = "verus/r/r16_capstone/src/statements.rs"
 R16_EX = ('["dafny/R/R16_Capstone/std/R16_Capstone.dfy", "' + R16_ST_D + '", '
-          '"verus/r/r16_capstone/src/lib.rs", "' + R16_ST_V + '", "specimens/R16/"]')
+          '"verus/r/r16_capstone/src/lib.rs", "' + R16_ST_V + '", '
+          '"verus/r/r16_capstone/src/trust_report.rs", "specimens/R16/"]')
 R16_ST = ('[{ path = "' + R16_ST_D + '", sha256 = "PENDING" }, '
           '{ path = "' + R16_ST_V + '", sha256 = "PENDING" }]')
 
@@ -845,6 +869,16 @@ case("R16: a statement that is not an exercise", r16_statements(R16_ST, "[]"),
 case("R16: a statement file not named Statement",
      r16_statements('[{ path = "dafny/R/R16_Capstone/std/R16_Capstone.dfy", '
                     'sha256 = "PENDING" }]'), 1, "a statement file's name holds 'Statement'")
+# Past planned (R16 is authoring): one statement file per language, and fvh's
+# pin file names exactly the registry's statement files.
+case("R16 past planned: no Verus statement file",
+     r16_statements('[{ path = "' + R16_ST_D + '", sha256 = "PENDING" }]'), 1,
+     "lists its learner-written statement file in Verus")
+case("R16 past planned: the pin file names another file", BASE, 1,
+     "expected/R16.statements names",
+     files={"expected/R16.statements": "a" * 64 + "  " + R16_ST_D + "\n"})
+case("R16 past planned: the pin file is missing", BASE, 1,
+     "expected/R16.statements is missing", files={"expected/R16.statements": None})
 case("R15: learner statements stay R16's", setf("R15", "statements",
      '[{ path = "dafny/R/R15_VerifierLoop/std/R15_Statements.dfy", sha256 = "PENDING" }]'),
      1, "statements are the frozen statement files of Q19–Q33")
@@ -1118,8 +1152,8 @@ case("resolve nothing", BASE, 3, "unknown module id", args=("--resolve", ""))
 case("resolve a malformed record", setf("R04", "paper", '"yes"'), 1, "'paper' must be true or false",
      args=("--resolve", "R04"))
 case("--list-nonplanned", ARMED, 0, "Q04", armed=True, args=("--list-nonplanned", "Q01-Q18"))
-case("--list-nonplanned: none armed", BASE, 0, "",
-     args=("--list-nonplanned", f"{PLANNED}-{PLANNED}"))
+case("--list-nonplanned: none armed", PLANNED_TEXT, 0, "",
+     args=("--list-nonplanned", f"{PLANNED}-{PLANNED}"), files=PLANNED_FILES)
 case("--list-nonplanned: a malformed range", BASE, 2, "wants a range",
      args=("--list-nonplanned", "Q01-R18"))
 case("--list-nonplanned: a reversed range", BASE, 2, "wants a range",
@@ -1150,11 +1184,12 @@ case("units: a generated file never written", ARMED, 1,
      after={"verus/q/q04_proof_craft/Cargo.toml": None})
 case("units: the workspace drifts", ARMED, 1, "verus/Cargo.toml: differs", armed=True,
      after={"verus/Cargo.toml": '[workspace]\nresolver = "2"\nmembers = ["q/q04_proof_craft"]\n'})
-case("units: a stale project file", BASE, 1, f"{PLANNED_D}/std/dfyconfig.toml: stale project file",
-     files={f"{PLANNED_D}/std/dfyconfig.toml": 'includes = ["*.dfy"]\n'})
-case("units: an unknown Cargo.toml in a learner tree", BASE, 1,
+case("units: a stale project file", PLANNED_TEXT, 1, f"{PLANNED_D}/std/dfyconfig.toml: stale project file",
+     files={**PLANNED_FILES, f"{PLANNED_D}/std/dfyconfig.toml": 'includes = ["*.dfy"]\n'})
+case("units: an unknown Cargo.toml in a learner tree", PLANNED_TEXT, 1,
      f"{PLANNED_V}/Cargo.toml: unknown Cargo.toml",
-     files={f"{PLANNED_V}/Cargo.toml": f"[package]\nname = \"{PLANNED_V.rsplit('/', 1)[1]}\"\n"})
+     files={**PLANNED_FILES,
+            f"{PLANNED_V}/Cargo.toml": f"[package]\nname = \"{PLANNED_V.rsplit('/', 1)[1]}\"\n"})
 case("units: a build script", ARMED, 1, "build scripts never belong in a learner crate", armed=True,
      files={"verus/q/q04_proof_craft/build.rs": "fn main() {}\n"})
 case("units: a .cargo directory", ARMED, 1, "a .cargo directory in a learner tree", armed=True,
@@ -1579,7 +1614,8 @@ case("rows: a paper home is language-free", cov_edit("S5.import-tiers", '"Q04.S5
      "no Q home covers Dafny")
 case("rows: a paper home in a planned module is pending",
      cov_edit(PLANNED_ROW, f'"{PLANNED_HOME}"',
-              f'"{PLANNED_HOME}", "{PLANNED}.B1"'), 0, "pending)")
+              f'"{PLANNED_HOME}", "{PLANNED}.B1"', PLANNED_TEXT), 0, "pending)",
+     files=PLANNED_FILES)
 # Pin the synthetic subject to planned; actual R07 may already be authored.
 case("rows: an item home in a planned module is pending",
      setf("R07", "status", '"planned"',

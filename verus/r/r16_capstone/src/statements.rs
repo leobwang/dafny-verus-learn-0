@@ -31,6 +31,6 @@ pub uninterp spec fn emit_complete_statement(p: Seq<Inst>, r: Re, pc: int, u: Se
 
 pub uninterp spec fn emit_sound_statement(p: Seq<Inst>, r: Re, pc: int, w: Seq<char>) -> bool;
 // Hint(1): each statement is one implication over all programs `p` that hold `emit(r, pc)` at `pc`; the continuation is whatever starts at `pc + clen(r)`, and `emit` casts addresses to `usize`.
-// Hint(2): completeness concatenates (`u + v`); soundness picks a split point `k` of `w` with `0 <= k <= w.len()`, `r` matching `w.subrange(0, k)` and the continuation accepting the rest.
+// Hint(2): read A5's `prog` and `lemma_prog_layout`: the whole program is the special case whose continuation is one `Match`; your statements must give back `lemma_emit_correct` (H5) there, and a split point needs both ends of its range.
 
 } // verus!

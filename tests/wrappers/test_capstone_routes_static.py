@@ -176,6 +176,9 @@ class BinTarget(unittest.TestCase):
         self.assertLess(q18.index("[lib]"), q18.index("[[bin]]"))
         self.assertLess(q18.index("[[bin]]"), q18.index("[dependencies]"))
         self.assertNotIn("[[bin]]", gu.render_crate("Q17", "q17_practice_iiib", "L7"))
+        r16 = gu.render_crate("R16", "r16_capstone", "A5")
+        self.assertIn('[[bin]]\nname = "rexc"\npath = "src/main.rs"\n', r16)
+        self.assertNotIn("[[bin]]", gu.render_crate("R15", "r15_verifier_loop", "A4"))
 
     def test_bin_targets(self):
         d = Path(tempfile.mkdtemp(prefix="bin-targets-"))

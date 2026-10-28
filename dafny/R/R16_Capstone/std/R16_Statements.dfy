@@ -38,5 +38,5 @@ module R16_Statements {
     ensures true
   // HOLE: write the definition body.
   // Hint(1): each statement is one implication over all programs `p` that hold `Emit(r, pc)` at `pc`; the continuation is whatever starts at `pc + |Emit(r, pc)|`.
-  // Hint(2): completeness concatenates (`u + v`); soundness picks a split point `k` of `w` with `0 <= k <= |w|`, `r` matching `w[..k]` and the continuation accepting `w[k..]`.
+  // Hint(2): read A5's `EmitProg` and `LayoutProg`: the whole program is the special case whose continuation is one `IMatch`; your statements must give back `EmitCorrect` (H5) there, and a split point needs both ends of its range.
 }
