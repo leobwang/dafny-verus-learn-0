@@ -20,6 +20,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | twins, learner files, admission | not started | — |
 | chapter, bank, paper, pins, CI | not started | — |
 | Lab γ pre-registration design (§5) | drafted | this file |
+| D96/D97 (decided, Δ314) | **next, in order**: (1) PLAN §2.2's A5 row and §2.3's A4 row corrected; (2) install `dafny/given/R/RG_A5_VM.dfy` and `verus/given/rg_re_a5/` (Cargo.toml by hand, like `rg_re_a4`) from `Solutions/plans/drafts/R16/a5/`, add `pike_run` (re-proved over the opaque `accepts`) and R09's parser re-supply with an A5 header naming the R09 answers; (3) the `statements` field change in `check_course_map.py` + tests (D97); (4) arm R16 (registry row, units, imports), move `test_course_map`'s planned stand-in off R16 (`PLANNED = "R16"` and `PLANNED_ROW`); (5) twins: T1 `EmitSizeR16`, statements S, H1 completeness, H2 soundness, H3 `Shortcut` (both spikes pass), H4 `rexc_match`/`EmitCorrect`; the agent and plant (§4); the trust-report layout (solo, rule 2s); then admission and the kit | — |
 
 ## 1. The A5 reconciliation (PLAN §2.2, §2.4, §2.5 step 7)
 

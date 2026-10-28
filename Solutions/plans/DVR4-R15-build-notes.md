@@ -24,6 +24,11 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | study workflow | **12/12** on a disposable clone of 865bceb9 (first tries, strict, freeze, native test, gates and audits of both units and both agents); P1's `wf.py` un-commented the `// end reference checks` marker, so this lane's copy `p1b/bin/wf.py` stops there; verdict pins `expected/R15.pins`; empty-body 7/7 | 17fe60b7 |
 | focused author CI | run `20261028T015742Z-2326456` @ 17fe60b7, clean tree, 3,840 s (12G, `DVL_VERUS_JOBS=1`): verify-r-dafny PASS 479 s, pins PASS 2,087 s, paper PASS, rubric PASS, harness PASS 81 s; static FAIL 912 s on `test_course_map` only (a case that added an R15 harness file without its import tier, which R15 being armed exposed; fixed at 95cbfaa8, 414 passed); verify-r-verus FAIL 279 s on `holes R03 v` only (R03's D95 `// GATED` external_body lines are counted by the tool but not as shipped hole forms: a pre-existing R03 issue from Δ311, not R15; R15 v passed: 2 holes, 0 mismatches) | 95cbfaa8 |
 | Lab β pre-registration design (§5) | drafted | this file |
+| D98 (H2v) | **next**: `vcheck --test` dev-dependency build (`regex`, offline, `--locked`) + hole kind `test-todo`, tests and a Δ each; then H2v (translation + oracle wrapper in `#[cfg(test)]`, the given generator `#[test]`), registry row 15 min, TRIV/empty-body admission, chapter §3 paragraph revised, leak pattern | — |
+| D99 (witness hints) | **next**: `IOPairR15` gains witness hints, rendered as `assert` lines; existential without a witness → `unknown`; frozen tests; references; re-capture `sound-d/v` and revise chapter §6's paragraph | — |
+| D100 (Lab β budget) | **next**: B6 problem/solutions/rubric/fixtures: 4 delivery repeats (768 Qwen calls, 288 runs), budget formula, the throughput-probe procedure at Lab β's settings, ceiling "to be re-set after the probe, as D56"; PLAN §4.3's row; never run the probe | — |
+| R03 CI fix (coordinator) | **done**: Δ315, `holes R03 v` 0 mismatches on the recorded run; tests `HolesStepGated` | d17c1bc0 |
+| focused author CI re-run | after D98–D100: `ci.sh --author --job static,verify-r-verus,verify-r-dafny,pins,wrappers,harness,rubric` (12G, `DVL_VERUS_JOBS=1`) | — |
 
 ## 1. Objective-to-exercise map (written before any build, 2026-10-27)
 
