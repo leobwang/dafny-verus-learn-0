@@ -723,7 +723,10 @@ case("a Q gate module file", q18_harness("harness/q/fvh_q/gate.py"), 0, "course 
 case("'gate' inside a word is no gate", q18_harness("harness/q/fvh_q/delegate.py"), 0,
      "course map OK", args=("--only", "registry"))
 case("an R harness gate is ordinary learner work (R's gate is Rust)",
-     setf("R15", "harness", '["harness/r/fvh_r/spectest.py", "harness/r/fvh_r/gate/check.py"]'), 0,
+     edit("R15", '"harness/r/fvh_r/roundtrip.py" = "py-fvh"',
+          '"harness/r/fvh_r/roundtrip.py" = "py-fvh", "harness/r/fvh_r/gate/check.py" = "py-fvh"',
+          setf("R15", "harness", '["harness/r/fvh_r/spectest.py", "harness/r/fvh_r/roundtrip.py", '
+               '"harness/r/fvh_r/gate/check.py"]')), 0,
      "course map OK", args=("--only", "registry"))
 case("a trust-report outside R16",
      setf("R15", "harness", '["harness/r/fvh_r/spectest.py", "harness/r/fvh_r/trust_report.py"]'), 1,

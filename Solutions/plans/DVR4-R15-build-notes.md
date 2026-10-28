@@ -21,7 +21,8 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | Python holes (`spectest`, `roundtrip`) design (§3) | drafted | this file |
 | chapter, paper, pins | **done**: chapter 7,668 words, 25 pins, lint 0; written track B1–B6 + exhibit; counts and freeze pinned; leak patterns 6 OK | 97a282dd, 65e7762a |
 | bank | **done**: 1,542 lines, 12 questions (2/4/2/2/2), draws A/B with two live predicts each, PP1/PP2, 51 captured probes (`bank/probes.log`), 11 backward edges; tags in concepts.md; leak OK | this commit |
-| study workflow (`wf.py R15`), focused author CI | to run after the bank | — |
+| study workflow | **12/12** on a disposable clone of 865bceb9 (first tries, strict, freeze, native test, gates and audits of both units and both agents); P1's `wf.py` un-commented the `// end reference checks` marker, so this lane's copy `p1b/bin/wf.py` stops there; verdict pins `expected/R15.pins`; empty-body 7/7 | 17fe60b7 |
+| focused author CI | running: `ci.sh --author --job static,verify-r-dafny,verify-r-verus,pins,paper,rubric,harness` (12G, `DVL_VERUS_JOBS=1`), log `p1b/r15/ci.log` | — |
 | Lab β pre-registration design (§5) | drafted | this file |
 
 ## 1. Objective-to-exercise map (written before any build, 2026-10-27)
