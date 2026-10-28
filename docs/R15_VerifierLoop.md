@@ -67,7 +67,7 @@ red-team exercise, Lab β and the viva remain.
 | file | purpose and shipped state |
 |---|---|
 | `dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy` | the P1dv and P2dv switches, T1 and H1, **2 holes**, with commented use-site checks |
-| `verus/r/r15_verifier_loop/src/lib.rs` | T1 and H1, **2 holes**, and a given compiled test of both (`search_sample_test`) |
+| `verus/r/r15_verifier_loop/src/lib.rs` | T1 and H1, **2 holes**, and a given compiled test of both (`search_sample_test`); H2, the property rung, in the test-only module `property_r15`, **2 test holes**, with the given property test `oracle_agrees_r15` |
 | `dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy` | red-teamed contractor, `FirstMatchEndR15`, **1 hole** |
 | `verus/r/r15_verifier_loop/src/agent.rs` | red-teamed contractor, `first_match_end_r15`, **1 hole** |
 | `harness/r/fvh_r/spectest.py` | Lab β's first oracle, H1py and H2py, **2 holes**; frozen tests in `harness/tests/r/r15_cases/` |
@@ -201,7 +201,9 @@ verus/r/r15_verifier_loop/src/lib.rs:78:44: hole assume R15.H1v
 
 Both runs are green, and neither proves anything about the search: the
 assumption discharges every obligation it reaches. The loop's job is to keep
-the counted holes visible, and here it does: two per language. A reader who
+the counted holes visible, and here it does: two proof holes per language,
+and in Verus also H2v's two `test-todo` holes, plain Rust that only the test
+build compiles. A reader who
 stops at the word `verified` has read rung 4 without its hole count.
 
 Rung 2 on the same Verus crate runs the shipped body:
@@ -617,13 +619,20 @@ A property test can exhibit a disagreement. It cannot show the absence of one
 beyond its range, and two implementations that share a component agree on that
 component's behaviour, right or wrong.
 
-**The property rung as a learner item.** The record plans a hand item here: a
-deterministic generator test outside `verus!` that compares your compiled
-`contains_match_r15` with the `regex` crate, in which you write the oracle
-wrapper and the anchoring translation. Its mechanism, a `regex`
-dev-dependency in the Verus test build, waits on a course decision; until it
-lands, the item is not in the files table, and this section demonstrates the
-rung with a test the course's tools already run.
+**The property rung as a learner item (H2v).** The Verus crate ends with a
+module under `#[cfg(test)]`, `property_r15`. The verifier never sees it, and
+only `scripts/vcheck --test` compiles it, with the `regex` crate as the
+crate's one dev-dependency: the course pins its version and builds it offline
+from the local cargo cache. H2v asks for two functions there. The first,
+`re_to_pattern_r15`, translates a `Re` into the crate's pattern syntax. The
+second, `oracle_r15(r, s, anchored)`, answers the whole-string question or the
+search question with it. Both ship as `todo!("R15.H2v")`, which the tool
+counts as a hole of kind `test-todo`, so the learner loop and the gate see
+them. The given test `oracle_agrees_r15` draws 500 seeded cases over the
+alphabet `{a, b, .}`. It compares A2's `deriv_match` with your anchored oracle,
+and your `contains_match_r15` with the unanchored one. The dot is in the
+alphabet on purpose. The demonstration below came first and stays, because it
+isolates the translation from the matcher.
 
 ### A differential test between two in-course answers
 
@@ -1468,13 +1477,18 @@ a grade of yours.
 Record the predictions and the closed-book T1 first, with
 `scripts/firsttry.sh R15 --check` and again after each first attempt. Then H1,
 in both languages. The shipped observations are in §1: each hand file is green
-in the learner loop with two counted holes, the Verus test fails on the shipped
+in the learner loop with its counted holes (two in Dafny; four in Verus, H2v's
+two `test-todo` holes included), the Verus tests fail on the shipped
 body, and the audit lists both placeholders.
 
 - **T1** (closed book) `PrefixMatchR15` / `prefix_match_r15`: does some prefix
   match? One loop, one derivative per character, an early `true`.
 - **H1** `ContainsMatchR15` / `contains_match_r15`: does some slice match?
   The derivative restarted at every start; the empty slices count.
+- **H2v** `re_to_pattern_r15` and `oracle_r15`, in the test-only module
+  `property_r15`: the `regex` crate as rung 3's oracle, anchored and
+  unanchored. Do it after H1v, because its property test runs your
+  `contains_match_r15`.
 - **H1py**, **H2py** `spec_sound_r15`, `spec_complete_r15` in
   `harness/r/fvh_r/spectest.py`, and **H3py** `roundtrip_r15` in
   `harness/r/fvh_r/roundtrip.py`: Lab β's two oracles, each judged by its frozen
@@ -1484,7 +1498,8 @@ body, and the audit lists both placeholders.
 Each Dafny hole is followed by its use-site checks, commented under
 `Uncomment as you go:`. Keep them commented for your first try so the receipt
 records one attempt, then enable them. In Verus, the given `search_sample_test`
-runs your two bodies: `scripts/vcheck --test verus/r/r15_verifier_loop`.
+runs your two bodies, and `oracle_agrees_r15` runs H1v against your H2v oracle:
+`scripts/vcheck --test verus/r/r15_verifier_loop`.
 
 Keep every statement as shipped. A `requires` that removes the empty string, a
 weakened `ensures`, an `assume`, an axiom or an external body is not a solution;

@@ -6,11 +6,11 @@
 //! This crate is rung 4 of the escalation ladder (the chapter's §1): a proof of the same
 //! matcher that rungs 1 to 3 only ran, checked and tested. Record the predictions first
 //! (scripts/firsttry.sh R15 --check), then attempt T1 closed book. Two typed holes ship in
-//! this crate.
+//! the verified part of this crate, and two test holes (`todo!`) in its test-only module.
 //!
 //! File order: the test-out T1 (a prefix search), then H1 (a search anywhere in the
 //! string), each followed by its use-site checks, commented under `Uncomment as you go:`,
-//! and a given compiled test (`scripts/vcheck --test` runs it once your bodies are done).
+//! and a given compiled test; last, H2 under #[cfg(test)], the `regex` crate as an oracle.
 //!
 //! Done: scripts/vcheck --gate verus/r/r15_verifier_loop exits 0 with zero holes,
 //! scripts/vaudit verus/r/r15_verifier_loop reports no finding, scripts/specfreeze --check
@@ -105,4 +105,84 @@ fn search_sample_test() {
     assert!(!prefix_match_r15(&ab, &vec!['x', 'a', 'b']));
     assert!(contains_match_r15(&ab, &vec!['x', 'a', 'b']));
     assert!(!contains_match_r15(&ab, &vec!['b', 'a']));
+}
+
+// =============================================================================
+// The property rung (rung 3): the `regex` crate as an independent oracle
+// =============================================================================
+
+// Plain Rust under #[cfg(test)]: the verifier never sees this module, and only
+// `scripts/vcheck --test` compiles it, with the pinned `regex` crate (D98).
+#[cfg(test)]
+mod property_r15 {
+    use super::*;
+
+    // item: R15.H2v
+    // uses: property-test
+    /// **H2.** Write the oracle: translate a `Re` into a pattern of the `regex` crate, then
+    /// ask that crate whether the text matches, anchored (the whole text, as `deriv_match`
+    /// decides) or unanchored (some slice, as `contains_match_r15` decides). Which `Re`
+    /// has no pattern of its own spelling, which characters change meaning in a pattern,
+    /// and which constructors need a group so that the pattern parses as the tree does?
+    fn re_to_pattern_r15(r: &Re) -> String {
+        todo!("R15.H2v")
+    }
+
+    fn oracle_r15(r: &Re, s: &[char], anchored: bool) -> bool {
+        todo!("R15.H2v")
+    }
+    // Hint(1): one match arm per constructor, recursing on the children. `is_match` already searches the whole text for a matching slice; the whole-text question pins the pattern at both ends, and each pin must bind to the whole pattern, not to its first alternative.
+    // Hint(2): the crate quotes a literal character for you (`regex::escape`), accepts a character class with no member when it is built by intersecting two classes (`&&`), and groups without capturing (`(?:…)`), which changes the parse and never what matches.
+
+    // Given (not an item): a seeded generator and the property test. Every case
+    // compares the two verified matchers with your oracle; a disagreement prints
+    // the case.
+    struct SeedR15(u64);
+
+    impl SeedR15 {
+        fn below(&mut self, n: u64) -> u64 {
+            self.0 ^= self.0 << 13;
+            self.0 ^= self.0 >> 7;
+            self.0 ^= self.0 << 17;
+            self.0 % n
+        }
+    }
+
+    const ALPHABET_R15: [char; 3] = ['a', 'b', '.'];
+
+    fn gen_re_r15(g: &mut SeedR15, depth: u32) -> Re {
+        let k = if depth == 0 { g.below(3) } else { g.below(6) };
+        match k {
+            0 => Re::Chr(ALPHABET_R15[g.below(3) as usize]),
+            1 => Re::Eps,
+            2 => {
+                if g.below(3) == 0 {
+                    Re::Empty
+                } else {
+                    Re::Chr(ALPHABET_R15[g.below(3) as usize])
+                }
+            }
+            3 => Re::Alt(Box::new(gen_re_r15(g, depth - 1)), Box::new(gen_re_r15(g, depth - 1))),
+            4 => Re::Cat(Box::new(gen_re_r15(g, depth - 1)), Box::new(gen_re_r15(g, depth - 1))),
+            _ => Re::Star(Box::new(gen_re_r15(g, depth - 1))),
+        }
+    }
+
+    fn gen_text_r15(g: &mut SeedR15) -> Vec<char> {
+        let n = g.below(7);
+        (0..n).map(|_| ALPHABET_R15[g.below(3) as usize]).collect()
+    }
+
+    #[test]
+    fn oracle_agrees_r15() {
+        let mut g = SeedR15(0x2026_1015);
+        for case in 0..500 {
+            let r = gen_re_r15(&mut g, 3);
+            let s = gen_text_r15(&mut g);
+            assert_eq!(contains_match_r15(&r, &s), oracle_r15(&r, &s, false),
+                       "case {}: unanchored, text {:?}", case, s);
+            assert_eq!(deriv_match(&r, &s), oracle_r15(&r, &s, true),
+                       "case {}: anchored, text {:?}", case, s);
+        }
+    }
 }

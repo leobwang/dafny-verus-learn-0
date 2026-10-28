@@ -1,4 +1,4 @@
-# R15 withheld hole answers (T1, H1, both languages), cut from the one-statement-per-line
+# R15 withheld hole answers (T1, H1, both languages; H2v), cut from the one-statement-per-line
 # twins (DVR4 step 7, lane P1b); no prediction answers. The Python holes are added with them.
 # from Solutions/dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy
 # source: invariant forall k | j <= k <= |s| :: Matches(d, s[j..k]) <==> Matches(r, s[..k]) (R15.T1d)
@@ -20,3 +20,9 @@ matches\(d,\s*s@\.subrange\(j\s+as\s+int,\s*k\)\)\s*<==>\s*matches\(\s*\*r,\s*s@
 # source: matches(d, s@.subrange(j as int, k)) <==> matches(*r, s@.subrange(i as int, k)) (R15.H1v)
 # verified: solutions=1 public=0
 matches\(d,\s*s@\.subrange\(j\s+as\s+int,\s*k\)\)\s*<==>\s*matches\(\s*\*r,\s*s@\.subrange\(i\s+as\s+int,\s*k\)
+# source: Re::Star(x) => format!("(?:{})*", re_to_pattern_r15(x)), (R15.H2v)
+# verified: solutions=1 public=0
+format!\("\(\?:\{\}\)\*",\s*re_to_pattern_r15\(x\)\)
+# source: let p = if anchored { format!("^(?:{})$", p) } else { p }; (R15.H2v)
+# verified: solutions=1 public=0
+if\s+anchored\s*\{\s*format!\("\^\(\?:\{\}\)\$",\s*p\)\s*\}\s*else\s*\{\s*p\s*\}
