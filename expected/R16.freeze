@@ -1,0 +1,109 @@
+# expected/R16.freeze — statement-freeze pins for R16 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R16` from the files as shipped; checked by
+# `scripts/specfreeze --check R16`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R16"
+unfrozen = ["verus/r/r16_capstone/src/trust_report.rs"]
+
+[[file]]
+path = "dafny/R/R16_Capstone/std/R16_Capstone.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_Capstone.EmitComplete" = "99e2e36ef787c65b3d3825c61626fd56b05f7cc274d187fadd33029c22d23e0c"
+"R16_Capstone.EmitCorrect" = "2fa6ade1c6b52a815cbcf2230b6b4185927ab6a71e55160e8bdfba236de90dd4"
+"R16_Capstone.EmitSizeR16" = "3687d2320c03771b195f3ecca3ee949003b82ae044dfe45d5754b8152c60d95f"
+"R16_Capstone.EmitSound" = "c50bf4049ece3c2ecfd7cfe6949237ba91b58f88f0dc4c1fb0d62b075649fb2b"
+"R16_Capstone.Hop" = "a7c692e7a397b8de713952fc8e1b4de4ede1619054eabdc8df2ba7e241b69759"
+"R16_Capstone.Shortcut" = "3bfea5f8d386afa2d276e785d471d565b287cf400cb24e6d47ca9ca060f4e44d"
+"R16_Capstone.ShortcutCorrect" = "9b0d5faffb94b87385a9411f538fc67dd45c3933912cdd9f20a8d9c0c3e6f83b"
+[file.frozen_imports]
+"R16_Capstone" = ["25a689bebf5a7b44bcfee7223c78f63e72762d303148f1ac6ca665b87066c4bd", "97bbad33a81395a706fbd71a8342c46ecc6162d2c8ef6f77a857116f4ef9ed5e", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+
+[[file]]
+path = "dafny/R/R16_Capstone/std/R16_Statements.dfy"
+lang = "d"
+open_bodies = ["R16_Statements.EmitCompleteStatement", "R16_Statements.EmitSoundStatement"]
+[file.statements]
+"R16_Statements.EmitCompleteStatement" = "7de403c2cecb0da324a251afe9e8337ee2164d0a4c6ace25bebb37c8ac9dbc34"
+"R16_Statements.EmitSoundStatement" = "075cf1a8542e09180c764cc3a9da013951bae0e264e08bf4135e8f93fca7ab17"
+[file.frozen_imports]
+"R16_Statements" = ["97bbad33a81395a706fbd71a8342c46ecc6162d2c8ef6f77a857116f4ef9ed5e", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+
+[[file]]
+path = "verus/r/r16_capstone/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"hop" = "34e6d83371a39cce500cae1e61de6ab589deac9772396ea64e58df4c044051bb"
+"lemma_emit_complete" = "4377610b129b557f027d6d3ef52565b3dc37917be208876da50c92c4ed5c4ba5"
+"lemma_emit_correct" = "083e545084e6982fe68bc7975cb7ceefdb5eddc4ad482744e5505c66adf6cb3b"
+"lemma_emit_size_r16" = "6ac4fc2dd79a77b506cdee3c991ffc997aff2dc56c39330c34a17df57fe9ee05"
+"lemma_emit_sound" = "0a18dd7fe80938e87a942e892c11ef0d595cefb6670d93d6f78a6a096d3c0ae8"
+"lemma_shortcut_correct" = "8f760d492881bc6f945cf9101c86bff3d6f53c048f032fdeaef0accf7f28bc59"
+"rexc_match" = "c8ad47cb734a73412b07b9121e65494ae766b2b2d4749a08de899a4244b37b4d"
+"shortcut" = "819bead2b446dc8b3b5ae4a995a50497b58c446002174ae8fcae3a5bcadcceeb"
+
+[[file]]
+path = "verus/r/r16_capstone/src/statements.rs"
+lang = "v"
+open_bodies = ["emit_complete_statement", "emit_sound_statement"]
+[file.statements]
+"emit_complete_statement" = "8c807d6718faecf5591ff0a1ebe4b7ad8065ac7124a0954dba4ec869c9f4d0fe"
+"emit_sound_statement" = "3179511733ccf42f1feb25b722fc4393d69df64dc188c0978f34acff24696000"
+
+[[file]]
+path = "specimens/R16/vacuous-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_VacuousD.CompleteLongProofR16" = "5a643e0565220bac16ed6aafd1fc43f6addf7108c33c7861ae428a745c5d7652"
+"R16_VacuousD.CompleteLongR16" = "b55972ab68f76dbe48b9f279ea3697f7ff886b9d71c76aa6fad7ce3c55caac18"
+
+[[file]]
+path = "specimens/R16/vacuous-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"complete_long_proof_r16" = "65b95b518caa7affb21eb802dfea51a211c0f3257d31d05c03bbefb2fdd13758"
+"complete_long_r16" = "a0e1d3c4501651f843234f1baf6deb08c187bb7fcbeb9e26126304b7630fc247"
+
+[[file]]
+path = "specimens/R16/whole-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_WholeD.CompleteWholeR16" = "8429b2989bd4fa3a397a3859c0a5cf3e58271c3c3a922c21afeed00de755e6f5"
+
+[[file]]
+path = "specimens/R16/whole-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"complete_whole_r16" = "6b8265c2d9395590c910c75b5eec1b2ce3bbd1d310e51fc7f09d6ca25d997285"
+
+[[file]]
+path = "dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy"
+lang = "d"
+open_bodies = ["R16_AgentCapstone.ThruR16"]
+[file.statements]
+"R16_AgentCapstone.HopSplitR16" = "b93762f1e85ef722efa54d19ea78f44919f368c0ed166e4620c89dc37d8a812e"
+"R16_AgentCapstone.ShortcutSplitCorrectR16" = "ac76873b6bd6ebbc00c1697be764f6a6f3fcaddc54901849380bdb57817994ab"
+"R16_AgentCapstone.ShortcutSplitR16" = "26a235642bd34ce9621f7cc2ecbbf00ef899384637e25fc381b0a6c6c4fa9ca5"
+"R16_AgentCapstone.ThruR16" = "5e7fa57c056d5a5046f13444dce5b81e880ca8d2bfbcbf8d4f6039736159ac52"
+[file.frozen_imports]
+"R16_AgentCapstone" = ["97bbad33a81395a706fbd71a8342c46ecc6162d2c8ef6f77a857116f4ef9ed5e", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+
+[[file]]
+path = "verus/r/r16_capstone/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"hop_split_r16" = "6ecf2185546a8b419839b2196969e9a1b2e05b79d7452c48cedf5175baf1f398"
+"lemma_shortcut_split_correct_r16" = "229c6d6dd7f2440380d404ef7fac6e03b9cb101a384b4ba9aa6cc45ac6909364"
+"shortcut_split_r16" = "107f5ed8dbb8b32507e274345d2c7c60eea8994d3d8b6e9285d7473b49bda393"
+"thru_r16" = "4c60075b1c5c3824c927f9a8b0955866e321cb081cf43e92337c0e695367616d"

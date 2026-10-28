@@ -25,6 +25,7 @@ import subprocess
 import sys
 import tempfile
 import tomllib
+import types
 import unittest
 import unittest.mock
 from pathlib import Path
@@ -1380,6 +1381,24 @@ class ReferenceLint(RootCase):
 
     def lint(self):
         return C.tool("reference_lint.py", root=self.root, env={"CI": "true"})
+
+    def test_bin_tree_exempt(self):
+        """A Verus twin reached from its crate's binary root (CRATE_BINS: R16's rexc and
+        its trust-report module) is exempt from the outside-verus rule; a lib module is not."""
+        rl = C.load_script("reference_lint")
+        unit = self.root / "verus/r/r16_capstone/src"
+        unit.mkdir(parents=True)
+        (unit / "main.rs").write_text("mod trust_report;\nfn main() {}\n", encoding="utf-8")
+        (unit / "trust_report.rs").write_text("pub fn f() {}\n", encoding="utf-8")
+        (unit / "lib.rs").write_text("pub fn g() {}\n", encoding="utf-8")
+        L = types.SimpleNamespace(root=self.root, exercises={"R16": [
+            "verus/r/r16_capstone/src/lib.rs", "verus/r/r16_capstone/src/trust_report.rs"]})
+        tp = self.root / "Solutions/verus/r/r16_capstone/src/trust_report.rs"
+        self.assertEqual(rl.bin_tree_exempt(L, "R16", "verus/r/r16_capstone/src/trust_report.rs",
+                                            "v", tp), {"test_files": [tp]})
+        self.assertEqual(rl.bin_tree_exempt(L, "R16", "verus/r/r16_capstone/src/lib.rs", "v", tp), {})
+        self.assertEqual(rl.bin_tree_exempt(L, "R15", "verus/r/r16_capstone/src/trust_report.rs",
+                                            "v", tp), {})
 
     def test_refused_without_author_context(self):
         rc, out, err = C.tool("reference_lint.py", root=self.root)

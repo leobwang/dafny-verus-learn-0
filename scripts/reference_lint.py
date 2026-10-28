@@ -404,6 +404,26 @@ def check_twin_slots(L, trel, ttext, tpath, titems, verdict_values):
                 L.add(tpath, it["line_start"], "answer-missing")
 
 
+def bin_tree_exempt(L, mid, rel, lang, tpath):
+    """lint kwargs for a Verus file reached from its crate's binary root
+    (gen_units.CRATE_BINS: R16's `rexc` and its trust-report module): code outside
+    verus! there is the tool's trusted shell, never verified (D16), so the
+    outside-verus rule does not apply to it (as it does not to test-only files)."""
+    if lang != "v":
+        return {}
+    import gen_units as gu
+    if mid not in gu.CRATE_BINS:
+        return {}
+    for unit in gu.derive_units(getattr(L, "exercises", {}).get(mid, [])):
+        if gu.unit_kind(unit)[0] != "v" or not rel.startswith(unit + "/"):
+            continue
+        bin_root = L.root / unit / gu.CRATE_BINS[mid][1]
+        reached = {f for f, _, _ in V.crate_files(bin_root)} if bin_root.is_file() else set()
+        if (L.root / rel).resolve() in reached:
+            return {"test_files": [tpath]}
+    return {}
+
+
 def lint_twin(L, mid, rel, slot_file, verdict_values, writers=frozenset()):
     lang = ci.file_lang(rel)
     trel = ref(rel)
@@ -420,7 +440,7 @@ def lint_twin(L, mid, rel, slot_file, verdict_values, writers=frozenset()):
             compare_declarations(L, rel, lang, ltext, ttext, tpath, writers)
         except V.vs.ParseError as e:
             L.add(tpath, e.line, "parse-error")
-        found = core.lib(lang).lint([tpath], "reference")
+        found = core.lib(lang).lint([tpath], "reference", **bin_tree_exempt(L, mid, rel, lang, tpath))
         planted, bad = SR.sr_planted(ttext.split("\n"), trel, titems)
         for ln, _ in bad:
             L.add(tpath, ln, "planted-marker")
@@ -452,6 +472,9 @@ def lint_module(L, mid):
         verdict_values = SR.sr_slot_file_values(text)
         slot_file = (rslots, table)
     has_verdicts = False
+    if not hasattr(L, "exercises"):
+        L.exercises = {}
+    L.exercises[rec["id"]] = rec["exercises"]
     for rel in req + opt:
         if not (L.root / ref(rel)).is_file():
             if rel in req:
