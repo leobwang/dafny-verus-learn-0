@@ -1,0 +1,22 @@
+# R15 withheld hole answers (T1, H1, both languages), cut from the one-statement-per-line
+# twins (DVR4 step 7, lane P1b); no prediction answers. The Python holes are added with them.
+# from Solutions/dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy
+# source: invariant forall k | j <= k <= |s| :: Matches(d, s[j..k]) <==> Matches(r, s[..k]) (R15.T1d)
+# verified: solutions=1 public=0
+Matches\(d,\s*s\[j\.\.k\]\)\s*<==>\s*Matches\(r,\s*s\[\.\.k\]\)
+# source: invariant forall i', j' | 0 <= i' < i && i' <= j' <= |s| :: !Matches(r, s[i'..j']) (R15.H1d)
+# verified: solutions=1 public=0
+0\s*<=\s*i'\s*<\s*i\s*&&\s*i'\s*<=\s*j'\s*<=\s*\|s\|\s*::\s*!Matches\(r,\s*s\[i'\.\.j'\]\)
+# source: invariant forall k | j <= k <= |s| :: Matches(d, s[j..k]) <==> Matches(r, s[i..k]) (R15.H1d)
+# verified: solutions=1 public=0
+Matches\(d,\s*s\[j\.\.k\]\)\s*<==>\s*Matches\(r,\s*s\[i\.\.k\]\)
+# from Solutions/verus/r/r15_verifier_loop/src/lib.rs
+# source: matches(d, s@.subrange(j as int, k)) <==> matches(*r, s@.subrange(0, k)) (R15.T1v)
+# verified: solutions=1 public=0
+matches\(d,\s*s@\.subrange\(j\s+as\s+int,\s*k\)\)\s*<==>\s*matches\(\s*\*r,\s*s@\.subrange\(0,\s*k\)
+# source: 0 <= i2 < i && i2 <= j2 <= s.len() ==> !#[trigger] matches(*r, s@.subrange(i2, j2)) (R15.H1v)
+# verified: solutions=1 public=0
+0\s*<=\s*i2\s*<\s*i\s*&&\s*i2\s*<=\s*j2\s*<=\s*s\.len\(\)\s*==>\s*!#\[trigger\]\s*matches\(\*r,\s*s@\.subrange\(i2,\s*j2\)\)
+# source: matches(d, s@.subrange(j as int, k)) <==> matches(*r, s@.subrange(i as int, k)) (R15.H1v)
+# verified: solutions=1 public=0
+matches\(d,\s*s@\.subrange\(j\s+as\s+int,\s*k\)\)\s*<==>\s*matches\(\s*\*r,\s*s@\.subrange\(i\s+as\s+int,\s*k\)

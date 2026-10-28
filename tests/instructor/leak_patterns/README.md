@@ -62,6 +62,7 @@ One line per module with a pattern file: the module, its pattern count, and the 
 
 | R13 | `R13.txt`: 8 (T1d/v, H1d/v, H2d/v, H3d/v) | 2026-10-21 (DVR4 step 5, lane P2: re-cut against the one-statement-per-line twins, T1v's pattern now matches the body line; the verifier over R13, 2,595 public files) | 8 OK |
 | R14 | `R14.txt`: 8 (H1d–H4d, H1v–H4v) | 2026-10-21 (DVR4 step 5, lane P2: re-cut after the H1 re-pose and the H3/H4 split; W1 given; the verifier over R14) | 8 OK |
+| R15 | `R15.txt`: 6 (T1d/v, H1d/v; the Python holes to come) | 2026-10-27 (DVR4 step 7, lane P1b: cut from the one-statement-per-line twins; the verifier over R15, 2,814 public files, before the chapter) | 6 OK |
 
 ## The verifier
 
