@@ -1,0 +1,156 @@
+% R15_answers.tex — your answers to paper/R15_problems.tex (learner-owned). One section
+% per problem, keyed by its \label{ans:B<n>} anchor; the GRADER comment convention and the
+% PREREG markers are paper/template_answers.tex's. /grade-paper hashes exactly the lines
+% from PREREG-BEGIN to PREREG-END, inclusive (B6): editing anything between them after
+% grading changes the hash, and the runs stay locked.
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R15 --- Verifier loop + Lab $\beta$ \\ \large My answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\sloppy
+\section*{Problem B1}\label{ans:B1}
+\begin{answer}
+\textbf{Task shape:} \vspace{1cm}
+
+\textbf{Oracle:} \vspace{1cm}
+
+\textbf{Trust:} \vspace{1cm}
+
+\textbf{Cheat surface:} \vspace{1cm}
+
+\textbf{Metric:} \vspace{1cm}
+
+\textbf{Budget:} \vspace{1cm}
+
+\textbf{Variance:} \vspace{1cm}
+
+\textbf{Artifact:} \vspace{1cm}
+
+\textbf{Roundtrip in R15 (stages, the blind class, a B3 instance, what spectest adds):} \vspace{3cm}
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+\textbf{Task shape:} \vspace{1cm}
+
+\textbf{Oracle:} \vspace{1cm}
+
+\textbf{Trust:} \vspace{1cm}
+
+\textbf{Cheat surface:} \vspace{1cm}
+
+\textbf{Metric:} \vspace{1cm}
+
+\textbf{Budget:} \vspace{1cm}
+
+\textbf{Variance:} \vspace{1cm}
+
+\textbf{Artifact:} \vspace{1cm}
+
+\textbf{(a) The six candidates in the taxonomy:} \vspace{2cm}
+
+\textbf{(b) Lab $\beta$'s card audit:} \vspace{2cm}
+
+\textbf{(c) Loopholes with and without an analogue:} \vspace{2cm}
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+\textbf{C1} (class; Dafny/Verus agree?; witness; instrument): \vspace{1.5cm}
+
+\textbf{C2:} \vspace{1.5cm}
+
+\textbf{C3:} \vspace{1.5cm}
+
+\textbf{C4:} \vspace{1.5cm}
+
+\textbf{C5:} \vspace{1.5cm}
+
+\textbf{C6:} \vspace{1.5cm}
+
+\textbf{What a verified body says about a statement:} \vspace{1.5cm}
+\end{answer}
+\section*{Problem B4}\label{ans:B4}
+\begin{answer}
+\textbf{My reading, before any pass (each flaw quoted, its dimension, recomputations):} \vspace{3cm}
+
+\textbf{Pass 1 (first line; scores in rubric order; findings at 2 or lower, quoted):} \vspace{2cm}
+
+\textbf{Pass 2 (the same):} \vspace{2cm}
+
+\textbf{(a) Agreement per dimension:} \vspace{1cm}
+
+\textbf{(b) Each flaw of my reading: caught by pass 1, pass 2, neither:} \vspace{2cm}
+
+\textbf{(c) Findings I dispute, with the settling quote or recomputation:} \vspace{1.5cm}
+
+\textbf{(d) What this licenses (at most three lines):} \vspace{1cm}
+\end{answer}
+\section*{Problem B5}\label{ans:B5}
+\begin{answer}
+\textbf{(a) The hostile string:} \vspace{1cm}
+
+\textbf{(b) Its effect on a naive LLM grader, and why it can work:} \vspace{1.5cm}
+
+\textbf{(c) The contract and the instruments (gate, audit, freeze):} \vspace{2cm}
+
+\textbf{(d) The evidence, the verdict and a failing input:} \vspace{1.5cm}
+
+\textbf{(e) Why the helper is worse than an unproved fact:} \vspace{1cm}
+
+\textbf{(f) The R-v1 clause:} \vspace{1cm}
+\end{answer}
+% PREREG-BEGIN
+\section*{Problem B6 (pre-registration)}\label{ans:B6}
+\begin{answer}
+\textbf{Claim, and the outcome that would refute it:} \dots
+
+\textbf{Metric and estimator} (the unit; each oracle's binary verdict and its
+unknown rule; $\kappa$ and its cluster-bootstrap interval; the descriptive
+confusion matrices and the verified-but-unfaithful rates, and where and when
+the hidden verdicts are read): \dots
+
+\textbf{Arms, tasks and the Claude subset} (the cards and their sources, the
+variants, each arm's policy and prompt hashes, the Claude subset's seed and
+stratification): \dots
+
+\textbf{Budget arithmetic} (per arm: calls = tasks $\times$ attempts $\times$
+rounds $\times$ arms $\times$ repeats, plus sentinels; runs; against the
+registry, with any reconciliation): \dots
+
+\textbf{Generation settings} (the values the Ollama gate pins: thinking,
+\texttt{num\_predict}, \texttt{num\_ctx}, temperature, the seed list per arm,
+pairwise disjoint; for Claude the pinned argv): \dots
+
+\textbf{Cost per arm} (tokens in and out, GPU-seconds, wall clock): \dots
+
+\textbf{GPU-hours against the ceiling} (the per-call cost and its source, each
+arm's GPU-hours, the largest per-call cost the plan tolerates): \dots
+
+\textbf{Truncation rate} (the sensitivity line): \dots
+
+\textbf{Precision} (the simulation, its assumptions and seed, the expected
+interval width, what 24 clusters cannot resolve): \dots
+
+\textbf{Cheat surface and gate}: \dots
+
+\textbf{Missing results and exclusions}: \dots
+
+\textbf{\texttt{firsttry} intervals} (80\%, before any data): \dots
+
+\textbf{Stopping rule}: \dots
+
+\textbf{Fallback}: \dots
+
+\textbf{Contamination}: \dots
+
+\textbf{Disclosure}: \dots
+
+\textbf{Batch plan binding} (the plan file, and its sha256 on a line of its own
+as \texttt{plan-sha256:} followed by the 64 hex digits \texttt{sha256sum}
+prints): \dots
+\end{answer}
+% PREREG-END
+
+\end{document}

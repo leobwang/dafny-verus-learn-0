@@ -1,0 +1,88 @@
+% paper/fixtures/R15_flawed_prereg.tex — R15's grade-the-grader exhibit (problem B4).
+% A course-written pre-registration of Lab beta, graded by /grade-paper's fixture mode
+% against R15's rubric. It unlocks no run, and it is deliberately imperfect. Record the
+% grader's scores and quotes in your answer to B4. It compiles standalone from paper/:
+%   latexmk -pdf fixtures/R15_flawed_prereg.tex
+\documentclass[11pt]{article}
+\input{preamble}
+
+\title{A pre-registration to grade \\ \large (Lab $\beta$)}
+\author{course exhibit}
+\date{}
+
+\begin{document}
+\maketitle
+\sloppy
+% PREREG-BEGIN
+\section*{Problem B6 (pre-registration)}\label{ans:B6}
+\begin{answer}
+\textbf{Claim.} If $\kappa$ is at least 0.6 the two oracles are validated:
+$\kappa$ is the share of specifications both oracles judge correctly, so
+$\kappa = 0.6$ means each oracle is right about 60\% of the time.
+
+\textbf{Metric and estimator.} Unit: one specification (card $\times$ variant
+$\times$ language), 192 units. \texttt{spectest} says faithful when the
+specification is sound on every pair and kills every decided mutant;
+\texttt{roundtrip} says faithful when its verdict is equivalent; an unparsed or
+unknown roundtrip reply counts as equivalent. Cohen's $\kappa$ over the 192
+units. The confusion matrices against the hidden verdicts and the
+verified-but-unfaithful rates, Dafny against Verus, are descriptive.
+
+\textbf{Arms, tasks and the Claude subset.} The 24 cards (10 mine, 14 the
+author's) with four variants in both languages; a Qwen \texttt{roundtrip} arm,
+a Qwen delivery arm and a Claude delivery arm on 20 cards, 10 per language,
+drawn with seed 4417 and stratified by language. To
+keep the four rounds productive, after each round the loop also tells the model
+whether the hidden verdict for its specification is faithful (read from
+\texttt{Hidden/labs/R15/} by the runner).
+
+\textbf{Budget arithmetic.} Qwen: 24 $\times$ 4 $\times$ 8 = 768 delivery
+calls and 24 $\times$ 4 $\times$ 2 = 192 roundtrip calls, 960 in all, exactly
+the registry; $\kappa$ is computed over all 192 units (24 $\times$ 4 $\times$ 2
+languages). Claude: 20 $\times$ 4 = 80 calls; sentinel calls are not model work
+and are not counted.
+
+\textbf{Generation settings.} Thinking off, \texttt{num\_predict} 768,
+\texttt{num\_ctx} 16384, temperature 0.7 for every Qwen call; seeds one per
+run, 15001--15192 for \texttt{roundtrip} and 15501--15692 for deliveries.
+
+\textbf{Cost per arm.} Logged per call: tokens in and out, GPU-seconds, wall
+clock.
+
+\textbf{GPU-hours against the ceiling.} 960 $\times$ 7.3 s $\approx$ 1.9
+GPU-h, under the 3-hour ceiling, so no fallback is needed.
+
+\textbf{Truncation rate.} Not needed at \texttt{num\_predict} 768.
+
+\textbf{Precision.} The 192 units are independent, so the interval is the
+usual $\kappa$ standard error with $n = 192$; the MDE from
+\texttt{mde\_two\_proportions(192, 0.5)} is about 0.14.
+
+\textbf{Cheat surface and gate.} A delivery could change the statement, add an
+assumption or a lever; every verified delivery is re-judged by the gate, the
+audit and the freeze in the verification container.
+
+\textbf{Missing results and exclusions.} An apparatus failure is re-run once
+with the same seed, then excluded and counted.
+
+\textbf{\texttt{firsttry} intervals.} $\kappa$ in [0.5, 0.9]; verified-but-unfaithful
+rate Dafny [0.1, 0.4], Verus [0.1, 0.4].
+
+\textbf{Stopping rule.} We look at $\kappa$ after every 48 units and stop once
+its interval excludes 0.4.
+
+\textbf{Fallback.} None.
+
+\textbf{Contamination.} All 24 cards are new, so contamination is impossible
+and no perturbation probe or card audit is needed.
+
+\textbf{Disclosure.} Model ids and digests, tool versions, prompt hashes and the
+oracles' sha256 are recorded. Claude is not a
+subject in Lab $\beta$ because the oracles use Qwen. The Claude arm uses seeds
+1--20.
+
+\textbf{Batch plan binding.} \texttt{plan-sha256:} to be filled in after the
+batch.
+\end{answer}
+% PREREG-END
+\end{document}
