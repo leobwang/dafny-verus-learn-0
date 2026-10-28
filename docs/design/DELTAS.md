@@ -5025,6 +5025,10 @@ Answers Δ312's and Δ313's open decisions. The record is in `Solutions/plans/DV
 - **D100 (R15-3 (a)).** Lab β runs four delivery repeats (768 Qwen calls, 288 runs). The GPU ceiling is to be re-set after a throughput probe at Lab β's settings, as D56 did for Lab α. The pre-registration carries the budget formula and the probe procedure. No author run: the coordinator schedules the probe with the user.
 - **Also asked (the coordinator):** fix R03's `holes R03 v` CI failure from D95 so the check counts `// GATED` external_body lines as shipped hole forms, consistent with `firsttry --strict`, with a test.
 
+### Δ315 · The CI holes step counts D95's GATED attributes — adopted (the coordinator, 2026-10-28; built 2026-10-28 UTC)
+
+`scripts/ci.sh`'s `holes <ID> <lang>` step (verify jobs) now treats every `#[verifier::external_body]  // GATED …` line of an exercise file as a shipped hole form, keyed `GATED` per file. It matches each one to the tool's `external_body` hole on the function directly below it (blank lines and doc comments may come between), using `firsttry`'s own `GATED_LINE`, so it agrees with `firsttry --strict`. On the recorded R03 run, `holes R03 v` goes from 4 mismatches to "11 hole(s) counted … 11 hole form(s) shipped … 0 mismatch(es)"; R15 stays at 0. Tests: `tests/ci/test_ci_static.py` `HolesStepGated` (a match on R03's shipped file; a missing gated hole is a mismatch).
+
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
 DVR4 step 5's systemic pass on R09 (plan §2's row: **revise**; §4.2's bar as R02 met it, Δ283; the user's D58 accepted R02 as the exemplar). Objectives, items and minutes are PLAN §3/§11's, unchanged; build notes `Solutions/plans/DVR4-R09-build-notes.md` (the objective-to-exercise map first); evidence `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p2/r09/`.

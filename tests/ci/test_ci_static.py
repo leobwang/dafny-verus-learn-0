@@ -643,5 +643,55 @@ class HolesStep(unittest.TestCase):
                       "(UnicodeDecodeError); no hole form counted", out)
 
 
+class HolesStepGated(unittest.TestCase):
+    """D95 (R03, Δ314): a `#[verifier::external_body]  // GATED …` attribute on given code
+    is a shipped hole form, as `firsttry --strict` counts it; the holes step matches it to
+    the tool's external_body hole on the fn it gates. Runs on R03's shipped Verus file."""
+
+    FILE = "verus/r/r03_modules/src/lib.rs"
+
+    def results(self, drop_gated=0):
+        lines = (C.ROOT / self.FILE).read_text(encoding="utf-8").split("\n")
+        gated = re.compile(r"#\[verifier::external_body\]\s*//\s*GATED\b")
+        holes = []
+        for i, line in enumerate(lines):
+            if gated.search(line):
+                k = i + 1
+                while not lines[k].strip() or lines[k].strip().startswith("///"):
+                    k += 1
+                holes.append({"file": str(C.ROOT / self.FILE), "kind": "external_body",
+                              "label": f"given_fn_{i}", "line": k + 1, "col": 5})
+        self.assertEqual(len(holes), 4)
+        holes = holes[drop_gated:]
+        for item, kind in (("H1v", "external_body"), ("H2v", "external_body"),
+                           ("H3v", "external_body"), ("H4v", "external_body"),
+                           ("H5v", "external_body"), ("H6v", "uninterp"), ("H7v", "uninterp")):
+            holes.append({"file": str(C.ROOT / self.FILE), "kind": kind,
+                          "label": f"R03.{item}", "line": 1, "col": 1})
+        return [{"unit": "verus/r/r03_modules", "holes": holes}]
+
+    def run_holes(self, results):
+        base = C.tmpdir("ci-holes-gated-")
+        self.addCleanup(C.remove, base)
+        j = base / "R03.v.json"
+        j.write_text(json.dumps({"results": results, "problems": [], "checked": 0}))
+        env = {**os.environ, "DVLCI_ROOT": str(C.ROOT), "DVLCI_SCRIPTS": str(C.ROOT / "scripts")}
+        p = subprocess.run([sys.executable, "-B", "-c", ci_helper_source(), "holes", "R03", "v",
+                            str(j)], capture_output=True, text=True, env=env, timeout=300)
+        return p.returncode, p.stdout, p.stderr
+
+    def test_gated_attributes_are_shipped_hole_forms(self):
+        rc, out, err = self.run_holes(self.results())
+        self.assertEqual(rc, 0, (out, err))
+        self.assertIn("R03 v: 11 hole(s) counted by the tool in 1 unit(s); 11 hole form(s) "
+                      "shipped in 1 exercise file(s); 0 mismatch(es)", out)
+
+    def test_a_missing_gated_hole_is_a_mismatch(self):
+        rc, out, err = self.run_holes(self.results(drop_gated=1))
+        self.assertEqual(rc, 1, (out, err))
+        self.assertIn(f"{self.FILE}: GATED: the tool counts 3 hole(s), the file ships 4 hole "
+                      "form(s)", out)
+
+
 if __name__ == "__main__":
     unittest.main()

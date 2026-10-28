@@ -437,6 +437,7 @@ def holes(mid, lang, jpath):
     files = [p for p in rec["exercises"]
              if p.endswith(ext) and any(p.startswith(u + "/") for u in units)]
     want = Counter()
+    gated_lines = {}
     unread = 0
     for f in files:
         try:
@@ -455,6 +456,13 @@ def holes(mid, lang, jpath):
                 n = len(ft.static_holes(text, f, it))
                 if n:
                     want[(f, it["id"])] += n
+        # D95 (R03): given code that ships `#[verifier::external_body]  // GATED …` until
+        # the learner's definitions exist is a shipped hole form (firsttry --strict counts
+        # every GATED line); the tool reports it on the gated fn, keyed here as GATED.
+        gated = sum(1 for line in text.split("\n") if ft.GATED_LINE.search(line))
+        if gated:
+            want[(f, "GATED")] += gated
+            gated_lines[f] = text.split("\n")
     try:
         data = json.loads(Path(jpath).read_text(encoding="utf-8"))
     except (OSError, ValueError) as e:
@@ -472,9 +480,23 @@ def holes(mid, lang, jpath):
         print(f"{mid}: vcheck returned no unit (an empty set fails)")
         return 1
     got = Counter()
+    def is_gated(f, line):
+        src = gated_lines.get(f)
+        if not src or not isinstance(line, int):
+            return False
+        # the attribute sits directly above the fn the tool names (blank lines and
+        # doc comments between them allowed)
+        k = line - 2
+        while 0 <= k < len(src) and (not src[k].strip() or src[k].strip().startswith("///")):
+            k -= 1
+        return 0 <= k < len(src) and bool(ft.GATED_LINE.search(src[k]))
     for r in results:
         for h in r.get("holes") or []:
-            got[(rel(h.get("file")), h.get("label") or h.get("kind") or "?")] += 1
+            f = rel(h.get("file"))
+            if h.get("kind") == "external_body" and is_gated(f, h.get("line")):
+                got[(f, "GATED")] += 1
+                continue
+            got[(f, h.get("label") or h.get("kind") or "?")] += 1
     bad = 0
     for key in sorted(set(want) | set(got)):
         if want[key] != got[key]:
