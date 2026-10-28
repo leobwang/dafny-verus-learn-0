@@ -13,9 +13,9 @@ freeze your statements (H1, in R16_Statements.dfy), and only then prove them
 here. Five typed items ship in this language: T1, H1 (in the statement file),
 H2, H3 and H4; H4 (jump threading) is the gated optimizer.
 
-File order: the test-out T1, completeness H2 (your helper lemmas, then
-`EmitComplete`), soundness H3 (helpers, then `EmitSound`), the optimizer H4
-(the given `Hop` and `Shortcut`, your helpers, then `ShortcutCorrect`) and the
+File order: the test-out T1, completeness H2 (`EmitComplete`, then your
+helper lemmas), soundness H3 (`EmitSound`, then helpers), the optimizer H4
+(the given `Hop` and `Shortcut`, `ShortcutCorrect`, then helpers) and the
 whole-program theorem H5. A5's `Accepts` is opaque: use its one-step lemmas
 (`AcceptsChar`, `AcceptsSplit`, `AcceptsJmp`, `AcceptsMatch`) and
 `AcceptsInside`, never a reveal.
@@ -73,19 +73,19 @@ module R16_Capstone {
   // item: R16.H2d
   // uses: lemma-recursion, lexicographic-decreases
   // pair: R16.H2v
-  /** **H2.** Prove your frozen completeness statement. Write your helper
-      lemmas above `EmitComplete`, then its body. `AcceptsFrom` hides the fuel,
-      so the induction runs on a fuelled helper: from an accepting run of the
-      continuation with fuel `f`, build one of `r`'s code with some fuel `f2`.
-      Which constructor's case recurses on the same regex, and what then
+  /** **H2.** Prove your frozen completeness statement. Write the body of
+      `EmitComplete`, then your helper lemmas below it. `AcceptsFrom` hides the
+      fuel, so the induction runs on a fuelled helper: from an accepting run of
+      the continuation with fuel `f`, build one of `r`'s code with some fuel
+      `f2`. Which constructor's case recurses on the same regex, and what then
       becomes smaller? Which addresses does each layout lemma name? */
-  // Your helper lemmas (H2), here.
-
   lemma EmitComplete(p: Prog, r: Re, pc: int, u: seq<char>, v: seq<char>)
     ensures EmitCompleteStatement(p, r, pc, u, v)
   {
     assume false;
   }
+
+  // Your helper lemmas (H2), here.
   // Hint(1): a fuelled helper by induction on `r`, with `Star` by induction on the length of the word: the first pass through `a` reads a non-empty chunk (A1's `Matches` gives it), and the rest is a shorter match of `Star(a)`.
   // Hint(2): `LayoutAlt`, `LayoutCat` and `LayoutStar` name each child's address and the jumps between them; `AcceptsSplit` and `AcceptsJmp` take one step each, so the fuel grows by one per instruction you pass.
 
@@ -96,19 +96,19 @@ module R16_Capstone {
   // item: R16.H3d
   // uses: lemma-recursion, lexicographic-decreases
   // pair: R16.H3v
-  /** **H3.** Prove your frozen soundness statement. Write your helper lemmas
-      above `EmitSound`, then its body. Here the induction runs on the fuel of
-      the given run: from a run of `r`'s code with fuel `f`, find the split
-      point `k` and a run of the continuation with no more fuel. Which cases
-      spend no fuel before they recurse, and on what? How does a `Split`
+  /** **H3.** Prove your frozen soundness statement. Write the body of
+      `EmitSound`, then your helper lemmas below it. Here the induction runs on
+      the fuel of the given run: from a run of `r`'s code with fuel `f`, find
+      the split point `k` and a run of the continuation with no more fuel. Which
+      cases spend no fuel before they recurse, and on what? How does a `Split`
       decide which branch to follow? */
-  // Your helper lemmas (H3), here.
-
   lemma EmitSound(p: Prog, r: Re, pc: int, w: seq<char>)
     ensures EmitSoundStatement(p, r, pc, w)
   {
     assume false;
   }
+
+  // Your helper lemmas (H3), here.
   // Hint(1): a fuelled helper by induction on the fuel first and the regex second: `Cat` and the entry of `Alt` and `Star` recurse on a smaller regex with the same fuel, an `Empty`'s self-jump on the same regex with less.
   // Hint(2): `AcceptsSplit` says which of the two branches holds the run (test one with `if`); `Star`'s loop body may read the empty word, so treat a first chunk of length 0 apart when you join the two matches.
 
@@ -133,18 +133,18 @@ module R16_Capstone {
   // uses: lemma-recursion
   // pair: R16.H4v
   /** **H4.** Prove that threading every jump changes no state's language, in
-      both directions, from every address. Write your helper lemmas above
-      `ShortcutCorrect`, then its body. A threaded jump skips one instruction
-      of the original, so one direction spends more fuel than the other. Which
-      direction is that, and what does `AcceptsInside` give you before you
-      look at the instruction at `pc`? */
-  // Your helper lemmas (H4), here.
-
+      both directions, from every address. Write the body of `ShortcutCorrect`,
+      then your helper lemmas below it. A threaded jump skips one instruction of
+      the original, so one direction spends more fuel than the other. Which
+      direction is that, and what does `AcceptsInside` give you before you look
+      at the instruction at `pc`? */
   lemma ShortcutCorrect(p: Prog, pc: int, w: seq<char>)
     ensures AcceptsFrom(Shortcut(p), pc, w) <==> AcceptsFrom(p, pc, w)
   {
     assume false;
   }
+
+  // Your helper lemmas (H4), here.
   // Hint(1): one fuelled helper per direction, each by induction on the fuel, with one case per instruction kind at `pc`; the threaded jump is the only case where the two programs differ.
   // Hint(2): from the original to the threaded program, a jump to a jump spends two steps of the original for one of the threaded; the other way, rebuild the skipped jump with `AcceptsJmp(p, a, w, g1 + 1)`.
 

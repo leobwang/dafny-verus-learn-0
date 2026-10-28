@@ -2636,8 +2636,11 @@ def _dafny_skip_reason(text, rel, it, open_specs):
     first, holes = decls[0], static_holes(text, rel, it)
     if not holes:
         return None
-    if first.kind in ("function", "predicate") and first.body is None and \
-            set(holes) == {first.line}:
+    # One bodyless function, or (R16.H1d, DVR4 step 7) a block of bodyless functions
+    # and predicates only, each shipped hole the declaration itself.
+    defs = [d for d in decls if d.kind in ("function", "predicate") and d.body is None]
+    if first in defs and (set(holes) == {first.line} or (
+            len(defs) == len(decls) and set(holes) == {d.line for d in defs})):
         return (f"{FUNCTION_SKIP}: a bodyless function has no empty body; its gate is its "
                 "twin's construct-free answers (`cfree:` lines, the forms gate)")
     assumes = {t.line for t in src.toks if t.kind == "id" and t.text == "assume"
@@ -3134,6 +3137,24 @@ def item_symbol_in(text, path, rel, lang, blk):
     return next((s for s, ln in syms if lo <= ln <= hi), None)
 
 
+def definition_block(text, rel, lang, blk):
+    """A Dafny block that opens with a function or predicate definition (a
+    learner-written definition, R16.H1d's statements): it states nothing of its
+    own to verify, so its uses judge it, wherever they sit in the shadowed unit
+    (the twin's other declarations all verify): a construct-free answer that
+    makes the unit fail is killed even when no error falls inside the block.
+    A Verus spec fn has no per-symbol verdict and is judged so already."""
+    if lang != "d":
+        return False
+    try:
+        src = D.parse_source(text, rel)
+    except Exception:  # noqa: BLE001
+        return False
+    decls = [d for d in src.decls if d.kind in D.METHODLIKE - {"iterator"}
+             and blk["line_start"] <= d.line <= blk["line_end"]]
+    return bool(decls) and decls[0].kind in ("function", "predicate")
+
+
 def cfree_verdict(shadows, rel, lang, it, rules, body, seeds, given=None, target=None,
                   decls=""):
     """(status, why) of one construct-free answer: killed (it fails
@@ -3169,7 +3190,8 @@ def cfree_verdict(shadows, rel, lang, it, rules, body, seeds, given=None, target
         st = res.per_symbol.get(sym) if sym else None
         if errs or res.stage in ("parse", "resolve") and res.verdict != "verified" or \
                 (st is not None and st not in STABLE_OK[lang]) or \
-                (st is None and res.verdict != "verified"):
+                (st is None and res.verdict != "verified") or \
+                (res.verdict != "verified" and definition_block(variant, rel, lang, vblk)):
             return "killed", "fails verification"
         fails = form_failures(static_forms(variant, rel, it, rules, given))
         if not fails and "stable" in rules:

@@ -1750,6 +1750,24 @@ class EmptyBodyStatementAndFunctionHoles(unittest.TestCase):
         method = method.replace("ensures r >= a", "ensures a >= 0")
         self.assertIsNone(firsttry.eb_skip_reason(method, rel, self.item(rel, method, "Q99.H2d")))
 
+    def test_dafny_block_of_bodyless_definitions(self):
+        """R16.H1d: two bodyless predicates in one block are one function hole, and
+        the block is a definition block (its cfree answers are judged by the unit)."""
+        rel = "dafny/Q/Q99_X/std/Q99_X.dfy"
+        two = EB_DAFNY.replace("  function Pick(a: nat): (r: nat)\n    ensures r >= a\n",
+                               "  function Pick(a: nat): (r: nat)\n    ensures r >= a\n\n"
+                               "  ghost predicate Both(a: nat)\n    ensures true\n")
+        it = self.item(rel, two, "Q99.H2d")
+        why = firsttry.eb_skip_reason(two, rel, it)
+        self.assertTrue(why.startswith(firsttry.FUNCTION_SKIP), why)
+        self.assertTrue(firsttry.definition_block(two, rel, "d", it))
+        self.assertFalse(firsttry.definition_block(two, rel, "d", self.item(rel, two, "Q99.H3d")))
+        self.assertFalse(firsttry.definition_block(two, rel, "v", it))
+        # a lemma after the definitions keeps the block gated as shipped
+        mixed = two.replace("  ghost predicate Both(a: nat)\n    ensures true\n",
+                            "  lemma Both(a: nat)\n    ensures a >= 0\n")
+        self.assertIsNone(firsttry.eb_skip_reason(mixed, rel, self.item(rel, mixed, "Q99.H2d")))
+
     def test_verus_statement_hole_after_an_open_statement(self):
         rel = "verus/q/x/src/lib.rs"
         it = self.item(rel, EB_VERUS_OPEN, "Q99.H5v")
