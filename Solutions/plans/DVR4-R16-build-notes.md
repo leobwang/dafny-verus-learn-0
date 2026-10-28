@@ -16,7 +16,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | A5 reconciliation design (§1) | **done (design)**; DECISION R16-1 open (emitter given) | probes `a5/a5_probe.{dfy,rs}` verified, 2026-10-27 |
 | A5 layer files in the tree | not started (waits for R16-1) | — |
 | R16 objective map (§2) | written | this file |
-| jump-threading spike (§3) | **Dafny passed** (one-hop `Shortcut`, both directions); Verus not run | `r16/thread_probe.dfy` 86 verified |
+| jump-threading spike (§3) | **passed in both languages** (one-hop `Shortcut`, both directions, no `reveal`: `AcceptsInside` given) | `r16/thread_probe.dfy` 87 verified, `r16/thread_probe.rs` 31 verified |
 | twins, learner files, admission | not started | — |
 | chapter, bank, paper, pins, CI | not started | — |
 | Lab γ pre-registration design (§5) | drafted | this file |
@@ -58,7 +58,7 @@ PLAN §3 R16's objectives, the item that checks each, minutes (PLAN: capstone 66
 Statement (both directions, all states, fuel-free): `ShortcutCorrect(p, pc, w): AcceptsFrom(Shortcut(p), pc, w) <==> AcceptsFrom(p, pc, w)` where `Shortcut(p)[i] = Hop(p, p[i])`, `Hop(p, IJmp(a)) = IJmp(p[a].x)` when `a` is in range and `p[a]` is a jump, else the instruction unchanged (one hop; a self-loop `IJmp(a)` at `a` stays itself, so cycles need no special case).
 
 - **Dafny (2026-10-27): verified**, 86 verified with the A5 probe. `ToShortcut` (original ⇒ shortcut, fuel never grows) and `FromShortcut` (shortcut ⇒ original, a hop costs two steps) by induction on fuel, four instruction cases each, using the one-step lemmas; it used `reveal Accepts()` only for "an accepting pc is in range", which `AcceptsInside` replaces.
-- **Verus:** to run (the same shape; `usize` targets, `Seq::new` for `shortcut`).
+- **Verus (2026-10-27): verified first try**, 31 verified: `hop`/`shortcut` (`Seq::new`), `lemma_to_shortcut`, `lemma_from_shortcut`, `lemma_shortcut_correct`, over the opaque `accepts` with the one-step lemmas and `lemma_accepts_inside`. The Dafny spike re-run with `AcceptsInside` in place of `reveal`: 87 verified.
 - Admission after both: seeds 1–3, empty body fails (shipped and maximal automation), D64 (the two directions × four cases). The plan's fallback (one-hop on acyclic chains) is not needed: one-hop on every jump is sound and complete as stated.
 - An exec `shortcut_exec` (`ensures out@ == shortcut(p@)`) is given (or a T-sized second part, decided at admission) so `rexc` can run the optimized program.
 
