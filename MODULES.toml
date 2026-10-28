@@ -91,7 +91,11 @@
 #                     { path = "...", sha256 = "<64 hex>" | "PENDING" }; required
 #                     past planned. A statement file's name holds "Statement"
 #                     (guard rule 2f freezes Challenges/**/*Statement*).
-#                     Otherwise []
+#                     R16 (D97): the learner-written statement files, one per
+#                     language past planned, among its exercises, sha256 always
+#                     "PENDING" (the learner's post-review commit pins them;
+#                     expected/R16.statements names the same files for fvh).
+#                     R08: its provided matcher, pinned. Otherwise []
 #   deep_dive         Q only: R ids the chapter links as "Deep dive → Rnn".  R: []
 #                     (no R record names a Q module)
 #   review_bar        /review-code bar: it-reads | proof-shape |

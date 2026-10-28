@@ -351,6 +351,14 @@ GATE_WORD = re.compile(r"(?<![a-z])gates?(?![a-z])")
 STATEMENT_NAME = re.compile(r"[Ss]tatement")
 # PLAN F6: the exact frozen A2 matcher interface introduced by R08.
 PROVIDED_STATEMENTS = {"R08": "dafny/given/R/RG_A2_MatcherStatement.dfy"}
+# D97 (the user, 2026-10-28; Δ319): R16's correctness statements are the learner's. The
+# learner writes them, has them reviewed statement-only, and commits them; that commit
+# is the pin. So the registry lists each statement file with sha256 = "PENDING" in every
+# status, inside the module's own trees and among its exercises, one per language past
+# planned, and fvh's pin file expected/<ID>.statements (the shipped forms, which
+# fvh.statements.check compares the committed files with before Lab γ's crate unpack)
+# names exactly the same files. specfreeze --check reads the same files' statements.
+LEARNER_STATEMENTS = {"R16": ("dafny/R/R16_Capstone/", "verus/r/r16_capstone/")}
 SHA256 = re.compile(r"[0-9a-f]{64}")
 KEBAB = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 CONCEPT_KEY = re.compile(r"S(1[0-3]|[1-9])\.[a-z0-9]+(?:-[a-z0-9]+)*(?:@(d|v|py))?")
@@ -760,7 +768,8 @@ def check_model_fields(m):
                 f"{cap} (design §3" + ("; the user's D56" if mid in GPU_HOURS_EXCEPTIONS else "")
                 + ")")
     st = m["statements"]
-    if is_core_module(mid) and st and mid not in PROVIDED_STATEMENTS:
+    if is_core_module(mid) and st and mid not in PROVIDED_STATEMENTS and \
+            mid not in LEARNER_STATEMENTS:
         err("statements are the frozen statement files of Q19–Q33; must be []")
     if mid in PROVIDED_STATEMENTS and len(st) > 1:
         err("R08 declares one frozen matcher statement, not additional statement files")
@@ -770,7 +779,17 @@ def check_model_fields(m):
             err(f"statements[{i}] must be {{ path = \"…\", sha256 = \"…\" }}")
             continue
         topic_dir = TOPIC_DIRS.get(m["topic"], "?")
-        if mid in PROVIDED_STATEMENTS:
+        if mid in LEARNER_STATEMENTS:
+            if not s["path"].startswith(LEARNER_STATEMENTS[mid]):
+                err(f"statements[{i}]: '{s['path']}': {mid}'s statement files sit in its own "
+                    "trees (" + ", ".join(LEARNER_STATEMENTS[mid]) + "; D97)")
+            elif s["path"] not in (m["exercises"] if isinstance(m["exercises"], list) else []):
+                err(f"statements[{i}]: '{s['path']}' is not one of {mid}'s exercises (the "
+                    "learner writes it; D97)")
+            if s["sha256"] != "PENDING":
+                err(f"statements[{i}]: {mid}'s statements are pinned by the learner's "
+                    "post-review commit, never in the registry: sha256 = \"PENDING\" (D97)")
+        elif mid in PROVIDED_STATEMENTS:
             if s["path"] != PROVIDED_STATEMENTS[mid]:
                 err(f"statements[{i}]: R08 uses the exact provided A2 matcher "
                     f"'{PROVIDED_STATEMENTS[mid]}'")
@@ -784,8 +803,16 @@ def check_model_fields(m):
                 "(or 'statement'), so guard rule 2f freezes it")
         if s["sha256"] != "PENDING" and not SHA256.fullmatch(s["sha256"]):
             err(f"statements[{i}]: sha256 must be 64 lower-case hex digits or \"PENDING\"")
-        if s["sha256"] == "PENDING" and m["status"] == "shipped":
+        if s["sha256"] == "PENDING" and m["status"] == "shipped" and \
+                mid not in LEARNER_STATEMENTS:
             err(f"statements[{i}]: a shipped module pins its statement (no PENDING)")
+    if mid in LEARNER_STATEMENTS and m["status"] != "planned":
+        langs = {PurePosixPath(s["path"]).suffix for s in st if isinstance(s, dict)
+                 and isinstance(s.get("path"), str)}
+        for ext, lang in ((".dfy", "Dafny"), (".rs", "Verus")):
+            if ext not in langs:
+                err(f"{mid} past planned lists its learner-written statement file in {lang} "
+                    "(statements, D97)")
     if not is_core_module(mid) and m["status"] != "planned" and not st:
         err("a challenge past planned lists its frozen statement files")
     for k, v in m["admissible"].items():
@@ -1264,6 +1291,32 @@ def check_paths(m, root):
                 errs.append(f"{mid}: {key}: directory '{p}' does not exist")
         elif not target.is_file():
             errs.append(f"{mid}: {key}: file '{p}' does not exist")
+    if mid in LEARNER_STATEMENTS and not planned:
+        # D97: fvh's pin file names exactly the registry's statement files (fvh.statements:
+        # "<sha256 of the shipped form>  <course path>"), and each shipped form is the
+        # file as it ships (a file the learner has changed is checked by fvh, not here).
+        pin = root / "expected" / f"{mid}.statements"
+        want = sorted(e["path"] for e in (m.get("statements") or [])
+                      if isinstance(e, dict) and isinstance(e.get("path"), str))
+        if not pin.is_file():
+            errs.append(f"{mid}: expected/{mid}.statements is missing: fvh pins the shipped form "
+                        "of each learner-written statement file there (D97)")
+        else:
+            got = {}
+            for n, line in enumerate(pin.read_text(encoding="utf-8").splitlines(), 1):
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                parts = line.split(None, 1)
+                if len(parts) != 2 or not SHA256.fullmatch(parts[0]):
+                    errs.append(f"{mid}: expected/{mid}.statements line {n}: not "
+                                "'<sha256>  <course path>'")
+                    continue
+                got[parts[1].strip()] = parts[0]
+            if sorted(got) != want:
+                errs.append(f"{mid}: expected/{mid}.statements names "
+                            f"{', '.join(sorted(got)) or 'no file'}; the registry's statements "
+                            f"name {', '.join(want) or 'none'} (D97)")
     if mid in PROVIDED_STATEMENTS:
         rel = PROVIDED_STATEMENTS[mid]
         statement = root / rel

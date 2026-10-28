@@ -5055,6 +5055,18 @@ Builds Δ314's D98 (after Δ316–Δ317), D99, D100 and D96's PLAN correction. T
 - **Lab β's budget (D100).** Paper B6 states the formula, the course's rows (Qwen 24 × 1 × 4 × 1 × 4 = 384 delivery calls in 96 runs, plus 24 × 4 × 2 × 2 = 384 `roundtrip` calls in 192 runs: 768 in 288; Claude 80 + ≤ 10 in 20), and the ceiling: 3 GPU-h, to be re-set after a throughput probe at Lab β's settings, as D56. It also gives the probe's procedure: 24 calls on public practice cards, never a Lab β card, one at a time; *t* is the 90th percentile of GPU-seconds; the ceiling is 768 × *t* / 3600 with a 20 % margin, set by the user. The model and server pin is "the apparatus's pinned OpenAI-compatible endpoint and model", and the text notes the move from the Ollama gate (a parallel lane's change; no sandbox, gate or apparatus file is touched here). The B6 solution's settings, ceiling and fallback are keyed on the ceiling *C* in force. The rubric's BP.b and PLAN §4.3's two β rows and budget paragraph follow, as do chapter §6's bullet and the registry's banner comment. The registry's `gpu_hours` stays 3 until then. Nothing was run.
 - **A5's row (D96).** PLAN §2.2's A5 row now gives `Emit`, `EmitProg`, the exec emitter, the layout lemmas, the word-relative opaque `Accepts` with `AcceptsInside` and `AcceptsFrom`, and the re-supplied parser and `pike_run`. The learner writes every statement, both proofs and the whole-program theorem. A4's row reads R10–R16 (A5's crate depends on `rg_re_a4`).
 
+### Δ319 · The registry's `statements` field opens to R16's learner-written statements (D97) — adopted (DVR4 step 7, lane P1c, 2026-10-28)
+
+Builds Δ314's D97 in `scripts/check_course_map.py` (`LEARNER_STATEMENTS = {"R16": (its Dafny and Verus trees)}`). R16's `statements` entries are the files in which the learner writes `EmitComplete` and `EmitSound`, reviewed statement-only before freezing. Each entry must:
+- sit inside R16's own trees and be one of its exercises;
+- carry a name that holds "Statement";
+- have `sha256 = "PENDING"` in every status, shipped included, because the learner's post-review commit is the pin and the registry never holds one.
+
+Past planned, the module lists one Dafny and one Verus statement file. `expected/R16.statements`, fvh's pin file of the files' shipped forms, must name exactly those files. `fvh.statements.check` compares the committed files with the shipped forms, and it gates Lab γ's crate unpack, as it gates Lab 3's unseal (QPLAN §30 Q64). `specfreeze --check R16` reads the same files' statements once frozen. R08's provided matcher and Q19–Q33's challenge statements are unchanged, and any other core module still refuses the field. The registry's banner comment follows.
+
+- **Tests:** `scripts/test_course_map.py`, six cases: pending statements are accepted; a registry pin is refused; so are a file outside R16's trees, a file that is not an exercise, and a file not named Statement; R15 is still refused. The past-planned rules (one file per language, the pin file) are exercised when R16 is armed.
+- **Touches:** `scripts/check_course_map.py`, `scripts/test_course_map.py`, `MODULES.toml` (comment).
+
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
 DVR4 step 5's systemic pass on R09 (plan §2's row: **revise**; §4.2's bar as R02 met it, Δ283; the user's D58 accepted R02 as the exemplar). Objectives, items and minutes are PLAN §3/§11's, unchanged; build notes `Solutions/plans/DVR4-R09-build-notes.md` (the objective-to-exercise map first); evidence `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p2/r09/`.

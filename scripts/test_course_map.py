@@ -819,6 +819,35 @@ case("R08: existing matcher cannot lose its pin", setf("R08", "statements", "[]"
      1, "provided matcher must be declared and pinned")
 case("R07: provided statements remain disallowed", setf("R07", "statements", R08_DESC),
      1, "statements are the frozen statement files of Q19–Q33")
+# D97: R16's statements are the learner's, PENDING in the registry until the
+# learner's post-review commit pins them; inside R16's trees, among its exercises.
+R16_ST_D = "dafny/R/R16_Capstone/std/R16_Statements.dfy"
+R16_ST_V = "verus/r/r16_capstone/src/statements.rs"
+R16_EX = ('["dafny/R/R16_Capstone/std/R16_Capstone.dfy", "' + R16_ST_D + '", '
+          '"verus/r/r16_capstone/src/lib.rs", "' + R16_ST_V + '", "specimens/R16/"]')
+R16_ST = ('[{ path = "' + R16_ST_D + '", sha256 = "PENDING" }, '
+          '{ path = "' + R16_ST_V + '", sha256 = "PENDING" }]')
+
+
+def r16_statements(statements, exercises=R16_EX):
+    return setf("R16", "statements", statements, setf("R16", "exercises", exercises))
+
+
+case("R16: learner-written statements, pending", r16_statements(R16_ST), 0, "course map OK")
+case("R16: a statement pinned in the registry",
+     r16_statements(R16_ST.replace('"PENDING" }]', '"' + "a" * 64 + '" }]')),
+     1, "pinned by the learner's post-review commit, never in the registry")
+case("R16: a statement outside its trees",
+     r16_statements('[{ path = "dafny/R/R15_VerifierLoop/std/R16_Statements.dfy", '
+                    'sha256 = "PENDING" }]'), 1, "statement files sit in its own trees")
+case("R16: a statement that is not an exercise", r16_statements(R16_ST, "[]"),
+     1, "is not one of R16's exercises")
+case("R16: a statement file not named Statement",
+     r16_statements('[{ path = "dafny/R/R16_Capstone/std/R16_Capstone.dfy", '
+                    'sha256 = "PENDING" }]'), 1, "a statement file's name holds 'Statement'")
+case("R15: learner statements stay R16's", setf("R15", "statements",
+     '[{ path = "dafny/R/R15_VerifierLoop/std/R15_Statements.dfy", sha256 = "PENDING" }]'),
+     1, "statements are the frozen statement files of Q19–Q33")
 case("gated item with minutes",
      setf("Q14", "admissible", '{ "Q14.H4d" = { admitted = false, minutes = 30, fallback = "x" } }'),
      1, "is gated: no minutes (0) and a named fallback")
