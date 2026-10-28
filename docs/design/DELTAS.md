@@ -5003,6 +5003,16 @@ The record is in `Solutions/plans/DVR4-R15-build-notes.md` and `Solutions/plans/
 - **Open: DECISION R15-1** (the property rung H2v). `vcheck --test` builds tests with `verus --compile --test`, so a `regex` dev-dependency needs a wrapper change, and no hole form counts a `todo!()` under `#[cfg(test)]`. **DECISION R16-2** decides how the learner's statements are pinned after review.
 - Lab β's and Lab γ's pre-registration designs follow plan §3 (each notes file's §5). Nothing is run.
 
+### Δ313 · R15's kit at the R module bar, except the bank and CI (DVR4 step 7, lane P1b) — in R authoring (2026-10-27 UTC)
+
+The record is in `Solutions/plans/DVR4-R15-build-notes.md` §0, §5b and §6.
+
+- **Lab β's oracles.** `harness/r/fvh_r/spectest.py` (H1py `spec_sound_r15`, H2py `spec_complete_r15`) and `roundtrip.py` (H3py `roundtrip_r15`), each with a reference and frozen tests (`harness/tests/r/r15_cases/`, plus shims at the paths vcheck maps to). Every gate run goes through a stand-in runner and every policy call is a scripted reply, so CI never calls a model. Registry rows are 35, 40 and 65 minutes, giving R15's admissible total of 205.
+- **Chapter** `docs/R15_VerifierLoop.md`: 7,668 lint words, 9 + 9 source blocks, 25 pins and PLAN's two diagrams (drawn as three fences). It adds 14 demo specimens. Rung 3 is demonstrated with fresh-named copies of A1/A2 (`vcheck --test` refuses module probes).
+- **Written track.** B1 and B2 are cards 03.10 and 05.2, each with its line range and sha256. B3 reviews six candidates for the agent's `FirstMatchEndR15` statement, not the search's: chapter §4 works the search's six. B4 is grade-the-grader, against the exhibit `paper/fixtures/R15_flawed_prereg.tex`. B5 is the injection and B6 Lab β's pre-registration. The set includes solutions, a rubric (pins current) and gold/flawed fixtures.
+- **Names.** P1dv's specimens are renamed `weak-d/v`, so "vacuous" means only an unsatisfiable requires throughout R15.
+- **Open:** R15-1 (H2v), R15-2 (`spectest` cannot decide existential postconditions with empty-body checks; recommended: witness hints per pair, and `unknown` when an existential has none), R15-3 (Lab β's call count against the registry and the GPU ceiling).
+
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
 DVR4 step 5's systemic pass on R09 (plan §2's row: **revise**; §4.2's bar as R02 met it, Δ283; the user's D58 accepted R02 as the exemplar). Objectives, items and minutes are PLAN §3/§11's, unchanged; build notes `Solutions/plans/DVR4-R09-build-notes.md` (the objective-to-exercise map first); evidence `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p2/r09/`.

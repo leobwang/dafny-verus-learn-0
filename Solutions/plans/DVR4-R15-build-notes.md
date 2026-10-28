@@ -19,8 +19,9 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | `spectest`/`roundtrip` (H1py–H3py) + frozen tests | **built**: learner files fail only on holes (13+14 failures, all NotImplementedError); references 26/26 and 25/25; TRIV 3/3 fail; hollow 0; registry rows 35/40/65. Open: the redaction rule is a substring check, so a bare-identifier clause (`ensures b`) trips it (card authors avoid; or narrow the rule); `bench/local/r/labbeta/STRATUM.toml` belongs to the later corpus step | this commit |
 | H2v property rung | **DECISION R15-1** (mechanism) | §4 |
 | Python holes (`spectest`, `roundtrip`) design (§3) | drafted | this file |
-| twins, learner files, agent pair, admission | not started | — |
-| chapter, bank, paper, pins, CI | not started | — |
+| chapter, paper, pins | **done**: chapter 7,668 words, 25 pins, lint 0; written track B1–B6 + exhibit; counts and freeze pinned; leak patterns 6 OK | 97a282dd, 65e7762a |
+| bank | sub-lane writing it (probes under memgate) | — |
+| study workflow (`wf.py R15`), focused author CI | to run after the bank | — |
 | Lab β pre-registration design (§5) | drafted | this file |
 
 ## 1. Objective-to-exercise map (written before any build, 2026-10-27)
