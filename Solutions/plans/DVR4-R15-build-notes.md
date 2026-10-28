@@ -20,7 +20,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | H2v property rung | **DECISION R15-1** (mechanism) | §4 |
 | Python holes (`spectest`, `roundtrip`) design (§3) | drafted | this file |
 | chapter, paper, pins | **done**: chapter 7,668 words, 25 pins, lint 0; written track B1–B6 + exhibit; counts and freeze pinned; leak patterns 6 OK | 97a282dd, 65e7762a |
-| bank | sub-lane writing it (probes under memgate) | — |
+| bank | **done**: 1,542 lines, 12 questions (2/4/2/2/2), draws A/B with two live predicts each, PP1/PP2, 51 captured probes (`bank/probes.log`), 11 backward edges; tags in concepts.md; leak OK | this commit |
 | study workflow (`wf.py R15`), focused author CI | to run after the bank | — |
 | Lab β pre-registration design (§5) | drafted | this file |
 
@@ -57,7 +57,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | T1d | 3 invariants, `NullableCorrect` ×2, `DerivCorrect`, the slice fact, one `s[j..j]` fact | 8 | — |
 | H1d | 4 invariants (the outer bound drops), `NullableCorrect` ×2, `s[j..j]` ×2, `DerivCorrect`, the slice fact | 10 | `DerivMatch(r, s[i..j])` per slice: 3 invariants + the call = **4**; each proper subset fails (minimizer) |
 | T1v | 3 invariant clauses, `lemma_nullable_correct` ×2, the empty-slice fact ×2, `lemma_deriv_correct`, the slice fact; nothing drops | 9 | — |
-| H1v | the inner loop's 4 clauses (the outer bound and the outer copy of the outer clause drop: the inner loop carries it), the same 6 proof lines | 10 | the slice answer needs a sub-vector built in a loop in Verus, so it is not shorter |
+| H1v | one copy of the outer clause plus the inner loop's 3 clauses, the same 6 proof lines (the outer bound drops). The inner copy is not needed: after the inner loop, facts about unchanged variables hold again (probe `h1v_noinner.rs`, verified), so the twin drops it and H1v's Hint(2) and chapter §2 say so (found by the bank sub-lane) | 10 | the slice answer needs a sub-vector built in a loop in Verus, so it is not shorter |
 
 Every item meets D64 with the cheaper answer counted. The cheaper H1d answer is cubic; the chapter names it and the cost, the twin keeps the derivative restart (plan §2.7's design).
 
@@ -96,6 +96,7 @@ Options:
 - **Written track** (sub-lane): B1–B6, solutions, rubric (pins current), gold/flawed fixtures, exhibit `paper/fixtures/R15_flawed_prereg.tex` for B4. B3 is being re-posed on `FirstMatchEndR15`'s statement: §4 of the chapter works the search's six candidates, which would hand B3 its answers.
 - **Finding (Lab β design): `spectest`'s empty-body checks cannot decide existential postconditions.** On the word search's faithful spec, every check fails in both languages (`sound-d/v` pins): the true pair reads "rejects" and the mutant "survives", so a sound, complete spec scores unfaithful. H1's own statement is existential. DECISION R15-2 below.
 - **Finding (budget):** PLAN §4.3's roundtrip row (96 runs / 192 calls) covers one language; the 24 × 4 × 2 primary needs 384 calls / 192 runs, and PLAN's rows plus the full primary exceed the registry's 960 calls / 288 runs. B6's exemplar fits by cutting delivery repeats to 4. At Lab α's measured 72 GPU-s per call, 768 calls ≈ 15 GPU-h against R15's 3 GPU-h ceiling; a throughput probe at Lab β's settings (thinking off, `num_predict` 768) is needed before the ceiling is final.
+- **Finding (bank, bears on R15-2):** an empty-body negative check on a 3-element sequence is proved in Dafny but not in Verus (fuel 1), so `spectest` can score the same mutant killed in Dafny and survived in Verus: a D-vs-V confound for Lab β beyond the existential problem; witness hints (R15-2 (a)) or a pinned unfolding depth per card would remove it.
 - **Redaction rule:** a bare-identifier clause (`ensures b`) always appears in the signature, so `roundtrip_r15` raises; cards avoid such clauses, or the rule is narrowed to the description.
 
 ## 6. DECISIONS (to the coordinator)

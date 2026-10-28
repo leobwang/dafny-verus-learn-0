@@ -423,9 +423,12 @@ $ scripts/vcheck specimens/R15/word-v.rs.specimen
 vcheck: specimens/R15/word-v.rs.specimen [verus, learner loop]: verified — 4 verified, 0 holes, 0 errors
 ```
 
-A Verus loop forgets every fact its invariant does not mention, so the bounds
+Inside a Verus loop body only that loop's invariant is known, so the bounds
 on `p` and `last` appear in both loops; Dafny keeps facts about variables a
-loop does not modify. H1v's second hint says the same about its outer clause.
+loop does not modify. After a Verus inner loop exits, facts about the
+variables it does not change hold again, which is why an outer clause need
+not be repeated in the inner invariant unless the inner body uses it (H1v's
+second hint).
 
 ### What the invariant catches that a fixed test misses
 

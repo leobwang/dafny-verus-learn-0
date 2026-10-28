@@ -80,7 +80,7 @@ pub fn contains_match_r15(r: &Re, s: &Vec<char>) -> (b: bool)
     false
 }
 // Hint(1): nested loops: restart the derivative at every start `i`; the inner loop is T1's loop on the slices that begin at `i`. The outer loop's last start is `s.len()`: leave before `i + 1` can overflow.
-// Hint(2): the outer invariant rules out every slice that starts before `i`, and the inner loop must carry it too (Verus forgets what a loop's invariant does not say).
+// Hint(2): the outer invariant rules out every slice that starts before `i`. Inside the inner loop Verus knows only that loop's invariant; after it exits, facts about the variables it does not change (`i`, `r`, `s`) hold again.
 // Uncomment as you go:
 // fn contains_check_r15() {
 //     let mut s: Vec<char> = Vec::new();
