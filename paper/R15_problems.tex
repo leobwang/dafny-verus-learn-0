@@ -270,17 +270,38 @@ batch, the hidden comparison only in the grader container); \texttt{roundtrip}
 uses the pinned Qwen model and Claude never judges in it; CI never calls a
 model.
 
-\textbf{Given numbers.} PLAN \S4.3's proposed rows: Qwen deliveries 24 cards
-$\times$ 1 attempt $\times$ 4 rounds (verifier feedback only) $\times$ 1 arm
-$\times$ 8 repeats (192 runs, 768 calls); Qwen \texttt{roundtrip} 24 cards
-$\times$ 4 variants $\times$ 2 calls (96 runs, 192 calls); Claude deliveries
-20 cards $\times$ 1 $\times$ 4 rounds $\times$ 1 arm $\times$ 1 (20 runs, 80
-calls); Claude sentinels ($\Delta$148) at most 10 calls. The registry's R15
-budget, which \texttt{fvh} enforces: 90 Claude calls, 20 Claude runs, 960 Qwen
-calls, 288 Qwen runs, 3 GPU-hours. The GPU arithmetic in PLAN assumes about
-7.3 s per Qwen call at \texttt{num\_predict} 768 [A]; DV4 step 3d's throughput
-probe replaces that figure (the course's recorded measurement under Lab
-$\alpha$'s settings is DELTAS $\Delta$292; your settings may differ).
+\textbf{Given numbers} (the course's budget for Lab $\beta$, PLAN \S4.3).
+The budget formula, per arm: calls $=$ tasks $\times$ attempts $\times$ rounds
+$\times$ arms $\times$ repeats, plus the sentinel calls ($\Delta$148); runs
+$=$ calls $/$ calls per run. Qwen deliveries: 24 cards $\times$ 1 attempt
+$\times$ 4 rounds (verifier feedback only) $\times$ 1 arm $\times$ 4 repeats
+(96 runs, 384 calls). Qwen \texttt{roundtrip}: 24 cards $\times$ 4 variants
+$\times$ 2 languages $\times$ 2 calls (192 runs, 384 calls). Qwen in all: 768
+calls in 288 runs. Claude deliveries: 20 cards $\times$ 1 $\times$ 4 rounds
+$\times$ 1 arm $\times$ 1 (20 runs, 80 calls), and at most 10 sentinel calls.
+The registry's R15 budget, which \texttt{fvh} enforces: 90 Claude calls, 20
+Claude runs, 960 Qwen calls, 288 Qwen runs and 3 GPU-hours. The GPU-hour
+ceiling is \emph{to be re-set after a throughput probe at Lab $\beta$'s
+settings}, as Lab $\alpha$'s was: GPU-hours $= 768 \times t / 3600$, where $t$
+is the measured GPU-seconds per Qwen call. At Lab $\alpha$'s recorded cost
+(about 72 GPU-s per call at its own settings, $\Delta$292) the plan needs
+about 15 GPU-hours; PLAN's working figure of 7.3 s per call gives 1.6.
+
+\textbf{The throughput probe} (run once by the course before Lab $\beta$
+opens, as DV4 step 3d's was for Lab $\alpha$; not part of your batch, never
+run by CI). On the apparatus's pinned
+OpenAI-compatible endpoint and model, after \texttt{fvh apparatus --check}
+passes, at the generation settings your block registers: 24 calls, one at a
+time, with nothing else on the GPU. Twelve are delivery-shaped (a first-round
+and a fourth-round prompt on each of 6 public practice cards, never a Lab
+$\beta$ card) and twelve are \texttt{roundtrip}-shaped (spec $\to$ English and
+English $\to$ spec on the same cards). Each call logs its wall clock,
+GPU-seconds, tokens in and out, and whether it stopped at the output cap. The
+registered $t$ is the 90th percentile of GPU-seconds. The ceiling becomes $768
+\times t / 3600$ GPU-hours with a 20\% margin, rounded up, set in the
+registry before any batch. The course moved its Qwen path from the Ollama
+gate to that OpenAI-compatible endpoint; write the settings in the endpoint's
+own terms (the cap on output tokens, the pinned context length).
 
 Write every field of the answer template: claim (and what would refute it);
 metric and estimator (the unit, each oracle's binary verdict and its unknown
@@ -288,8 +309,9 @@ rule, $\kappa$ and its interval); arms, tasks and the Claude subset; budget
 arithmetic per arm (calls = tasks $\times$ attempts $\times$ rounds $\times$
 arms $\times$ repeats, plus sentinels; runs), recomputed against the registry,
 with any reconciliation stated; generation settings; cost per arm (tokens in
-and out, GPU-seconds, wall clock); GPU-hours against the 3-hour ceiling,
-including the largest per-call cost your plan tolerates; the truncation rate as
+and out, GPU-seconds, wall clock); GPU-hours against the ceiling (3 hours until
+the probe re-sets it), including the largest per-call cost your plan tolerates
+at a ceiling $C$; the truncation rate as
 a sensitivity line; precision (there is no test here: replace the MDE by the
 expected width of $\kappa$'s interval from a simulation you write, with its
 assumptions and seed, and say what 24 clusters cannot resolve); cheat surface

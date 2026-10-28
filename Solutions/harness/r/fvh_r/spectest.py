@@ -110,10 +110,18 @@ class SpecR15:
 class IOPairR15:
     """One reference behaviour of a card: `inputs`, one source literal (a
     string such as "3", "-2" or "true") per parameter in order, and
-    `outputs`, one source literal per result in order."""
+    `outputs`, one source literal per result in order.
+
+    `witnesses` (D99): the pair's witness hints, each one boolean expression
+    in the card's language about the pair's inputs that names a witness term
+    for an existential of the card's specifications (for `exists p ::
+    OccursAt(s, w, p)` at s = "ab", w = "b": `OccursAt(s, w, 1)`). Every check
+    of the pair asserts them in its body, in order, so the verifier has the
+    term an empty body cannot supply. () when the pair has none."""
 
     inputs: tuple
     outputs: tuple
+    witnesses: tuple = ()
 
 
 @dataclass(frozen=True)
@@ -178,35 +186,46 @@ def _sig_r15(pairs):
     return ", ".join(f"{n}: {t}" for n, t in pairs)
 
 
-def render_lemma_r15(card: CardR15, name: str, params, requires, ensures) -> str:
+def has_existential_r15(spec: SpecR15) -> bool:
+    """True when one of the specification's ensures clauses holds the quantifier
+    `exists` (as a whole word, in either language): an empty-body check of
+    such a postcondition needs a witness term to be proved (D99)."""
+    return any(re.search(r"\bexists\b", c) for c in spec.ensures)
+
+
+def render_lemma_r15(card: CardR15, name: str, params, requires, ensures, body=()) -> str:
     """The whole file of one lemma over the card's definitions (Dafny: `lemma
-    name(params)` with one `requires`/`ensures` line per clause and an empty
-    body; Verus: `pub proof fn name(params)` with `requires` and `ensures`
-    lists and an empty body), wrapped in the card's header and footer."""
+    name(params)` with one `requires`/`ensures` line per clause; Verus: `pub
+    proof fn name(params)` with `requires` and `ensures` lists), wrapped in
+    the card's header and footer. Its body asserts each expression of `body`
+    in order (Dafny `assert e;`, Verus `assert(e);`), and is empty when
+    `body` is ()."""
     if card.lang == "dafny":
         lines = [f"  lemma {name}({_sig_r15(params)})"]
         lines += [f"    requires {c}" for c in requires]
         lines += [f"    ensures {c}" for c in ensures]
-        lines += ["  {", "  }"]
+        lines += ["  {"] + [f"    assert {e};" for e in body] + ["  }"]
     else:
         lines = [f"pub proof fn {name}({_sig_r15(params)})"]
         if requires:
             lines += ["    requires"] + [f"        {c}," for c in requires]
         if ensures:
             lines += ["    ensures"] + [f"        {c}," for c in ensures]
-        lines += ["{", "}"]
+        lines += ["{"] + [f"    assert({e});" for e in body] + ["}"]
     return card.header + "\n".join(lines) + "\n" + card.footer
 
 
 def render_pair_check_r15(card: CardR15, spec: SpecR15, name: str, inputs, outputs,
-                          negate: bool) -> str:
+                          negate: bool, witnesses=()) -> str:
     """The whole file of the lemma that checks the specification at one
     pair of values: over the card's parameters followed by its results; its
     requires bind each of them to its literal, in order (`x == 3`), then add
     the specification's requires clauses; its one ensures is the
     specification's postcondition, the conjunction of its ensures clauses
     (one clause as it is, several each parenthesized and joined by ` && `,
-    none `true`), or with `negate` its negation (`!(…)`, none `false`).
+    none `true`), or with `negate` its negation (`!(…)`, none `false`); its
+    body asserts the pair's witness hints `witnesses`, in order (D99), and
+    is empty when there are none.
 
     Proved without `negate`: the specification accepts these outputs for
     these inputs. Proved with `negate`: it rejects them. Raises ValueError
@@ -228,7 +247,7 @@ def render_pair_check_r15(card: CardR15, spec: SpecR15, name: str, inputs, outpu
     else:
         conj = ens[0] if len(ens) == 1 else " && ".join(f"({c})" for c in ens)
         post = f"!({conj})" if negate else conj
-    return render_lemma_r15(card, name, over, requires, (post,))
+    return render_lemma_r15(card, name, over, requires, (post,), tuple(witnesses))
 
 
 # Where write_target_r15 puts a file by default, under a fresh directory
@@ -294,23 +313,31 @@ def spec_sound_r15(spec: SpecR15, pairs, *, run=None, workdir=None) -> SoundRepo
     spec, <name>, pair.inputs, pair.outputs, False)`, where card is
     spec.card and <name> is `<card name>_PairHolds` (Dafny) or
     `<card name>_pair_holds` (Verus), with `write_target_r15` (into
-    `workdir` when given), and run `run("vcheck --gate", <its path>)`, where
-    `run` is the argument when it is given, else `fvh.tools.run` looked up at
-    the time of the call: one run per pair. The pair holds when the run's
-    `outcome_r15` is "proved", rejects when it is "failed", and is unknown
-    otherwise. Returns the SoundReportR15 (above): sound only when every
-    pair holds (an unknown pair is never counted as holding). Raises
-    ValueError when there is no pair.
+    `workdir` when given), with the pair's witness hints
+    (`witnesses=pair.witnesses`), and run `run("vcheck --gate", <its path>)`,
+    where `run` is the argument when it is given, else `fvh.tools.run` looked
+    up at the time of the call: one run per pair. The pair holds when the
+    run's `outcome_r15` is "proved", rejects when it is "failed", and is
+    unknown otherwise, with one exception (D99): a "failed" run is unknown,
+    never rejects, when the specification has an existential
+    (`has_existential_r15`) and the pair has no witness hint, because an
+    empty body cannot name the witness. Returns the SoundReportR15 (above):
+    sound only when every pair holds (an unknown pair is never counted as
+    holding). Raises ValueError when there is no pair.
     """
     if not pairs:
         raise ValueError("no pair to check")
     card = spec.card
     go = run if run is not None else tools.run
     name = f"{card.name}_PairHolds" if card.lang == "dafny" else f"{card.name}_pair_holds"
+    exist = has_existential_r15(spec)
     got = []
     for p in pairs:
-        text = render_pair_check_r15(card, spec, name, p.inputs, p.outputs, False)
+        text = render_pair_check_r15(card, spec, name, p.inputs, p.outputs, False,
+                                     witnesses=p.witnesses)
         o = outcome_r15(go(GATE_R15, write_target_r15(text, card.lang, workdir)))
+        if o == "failed" and exist and not p.witnesses:
+            o = "unknown"
         got.append("holds" if o == "proved" else "rejects" if o == "failed" else "unknown")
     return SoundReportR15(tuple(got), all(g == "holds" for g in got))
 # triv: return SoundReportR15(tuple("holds" for _ in pairs), True)
@@ -324,11 +351,14 @@ def spec_complete_r15(spec: SpecR15, pairs, *, run=None, workdir=None) -> Comple
     `mutate_outputs_r15(card, pair)`, in order, write the negated check
     `render_pair_check_r15(card, spec, <name>, pair.inputs, mutant.outputs,
     True)`, where <name> is `<card name>_MutantRejected` (Dafny) or
-    `<card name>_mutant_rejected` (Verus), and run it like spec_sound_r15's
-    checks (`run`, `workdir`): one run per mutant. The mutant is killed when
-    the run's `outcome_r15` is "proved" (the specification provably rejects
-    that output), survives when it is "failed", and is unknown otherwise; a
-    survivor is listed as "<i>:<mutant id>". Returns the CompleteReportR15
+    `<card name>_mutant_rejected` (Verus), with the pair's witness hints, and
+    run it like spec_sound_r15's checks (`run`, `workdir`): one run per
+    mutant. The mutant is killed when the run's `outcome_r15` is "proved"
+    (the specification provably rejects that output), survives when it is
+    "failed", and is unknown otherwise, with spec_sound_r15's exception: a
+    "failed" run is unknown when the specification has an existential and the
+    pair has no witness hint (D99). A survivor is listed as "<i>:<mutant
+    id>". Returns the CompleteReportR15
     (above): rate = killed / (killed + survived), 0.0 when no mutant was
     decided (a pair with no mutant adds nothing and runs nothing). Raises
     ValueError when there is no pair.
@@ -339,12 +369,16 @@ def spec_complete_r15(spec: SpecR15, pairs, *, run=None, workdir=None) -> Comple
     go = run if run is not None else tools.run
     name = f"{card.name}_MutantRejected" if card.lang == "dafny" else \
         f"{card.name}_mutant_rejected"
+    exist = has_existential_r15(spec)
     killed = survived = unknown = 0
     survivors = []
     for i, p in enumerate(pairs):
         for m in mutate_outputs_r15(card, p):
-            text = render_pair_check_r15(card, spec, name, p.inputs, m.outputs, True)
+            text = render_pair_check_r15(card, spec, name, p.inputs, m.outputs, True,
+                                         witnesses=p.witnesses)
             o = outcome_r15(go(GATE_R15, write_target_r15(text, card.lang, workdir)))
+            if o == "failed" and exist and not p.witnesses:
+                o = "unknown"
             if o == "proved":
                 killed += 1
             elif o == "failed":

@@ -8,10 +8,10 @@ in `--fixture` mode never unlocks a run. D45 live grading remains explicit
 deferred debt.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
-paper/solutions/R15_solutions.tex  sha256 9a89723b130ade9fa743b84106fe5545e362ea0c4ed9f1729244cf0fa2758256
-paper/R15_problems.tex  sha256 4ddb1c27a4943ee5293588c7fc0312d3106772a3c7a36fc55639df2a95aa861d
+paper/solutions/R15_solutions.tex  sha256 65033e133ffc5f80f7f0f2636111548685f0ea60b642f5961a16486be82b4529
+paper/R15_problems.tex  sha256 f829e3930c2597ef1ac5a76217943b41fd59c2f6127481f23b28a67187f01eac
 Solutions/dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy  sha256 753c7572c20a42bb4c8a4381cb7d55e4465c10baf0a2a3ce61fdac928bfb3da7
-Solutions/verus/r/r15_verifier_loop/src/lib.rs  sha256 0b276af0484b6d70296224170faa7501614b2db2636b70c8b27b5851efe9d5f9
+Solutions/verus/r/r15_verifier_loop/src/lib.rs  sha256 f9df9a28ee52d2881e8f6ee137cd4ed5fc365b9052f93f11f1e478195cdfa85c
 Solutions/dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy  sha256 169512d487f316f812eb722783d0e0ef183a7f09a33c8badd0a2f706c6b58d3e
 Solutions/verus/r/r15_verifier_loop/src/agent.rs  sha256 7a886d3c9ec31ff6c3b77cad719a5d9a2ceb5f8ef45973ad214723c816538ffd
 
@@ -176,7 +176,10 @@ MDE of CORE.md's predicate.
 - **BP.b:** generation settings are identical within each Qwen arm and pinned;
   seeds are per run and pairwise disjoint between arms; the cost per call is
   measured at these settings, and the largest tolerable per-call cost is
-  derived from the 3 GPU-hour ceiling.
+  derived from the ceiling (3 GPU-hours until the throughput probe at Lab β's
+  settings re-sets it; a plan that derives it from a re-set ceiling C writes
+  the formula t ≤ 3600·C/768). Settings name the apparatus's pinned
+  OpenAI-compatible endpoint and model, not the earlier Ollama gate.
 - **BP.c:** a truncation sensitivity line and a fallback chosen from the
   measured cost before the batch; no scored attempt is re-issued.
 

@@ -12,11 +12,11 @@ note = "Rung 2 on the shipped crate: the given test runs the shipped bodies."
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "4f80eaa5f6db82fae146080bb7e8a079c9868151bb44bd48014f87f160492b00"
+body = "d68ca57447e3eff0cdf7bf9870a3ab5331d9d503955e980bfde845527b46455b"
 [entry.pinned.inputs]
-"verus/r/r15_verifier_loop/Cargo.toml" = "297bd530a7094afd9b0a8ddcfb18161145f038eba3506e16622717beb2737db0"
+"verus/r/r15_verifier_loop/Cargo.toml" = "2240dd0c7400c17b9c9aeedee0c431db01384e32440f460d44b4e09d64aaf91e"
 "verus/r/r15_verifier_loop/src/agent.rs" = "92ca520ac8a2693edb1c3966294af6bc3e6975267626ebb2949dd7d3c327fe11"
-"verus/r/r15_verifier_loop/src/lib.rs" = "010f156ade0fe2e0a1bfb795f0bdc87f06f5d0639d590fc56b5024245420188e"
+"verus/r/r15_verifier_loop/src/lib.rs" = "86a605a99a768f5a1e16077e4f537735c87aa34e9c1d470f6836f3c24f5b19b3"
 
 [[entry]]
 id = "shipped-d"
@@ -35,11 +35,11 @@ cmd = ["scripts/vcheck", "verus/r/r15_verifier_loop"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "992436a4b2574213552f2c80df6b89c72a99ec8e739798dcb1b67e4b0c446898"
+body = "ac37095d229df313c956f5446aeec951964c525bcdb1460640d8fb9dc92c5faa"
 [entry.pinned.inputs]
-"verus/r/r15_verifier_loop/Cargo.toml" = "297bd530a7094afd9b0a8ddcfb18161145f038eba3506e16622717beb2737db0"
+"verus/r/r15_verifier_loop/Cargo.toml" = "2240dd0c7400c17b9c9aeedee0c431db01384e32440f460d44b4e09d64aaf91e"
 "verus/r/r15_verifier_loop/src/agent.rs" = "92ca520ac8a2693edb1c3966294af6bc3e6975267626ebb2949dd7d3c327fe11"
-"verus/r/r15_verifier_loop/src/lib.rs" = "010f156ade0fe2e0a1bfb795f0bdc87f06f5d0639d590fc56b5024245420188e"
+"verus/r/r15_verifier_loop/src/lib.rs" = "86a605a99a768f5a1e16077e4f537735c87aa34e9c1d470f6836f3c24f5b19b3"
 
 [[entry]]
 id = "audit-d"
@@ -60,9 +60,9 @@ drop = ["^raw output: "]
 [entry.pinned]
 body = "4d2bc500cbb5d1511ab1269028fcc7d218ce491667c0c3d99f2e3753982e719e"
 [entry.pinned.inputs]
-"verus/r/r15_verifier_loop/Cargo.toml" = "297bd530a7094afd9b0a8ddcfb18161145f038eba3506e16622717beb2737db0"
+"verus/r/r15_verifier_loop/Cargo.toml" = "2240dd0c7400c17b9c9aeedee0c431db01384e32440f460d44b4e09d64aaf91e"
 "verus/r/r15_verifier_loop/src/agent.rs" = "92ca520ac8a2693edb1c3966294af6bc3e6975267626ebb2949dd7d3c327fe11"
-"verus/r/r15_verifier_loop/src/lib.rs" = "010f156ade0fe2e0a1bfb795f0bdc87f06f5d0639d590fc56b5024245420188e"
+"verus/r/r15_verifier_loop/src/lib.rs" = "86a605a99a768f5a1e16077e4f537735c87aa34e9c1d470f6836f3c24f5b19b3"
 
 [[entry]]
 id = "word-d"
@@ -326,9 +326,9 @@ cmd = ["scripts/vcheck", "specimens/R15/sound-d.dfy.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "a4ae311366526db1634a086d3362d1c5e725777e494ff7a5d4343da996f9ad02"
+body = "79734f34a45a06a3370095f3a4bcd24f833989c24ff1222716ebcf63fda2ca1e"
 [entry.pinned.inputs]
-"specimens/R15/sound-d.dfy.specimen" = "663cc413d3d9ff2a60e4969bcd8812ed109d114e923f924d1f362c731f6dc2cf"
+"specimens/R15/sound-d.dfy.specimen" = "915de639364ce13a825d5139e5004af9e35a50388cdb45d3df1fab6660deeb34"
 
 [[entry]]
 id = "sound-v"
@@ -336,9 +336,9 @@ cmd = ["scripts/vcheck", "specimens/R15/sound-v.rs.specimen"]
 [entry.normalize]
 drop = ["^raw output: "]
 [entry.pinned]
-body = "a7cd6befe1786fd31620a73a51ffb58ed190cc87f0ac86ca1df3e1a534e7af52"
+body = "d8c7eeeec2b8696b74860628f3337be9ad0588d5851db8baa08e5217e5f95dfb"
 [entry.pinned.inputs]
-"specimens/R15/sound-v.rs.specimen" = "cc09f288e4545a07d9016eae7adfbd33479556bfc96c4afba3c5675232f3ddf5"
+"specimens/R15/sound-v.rs.specimen" = "40101273ee65d7f39ab48b68172002a6fbdfbfa6348dd4dc3b468ba6471d7396"
 
 [[entry]]
 id = "agent-d"

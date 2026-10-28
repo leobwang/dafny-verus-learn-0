@@ -194,31 +194,34 @@ dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy:88:5: hole assume R15.H1d
 <!-- pin: shipped-v -->
 ```
 $ scripts/vcheck verus/r/r15_verifier_loop
-vcheck: verus/r/r15_verifier_loop [verus, learner loop]: verified — - verified, 2 holes, 0 errors
+vcheck: verus/r/r15_verifier_loop [verus, learner loop]: verified — - verified, 4 holes, 0 errors
 verus/r/r15_verifier_loop/src/lib.rs:42:44: hole assume R15.T1v
 verus/r/r15_verifier_loop/src/lib.rs:78:44: hole assume R15.H1v
+verus/r/r15_verifier_loop/src/lib.rs:128: hole test-todo R15.H2v
+verus/r/r15_verifier_loop/src/lib.rs:132: hole test-todo R15.H2v
 ```
 
 Both runs are green, and neither proves anything about the search: the
 assumption discharges every obligation it reaches. The loop's job is to keep
 the counted holes visible, and here it does: two proof holes per language,
-and in Verus also H2v's two `test-todo` holes, plain Rust that only the test
-build compiles. A reader who
-stops at the word `verified` has read rung 4 without its hole count.
+plus H2v's two `test-todo` holes in Verus. A reader who stops at the word
+`verified` has read rung 4 without its hole count.
 
 Rung 2 on the same Verus crate runs the shipped body:
 
 <!-- pin: test-shipped-v -->
 ```
 $ scripts/vcheck --test verus/r/r15_verifier_loop
-vcheck: verus/r/r15_verifier_loop [verus, test]: failed — 0 passed, 1 failed
+vcheck: verus/r/r15_verifier_loop [verus, test]: failed — 0 passed, 2 failed
+FAILED property_r15::oracle_agrees_r15
 FAILED search_sample_test
+(no file): error: test property_r15::oracle_agrees_r15 failed
 (no file): error: test search_sample_test failed
 ```
 
-The test fails at its first assertion, because the shipped body returns
-`false` for a prefix that matches. A fixed check catches in one run a body that
-the hole-carrying proof run accepted. Dafny's hand file has no compiled test;
+Both tests fail: `search_sample_test` at its first assertion, because the
+shipped body returns `false` for a matching prefix, and `oracle_agrees_r15` at
+H2v's `todo!`. A fixed check catches in one run a body the proof run accepted. Dafny's hand file has no compiled test;
 its use-site checks, commented under `Uncomment as you go:`, are static
 assertions about the results, which is rung 4 applied to a client.
 
@@ -622,17 +625,15 @@ component's behaviour, right or wrong.
 **The property rung as a learner item (H2v).** The Verus crate ends with a
 module under `#[cfg(test)]`, `property_r15`. The verifier never sees it, and
 only `scripts/vcheck --test` compiles it, with the `regex` crate as the
-crate's one dev-dependency: the course pins its version and builds it offline
-from the local cargo cache. H2v asks for two functions there. The first,
+crate's one dev-dependency, pinned and built offline. H2v asks for two functions there. The first,
 `re_to_pattern_r15`, translates a `Re` into the crate's pattern syntax. The
 second, `oracle_r15(r, s, anchored)`, answers the whole-string question or the
-search question with it. Both ship as `todo!("R15.H2v")`, which the tool
-counts as a hole of kind `test-todo`, so the learner loop and the gate see
-them. The given test `oracle_agrees_r15` draws 500 seeded cases over the
+search question with it. Both ship as `todo!("R15.H2v")`, a hole of kind
+`test-todo` that the learner loop and the gate count. The given test `oracle_agrees_r15` draws 500 seeded cases over the
 alphabet `{a, b, .}`. It compares A2's `deriv_match` with your anchored oracle,
 and your `contains_match_r15` with the unanchored one. The dot is in the
-alphabet on purpose. The demonstration below came first and stays, because it
-isolates the translation from the matcher.
+alphabet on purpose. The demonstration below isolates the translation from the
+matcher.
 
 ### A differential test between two in-course answers
 
@@ -1168,10 +1169,12 @@ frozen core's `fvh.tools.run`, never through a subprocess of your own.
 card's reference input/output pairs. `spec_sound_r15` is soundness: for each
 reference pair it renders one lemma whose `requires` bind the card's
 parameters and results to the pair's literals and whose `ensures` is the
-specification's postcondition, with an empty body, and runs it through the
-gate. A pair *holds* when the run proves it, *rejects* when the run fails at
-the verify stage, and is *unknown* otherwise; the specification is sound when
-every pair holds. `spec_complete_r15` is completeness: for each pair it mutates
+specification's postcondition, with a body that asserts only the pair's
+witness hints (none for most pairs), and runs it through the gate. A pair
+*holds* when the run proves it, *rejects* when the run fails at the verify
+stage, and is *unknown* otherwise, or when the run fails on a specification
+with an existential at a pair that has no witness hint (the next subsection
+shows why); the specification is sound when every pair holds. `spec_complete_r15` is completeness: for each pair it mutates
 the outputs (off by one, negated, zeroed), renders the negated postcondition
 at each mutant, and counts a mutant *killed* when that negation is proved. The
 kill rate is over decided mutants only. A survivor is not a verdict: an
@@ -1219,22 +1222,24 @@ is computed after both have run on every unit.
 ### What a check that fails means
 
 A failed check is evidence that the verifier did not prove the claim. It is not
-always evidence that the claim is false. Here are the three checks `spectest`
-would render for the worked word search's faithful specification: two
-reference pairs and one output mutant.
+always evidence that the claim is false. Here are the four checks `spectest`
+renders for the worked word search's faithful specification: two reference
+pairs and one output mutant of each. The second pair carries a witness hint,
+a fact about its inputs that names the position where the word occurs, and
+`spectest` asserts it in the body of both of that pair's checks.
 
 ```dafny
 // Lab beta's first oracle at work (not an item): the checks spectest renders for
-// the worked word search's specification, at two reference pairs and one
-// output mutant. Each is one lemma with an empty body: requires bind the
-// card's parameters and result to the literals, ensures is the postcondition.
+// the worked word search's specification, at two reference pairs and one output
+// mutant of each. Requires bind the card's parameters and result to the literals,
+// ensures is the postcondition, and the body asserts the pair's witness hints.
 module R15_SpecCheckD {
   ghost predicate OccursAtR15(s: seq<char>, w: seq<char>, p: int)
   {
     0 <= p && p + |w| <= |s| && s[p..p + |w|] == w
   }
 
-  // Pair 1: s = "a", w = "b", reference output false.
+  // Pair 1: s = "a", w = "b", reference output false; no witness exists.
   lemma HasWordR15_PairHolds(s: seq<char>, w: seq<char>, b: bool)
     requires s == ['a']
     requires w == ['b']
@@ -1243,13 +1248,14 @@ module R15_SpecCheckD {
   {
   }
 
-  // Pair 2: s = "ab", w = "b", reference output true.
+  // Pair 2: s = "ab", w = "b", reference output true; witness hint p = 1.
   lemma HasWordR15_PairHolds2(s: seq<char>, w: seq<char>, b: bool)
     requires s == ['a', 'b']
     requires w == ['b']
     requires b == true
     ensures b == exists p :: OccursAtR15(s, w, p)
   {
+    assert OccursAtR15(s, w, 1);
   }
 
   // Pair 1's output mutant: b = true must be rejected.
@@ -1260,26 +1266,34 @@ module R15_SpecCheckD {
     ensures !(b == exists p :: OccursAtR15(s, w, p))
   {
   }
+
+  // Pair 2's output mutant: b = false must be rejected.
+  lemma HasWordR15_MutantRejected2(s: seq<char>, w: seq<char>, b: bool)
+    requires s == ['a', 'b']
+    requires w == ['b']
+    requires b == false
+    ensures !(b == exists p :: OccursAtR15(s, w, p))
+  {
+    assert OccursAtR15(s, w, 1);
+  }
 }
 ```
 
 <!-- pin: sound-d -->
 ```
 $ scripts/vcheck specimens/R15/sound-d.dfy.specimen
-vcheck: specimens/R15/sound-d.dfy.specimen [dafny, learner loop]: failed — 1 verified, 0 holes, 3 errors
+vcheck: specimens/R15/sound-d.dfy.specimen [dafny, learner loop]: failed — 3 verified, 0 holes, 2 errors
 specimens/R15/sound-d.dfy.specimen:17:3: error: a postcondition could not be proved on this return path
 specimens/R15/sound-d.dfy.specimen:16:15: related: this is the postcondition that could not be proved
-specimens/R15/sound-d.dfy.specimen:26:3: error: a postcondition could not be proved on this return path
-specimens/R15/sound-d.dfy.specimen:25:15: related: this is the postcondition that could not be proved
-specimens/R15/sound-d.dfy.specimen:35:3: error: a postcondition could not be proved on this return path
-specimens/R15/sound-d.dfy.specimen:34:17: related: this is the postcondition that could not be proved
+specimens/R15/sound-d.dfy.specimen:36:3: error: a postcondition could not be proved on this return path
+specimens/R15/sound-d.dfy.specimen:35:17: related: this is the postcondition that could not be proved
 ```
 
 ```rust
 // Lab beta's first oracle at work (not an item): the checks spectest renders for
-// the worked word search's specification, at two reference pairs and one
-// output mutant. Each is one lemma with an empty body: requires bind the
-// card's parameters and result to the literals, ensures is the postcondition.
+// the worked word search's specification, at two reference pairs and one output
+// mutant of each. Requires bind the card's parameters and result to the literals,
+// ensures is the postcondition, and the body asserts the pair's witness hints.
 use vstd::prelude::*;
 
 verus! {
@@ -1288,7 +1302,7 @@ pub open spec fn occurs_at_r15(s: Seq<char>, w: Seq<char>, p: int) -> bool {
     0 <= p && p + w.len() <= s.len() && s.subrange(p, p + w.len()) == w
 }
 
-// Pair 1: s = "a", w = "b", reference output false.
+// Pair 1: s = "a", w = "b", reference output false; no witness exists.
 pub proof fn has_word_r15_pair_holds(s: Seq<char>, w: Seq<char>, b: bool)
     requires
         s == seq!['a'],
@@ -1299,7 +1313,7 @@ pub proof fn has_word_r15_pair_holds(s: Seq<char>, w: Seq<char>, b: bool)
 {
 }
 
-// Pair 2: s = "ab", w = "b", reference output true.
+// Pair 2: s = "ab", w = "b", reference output true; witness hints for p = 1.
 pub proof fn has_word_r15_pair_holds2(s: Seq<char>, w: Seq<char>, b: bool)
     requires
         s == seq!['a', 'b'],
@@ -1308,6 +1322,8 @@ pub proof fn has_word_r15_pair_holds2(s: Seq<char>, w: Seq<char>, b: bool)
     ensures
         b == exists|p: int| #[trigger] occurs_at_r15(s, w, p),
 {
+    assert(s.subrange(1, 2) =~= w);
+    assert(occurs_at_r15(s, w, 1));
 }
 
 // Pair 1's output mutant: b = true must be rejected.
@@ -1321,26 +1337,43 @@ pub proof fn has_word_r15_mutant_rejected(s: Seq<char>, w: Seq<char>, b: bool)
 {
 }
 
+// Pair 2's output mutant: b = false must be rejected.
+pub proof fn has_word_r15_mutant_rejected2(s: Seq<char>, w: Seq<char>, b: bool)
+    requires
+        s == seq!['a', 'b'],
+        w == seq!['b'],
+        b == false,
+    ensures
+        !(b == exists|p: int| #[trigger] occurs_at_r15(s, w, p)),
+{
+    assert(s.subrange(1, 2) =~= w);
+    assert(occurs_at_r15(s, w, 1));
+}
+
 } // verus!
 ```
 
 <!-- pin: sound-v -->
 ```
 $ scripts/vcheck specimens/R15/sound-v.rs.specimen
-vcheck: specimens/R15/sound-v.rs.specimen [verus, learner loop]: failed — 0 verified, 0 holes, 3 errors
+vcheck: specimens/R15/sound-v.rs.specimen [verus, learner loop]: failed — 2 verified, 0 holes, 2 errors
 specimens/R15/sound-v.rs.specimen:20:9: error: postcondition not satisfied
-specimens/R15/sound-v.rs.specimen:31:9: error: postcondition not satisfied
-specimens/R15/sound-v.rs.specimen:42:9: error: postcondition not satisfied
+specimens/R15/sound-v.rs.specimen:44:9: error: postcondition not satisfied
 ```
 
-All six checks fail, although §2 proved this specification. Each
-postcondition mentions `exists p :: OccursAtR15(s, w, p)`: the true pair needs
-the witness `p = 1`, the false pair needs every `p` ruled out, and an empty
-body supplies the terms for neither. Under the oracle's rules both pairs read
-as *rejects* and the mutant as a *survivor*, so a sound and complete
-specification is scored unfaithful. The oracles can therefore disagree for
-reasons unrelated to the specification; this is a cell of the confusion matrix
-below, whose rate the lab measures instead of assuming zero; and it asks of any
+The second pair's two checks are proved in both languages and the first
+pair's two fail, although the specification is right on both. Each
+postcondition mentions `exists p :: OccursAtR15(s, w, p)`. The true pair needs
+the witness `p = 1`, and its hint names it, so the pair holds and its mutant
+is killed. The false pair needs every `p` ruled out, and no witness can do
+that: an empty body supplies the terms for neither. So `spectest` scores a
+failed check of a specification with an existential, at a pair without a
+witness hint, as *unknown*, never as *rejects* or *survived*. Without that
+rule a sound and complete specification would be scored unfaithful. The rule
+removes a false verdict; it does not supply a true one, and the unknown rate
+is reported per card. Negative checks still depend on how far each verifier
+unfolds a definition over a literal sequence, which can differ between Dafny
+and Verus; Lab β reports unknowns per language for that reason. Ask of any
 oracle built on empty-body checks which specifications it can decide at all.
 
 ### Hidden verdicts and the confusion matrix
@@ -1404,13 +1437,14 @@ the module's proposed design:
   0.6} and within-card correlation ρ ∈ {0, 0.3}, with a fixed seed and the
   standard library, and pre-register the half-width you expect. Say plainly
   what it implies: 24 clusters cannot separate κ = 0.4 from κ = 0.6.
-- **Budget and settings.** Qwen deliveries 24 cards × 4 rounds × 8 repeats
-  = 768 calls; `roundtrip` 24 × 4 variants × 2 calls = 192; Claude deliveries
-  20 cards × 4 rounds = 80, plus at most 10 sentinels. About 960 Qwen calls at
-  the planning figure of 7.3 s is about 2 GPU-hours, inside the registry's 3.
-  Add the pinned settings per arm (thinking, `num_predict`, `num_ctx`,
-  temperature, seeds), the truncation rate as a sensitivity line, and the
-  fallback of four delivery repeats if throughput is lower.
+- **Budget and settings.** Qwen deliveries 24 cards × 4 rounds × 4 repeats
+  = 384 calls; `roundtrip` 24 × 4 variants × 2 languages × 2 calls = 384;
+  768 Qwen calls in 288 runs. Claude deliveries 20 cards × 4 rounds = 80, plus
+  at most 10 sentinels. GPU-hours are 768 × t / 3600 for a measured t per
+  call; the registry's 3-hour ceiling is re-set after a throughput probe at
+  Lab β's settings (B6 gives the procedure). Add the settings per arm on
+  the pinned OpenAI-compatible endpoint (thinking, output cap, temperature,
+  seeds), the truncation rate, and a fallback chosen from the measured t.
 - **Missing results, stopping, accounting.** An apparatus failure is re-run
   once with the same seed, then excluded and counted; a policy failure is a
   failed delivery; generation settings and the feedback cap are identical

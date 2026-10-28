@@ -1,14 +1,14 @@
 // Lab beta's first oracle at work (not an item): the checks spectest renders for
-// the worked word search's specification, at two reference pairs and one
-// output mutant. Each is one lemma with an empty body: requires bind the
-// card's parameters and result to the literals, ensures is the postcondition.
+// the worked word search's specification, at two reference pairs and one output
+// mutant of each. Requires bind the card's parameters and result to the literals,
+// ensures is the postcondition, and the body asserts the pair's witness hints.
 module R15_SpecCheckD {
   ghost predicate OccursAtR15(s: seq<char>, w: seq<char>, p: int)
   {
     0 <= p && p + |w| <= |s| && s[p..p + |w|] == w
   }
 
-  // Pair 1: s = "a", w = "b", reference output false.
+  // Pair 1: s = "a", w = "b", reference output false; no witness exists.
   lemma HasWordR15_PairHolds(s: seq<char>, w: seq<char>, b: bool)
     requires s == ['a']
     requires w == ['b']
@@ -17,13 +17,14 @@ module R15_SpecCheckD {
   {
   }
 
-  // Pair 2: s = "ab", w = "b", reference output true.
+  // Pair 2: s = "ab", w = "b", reference output true; witness hint p = 1.
   lemma HasWordR15_PairHolds2(s: seq<char>, w: seq<char>, b: bool)
     requires s == ['a', 'b']
     requires w == ['b']
     requires b == true
     ensures b == exists p :: OccursAtR15(s, w, p)
   {
+    assert OccursAtR15(s, w, 1);
   }
 
   // Pair 1's output mutant: b = true must be rejected.
@@ -33,5 +34,15 @@ module R15_SpecCheckD {
     requires b == true
     ensures !(b == exists p :: OccursAtR15(s, w, p))
   {
+  }
+
+  // Pair 2's output mutant: b = false must be rejected.
+  lemma HasWordR15_MutantRejected2(s: seq<char>, w: seq<char>, b: bool)
+    requires s == ['a', 'b']
+    requires w == ['b']
+    requires b == false
+    ensures !(b == exists p :: OccursAtR15(s, w, p))
+  {
+    assert OccursAtR15(s, w, 1);
   }
 }

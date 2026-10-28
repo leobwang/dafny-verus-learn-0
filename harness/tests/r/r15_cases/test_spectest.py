@@ -11,15 +11,19 @@ counts) is written out by hand, never re-derived from the code under test.
 What they hold the oracles to:
   - the given renderer: the binding requires (`x == <literal>`, parameters
     then results), then the spec's requires, and the postcondition or its
-    negation as one ensures;
+    negation as one ensures; the pair's witness hints as `assert` lines in
+    the body (D99);
   - the given mutator: the operators per result type, ids, drops;
   - `spec_sound_r15`: one gate run per pair of the non-negated check,
     proved -> holds, failed -> rejects, anything else (a killed run, a
     front-end stage, a refusal, a pass with holes) -> unknown; sound only
-    when every pair holds;
+    when every pair holds; a failed check of a specification with an
+    existential and a pair without witness hints -> unknown, never rejects
+    (D99);
   - `spec_complete_r15`: one gate run per output mutant of the negated
     check, proved -> killed, failed -> survived, else unknown; survivors as
-    "<pair index>:<mutant id>"; rate over the decided mutants only;
+    "<pair index>:<mutant id>"; rate over the decided mutants only; the
+    same existential exception (a failed check without witness -> unknown);
   - both look `fvh.tools.run` up at call time when `run` is not given.
 A body that always answers "sound", or a kill rate of 1.0, fails them.
 
@@ -350,3 +354,96 @@ def test_complete_uses_fvh_tools_run_at_call_time(monkeypatch, tmp_path):
 def test_complete_refuses_no_pair():
     with pytest.raises(ValueError):
         st.spec_complete_r15(SPEC_EVEN, (), run=Runner(lambda t: res(doc("verified"))))
+
+
+# --- witness hints (D99): an existential without a witness is unknown, never a verdict ---
+
+CARD_W = st.CardR15("toy-d-has", "dafny", "Has", (("s", "seq<int>"),), (("b", "bool"),),
+                    "module ToyWR15 {\n\n", "}\n")
+SPEC_W = st.SpecR15(CARD_W, (), ("b == exists i :: 0 <= i < |s| && s[i] == 7",))
+CARD_WV = st.CardR15("toy-v-has", "verus", "has", (("s", "Seq<int>"),), (("b", "bool"),),
+                     "use vstd::prelude::*;\n\nverus! {\n\n", "\n} // verus!\n")
+SPEC_WV = st.SpecR15(CARD_WV, (), ("b == exists|i: int| 0 <= i < s.len() && s[i] == 7",))
+
+
+def lit(text, name):
+    """The whole literal a generated check binds `name` to (any literal form)."""
+    m = re.search(rf"^\s*(?:requires )?{name} == (.+?),?$", text, flags=re.M)
+    assert m, text
+    return m.group(1)
+
+HOLDS_W = """module ToyWR15 {
+
+  lemma Has_PairHolds(s: seq<int>, b: bool)
+    requires s == [1, 7]
+    requires b == true
+    ensures b == exists i :: 0 <= i < |s| && s[i] == 7
+  {
+    assert s[1] == 7;
+  }
+}
+"""
+
+REJECT_WV = """use vstd::prelude::*;
+
+verus! {
+
+pub proof fn has_mutant_rejected(s: Seq<int>, b: bool)
+    requires
+        s == seq![1, 7],
+        b == false,
+    ensures
+        !(b == exists|i: int| 0 <= i < s.len() && s[i] == 7),
+{
+    assert(s[1] == 7);
+}
+
+} // verus!
+"""
+
+
+def test_has_existential():
+    assert st.has_existential_r15(SPEC_W) and st.has_existential_r15(SPEC_WV)
+    assert not st.has_existential_r15(SPEC_D) and not st.has_existential_r15(SPEC_V)
+    assert not st.has_existential_r15(st.SpecR15(CARD_D, (), ("r == existsCount(x)",)))
+    assert not st.has_existential_r15(st.SpecR15(CARD_D, ("exists k :: k == x",), ("true",)))
+
+
+def test_render_pair_check_asserts_the_witnesses():
+    assert st.render_pair_check_r15(CARD_W, SPEC_W, "Has_PairHolds", ("[1, 7]",), ("true",),
+                                    False, witnesses=("s[1] == 7",)) == HOLDS_W
+    assert st.render_pair_check_r15(CARD_WV, SPEC_WV, "has_mutant_rejected", ("seq![1, 7]",),
+                                    ("false",), True, witnesses=("s[1] == 7",)) == REJECT_WV
+    assert st.IOPairR15(("1",), ("2",)).witnesses == ()
+
+
+def test_sound_existential_without_witness_is_unknown(tmp_path):
+    pairs = (st.IOPairR15(("[1, 7]",), ("true",), ("s[1] == 7",)),   # witness: verdicts stand
+             st.IOPairR15(("[7]",), ("true",), ("s[0] == 7",)),
+             st.IOPairR15(("[1]",), ("false",)),                     # no witness
+             st.IOPairR15(("[2, 3]",), ("false",)))
+    table = {"[1, 7]": res(doc("verified")), "[7]": res(doc("failed")),
+             "[1]": res(doc("failed")), "[2, 3]": res(doc("verified"))}
+    run = Runner(lambda text: table[lit(text, "s")])
+    rep = st.spec_sound_r15(SPEC_W, pairs, run=run, workdir=tmp_path)
+    assert rep == st.SoundReportR15(("holds", "rejects", "unknown", "holds"), False)
+    assert run.calls[0][2] == HOLDS_W
+    assert "    assert s[0] == 7;\n" in run.calls[1][2]
+    assert "assert" not in run.calls[2][2] and "assert" not in run.calls[3][2]
+    # no existential: a failed check rejects with or without a hint
+    run = Runner(lambda text: res(doc("failed")))
+    rep = st.spec_sound_r15(SPEC_D, (st.IOPairR15(("3",), ("7",)),), run=run, workdir=tmp_path)
+    assert rep.outcomes == ("rejects",)
+
+
+def test_complete_existential_without_witness_is_unknown(tmp_path):
+    pairs = (st.IOPairR15(("seq![1, 7]",), ("true",), ("s[1] == 7",)),
+             st.IOPairR15(("seq![1]",), ("false",)),
+             st.IOPairR15(("seq![7]",), ("true",), ("s[0] == 7",)))
+    table = {"seq![1, 7]": res(doc("verified")), "seq![1]": res(doc("failed")),
+             "seq![7]": res(doc("failed"))}
+    run = Runner(lambda text: table[lit(text, "s")])
+    rep = st.spec_complete_r15(SPEC_WV, pairs, run=run, workdir=tmp_path)
+    assert rep == st.CompleteReportR15(3, 1, 1, 1, ("2:O01",), 0.5)
+    assert run.calls[0][2] == REJECT_WV
+    assert "assert" not in run.calls[1][2]

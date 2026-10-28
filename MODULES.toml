@@ -123,7 +123,8 @@
 #                     (design §11.3: the six labs' Qwen work in ≤ 45 GPU-h; Q07's
 #                     replay hour comes out of the same pool). The lab caps scale
 #                     with planned Qwen work: Q12 10 (4,400 calls), R12 80 (10,700 calls: the user's D50 and D56, DELTAS Δ295);
-#                     Q15, R15 3 (1,200 / 960 calls); Q18, R16 9 (36 agent runs
+#                     Q15, R15 3 (1,200 / 960 calls; R15's to be re-set after a
+#                     throughput probe at Lab β's settings, as D56: D100); Q18, R16 9 (36 agent runs
 #                     each) [A: design §11; DELTAS Δ176]
 #   admissible        item id → { admitted, minutes, fallback } (design §7.5): a
 #                     gated item carries 0 minutes and names its fallback. Past

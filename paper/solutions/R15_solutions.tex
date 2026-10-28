@@ -408,9 +408,11 @@ $\le$ 288. Claude: 20 $\times$ 1 $\times$ 4 $\times$ 1 $\times$ 1 = 80 calls,
 20 runs, plus at most 10 sentinels: $\le$ 90 calls $\le$ 90. A run that stops at
 its first verified round spends fewer calls; these are ceilings.
 
-\textbf{Generation settings.} Qwen through the Ollama gate: the pinned model
-and digest, thinking off, \texttt{num\_predict} 768, \texttt{num\_ctx} 16384,
-temperature 0.7, identical in both Qwen arms. Seeds, one per run, pairwise
+\textbf{Generation settings.} Qwen through the apparatus's pinned
+OpenAI-compatible endpoint and model (the course's Qwen path moved there from
+the Ollama gate; the settings are written in the endpoint's terms): thinking
+off, at most 768 output tokens, the pinned context length, temperature 0.7,
+identical in both Qwen arms. Seeds, one per run, pairwise
 disjoint: \texttt{roundtrip} 15001--15192, deliveries 15501--15596. Claude:
 the harness's pinned argv; its runs are repeated runs, never seeds.
 
@@ -418,13 +420,17 @@ the harness's pinned argv; its runs are repeated runs, never seeds.
 clock. Estimate [A] at 7.3 s per call: \texttt{roundtrip} 384 $\times$ 7.3 =
 2,803 GPU-s (0.78 GPU-h); deliveries the same; Claude no GPU.
 
-\textbf{GPU-hours against the ceiling.} 768 $\times$ 7.3 s = 5,606 s $\approx$
-1.56 GPU-h $\le$ 3. The plan tolerates at most 10,800 / 768 $\approx$ 14.1
-GPU-s per call. Lab $\alpha$'s apparatus measured 72 GPU-s per call
-(\texttt{num\_predict} 32,768, about 11.5k output tokens; $\Delta$292): at that
-cost 768 calls are 15.4 GPU-h, so the settings above are part of the budget,
-and the cost per call is measured under them (DV4 step 3d's probe, re-run at
-these settings) before the batch.
+\textbf{GPU-hours against the ceiling.} GPU-h $= 768 \times t / 3600$ for a
+measured cost $t$ GPU-s per call; at a ceiling of $C$ GPU-h the plan tolerates
+$t \le 3600\,C / 768$. The registry's ceiling is 3 GPU-h, to be re-set after the
+throughput probe at these settings (the problem's procedure: 24 public-card
+calls, $t$ = their 90th percentile, the ceiling $768 \times t / 3600$ with a
+20\% margin, rounded up), as Lab $\alpha$'s was. At 3 GPU-h: 768 $\times$ 7.3
+s = 5,606 s $\approx$ 1.56 GPU-h $\le$ 3, and $t \le$ 10,800 / 768 $\approx$
+14.1 GPU-s. Lab $\alpha$'s apparatus measured 72 GPU-s per call (32,768-token
+cap, about 11.5k output tokens; $\Delta$292): at that cost 768 calls are 15.4
+GPU-h, so the settings above are part of the budget and $t$ is measured under
+them before the batch.
 
 \textbf{Truncation rate.} The share of calls that end at \texttt{num\_predict},
 per arm. A truncated \texttt{roundtrip} reply is unparsed (unknown); a
@@ -467,12 +473,13 @@ primary arm runs first. No interim look at $\kappa$ or at any hidden
 comparison. The batch ends when every registered run is scored or at the
 ceiling; a scored attempt is never re-issued.
 
-\textbf{Fallback} (chosen from the measured cost $t$ per call, before the
-batch): $t\le14.1$ s, as registered; $14.1<t\le18.75$ s, deliveries at 1
-repeat per language (192 calls; 576 in all); $18.75<t\le28.1$ s, the primary
-only (384 calls), deliveries deferred and reported as not run; $t>28.1$ s,
-the lab stays locked and an amended registration is re-graded. The ceiling is
-the course's, never the run's.
+\textbf{Fallback} (chosen from the measured cost $t$ per call against the
+ceiling $C$ in force at the batch, before it): $768\,t \le 3600\,C$, as
+registered; else if $576\,t \le 3600\,C$, deliveries at 1 repeat per language
+(192 calls; 576 in all); else if $384\,t \le 3600\,C$, the primary only (384
+calls), deliveries deferred and reported as not run; otherwise the lab stays
+locked and an amended registration is re-graded. At $C = 3$ the thresholds
+are 14.1, 18.75 and 28.1 s. The ceiling is the course's, never the run's.
 
 \textbf{Contamination.} The author's 14 cards were written after the pinned
 model's release (dates recorded); the learner's 10 were written by the person
@@ -481,8 +488,8 @@ card gets a renaming perturbation probe, and every call is a fresh context
 holding one card and no verdict. The card audit (05.2's classes) runs before
 the freeze. The hidden verdicts are read once.
 
-\textbf{Disclosure.} Model ids and digests, Ollama, Claude Code and toolchain
-versions, prompt hashes, the oracles' sha256 and the sandbox manifest; which
+\textbf{Disclosure.} Model ids and digests, the pinned OpenAI-compatible
+endpoint and server version, Claude Code and toolchain versions, prompt hashes, the oracles' sha256 and the sandbox manifest; which
 runs act through the harness's action schema (all of them); every deviation.
 Claude grades this registration and is a subject (its delivery arm).
 
