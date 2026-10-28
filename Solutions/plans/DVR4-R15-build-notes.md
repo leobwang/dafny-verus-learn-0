@@ -13,7 +13,10 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | step | state | evidence / commit |
 |---|---|---|
 | objective map (§1) | written | this file |
-| H1 references and measurements (§2) | not started | — |
+| H1/T1 references (D/V), twins + learner files, P1dv/P2dv specimens, registry row `authoring` | **done** | 7d050ecd |
+| T1/H1 admission (§2) | **done**: empty-body 4/4 (Verus TRIV `false`); seeds 1–3 stable (D CV ≤ 25.7 % outside the target, V 1.7 %); D64 measured in both languages (8/10/9/10; cheaper H1d answer 4) | `r15/seeds.log`, `r15/min/` |
+| agent pair `R15_AgentRedTeam.dfy` / `agent.rs` (A1d/A1v) | twins + learner files; references verify (D 64, V 2) | — |
+| `spectest`/`roundtrip` (H1py–H3py) + frozen tests | delegated to a sub-lane (no solver), to review | — |
 | H2v property rung | **DECISION R15-1** (mechanism) | §4 |
 | Python holes (`spectest`, `roundtrip`) design (§3) | drafted | this file |
 | twins, learner files, agent pair, admission | not started | — |
@@ -45,6 +48,17 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 
 - **Reference (the design):** outer loop over `i` with `forall i' < i, j' :: !Matches(r, s[i'..j'])`; inner loop keeps `d` with `forall w :: Matches(d, w) <==> Matches(r, s[i..j] + w)` and `forall j' in [i, j) :: !Matches(r, s[i..j'])`; each step `DerivCorrect` and `NullableCorrect` with the slice fact `s[i..j+1] == s[i..j] + [s[j]]`.
 - **The cheaper answer:** call A2's `DerivMatch(r, s[i..j])` for every slice (cubic). It meets the spec; its smallest form (two loops, two quantified invariants, the calls) must still be ≥ 3 one-fact lines (expected 4–6). Measured both; if the cheaper one is the smallest and meets D64, it is recorded as acceptable (the chapter discusses the cost; the property rung and the bank's PP use the derivative-restart form). No re-pose unless D64 fails.
+
+### Measurements (2026-10-27, `r15/min/`, greedy minimizer, structural lines kept)
+
+| item | smallest found from the reference | one-fact lines | the cheaper answer |
+|---|---|---|---|
+| T1d | 3 invariants, `NullableCorrect` ×2, `DerivCorrect`, the slice fact, one `s[j..j]` fact | 8 | — |
+| H1d | 4 invariants (the outer bound drops), `NullableCorrect` ×2, `s[j..j]` ×2, `DerivCorrect`, the slice fact | 10 | `DerivMatch(r, s[i..j])` per slice: 3 invariants + the call = **4**; each proper subset fails (minimizer) |
+| T1v | 3 invariant clauses, `lemma_nullable_correct` ×2, the empty-slice fact ×2, `lemma_deriv_correct`, the slice fact; nothing drops | 9 | — |
+| H1v | the inner loop's 4 clauses (the outer bound and the outer copy of the outer clause drop: the inner loop carries it), the same 6 proof lines | 10 | the slice answer needs a sub-vector built in a loop in Verus, so it is not shorter |
+
+Every item meets D64 with the cheaper answer counted. The cheaper H1d answer is cubic; the chapter names it and the cost, the twin keeps the derivative restart (plan §2.7's design).
 
 ## 3. `spectest` and `roundtrip` (Lab β's oracles; Python holes)
 
