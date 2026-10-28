@@ -1,0 +1,16 @@
+// after: R15.P1dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+// A candidate statement for the search, with a body that never searches.
+fn contains_vacuous_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b ==> exists|i: int, j: int|
+            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
+{
+    false
+}
+
+} // verus!

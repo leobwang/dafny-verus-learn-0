@@ -2436,7 +2436,7 @@ concept_items = {}
 id = "R15"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "Verifier loop + Lab β"
 tier = ""
 topic = ""
@@ -2463,13 +2463,13 @@ viva_mode = "module"
 tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
-write_d = []
-write_v = []
+write_d = ["invariant"]
+write_v = ["invariant"]
 recognise_d = []
 recognise_v = []
 budget = { claude_calls = 90, claude_runs = 20, qwen_calls = 960, qwen_runs = 288, gpu_hours = 3 }
-admissible = {}
-imports = {}
+admissible = { "R15.T1d" = { admitted = true, minutes = 5, fallback = "" }, "R15.H1d" = { admitted = true, minutes = 20, fallback = "" }, "R15.T1v" = { admitted = true, minutes = 5, fallback = "" }, "R15.H1v" = { admitted = true, minutes = 20, fallback = "" } }
+imports = { "dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy" = "std", "dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy" = "std", "verus/r/r15_verifier_loop/src/lib.rs" = "all", "verus/r/r15_verifier_loop/src/agent.rs" = "all", "harness/r/fvh_r/spectest.py" = "py-fvh", "harness/r/fvh_r/roundtrip.py" = "py-fvh" }
 concept_items = {}
 
 [[module]]

@@ -1,0 +1,17 @@
+// after: R15.P2dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a2::*;
+
+verus! {
+
+// The faithful statement of the search, with the whole-string matcher as its body.
+fn contains_anchored_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+    ensures
+        b == exists|i: int, j: int|
+            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
+{
+    deriv_match(r, s)
+}
+
+} // verus!

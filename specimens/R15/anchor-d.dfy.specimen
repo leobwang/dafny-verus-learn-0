@@ -1,0 +1,12 @@
+// after: R15.P2dv
+module R15_AnchorD {
+  import opened RG_A1_Re
+  import A2 = RG_A2_Deriv
+
+  // The faithful statement of the search, with the whole-string matcher as its body.
+  method ContainsAnchoredR15(r: Re, s: seq<char>) returns (b: bool)
+    ensures b == exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
+  {
+    b := A2.DerivMatch(r, s);
+  }
+}
