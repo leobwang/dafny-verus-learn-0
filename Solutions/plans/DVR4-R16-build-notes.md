@@ -14,7 +14,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | step | state | evidence / commit |
 |---|---|---|
 | A5 reconciliation design (§1) | **done (design)**; DECISION R16-1 open (emitter given) | probes `a5/a5_probe.{dfy,rs}` verified, 2026-10-27 |
-| A5 layer files in the tree | not started (waits for R16-1) | — |
+| A5 layer files | **staged in scratch** (`a5/layer/RG_A5_VM.dfy`, `a5/layer/rg_re_a5/src/lib.rs`: VM, one-step lemmas, `AcceptsInside`, `Emit`, `EmitProg`, `CodeAt`, layout lemmas, Verus exec emitter); install when R16 is armed and R16-1 is answered; `pike_run` and the R09 parser re-supply still to add | scratch |
 | R16 objective map (§2) | written | this file |
 | jump-threading spike (§3) | **passed in both languages** (one-hop `Shortcut`, both directions, no `reveal`: `AcceptsInside` given) | `r16/thread_probe.dfy` 87 verified, `r16/thread_probe.rs` 31 verified |
 | twins, learner files, admission | not started | — |
@@ -80,3 +80,9 @@ Three rounds on the capstone (PLAN §3 R16, §4.1): (1) **reviewer**: the agent 
 
 - **R16-1 (A5's emitter).** (a, recommended) `Emit` and the layout lemmas given in A5, the learner writes every statement, both proofs and the whole-program theorem; PLAN §2.2's A5 row is corrected. (b) The learner writes `Emit` in R16 and the layout lemmas move into R16's own given file (a frozen given-role file inside the module, F6-style), proved against the learner's emitter: layout lemmas cannot be proved before the emitter exists, so they would become learner holes too (+≈ 30 min, no record line for them). (c) Given emitter, but the learner writes the layout lemmas (four small holes, ≈ 15 min).
 - **R16-2 (pinning the learner's statements).** (a, recommended) The registry's `statements` field opens to R16 with `PENDING` until the learner's commit after the statement-only review; `fvh` and `specfreeze --pin` read it (a check_course_map change with tests). (b) The statements live in a learner file pinned only by `specfreeze` (no registry field); Lab γ's unpack gate reads the specfreeze pin.
+
+## 7. Hand-off sketch: how item S (the learner's statements) could ship (for R16-2)
+
+- The learner file ships the four lemma declarations with their parameter lists and an empty contract, each body a hole, under a `// statement: S` marker; the learner writes `requires`/`ensures` (S, written, 40 min), runs `/review` statement-only, and commits.
+- Under R16-2 (a), the author's registry row lists the statement file with `sha256 = "PENDING"`; the learner's post-review commit is pinned by `specfreeze --pin`'s learner mode (to build) and `fvh` reads it for Lab γ's crate unpack. Under (b), specfreeze's pin alone.
+- Either way the twin carries the reference statements (§1's probe shapes), and the admission's four results run on the twin. H1/H2's empty-body gate is over the reference statements; a learner statement that is weaker than the reference is caught by the statement-only review and `specfreeze --against` the reference shape (an author-side check, never shown to the learner before the review).
