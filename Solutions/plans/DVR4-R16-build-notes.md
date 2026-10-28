@@ -14,7 +14,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | step | state | evidence / commit |
 |---|---|---|
 | A5 reconciliation design (§1) | **done (design)**; DECISION R16-1 open (emitter given) | probes `a5/a5_probe.{dfy,rs}` verified, 2026-10-27 |
-| A5 layer files | **staged in scratch** (`a5/layer/RG_A5_VM.dfy`, `a5/layer/rg_re_a5/src/lib.rs`: VM, one-step lemmas, `AcceptsInside`, `Emit`, `EmitProg`, `CodeAt`, layout lemmas, Verus exec emitter); install when R16 is armed and R16-1 is answered; `pike_run` and the R09 parser re-supply still to add | scratch |
+| A5 layer files | **staged** in `Solutions/plans/drafts/R16/a5/` (`RG_A5_VM.dfy`, `rg_re_a5/src/lib.rs`: VM, one-step lemmas, `AcceptsInside`, `Emit`, `EmitProg`, `CodeAt`, layout lemmas, Verus exec emitter); install when R16 is armed and R16-1 is answered; `pike_run` and the R09 parser re-supply still to add; the verified probes (R16 references, threading) are in `Solutions/plans/drafts/R16/probes/` | e7ea83b9+ |
 | R16 objective map (§2) | written | this file |
 | jump-threading spike (§3) | **passed in both languages** (one-hop `Shortcut`, both directions, no `reveal`: `AcceptsInside` given) | `r16/thread_probe.dfy` 87 verified, `r16/thread_probe.rs` 31 verified |
 | twins, learner files, admission | not started | — |
