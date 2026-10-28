@@ -22,7 +22,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 | chapter, paper, pins | **done**: chapter 7,668 words, 25 pins, lint 0; written track B1–B6 + exhibit; counts and freeze pinned; leak patterns 6 OK | 97a282dd, 65e7762a |
 | bank | **done**: 1,542 lines, 12 questions (2/4/2/2/2), draws A/B with two live predicts each, PP1/PP2, 51 captured probes (`bank/probes.log`), 11 backward edges; tags in concepts.md; leak OK | this commit |
 | study workflow | **12/12** on a disposable clone of 865bceb9 (first tries, strict, freeze, native test, gates and audits of both units and both agents); P1's `wf.py` un-commented the `// end reference checks` marker, so this lane's copy `p1b/bin/wf.py` stops there; verdict pins `expected/R15.pins`; empty-body 7/7 | 17fe60b7 |
-| focused author CI | running: `ci.sh --author --job static,verify-r-dafny,verify-r-verus,pins,paper,rubric,harness` (12G, `DVL_VERUS_JOBS=1`), log `p1b/r15/ci.log` | — |
+| focused author CI | run `20261028T015742Z-2326456` @ 17fe60b7, clean tree, 3,840 s (12G, `DVL_VERUS_JOBS=1`): verify-r-dafny PASS 479 s, pins PASS 2,087 s, paper PASS, rubric PASS, harness PASS 81 s; static FAIL 912 s on `test_course_map` only (a case that added an R15 harness file without its import tier, which R15 being armed exposed; fixed at 95cbfaa8, 414 passed); verify-r-verus FAIL 279 s on `holes R03 v` only (R03's D95 `// GATED` external_body lines are counted by the tool but not as shipped hole forms: a pre-existing R03 issue from Δ311, not R15; R15 v passed: 2 holes, 0 mismatches) | 95cbfaa8 |
 | Lab β pre-registration design (§5) | drafted | this file |
 
 ## 1. Objective-to-exercise map (written before any build, 2026-10-27)
