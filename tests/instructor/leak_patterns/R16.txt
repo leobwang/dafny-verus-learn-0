@@ -1,0 +1,31 @@
+# R16 withheld hole answers (H1 statements, H2 completeness, H3 soundness, H4 threading,
+# H5 the whole-program theorem; both languages), cut from the one-statement-per-line twins
+# (DVR4 step 7, lane P1d); no prediction answers.
+# from Solutions/dafny/R/R16_Capstone/std/R16_Statements.dfy
+# source: ==> exists k | 0 <= k <= |w| :: Matches(r, w[..k]) && AcceptsFrom(p, pc + |Emit(r, pc)|, w[k..]) (R16.H1d)
+# verified: solutions=1 public=0
+Matches\(r,\s*w\[\.\.k\]\)\s*&&\s*AcceptsFrom\(p,\s*pc\s*\+\s*\|Emit\(r,\s*pc\)\|,\s*w\[k\.\.\]\)
+# from Solutions/dafny/R/R16_Capstone/std/R16_Capstone.dfy
+# source: var f1 := CompleteFuel(p, Star(a), pc, u[k..], v, f); (R16.H2d)
+# verified: solutions=1 public=0
+CompleteFuel\(p,\s*Star\(a\),\s*pc,\s*u\[k\.\.\],\s*v,\s*f\)
+# source: k2, f2 := SoundFuel(p, Star(a), pc, w[k1..], f1 - 1); (R16.H3d)
+# verified: solutions=1 public=0
+SoundFuel\(p,\s*Star\(a\),\s*pc,\s*w\[k1\.\.\],\s*f1\s*-\s*1\)
+# source: EmitComplete(p, r, 0, s, []); (R16.H5d)
+# verified: solutions=1 public=0
+EmitComplete\(p,\s*r,\s*0,\s*s,\s*\[\]\)
+# from Solutions/verus/r/r16_capstone/src/statements.rs
+# source: 0 <= k <= w.len() && #[trigger] matches(r, w.subrange(0, k)) && accepts_from(p, pc + clen(r), ... (R16.H1v)
+# verified: solutions=1 public=0
+matches\(r,\s*w\.subrange\(0,\s*k\)\)\s*&&\s*accepts_from\(p,\s*pc\s*\+\s*clen\(r\)
+# from Solutions/verus/r/r16_capstone/src/lib.rs
+# source: lemma_accepts_jmp(p, pc + 1 + clen(a), y + s2, fy + 1); (R16.H2v)
+# verified: solutions=1 public=0
+lemma_accepts_jmp\(p,\s*pc\s*\+\s*1\s*\+\s*clen\(a\),\s*y\s*\+\s*s2,\s*fy\s*\+\s*1\)
+# source: lemma_to_shortcut(p, p[a as int]->Jmp_0 as int, w, (f - 2) as nat) (R16.H4v)
+# verified: solutions=1 public=0
+lemma_to_shortcut\(p,\s*p\[a\s+as\s+int\]->Jmp_0\s+as\s+int,\s*w,\s*\(f\s*-\s*2\)\s+as\s+nat\)
+# source: lemma_emit_complete(p, r, 0, s, e); (R16.H5v)
+# verified: solutions=1 public=0
+lemma_emit_complete\(p,\s*r,\s*0,\s*s,\s*e\)
