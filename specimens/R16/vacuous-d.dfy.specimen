@@ -1,0 +1,18 @@
+// after: R16.P1dv
+module R16_VacuousD {
+  import opened RG_A1_Re
+  import opened RG_A5_VM
+
+  // A candidate completeness statement for code that runs past the end of the
+  // program holding it, with an empty proof.
+  ghost predicate CompleteLongR16(p: Prog, r: Re, pc: int, u: seq<char>, v: seq<char>)
+  {
+    CodeAt(p, pc, Emit(r, pc)) && pc + |Emit(r, pc)| > |p| && Matches(r, u)
+    ==> AcceptsFrom(p, pc, u + v)
+  }
+
+  lemma CompleteLongProofR16(p: Prog, r: Re, pc: int, u: seq<char>, v: seq<char>)
+    ensures CompleteLongR16(p, r, pc, u, v)
+  {
+  }
+}

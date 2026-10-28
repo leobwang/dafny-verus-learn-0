@@ -1,0 +1,22 @@
+// Reference Solution.
+// after: R16.P1dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a5::*;
+
+verus! {
+
+// A candidate completeness statement for code that runs past the end of the
+// program holding it, with an empty proof.
+pub open spec fn complete_long_r16(p: Seq<Inst>, r: Re, pc: int, u: Seq<char>, v: Seq<char>) -> bool {
+    code_at(p, pc, emit(r, pc)) && pc + emit(r, pc).len() > p.len() && matches(r, u)
+        ==> accepts_from(p, pc, u + v)
+}
+
+proof fn complete_long_proof_r16(p: Seq<Inst>, r: Re, pc: int, u: Seq<char>, v: Seq<char>)
+    ensures
+        complete_long_r16(p, r, pc, u, v),
+{
+}
+
+} // verus!

@@ -2481,14 +2481,14 @@ concept_items = {}
 id = "R16"
 legacy_id = ""
 track = "R"
-status = "planned"
+status = "authoring"
 title = "Capstone + Lab γ"
 tier = ""
 topic = ""
 strands = []
 langs = ["d", "v"]
 chapter = "docs/R16_Capstone.md"
-exercises = ["dafny/R/R16_Capstone/std/R16_Capstone.dfy", "verus/r/r16_capstone/src/lib.rs", "specimens/R16/"]
+exercises = ["dafny/R/R16_Capstone/std/R16_Capstone.dfy", "dafny/R/R16_Capstone/std/R16_Statements.dfy", "verus/r/r16_capstone/src/lib.rs", "verus/r/r16_capstone/src/statements.rs", "verus/r/r16_capstone/src/trust_report.rs", "specimens/R16/"]
 exits = []
 agentic = ["dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy", "verus/r/r16_capstone/src/agent.rs"]
 harness = []
@@ -2500,7 +2500,7 @@ build_target = "R"
 units = ["dafny/R/R16_Capstone/std", "verus/r/r16_capstone"]
 layer = "A5"
 engines = ["contract", "policy", "agent"]
-statements = []
+statements = [{ path = "dafny/R/R16_Capstone/std/R16_Statements.dfy", sha256 = "PENDING" }, { path = "verus/r/r16_capstone/src/statements.rs", sha256 = "PENDING" }]
 deep_dive = []
 review_bar = "production"
 persona = "ml-engineer"
@@ -2508,13 +2508,13 @@ viva_mode = "module"
 tutor_max_rung = 5
 solo = false
 solutions_policy = "solutions-first"
-write_d = []
-write_v = []
-recognise_d = []
-recognise_v = []
+write_d = ["lemma-recursion", "lexicographic-decreases"]
+write_v = ["lemma-recursion", "lexicographic-decreases"]
+recognise_d = ["opaque-reveal"]
+recognise_v = ["opaque-reveal"]
 budget = { claude_calls = 610, claude_runs = 24, qwen_calls = 1440, qwen_runs = 36, gpu_hours = 9 }
-admissible = {}
-imports = {}
+admissible = { "R16.T1d" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)" }, "R16.H1d" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)" }, "R16.H2d" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)", writes = "module" }, "R16.H3d" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)", writes = "module" }, "R16.H4d" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)", writes = "module" }, "R16.H5d" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)" }, "R16.T1v" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)" }, "R16.H1v" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)" }, "R16.H2v" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)", writes = "module" }, "R16.H3v" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)", writes = "module" }, "R16.H4v" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)", writes = "module" }, "R16.H5v" = { admitted = false, minutes = 0, fallback = "pending the four results (DVR4 step 7)" } }
+imports = { "dafny/given/R/RG_A5_VM.dfy" = "std", "verus/given/rg_re_a5/src/lib.rs" = "all", "dafny/R/R16_Capstone/std/R16_Capstone.dfy" = "std", "dafny/R/R16_Capstone/std/R16_Statements.dfy" = "std", "dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy" = "std", "verus/r/r16_capstone/src/lib.rs" = "all", "verus/r/r16_capstone/src/statements.rs" = "all", "verus/r/r16_capstone/src/trust_report.rs" = "prelude", "verus/r/r16_capstone/src/agent.rs" = "all" }
 concept_items = {}
 
 # ============================================================================

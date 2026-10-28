@@ -1,0 +1,31 @@
+// after: R16.P2dv
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a5::*;
+
+verus! {
+
+// Completeness stated for whole programs only, proved by calling itself on
+// the two halves of a concatenation.
+proof fn complete_whole_r16(r: Re, s: Seq<char>)
+    requires
+        matches(r, s),
+        clen(r) + 1 < usize::MAX,
+    ensures
+        accepts_from(prog(r), 0, s),
+    decreases r,
+{
+    lemma_prog_layout(r);
+    match r {
+        Re::Cat(a, b) => {
+            let k = choose|k: int|
+                0 <= k <= s.len() && matches(*a, #[trigger] s.subrange(0, k)) && matches(*b, s.subrange(k, s.len() as int));
+            complete_whole_r16(*a, s.subrange(0, k));
+            complete_whole_r16(*b, s.subrange(k, s.len() as int));
+            assert(s.subrange(0, k) + s.subrange(k, s.len() as int) =~= s);
+        },
+        _ => {},
+    }
+}
+
+} // verus!

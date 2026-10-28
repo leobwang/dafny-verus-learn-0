@@ -1,0 +1,22 @@
+// Reference Solution.
+// after: R16.P2dv
+module R16_WholeD {
+  import opened RG_A1_Re
+  import opened RG_A5_VM
+
+  // Completeness stated for whole programs only, proved by calling itself on
+  // the two halves of a concatenation.
+  lemma CompleteWholeR16(r: Re, s: seq<char>)
+    requires Matches(r, s)
+    ensures AcceptsFrom(EmitProg(r), 0, s)
+  {
+    LayoutProg(r);
+    match r
+    case Cat(a, b) =>
+      var k :| 0 <= k <= |s| && Matches(a, s[..k]) && Matches(b, s[k..]);
+      CompleteWholeR16(a, s[..k]);
+      CompleteWholeR16(b, s[k..]);
+      assert s[..k] + s[k..] == s;
+    case _ =>
+  }
+}
