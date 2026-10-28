@@ -5014,6 +5014,17 @@ The record is in `Solutions/plans/DVR4-R15-build-notes.md` §0, §5b and §6.
 - **Bank, workflow, CI (addendum, 2026-10-28).** The bank has 12 questions in 1,542 lines, with 51 captured probes. H1v's twin dropped a redundant inner copy of the outer invariant, and its Hint(2) and chapter §2 were corrected (the bank sub-lane found that Verus restores facts about unchanged variables after an inner loop). Verdict pins are written. The study workflow passed 12/12 and the empty-body gate 7/7. Focused author CI `20261028T015742Z-2326456` passed verify-r-dafny, pins, paper, rubric and harness. Static failed only on a `test_course_map` case, now fixed (414 passed). verify-r-verus failed only on `holes R03 v`: R03's `GATED` lines (D95) are not counted as shipped hole forms. That is R03's issue, reported to the coordinator.
 - **Open:** R15-1 (H2v), R15-2 (`spectest` cannot decide existential postconditions with empty-body checks; recommended: witness hints per pair, and `unknown` when an existential has none), R15-3 (Lab β's call count against the registry and the GPU ceiling).
 
+### Δ314 · D96–D100: R16's emitter and statements, R15's property rung, spectest witnesses, Lab β's budget — adopted (the user, 2026-10-28; to build)
+
+Answers Δ312's and Δ313's open decisions. The record is in `Solutions/plans/DVR4-R15-build-notes.md` §6 and `DVR4-R16-build-notes.md` §6.
+
+- **D96 (R16-1 (a)).** A5 gives `Emit`, the exec `emit_prog` and the layout lemmas. The learner writes every statement, both proofs and the whole-program theorem. PLAN §2.2's A5 row is corrected.
+- **D97 (R16-2 (a)).** The registry's `statements` field opens to R16 and stays `PENDING` until the learner's post-review commit. fvh and specfreeze read it, and Lab γ's crate unpack is gated on it. This is a check_course_map change, with tests.
+- **D98 (R15-1 (a)).** `vcheck --test` builds one declared dev-dependency (`regex` only: offline, `--locked`, from the local cargo cache). A new hole kind, `test-todo`, counts `todo!("<item>")` inside `#[cfg(test)]`. Each change gets tests and its own Δ entry. H2v is then built: the learner writes the Re-to-pattern translation and the anchored/unanchored oracle wrapper. It is admitted per §2.1 where applicable, with TRIV and the empty body.
+- **D99 (R15-2 (a)).** Reference pairs carry witness hints, rendered as `assert` lines. A check with an existential and no witness is `unknown`, never `rejects`. Tests are added and the `sound-d/v` chapter pins re-captured.
+- **D100 (R15-3 (a)).** Lab β runs four delivery repeats (768 Qwen calls, 288 runs). The GPU ceiling is to be re-set after a throughput probe at Lab β's settings, as D56 did for Lab α. The pre-registration carries the budget formula and the probe procedure. No author run: the coordinator schedules the probe with the user.
+- **Also asked (the coordinator):** fix R03's `holes R03 v` CI failure from D95 so the check counts `// GATED` external_body lines as shipped hole forms, consistent with `firsttry --strict`, with a test.
+
 ### Δ320 · R09 at the R module bar (DVR4 step 5, lane P2) — adopted in R authoring (2026-10-19 UTC)
 
 DVR4 step 5's systemic pass on R09 (plan §2's row: **revise**; §4.2's bar as R02 met it, Δ283; the user's D58 accepted R02 as the exemplar). Objectives, items and minutes are PLAN §3/§11's, unchanged; build notes `Solutions/plans/DVR4-R09-build-notes.md` (the objective-to-exercise map first); evidence `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step5/p2/r09/`.

@@ -76,6 +76,11 @@ Three rounds on the capstone (PLAN §3 R16, §4.1): (1) **reviewer**: the agent 
 - **Precision** (replaces the MDE): simulate the interval half-width for the expected naive-success count (≈ 40–80 deliveries over 12 + α/β tasks) at I ∈ {0.1, 0.3, 0.5}; pre-register the half-width, not a power.
 - **What the author builds:** the prereg fields in `paper/R16_problems.tex` and the rubric; nothing runs.
 
+## 6a. Decided (the user, 2026-10-28; Δ314)
+
+- **D96 = R16-1 (a):** A5 gives `Emit`, exec `emit_prog`, the layout lemmas; the learner writes every statement, both proofs and the whole-program theorem; correct PLAN §2.2's A5 row. **Not started** (the staged files in `Solutions/plans/drafts/R16/a5/` are the starting point).
+- **D97 = R16-2 (a):** the registry's `statements` field opens to R16, `PENDING` until the learner's post-review commit; fvh and specfreeze read it; Lab γ's unpack gated on it; a check_course_map change with tests. **Not started.**
+
 ## 6. DECISIONS (to the coordinator)
 
 - **R16-1 (A5's emitter).** (a, recommended) `Emit` and the layout lemmas given in A5, the learner writes every statement, both proofs and the whole-program theorem; PLAN §2.2's A5 row is corrected. (b) The learner writes `Emit` in R16 and the layout lemmas move into R16's own given file (a frozen given-role file inside the module, F6-style), proved against the learner's emitter: layout lemmas cannot be proved before the emitter exists, so they would become learner holes too (+≈ 30 min, no record line for them). (c) Given emitter, but the learner writes the layout lemmas (four small holes, ≈ 15 min).

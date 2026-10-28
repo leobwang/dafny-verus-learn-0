@@ -100,6 +100,12 @@ Options:
 - **Finding (bank, bears on R15-2):** an empty-body negative check on a 3-element sequence is proved in Dafny but not in Verus (fuel 1), so `spectest` can score the same mutant killed in Dafny and survived in Verus: a D-vs-V confound for Lab β beyond the existential problem; witness hints (R15-2 (a)) or a pinned unfolding depth per card would remove it.
 - **Redaction rule:** a bare-identifier clause (`ensures b`) always appears in the signature, so `roundtrip_r15` raises; cards avoid such clauses, or the rule is narrowed to the description.
 
+## 6a. Decided (the user, 2026-10-28; Δ314)
+
+- **D98 = R15-1 (a):** `vcheck --test` builds the declared `regex` dev-dependency (offline, `--locked`, local cargo cache); new hole kind `test-todo` for `todo!("<item>")` inside `#[cfg(test)]`; tests + a Δ entry each; then build H2v (Re-to-pattern translation + anchored/unanchored oracle wrapper), admitted with TRIV and empty-body. **Not started.**
+- **D99 = R15-2 (a):** witness hints on reference pairs rendered as `assert` lines; an existential with no witness is `unknown`; tests; re-capture `sound-d/v`. **Not started.**
+- **D100 = R15-3 (a):** four delivery repeats (768 Qwen calls, 288 runs); GPU ceiling "to be re-set after a throughput probe at Lab β's settings, as D56"; write the budget formula and the probe procedure into B6's pre-registration (problems/solutions/rubric); never run the probe. **Not started.**
+
 ## 6. DECISIONS (to the coordinator)
 
 - **R15-2 (spectest on existential postconditions):** (a, recommended) each card's reference pair carries witness hints (the witness terms for the spec's existentials), rendered as `assert` lines in the pair check, and a check with no witness for an existential is `unknown`, never `rejects`; tests added; (b) Lab β's cards avoid existential postconditions (fewer R-relevant cards); (c) `outcome_r15` maps every failed check of a quantified spec to `unknown` (honest but makes `spectest` uninformative there).
