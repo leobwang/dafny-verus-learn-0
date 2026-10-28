@@ -27,7 +27,7 @@ scripts/firsttry.sh R15 --report --strict exits 0.
 // =============================================================================
 
 // item: R15.P1dv verdict
-/** vacuous-d and vacuous-v state one candidate statement from the chapter's
+/** weak-d and weak-v state one candidate statement from the chapter's
     review (§4) and return false for every input. Predict both verdict and
     stage pairs. Answer form: D:<verdict>,<stage> V:<verdict>,<stage>. */
 // CHECK P1dv

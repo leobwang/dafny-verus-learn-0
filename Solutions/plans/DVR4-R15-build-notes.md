@@ -40,7 +40,7 @@ Scratch and evidence: `~/.cache/dafny-verus-learn-0/author-probes/dvr4-step7/p1b
 
 **Minutes reconcile:** practice 384 = setup 8, test-out 10, read 70, worked 25, cards 6, predicts 15, ladder 70 (T1 not here; H1d 20 + H1v 20 + H2v 15 + run/checks/audit walk-through 15), statement review 30, grade-the-grader 20, injection 15, contamination 15, red-team + R-v1 30, paper 30, viva 30, calib 10. Admissible rows: T1d 5, T1v 5, H1d 20, H1v 20, H2v 15, H1py 35, H2py 40, H3py 65 (= 205).
 
-**Predictions (≥ 2 `dv`, R-owned, to draft):** P1dv the empty slice (does `ContainsMatchR15(Star(Chr('a')), "")` return true; verdict of a body that starts `i` at 1); P2dv anchored vs unanchored oracle values on `b` for `a*` (value); P3dv a vacuous candidate statement (`ensures b ==> …` with `b := false`) — does it verify (verdict); P4d/P4v the roundtrip implication check between two specs that differ only on the empty input (obligation: which direction fails).
+**Predictions (≥ 2 `dv`, R-owned, to draft):** P1dv the empty slice (does `ContainsMatchR15(Star(Chr('a')), "")` return true; verdict of a body that starts `i` at 1); P2dv anchored vs unanchored oracle values on `b` for `a*` (value); P1dv as built: the weak candidate (`ensures b ==> …` with `b := false`; specimens `weak-d/v`, renamed from `vacuous-*` so that "vacuous" means only an unsatisfiable requires) — does it verify (verdict); P4d/P4v the roundtrip implication check between two specs that differ only on the empty input (obligation: which direction fails).
 
 **Constructs (to confirm, D82/D85):** WRITE `invariant` (T1 and H1 are loops whose smallest answers write invariant clauses, in both languages); RECOGNISE `property-test` (one item, H2v; Q's WRITE slug, not R's here). No other WRITE tag.
 
@@ -89,6 +89,17 @@ Options:
 - **Contamination (W18):** post-cutoff authorship for the 14 author cards, a perturbation probe per card (renaming), the card audit (30 min) before freeze.
 - **What the author builds now:** the prereg fields in `paper/R15_problems.tex` and the rubric; `fvh.prereg`'s required fields for Lab β (estimand, primary, aggregation, missing rule, cluster rule, precision sim sha256) as a later harness step; the 24 cards and the hidden verdicts are a later corpus step (not in step 7's scope).
 
+## 5b. Kit state and findings (2026-10-27)
+
+- **Chapter** `docs/R15_VerifierLoop.md` (sub-lane): 7,671 lint words, 9 dafny + 9 rust blocks (≥ 1 each in §1–§6), 25 pins, 2 predict boxes, 3 mermaid fences (PLAN's 2 diagrams, the second drawn as two fences because the lint requires 3–5). 14 demo specimens (`word`, `shortrun`, `short`, `prop`, `review`, `inject`, `sound`, D/V). §3 demonstrates rung 3 with a copy of A1/A2 under fresh names (`vcheck --test` refuses module probes) and keeps H2v's mechanism to one revisable paragraph (R15-1). §8 now names the paper as B1–B6.
+- **Written track** (sub-lane): B1–B6, solutions, rubric (pins current), gold/flawed fixtures, exhibit `paper/fixtures/R15_flawed_prereg.tex` for B4. B3 is being re-posed on `FirstMatchEndR15`'s statement: §4 of the chapter works the search's six candidates, which would hand B3 its answers.
+- **Finding (Lab β design): `spectest`'s empty-body checks cannot decide existential postconditions.** On the word search's faithful spec, every check fails in both languages (`sound-d/v` pins): the true pair reads "rejects" and the mutant "survives", so a sound, complete spec scores unfaithful. H1's own statement is existential. DECISION R15-2 below.
+- **Finding (budget):** PLAN §4.3's roundtrip row (96 runs / 192 calls) covers one language; the 24 × 4 × 2 primary needs 384 calls / 192 runs, and PLAN's rows plus the full primary exceed the registry's 960 calls / 288 runs. B6's exemplar fits by cutting delivery repeats to 4. At Lab α's measured 72 GPU-s per call, 768 calls ≈ 15 GPU-h against R15's 3 GPU-h ceiling; a throughput probe at Lab β's settings (thinking off, `num_predict` 768) is needed before the ceiling is final.
+- **Redaction rule:** a bare-identifier clause (`ensures b`) always appears in the signature, so `roundtrip_r15` raises; cards avoid such clauses, or the rule is narrowed to the description.
+
 ## 6. DECISIONS (to the coordinator)
+
+- **R15-2 (spectest on existential postconditions):** (a, recommended) each card's reference pair carries witness hints (the witness terms for the spec's existentials), rendered as `assert` lines in the pair check, and a check with no witness for an existential is `unknown`, never `rejects`; tests added; (b) Lab β's cards avoid existential postconditions (fewer R-relevant cards); (c) `outcome_r15` maps every failed check of a quantified spec to `unknown` (honest but makes `spectest` uninformative there).
+- **R15-3 (Lab β budget):** (a, recommended) four delivery repeats (768 Qwen calls, 288 runs) and the GPU ceiling re-set after a throughput probe at Lab β's settings, as D56 did for Lab α; (b) keep PLAN's rows and raise the registry's call count.
 
 - **R15-1:** the property rung's mechanism (§4); recommend (a).

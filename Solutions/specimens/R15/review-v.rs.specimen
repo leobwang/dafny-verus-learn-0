@@ -1,0 +1,45 @@
+// Reference Solution.
+// Statement review (not an item): the vacuous candidate and two witnesses. The
+// candidate's author meant to set the empty slice aside and wrote it as an
+// assumption about the input; its body never searches.
+use vstd::prelude::*;
+use rg_re_a1::*;
+
+verus! {
+
+// Witness 1: no input meets the candidate's requires.
+proof fn no_input_r15(s: Seq<char>)
+    requires
+        forall|i: int, j: int| 0 <= i <= j <= s.len() ==> #[trigger] s.subrange(i, j).len() > 0,
+    ensures
+        false,
+{
+    assert(s.subrange(0, 0).len() > 0);
+}
+
+fn contains_assumed_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+    requires
+        forall|i: int, j: int| 0 <= i <= j <= s.len() ==> #[trigger] s@.subrange(i, j).len() > 0,
+    ensures
+        b == exists|i: int, j: int|
+            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
+{
+    proof {
+        no_input_r15(s@);
+    }
+    false
+}
+
+// Witness 2: on Eps and the empty string, the faithful statement demands
+// true and the `i < j` statement demands false.
+proof fn empty_slice_witness_r15(s: Seq<char>)
+    requires
+        s.len() == 0,
+    ensures
+        exists|i: int, j: int| 0 <= i <= j <= s.len() && #[trigger] matches(Re::Eps, s.subrange(i, j)),
+        !exists|i: int, j: int| 0 <= i < j <= s.len() && #[trigger] matches(Re::Eps, s.subrange(i, j)),
+{
+    assert(matches(Re::Eps, s.subrange(0, 0)));
+}
+
+} // verus!

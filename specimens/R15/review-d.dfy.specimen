@@ -1,0 +1,32 @@
+// Statement review (not an item): the vacuous candidate and two witnesses. The
+// candidate's author meant to set the empty slice aside and wrote it as an
+// assumption about the input; its body never searches.
+module R15_ReviewD {
+  import opened RG_A1_Re
+
+  // Witness 1: no input meets the candidate's requires.
+  lemma NoInputR15(s: seq<char>)
+    requires forall i, j | 0 <= i <= j <= |s| :: |s[i..j]| > 0
+    ensures false
+  {
+    assert |s[0..0]| > 0;
+  }
+
+  method ContainsAssumedR15(r: Re, s: seq<char>) returns (b: bool)
+    requires forall i, j | 0 <= i <= j <= |s| :: |s[i..j]| > 0
+    ensures b == exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
+  {
+    NoInputR15(s);
+    b := false;
+  }
+
+  // Witness 2: on Eps and the empty string, the faithful statement demands
+  // true and the `i < j` statement demands false.
+  lemma EmptySliceWitnessR15(s: seq<char>)
+    requires s == []
+    ensures exists i, j | 0 <= i <= j <= |s| :: Matches(Eps, s[i..j])
+    ensures !exists i, j | 0 <= i < j <= |s| :: Matches(Eps, s[i..j])
+  {
+    assert Matches(Eps, s[0..0]);
+  }
+}

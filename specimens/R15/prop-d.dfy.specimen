@@ -1,0 +1,109 @@
+// Rung 3 (not an item): a differential property test. A specimen runs alone, so
+// A1's regex type and A2's derivative are copied here under fresh names. Two
+// answers to the unanchored question are compared on generated cases: the
+// whole-string matcher on every slice, and the same matcher on a padded pattern.
+module R15_PropertyD {
+  datatype ReR15 = Empty | Eps | Chr(c: char) | Alt(a: ReR15, b: ReR15)
+                 | Cat(a: ReR15, b: ReR15) | Star(r: ReR15)
+
+  predicate NullableR15(r: ReR15)
+  {
+    match r
+    case Empty => false
+    case Eps => true
+    case Chr(_) => false
+    case Alt(a, b) => NullableR15(a) || NullableR15(b)
+    case Cat(a, b) => NullableR15(a) && NullableR15(b)
+    case Star(_) => true
+  }
+
+  function DerivR15(r: ReR15, c: char): ReR15
+  {
+    match r
+    case Empty => Empty
+    case Eps => Empty
+    case Chr(d) => if c == d then Eps else Empty
+    case Alt(a, b) => Alt(DerivR15(a, c), DerivR15(b, c))
+    case Cat(a, b) =>
+      if NullableR15(a) then Alt(Cat(DerivR15(a, c), b), DerivR15(b, c))
+      else Cat(DerivR15(a, c), b)
+    case Star(a) => Cat(DerivR15(a, c), Star(a))
+  }
+
+  // Whole-string matching: one derivative per character, then nullable.
+  function WholeR15(r: ReR15, s: seq<char>): bool
+    decreases |s|
+  {
+    if s == [] then NullableR15(r) else WholeR15(DerivR15(r, s[0]), s[1..])
+  }
+
+  // The unanchored question read literally: does some slice match?
+  method BySlicesR15(r: ReR15, s: seq<char>) returns (b: bool)
+  {
+    for i := 0 to |s| + 1 {
+      for j := i to |s| + 1 {
+        if WholeR15(r, s[i..j]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // Sigma-star over the test alphabet {a, b}, and two translations to one
+  // whole-string match: padded on both sides, or on the right only.
+  function AnyR15(): ReR15
+  {
+    Star(Alt(Chr('a'), Chr('b')))
+  }
+
+  function PaddedR15(r: ReR15): ReR15
+  {
+    Cat(Cat(AnyR15(), r), AnyR15())
+  }
+
+  function RightPaddedR15(r: ReR15): ReR15
+  {
+    Cat(r, AnyR15())
+  }
+
+  // A deterministic generator: the number n decodes to one regex, m to one word.
+  function GenReR15(n: nat, depth: nat): ReR15
+  {
+    if depth == 0 || n % 7 < 4 then
+      (if n % 4 == 0 then Empty else if n % 4 == 1 then Eps
+       else if n % 4 == 2 then Chr('a') else Chr('b'))
+    else if n % 7 == 4 then Alt(GenReR15(n / 7, depth - 1), GenReR15(n / 49, depth - 1))
+    else if n % 7 == 5 then Cat(GenReR15(n / 7, depth - 1), GenReR15(n / 49, depth - 1))
+    else Star(GenReR15(n / 7, depth - 1))
+  }
+
+  function GenWordR15(m: nat, len: nat): seq<char>
+  {
+    if len == 0 then [] else [if m % 2 == 0 then 'a' else 'b'] + GenWordR15(m / 2, len - 1)
+  }
+
+  method {:test} PaddedAgreesR15()
+  {
+    for n := 0 to 400 {
+      for m := 0 to 16 {
+        var r := GenReR15(n, 2);
+        var s := GenWordR15(m, m % 5);
+        var slices := BySlicesR15(r, s);
+        expect slices == WholeR15(PaddedR15(r), s);
+      }
+    }
+  }
+
+  method {:test} RightPaddedAgreesR15()
+  {
+    for n := 0 to 400 {
+      for m := 0 to 16 {
+        var r := GenReR15(n, 2);
+        var s := GenWordR15(m, m % 5);
+        var slices := BySlicesR15(r, s);
+        expect slices == WholeR15(RightPaddedR15(r), s);
+      }
+    }
+  }
+}

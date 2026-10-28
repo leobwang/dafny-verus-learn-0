@@ -8,9 +8,9 @@ in `--fixture` mode never unlocks a run. D45 live grading remains explicit
 deferred debt.
 
 Solution pins (filled by scripts/update_rubric_pins.sh):
-paper/solutions/R15_solutions.tex  sha256 bafcb82a59ec2cee760a5a220329f649f1619ee71915b87e230aa2e64d9dcc84
-paper/R15_problems.tex  sha256 5dcf10ff6001bf37d0248a70cb6f39219c1683d44ac833df20d5e8a45dd9ac53
-Solutions/dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy  sha256 1f9e3a4393a49421ecf3d8e5b669675304c25ffed71ef0d0475c0b51ac08f81d
+paper/solutions/R15_solutions.tex  sha256 9a89723b130ade9fa743b84106fe5545e362ea0c4ed9f1729244cf0fa2758256
+paper/R15_problems.tex  sha256 4ddb1c27a4943ee5293588c7fc0312d3106772a3c7a36fc55639df2a95aa861d
+Solutions/dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy  sha256 753c7572c20a42bb4c8a4381cb7d55e4465c10baf0a2a3ce61fdac928bfb3da7
 Solutions/verus/r/r15_verifier_loop/src/lib.rs  sha256 bf4b474cf690e68500351d6a1a75a379abdca2ebc1150288072abdcb367e68b1
 Solutions/dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy  sha256 169512d487f316f812eb722783d0e0ef183a7f09a33c8badd0a2f706c6b58d3e
 Solutions/verus/r/r15_verifier_loop/src/agent.rs  sha256 7a886d3c9ec31ff6c3b77cad719a5d9a2ceb5f8ef45973ad214723c816538ffd
@@ -25,12 +25,13 @@ Solutions/verus/r/r15_verifier_loop/src/agent.rs  sha256 7a886d3c9ec31ff6c3b77ca
   growth; a stale pin refuses that card only.
 - **Probe B (B3):** for a disputed classification, write the candidate's
   statement as printed in B3 in a scratch file over layer A1 and run
-  `scripts/vcheck --module R15 <probe>` with the trivial body (`b := false`,
-  `false`), or with a call at the learner's witness values. A witness is
-  checked as a closed statement at those values (a slice equality, a `Matches`
-  fact at concrete arguments), never by restating H1's proof. A
-  precondition failure at a call is an error verdict: pair it with a verified
-  refutation of the requires at one concrete `s` before calling a claim wrong.
+  `scripts/vcheck --module R15 <probe>` with the trivial body (`found, e :=
+  false, 0`; `None`), or with a call at the learner's witness values. A witness
+  is checked as a closed statement at those values (a prefix or suffix
+  equality, a `Matches` fact at concrete arguments), never by writing a body or
+  a proof for the agent's method. A precondition failure at a call is an error
+  verdict: pair it with a verified refutation of the requires at one concrete
+  `s` before calling a claim wrong.
 - **Probe C (B6):** recompute every product the registration states (calls =
   tasks × attempts × rounds × arms × repeats, runs, sentinels, GPU-seconds at
   the stated per-call cost) with `python3 -c`, and compare each arm and the
@@ -102,7 +103,7 @@ Solutions/verus/r/r15_verifier_loop/src/agent.rs  sha256 7a886d3c9ec31ff6c3b77ca
   cannot conclude) and what it shows. Calling a candidate faithful because some
   body verifies against it scores at most 2, quoting the sentence.
 - **SR.d:** the answer states what a verified body says about a statement,
-  and writes no H1 invariant or proof.
+  and writes no body, invariant or proof for the agent's method.
 
 ## B4 — Grade the grader (grade-the-grader; dimension: grader-audit)
 

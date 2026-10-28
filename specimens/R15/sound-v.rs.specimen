@@ -1,0 +1,46 @@
+// Lab beta's first oracle at work (not an item): the checks spectest renders for
+// the worked word search's specification, at two reference pairs and one
+// output mutant. Each is one lemma with an empty body: requires bind the
+// card's parameters and result to the literals, ensures is the postcondition.
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn occurs_at_r15(s: Seq<char>, w: Seq<char>, p: int) -> bool {
+    0 <= p && p + w.len() <= s.len() && s.subrange(p, p + w.len()) == w
+}
+
+// Pair 1: s = "a", w = "b", reference output false.
+pub proof fn has_word_r15_pair_holds(s: Seq<char>, w: Seq<char>, b: bool)
+    requires
+        s == seq!['a'],
+        w == seq!['b'],
+        b == false,
+    ensures
+        b == exists|p: int| #[trigger] occurs_at_r15(s, w, p),
+{
+}
+
+// Pair 2: s = "ab", w = "b", reference output true.
+pub proof fn has_word_r15_pair_holds2(s: Seq<char>, w: Seq<char>, b: bool)
+    requires
+        s == seq!['a', 'b'],
+        w == seq!['b'],
+        b == true,
+    ensures
+        b == exists|p: int| #[trigger] occurs_at_r15(s, w, p),
+{
+}
+
+// Pair 1's output mutant: b = true must be rejected.
+pub proof fn has_word_r15_mutant_rejected(s: Seq<char>, w: Seq<char>, b: bool)
+    requires
+        s == seq!['a'],
+        w == seq!['b'],
+        b == true,
+    ensures
+        !(b == exists|p: int| #[trigger] occurs_at_r15(s, w, p)),
+{
+}
+
+} // verus!

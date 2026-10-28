@@ -1,9 +1,9 @@
 // after: R15.P1dv
-module R15_VacuousD {
+module R15_WeakD {
   import opened RG_A1_Re
 
   // A candidate statement for the search, with a body that never searches.
-  method ContainsVacuousR15(r: Re, s: seq<char>) returns (b: bool)
+  method ContainsWeakR15(r: Re, s: seq<char>) returns (b: bool)
     ensures b ==> exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
   {
     b := false;

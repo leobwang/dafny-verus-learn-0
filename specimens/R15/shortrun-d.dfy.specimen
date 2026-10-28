@@ -1,0 +1,31 @@
+// Rungs 1 and 2 on the changed loop (not an item): the same code with no
+// contract and no invariant, and a fixed compiled test. Run the test.
+module R15_WordRunD {
+  method HasWordRunR15(s: seq<char>, w: seq<char>) returns (b: bool)
+  {
+    var p: nat := 0;
+    while p + |w| < |s|
+    {
+      var k: nat := 0;
+      while k < |w| && s[p + k] == w[k]
+      {
+        k := k + 1;
+      }
+      if k == |w| {
+        return true;
+      }
+      p := p + 1;
+    }
+    return false;
+  }
+
+  method {:test} WordSampleTestR15()
+  {
+    var b1 := HasWordRunR15(['x', 'a', 'b', 'y'], ['a', 'b']);
+    expect b1;
+    var b2 := HasWordRunR15(['x', 'y', 'z'], ['a', 'b']);
+    expect !b2;
+    var b3 := HasWordRunR15(['a', 'a', 'b', 'a'], ['a', 'b']);
+    expect b3;
+  }
+}

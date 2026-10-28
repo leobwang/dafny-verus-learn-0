@@ -1,0 +1,133 @@
+// Rung 3 (not an item): a differential property test. A specimen runs alone, so
+// A1's regex type and A2's derivative are copied here under fresh names, as plain
+// Rust in the test module. Two answers to the unanchored question are compared on
+// generated cases: the whole-string matcher on every slice, and the same matcher
+// on a padded pattern.
+use vstd::prelude::*;
+
+verus! {
+
+} // verus!
+
+#[cfg(test)]
+mod property_r15 {
+    #[derive(Clone)]
+    enum ReR15 {
+        Empty,
+        Eps,
+        Chr(char),
+        Alt(Box<ReR15>, Box<ReR15>),
+        Cat(Box<ReR15>, Box<ReR15>),
+        Star(Box<ReR15>),
+    }
+    use ReR15::*;
+
+    fn nullable_r15(r: &ReR15) -> bool {
+        match r {
+            Empty => false,
+            Eps => true,
+            Chr(_) => false,
+            Alt(a, b) => nullable_r15(a) || nullable_r15(b),
+            Cat(a, b) => nullable_r15(a) && nullable_r15(b),
+            Star(_) => true,
+        }
+    }
+
+    fn deriv_r15(r: &ReR15, c: char) -> ReR15 {
+        match r {
+            Empty => Empty,
+            Eps => Empty,
+            Chr(d) => if c == *d { Eps } else { Empty },
+            Alt(a, b) => Alt(Box::new(deriv_r15(a, c)), Box::new(deriv_r15(b, c))),
+            Cat(a, b) => if nullable_r15(a) {
+                Alt(
+                    Box::new(Cat(Box::new(deriv_r15(a, c)), b.clone())),
+                    Box::new(deriv_r15(b, c)),
+                )
+            } else {
+                Cat(Box::new(deriv_r15(a, c)), b.clone())
+            },
+            Star(a) => Cat(Box::new(deriv_r15(a, c)), Box::new(Star(a.clone()))),
+        }
+    }
+
+    // Whole-string matching: one derivative per character, then nullable.
+    fn whole_r15(r: &ReR15, s: &[char]) -> bool {
+        let mut cur = r.clone();
+        for &c in s {
+            cur = deriv_r15(&cur, c);
+        }
+        nullable_r15(&cur)
+    }
+
+    // The unanchored question read literally: does some slice match?
+    fn by_slices_r15(r: &ReR15, s: &[char]) -> bool {
+        for i in 0..=s.len() {
+            for j in i..=s.len() {
+                if whole_r15(r, &s[i..j]) {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    // Sigma-star over the test alphabet {a, b}, and two translations to one
+    // whole-string match: padded on both sides, or on the right only.
+    fn any_r15() -> ReR15 {
+        Star(Box::new(Alt(Box::new(Chr('a')), Box::new(Chr('b')))))
+    }
+
+    fn padded_r15(r: &ReR15) -> ReR15 {
+        Cat(Box::new(Cat(Box::new(any_r15()), Box::new(r.clone()))), Box::new(any_r15()))
+    }
+
+    fn right_padded_r15(r: &ReR15) -> ReR15 {
+        Cat(Box::new(r.clone()), Box::new(any_r15()))
+    }
+
+    // A deterministic generator: the number n decodes to one regex, m to one word.
+    fn gen_re_r15(n: u64, depth: u32) -> ReR15 {
+        if depth == 0 || n % 7 < 4 {
+            match n % 4 {
+                0 => Empty,
+                1 => Eps,
+                2 => Chr('a'),
+                _ => Chr('b'),
+            }
+        } else if n % 7 == 4 {
+            Alt(Box::new(gen_re_r15(n / 7, depth - 1)), Box::new(gen_re_r15(n / 49, depth - 1)))
+        } else if n % 7 == 5 {
+            Cat(Box::new(gen_re_r15(n / 7, depth - 1)), Box::new(gen_re_r15(n / 49, depth - 1)))
+        } else {
+            Star(Box::new(gen_re_r15(n / 7, depth - 1)))
+        }
+    }
+
+    fn gen_word_r15(m: u64, len: u64) -> Vec<char> {
+        (0..len).map(|k| if (m >> k) % 2 == 0 { 'a' } else { 'b' }).collect()
+    }
+
+    fn agrees_r15(translate: fn(&ReR15) -> ReR15) -> bool {
+        for n in 0..400 {
+            for m in 0..16 {
+                let r = gen_re_r15(n, 2);
+                let s = gen_word_r15(m, m % 5);
+                if by_slices_r15(&r, &s) != whole_r15(&translate(&r), &s) {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+
+    #[test]
+    fn padded_agrees_r15() {
+        assert!(agrees_r15(padded_r15));
+    }
+
+    #[test]
+    fn right_padded_agrees_r15() {
+        assert!(agrees_r15(right_padded_r15));
+    }
+}

@@ -1,0 +1,218 @@
+# expected/R15.freeze — statement-freeze pins for R15 (spec §11.1 row 29, Δ44).
+# Written by `scripts/specfreeze --pin R15` from the files as shipped; checked by
+# `scripts/specfreeze --check R15`. One sha256 per statement (signature and
+# clauses, token-normalized; a definition's body included). A symbol under
+# open_bodies was pinned without a body (a function hole); one under open_frames
+# or open_specs by its core, with its shipped clauses kept in order (QPLAN §6
+# Q22, Q44). Never edit by hand.
+schema = 1
+module = "R15"
+unfrozen = ["specimens/R15/prop-v.rs.specimen", "specimens/R15/shortrun-v.rs.specimen"]
+
+[[file]]
+path = "dafny/R/R15_VerifierLoop/std/R15_VerifierLoop.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_VerifierLoop.ContainsMatchR15" = "fc6756b5e3ed7b82a1c7e89317116936da7e12622b8ecd0d2b9e85507d683b63"
+"R15_VerifierLoop.PrefixMatchR15" = "686b6b58c6edd2cd93e2897d3df216b0ab3bcc0c6affb295a2154645b1694700"
+[file.frozen_imports]
+"R15_VerifierLoop" = ["c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26", "e4baae33e0e4ceaf257d0be2bb6ec3867ed265e36301d104fe0310c9a744da62", "f7ebae5425995070dc5730af2361722799bdffb26f355112d4df49721b443889"]
+
+[[file]]
+path = "verus/r/r15_verifier_loop/src/lib.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"contains_match_r15" = "bf52ea2b1732c83f0ad63c752cccaa89de48c19934e9eaf6c086d53691429358"
+"prefix_match_r15" = "7e5015ca09cf38cc77b559089b36e5778e2652bdbe94349fec8e0bdbf1410fc2"
+
+[[file]]
+path = "specimens/R15/anchor-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_AnchorD.ContainsAnchoredR15" = "3662fe9a6fd149be83bcfe8441b679715c16fa38e3fc37183654db85f8f3606c"
+
+[[file]]
+path = "specimens/R15/anchor-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"contains_anchored_r15" = "7be448a754147e7fe09ddf866d570e776746ba1598c2f2f0e6de2723e425769a"
+
+[[file]]
+path = "specimens/R15/inject-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_InjectD.ContainsNotedR15" = "96797cb508ace9ec0641d95457e2308feb7f47286a8778c9cf6128d0d7feafd4"
+
+[[file]]
+path = "specimens/R15/inject-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"contains_noted_r15" = "2794660c93543f2ed56cb5a2062e380869ec952049e0b58cbae3bc895d46b40c"
+
+[[file]]
+path = "specimens/R15/prop-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_PropertyD.AnyR15" = "d07615d8b71b58caaa28117bf53ea11ee2d28dcbb70cdb35a955ff31ee84d1f4"
+"R15_PropertyD.BySlicesR15" = "2153b59f4fe33193b9b0470e5fafbdea5699f3fd66928965636127311ff36602"
+"R15_PropertyD.DerivR15" = "313ceb1a738ecd53eb775f6222664fbaca3c52ff59e64e9c44ffaacd0a698e90"
+"R15_PropertyD.GenReR15" = "d4c6b8beacba56766fcd9b6ba7c6022bd62f81285f63d6097af36eaed7c73942"
+"R15_PropertyD.GenWordR15" = "4d55814fb966422e0a6c2ff9b6024bb2743ae12359e5b2f0194d7493223308a8"
+"R15_PropertyD.NullableR15" = "4a8b45536ed8270fea42cc47fe7b82a3226aaed83e685eba9390141af1cb093c"
+"R15_PropertyD.PaddedAgreesR15" = "ae093ca41eb167d113a1380706da90adace1c870a658c664936caa18d3d23055"
+"R15_PropertyD.PaddedR15" = "fef6fd3bfd0231d2097dd8162a645034ca3e9de4ea718d6601a765150f11458b"
+"R15_PropertyD.ReR15" = "3a0ad5a4321ffbe45c603967b3b17ccb5648f614f4d4caf481c0228d0cb3dd17"
+"R15_PropertyD.RightPaddedAgreesR15" = "89ff1a3f00010d8d86d14faea90387c501e2c913f4b42a4138b9057721687a65"
+"R15_PropertyD.RightPaddedR15" = "a76b6fc8b646ffbefa5c21e357a490c9bbad15773bfd9c498568b38c39291b63"
+"R15_PropertyD.WholeR15" = "491140e61847c4fec71e6e10689ebb7919c2513485ec45a084bad312a6db119d"
+
+[[file]]
+path = "specimens/R15/review-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_ReviewD.ContainsAssumedR15" = "a075a514a6f0bc9aee23d0d7fb3d1be2482d2b55c9e86deba060a94b6aeaa8d2"
+"R15_ReviewD.EmptySliceWitnessR15" = "7e8a52f5c4cda277cedebb0074bde43d708c863a81c905598c2cfa894a91ebd9"
+"R15_ReviewD.NoInputR15" = "ca6c40c84073eeb3bebb7e54733116495670c9bcad781888689c30bd48124fa0"
+
+[[file]]
+path = "specimens/R15/review-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"contains_assumed_r15" = "33c2886581933deef2db1fceac81edf119925e5b201907733c7dfd41227e5307"
+"empty_slice_witness_r15" = "2e4acc75d07c326627a97013399c8588e5276540c90f51112f5364d5b622c750"
+"no_input_r15" = "f42efb2ea3b69fd17fa1b8fbdea59ef14867e824d130eeea6756ed012a2d43ba"
+
+[[file]]
+path = "specimens/R15/short-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_WordShortD.HasWordShortR15" = "561c37832de841e1b93675109c757f3d6b4b2c8ba23d0ffa8106f247c1599418"
+"R15_WordShortD.OccursAtR15" = "e82fdd081e6bfe400b1683fa71eccb1037509c65b6a883abed833dce8290a782"
+
+[[file]]
+path = "specimens/R15/short-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"has_word_short_r15" = "f5820b1ab90ecc3594df475f7ae4c04b8691b29feed51de8c9f8f6bad04377b0"
+"occurs_at_r15" = "e1eb23acaff42e15bb1370957497bd0f77f87c10ceeba7be443fae21843565e3"
+
+[[file]]
+path = "specimens/R15/shortrun-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_WordRunD.HasWordRunR15" = "600a0f6b2bfadade6a08cdb857c3acd3cddf04a6887d4d2ad9500b75a532b2c5"
+"R15_WordRunD.WordSampleTestR15" = "6147c48f607f7e3687213f139bb1865bd63817b059cc5e9a2b41215c3aba141a"
+
+[[file]]
+path = "specimens/R15/sound-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_SpecCheckD.HasWordR15_MutantRejected" = "919221d220a32756a1200a048b93ce299e0210f0ad934dbf7d1f4e0149a53590"
+"R15_SpecCheckD.HasWordR15_PairHolds" = "ff846da6999bea5d3aab22f20a954655c518948eaa48077f9eb47f102aba98f7"
+"R15_SpecCheckD.HasWordR15_PairHolds2" = "c86b46a1ee94134ec45be631dfebd888094326cd81a81ba6fe1d12718303be7f"
+"R15_SpecCheckD.OccursAtR15" = "e82fdd081e6bfe400b1683fa71eccb1037509c65b6a883abed833dce8290a782"
+
+[[file]]
+path = "specimens/R15/sound-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"has_word_r15_mutant_rejected" = "785a02fd41e562f50ee5249fb76b0a58def09eb1396e97b4b2bd25af7c8ceb45"
+"has_word_r15_pair_holds" = "5aa25a06f68f7a3330f54861ebe5a0e2789a953e507f02eff4050600cb28242d"
+"has_word_r15_pair_holds2" = "348d6691d4418115e31b67d9792454756b9ebf0e64fac2682820b5a440844e46"
+"occurs_at_r15" = "e1eb23acaff42e15bb1370957497bd0f77f87c10ceeba7be443fae21843565e3"
+
+[[file]]
+path = "specimens/R15/weak-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_WeakD.ContainsWeakR15" = "3e9d94a5df32e5a2b8755435158e1f637b348261754c8bc8847a8ed9939a4b30"
+
+[[file]]
+path = "specimens/R15/weak-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"contains_weak_r15" = "bf58aae687d65c102ca8398712cc2e8e5a51db9cb261ada5e10e928da4384463"
+
+[[file]]
+path = "specimens/R15/word-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_WordSearchD.HasWordR15" = "ae79d505f5344c9262b470eafb67dc529465499d9a24a9b600df66c1f0edf3ba"
+"R15_WordSearchD.OccursAtR15" = "e82fdd081e6bfe400b1683fa71eccb1037509c65b6a883abed833dce8290a782"
+"R15_WordSearchD.WordCheckR15" = "e03da69aa0537cdb2896fa2c5c0f6d5c986ecc920908c07eb1b719065310a35e"
+
+[[file]]
+path = "specimens/R15/word-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"has_word_r15" = "d5991473689b1495f4e3b73a542319451f3cc08bf8a44d17ce19d007d1f4ce00"
+"occurs_at_r15" = "e1eb23acaff42e15bb1370957497bd0f77f87c10ceeba7be443fae21843565e3"
+"word_check_r15" = "67ae2a08b36985c8273dbe1ff8f9d031abe5b37c46d261002f5f4ecb489b9906"
+
+[[file]]
+path = "dafny/R/R15_VerifierLoop/agent/R15_AgentRedTeam.dfy"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R15_RedTeamDelivery.FirstMatchEndR15" = "4bae736e5e3dbbdc330903778fd39995ba4966852022545cff34b4b3dbe3e8dc"
+[file.frozen_imports]
+"R15_RedTeamDelivery" = ["c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26", "e4baae33e0e4ceaf257d0be2bb6ec3867ed265e36301d104fe0310c9a744da62", "f7ebae5425995070dc5730af2361722799bdffb26f355112d4df49721b443889"]
+
+[[file]]
+path = "verus/r/r15_verifier_loop/src/agent.rs"
+lang = "v"
+open_bodies = []
+[file.statements]
+"first_match_end_r15" = "d33ec82784dc2526cde46cc33bb8415b1abed20cce3e7621ce768e2eb9434ba2"
+
+[[file]]
+path = "harness/r/fvh_r/spectest.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"CardR15" = "a64781fd326d973e2d6546ccba8df5b67aaa9c880bee62f6b687fc595001f17b"
+"CompleteReportR15" = "fa971980675013a000c3c7445b8b516a22b0abcf49d07ea77ce01f37482e222b"
+"IOPairR15" = "0e37551459d106e5ca3301bf059068c8a38d906d9f81d20ceb0dc9898ac11440"
+"OutputMutantR15" = "334a887a4cdb2055e6b86a70924574321a5b44b775e76ca21959baf5b55a725d"
+"SoundReportR15" = "9e95d4da9350d5c358ee306283e093d4389f0cb062bd6ffdf8e71cc829d5e91b"
+"SpecR15" = "f7642beecb5a417dd5161eb20368b692c9a08a5a4c91228b08b19133744dbcd4"
+"_sig_r15" = "b08f84a6caa60e42fa52da6d61e8d44f0767e52f9f605442acf5fd7a0c78ea7a"
+"mutate_outputs_r15" = "97ae937985512725f91297213b40c914b90c0b8e7c83bbb2b1c7344990cf410c"
+"outcome_r15" = "f3359ee91e519796f633755133fae02bada284665c7de4dacd1fe6967505a9ae"
+"render_lemma_r15" = "29f1fccda0b188e745fafc834e8723f6a9d1750a9bb4d6231eedfd3b6f6dbdf7"
+"render_pair_check_r15" = "3033983059c07ddc04e6f9101438f686a21c5f240b3bd8ca6d36cd36cab9b4b8"
+"spec_complete_r15" = "0b5a1e2ae53c7db8197c5ba1df137c58eba527795da89a9ffab597eea6501bde"
+"spec_sound_r15" = "00e3d34c85a1186dabc90c06c8dd02a1512c9f9d0a70babe37fea5751b941e24"
+"write_target_r15" = "182bbe3bd058813df611ca60690ba621102bb9230de24a0c5bfa57cad7cb899b"
+
+[[file]]
+path = "harness/r/fvh_r/roundtrip.py"
+lang = "py"
+open_bodies = []
+[file.statements]
+"RoundtripReportR15" = "634ce06836d2d20c884d40fa456e0323352741dbd1c8edbd45cfb341ec462692"
+"_language_r15" = "c5ef5260d5ec3537f0e33afb8406559e48712e421c7a58654978fb3a9286bac8"
+"_signature_r15" = "e6eaec0a3b958ff0228207e8a891e9cfe21d2a8f4e82ff9818ae1709ed6a5ef0"
+"describe_prompt_r15" = "f271892edd37d8f0714ab8ffadc0e61a96cd53985fb298e4ee261f2333c1da17"
+"formalize_prompt_r15" = "05dbc2934b9d32c850cdee44c97ce95b586816e9f66f3dfddd6a74ec6e1ba46d"
+"parse_spec_reply_r15" = "d834b739c0660fb17caf9f6ef3cbd08dfa662ad1aaa746d5f2f05c8778409f88"
+"render_implication_r15" = "9b46c1e2f7b86c7cbfd6e6f9357d835ddc45905c84841d574c72a904dde2eb6f"
+"roundtrip_r15" = "5a4771dbb1433a929cc4c1057f1eb91c77970064d9c65a908a880decd1847cfd"

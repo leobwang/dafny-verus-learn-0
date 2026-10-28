@@ -1,0 +1,40 @@
+// Reference Solution.
+// Rungs 1 and 2 on the changed loop (not an item): the same code as plain Rust
+// in the test module, with no contract and no invariant, and a fixed compiled
+// test. Run the test.
+use vstd::prelude::*;
+
+verus! {
+
+} // verus!
+
+#[cfg(test)]
+mod rung_two_r15 {
+    fn has_word_run_r15(s: &[char], w: &[char]) -> bool {
+        if w.len() >= s.len() {
+            return false;
+        }
+        let last = s.len() - w.len();
+        let mut p = 0;
+        loop {
+            let mut k = 0;
+            while k < w.len() && s[p + k] == w[k] {
+                k = k + 1;
+            }
+            if k == w.len() {
+                return true;
+            }
+            if p == last {
+                return false;
+            }
+            p = p + 1;
+        }
+    }
+
+    #[test]
+    fn word_sample_test_r15() {
+        assert!(has_word_run_r15(&['x', 'a', 'b', 'y'], &['a', 'b']));
+        assert!(!has_word_run_r15(&['x', 'y', 'z'], &['a', 'b']));
+        assert!(has_word_run_r15(&['a', 'a', 'b', 'a'], &['a', 'b']));
+    }
+}

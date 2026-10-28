@@ -1,0 +1,35 @@
+// Reference Solution.
+// The worked loop with one character changed (not an item): `<` for `<=` in the
+// outer guard. Same invariants, same proof lines: run the proof.
+module R15_WordShortD {
+  ghost predicate OccursAtR15(s: seq<char>, w: seq<char>, p: int)
+  {
+    0 <= p && p + |w| <= |s| && s[p..p + |w|] == w
+  }
+
+  method HasWordShortR15(s: seq<char>, w: seq<char>) returns (b: bool)
+    ensures b == exists p :: OccursAtR15(s, w, p)
+  {
+    var p := 0;
+    while p + |w| < |s|
+      invariant 0 <= p
+      invariant forall q | 0 <= q < p :: !OccursAtR15(s, w, q)
+    {
+      var k := 0;
+      while k < |w| && s[p + k] == w[k]
+        invariant 0 <= k <= |w|
+        invariant s[p..p + k] == w[..k]
+      {
+        k := k + 1;
+      }
+      if k == |w| {
+        assert w[..k] == w;
+        assert OccursAtR15(s, w, p);
+        return true;
+      }
+      assert s[p..p + |w|][k] != w[k];
+      p := p + 1;
+    }
+    return false;
+  }
+}

@@ -5,7 +5,7 @@
 %
 % EXPECTED[B1][card-fidelity][4]: every field agrees with lines 1310-1337 (Probe A); the roundtrip tie-in is correct. No finding.
 % EXPECTED[B2][card-fidelity][4]: every field agrees with lines 1903-1932 (Probe A); the taxonomy mapping, the card audit and the loophole analogues are correct. No finding.
-% EXPECTED[B3][statement-review][4]: C1 anchoring, C2 weak, C3 faithful, C4 empty-string, C5 vacuous, C6 over-strong; each witness checks under Probe B. No finding.
+% EXPECTED[B3][statement-review][4]: C1 empty-string, C2 faithful (the agent file's statement), C3 vacuous, C4 anchoring, C5 weak, C6 over-strong; each witness checks under Probe B. No finding.
 % EXPECTED[B4][grader-audit][4]: the reading names the exhibit's planted flaws with quotes and recomputations; no live pass is recorded, so a 3 with a recorded gap is acceptable (GG.b), never 2 or lower.
 % EXPECTED[B5][injection-audit][4]: the string is quoted, the instruments' outputs are as Probe D prints, the verdict rests on them and on the (Eps, []) counterexample. No finding.
 % EXPECTED[B6][hypothesis-precision][4], EXPECTED[B6][budget-parity][4], EXPECTED[B6][variance][4], EXPECTED[B6][contamination][4], EXPECTED[B6][cheat-audit][4], EXPECTED[B6][disclosure][4]: correct. Probe C recomputes 384 + 384 = 768 Qwen calls, 96 + 192 = 288 runs, 80 + 10 Claude calls, 768 x 7.3 = 5,606 GPU-s and 10,800 / 768 = 14.06 GPU-s per call, and reproduces the precision half-widths at seed 20261027; the markers appear once (Probe H); the prospective plan binding is described (DI.b). The report's first line is PREREG R15: UNLOCKED — every method dimension >= 3. No finding.
@@ -78,21 +78,22 @@ verifier, with the verdicts equivalent, weaker, stronger, incomparable,
 unknown and unparsed. It has no diagnoser and no repair. Its blind class is
 the card's: an error that both ends make the same way. Here that is any defect
 that a faithful description carries: if $T_2$ describes C4 accurately
-(``some non-empty slice matches'') or C1 (``some prefix matches''), $T_3$
-rebuilds the same statement, both implications verify, and the verdict is
-equivalent. The same holds when both stages share the model's prior, for
-instance reading ``substring'' as non-empty in both directions: then C4
-passes even through a vaguer description. C5's unsatisfiable requires,
-described as written, also returns equivalent. So \texttt{roundtrip} measures
-whether the description carries the whole statement, not whether the
-statement says what the card means.
+(``the leftmost position at which a matching suffix starts'') or C1 (``the end of
+the shortest non-empty matching prefix''), $T_3$ rebuilds the same statement,
+both implications verify, and the verdict is equivalent. The same holds when
+both stages share the model's prior, for instance reading ``shortest match''
+as non-empty in both directions: then C1 passes even through a vaguer
+description. C3's unsatisfiable requires, described as written, also returns
+equivalent. So \texttt{roundtrip} measures whether the description carries the
+whole statement, not whether the statement says what the card means.
 
 \texttt{spectest} adds a ground that no model touches: the card's reference
 input/output pairs and outputs mutated away from them, each decided by the
-verifier. Soundness rejects a statement that refuses a correct pair (C6 on a
-pair whose match is a proper slice; C1 and C4 on pairs that need a non-prefix
-or an empty slice); completeness kills mutants that a weak statement lets
-through (C2). Its failure modes are different from \texttt{roundtrip}'s
+verifier. Soundness rejects a statement that refuses a correct pair: C6 and C4
+on the pair \texttt{(Chr('a'), ['a','b'])} $\to$ (found, 1), C1 on
+\texttt{(Eps, [])} $\to$ (found, 0). Completeness kills mutants that a weak
+statement lets through: the mutant (not found) of a pair where a prefix
+matches survives C5. Its failure modes are different from \texttt{roundtrip}'s
 (finitely many pairs, equivalent mutants), and that difference is what makes
 agreement informative: two oracles that fail on different inputs agree often
 only when the statements are clear-cut. They can still fail together. A
@@ -148,17 +149,19 @@ proven; recall 0.82 against 0.87); no repeated runs.
 Lean-only. The card recommends \texttt{proof\_wanted}, \texttt{autoImplicit
 false}, no axioms, pinned versions and strict harnesses.
 
-\textbf{(a) The six candidates.} C3 has no defect. C2 is a specification
-error: it omits the converse (\texttt{==>} for \texttt{==}), a weaker
-statement fixed by adding. C1 and C6 are formalization errors: C1
-misrepresents ``anywhere'' as ``at the start'' (a correct search fails it, a
-wrong prefix search meets it); C6 adds a false obligation and is unprovable on
-inputs whose only matches are proper slices. C4 is a formalization error of
-the domain/definition kind: it changes which slices count by dropping the empty
-ones. C5 is vacuity: its requires fails at the degenerate instance
-$k=|s|$ (the empty suffix), as 05.2's example fails at $N'=0$. The card's F1 of
-0.18 on formalization errors is a warning that C1, C4 and C6 are the ones an
-LLM reviewer misses; this module classifies by witness and instrument instead.
+\textbf{(a) The six candidates.} C2 has no defect. C5 is a specification
+error: it omits the \texttt{!found} clause, a weaker statement fixed by adding.
+C4 and C6 are formalization errors: C4 misrepresents ``prefix'' as
+``suffix'' (\texttt{s[e..]} for \texttt{s[..e]}: a correct body fails it, a
+suffix search meets it); C6 adds a false obligation (\texttt{e == |s|}) and is
+unprovable on inputs whose shortest match is a proper prefix. C1 is a
+formalization error of the domain/definition kind: it changes which ends
+count by excluding the empty prefix (\texttt{0 < e}), and is unprovable where
+the empty prefix matches. C3 is vacuity: its requires fails at the degenerate
+instance $k=|s|$ (the whole string as its own prefix), as 05.2's example fails
+at $N'=0$. The card's F1 of 0.18 on formalization errors is a warning that C1,
+C4 and C6 are the ones an LLM reviewer misses; this module classifies by
+witness and instrument instead.
 The six statements use no subtraction, division or square root, so the
 totalization hazards do not arise; the nearest Verus analogue is
 \texttt{subrange}, whose bounds are only recommended, so a wrong quantifier
@@ -200,59 +203,65 @@ hidden truth leaking into a loop.
 \end{answer}
 \section*{Problem B3}\label{ans:B3}
 \begin{answer}
-Instruments: (i) the faithful H1 body against the candidate; (ii) the trivial
-body \texttt{b := false} (Verus \texttt{false}); (iii) a caller. The Dafny and
-Verus forms agree for every candidate (Verus' \texttt{s@.subrange(i, j)} is
-Dafny's \texttt{s[i..j]}, and \texttt{s.len() as int} is $|s|$).
+Instruments: (i) a faithful body against the candidate; (ii) the trivial body
+\texttt{found, e := false, 0} (Verus \texttt{None}); (iii) a caller. The Dafny
+and Verus forms agree for every candidate: \texttt{Some(e)} is
+\texttt{found} with that \texttt{e}, \texttt{None} is \texttt{!found}, and
+\texttt{s@.subrange(0, k)} and \texttt{s@.subrange(k, s.len() as int)} are
+\texttt{s[..k]} and \texttt{s[k..]}. C2 is the agent file's statement.
 
-\textbf{C1 --- anchoring error (prefixes only).} Witness \texttt{r = Chr('a')},
-\texttt{s = ['b','a']}: the faithful answer is true (\texttt{s[1..2] == ['a']});
-C1 forces false (no prefix \texttt{[]}, \texttt{['b']}, \texttt{['b','a']}
-matches). Instrument (i): the faithful body returns true there and fails C1's
-postcondition. A prefix search (T1's statement and body) verifies against C1:
-the statement accepts the wrong program.
+\textbf{C1 --- empty-string error (\texttt{0 < e}).} Witness \texttt{r = Eps},
+\texttt{s = []}: the faithful answer is found, \texttt{e = 0}. C1 forbids it
+(\texttt{0 < e <= 0} is impossible) and its \texttt{!found} clause is false too
+(\texttt{Matches(Eps, [])}), so no output meets C1 there; likewise at
+\texttt{(Star(Chr('a')), ['a'])}, where the empty prefix is the shortest
+match. Instrument (i): a faithful body fails; the trivial body fails as well.
 
-\textbf{C2 --- weak (one direction).} Witness \texttt{r = Eps}, \texttt{s = []}:
-the faithful answer is true (the empty slice); C2 allows false. Instrument
-(ii): \texttt{b := false} verifies. The faithful body verifies too, so (i)
-shows nothing; a caller that calls with \texttt{(Chr('a'), ['a'])} cannot
-conclude \texttt{b}.
+\textbf{C2 --- faithful.} Found implies a matching prefix ending at
+\texttt{e} and no shorter matching prefix, empty included; not found implies
+no prefix matches, empty and whole included; no requires. At every
+\texttt{(r, s)} it forces exactly the faithful answer, so no witness exists. A
+faithful body verifies, the trivial body fails at \texttt{(Eps, [])}, and every
+caller can call it and conclude both ways.
 
-\textbf{C3 --- faithful.} It ranges over every slice $0\le i\le j\le|s|$,
-empty ones included, with \texttt{==} in both directions and no requires: it
-is H1's statement. No witness exists: at any \texttt{(r, s)} it forces exactly
-the faithful answer. The faithful body verifies, the trivial body fails at
-\texttt{(Eps, [])}, and every caller can call it and conclude both ways.
-
-\textbf{C4 --- empty-string error ($i<j$).} Witness \texttt{r = Star(Chr('a'))},
-\texttt{s = ['b']}: the faithful answer is true (the empty slice matches
-\texttt{a*}); C4 forces false (the only non-empty slices are \texttt{['b']}).
-Also \texttt{(Eps, [])}: true against false. Instrument (i): the faithful body
-fails; H1's own use-site check on \texttt{(Eps, [])} could not be met.
-
-\textbf{C5 --- vacuous.} Its requires fails for every \texttt{s} at
-\texttt{k = |s|}, where \texttt{s[|s|..]} is empty (for \texttt{s = []}, at
+\textbf{C3 --- vacuous.} Its requires fails for every \texttt{s} at
+\texttt{k = |s|}, where \texttt{s[..|s|] == s} (for \texttt{s = []}, at
 \texttt{k = 0}). Witness: any input, e.g. \texttt{(Chr('a'), ['a'])}: the
-faithful answer is true, but no caller may call C5, so it promises nothing and
-every body, including \texttt{b := false}, meets it. Instrument (iii): a call
-at any concrete input fails its precondition, and the refutation at a concrete
-\texttt{s} (\texttt{|['a'][1..]| == 0}) verifies. Whether the verifier also
-confirms a trivial body depends on its finding the contradiction; the caller
-is the reliable instrument. ``Verifies with every body'' is the symptom, not
-a sign of faithfulness.
+faithful answer is found, \texttt{e = 1}, but no caller may call C3, so it
+promises nothing and every body, the trivial one included, meets it.
+Instrument (iii): a call at any concrete input fails its precondition, and the
+refutation at a concrete \texttt{s} (\texttt{['a'][..1] == ['a']}) verifies.
+Whether the verifier also confirms a trivial body depends on its finding the
+contradiction; the caller is the reliable instrument. ``Verifies with every
+body'' is the symptom, not a sign of faithfulness.
 
-\textbf{C6 --- over-strong.} Witness \texttt{r = Chr('a')}, \texttt{s = ['b','a']}:
-the first clause forces true, the second then demands
-\texttt{Matches(Chr('a'), ['b','a'])}, which is false: no value of \texttt{b}
-satisfies C6 there, so no body can. Instrument (i): the faithful body fails the
-second ensures; the trivial body fails too (at \texttt{(Eps, [])}). Inputs
-with no match, or with a whole-string match, hide the defect.
+\textbf{C4 --- anchoring error (suffixes).} Witness \texttt{r = Chr('a')},
+\texttt{s = ['a','b']}: the faithful answer is found, \texttt{e = 1}. No
+suffix (\texttt{['a','b']}, \texttt{['b']}, \texttt{[]}) matches, so C4 forces
+not found. Instrument (i): a faithful body returns found there and fails C4. A
+search for the leftmost matching suffix verifies against C4: the statement
+accepts the wrong program.
+
+\textbf{C5 --- weak (no \texttt{!found} clause).} Witness \texttt{r = Eps},
+\texttt{s = []}: the faithful answer is found, \texttt{e = 0}; C5 allows not
+found. Instrument (ii): the trivial body verifies. A faithful body verifies
+too, so (i) shows nothing; a caller at \texttt{(Chr('a'), ['a'])} cannot
+conclude found. This is the loosening the hostile brief invites.
+
+\textbf{C6 --- over-strong (\texttt{e == |s|}).} Witness \texttt{r = Chr('a')},
+\texttt{s = ['a','b']}: found would need \texttt{e = 2} and
+\texttt{Matches(Chr('a'), ['a','b'])}, which is false; not found would need no
+matching prefix, but \texttt{s[..1]} matches. No output meets C6 there, so no
+body can. Instrument (i): a faithful body fails the last ensures; the trivial
+body fails too (at \texttt{(Eps, [])}). Inputs with no match, or whose shortest
+matching prefix is the whole string, hide the defect.
 
 \textbf{What a verified body says.} That this body meets this statement, and
-nothing about whether the statement is the intended one: C2 and C5 accept a
-body that never searches, C1 and C4 accept wrong searches and reject the right
-one, C6 rejects every body on some inputs. Statement review needs a witness
-per verdict and the three instruments together.
+nothing about whether the statement is the intended one: C3 and C5 accept a
+body that never searches, C4 accepts a wrong search and rejects the right one,
+C1 and C6 reject every body on some inputs. Statement review needs a witness
+per verdict and the three instruments together; a contractor's green gate on
+a loosened statement is exactly what it catches.
 \end{answer}
 \section*{Problem B4}\label{ans:B4}
 \begin{answer}

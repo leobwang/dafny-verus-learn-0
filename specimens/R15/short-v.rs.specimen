@@ -1,0 +1,53 @@
+// The worked loop with one character changed (not an item): `>=` for `>` in the
+// first guard. Same invariants, same proof lines: run the proof.
+use vstd::prelude::*;
+
+verus! {
+
+pub open spec fn occurs_at_r15(s: Seq<char>, w: Seq<char>, p: int) -> bool {
+    0 <= p && p + w.len() <= s.len() && s.subrange(p, p + w.len()) == w
+}
+
+pub fn has_word_short_r15(s: &Vec<char>, w: &Vec<char>) -> (b: bool)
+    ensures
+        b == exists|p: int| #[trigger] occurs_at_r15(s@, w@, p),
+{
+    if w.len() >= s.len() {
+        return false;
+    }
+    let last = s.len() - w.len();
+    let mut p: usize = 0;
+    loop
+        invariant
+            w.len() <= s.len(),
+            last == s.len() - w.len(),
+            p <= last,
+            forall|q: int| 0 <= q < p ==> !#[trigger] occurs_at_r15(s@, w@, q),
+        decreases last - p,
+    {
+        let mut k: usize = 0;
+        while k < w.len() && s[p + k] == w[k]
+            invariant
+                w.len() <= s.len(),
+                last == s.len() - w.len(),
+                p <= last,
+                k <= w.len(),
+                s@.subrange(p as int, p + k) =~= w@.subrange(0, k as int),
+            decreases w.len() - k,
+        {
+            k = k + 1;
+        }
+        if k == w.len() {
+            assert(w@.subrange(0, k as int) =~= w@);
+            assert(occurs_at_r15(s@, w@, p as int));
+            return true;
+        }
+        assert(s@.subrange(p as int, p + w.len())[k as int] != w@[k as int]);
+        if p == last {
+            return false;
+        }
+        p = p + 1;
+    }
+}
+
+} // verus!

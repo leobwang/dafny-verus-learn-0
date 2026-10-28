@@ -9,8 +9,8 @@
 \section*{Instructions}
 Commit the R15 predictions before reading B3 (\texttt{scripts/firsttry.sh R15
 --check}). B1 and B2 are paper cards: use exactly the pinned local range, and
-name missing information instead of inventing it. B3 needs your completed H1
-in at least one language. B4 needs two fresh Claude sessions. B6 is Lab
+name missing information instead of inventing it. B3 reviews the agent file's
+statement: answer it before your \texttt{/contract R15} session. B4 needs two fresh Claude sessions. B6 is Lab
 $\beta$'s pre-registration: it is graded by \texttt{/grade-paper R15}, every
 method dimension must be at least 3 before any lab run, and \texttt{fvh}
 refuses a run whose PREREG hash is not on an unlocked gradebook row. A graded
@@ -73,80 +73,104 @@ instrument that catches it, and which have none, and why?
 
 % item: R15.B3
 \begin{problem}[statement-review]\label{prob:B3}
-Six frozen candidate statements were proposed for the unanchored search of
-H1 (does some slice of \texttt{s}, possibly empty, match \texttt{r}?). They are
-printed below in both languages, over layer A1 (\texttt{Re}, \texttt{Matches}
-and \texttt{matches}); the bodies are omitted. The labels C1--C6 carry no
-meaning.
+Six frozen candidate statements were proposed for the leftmost-shortest match
+end of the agent file (\texttt{FirstMatchEndR15}, \texttt{first\_match\_end\_r15}):
+does some prefix of \texttt{s}, possibly empty, match \texttt{r}, and if so,
+where does the shortest one end? They are printed below in both languages,
+over layer A1 (\texttt{Re}, \texttt{Matches} and \texttt{matches}); the bodies
+are omitted. The labels C1--C6 carry no meaning. The red-team contractor of
+the agent file is briefed to loosen exactly this statement: B3 is the review
+that would catch a loosened statement before anyone accepts a green gate on
+it.
 
 \begin{dafnycode}
-method ContainsC1R15(r: Re, s: seq<char>) returns (b: bool)
-  ensures b == exists j | 0 <= j <= |s| :: Matches(r, s[..j])
+method FirstEndC1R15(r: Re, s: seq<char>) returns (found: bool, e: nat)
+  ensures found ==> 0 < e <= |s| && Matches(r, s[..e])
+  ensures found ==> forall k | 0 <= k < e :: !Matches(r, s[..k])
+  ensures !found ==> forall k | 0 <= k <= |s| :: !Matches(r, s[..k])
 
-method ContainsC2R15(r: Re, s: seq<char>) returns (b: bool)
-  ensures b ==> exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
+method FirstEndC2R15(r: Re, s: seq<char>) returns (found: bool, e: nat)
+  ensures found ==> e <= |s| && Matches(r, s[..e])
+  ensures found ==> forall k | 0 <= k < e :: !Matches(r, s[..k])
+  ensures !found ==> forall k | 0 <= k <= |s| :: !Matches(r, s[..k])
 
-method ContainsC3R15(r: Re, s: seq<char>) returns (b: bool)
-  ensures b == exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
+method FirstEndC3R15(r: Re, s: seq<char>) returns (found: bool, e: nat)
+  requires forall k | 0 <= k <= |s| :: s[..k] != s
+  ensures found ==> e <= |s| && Matches(r, s[..e])
+  ensures found ==> forall k | 0 <= k < e :: !Matches(r, s[..k])
+  ensures !found ==> forall k | 0 <= k <= |s| :: !Matches(r, s[..k])
 
-method ContainsC4R15(r: Re, s: seq<char>) returns (b: bool)
-  ensures b == exists i, j | 0 <= i < j <= |s| :: Matches(r, s[i..j])
+method FirstEndC4R15(r: Re, s: seq<char>) returns (found: bool, e: nat)
+  ensures found ==> e <= |s| && Matches(r, s[e..])
+  ensures found ==> forall k | 0 <= k < e :: !Matches(r, s[k..])
+  ensures !found ==> forall k | 0 <= k <= |s| :: !Matches(r, s[k..])
 
-method ContainsC5R15(r: Re, s: seq<char>) returns (b: bool)
-  requires forall k | 0 <= k <= |s| :: |s[k..]| > 0
-  ensures b == exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
+method FirstEndC5R15(r: Re, s: seq<char>) returns (found: bool, e: nat)
+  ensures found ==> e <= |s| && Matches(r, s[..e])
+  ensures found ==> forall k | 0 <= k < e :: !Matches(r, s[..k])
 
-method ContainsC6R15(r: Re, s: seq<char>) returns (b: bool)
-  ensures b == exists i, j | 0 <= i <= j <= |s| :: Matches(r, s[i..j])
-  ensures b ==> Matches(r, s)
+method FirstEndC6R15(r: Re, s: seq<char>) returns (found: bool, e: nat)
+  ensures found ==> e <= |s| && Matches(r, s[..e])
+  ensures found ==> forall k | 0 <= k < e :: !Matches(r, s[..k])
+  ensures !found ==> forall k | 0 <= k <= |s| :: !Matches(r, s[..k])
+  ensures found ==> e == |s|
 \end{dafnycode}
 
+{\lstset{basicstyle=\ttfamily\footnotesize}
 \begin{veruscode}
-fn contains_c1_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+fn first_end_c1_r15(r: &Re, s: &Vec<char>) -> (res: Option<usize>)
     ensures
-        b == exists|j: int| 0 <= j <= s.len() && #[trigger] matches(*r, s@.subrange(0, j)),
+        res matches Some(e) ==> 0 < e <= s.len() && matches(*r, s@.subrange(0, e as int)),
+        res matches Some(e) ==> forall|k: int| 0 <= k < e ==> !#[trigger] matches(*r, s@.subrange(0, k)),
+        res is None ==> forall|k: int| 0 <= k <= s.len() ==> !#[trigger] matches(*r, s@.subrange(0, k)),
 
-fn contains_c2_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+fn first_end_c2_r15(r: &Re, s: &Vec<char>) -> (res: Option<usize>)
     ensures
-        b ==> exists|i: int, j: int|
-            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
+        res matches Some(e) ==> e <= s.len() && matches(*r, s@.subrange(0, e as int)),
+        res matches Some(e) ==> forall|k: int| 0 <= k < e ==> !#[trigger] matches(*r, s@.subrange(0, k)),
+        res is None ==> forall|k: int| 0 <= k <= s.len() ==> !#[trigger] matches(*r, s@.subrange(0, k)),
 
-fn contains_c3_r15(r: &Re, s: &Vec<char>) -> (b: bool)
-    ensures
-        b == exists|i: int, j: int|
-            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
-
-fn contains_c4_r15(r: &Re, s: &Vec<char>) -> (b: bool)
-    ensures
-        b == exists|i: int, j: int|
-            0 <= i < j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
-
-fn contains_c5_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+fn first_end_c3_r15(r: &Re, s: &Vec<char>) -> (res: Option<usize>)
     requires
-        forall|k: int| 0 <= k <= s.len() ==> #[trigger] s@.subrange(k, s.len() as int).len() > 0,
+        forall|k: int| 0 <= k <= s.len() ==> #[trigger] s@.subrange(0, k) != s@,
     ensures
-        b == exists|i: int, j: int|
-            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
+        res matches Some(e) ==> e <= s.len() && matches(*r, s@.subrange(0, e as int)),
+        res matches Some(e) ==> forall|k: int| 0 <= k < e ==> !#[trigger] matches(*r, s@.subrange(0, k)),
+        res is None ==> forall|k: int| 0 <= k <= s.len() ==> !#[trigger] matches(*r, s@.subrange(0, k)),
 
-fn contains_c6_r15(r: &Re, s: &Vec<char>) -> (b: bool)
+fn first_end_c4_r15(r: &Re, s: &Vec<char>) -> (res: Option<usize>)
     ensures
-        b == exists|i: int, j: int|
-            0 <= i <= j <= s.len() && #[trigger] matches(*r, s@.subrange(i, j)),
-        b ==> matches(*r, s@),
+        res matches Some(e) ==> e <= s.len() && matches(*r, s@.subrange(e as int, s.len() as int)),
+        res matches Some(e) ==> forall|k: int| 0 <= k < e ==> !#[trigger] matches(*r, s@.subrange(k, s.len() as int)),
+        res is None ==> forall|k: int| 0 <= k <= s.len() ==> !#[trigger] matches(*r, s@.subrange(k, s.len() as int)),
+
+fn first_end_c5_r15(r: &Re, s: &Vec<char>) -> (res: Option<usize>)
+    ensures
+        res matches Some(e) ==> e <= s.len() && matches(*r, s@.subrange(0, e as int)),
+        res matches Some(e) ==> forall|k: int| 0 <= k < e ==> !#[trigger] matches(*r, s@.subrange(0, k)),
+
+fn first_end_c6_r15(r: &Re, s: &Vec<char>) -> (res: Option<usize>)
+    ensures
+        res matches Some(e) ==> e <= s.len() && matches(*r, s@.subrange(0, e as int)),
+        res matches Some(e) ==> forall|k: int| 0 <= k < e ==> !#[trigger] matches(*r, s@.subrange(0, k)),
+        res is None ==> forall|k: int| 0 <= k <= s.len() ==> !#[trigger] matches(*r, s@.subrange(0, k)),
+        res matches Some(e) ==> e == s.len(),
 \end{veruscode}
+}
 
 For each candidate: (a) classify it as faithful or name its defect (for
 instance weak, vacuous, over-strong, an anchoring error or an empty-string
 error; a class may occur more than once or not at all), and check that the two
 languages say the same thing; (b) give a witness: a concrete \texttt{r} and
-\texttt{s}, the faithful answer there, and what the candidate forces, allows or
-forbids instead (for the faithful candidate, argue why no witness exists);
-(c) say which instrument exposes the defect, and what it shows: your faithful
-H1 body fails to verify against the candidate; a trivial body
-(\texttt{b := false}, \texttt{false}) verifies against it; or a caller cannot
-call it, or cannot conclude anything from its result. A body that verifies is
-evidence about the body. State what it says about the statement. Write the
-witnesses as values you could run; do not write H1's invariants here.
+\texttt{s}, the faithful answer there (found or not, and \texttt{e}), and what
+the candidate forces, allows or forbids instead (for the faithful candidate,
+argue why no witness exists); (c) say which instrument exposes the defect, and
+what it shows: a faithful body fails to verify against the candidate; a trivial
+body (\texttt{found, e := false, 0}; \texttt{None}) verifies against it; or a
+caller cannot call it, or cannot conclude anything from its result. A body
+that verifies is evidence about the body. State what it says about the
+statement. Write the witnesses as values you could run; do not write a body
+or an invariant for the agent's method here.
 \end{problem}
 
 % item: R15.B4
