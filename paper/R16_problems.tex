@@ -1,0 +1,270 @@
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R16 --- Capstone + Lab $\gamma$ \\ \large Written problems}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\sloppy
+\section*{Instructions}
+Commit the R16 predictions before reading B1 (\texttt{scripts/firsttry.sh R16
+--check}). B1 is the blueprint: write it after the chapter's ``On paper
+first'' section and before you write any statement in
+\texttt{R16\_Statements.dfy} or \texttt{statements.rs}; run
+\texttt{/grade-paper R16} in a fresh session and get at least 3 on every B1
+dimension before you formalize anything (design \S7.1's hard-tier rule). B2
+and B3 are paper cards: use exactly the pinned local range, and name missing
+information instead of inventing it. B4 reviews candidate statements for the
+emitter: answer it once your own H1 statements are written and before your
+statement-only review (\texttt{/review R16 --statements}). B5 is Lab
+$\gamma$'s pre-registration: it is graded by \texttt{/grade-paper R16}, every
+method dimension must be at least 3 before any lab run, and \texttt{fvh}
+refuses a run whose PREREG hash is not on an unlocked gradebook row; it also
+refuses to unpack the crate tasks before your statement files are committed.
+Claude is both the grader of this paper and a subject of Lab $\gamma$; say so
+wherever it matters. The one-page memo, contract R-v2 and the final
+\texttt{TRUST.md} are the chapter's last section's work, reviewed in the code
+and oral review, not here.
+
+% item: R16.B1
+\begin{problem}[informal-proof-first]\label{prob:B1}
+\textbf{The blueprint} (45 minutes). Layer A5 gives the VM (\dfy{Accepts},
+opaque, used through its four one-step lemmas and \dfy{AcceptsInside};
+\dfy{AcceptsFrom}, acceptance with some fuel), the emitter (\dfy{Emit(r, pc)},
+the code of \dfy{r} placed at address \dfy{pc}, which falls through to the
+address after it; \dfy{EmitProg(r)}, that code at address 0 followed by one
+\dfy{IMatch}), \dfy{CodeAt} and the layout lemmas of each constructor's code.
+The Verus names are \vrs{accepts}, \vrs{accepts_from}, \vrs{emit},
+\vrs{clen}, \vrs{prog} and \vrs{code_at}. The capstone's last theorem is H5's,
+whose statement your exercise file prints: the compiled program accepts
+exactly the words \dfy{r} matches. Before you write any statement, write, in
+both languages wherever they differ:
+\begin{enumerate}
+\item[(a)] whether that whole-program fact can be proved, in each direction,
+  by structural induction on \dfy{r} as it stands; if not, the first
+  constructor case where the induction hypothesis is not the fact the case
+  needs, and what the case needs instead;
+\item[(b)] the two statements you will freeze, completeness and soundness, as
+  formulas over A5's names, for the code of \dfy{r} at \dfy{pc} inside an
+  arbitrary program, with every hypothesis and every quantifier's range; why
+  neither statement may say where the program ends; what the soundness
+  conclusion must bound; and what more, if anything, the Verus form needs;
+\item[(c)] how (b) gives back the whole-program fact in each direction: which
+  continuation, which word it accepts, and with what fuel;
+\item[(d)] completeness's proof: the fuelled helper you will state (its exact
+  \texttt{requires} and \texttt{ensures}), its induction and measure, and each
+  constructor's case: the layout lemma and the one-step lemmas it uses, and how
+  the fuels of the pieces compose; for \dfy{Star}, what the inner induction
+  runs on and why its first chunk must be non-empty;
+\item[(e)] soundness's proof: the fuelled helper's statement, its measure,
+  and why the measure decreases in every case (name the cases that spend no
+  fuel before they recurse, and what they recurse on); how an \dfy{ISplit}'s two
+  branches are handled; and how a pass through \dfy{Star}'s body that reads
+  nothing is treated;
+\item[(f)] jump threading (the file's \dfy{Hop} and \dfy{Shortcut}): the two
+  fuelled directions, each as a statement; for each, how the fuel of one run
+  bounds the fuel of the other; and the one instruction case where the two
+  programs differ;
+\item[(g)] every step you cannot yet justify, declared as a gap.
+\end{enumerate}
+The test of a blueprint: could a contractor formalize it without inventing a
+statement? Write formulas in \LaTeX{} or in \dfy{...}/\vrs{...} code; the
+grader reads either. Stating the shapes is the task: copy no statement from
+anywhere, and write no proof body for H2--H5 here.
+\end{problem}
+
+% item: R16.B2
+\begin{problem}[paper-card]\label{prob:B2}
+Read local card 07.3, \emph{Inductive Deductive Synthesis: Enabling AI to
+Generate Formally Verified Systems}. Use exactly lines 2877--2907 of your
+local \texttt{cheatsheets.md}; the excerpt ends before 07.4. Verify the local
+bytes:
+\begin{verbatim}
+sed -n '2877,2907p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+4ce943081668ca8b55f34e2a5fa18422c8c6f0d444bc542c39fb7ed97fe5c75a  -
+\end{verbatim}
+A mismatch needs an author re-pin. Fill Task shape, Oracle, Trust, Cheat
+surface, Metric, Budget, Variance and Artifact; the card score is the minimum
+of the eight field scores. Keep every reported figure with its row and column
+(system, benchmark, specification set) and do not pool what the card keeps
+apart.
+
+Then tie the card to R16, whose record in PLAN reads it as implementation and
+proof grown together, with stalled designs discarded. (a) Map the card's step
+kinds and its rule for deferred holes onto R16's workflow (the holes the gate
+counts, the blueprint, the frozen statements, the proofs), and say which of
+the card's mechanisms has no counterpart in a course that freezes its
+statements before the proofs and gives the emitter. (b) Name the event in R16
+that plays the part of a discarded design: what stalls, how you would know
+that it stalled, and what replaces it; compare the card's trigger for
+discarding a design with yours. (c) The card names an audit of finished
+proofs: say what it checks, quoting the excerpt, and what the excerpt says
+about its limits; then give one of B4's candidates whose proof such an audit
+could pass although the statement is defective, with the course instrument
+that catches it. (d) Say what the card's ablations do and do not license about
+R16's own process (one learner, one capstone, no repeats), keeping each figure
+with its row.
+\end{problem}
+
+% item: R16.B3
+\begin{problem}[paper-card]\label{prob:B3}
+Read local card 12.9, \emph{Autonomous Research Agents: A Survey of AI
+Scientists and the Verification Gap}. Use exactly lines 5418--5445 of your
+local \texttt{cheatsheets.md}; the excerpt ends before 12.10. Verify the local
+bytes:
+\begin{verbatim}
+sed -n '5418,5445p' ~/code/research/agentic-formal-veri/cheatsheets.md | sha256sum
+ad66a46bbab0a8836a15cefe8ab48b162310515273b479a6b46747d0a1bf9e43  -
+\end{verbatim}
+Fill the eight fields as in B2. Keep every rate with the number of entries it
+is computed over, and attribute to the card, not to the paper, any figure or
+notation that the excerpt marks as the card's own.
+
+Then tie the card to R16, whose record in PLAN reads it as the verification
+gap: R16 ships a system and a claim that an outside checker can re-run.
+(a) R16 makes two claims: \texttt{rexc}'s whole-program theorem and Lab
+$\gamma$'s inflation estimate. Place each claim, and each check that supports
+it (the gate's verdict, \texttt{rexc trust-report}, the CLI's tests, the
+batch's logs), and each of Lab $\gamma$'s naive graders, on the card's
+verification ladder, naming the rungs as the excerpt does. (b) Using the
+card's autonomy levels, say where Lab $\gamma$ sits as a system and where one
+delivery run's loop sits, and why. (c) List what an outside checker needs to
+re-run each of the two claims (commands, pins, artifacts) and what that
+checker must still trust; say whether the card's ladder accounts for that
+trust, quoting the excerpt. (d) Name one item of the card's disclosure
+checklist that Lab $\gamma$'s report cannot satisfy as designed, and why.
+\end{problem}
+
+% item: R16.B4
+\begin{problem}[statement-review]\label{prob:B4}
+Six frozen candidate statements were proposed for the emitter's correctness
+facts, over layers A1 and A5 (\dfy{Re}, \dfy{Matches}, \dfy{Prog},
+\dfy{Inst}, \dfy{CodeAt}, \dfy{Emit}, \dfy{AcceptsFrom}). They are printed
+below in Dafny with the bodies omitted; part (d) asks about Verus. The labels
+C1--C6 carry no meaning, and a candidate may be true and still be the wrong
+statement to freeze.
+Do B4 only after your own statements (H1) are committed and frozen: the
+candidates are near misses of the statements you write, so reading them first
+would answer H1 for you.
+
+\begin{dafnycode}
+lemma CandC1R16(q: Prog, e: Re, a: int, x: seq<char>, y: seq<char>)
+  requires CodeAt(q, a, Emit(e, a))
+  requires |q| < a + |Emit(e, a)|
+  requires Matches(e, x)
+  ensures AcceptsFrom(q, a, x + y)
+
+lemma CandC2R16(q: Prog, e: Re, a: int, z: seq<char>)
+  requires CodeAt(q, a, Emit(e, a))
+  requires AcceptsFrom(q, a, z)
+  ensures exists x, y :: z == x + y && Matches(e, x)
+
+lemma CandC3R16(q: Prog, e: Re, a: int, x: seq<char>)
+  requires CodeAt(q, a, Emit(e, a))
+  requires a + |Emit(e, a)| < |q|
+  requires q[a + |Emit(e, a)|] == IMatch
+  requires Matches(e, x)
+  ensures AcceptsFrom(q, a, x)
+
+lemma CandC4R16(q: Prog, e: Re, a: int, x: seq<char>, y: seq<char>)
+  requires CodeAt(q, a, Emit(e, a))
+  requires Matches(e, x)
+  requires AcceptsFrom(q, a + |Emit(e, a)| + 1, y)
+  ensures AcceptsFrom(q, a, x + y)
+
+lemma CandC5R16(q: Prog, e: Re, a: int, z: seq<char>)
+  requires CodeAt(q, a, Emit(e, a))
+  requires AcceptsFrom(q, a, z)
+  ensures exists j :: Matches(e, z[..j]) && AcceptsFrom(q, a + |Emit(e, a)|, z[j..])
+
+lemma CandC6R16(q: Prog, e: Re, a: int, x: seq<char>, y: seq<char>)
+  requires CodeAt(q, a, Emit(e, a))
+  requires a + |Emit(e, a)| == |q|
+  requires Matches(e, x)
+  requires AcceptsFrom(q, a + |Emit(e, a)|, y)
+  ensures AcceptsFrom(q, a, x + y)
+\end{dafnycode}
+
+For each candidate: (a) classify it as faithful or name its defect (for
+instance vacuous, weak, false, ill-formed, or true but not inductive: no
+proof of it by induction on itself goes through; a class may occur more than
+once or not at all); (b) give a witness: a concrete program \dfy{q}, regex
+\dfy{e}, address \dfy{a} and words, and what the candidate forces, allows,
+forbids or fails to say there, against what the emitter's code actually does
+(for a faithful candidate, argue why no witness exists); (c) say which
+instrument exposes the defect, and what it shows: a faithful proof fails; a
+body that simulates nothing verifies; the verifier rejects the statement
+itself; a caller cannot call it, or cannot conclude what it needs from it; or
+an induction cannot use it as its own hypothesis. (d) For C5, say what the
+same quantifier means in Verus, where the slices are written with
+\vrs{subrange}, what the verifier then reports, and which instrument exposes
+the defect there. (e) State what a verified body says about a statement.
+Write the witnesses as values you could run; write no body, invariant or proof
+for H2--H5 here.
+\end{problem}
+
+% item: R16.B5
+\begin{problem}[pre-registration]\label{prob:B5}
+Pre-register Lab $\gamma$ (PLAN \S4.3). Its question: what fraction of
+naive-grader successes survive your gate (\texttt{rexc trust-report}), by
+cheat class?
+
+\textbf{Fixed by the course.} The unit is a delivery: one run's final state.
+The naive graders $g$ are five: the run's exit code; \texttt{cargo build} and
+\texttt{cargo test}; a ``verified'' substring in the output; one verifier
+seed; a run with \texttt{--allow-warnings}. For each, the inflation is $I_g =
+1 - P(\text{gate PASS} \mid g \text{ PASS})$. The primary estimand is the
+pooled $I$ over the deliveries that at least one naive grader passes,
+estimated as a ratio of counts, with deliveries clustered by task. The primary
+analysis is one estimate with a 95\% cluster-bootstrap interval (10,000
+resamples of tasks) and no test; the inflation per cheat class and per naive
+grader is descriptive, with Wilson intervals; the 4 impossible tasks are
+reported separately. The data: every Lab $\alpha$ and Lab $\beta$ success,
+re-graded with no new model call, plus 12 crate tasks (8 possible, 4
+impossible), run by Claude (2 repeated runs) and by Qwen (3 repeats). Validity
+rules: the crate tasks are built over \texttt{rexc}'s parser, character
+classes, printer and CLI, never over the emitter, the simulation or jump
+threading; \texttt{fvh} refuses to unpack \texttt{bench/local/r/crate/} until
+your R16 statement files are committed (the registry's \texttt{statements}
+pin, checked by \texttt{python -m fvh unseal R16}); CI never calls a model.
+
+\textbf{Given numbers} (the course's budget for Lab $\gamma$, PLAN \S4.3).
+The budget formula, per arm: calls $=$ tasks $\times$ attempts $\times$ rounds
+$\times$ arms $\times$ repeats, plus the sentinel calls ($\Delta$148); runs
+$=$ tasks $\times$ arms $\times$ repeats. Claude, harness-executed: 12 tasks
+$\times$ 1 attempt $\times$ at most 25 rounds $\times$ 1 arm $\times$ 2
+repeated runs, and at most 10 sentinel calls. Qwen in agent mode
+(\texttt{opencode} in a per-run container): 12 tasks $\times$ 1 attempt
+$\times$ at most 40 turns $\times$ 1 arm $\times$ 3 repeats. PLAN's working
+figure is about 15 minutes of GPU time per Qwen run [A], to be replaced by a
+measurement at your settings before the batch. The registry's R16 budget,
+which \texttt{fvh} enforces: 610 Claude calls, 24 Claude runs, 1,440 Qwen
+calls, 36 Qwen runs and 9 GPU-hours. PLAN's fallback if the measured cost puts
+the plan over its ceiling: two Qwen repeats. Write the Qwen settings in the
+terms of the apparatus's pinned OpenAI-compatible endpoint (the cap on output
+tokens, the pinned context length), as for Lab $\beta$.
+
+Write every field of the answer template: claim (and what would refute it);
+metric and estimator (the unit; each naive grader's PASS rule; the gate's
+PASS, FAIL and UNKNOWN and how UNKNOWN counts; $I_g$ and the pooled $I$ as a
+ratio of counts); primary analysis (the interval's resampling written out,
+with its seed; the per-class and per-grader Wilson intervals; the impossible
+tasks); data (which Lab $\alpha$ and $\beta$ artifacts are re-graded, from
+where and by what; the crate tasks; the arms, and the Claude runs as repeated
+runs); budget arithmetic per arm, recomputed against the registry, with any
+reconciliation stated; generation settings; cost per arm (tokens in and out,
+GPU-seconds, wall clock); GPU-hours against the ceiling, including the
+largest per-run cost your plan tolerates at a ceiling $C$; the truncation rate
+as a sensitivity line; precision (there is no test: replace the MDE by the
+expected half-width of the pooled $I$'s interval at $I \in \{0.1, 0.3, 0.5\}$
+for about 40 to 80 naive successes, from a simulation you write, with its
+assumptions and seed; pre-register the half-width, not a power; and say what
+that precision cannot resolve); cheat surface and gate; missing results and
+exclusions; \texttt{firsttry} intervals (80\% prediction intervals written
+before any data); stopping rule; fallback; contamination; the statement-sha
+unpack gate (what it checks, when, and what it protects); disclosure; and the
+batch plan binding (\texttt{plan-sha256:}). Changing the block after grading
+needs a new grade.
+\end{problem}
+
+\end{document}

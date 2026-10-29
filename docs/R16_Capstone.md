@@ -958,26 +958,10 @@ violation in itself. It is plain Rust compiled into the `rexc` binary, never
 verified, so its rules are written down where they can be checked: in
 `research/TRUST.md`, before you run it on any delivery.
 
-The skeleton gives the types and nothing else:
-
-```rust
-/// The gate's three answers.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Verdict {
-    Pass,
-    Fail,
-    Unknown,
-}
-
-/// What the gate collected about one delivery; add the fields your rules need.
-#[derive(Debug, Default)]
-pub struct Evidence {
-    pub gate_exit: Option<i32>,
-    pub holes: Option<u32>,
-    pub audit_findings: Option<u32>,
-    pub freeze_findings: Option<u32>,
-}
-```
+The skeleton gives the types and nothing else: an enum of the three answers,
+an `Evidence` struct whose fields are optional (`gate_exit`, `holes`,
+`audit_findings`, `freeze_findings`; add the fields your rules need), and a
+function from the evidence to the answer that returns UNKNOWN for everything.
 
 Each field is an instrument from an earlier module, and `None` means it did not
 run. The rule that matters most is the asymmetry. A single concrete failure is
@@ -1087,7 +1071,9 @@ together, stalled designs discarded) and 12.9 (the AI-scientist survey's
 verification gap) are the next two: say what each source claims, and how R16's
 shipped system, a claim an outside checker can re-run, bears on it. Keep each
 claim attached to its source. The statement-review problem asks you to classify
-frozen candidates for the emitter, with a witness for each, as §3 did. The last
+frozen candidates for the emitter, with a witness for each, as §3 did. Do it
+only after your own statements are committed: its candidates are near misses
+of H1. The last
 problem is Lab γ's pre-registration, with every field of §10 and your own
 precision simulation's numbers.
 

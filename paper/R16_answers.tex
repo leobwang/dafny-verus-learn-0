@@ -1,0 +1,172 @@
+% R16_answers.tex — your answers to paper/R16_problems.tex (learner-owned). One section
+% per problem, keyed by its \label{ans:B<n>} anchor; the GRADER comment convention and the
+% PREREG markers are paper/template_answers.tex's. /grade-paper hashes exactly the lines
+% from PREREG-BEGIN to PREREG-END, inclusive (B5): editing anything between them after
+% grading changes the hash, and the runs stay locked.
+\documentclass[11pt]{article}
+\input{preamble}
+\title{R16 --- Capstone + Lab $\gamma$ \\ \large My answers}
+\author{dafny-verus-learn-0}
+\date{}
+\begin{document}
+\maketitle
+\sloppy
+\section*{Problem B1 (informal proof first: the blueprint)}\label{ans:B1}
+\begin{answer}
+% Expect the grader to try to counterexample each formula (the rubric's Probe X).
+\textbf{(a) The whole-program fact by structural induction (each direction; the
+first case that breaks, and what it needs):} \vspace{2cm}
+
+\textbf{(b) The two statements (formulas over A5's names, every hypothesis and
+range; why neither fixes the program's end; the soundness bound; the Verus
+form):} \vspace{3cm}
+
+\textbf{(c) The whole-program fact from (b), each direction:} \vspace{1.5cm}
+
+\textbf{(d) Completeness's proof (the fuelled helper, its measure, each
+constructor's case, \texttt{Star}'s inner induction):} \vspace{3cm}
+
+\textbf{(e) Soundness's proof (the fuelled helper, its measure and why it
+decreases, \texttt{ISplit}, an empty pass through \texttt{Star}'s body):}
+\vspace{3cm}
+
+\textbf{(f) Jump threading (both fuelled directions, the fuel bounds, the case
+where the programs differ):} \vspace{2cm}
+
+\textbf{(g) Declared gaps:} \vspace{1cm}
+\end{answer}
+\section*{Problem B2}\label{ans:B2}
+\begin{answer}
+\textbf{Task shape:} \vspace{1cm}
+
+\textbf{Oracle:} \vspace{1cm}
+
+\textbf{Trust:} \vspace{1cm}
+
+\textbf{Cheat surface:} \vspace{1cm}
+
+\textbf{Metric:} \vspace{1cm}
+
+\textbf{Budget:} \vspace{1cm}
+
+\textbf{Variance:} \vspace{1cm}
+
+\textbf{Artifact:} \vspace{1cm}
+
+\textbf{(a) The card's steps and holes in R16's workflow:} \vspace{2cm}
+
+\textbf{(b) R16's discarded design, and the two triggers:} \vspace{2cm}
+
+\textbf{(c) The card's audit, and a B4 candidate it could pass:} \vspace{2cm}
+
+\textbf{(d) What the ablations license about R16:} \vspace{1.5cm}
+\end{answer}
+\section*{Problem B3}\label{ans:B3}
+\begin{answer}
+\textbf{Task shape:} \vspace{1cm}
+
+\textbf{Oracle:} \vspace{1cm}
+
+\textbf{Trust:} \vspace{1cm}
+
+\textbf{Cheat surface:} \vspace{1cm}
+
+\textbf{Metric:} \vspace{1cm}
+
+\textbf{Budget:} \vspace{1cm}
+
+\textbf{Variance:} \vspace{1cm}
+
+\textbf{Artifact:} \vspace{1cm}
+
+\textbf{(a) R16's two claims, their checks and the naive graders on the
+ladder:} \vspace{2cm}
+
+\textbf{(b) Lab $\gamma$ and one delivery run on the autonomy levels:}
+\vspace{1.5cm}
+
+\textbf{(c) What an outside checker re-runs, and must still trust:}
+\vspace{2cm}
+
+\textbf{(d) The disclosure item Lab $\gamma$ cannot satisfy:} \vspace{1cm}
+\end{answer}
+\section*{Problem B4}\label{ans:B4}
+\begin{answer}
+\textbf{C1} (class; witness; instrument): \vspace{1.5cm}
+
+\textbf{C2:} \vspace{1.5cm}
+
+\textbf{C3:} \vspace{1.5cm}
+
+\textbf{C4:} \vspace{1.5cm}
+
+\textbf{C5:} \vspace{1.5cm}
+
+\textbf{C6:} \vspace{1.5cm}
+
+\textbf{(d) C5 in Verus:} \vspace{1.5cm}
+
+\textbf{(e) What a verified body says about a statement:} \vspace{1.5cm}
+\end{answer}
+% PREREG-BEGIN
+\section*{Problem B5 (pre-registration)}\label{ans:B5}
+\begin{answer}
+\textbf{Claim, and the outcome that would refute it:} \dots
+
+\textbf{Metric and estimator} (the unit; each naive grader's PASS rule; the
+gate's PASS, FAIL and UNKNOWN and how UNKNOWN counts; $I_g$ and the pooled $I$
+as a ratio of counts): \dots
+
+\textbf{Primary analysis} (the cluster-bootstrap resampling written out and its
+seed; the per-class and per-grader Wilson intervals; the impossible tasks):
+\dots
+
+\textbf{Data and arms} (the Lab $\alpha$ and $\beta$ successes re-graded: which
+artifacts, from where, by what, with no model call; the crate tasks and their
+source; each arm's policy and prompt hashes; Claude's repeated runs, Qwen's
+repeats): \dots
+
+\textbf{Budget arithmetic} (per arm: calls = tasks $\times$ attempts $\times$
+rounds $\times$ arms $\times$ repeats, plus sentinels; runs; against the
+registry, with any reconciliation): \dots
+
+\textbf{Generation settings} (Qwen in the pinned endpoint's terms: thinking,
+the cap on output tokens, the pinned context length, temperature, the seed list,
+pairwise disjoint; the agent-mode container; for Claude the pinned argv): \dots
+
+\textbf{Cost per arm} (tokens in and out, GPU-seconds, wall clock): \dots
+
+\textbf{GPU-hours against the ceiling} (the per-run cost and its source, the
+arm's GPU-hours, the largest per-run cost the plan tolerates at a ceiling $C$):
+\dots
+
+\textbf{Truncation rate} (the sensitivity line): \dots
+
+\textbf{Precision} (the simulation, its assumptions and seed, the expected
+half-width at $I \in \{0.1, 0.3, 0.5\}$ for 40 to 80 naive successes, the
+registered half-width, what it cannot resolve): \dots
+
+\textbf{Cheat surface and gate}: \dots
+
+\textbf{Missing results and exclusions}: \dots
+
+\textbf{\texttt{firsttry} intervals} (80\%, before any data): \dots
+
+\textbf{Stopping rule}: \dots
+
+\textbf{Fallback}: \dots
+
+\textbf{Contamination}: \dots
+
+\textbf{The statement-sha unpack gate} (what it checks, when, what it
+protects): \dots
+
+\textbf{Disclosure}: \dots
+
+\textbf{Batch plan binding} (the plan file, and its sha256 on a line of its own
+as \texttt{plan-sha256:} followed by the 64 hex digits \texttt{sha256sum}
+prints): \dots
+\end{answer}
+% PREREG-END
+
+\end{document}
