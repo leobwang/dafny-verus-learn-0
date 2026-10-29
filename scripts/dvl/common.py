@@ -818,15 +818,11 @@ def oom_kills():
                    "from a crash, so no solver runs")
 
 
-# The container watcher (POSIX sh; $1 = the job's process group): `done` on
-# stdin after a normal return kills the group once (stragglers); EOF with
-# nothing read (the parent died) kills it at once.
-_CONTAINER_LIFELINE_SH = r"""
-pgid="$1"
-IFS= read -r line
-kill -KILL -- "-$pgid" >/dev/null 2>&1
-exit 0
-"""
+# The container watcher: the host's lifeline script (above). It was
+# `kill -KILL -- "-$pgid"`, which dash (the image's /bin/sh, Ubuntu's) rejects
+# as "Illegal number: -", so a container job outlived a killed parent; the
+# POSIX `kill -s KILL -- -<pgid>` works in dash and bash alike (DELTAS Δ504).
+_CONTAINER_LIFELINE_SH = _LIFELINE_SH
 
 
 def _container_lifeline(pgid):

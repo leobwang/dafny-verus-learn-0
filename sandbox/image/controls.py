@@ -15,8 +15,11 @@ positive control that must work.
   C2  the root file system, /usr, /opt and every read-only input under /work refuse
       a write; /tmp, the home tmpfs and the editable directories accept one
   C3  no container-runtime socket is reachable
-  C4  no network interface but loopback, and no route
-  C5  (model networks) the relay answers GET /api/version on 127.0.0.1
+  C4  no network interface but loopback, and no route; on a model network
+      (Route C, DELTAS Δ504) loopback and the one interface on the run's
+      --internal network, with no default route. A down interface is ignored
+      (and listed) only while CapEff has no CAP_NET_ADMIN (Δ506)
+  C5  (model networks) the relay answers GET /v1/models on 127.0.0.1
   C6  (model networks) no host listener answers on any address the run names
   C7  no public address answers (IPv4 and IPv6)
   C8  no public name resolves
@@ -38,6 +41,8 @@ import sys
 import time
 import urllib.error
 import urllib.request
+
+RELAY_PORT = 8000      # the sandbox's loopback model port (entry.py's GATE_PORT; Δ505)
 
 RUNTIME_SOCKETS = ("/var/run/docker.sock", "/run/docker.sock", "/run/containerd/containerd.sock",
                    "/var/run/containerd/containerd.sock", "/run/podman/podman.sock",
@@ -111,21 +116,73 @@ def c3():
     return not found, ("no runtime socket" if not found else "present: " + ", ".join(found))
 
 
-def c4():
-    ifaces = sorted(os.listdir("/sys/class/net"))
-    routes = []
+CAP_NET_ADMIN = 12     # capability(7)'s bit
+
+
+def _interfaces(base="/sys/class/net"):
+    """(up, down): the network interfaces by IFF_UP (flags bit 0). A
+    non-directory entry of /sys/class/net (the bonding module's
+    bonding_masters) is no interface and is skipped."""
+    up, down = [], []
+    for name in sorted(os.listdir(base)):
+        d = os.path.join(base, name)
+        if not os.path.isdir(d):
+            continue
+        try:
+            with open(os.path.join(d, "flags"), encoding="ascii") as fh:
+                flags = int(fh.read().strip(), 16)
+        except (OSError, ValueError):
+            flags = 1                      # unreadable: counted as up
+        (up if flags & 1 else down).append(name)
+    return up, down
+
+
+def _routes(path="/proc/net/route"):
     try:
-        with open("/proc/net/route", encoding="ascii") as fh:
-            routes = [ln.split()[0] for ln in fh.readlines()[1:] if ln.strip()]
+        with open(path, encoding="ascii") as fh:
+            return [ln.split()[:2] for ln in fh.readlines()[1:] if ln.strip()]
     except OSError:
-        pass
-    ok = ifaces == ["lo"] and not routes
-    return ok, f"interfaces {ifaces}; IPv4 routes {len(routes)}"
+        return []
+
+
+def c4(req=None, cap_eff=None, net="/sys/class/net", route="/proc/net/route"):
+    """C4 (Δ506): a down interface is ignored only while the effective capability
+    set (`cap_eff`, the CapEff word C1 reads from the same /proc/self/status) has
+    no CAP_NET_ADMIN, so nothing in the container can bring it up. Docker
+    Desktop's LinuxKit kernel (6.10.14) puts its tunnel modules' fallback
+    devices (tunl0, gre0, gretap0, erspan0, ip_vti0, ip6_vti0, sit0, ip6tnl0,
+    ip6gre0) in every network namespace, down and without an address. With
+    CAP_NET_ADMIN, or CapEff unknown, every interface counts, as before.
+    Returns (ok, detail, {"down": [...], "down_ignored": bool}) for the record."""
+    if cap_eff is None:
+        try:
+            cap_eff = int(_status().get("CapEff", ""), 16)
+        except (OSError, ValueError):
+            cap_eff = None
+    no_admin = cap_eff is not None and not (cap_eff >> CAP_NET_ADMIN) & 1
+    up, down = _interfaces(net)
+    ifaces = up if no_admin else sorted(up + down)
+    routes = _routes(route)
+    extra = {"down": down, "down_ignored": bool(down) and no_admin}
+    dn = ""
+    if down:
+        dn = (f"; down {down} (ignored: CapEff has no CAP_NET_ADMIN)" if no_admin
+              else f"; down {down} (counted: CAP_NET_ADMIN present or CapEff unknown)")
+    if (req or {}).get("network", "none") == "none":
+        ok = ifaces == ["lo"] and not routes
+        return ok, f"interfaces {ifaces}{dn}; IPv4 routes {len(routes)}", extra
+    # Route C: the run's --internal network, one interface, its own subnet only
+    others = [i for i in ifaces if i != "lo"]
+    default = [r for r in routes if len(r) > 1 and r[1] == "00000000"]
+    ok = "lo" in ifaces and len(others) == 1 and not default and \
+        all(r[0] == others[0] for r in routes)
+    return ok, (f"interfaces {ifaces}{dn}; IPv4 routes {len(routes)}, default routes "
+                f"{len(default)} (the run's internal network only)"), extra
 
 
 def c5(req):
-    port = int(req.get("relay_port", 11434))
-    url = f"http://127.0.0.1:{port}{req.get('relay_path', '/api/version')}"
+    port = int(req.get("relay_port", RELAY_PORT))
+    url = f"http://127.0.0.1:{port}{req.get('relay_path', '/v1/models')}"
     try:
         with urllib.request.urlopen(url, timeout=float(req.get("timeout_s", 3)) * 3) as r:
             body = r.read(4096).decode("utf-8", "replace")
@@ -185,16 +242,19 @@ def check(req):
     res = []
 
     def add(cid, fn, *a):
+        extra = {}
         try:
-            ok, detail = fn(*a)
+            out = fn(*a)
+            ok, detail = out[0], out[1]
+            extra = out[2] if len(out) > 2 else {}
         except Exception as e:  # noqa: BLE001
             ok, detail = False, f"the control raised {type(e).__name__}: {e}"
-        res.append({"id": cid, "ok": bool(ok), "detail": detail})
+        res.append({"id": cid, "ok": bool(ok), "detail": detail, **extra})
 
     add("C1", c1)
     add("C2", c2, req)
     add("C3", c3)
-    add("C4", c4)
+    add("C4", c4, req)
     if req.get("network", "none") != "none":
         add("C5", c5, req)
         add("C6", c6, req)
@@ -299,13 +359,11 @@ def door_http(args):
     body = None
     if method == "POST":
         msgs = [{"role": "user", "content": "door"}]
-        if path == "/api/chat":
-            body = {"model": model, "messages": msgs, "stream": False, "options": opts}
-        elif path == "/v1/chat/completions":
+        if path == "/v1/chat/completions":
             body = {"model": model, "messages": msgs, "stream": False, **opts}
         else:
             body = {"model": model, "name": model}
-    req = urllib.request.Request(f"http://127.0.0.1:11434{path}", method=method,
+    req = urllib.request.Request(f"http://127.0.0.1:{RELAY_PORT}{path}", method=method,
                                  data=json.dumps(body).encode() if body is not None else None,
                                  headers={"Content-Type": "application/json"})
     try:

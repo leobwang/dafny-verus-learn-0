@@ -172,9 +172,11 @@ carries none) is sticky (DV5c fix round): its event goes to the window file,
 an `overage-stop` note to the ledger, and no Claude call of any batch of the
 module runs until a human checks the account and runs `fvh resume <ID>
 --after-overage-check` (an `overage-cleared` note). A live Qwen batch checks
-the model server against the apparatus pins (fvh.backends.gate.server_drift:
-version, digests, the unit's settings) before its first attempt and refuses
-on any difference. A call that ran counts against the run's meter and the
+the host's model server before its first attempt (fvh.backends.gate.discover,
+Δ505): it refuses when none answers on the apparatus file's endpoints or the
+model cannot be chosen; the server's URL, model id, max_model_len and version
+as found, and the first system_fingerprint each run's gate saw, go into every
+record as observed facts (apparatus.model_server_found), never pins. A call that ran counts against the run's meter and the
 ledger even when its reply was discarded, and Ledger.used counts what
 infra-failed or deferred attempts spent.
 
@@ -753,8 +755,8 @@ class Batch:
         self.agent = agent            # the agent-mode route (fvh.backends.agent.LiveAgent's
                                       # interface); None: the live one, built when first used
         # fixed here, not read off self.agent: open()'s preflight builds the live agent
-        # route, and the batch is still live (the calendar lock, the server check, the
-        # state reap and the unload; DV5d review fix)
+        # route, and the batch is still live (the calendar lock, the server check and
+        # the state reap; DV5d review fix)
         self._live = transports is None and agent is None
         self.say = log or (lambda m: print(f"fvh: {m}", flush=True))
         self.mem_gb = mem_gb
@@ -782,8 +784,8 @@ class Batch:
 
     @property
     def live(self) -> bool:
-        """No test route was injected at construction: the live model server, lock and
-        unload (the live agent route built later by open() does not change it)."""
+        """No test route was injected at construction: the live model server and lock
+        (the live agent route built later by open() does not change it)."""
         return self._live
 
     def open(self) -> int:
@@ -956,11 +958,15 @@ class Batch:
             return self.transports(family, Path(run_dir), list(seeds), caps)
         if family == budget.QWEN:
             from fvh.backends import gate as G
-            g = G.HostGate(run_dir, G.gate_config(self.app, seeds=seeds or [self.plan.seed],
-                                                  calls=max(1, len(seeds)),
-                                                  gpu_s=caps.gpu_s), root=self.root)
+            if self.server is None:
+                self.server = G.discover(self.app)
+            cfg = G.gate_config(self.app, self.server, seeds=seeds or [self.plan.seed],
+                                calls=max(1, len(seeds)), gpu_s=caps.gpu_s)
+            g = G.HostGate(run_dir, cfg, root=self.root)
             url = g.start()
             inner = backends.build(budget.QWEN, self.app, gate_url=url + "/v1",
+                                   model=cfg["model"], context=cfg["max_model_len"],
+                                   options=cfg["options"],
                                    state_base=_state_base("fvh-qwen-state"))
             t = RecordingTransport(inner, run_dir, gate=g, seeds=seeds)
             t.gate_handle = g
@@ -1168,7 +1174,11 @@ class Batch:
         usage = {**meter.usage(), "client_calls": meter.calls}
         if cnt:
             usage.update(gate_calls=cnt.get("calls"), gate_prompt_tokens=cnt.get("prompt_tokens"),
-                         gate_output_tokens=cnt.get("output_tokens"), gate_gpu_s=cnt.get("gpu_s"))
+                         gate_output_tokens=cnt.get("output_tokens"), gate_gpu_s=cnt.get("gpu_s"),
+                         gate_reasoning_tokens=cnt.get("reasoning_tokens"))
+            if cnt.get("system_fingerprint") and isinstance(facts.get("model_server_found"), dict):
+                facts["model_server_found"] = {**facts["model_server_found"],
+                                               "system_fingerprint": cnt["system_fingerprint"]}
             if cnt.get("ctx_saturated"):
                 findings.append(f"ctx-saturated:{cnt['ctx_saturated']}")
             if int(cnt.get("calls") or 0) > meter.calls:
@@ -1541,19 +1551,22 @@ class Batch:
         # what every session's gate counted, read again after the scan (a killed session
         # has no Segment): the attempt's spend
         tot = {"calls": 0, "gpu_s": 0.0, "prompt_tokens": 0, "output_tokens": 0}
+        fingerprint = None
         for d in sorted(rd.glob("seg-*")):
             cnt = AG.read_counts(d)
             for key in tot:
                 tot[key] += (float if key == "gpu_s" else int)(cnt.get(key) or 0)
+            fingerprint = fingerprint or cnt.get("system_fingerprint")
         tot["calls"] = max(tot["calls"], st["calls"])
         tot["gpu_s"] = round(max(tot["gpu_s"], st["gpu_s"]), 3)
         facts = apparatus.collect(self.app, self.root)
         if self.server is not None:
-            facts["model_server_found"] = self.server
+            facts["model_server_found"] = dict(self.server, **(
+                {"system_fingerprint": fingerprint} if fingerprint else {}))
         facts.update(seeds=list(seeds), plan_sha256=self.plan.sha256, arm_construct="agent",
                      arm_policy="", instrument="vcheck --gate", acceptance=arm.acceptance, lab_code=arm.lab_code, feedback=arm.feedback,
                      lab_task=(target if self.plan.lever_check else ""),
-                     agent={"model": str(self.app.backend(budget.QWEN).get("model") or ""),
+                     agent={"model": str((self.server or {}).get("model") or ""),
                             "turns": arm.rounds, "sessions": len(segs),
                             "images": sorted({s.image for s in segs if s.image}),
                             "config_sha256": [s.config_sha256 for s in segs],
@@ -1613,18 +1626,16 @@ class Batch:
     # --- the loop ------------------------------------------------------------------
 
     def server_check(self) -> str | None:
-        """Why a live Qwen batch may not start: the model server is unreachable or
-        differs from the apparatus file's [model_server] pins (version, the pinned
-        tags' digests, the unit's settings), or None (DV5c fix round)."""
+        """Why a live Qwen batch may not start: no model server answers on the
+        apparatus file's endpoints, or its model cannot be chosen, or None (DV5c
+        fix round; Δ505). What it found is the batch's model server, recorded."""
         from fvh.backends import gate as G
         try:
-            facts = G.server_facts(self.app)
+            found = G.discover(self.app)
         except (G.GateError, backends.ModelDisabled) as e:
-            return f"the model server cannot be checked: {e}"
-        self.server = facts
-        drift = G.server_drift(self.app, facts)
-        if drift:
-            return "apparatus drift: " + "; ".join(d.line() for d in drift)
+            return f"no model server: {e}"
+        self.server = found
+        self.say(f"model server: {found['base_url']}, model {found['model']} (found, not pinned)")
         return None
 
     def run(self, ids=None) -> int:
@@ -1675,12 +1686,9 @@ class Batch:
         finally:
             for s, h in old.items():
                 signal.signal(s, h)
-            try:
-                self._unload()
-            finally:
-                if lock is not None:
-                    self._calendar = None
-                    lock.__exit__(None, None, None)
+            if lock is not None:
+                self._calendar = None
+                lock.__exit__(None, None, None)
         if self.stop:
             left = budget.resume_order(self.ledger, max_reissue=self.plan.max_reissue)
             for aid in left:
@@ -1711,21 +1719,6 @@ class Batch:
             return (f"the module's gpu_hours = {hours:g} are spent ({spent:.0f} GPU-s in the "
                     "ledger)")
         return None
-
-    def _unload(self):
-        """keep_alive 0 for the model after a Qwen batch (DV4-PLAN §10): one gate with
-        unload_on_stop and no call (the calls cap 0, so it forwards nothing)."""
-        if budget.QWEN not in self.plan.families() or not self.live:
-            return
-        from fvh.backends import gate as G
-        d = self.batches_dir / "unload"
-        try:
-            cfg = G.gate_config(self.app, seeds=[self.plan.seed], calls=0, unload=True)
-            g = G.HostGate(d, cfg, root=self.root)
-            g.start()
-            g.stop()
-        except Exception as e:                       # the unload is best effort, recorded
-            self.say(f"the model unload failed: {type(e).__name__}: {e}")
 
 
 STATE_BASES = ("fvh-claude-state", "fvh-qwen-state")

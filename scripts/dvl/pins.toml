@@ -64,8 +64,8 @@ stdlib_files = ["DafnyStandardLibraries.dfy", "DafnyStandardLibraries-notarget.d
 # `vcheck --solver <name>` and `vcheck --brittleness --solvers` run another
 # one for a measurement; the done gate and the reference gate refuse both.
 [dafny.solvers]
-"4.12.1" = { path = "dafny/z3/bin/z3-4.12.1", version = "Z3 version 4.12.1 - 64 bit", sha256 = { linux-x86_64 = "22214e518eed9eec867d18b485e7b2570d09cbf1d94a47c8eec6ec4de0287eff", macos-arm64 = "7d15df1e4ba8f60b0808dce02ec85e0dd6dac4b975231a2f7b35fe8789464208" } }
-"4.14.1" = { path = "dafny/z3/bin/z3-4.14.1", version = "Z3 version 4.14.1 - 64 bit", sha256 = { linux-x86_64 = "5a4f295b2e64abd2e2463a321d33f8054585083230203a55fa57982a1843d559", macos-arm64 = "2fb05b03121f522fdea1ee523c73b9341d327814c81f051a887e97e931af06bf" } }
+"4.12.1" = { path = "dafny/z3/bin/z3-4.12.1", version = "Z3 version 4.12.1 - 64 bit", sha256 = { linux-x86_64 = "22214e518eed9eec867d18b485e7b2570d09cbf1d94a47c8eec6ec4de0287eff", macos-arm64 = "7d15df1e4ba8f60b0808dce02ec85e0dd6dac4b975231a2f7b35fe8789464208", linux-aarch64 = "0b8cf99e4abb7c4d863bea86cc040f3096d340233e5c023ad1040929aa31f147" } }
+"4.14.1" = { path = "dafny/z3/bin/z3-4.14.1", version = "Z3 version 4.14.1 - 64 bit", sha256 = { linux-x86_64 = "5a4f295b2e64abd2e2463a321d33f8054585083230203a55fa57982a1843d559", macos-arm64 = "2fb05b03121f522fdea1ee523c73b9341d327814c81f051a887e97e931af06bf", linux-aarch64 = "94faba3955d8e036a3536efa2a7163ccb2f19241def4ed8414f113497719d797" } }
 
 # VERSIONS.md §2.4, verbatim: the fixed Dafny wordings the wrapper matches.
 [dafny.messages]

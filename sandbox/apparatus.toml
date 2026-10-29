@@ -1,10 +1,11 @@
 # sandbox/apparatus.toml: the apparatus pins (DV4-PLAN §3.6; guard rule 2g),
 # schema 1, read by fvh.apparatus (fvh run, fvh apparatus --check) and by
-# scripts/dvl/sandbox.py for the Ollama gate of an agent run. Every binary path
-# and model fvh and the sandbox use comes from here, never from a default in
-# code. A drift between the host and a pin refuses every batch until the
-# probes are re-run and the pin is moved (fvh apparatus --check names the field
-# and what to re-probe).
+# scripts/dvl/sandbox.py for the model gate of an agent run. Every binary path,
+# setting and candidate model server address fvh and the sandbox use comes from
+# here, never from a default in code. A drift between the host and a binary or
+# file pin refuses every batch until the probes are re-run and the pin is moved
+# (fvh apparatus --check names the field and what to re-probe). The model
+# server is not pinned (Δ505): it is the host's, found at run time.
 #
 # Written at DV4 step 3 (Docker and the local model, 2026-10-11) from the probes
 # archived under the author probe archive's dv5b/dv4s3/ (Solutions/plans/DV4-
@@ -63,43 +64,45 @@ builtin_skills = ["deep-research", "dataviz", "update-config", "verify", "debug"
                   "plugin-authoring"]
 
 [backend.qwen]
-# opencode 1.18.25, the binary DV0 probed (Δ64) and sandbox/build-images.sh
-# stages into dvl-agent (the same sha256)
+# opencode 1.18.25, the host binary DV0 probed (Δ64). Since Δ504 dvl-agent
+# carries the upstream Linux release of the same version for its architecture
+# (opencode-linux-x64.tar.gz, binary sha256 d91e0d33…, pinned in
+# sandbox/build-images.sh), not this file: no release asset has this sha256
 version = "1.18.25"
 binary = "~/.opencode/bin/opencode"
 sha256 = "5750524bbdd592157a3e1b4451038c1d05075365336cd74b8ec573f92b2924c0"
-model = "qwen3.8:latest"
+# no model pin: the model is whatever the host's server serves (Δ505; [model_gate])
 provider_npm = "@ai-sdk/openai-compatible"    # bundled in 1.18.25 (probe: no fetch, no network)
-num_ctx = 262144         # the unit's context, which /v1 requests get anyway (see [model_server])
-num_predict = 32768      # [A] one call's output cap, thinking included (8192 cut a thinking step:
-                         # Q07 replay run 1, finish "length", and opencode ends the session there)
 call_timeout_s = 900     # [A]
 # opencode's own default allow rule for its tmp directory (DV0's B3 record);
 # its tool-output rule lies under the call's state directory and passes anyway
 external_ok = ["/tmp/opencode/*"]
 
-[model_server]
-# Ollama on loopback (Δ146); every request of every mode passes the run's gate
-version = "0.33.2"
-models = { "qwen3.8:latest" = "22130167c4c20e20c7b71454612966ca8e8171e9b3cc8ab6ce8aa6cbfec79643" }
-# the unit's settings (systemd unit `ollama`, read 2026-10-11)
-unit = { OLLAMA_CONTEXT_LENGTH = "262144", OLLAMA_KV_CACHE_TYPE = "q8_0" }
-# The OpenAI-compatible endpoint (opencode's) ignores num_ctx and top_k, also as
-# an `options` field (probe v1-options: /api/ps shows context_length 262144
-# after a request that sent num_ctx 8192); such a request runs at the unit's
-# context. GPU: driver 595.99.02, CUDA 13.2; qwen3.8:latest
-# resident at 262144 context: size_vram 18,882,431,548 bytes.
-effective_v1_context = 262144
+[model_gate]
+# The course's model gate (Δ505). The model server is not the course's: an
+# OpenAI-compatible server the host already runs on localhost (127.0.0.1) port
+# 8000 or 8001, yours to run, like dafny, verus and uv (D78). Every run tries
+# these base URLs in order and takes the first whose GET /models answers;
+# DVL_MODEL_URL overrides the list (a loopback http URL: the gate sends no
+# key). The model is the one the server serves (DVL_MODEL names it when the
+# server serves several, or to take another one); its max_model_len, when the
+# server reports one, bounds the context check. The URL, the model id and what
+# /version or system_fingerprint report are recorded with every run as
+# observed facts, never pinned. Write 127.0.0.1, never `localhost`, which may
+# resolve to ::1.
+endpoints = ["http://127.0.0.1:8000/v1", "http://127.0.0.1:8001/v1"]
+# a prompt whose token count reaches the served max_model_len less the margin
+# is flagged ctx-saturated (so is a request the server refuses for its length)
 margin = 512
-# The pinned request options the gate sets on every request (Δ65): Qwen's own
-# sampling defaults for top_k and top_p, a temperature below its default 1 [A],
-# and one seed for a single-run replay [A] (a lab's per-run seeds are its
-# pre-registration's). num_ctx is the unit's own 262144: /v1 requests run at it
-# whatever they send, and a native request with another num_ctx would make
-# Ollama reload the model between the two kinds of request; a prompt past it
-# less the margin is one Ollama cuts (the gate's ctx-saturated).
-options = { temperature = 0.6, top_p = 0.95, top_k = 20, seed = 1, num_predict = 32768, num_ctx = 262144 }
+# The course's experimental settings, which the gate sets on every request as
+# OpenAI fields (Δ65, Δ505): top_k and top_p at Qwen's sampling defaults, a
+# temperature below its default 1 [A], one seed for a single-run replay [A] (a
+# lab's per-run seeds are its pre-registration's), and max_tokens, one call's
+# output cap, thinking included [A] (8192 cut a thinking step: Q07 replay run
+# 1, finish "length", and opencode ends the session there). A server that
+# ignores a field still receives it.
+options = { temperature = 0.6, top_p = 0.95, top_k = 20, seed = 1, max_tokens = 32768 }
 
 [pins]
-toolchain_sha256 = "7db75fd8df0eb56117f8b4ca98f9e5a8868a97f74f11d021e17c781d1cd6163f"
-images_lock_sha256 = "9d491d55d2d50ae03a4de6b55bafa25cffe803db03428cdd511ecea020226976"
+toolchain_sha256 = "2dd90926faf099b45fcadba8f86d3042d75a4782de2592254c7bce32d5d73b21"
+images_lock_sha256 = "8e50527235f62b85ea39dc797ea52c23307f4cfb658257c849a7008d72d5fb54"

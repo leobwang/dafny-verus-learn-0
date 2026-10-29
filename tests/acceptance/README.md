@@ -79,8 +79,8 @@ The refusal texts are guard messages and permission messages. They hold no answe
 checks the per-run sandbox end to end (DV4-PLAN §9; the controls C1–C20 of the DV4
 author notes, as neutral regression checks: the plain operation that must be refused,
 beside a positive control). It needs Docker and no model: the one request that reaches
-Ollama is `GET /api/version`; the gate's controls run against a fake model server on
-loopback. Each container runs alone at its `--memory` cap (Verus parity at 16 GB). Run
+the model server is `GET /v1/models` at the host's server on localhost (127.0.0.1) port 8000 or 8001 (Δ505); the
+gate's controls run against a fake OpenAI-compatible server on loopback. Each container runs alone at its `--memory` cap (Verus parity at 16 GB). Run
 it by hand before a merge that changes `sandbox/`, `scripts/mksandbox-run`,
 `scripts/dvl/sandbox.py` or an image digest; `scripts/ci.sh` never runs it. Sections:
 `access`, `images`, `controls`, `gate`, `memory`, `pids`, `wall`, `watcher`, `reap`,

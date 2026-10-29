@@ -7,7 +7,8 @@
 # It changes nothing outside the checkout and its log directory: no shell
 # startup file, no PATH beyond its own process.
 #
-#   PATH=<dafny dir>:<verus dir>:$PATH scripts/port_selftest.sh [--full-ci] [--log-dir DIR]
+#   PATH=<dafny dir>:<verus dir>:$PATH scripts/port_selftest.sh [--full-ci]
+#       [--containers [--build-images]] [--log-dir DIR]
 #
 # Steps (each prints one PASS/FAIL line; a summary closes the run):
 #   1  preflight      platform id, bash, Python >= 3.12, uv; `uv sync --frozen`
@@ -26,6 +27,24 @@
 #                     quotes resource counts or an out-of-resource verdict, in
 #                     the author's context (CI=true) so every entry runs
 #   9  ci (optional)  --full-ci: scripts/ci.sh (the study run, every job)
+#  10  images (opt.)  --containers --build-images: sandbox/build-images.sh for
+#                     this host's architecture (Δ504: arm64 on the Mac builds
+#                     Verus and Z3 4.12.1 from source, a long build; each
+#                     step capped at DVL_BUILD_MEMORY, default 12g, which
+#                     Docker's VM must have)
+#  11  containers     --containers: the harness environment (`uv sync
+#      (optional)     --directory harness --frozen`, once: the host's Python
+#                     gate runs `uv run --offline --frozen --directory
+#                     harness`, which parity's Python files need; checked and
+#                     named, never run for you; Δ506), build-images.sh --check, then
+#                     tests/acceptance/sandbox_doors.py (Route C, the controls,
+#                     the gate, the caps, the watcher, the return path,
+#                     exposure, e2e and parity; never canary, which needs the
+#                     author's planted trees). Docker running; your model
+#                     server answering GET /v1/models on localhost (127.0.0.1)
+#                     port 8000 or 8001 for C5 (no model is called; Δ505); parity
+#                     starts 16 GB Verus containers, so Docker's VM needs
+#                     more than that
 # Logs: DIR (default ~/.cache/dafny-verus-learn-0/port-selftest/<UTC stamp>/).
 # Exit 0 when every step passed. Memory: one solver job at a time; the course
 # caps nothing (D78), so run it on a host with room (a Verus gate can take a
@@ -42,17 +61,22 @@ set -uo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 SCRIPTS="$ROOT/scripts"
-FULLCI=0 LOG=""
+FULLCI=0 CONTAINERS=0 BUILD=0 LOG=""
 while [ $# -gt 0 ]; do
   case $1 in
     --full-ci) FULLCI=1 ;;
+    --containers) CONTAINERS=1 ;;
+    --build-images) BUILD=1 ;;
     --log-dir) [ $# -ge 2 ] || { echo "port_selftest: --log-dir needs a directory" >&2; exit 2; }
                LOG="$2"; shift ;;
-    -h|--help) sed -n '2,31p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
-    *) echo "usage: scripts/port_selftest.sh [--full-ci] [--log-dir DIR]" >&2; exit 2 ;;
+    -h|--help) sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "usage: scripts/port_selftest.sh [--full-ci] [--containers [--build-images]] [--log-dir DIR]" >&2; exit 2 ;;
   esac
   shift
 done
+if [ "$BUILD" = 1 ] && [ "$CONTAINERS" = 0 ]; then
+  echo "port_selftest: --build-images goes with --containers" >&2; exit 2
+fi
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 LOG="${LOG:-$HOME/.cache/dafny-verus-learn-0/port-selftest/$STAMP}"
@@ -125,6 +149,29 @@ step "the 13 resource-sensitive chapter pins (pins.py --chapter, author context)
 
 if [ "$FULLCI" = 1 ]; then
   step "scripts/ci.sh (study run, every job)" ci "$SCRIPTS/ci.sh" --log-dir "$LOG/ci"
+fi
+
+DOORS=(access images controls gate memory pids wall watcher reap return secret exposure e2e parity)
+harness_env() {   # the host side of parity's Python files runs uv offline in harness/
+  if uv run --offline --frozen --directory "$ROOT/harness" python3 -c 'import fvh, pytest' >/dev/null 2>&1; then
+    echo "harness environment: ready (uv run --offline --frozen --directory harness)"
+    return 0
+  fi
+  echo "harness environment: not synced. Run once, online, from the repository root:"
+  echo "  uv sync --directory harness --frozen"
+  echo "(the host's Python gate runs uv offline in harness/; without it parity's Python files read 'error' at stage cli)"
+  return 1
+}
+if [ "$CONTAINERS" = 1 ]; then
+  if [ "$BUILD" = 1 ]; then
+    step "sandbox/build-images.sh (this host's architecture: $(PYTHONPATH="$SCRIPTS" python3 -B -c 'from dvl import host; print(host.docker_arch())'))" \
+      build-images "$ROOT/sandbox/build-images.sh"
+  fi
+  step "the harness environment (uv sync --directory harness --frozen, once)" harness-env harness_env
+  step "sandbox/build-images.sh --check (the lock names the local images)" images-check \
+    "$ROOT/sandbox/build-images.sh" --check
+  step "sandbox_doors.py ${DOORS[*]}" doors \
+    python3 -B "$ROOT/tests/acceptance/sandbox_doors.py" "${DOORS[@]}" --archive "$LOG/doors"
 fi
 
 echo

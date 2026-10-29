@@ -389,7 +389,12 @@ class ToolResult:
 def _redactor(root, scratch):
     root_s = str(root)
     home = os.environ.get("HOME", "")
-    scr = re.compile(re.escape(str(scratch)) + r"[^\s\"',:;)\]}]*") if scratch else None
+    scr = None
+    if scratch:
+        # the scratch as given and as resolved: on macOS $TMPDIR is under /var, a
+        # symlink to /private/var, and the tools print the resolved path (Δ506)
+        forms = sorted({str(scratch), os.path.realpath(str(scratch))}, key=len, reverse=True)
+        scr = re.compile("(?:" + "|".join(re.escape(f) for f in forms) + r")[^\s\"',:;)\]}]*")
 
     def red(text):
         text = _ANSI.sub("", text)

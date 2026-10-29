@@ -1,9 +1,9 @@
 """fvh.backends.opencode — the local Qwen through the opencode CLI, on the host,
-tool-less (DV4-PLAN §3.4; Δ64, Δ65, Δ146).
+tool-less (DV4-PLAN §3.4; Δ64, Δ65, Δ146; an OpenAI-compatible server, Δ505).
 
 Δ64's recipe, pinned:
 
-  - argv `<pinned opencode> run --pure --format json -m <provider>/<tag>
+  - argv `<pinned opencode> run --pure --format json -m <provider>/<model id>
     <message>`, from a fresh mktemp directory under /tmp (outside $HOME); the
     binary path ("~/...") and its sha256 come from the apparatus file.
   - `env -i` with HOME and every XDG_* directory in the call's state
@@ -12,8 +12,10 @@ tool-less (DV4-PLAN §3.4; Δ64, Δ65, Δ146).
   - the config {"permission": {"*": "deny"}, "tools": {"*": false}, "mcp": {},
     "autoupdate": false, "share": "disabled"} plus one provider whose base URL
     is this run's model gate (DV4-PLAN §5.6.3), never the model server's own
-    address, and whose model entry states the pinned num_ctx as its context
-    limit; and the title agent disabled and automatic compaction off, so that
+    address, whose model is the one the host's server serves (Δ505:
+    fvh.backends.gate.discover), and whose model entry states the served
+    max_model_len (when the server reports one) as its context limit and the
+    course's max_tokens as its output limit; and the title agent disabled and automatic compaction off, so that
     one call is one gated request (DV4 step 3c's probe: without them every
     `run` first sends a title request of its own, ~600 prompt tokens).
   - a per-call precheck before the call, without a model call: `debug agent
@@ -23,15 +25,19 @@ tool-less (DV4-PLAN §3.4; Δ64, Δ65, Δ146).
     must show the gate's address as the only provider URL. The two outputs'
     shapes are DV0's recorded ones (infra/opencode-iso-config-B3).
   - the reply: `<think>` blocks are stripped; what is left must be exactly one
-    JSON value (the caller validates it against ACTION_SCHEMA).
+    JSON value (the caller validates it against ACTION_SCHEMA). A server
+    that returns the thinking apart (`reasoning` or `reasoning_content`) has
+    it read as a reasoning part by the bundled @ai-sdk/openai-compatible
+    (checked in the 1.18.25 binary, Δ505), never as text; a server that
+    leaves `<think>` in the text has it stripped.
 
 As probed at DV4 step 3c on 1.18.25 through a host gate (the author probe
 archive's dv5b/dv4s3/3c-policy/): the `run --format json` stream holds
 step_start, text (the reply in `part.text`) and step_finish events (`part.tokens`
 with input, output and reasoning counts), which is what this build reads; the
 gate's own counts are the budget's either way (DV4-PLAN §4.1). opencode sends
-the model entry's seed and max_tokens = min(num_predict, 32000), and no
-temperature, top_p, top_k or num_ctx: the gate sets the pins. The system
+the model entry's seed and max_tokens = min(the output limit, 32000), and no
+temperature, top_p or top_k: the gate sets the pins (Δ505: as OpenAI fields). The system
 prompt is sent as the message's first paragraph, after opencode's own system
 prompt, which every call carries (~3,700 characters).
 """
@@ -62,16 +68,17 @@ XDG = {"XDG_CONFIG_HOME": ".config", "XDG_DATA_HOME": ".local/share",
 DEFAULT_TIMEOUT_S = 900               # [A] one policy call's wall-clock cap
 
 
-def config(table: Mapping, *, gate_url: str, seed=None) -> dict:
-    """The call's opencode config (module docstring)."""
-    tag = table.get("model")
+def config(table: Mapping, *, gate_url: str, model: str, context=None, output=4096,
+           seed=None) -> dict:
+    """The call's opencode config (module docstring): `model` the served model
+    id, `context` its served max_model_len (None: not reported, no limit
+    stated), `output` the course's max_tokens."""
+    tag = model
     if not isinstance(tag, str) or not tag:
-        raise apparatus.ApparatusError(f"[backend.{NAME}] has no model pin")
-    num_ctx = table.get("num_ctx")
-    if isinstance(num_ctx, bool) or not isinstance(num_ctx, int) or num_ctx < 1:
-        raise apparatus.ApparatusError(f"[backend.{NAME}] has no num_ctx pin")
-    model = {"name": tag, "limit": {"context": num_ctx, "output": int(table.get("num_predict",
-                                                                         4096))}}
+        raise apparatus.ApparatusError("a Qwen call needs the served model id (discover())")
+    model = {"name": tag}
+    if isinstance(context, int) and not isinstance(context, bool) and context > 0:
+        model["limit"] = {"context": context, "output": int(output)}
     if seed is not None:
         model["options"] = {"seed": seed}
     return {"$schema": "https://opencode.ai/config.json", "autoupdate": False,
@@ -94,9 +101,9 @@ def environment(state: Path) -> dict:
     return env
 
 
-def argv(binary, table: Mapping, message: str) -> list[str]:
+def argv(binary, model: str, message: str) -> list[str]:
     return [str(binary), "run", "--pure", "--format", "json", "-m",
-            f"{PROVIDER}/{table['model']}", message]
+            f"{PROVIDER}/{model}", message]
 
 
 def _urls(obj):
@@ -168,13 +175,18 @@ class Transport:
 
     family = NAME
 
-    def __init__(self, table: Mapping, *, gate_url: str, window=None, state_base=None,
-                 timeout_s: float | None = None, cwd_base: str = "/tmp", clock=time.monotonic):
+    def __init__(self, table: Mapping, *, gate_url: str, model: str | None = None,
+                 context: int | None = None, options: Mapping | None = None, window=None,
+                 state_base=None, timeout_s: float | None = None, cwd_base: str = "/tmp",
+                 clock=time.monotonic):
         refuse_if_disabled()
         if not isinstance(gate_url, str) or not gate_url.startswith(("http://", "https://")):
             raise ValueError("gate_url is the run's model gate (an http URL)")
         self.table = dict(table)
         self.gate_url = gate_url
+        self.model = model
+        self.context = context
+        self.output = int((options or {}).get("max_tokens", 4096))
         self.state_base = Path(state_base) if state_base is not None else None
         self.timeout_s = timeout_s or float(self.table.get("call_timeout_s", DEFAULT_TIMEOUT_S))
         self.cwd_base = cwd_base
@@ -196,7 +208,8 @@ class Transport:
             env = environment(state)
             for k in ("HOME", *XDG):
                 Path(env[k]).mkdir(parents=True, exist_ok=True)
-            conf = config(self.table, gate_url=self.gate_url, seed=seed)
+            conf = config(self.table, gate_url=self.gate_url, model=self.model,
+                          context=self.context, output=self.output, seed=seed)
             Path(env["OPENCODE_CONFIG"]).write_text(json.dumps(conf, indent=1), encoding="utf-8")
             try:
                 a = self._run([str(binary), "debug", "agent", "build", "--pure"], cwd, env, 120)
@@ -213,7 +226,7 @@ class Transport:
             text_in = f"{system}\n\n{message}" if system else message
             t0 = self.clock()
             try:
-                p = self._run(argv(binary, self.table, text_in), cwd, env, self.timeout_s)
+                p = self._run(argv(binary, self.model, text_in), cwd, env, self.timeout_s)
             except subprocess.TimeoutExpired:
                 raise TransportError("cli-crash", f"the call passed its {self.timeout_s:g} s cap",
                                      had_output=False) from None
@@ -230,7 +243,7 @@ class Transport:
                           apparatus={"family": NAME, "version": self.table.get("version"),
                                      "binary": self.table.get("binary"),
                                      "sha256": self.table.get("sha256"),
-                                     "model": self.table.get("model"),
-                                     "num_ctx": self.table.get("num_ctx"), "seed": seed,
+                                     "model": self.model,
+                                     "max_model_len": self.context, "seed": seed,
                                      "gate": self.gate_url},
                           raw=p.stdout)

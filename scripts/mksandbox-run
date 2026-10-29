@@ -42,7 +42,7 @@ Usage:
   scripts/mksandbox-run --release RUNDIR          remove a materialized run
                                                   directory
   scripts/mksandbox-run --build-verify --target PATH --argv JSON [--module ID]
-                [--kind verify|agent] [--network none|ollama] [--mem-gb N]
+                [--kind verify|agent] [--network none|model] [--mem-gb N]
                 [--lab-task TASK] [--rev REV]
                                                   print the manifest (JSON) of one
                                                   tool command on one target: a
@@ -255,7 +255,7 @@ def main(argv=None):
     ap.add_argument("--argv", metavar="JSON")
     ap.add_argument("--module")
     ap.add_argument("--kind", choices=("verify", "agent"), default="verify")
-    ap.add_argument("--network", choices=("none", "ollama"), default="none")
+    ap.add_argument("--network", choices=("none", "model"), default="none")
     ap.add_argument("--mem-gb", type=float)
     ap.add_argument("--lab-task", metavar="TASK")
     ap.add_argument("--rev", metavar="REV")
@@ -450,6 +450,11 @@ def main(argv=None):
             print(f"memory: --memory {manifest.limits['mem_gb']:g}g (the pinned bound for a "
                   f"{manifest.kind} container of {', '.join(manifest.pools()) or 'no solver language'})")
             print("docker argv (nothing was run; $RUN is the run directory):")
+            if manifest.network != "none":   # Route C's set-up (DELTAS Δ504)
+                print("  # the run's internal network, its upstream network and its gate container "
+                      "($GATE_TARGET:$GATE_PORT: the host gate)")
+                for line in sandbox.model_network_lines(manifest):
+                    print("  " + shlex.join(line))
             for line in sandbox.docker_argv(manifest, "$RUN"):
                 print("  " + shlex.join(line))
             if image_problem:

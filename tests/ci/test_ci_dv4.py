@@ -120,7 +120,7 @@ class HarnessTripwire(unittest.TestCase):
             "def test_planted_connection():\n"
             "    # a regression fixture: the tripwire must refuse this connection\n"
             "    try:\n"
-            "        socket.create_connection(('127.0.0.1', 11434), timeout=1)\n"
+            "        socket.create_connection(('127.0.0.1', 8000), timeout=1)\n"
             "    except Exception:\n"
             "        pass\n",
             encoding="utf-8")

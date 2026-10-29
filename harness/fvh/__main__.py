@@ -110,20 +110,28 @@ def _live_ok():
                       "runs here")
 
 
-def _server_drift(app):
-    """The live model server's drift from the pins (fvh.backends.gate), or [] when
-    the apparatus pins no Qwen backend or models are disabled (CI)."""
+def _server_check(app):
+    """(drift, found): the host's model server as fvh.backends.gate.discover finds
+    it (Δ505). No server answering, or a model that cannot be chosen, is one
+    drift line (a batch refuses); the server's identity is never pinned.
+    ([], None) when the apparatus pins no Qwen backend or models are disabled (CI)."""
     if budget.QWEN not in app.families():
-        return []
+        return [], None
     try:
         backends.refuse_if_disabled()
     except backends.ModelDisabled:
-        return []
+        return [], None
     from fvh.backends import gate as G
     try:
-        return G.server_drift(app, G.server_facts(app))
+        return [], G.discover(app)
     except G.GateError as e:
-        return [apparatus.Drift("model_server", "pinned", str(e), "fix the apparatus file")]
+        return [apparatus.Drift("model_server", "an OpenAI-compatible server on localhost "
+                                "(127.0.0.1) port 8000 or 8001", str(e),
+                                "start your model server, or set DVL_MODEL_URL / DVL_MODEL")], None
+
+
+def _server_drift(app):
+    return _server_check(app)[0]
 
 
 def _checks(root, rec, *, lab, server=False):
@@ -297,11 +305,16 @@ def cmd_apparatus(a, root):
         raise Refusal(str(e)) from None
     if a.check:
         drift = apparatus.check(app, root)
-        drift = drift or _server_drift(app)
+        found = None
+        if not drift:
+            drift, found = _server_check(app)
         for d in drift:
             say(f"drift: {d.line()}", err=True)
         if drift:
             return EXIT_REFUSED
+        if found:
+            say(f"model server (found, not pinned): {found['base_url']}, model {found['model']}, "
+                f"max_model_len {found['max_model_len']}, version {found['version']}")
         say("apparatus: the host matches the pins")
         return EXIT_OK
     print(json.dumps(apparatus.collect(app, root), indent=1, sort_keys=True))
