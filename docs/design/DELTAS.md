@@ -5170,7 +5170,12 @@ The record is in `Solutions/plans/DVR4-R16-build-notes.md` §0 and §6a. Evidenc
   - An answer that avoids the pair exists and is longer: an outer lemma on `|w|` with a `forall` over its own call, plus an inner lemma on the regex.
 - **Minutes.** 10 per item, so +40, and R16 goes from 936 to 976 min (PLAN §3 R16's Exercises and Hours, the band-3 row and the R total). H2 and H3 keep their lexicographic references and their `uses:`. The tag rests on H6 and H7.
 - **Admission (§2.1).** `firsttry.sh R16 --empty-body` passes 16/16 (`p1e/adm/eb2.log`): every empty body and every region gate fails in every run, maximal automation included, and H7v's TRIV `false` fails. Seeds 1–3 are stable on both twins (`p1e/adm/brittle.log`). Importing A2 into `R16_Capstone` first made `SoundCat` and `LazyMatchExec` seed-unstable. Dafny's engine therefore lives in its own module, `R16_SecondEngine`, in the same hand file (frozen-imports marked; it imports A1, A1b, A2, A5 and `R16_Capstone`). H7d keeps `assert s[i..] == []`, which the minimizer drops on the default seed but seeds 2 and 3 need. Twins: D 193 verified, V 23. Counts are re-pinned (shipped holes D 7 + 2, V 8 + 2). The freeze is re-pinned at 73 statements in 20 files, the new specimens included. `reference_lint` gives 0, avoid.sh gives 0 hits, and the course map is OK. Rows are admitted at 10 minutes each, so R16 is D 180 + V 200.
-- **Kit.** In progress: see the notes §0.
+- **Kit.**
+  - Chapter `docs/R16_Capstone.md`: §0–§14, 4 diagrams, 10 new specimens, 20 pins; lint 0; `pins.py --ci` 0 problems over 1,634 pins. The P1dv and P2dv pins confirm the reference answers.
+  - Written pair B1–B5: blueprint, cards 07.3 and 12.9, statement review (done after the H1 freeze), and Lab γ's pre-registration. Also the rubric (9 pins) and the gold and flawed fixtures.
+  - Bank and focused CI: still to do (bank sub-agent unfinished at hand-off; CI not yet run).
+  - Study workflow: 11/11.
+  - Memo: PLAN's written-track listing of the memo is met by the chapter (§12, outside the pair, as R15 did).
 
 ### Δ500 · The course's own copy of the pinned Claude Code version file, and the re-pin to 2.1.306 — adopted (basic fix lane, 2026-10-20)
 - **Found:** an auto-update at a reboot moved `~/.local/bin/claude` to `versions/2.1.306` and deleted `versions/2.1.296`, the file `[backend.claude]` pinned by path and sha256 (Δ203). `fvh`'s apparatus check then refused every batch, Qwen-only ones included (`backend.claude.sha256: pinned 24972e3b…, found missing`). Any learner's CLI would do the same after its next update. Pinning the version file (author notes §1.7) kept an update from changing the apparatus under a batch, but the pin still depended on a file the updater owns.
