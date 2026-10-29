@@ -886,7 +886,9 @@ def gone_findings(ctx, shipped):
 
 def lint_file(root, rel, mode="learner"):
     """The lint findings of one file. A Verus file of a crate is linted with
-    its crate, so a file reached through `#[cfg(test)] mod` counts as tests."""
+    its crate, so a file reached through `#[cfg(test)] mod` counts as tests, and
+    one reached from a capstone crate's binary root is exempt from outside-verus
+    (bin_tree_files)."""
     lang = core.lang_of(rel)
     path = Path(root) / rel
     paths = [path]
@@ -894,8 +896,28 @@ def lint_file(root, rel, mode="learner"):
         crate = harness._crate_rel(root, rel)
         if crate:
             paths = [Path(root) / crate, path]
-    found = core.lib(lang).lint(paths, mode)
+    kw = {"test_files": bin_tree_files(root, crate)} if lang == "v" and len(paths) == 2 else {}
+    found = core.lib(lang).lint(paths, mode, **kw)
     return [f for f in found if Path(f.file).resolve() == path.resolve()]
+
+
+def bin_tree_files(root, crate):
+    """The files of a capstone crate reached from its binary root
+    (gen_units.CRATE_BINS: Q18's `bignat`, R16's `rexc` and its trust-report
+    module). Code outside verus! there is the tool's trusted shell, never
+    verified (D16), so the outside-verus rule does not apply to it, as
+    reference_lint's bin_tree_exempt rules for the twins (Δ326)."""
+    import tomllib
+    try:
+        manifest = tomllib.loads((Path(root) / crate / "Cargo.toml").read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError):
+        return []
+    bins = set(core.gu.CRATE_BINS.values())
+    out = []
+    for b in manifest.get("bin", []):
+        if (b.get("name"), b.get("path")) in bins and (Path(root) / crate / b["path"]).is_file():
+            out += [f for f, _, _ in core.V.crate_files(Path(root) / crate / b["path"])]
+    return out
 
 
 def item_problems(ctx, it):

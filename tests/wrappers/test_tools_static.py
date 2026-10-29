@@ -271,8 +271,8 @@ class Core(unittest.TestCase):
         for args, want in ((["--function", "f", "x.rs"], 2),
                            ([], 2),
                            (["Q99"], 3),
-                           (["R16"], 3),                       # planned in the registry
-                           (["--module", "R16"], 3),
+                           (["Q19"], 3),                       # planned in the registry
+                           (["--module", "Q19"], 3),
                            (["--module", "notanid"], 2),
                            (["no/such/file.dfy"], 3),
                            (["README.md"], 3),
@@ -1399,6 +1399,28 @@ class ReferenceLint(RootCase):
         self.assertEqual(rl.bin_tree_exempt(L, "R16", "verus/r/r16_capstone/src/lib.rs", "v", tp), {})
         self.assertEqual(rl.bin_tree_exempt(L, "R15", "verus/r/r16_capstone/src/trust_report.rs",
                                             "v", tp), {})
+
+    def test_firsttry_bin_tree_files(self):
+        """firsttry's learner lint (--lint-hollow) exempts the same binary-tree files:
+        a module reached from a CRATE_BINS [[bin]] root is the tool's trusted shell; a lib
+        module, or a bin target not in CRATE_BINS, is not."""
+        unit = self.root / "verus/r/r16_capstone"
+        (unit / "src").mkdir(parents=True)
+        (unit / "Cargo.toml").write_text(
+            '[package]\nname = "r16_capstone"\nversion = "0.1.0"\n\n[lib]\npath = "src/lib.rs"\n\n'
+            '[[bin]]\nname = "rexc"\npath = "src/main.rs"\n', encoding="utf-8")
+        (unit / "src/main.rs").write_text("mod trust_report;\nfn main() {}\n", encoding="utf-8")
+        (unit / "src/trust_report.rs").write_text("pub fn f() {}\n", encoding="utf-8")
+        (unit / "src/lib.rs").write_text("pub fn g() {}\n", encoding="utf-8")
+        got = {p.name for p in firsttry.bin_tree_files(self.root, "verus/r/r16_capstone")}
+        self.assertEqual(got, {"main.rs", "trust_report.rs"})
+        kinds = lambda rel: {f.kind for f in firsttry.lint_file(self.root, rel)}
+        self.assertNotIn("outside-verus", kinds("verus/r/r16_capstone/src/trust_report.rs"))
+        self.assertIn("outside-verus", kinds("verus/r/r16_capstone/src/lib.rs"))
+        (unit / "Cargo.toml").write_text(
+            '[package]\nname = "r16_capstone"\nversion = "0.1.0"\n\n[lib]\npath = "src/lib.rs"\n\n'
+            '[[bin]]\nname = "other"\npath = "src/main.rs"\n', encoding="utf-8")
+        self.assertEqual(firsttry.bin_tree_files(self.root, "verus/r/r16_capstone"), [])
 
     def test_refused_without_author_context(self):
         rc, out, err = C.tool("reference_lint.py", root=self.root)
