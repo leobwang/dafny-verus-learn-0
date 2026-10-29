@@ -1,0 +1,330 @@
+# expected/R16.chapter.toml — the chapter pins of R16's chapter: one [[entry]] per
+# pinned output fence (`<!-- pin: <id> -->` above a bare fence). The schema is in
+# scripts/pins.py ("Chapter fences") and expected/README.md. Authors write the
+# entries; `scripts/pins.py --update --chapter R16 [--entry ID]` captures them
+# (it fills [entry.pinned] and rewrites this file canonically: notes go in `note`).
+schema = 1
+
+[[entry]]
+id = "shipped-d"
+cmd = ["scripts/vcheck", "dafny/R/R16_Capstone/std"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "da20af4e2898509273a83e7193fea584e21a34718588e051b1c1805b6247c445"
+[entry.pinned.inputs]
+"dafny/R/R16_Capstone/std/R16_Capstone.dfy" = "4250aa749adf2da64c018440400a0b81949c38544b0f43fc2882fb0d7691fade"
+"dafny/R/R16_Capstone/std/R16_Statements.dfy" = "437ed8c6cbd8b74d1ececc2ac9a6988dec898f413adecc1d3a60e3f1f37059f4"
+"dafny/R/R16_Capstone/std/dfyconfig.toml" = "aabce9a2dc982bc36f0250f88a956a7a5bfab43d3f8b85be25e58bdefe06006a"
+
+[[entry]]
+id = "shipped-v"
+cmd = ["scripts/vcheck", "verus/r/r16_capstone"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "796b916106035762543958396baff42c518b03837acb30a4bc81ff6e8428c898"
+[entry.pinned.inputs]
+"verus/r/r16_capstone/Cargo.toml" = "34b3e498175954f81b45ffd32b8240973561932fb901084cccd2248742accea2"
+"verus/r/r16_capstone/src/agent.rs" = "1171d821c0ac40197991cdc188af1a4e73c67fefbaef86d2216a3576aace7e7c"
+"verus/r/r16_capstone/src/lib.rs" = "27eaf236ae140ef9b20aea0f7c10d8320499ba3ff8f542b73ee02acceb323a0d"
+"verus/r/r16_capstone/src/main.rs" = "54eced71f03fd83f79f33e4c05ab7b4c9cf585bbc0f59cf119d272e5f022fefb"
+"verus/r/r16_capstone/src/statements.rs" = "f1a007ab6d537d7af6555e60116c9df2fa0f031f83b109624a2fd3e264e23d6a"
+"verus/r/r16_capstone/src/trust_report.rs" = "8d7a13af847f2b9f196a7b87a19f0296c38213b7a24f835b34299be9e3df3b5d"
+
+[[entry]]
+id = "onestep-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+note = "specimens/R16/onestep-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/onestep-d.dfy.specimen"
+[entry.pinned]
+body = "cc662ac3041ef1aa4b8dc50ce20e7c94cf78afa3a39f4a96fb8587877bc85bbb"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "00a201fe8e5e1ed62c3be8516f1b5b5e9a298d03a5bd1fccf2226d0a2e7c2c10"
+"specimens/R16/onestep-d.dfy.specimen" = "00a201fe8e5e1ed62c3be8516f1b5b5e9a298d03a5bd1fccf2226d0a2e7c2c10"
+
+[[entry]]
+id = "onestep-v"
+cmd = ["scripts/vcheck", "specimens/R16/onestep-v.rs.specimen"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c01c8834ddc665c3a5e316bdb513fb8a77000da00c010fb8faf0d133c8db82a5"
+[entry.pinned.inputs]
+"specimens/R16/onestep-v.rs.specimen" = "a3bb77ab4c2792797ff31e2f489b85f92370aa0863d480bfafb673d3c787abeb"
+
+[[entry]]
+id = "layout-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+note = "specimens/R16/layout-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/layout-d.dfy.specimen"
+[entry.pinned]
+body = "27093ab4dea4f45d4f0674808383a996e8f79a3cff532dbe11f01d4673910bb2"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "bcd46db86ea994dcae956afa580733156c7fdd16ac097ef64047fc9e48d142d8"
+"specimens/R16/layout-d.dfy.specimen" = "bcd46db86ea994dcae956afa580733156c7fdd16ac097ef64047fc9e48d142d8"
+
+[[entry]]
+id = "layout-v"
+cmd = ["scripts/vcheck", "specimens/R16/layout-v.rs.specimen"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "11449c61029ed2030b0677b5373eaefd874d182d4b428f27baa3d18b92d4cf08"
+[entry.pinned.inputs]
+"specimens/R16/layout-v.rs.specimen" = "4be38a2706da85b0de197d6ca5a71f6ef3fa14248a2c27886633097955545cc2"
+
+[[entry]]
+id = "vacuous-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+answers = ["R16.P1dv"]
+note = "specimens/R16/vacuous-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/vacuous-d.dfy.specimen"
+[entry.pinned]
+body = "d0aa7d40851d15d98f65ad36a9c70663adccc4d1740eaa82a28cfbceaa70997a"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "f4ec43f53a4e2b0eba8ea64b9a32a7a9501efd9d27ed1c61c10be86accd0b101"
+"specimens/R16/vacuous-d.dfy.specimen" = "f4ec43f53a4e2b0eba8ea64b9a32a7a9501efd9d27ed1c61c10be86accd0b101"
+
+[[entry]]
+id = "vacuous-v"
+cmd = ["scripts/vcheck", "specimens/R16/vacuous-v.rs.specimen"]
+answers = ["R16.P1dv"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "f0292957f68ae3271c93f64fbb3569aa7f08866cb7aef4ee51bceb6997686bc4"
+[entry.pinned.inputs]
+"specimens/R16/vacuous-v.rs.specimen" = "54d6b281459d954e6cbf6d629df77a1d27052a29a9847a64afe55dc4c01b8d2c"
+
+[[entry]]
+id = "whole-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+answers = ["R16.P2dv"]
+note = "specimens/R16/whole-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/whole-d.dfy.specimen"
+[entry.pinned]
+body = "d8ceb065fdf504bffe1447fd05a2484c8cc443999942a530a1cdbcc53cb7e357"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "197d023ec5e80719552b6b6494aa9c1b41a8fd0385d2ad6a5e06753c63f183e7"
+"specimens/R16/whole-d.dfy.specimen" = "197d023ec5e80719552b6b6494aa9c1b41a8fd0385d2ad6a5e06753c63f183e7"
+
+[[entry]]
+id = "whole-v"
+cmd = ["scripts/vcheck", "specimens/R16/whole-v.rs.specimen"]
+answers = ["R16.P2dv"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "398dda9b0e7a2a2463b866c08894c867da3bef33f2b94aa130d3ec75bd674d17"
+[entry.pinned.inputs]
+"specimens/R16/whole-v.rs.specimen" = "309399e06cd0f03aae3e739fbf28015de21d61fbcace24afd37e62fbfbe3e172"
+
+[[entry]]
+id = "thread-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+note = "specimens/R16/thread-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/thread-d.dfy.specimen"
+[entry.pinned]
+body = "26ba345e5498c00b66783041e396ca59e44d1de18135deb0951da182a4353acc"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "8794e1315bccd52f55670b080000da1aef42f356296bbd36df684c8de85fe3f1"
+"specimens/R16/thread-d.dfy.specimen" = "8794e1315bccd52f55670b080000da1aef42f356296bbd36df684c8de85fe3f1"
+
+[[entry]]
+id = "thread-v"
+cmd = ["scripts/vcheck", "specimens/R16/thread-v.rs.specimen"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "c08a4f5a99d20d37d9187f24c4bcc44defd16a695b34c2123edc6c62f2e3b0e5"
+[entry.pinned.inputs]
+"specimens/R16/thread-v.rs.specimen" = "b783b44e17494afbbd62b6f9b6655a93a215c34ef92f56f5eeba0db8485cd54f"
+
+[[entry]]
+id = "lazysum-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+note = "specimens/R16/lazysum-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/lazysum-d.dfy.specimen"
+[entry.pinned]
+body = "0fe513a841e7baae91fa9b027c6c9d092922488625359242e83c97ea8fb0010e"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "95a9923ad235ca66ea7e34ff08c9f9729e21c667bd9c006b4894227c94726275"
+"specimens/R16/lazysum-d.dfy.specimen" = "95a9923ad235ca66ea7e34ff08c9f9729e21c667bd9c006b4894227c94726275"
+
+[[entry]]
+id = "lazysum-v"
+cmd = ["scripts/vcheck", "specimens/R16/lazysum-v.rs.specimen"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "33eb90adb78212282a94a75107e8085bb1d606a2ffddff56302398558648cc66"
+[entry.pinned.inputs]
+"specimens/R16/lazysum-v.rs.specimen" = "17ee8f97a3d76ab7dd456a34ac0cd134cea147b2ee5196d69689e71d09855d07"
+
+[[entry]]
+id = "rexc-usage"
+cmd = ["scripts/vcheck", "--bin", "verus/r/r16_capstone", "--", "match", "a", "a"]
+[entry.normalize]
+prompt = true
+exit = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "1f9e3225db06cd6328dc34e749792f3a4741f6b92f4131ad4f0cc3ae32db658c"
+[entry.pinned.inputs]
+"verus/r/r16_capstone/Cargo.toml" = "34b3e498175954f81b45ffd32b8240973561932fb901084cccd2248742accea2"
+"verus/r/r16_capstone/src/agent.rs" = "1171d821c0ac40197991cdc188af1a4e73c67fefbaef86d2216a3576aace7e7c"
+"verus/r/r16_capstone/src/lib.rs" = "27eaf236ae140ef9b20aea0f7c10d8320499ba3ff8f542b73ee02acceb323a0d"
+"verus/r/r16_capstone/src/main.rs" = "54eced71f03fd83f79f33e4c05ab7b4c9cf585bbc0f59cf119d272e5f022fefb"
+"verus/r/r16_capstone/src/statements.rs" = "f1a007ab6d537d7af6555e60116c9df2fa0f031f83b109624a2fd3e264e23d6a"
+"verus/r/r16_capstone/src/trust_report.rs" = "8d7a13af847f2b9f196a7b87a19f0296c38213b7a24f835b34299be9e3df3b5d"
+
+[[entry]]
+id = "agent-d"
+cmd = ["scripts/vcheck", "dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "116cd91e6cca86a66c03bef4acd46691cc0e62d51841dc3a0f30e794570ef15f"
+[entry.pinned.inputs]
+"dafny/R/R16_Capstone/agent/R16_AgentCapstone.dfy" = "c387e416dd24e209a14663c73c57e11fe14089deee9fddf89404b1a8432f8ef5"
+
+[[entry]]
+id = "agent-v"
+cmd = ["scripts/vcheck", "verus/r/r16_capstone/src/agent.rs"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "36b0f23149293e13fef84c9a210b16d7c6c6e113ce2e1b3a2fcc9e4e2ec28227"
+[entry.pinned.inputs]
+"verus/r/r16_capstone/src/agent.rs" = "1171d821c0ac40197991cdc188af1a4e73c67fefbaef86d2216a3576aace7e7c"
+
+[[entry]]
+id = "plant-d"
+cmd = ["scripts/vcheck", "--module", "R16", "probe.dfy"]
+cwd = "scratch"
+inputs = ["dafny/options/std.toml", "dafny/given/R/RG_A1_Re.dfy", "dafny/given/R/RG_A1b_Facts.dfy", "dafny/given/R/RG_A2_Deriv.dfy", "dafny/given/R/RG_A2_MatcherStatement.dfy", "dafny/given/R/RG_A3_Syntax.dfy", "dafny/given/R/RG_A4_Norm.dfy", "dafny/given/R/RG_A5_VM.dfy"]
+note = "specimens/R16/plant-d.dfy.specimen, run in R16's given context."
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.scratch."probe.dfy"]
+copy = "specimens/R16/plant-d.dfy.specimen"
+[entry.pinned]
+body = "7cb0d256e76e9af5aa0d03de05d43203fb745d0865d4f681e9f6aa422cecac35"
+[entry.pinned.inputs]
+"dafny/given/R/RG_A1_Re.dfy" = "7b609ea0d724178bbf910257db6e3a1cab83f9c28848420c3bbd4da8c48e0dc1"
+"dafny/given/R/RG_A1b_Facts.dfy" = "25656c305b1d7a540ce67dcc0ddae44ae795dfff82acf9561e861da0168942ef"
+"dafny/given/R/RG_A2_Deriv.dfy" = "0a44afceaffbba7f901c3e832081c1950ab35d4ead103b3f98b2e834b7028933"
+"dafny/given/R/RG_A2_MatcherStatement.dfy" = "918decd970f9b67286ccfb52478991562e5bf02efb588e6bc60e10cc3dda1c49"
+"dafny/given/R/RG_A3_Syntax.dfy" = "283a43ee9d8d49ef9f03099e440361c5df7d14cfe64f901ffb1d99b17803e19e"
+"dafny/given/R/RG_A4_Norm.dfy" = "f5b9ae4793e620ab1d2b2cb249de2796ac56a27791bce66a0ec9419480166da8"
+"dafny/given/R/RG_A5_VM.dfy" = "465aa8fe9f3563e05ca5876806c7db6ee437382e3654cec514d636a3d929e99b"
+"dafny/options/std.toml" = "f5c393f2d3fa710dc0b5a1c189cc676e7889fa039602dc4731ca6647d56ca3c7"
+"scratch:probe.dfy" = "2d362d091d3af0eb205c530e4f26f427825618a633d6c853b857352efff19ea5"
+"specimens/R16/plant-d.dfy.specimen" = "2d362d091d3af0eb205c530e4f26f427825618a633d6c853b857352efff19ea5"
+
+[[entry]]
+id = "plant-v"
+cmd = ["scripts/vcheck", "specimens/R16/plant-v.rs.specimen"]
+[entry.normalize]
+prompt = true
+drop = ["^raw output: "]
+[entry.pinned]
+body = "09c653a22c57cb7f9ded33a5e9042f81d6f68eac658de78c7ca7556f65bc9747"
+[entry.pinned.inputs]
+"specimens/R16/plant-v.rs.specimen" = "a27e6cc5e41b23466627a05a06bdbbad336e3455b31726dd4fab0bfb19cb68b4"

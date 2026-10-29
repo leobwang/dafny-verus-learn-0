@@ -21,8 +21,13 @@ open_bodies = []
 "R16_Capstone.Hop" = "a7c692e7a397b8de713952fc8e1b4de4ede1619054eabdc8df2ba7e241b69759"
 "R16_Capstone.Shortcut" = "3bfea5f8d386afa2d276e785d471d565b287cf400cb24e6d47ca9ca060f4e44d"
 "R16_Capstone.ShortcutCorrect" = "9b0d5faffb94b87385a9411f538fc67dd45c3933912cdd9f20a8d9c0c3e6f83b"
+"R16_SecondEngine.CrossCheckR16" = "7f7b66599ee12b5f6521e0cf382a52dafbae4a809cf92122a7082577faf8329d"
+"R16_SecondEngine.LazyMatch" = "f2205eab1b8024945e1c4c2ff39c71025aa9c932a4074d745e4faa7414a59460"
+"R16_SecondEngine.LazyMatchCorrect" = "6f0c5b318539c76a8f9250f2ce9494e3ce41565ad89e1207c37d42e60e5c3eb0"
+"R16_SecondEngine.LazyMatchExec" = "cdd0ef3a1de381141bd61a609520290854b42096e0b4580eff4bd2e9a6627d9e"
 [file.frozen_imports]
 "R16_Capstone" = ["25a689bebf5a7b44bcfee7223c78f63e72762d303148f1ac6ca665b87066c4bd", "97bbad33a81395a706fbd71a8342c46ecc6162d2c8ef6f77a857116f4ef9ed5e", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26"]
+"R16_SecondEngine" = ["50701aefb8395eb6c14830e36166b46e3e1ae4f2a4ea16d148eac1ded57f8759", "97bbad33a81395a706fbd71a8342c46ecc6162d2c8ef6f77a857116f4ef9ed5e", "c45ad0c0cc82dfa895dee1270639bd81b1d49986f060cdc17539337385893f26", "e3852e57186c5f813133f22406b729dda00f710f1a9c7a59fba97cedd5bc91b7", "fc28f9ddc45485657f243e4a497f9c23d58da990e7eb21f420e0faf05def2701"]
 
 [[file]]
 path = "dafny/R/R16_Capstone/std/R16_Statements.dfy"
@@ -39,11 +44,15 @@ path = "verus/r/r16_capstone/src/lib.rs"
 lang = "v"
 open_bodies = []
 [file.statements]
+"cross_check_r16" = "e2a09a3ff7e7788b24dc1566aac69ef4aa28a216964980ddaf31c2c74b3f9556"
 "hop" = "34e6d83371a39cce500cae1e61de6ab589deac9772396ea64e58df4c044051bb"
+"lazy_match" = "b5827bffae3f8ba2b591d0247e5072bfc1d481279dbe99532547a74361740c7f"
+"lazy_match_exec" = "8f68230613a1ad9ac630a060ea4abf9666c722c5ecff0977967e0d662677d01b"
 "lemma_emit_complete" = "4377610b129b557f027d6d3ef52565b3dc37917be208876da50c92c4ed5c4ba5"
 "lemma_emit_correct" = "083e545084e6982fe68bc7975cb7ceefdb5eddc4ad482744e5505c66adf6cb3b"
 "lemma_emit_size_r16" = "6ac4fc2dd79a77b506cdee3c991ffc997aff2dc56c39330c34a17df57fe9ee05"
 "lemma_emit_sound" = "0a18dd7fe80938e87a942e892c11ef0d595cefb6670d93d6f78a6a096d3c0ae8"
+"lemma_lazy_match" = "372fc044ec97ba553e66ed36610bea5cd9834f7b52484ca09bf78810cf669b97"
 "lemma_shortcut_correct" = "8f760d492881bc6f945cf9101c86bff3d6f53c048f032fdeaef0accf7f28bc59"
 "rexc_match" = "c8ad47cb734a73412b07b9121e65494ae766b2b2d4749a08de899a4244b37b4d"
 "shortcut" = "819bead2b446dc8b3b5ae4a995a50497b58c446002174ae8fcae3a5bcadcceeb"
@@ -55,6 +64,98 @@ open_bodies = ["emit_complete_statement", "emit_sound_statement"]
 [file.statements]
 "emit_complete_statement" = "8c807d6718faecf5591ff0a1ebe4b7ad8065ac7124a0954dba4ec869c9f4d0fe"
 "emit_sound_statement" = "3179511733ccf42f1feb25b722fc4393d69df64dc188c0978f34acff24696000"
+
+[[file]]
+path = "specimens/R16/layout-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_LayoutD.CatLayoutAtZeroR16" = "03fe6aed25eea2d9202d1296bbbbfa7ebd96dc28dbc004c00fe46ef2fb3564be"
+"R16_LayoutD.StarLayoutAtThreeR16" = "3e64e4dc62d92d5fdde3c067e300b6df26489fd441ed78c68820c45312b9847e"
+
+[[file]]
+path = "specimens/R16/layout-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"cat_layout_at_zero_r16" = "5dff71b65461293879b580f3c28262ad969e427b87c10b3879bc387871dd0884"
+"star_layout_at_three_r16" = "9e527b651bce9f34f684dac5903e62bbd48d964c1d843e9e11cf9e6c8820b8f8"
+
+[[file]]
+path = "specimens/R16/lazysum-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_LazySumD.DerivGrowsR16" = "01199e96ad670061facc0dcda11d10d070026ea977b0d72b93756f5e008b289d"
+"R16_LazySumD.LazyMatchSumR16" = "39595214c7c07299d97f72978c34c928a72d88997d9909c56c4459fa4625af0f"
+
+[[file]]
+path = "specimens/R16/lazysum-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"deriv_grows_r16" = "52ce89d9883b36862bc635afa8657349465c97c2a2fae13b290d618f5876ac81"
+"lazy_match_sum_r16" = "044b4de3757e453f598a6a10753d2686ac5e23585547418f359d0d64d0ab295c"
+
+[[file]]
+path = "specimens/R16/onestep-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_OneStepD.AcceptsBlindR16" = "594aab82021c70734fea6e0761c5d365e0acd12e07b896715e2c28a8ff9ba550"
+"R16_OneStepD.AcceptsStepsR16" = "bc480db04f0d4c5f09ad814244a178641e21af80507994028d6f79e741bd9d13"
+
+[[file]]
+path = "specimens/R16/onestep-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"accepts_blind_r16" = "39f68d93e5cf0df075c93b1cff83d7ae6baf5f53e27d24fce1e053974eceee37"
+"accepts_steps_r16" = "9cc9e223acb5bffa0df5d099fa34f4c6b8a80d8be0a86534552ce26a78dd3bda"
+
+[[file]]
+path = "specimens/R16/plant-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_PlantD.HopSplitR16" = "b93762f1e85ef722efa54d19ea78f44919f368c0ed166e4620c89dc37d8a812e"
+"R16_PlantD.PlantAtWitnessR16" = "a6b1b547571f60857d1bf2614ad298b81b9ded2d4efccc183ec1161b974a1ed3"
+"R16_PlantD.PlantProgR16" = "8db3ab8bfadb0fda7f015c228536c880cf2c934dd490d699cb96bc3dd608acc9"
+"R16_PlantD.PlantRejectsR16" = "ca588d3ebf2af1b61d1765ef5dbcc8d53ed9621ce7d484d0dcaf971890090ca9"
+"R16_PlantD.ShortcutSplitR16" = "26a235642bd34ce9621f7cc2ecbbf00ef899384637e25fc381b0a6c6c4fa9ca5"
+"R16_PlantD.ThruR16" = "c303d986d368005f25e3122b967ce9669da6d9bb85a0448ad26755b1954d1ece"
+
+[[file]]
+path = "specimens/R16/plant-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"hop_split_r16" = "6ecf2185546a8b419839b2196969e9a1b2e05b79d7452c48cedf5175baf1f398"
+"plant_at_witness_r16" = "8c1dad2415f900c9dab9ff897e1f300043cd50678109274b5610c34f86412f89"
+"plant_prog_r16" = "54c23fb9b7ae25e7ed11dc870859ea00c3365a7a6f76227f933fb216531d523a"
+"plant_rejects_r16" = "967950e3b5ded95b9364b102655c1e0b9f37a01c9e165ee4149daf9d22307a1c"
+"shortcut_split_r16" = "107f5ed8dbb8b32507e274345d2c7c60eea8994d3d8b6e9285d7473b49bda393"
+"thru_r16" = "4c60075b1c5c3824c927f9a8b0955866e321cb081cf43e92337c0e695367616d"
+
+[[file]]
+path = "specimens/R16/thread-d.dfy.specimen"
+lang = "d"
+open_bodies = []
+[file.statements]
+"R16_ThreadD.Hop" = "a7c692e7a397b8de713952fc8e1b4de4ede1619054eabdc8df2ba7e241b69759"
+"R16_ThreadD.Shortcut" = "3bfea5f8d386afa2d276e785d471d565b287cf400cb24e6d47ca9ca060f4e44d"
+"R16_ThreadD.ShortcutChainR16" = "ca6ac5afee34801b0ddaeb71300ca7d88b26af1d03afe00b42e67fae6ab4bd27"
+"R16_ThreadD.ShortcutSelfLoopR16" = "2f15443f10ecaf024681bb8ed9d0aef2218864edaa6825457f6b3e4e84ae3b38"
+
+[[file]]
+path = "specimens/R16/thread-v.rs.specimen"
+lang = "v"
+open_bodies = []
+[file.statements]
+"hop" = "34e6d83371a39cce500cae1e61de6ab589deac9772396ea64e58df4c044051bb"
+"shortcut" = "819bead2b446dc8b3b5ae4a995a50497b58c446002174ae8fcae3a5bcadcceeb"
+"shortcut_chain_r16" = "6fd3e21f3f7612731bd95188c0a9940b74374f0afe484ebf777f1c86bfaf4f28"
+"shortcut_self_loop_r16" = "dc5e2ab6415c36ee80b8d96b6fd337bf6efe0ae4d0c306d73785f5e92d00a788"
 
 [[file]]
 path = "specimens/R16/vacuous-d.dfy.specimen"

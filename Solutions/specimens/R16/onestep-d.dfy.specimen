@@ -1,0 +1,23 @@
+// Reference Solution.
+module R16_OneStepD {
+  import opened RG_A1_Re
+  import opened RG_A5_VM
+
+  // The program `a` then match accepts the word "a" from address 0, with two
+  // units of fuel. `Accepts` is opaque: without the one-step lemmas the
+  // verifier knows nothing about it.
+  lemma AcceptsBlindR16()
+    ensures Accepts([IChar('a'), IMatch], 0, ['a'], 2)
+  {
+  }
+
+  // The same fact, one instruction at a time.
+  lemma AcceptsStepsR16()
+    ensures Accepts([IChar('a'), IMatch], 0, ['a'], 2)
+  {
+    var p := [IChar('a'), IMatch];
+    AcceptsMatch(p, 1, [], 1);
+    assert ['a'][1..] == [];
+    AcceptsChar(p, 0, ['a'], 2);
+  }
+}

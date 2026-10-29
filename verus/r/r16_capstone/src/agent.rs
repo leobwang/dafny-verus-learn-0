@@ -2,7 +2,7 @@
 //! for rexc's VM: `shortcut_split_r16` threads every jump and both targets of every split
 //! through one jump. Its statement, `lemma_shortcut_split_correct_r16`, is frozen: both
 //! directions, from every address. The shipped optimizer holds one planted defect (chapter
-//! §8). Snapshot this file under research/R16/ before any contractor edit. The contractor
+//! §14). Snapshot this file under research/R16/ before any contractor edit. The contractor
 //! (/contract R16, a fresh session, contract R-v1) may edit only the optimizer (`thru_r16`,
 //! `hop_split_r16`, `shortcut_split_r16`) and write the body of
 //! `lemma_shortcut_split_correct_r16` and its helper lemmas; the statement, the imports and

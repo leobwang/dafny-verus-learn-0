@@ -1,8 +1,8 @@
 /*!
 # R16 — Capstone (Exercises)
 
-Standalone R track. Import only the frozen layers A1 and A5 and your own
-statement file R16_Statements.dfy; no earlier learner file is needed. The
+Standalone R track. Import only the frozen layers A1, A1b, A2 and A5 and your
+own statement file R16_Statements.dfy; no earlier learner file is needed. The
 paired exercise is verus/r/r16_capstone/src/lib.rs.
 
 Record the two predictions first (scripts/firsttry.sh R16 --check: the
@@ -10,13 +10,15 @@ CHECK lines of the prediction block below, answered in slots/R16.slots), then
 attempt T1 closed book before reading the chapter. Then work on paper first
 (the chapter's §2: the blueprint is graded before you formalize), write and
 freeze your statements (H1, in R16_Statements.dfy), and only then prove them
-here. Five typed items ship in this language: T1, H1 (in the statement file),
-H2, H3 and H4; H4 (jump threading) is the gated optimizer.
+here. Eight typed items ship in this language: T1, H1 (in the statement
+file), H2, H3, H4, H5, H6 and H7; H4 (jump threading) is the gated optimizer.
 
 File order: the test-out T1, completeness H2 (`EmitComplete`, then your
 helper lemmas), soundness H3 (`EmitSound`, then helpers), the optimizer H4
-(the given `Hop` and `Shortcut`, `ShortcutCorrect`, then helpers) and the
-whole-program theorem H5. A5's `Accepts` is opaque: use its one-step lemmas
+(the given `Hop` and `Shortcut`, `ShortcutCorrect`, then helpers), the
+whole-program theorem H5, and rexc's second engine (the given `LazyMatch`,
+its correctness H6 and its compiled matcher H7, each yours to give a
+measure). A5's `Accepts` is opaque: use its one-step lemmas
 (`AcceptsChar`, `AcceptsSplit`, `AcceptsJmp`, `AcceptsMatch`) and
 `AcceptsInside`, never a reveal.
 
@@ -166,4 +168,77 @@ module R16_Capstone {
   }
   // Hint(1): A5's `LayoutProg` places `Emit(r, 0)` at address 0 and `IMatch` right after it; the continuation is that one instruction.
   // Hint(2): `AcceptsMatch` accepts only the empty word, so the split your soundness statement returns must be the whole word; completeness needs the continuation to accept `[]`, with one unit of fuel.
+}
+
+// rexc's second engine, in its own module: it reaches A1b and A2, which the
+// capstone's VM proofs above do not import.
+module R16_SecondEngine {
+  // specfreeze: frozen-imports
+  import opened RG_A1_Re
+  import opened RG_A1b_Facts
+  import opened RG_A2_Deriv
+  import opened RG_A5_VM
+  import opened R16_Capstone
+
+  // ===========================================================================
+  // rexc's second engine: derivatives
+  // ===========================================================================
+
+  // A second matcher, for rexc's cross-check against the VM: A2's derivatives,
+  // except that an alternation is split instead of built (the two branches are
+  // matched against the same word). Splitting makes the regex smaller with the
+  // word unchanged; deriving makes the word shorter and the regex possibly
+  // larger (`Deriv(Star(a), c)` is `Cat(Deriv(a, c), Star(a))`).
+  ghost function LazyMatch(r: Re, w: seq<char>): bool
+    decreases |w|, r
+  {
+    if w == [] then Nullable(r)
+    else match r
+      case Alt(a, b) => LazyMatch(a, w) || LazyMatch(b, w)
+      case _ => LazyMatch(Deriv(r, w[0]), w[1..])
+  }
+
+  // item: R16.H6d
+  // uses: lemma-recursion, lexicographic-decreases
+  // pair: R16.H6v
+  /** **H6.** Prove that the lazy engine decides `Matches`. Write the body of
+      `LazyMatchCorrect`, and give the lemma the measure its recursion needs
+      (the lemma ships without one). Which of your recursive calls keep the
+      word and shrink the regex, which shorten the word and may grow the
+      regex, and why does no single number built from `|w|` and
+      `NodeCount(r)` go down at both? */
+  lemma LazyMatchCorrect(r: Re, w: seq<char>)
+    ensures LazyMatch(r, w) == Matches(r, w)
+  {
+    assume false;
+  }
+  // Hint(1): follow `LazyMatch`'s own cases: the empty word, an alternation, and every other regex at a non-empty word.
+  // Hint(2): A1b's `NullableCorrect` settles the empty word and A2's `DerivCorrect` the derivative step; the measure compares the word's length first and the regex second.
+
+  // item: R16.H7d
+  // uses: lexicographic-decreases
+  // pair: R16.H7v
+  /** **H7.** Compile the lazy engine: a recursive method that answers whether
+      `r` matches the suffix `s[i..]`, splitting an alternation and deriving
+      otherwise, as `LazyMatch` does. Write its body and give it the measure
+      it needs (it ships without one). What decreases when the method moves
+      to `i + 1`, what when it splits, and in which order must the measure
+      compare them? */
+  method LazyMatchExec(r: Re, s: seq<char>, i: nat) returns (b: bool)
+    requires i <= |s|
+    ensures b == Matches(r, s[i..])
+  {
+    assume false;
+  }
+  // Hint(1): one case per branch of `LazyMatch`; A1's `Nullable` and A2's `Deriv` are compiled, `LazyMatch` and `Matches` are not.
+  // Hint(2): `NullableCorrect` and `DerivCorrect` give the two facts the cases need; a recursive call on `r.a` keeps `i`, one on the derivative moves to `i + 1`.
+
+  // The use-site check: both of rexc's engines agree on every regex and word.
+  method CrossCheckR16(r: Re, s: seq<char>) returns (b: bool)
+    ensures b == AcceptsFrom(EmitProg(r), 0, s)
+  {
+    b := LazyMatchExec(r, s, 0);
+    assert s[0..] == s;
+    EmitCorrect(r, s);
+  }
 }

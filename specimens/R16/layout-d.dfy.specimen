@@ -1,0 +1,17 @@
+module R16_LayoutD {
+  import opened RG_A1_Re
+  import opened RG_A5_VM
+
+  // The code A5 emits for a loop over one character, placed at address 3:
+  // a split into the body or past it, the body, and a jump back to the split.
+  lemma StarLayoutAtThreeR16()
+    ensures Emit(Star(Chr('a')), 3) == [ISplit(4, 6), IChar('a'), IJmp(3)]
+  {
+  }
+
+  // A concatenation places its second half right after its first.
+  lemma CatLayoutAtZeroR16()
+    ensures Emit(Cat(Chr('a'), Chr('b')), 0) == [IChar('a'), IChar('b')]
+  {
+  }
+}

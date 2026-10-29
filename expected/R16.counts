@@ -14,22 +14,22 @@ module = "R16"
 [[unit]]
 path = "dafny/R/R16_Capstone/std"
 lang = "dafny"
-reference_verified = 188
-min_verified = 9
-symbols = ["R16_Capstone.EmitComplete", "R16_Capstone.EmitCorrect", "R16_Capstone.EmitSizeR16", "R16_Capstone.EmitSound", "R16_Capstone.Hop", "R16_Capstone.Shortcut", "R16_Capstone.ShortcutCorrect", "R16_Statements.EmitCompleteStatement", "R16_Statements.EmitSoundStatement"]
+reference_verified = 193
+min_verified = 13
+symbols = ["R16_Capstone.EmitComplete", "R16_Capstone.EmitCorrect", "R16_Capstone.EmitSizeR16", "R16_Capstone.EmitSound", "R16_Capstone.Hop", "R16_Capstone.Shortcut", "R16_Capstone.ShortcutCorrect", "R16_SecondEngine.CrossCheckR16", "R16_SecondEngine.LazyMatch", "R16_SecondEngine.LazyMatchCorrect", "R16_SecondEngine.LazyMatchExec", "R16_Statements.EmitCompleteStatement", "R16_Statements.EmitSoundStatement"]
 
 [[unit]]
 path = "verus/r/r16_capstone"
 lang = "verus"
-reference_verified = 19
-min_verified = 6
-symbols = ["lemma_emit_complete", "lemma_emit_correct", "lemma_emit_size_r16", "lemma_emit_sound", "lemma_shortcut_correct", "rexc_match"]
+reference_verified = 23
+min_verified = 10
+symbols = ["cross_check_r16", "lazy_match", "lazy_match_exec", "lemma_emit_complete", "lemma_emit_correct", "lemma_emit_size_r16", "lemma_emit_sound", "lemma_lazy_match", "lemma_shortcut_correct", "rexc_match"]
 
 [[file]]
 path = "dafny/R/R16_Capstone/std/R16_Capstone.dfy"
 role = "exercise"
 verdict = "verified"
-holes = 5
+holes = 7
 errors = 0
 
 [[file]]
@@ -43,7 +43,7 @@ errors = 0
 path = "verus/r/r16_capstone/src/lib.rs"
 role = "exercise"
 verdict = "verified"
-holes = 6
+holes = 8
 errors = 0
 
 [[file]]

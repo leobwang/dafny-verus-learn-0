@@ -1,0 +1,27 @@
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a5::*;
+
+verus! {
+
+// The program `a` then match accepts the word "a" from address 0, with two
+// units of fuel. `accepts` is opaque: without the one-step lemmas the verifier
+// knows nothing about it.
+proof fn accepts_blind_r16()
+    ensures
+        accepts(seq![Inst::Char('a'), Inst::Match], 0, seq!['a'], 2),
+{
+}
+
+// The same fact, one instruction at a time.
+proof fn accepts_steps_r16()
+    ensures
+        accepts(seq![Inst::Char('a'), Inst::Match], 0, seq!['a'], 2),
+{
+    let p = seq![Inst::Char('a'), Inst::Match];
+    lemma_accepts_match(p, 1, Seq::<char>::empty(), 1);
+    assert(seq!['a'].drop_first() =~= Seq::<char>::empty());
+    lemma_accepts_char(p, 0, seq!['a'], 2);
+}
+
+} // verus!

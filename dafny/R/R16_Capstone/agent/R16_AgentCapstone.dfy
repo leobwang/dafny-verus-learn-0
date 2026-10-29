@@ -2,7 +2,7 @@
 optimizer for rexc's VM: `ShortcutSplitR16` threads every jump and both targets
 of every split through one jump. Its statement, `ShortcutSplitCorrectR16`, is
 frozen: both directions, from every address. The shipped optimizer holds one
-planted defect (chapter §8). Snapshot this file under research/R16/ before any
+planted defect (chapter §14). Snapshot this file under research/R16/ before any
 contractor edit. The contractor (/contract R16, a fresh session, contract R-v1)
 may edit only the optimizer (`ThruR16`, `HopSplitR16`, `ShortcutSplitR16`) and
 write the body of `ShortcutSplitCorrectR16` and its helper lemmas; the

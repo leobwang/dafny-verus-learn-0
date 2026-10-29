@@ -1,0 +1,52 @@
+module R16_PlantD {
+  import opened RG_A1_Re
+  import opened RG_A5_VM
+
+  // The agent file's shipped optimizer, copied (not an item).
+  function ThruR16(p: Prog, a: int): int
+  {
+    if 0 <= a < |p| && (p[a].IJmp? || p[a].ISplit?) then p[a].x else a
+  }
+
+  function HopSplitR16(p: Prog, ins: Inst): Inst
+  {
+    match ins
+    case IJmp(a) => IJmp(ThruR16(p, a))
+    case ISplit(x, y) => ISplit(ThruR16(p, x), ThruR16(p, y))
+    case _ => ins
+  }
+
+  function ShortcutSplitR16(p: Prog): Prog
+  {
+    seq(|p|, i requires 0 <= i < |p| => HopSplitR16(p, p[i]))
+  }
+
+  // A jump to a split that offers one character or the end.
+  function PlantProgR16(): Prog
+  {
+    [IJmp(1), ISplit(2, 3), IChar('a'), IMatch]
+  }
+
+  // The frozen statement at this program, address 0 and the empty word, with
+  // the original program's run supplied.
+  lemma PlantAtWitnessR16()
+    ensures AcceptsFrom(ShortcutSplitR16(PlantProgR16()), 0, []) <==> AcceptsFrom(PlantProgR16(), 0, [])
+  {
+    var p := PlantProgR16();
+    AcceptsMatch(p, 3, [], 1);
+    AcceptsSplit(p, 1, [], 2);
+    AcceptsJmp(p, 0, [], 3);
+  }
+
+  // Why it fails: the optimized jump skips the split's second branch.
+  lemma PlantRejectsR16(f: nat)
+    ensures !Accepts(ShortcutSplitR16(PlantProgR16()), 0, [], f)
+  {
+    var q := ShortcutSplitR16(PlantProgR16());
+    assert q[0] == IJmp(2) && q[2] == IChar('a');
+    AcceptsJmp(q, 0, [], f);
+    if f > 0 {
+      AcceptsChar(q, 2, [], f - 1);
+    }
+  }
+}

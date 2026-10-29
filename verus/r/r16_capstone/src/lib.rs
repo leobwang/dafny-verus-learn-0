@@ -1,19 +1,21 @@
 //! # R16 — Capstone (exercises)
 //!
-//! Standalone R track. Import only the frozen layers A1, A1b and A5 and your own statement
-//! file statements.rs; no earlier learner file is needed. The paired exercise is
+//! Standalone R track. Import only the frozen layers A1, A1b, A2 and A5 and your own
+//! statement file statements.rs; no earlier learner file is needed. The paired exercise is
 //! dafny/R/R16_Capstone/std/R16_Capstone.dfy.
 //!
 //! Attempt T1 closed book before reading the chapter. Then work on paper first (the
 //! chapter's §2: the blueprint is graded before you formalize), write and freeze your
-//! statements (H1, in statements.rs), and only then prove them here. Six typed items ship in
-//! this crate: T1, H1 (in statements.rs), H2, H3, H4 and H5; H4 (jump threading) is the
-//! gated optimizer.
+//! statements (H1, in statements.rs), and only then prove them here. Eight typed items ship
+//! in this crate: T1, H1 (in statements.rs), H2, H3, H4, H5, H6 and H7; H4 (jump threading)
+//! is the gated optimizer.
 //!
 //! File order: the test-out T1, completeness H2 (`lemma_emit_complete`, then your helper
 //! lemmas), soundness H3 (`lemma_emit_sound`, then helpers), the optimizer H4 (the given
 //! `hop` and `shortcut`, `lemma_shortcut_correct`, then helpers) and `rexc`
-//! H5 (the whole-program theorem and `rexc_match`, with its given use-site check). A5's
+//! H5 (the whole-program theorem and `rexc_match`, with its given use-site check), then
+//! rexc's second engine (the given `lazy_match`, its correctness H6 and its exec matcher H7,
+//! each yours to give a measure, with the given cross-check). A5's
 //! `accepts` is opaque: use its one-step lemmas (`lemma_accepts_char`, `_split`, `_jmp`,
 //! `_match`) and `lemma_accepts_inside`, never a reveal.
 //!
@@ -23,6 +25,7 @@
 use vstd::prelude::*;
 use rg_re_a1::*;
 use rg_re_a1b::*;
+use rg_re_a2::*;
 use rg_re_a5::*;
 
 pub mod statements;
@@ -180,5 +183,78 @@ pub fn rexc_match(r: &Re, s: &Vec<char>) -> (res: Option<bool>)
 //     let none = rexc_match(&Re::Empty, &s);
 //     assert(none == Some(false));
 // }
+
+// =============================================================================
+// rexc's second engine: derivatives
+// =============================================================================
+
+/// A second matcher, for rexc's cross-check against the VM: A2's derivatives, except that an
+/// alternation is split instead of built (both branches are matched against the same word).
+/// Splitting makes the regex smaller with the word unchanged; deriving makes the word shorter
+/// and the regex possibly larger (`deriv(Star(a), c)` is `Cat(deriv(a, c), Star(a))`).
+pub open spec fn lazy_match(r: Re, w: Seq<char>) -> bool
+    decreases w.len(), r,
+{
+    if w.len() == 0 {
+        nullable(r)
+    } else {
+        match r {
+            Re::Alt(a, b) => lazy_match(*a, w) || lazy_match(*b, w),
+            _ => lazy_match(deriv(r, w[0]), w.drop_first()),
+        }
+    }
+}
+
+// item: R16.H6v
+// uses: lemma-recursion, lexicographic-decreases
+// pair: R16.H6d
+/// **H6.** Prove that the lazy engine decides `matches`. Write the body of `lemma_lazy_match`,
+/// and give the lemma the measure its recursion needs (it ships without one). Which of your
+/// recursive calls keep the word and shrink the regex, which shorten the word and may grow
+/// the regex, and why does no single number built from `w.len()` and `node_count(r)` go
+/// down at both?
+pub proof fn lemma_lazy_match(r: Re, w: Seq<char>)
+    ensures
+        lazy_match(r, w) == matches(r, w),
+{
+    #[verifier::proof_note("R16.H6v")] assume(false);
+}
+// Hint(1): follow `lazy_match`'s own cases: the empty word, an alternation, and every other regex at a non-empty word.
+// Hint(2): A1b's `lemma_nullable_correct` settles the empty word and A2's `lemma_deriv_correct` the derivative step; the measure compares the word's length first and the regex second.
+
+// item: R16.H7v
+// uses: lexicographic-decreases
+// pair: R16.H7d
+/// **H7.** Compile the lazy engine: a recursive exec fn that answers whether `r` matches the
+/// suffix of `s` from `i`, splitting an alternation and deriving otherwise, as `lazy_match`
+/// does. Write its body and give it the measure it needs (it ships without one). What
+/// decreases when the function moves to `i + 1`, what when it splits, and in which order
+/// must the measure compare them?
+pub fn lazy_match_exec(r: &Re, s: &Vec<char>, i: usize) -> (b: bool)
+    requires
+        i <= s.len(),
+    ensures
+        b == matches(*r, s@.subrange(i as int, s@.len() as int)),
+{
+    proof {
+        #[verifier::proof_note("R16.H7v")] assume(false);  // HOLE: replace this block
+    }
+    false
+}
+// Hint(1): one case per branch of `lazy_match`; A1's `is_nullable` and A2's `deriv_exec` are exec, `lazy_match` and `matches` are spec only.
+// Hint(2): `lemma_nullable_correct` and `lemma_deriv_correct` give the two facts the cases need; a recursive call on a branch keeps `i`, one on the derivative moves to `i + 1`.
+
+/// The use-site check: rexc's two engines agree on every regex and word.
+pub fn cross_check_r16(r: &Re, s: &Vec<char>) -> (agree: bool)
+    ensures
+        agree,
+{
+    let lazy = lazy_match_exec(r, s, 0);
+    assert(s@.subrange(0, s@.len() as int) =~= s@);
+    match rexc_match(r, s) {
+        Some(b) => b == lazy,
+        None => true,
+    }
+}
 
 } // verus!

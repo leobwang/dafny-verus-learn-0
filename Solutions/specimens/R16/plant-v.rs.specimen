@@ -1,0 +1,66 @@
+// Reference Solution.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a5::*;
+
+verus! {
+
+// The agent file's shipped optimizer, copied (not an item).
+pub open spec fn thru_r16(p: Seq<Inst>, a: usize) -> usize {
+    if (a as int) < p.len() {
+        match p[a as int] {
+            Inst::Jmp(b) => b,
+            Inst::Split(b, _) => b,
+            _ => a,
+        }
+    } else {
+        a
+    }
+}
+
+pub open spec fn hop_split_r16(p: Seq<Inst>, ins: Inst) -> Inst {
+    match ins {
+        Inst::Jmp(a) => Inst::Jmp(thru_r16(p, a)),
+        Inst::Split(x, y) => Inst::Split(thru_r16(p, x), thru_r16(p, y)),
+        _ => ins,
+    }
+}
+
+pub open spec fn shortcut_split_r16(p: Seq<Inst>) -> Seq<Inst> {
+    Seq::new(p.len(), |i: int| hop_split_r16(p, p[i]))
+}
+
+// A jump to a split that offers one character or the end.
+pub open spec fn plant_prog_r16() -> Seq<Inst> {
+    seq![Inst::Jmp(1), Inst::Split(2, 3), Inst::Char('a'), Inst::Match]
+}
+
+// The frozen statement at this program, address 0 and the empty word, with the
+// original program's run supplied.
+proof fn plant_at_witness_r16()
+    ensures
+        accepts_from(shortcut_split_r16(plant_prog_r16()), 0, Seq::<char>::empty())
+            == accepts_from(plant_prog_r16(), 0, Seq::<char>::empty()),
+{
+    let p = plant_prog_r16();
+    let e = Seq::<char>::empty();
+    lemma_accepts_match(p, 3, e, 1);
+    lemma_accepts_split(p, 1, e, 2);
+    lemma_accepts_jmp(p, 0, e, 3);
+}
+
+// Why it fails: the optimized jump skips the split's second branch.
+proof fn plant_rejects_r16(f: nat)
+    ensures
+        !accepts(shortcut_split_r16(plant_prog_r16()), 0, Seq::<char>::empty(), f),
+{
+    let q = shortcut_split_r16(plant_prog_r16());
+    let e = Seq::<char>::empty();
+    assert(q[0] == Inst::Jmp(2) && q[2] == Inst::Char('a'));
+    lemma_accepts_jmp(q, 0, e, f);
+    if f > 0 {
+        lemma_accepts_char(q, 2, e, (f - 1) as nat);
+    }
+}
+
+} // verus!

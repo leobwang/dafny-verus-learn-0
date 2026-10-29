@@ -1,0 +1,33 @@
+// Reference Solution.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a2::*;
+
+verus! {
+
+// The capstone's given lazy engine with a single-number measure in place of its
+// pair (not an item): the word's length plus the regex's size.
+pub open spec fn lazy_match_sum_r16(r: Re, w: Seq<char>) -> bool
+    decreases w.len() + node_count(r),
+{
+    if w.len() == 0 {
+        nullable(r)
+    } else {
+        match r {
+            Re::Alt(a, b) => lazy_match_sum_r16(*a, w) || lazy_match_sum_r16(*b, w),
+            _ => lazy_match_sum_r16(deriv(r, w[0]), w.drop_first()),
+        }
+    }
+}
+
+// The step that breaks it: one character shorter, a larger regex.
+proof fn deriv_grows_r16()
+    ensures
+        node_count(deriv(Re::Star(Box::new(Re::Chr('a'))), 'a')) == 4,
+        node_count(Re::Star(Box::new(Re::Chr('a')))) == 2,
+{
+    reveal_with_fuel(deriv, 2);
+    reveal_with_fuel(node_count, 4);
+}
+
+} // verus!

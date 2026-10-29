@@ -1,0 +1,38 @@
+// Reference Solution.
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a5::*;
+
+verus! {
+
+// The capstone's given optimizer, copied (not an item).
+pub open spec fn hop(p: Seq<Inst>, ins: Inst) -> Inst {
+    match ins {
+        Inst::Jmp(a) => if (a as int) < p.len() && p[a as int] is Jmp {
+            Inst::Jmp(p[a as int]->Jmp_0)
+        } else {
+            ins
+        },
+        _ => ins,
+    }
+}
+
+pub open spec fn shortcut(p: Seq<Inst>) -> Seq<Inst> {
+    Seq::new(p.len(), |i: int| hop(p, p[i]))
+}
+
+// A chain of two jumps: the first now goes straight to the match.
+proof fn shortcut_chain_r16()
+    ensures
+        shortcut(seq![Inst::Jmp(1), Inst::Jmp(2), Inst::Match]) =~= seq![Inst::Jmp(2), Inst::Jmp(2), Inst::Match],
+{
+}
+
+// A jump to itself (A5's code for `Empty`) stays one: one hop, no search.
+proof fn shortcut_self_loop_r16()
+    ensures
+        shortcut(seq![Inst::Jmp(0)]) =~= seq![Inst::Jmp(0)],
+{
+}
+
+} // verus!

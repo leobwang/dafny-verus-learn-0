@@ -1,0 +1,24 @@
+use vstd::prelude::*;
+use rg_re_a1::*;
+use rg_re_a5::*;
+
+verus! {
+
+// The code A5 emits for a loop over one character, placed at address 3:
+// a split into the body or past it, the body, and a jump back to the split.
+proof fn star_layout_at_three_r16()
+    ensures
+        emit(Re::Star(Box::new(Re::Chr('a'))), 3) =~= seq![Inst::Split(4, 6), Inst::Char('a'), Inst::Jmp(3)],
+{
+    reveal_with_fuel(emit, 2);
+}
+
+// A concatenation places its second half right after its first.
+proof fn cat_layout_at_zero_r16()
+    ensures
+        emit(Re::Cat(Box::new(Re::Chr('a')), Box::new(Re::Chr('b'))), 0) =~= seq![Inst::Char('a'), Inst::Char('b')],
+{
+    reveal_with_fuel(emit, 2);
+}
+
+} // verus!

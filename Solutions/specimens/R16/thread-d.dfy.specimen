@@ -1,0 +1,28 @@
+// Reference Solution.
+module R16_ThreadD {
+  import opened RG_A1_Re
+  import opened RG_A5_VM
+
+  // The capstone's given optimizer, copied (not an item).
+  function Hop(p: Prog, ins: Inst): Inst
+  {
+    if ins.IJmp? && 0 <= ins.x < |p| && p[ins.x].IJmp? then IJmp(p[ins.x].x) else ins
+  }
+
+  function Shortcut(p: Prog): Prog
+  {
+    seq(|p|, i requires 0 <= i < |p| => Hop(p, p[i]))
+  }
+
+  // A chain of two jumps: the first now goes straight to the match.
+  lemma ShortcutChainR16()
+    ensures Shortcut([IJmp(1), IJmp(2), IMatch]) == [IJmp(2), IJmp(2), IMatch]
+  {
+  }
+
+  // A jump to itself (A5's code for `Empty`) stays one: one hop, no search.
+  lemma ShortcutSelfLoopR16()
+    ensures Shortcut([IJmp(0)]) == [IJmp(0)]
+  {
+  }
+}
