@@ -6,13 +6,13 @@ connection: a connection (TCP, UDP or a Unix socket) to any address that a
 test's fake server has not registered, and any name lookup other than
 localhost or a numeric address, is refused and fails the test loudly, even
 when the code under test catches the error. So a test that reaches the live
-Ollama on 127.0.0.1:11434, the Anthropic API, a container socket or any other
-address fails.
+model server (127.0.0.1:8000, Δ505), the Anthropic API, a container socket or
+any other address fails.
 
 A fake server registers its address for the test that uses it:
 
     def test_backend(net_allow):
-        server = start_fake_ollama()            # binds 127.0.0.1:0
+        server = start_fake_server()            # binds 127.0.0.1:0
         net_allow(server.server_address)        # ("127.0.0.1", port), or a socket path
         ...
 
@@ -20,7 +20,8 @@ A fake server registers its address for the test that uses it:
 expects one asserts on the list and clears it (the tripwire's own tests do).
 Child processes are outside this file's reach: the CI job runs them with a
 sterile HOME, XDG and CLAUDE_CONFIG_DIR, FVH_NO_MODEL=1, DVL_NO_DOCKER=1 and
-shims for claude, opencode, ollama, docker and sudo on PATH (scripts/ci.sh).
+shims for claude, opencode, ollama, docker and sudo on PATH, and DVL_MODEL_URL at
+the discard port, so no model server is ever found (scripts/ci.sh).
 """
 
 import ipaddress

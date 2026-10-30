@@ -279,11 +279,12 @@ def test_claude_malformed_structured_output(tmp_path, monkeypatch):
 
 def qw_setup(tmp_path, monkeypatch, **extra):
     pins, ctl, log = install(tmp_path, monkeypatch, "fake_opencode.py", "qcli")
-    table = {**pins, "version": "0.0.0-fake", "model": "fake:latest", "num_ctx": 32768,
-             "num_predict": 512, **extra}
+    table = {**pins, "version": "0.0.0-fake", **extra}
     state = tmp_path / "state"
     state.mkdir()
-    return QW.Transport(table, gate_url=GATE, state_base=state, cwd_base=str(tmp_path)), ctl, log
+    return QW.Transport(table, gate_url=GATE, model="fake:latest", context=32768,
+                        options={"max_tokens": 512}, state_base=state,
+                        cwd_base=str(tmp_path)), ctl, log
 
 
 def test_qwen_config_environment_argv_and_precheck(tmp_path, monkeypatch):
@@ -301,14 +302,20 @@ def test_qwen_config_environment_argv_and_precheck(tmp_path, monkeypatch):
     assert all(env[k] == "1" for k in QW.DISABLE) and len(QW.DISABLE) == 8
     assert all(env[k].startswith(env["HOME"]) for k in QW.XDG)
     assert env["HOME"].startswith(str(tmp_path / "state"))         # the call's own state
-    conf_obj = QW.config(t.table, gate_url=GATE, seed=41)
+    conf_obj = QW.config(t.table, gate_url=GATE, model="fake:latest", context=32768, output=512,
+                         seed=41)
     assert conf_obj["permission"] == {"*": "deny"} and conf_obj["tools"] == {"*": False}
     assert conf_obj["mcp"] == {} and conf_obj["share"] == "disabled"
     # one call, one gated request: no title request, no compaction request (step 3c)
     assert conf_obj["agent"] == {"title": {"disable": True}}
     assert conf_obj["compaction"] == {"auto": False}
     model = conf_obj["provider"][QW.PROVIDER]["models"]["fake:latest"]
-    assert model["limit"]["context"] == 32768 and model["options"] == {"seed": 41}
+    assert model["limit"] == {"context": 32768, "output": 512} and model["options"] == {"seed": 41}
+    # a server that reports no max_model_len: no limit stated, its own refusal decides
+    nolim = QW.config(t.table, gate_url=GATE, model="fake:latest", context=None)
+    assert "limit" not in nolim["provider"][QW.PROVIDER]["models"]["fake:latest"]
+    with pytest.raises(apparatus.ApparatusError, match="model id"):
+        QW.config(t.table, gate_url=GATE, model="")
     assert conf_obj["provider"][QW.PROVIDER]["options"]["baseURL"] == GATE
     assert list((tmp_path / "state").iterdir()) == []
 

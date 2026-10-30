@@ -249,7 +249,8 @@ if __name__ == "__main__":
 
 class PerPlatformPins(unittest.TestCase):
     """Δ503: the bundled solvers' and the age binary's sha256 per supported
-    platform; a platform's value holds there and nowhere else."""
+    platform; a platform's value holds there and nowhere else. Δ506: the
+    solvers also name linux-aarch64, the arm64 sandbox image's own builds."""
 
     MAC = {"4.12.1": "7d15df1e4ba8f60b0808dce02ec85e0dd6dac4b975231a2f7b35fe8789464208",
            "4.14.1": "2fb05b03121f522fdea1ee523c73b9341d327814c81f051a887e97e931af06bf"}
@@ -257,7 +258,7 @@ class PerPlatformPins(unittest.TestCase):
     def test_every_solver_names_one_sha256_per_supported_platform(self):
         for name, e in PINS["dafny"]["solvers"].items():
             with self.subTest(solver=name):
-                self.assertEqual(sorted(e["sha256"]), sorted(plat.SUPPORTED))
+                self.assertEqual(sorted(e["sha256"]), sorted(plat.SUPPORTED + plat.IMAGE_ONLY))
                 for v in e["sha256"].values():
                     self.assertRegex(v, r"^[0-9a-f]{64}$")
                 self.assertEqual(e["sha256"]["macos-arm64"], self.MAC[name])
@@ -266,18 +267,30 @@ class PerPlatformPins(unittest.TestCase):
         for name, e in PINS["dafny"]["solvers"].items():
             self.assertEqual(common.pinned_solver_sha256(e, "macos-arm64"), self.MAC[name])
             self.assertNotEqual(common.pinned_solver_sha256(e, "linux-x86_64"), self.MAC[name])
-            self.assertIsNone(common.pinned_solver_sha256(e, "unsupported-linux-aarch64"))
+            self.assertIsNone(common.pinned_solver_sha256(e, "unsupported-linux-riscv64"))
         with tempfile.TemporaryDirectory() as d:
             f = Path(d) / "z3-4.14.1"
             f.write_bytes(b"a macOS build")
             digest = __import__("hashlib").sha256(f.read_bytes()).hexdigest()
             entry = {"sha256": {"macos-arm64": digest, "linux-x86_64": "0" * 64}}
             self.assertIsNone(common.solver_hash_mismatch("4.14.1", f, entry, "macos-arm64"))
-            for other in ("linux-x86_64", "unsupported-linux-aarch64"):
+            for other in ("linux-x86_64", "unsupported-linux-riscv64"):
                 with self.subTest(platform=other):
                     m = common.solver_hash_mismatch("4.14.1", f, entry, other)
                     self.assertIn(f"has sha256 {digest}", m)
                     self.assertIn(other, m)
+
+    def test_linux_aarch64_is_the_arm64_images_platform_not_a_learner_host(self):
+        from unittest import mock
+        u = os.uname_result(("Linux", "h", "r", "v", "aarch64"))
+        with mock.patch("os.uname", return_value=u), mock.patch.object(sys, "platform", "linux"):
+            self.assertEqual(plat.current(), "linux-aarch64")
+            self.assertEqual(plat.rust_host_triple(), "aarch64-unknown-linux-gnu")
+            sys.path.insert(0, str(ROOT / "harness"))
+            from fvh import statements
+            self.assertEqual(statements._platform(), "linux-aarch64")
+        self.assertNotIn("linux-aarch64", plat.SUPPORTED)
+        self.assertIsNone(plat.pinned("x", "linux-aarch64"))
 
     def test_a_plain_pin_holds_on_linux_x86_64_only(self):
         self.assertEqual(plat.pinned("x", "linux-x86_64"), "x")
@@ -297,7 +310,7 @@ class PerPlatformPins(unittest.TestCase):
             with self.subTest(lab=lab):
                 self.assertEqual(pin["age_sha256"], {"linux-x86_64": linux, "macos-arm64": mac})
                 for platform, want in (("linux-x86_64", linux), ("macos-arm64", mac),
-                                       ("unsupported-linux-aarch64", None)):
+                                       ("unsupported-linux-riscv64", None)):
                     self.assertEqual(sandbox.age_sha256(pin, platform), want)
                     self.assertEqual(statements._pinned(pin["age_sha256"], platform), want)
         self.assertEqual(statements._platform(), plat.current())

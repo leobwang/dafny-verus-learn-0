@@ -31,11 +31,10 @@ max_turns = 2
 version = "0.0.0-fake"
 binary = "~/.opencode/bin/opencode"
 sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
-model = "fake:latest"
-num_ctx = 32768
-num_predict = 4096
 external_ok = []
 
-[model_server]
-version = "0.0.0-fake"
-models = { "fake:latest" = "0000000000000000000000000000000000000000000000000000000000000000" }
+[model_gate]
+# port 9 (discard): no server; CI registers none and models are disabled anyway
+endpoints = ["http://127.0.0.1:9/v1"]
+margin = 512
+options = { temperature = 0.6, seed = 1, max_tokens = 4096 }

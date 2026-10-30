@@ -69,7 +69,7 @@ chapter (→ optional /discuss) → paper problems → make -C paper paper green
    - rustup, for Verus's Rust 1.98.1;
    - Claude Code, the `claude` command line. Every `/skill` in this course is typed into a `claude` session started in the repository root.
 
-   Run the course scripts through uv from the repository root: `uv sync` once, then `uv run scripts/vcheck …`. Or `source .venv/bin/activate` once per shell and run them bare, as this README writes them.
+   Run the course scripts through uv from the repository root: `uv sync` once, then `uv run scripts/vcheck …`. Or `source .venv/bin/activate` once per shell and run them bare, as this README writes them. The Python labs and the container checks also need the harness environment, once and online: `uv sync --directory harness --frozen` (the course then runs it offline: `uv run --offline --frozen --directory harness`; `scripts/port_selftest.sh --containers` checks for it).
 2. **Toolchains on your PATH** (DELTAS Δ503, D78). You provide the pinned verifiers on `PATH`, and the course calls them as plain processes:
    - **`dafny` 4.11.0** (`dafny --version` prints `4.11.0+fcb2042d6d043a2634f0854338c08feeaaaf4ae2`). Use the release zip, which bundles the Z3 solvers 4.12.1 (the course's pin) and 4.14.1. If you install with `dotnet tool install --global dafny --version 4.11.0` (on .NET 8) instead, also put a Z3 4.12.1 on `PATH` as `z3-4.12.1`.
    - **`verus` 0.2026.09.27.3cf1832**, the weekly release zip. It bundles Z3 4.16.0 and needs Rust `1.98.1`.
@@ -93,7 +93,7 @@ chapter (→ optional /discuss) → paper problems → make -C paper paper green
    |---|---|---|---|---|
    | uv and the harness environment | uv ≥ 0.11.0, a minimum (`required-version` in `pyproject.toml` and `harness/pyproject.toml`); the sandbox images carry their own pinned uv 0.12.4 (`sandbox/images.lock`) | Q06, R05 | install uv, then `uv sync --directory harness --frozen` | `uv --version`; `uv run --directory harness python3 -c 'import fvh'` |
    | Docker and the course images (`dvl-toolchain`, `dvl-agent`) | `sandbox/images.lock` | Q07 (the local agent replay) | Docker Engine, then `sandbox/build-images.sh` | `sandbox/build-images.sh --check` |
-   | Ollama and the local model | `qwen3.8:latest` (`sandbox/apparatus.toml`) | Q07, the labs | Ollama, then `ollama pull qwen3.8:latest` | `ollama list`; `scripts/contract_local.sh Q07 --available` |
+   | an OpenAI-compatible model server on localhost:8000 or :8001 (yours to run) | none: the course pins no server or model (Δ505); every run records the URL, model id and server identity it found | Q07, the labs | any OpenAI-compatible server on localhost (127.0.0.1) port 8000 or 8001; `DVL_MODEL_URL` overrides the address, `DVL_MODEL` picks the model when it serves several | `curl -s http://127.0.0.1:8000/v1/models` (or `:8001`; write `127.0.0.1`, not `localhost`) |
    | the course's copy of Claude Code's version file | Claude Code 2.1.306, `[backend.claude]` in `sandbox/apparatus.toml` | Q12 (Lab 1: every `fvh` batch checks it, a Qwen-only one too) | `scripts/get_toolchain.sh claude`, while that version is still in `~/.local/share/claude/versions/` (see below) | `scripts/get_toolchain.sh claude --check` |
    | age and the grader's key | age v1.3.2 at `~/.local/bin/age` (`sandbox/truth.toml`) | Q13 (the hidden checks) | the pinned release binary for your platform (linux-amd64 or darwin-arm64), and the key where `sandbox/truth.toml` names it | `sha256sum ~/.local/bin/age` (macOS: `shasum -a 256`) against this platform's `age_sha256` |
    | the public benchmark sets | `bench/manifest.toml`, `bench/public/POOLS.toml` | Q12 (Lab 1) | `scripts/get_bench.sh --all` | `scripts/get_bench.sh --check` |
@@ -108,8 +108,10 @@ The course runs on Linux x86-64 and on macOS on Apple silicon (D77). `PYTHONPATH
 | | Linux x86-64 | macOS on Apple silicon |
 |---|---|---|
 | **T1** the verification loop: `vcheck`, `vaudit`, `specfreeze`, `pins.py`, `firsttry.sh`, chapters, skills, the guard, the written track | yes | yes |
-| **T2** the labs without containers: Ollama and the local model through `harness/fvh` | yes | yes, except `fvh` batches (below) |
-| **T3** containers: `scripts/mksandbox-run`, `scripts/contract_local.sh`, the sealed hidden checks, agent replays in Docker | yes | not yet |
+| **T2** the labs without containers: your local model server through `harness/fvh` | yes | yes, except `fvh` batches (below) |
+| **T3** containers: `scripts/mksandbox-run`, `scripts/contract_local.sh`, the sealed hidden checks, agent replays in Docker | yes | yes: built natively (Docker Desktop), every door passed but the two that need your model server (Δ506) |
+
+**Containers (T3, Δ504).** `sandbox/build-images.sh` builds the images for your machine's architecture: on Linux x86-64 with the vendor Dafny and Verus releases, on Apple silicon (Docker Desktop's arm64 Linux VM, no emulation) with Verus and Z3 4.12.1 built from their pinned sources and Dafny's NuGet package, a long first build. Each build checks every solver's rlimit fingerprint. Every build step is capped at `DVL_BUILD_MEMORY` (default `12g`), which Docker's VM must have. `sandbox/build-images.sh --check` and `scripts/port_selftest.sh --containers` check the result. A run that talks to the local model reaches only its own gate container, on an internal network with no route out, and through it the host's model gate (Route C), which alone talks to your model server on localhost.
 
 **`fvh` batches on macOS: not yet.** `sandbox/apparatus.toml` pins this course host's Claude Code and opencode binaries by path and sha256 (`[backend.*]`), so `fvh apparatus --check`, which every batch runs, refuses on a Mac. A Mac needs its own host-specific `[backend.*]` pins, which the course does not support yet.
 
@@ -124,7 +126,8 @@ uv python install 3.12
 curl --proto '=https' -sSf https://sh.rustup.rs | sh -s -- --default-toolchain stable --profile minimal
 rustup toolchain install 1.98.1-aarch64-apple-darwin --profile minimal --no-self-update
 # unzip the arm64 Dafny and Verus release zips (step 2) and put dafny/ and verus-arm64-macos/ on PATH
-uv sync && uv run scripts/vcheck --versions && uv run scripts/port_selftest.sh
+uv sync && uv sync --directory harness --frozen
+uv run scripts/vcheck --versions && uv run scripts/port_selftest.sh     # --containers: also the images and doors
 ```
 macOS needs no GNU coreutils. The guard runs under the system bash 3.2, and `ci.sh` and `test_hooks.sh` re-run themselves under Homebrew's bash. The editor setting `verus-analyzer.verus.verusBinary` is `verus`, resolved on `PATH`.
 
@@ -138,7 +141,7 @@ macOS needs no GNU coreutils. The guard runs under the system bash 3.2, and `ci.
 
 ## Agents and models: no usage-billed API
 
-All agent work uses the Claude subscription CLI and local models only: interactive `/contract` sessions; tool-less `claude -p` policy runs and sandboxed agent runs driven by the course harness (`fvh`); and opencode with local Qwen models through Ollama. No API keys, no SDK, no usage-billed API, and never `claude --bare` (it uses an API key). `scripts/ci.sh` never calls a model. Budgets are counted in calls, tokens, wall-clock and GPU time, with checkpoint-and-resume so a rate limit never turns into best-of-n.
+All agent work uses the Claude subscription CLI and local models only: interactive `/contract` sessions; tool-less `claude -p` policy runs and sandboxed agent runs driven by the course harness (`fvh`); and opencode with a local model through your own OpenAI-compatible server on localhost (Δ505). No API keys, no SDK, no usage-billed API, and never `claude --bare` (it uses an API key). `scripts/ci.sh` never calls a model. Budgets are counted in calls, tokens, wall-clock and GPU time, with checkpoint-and-resume so a rate limit never turns into best-of-n.
 
 ## Study mode and authoring mode
 

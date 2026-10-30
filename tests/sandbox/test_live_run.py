@@ -74,6 +74,8 @@ if cmd == "exec":
         sys.exit(137)
     print(beh.get("stdout", json.dumps({"verdict": "verified", "target": "/work/x"})))
     sys.exit(beh.get("exit", 0))
+if cmd == "network" and args[1] == "inspect":     # Route C: the upstream gateway
+    print("172.30.0.1 "); sys.exit(0)
 if cmd == "inspect":
     s = state(args[-1])
     if s is None:
@@ -184,7 +186,7 @@ class Live(unittest.TestCase):
         self.assertEqual((code, rec["ended_by"], rec["commands"][0]["killed"]), (1, "killed(memory)", "memory"))
 
     def test_an_agent_probe_returns_the_changed_file_as_a_patch(self):
-        m = sc.agent_manifest(self.root, agent={"cli": "none", "model": "qwen3.8:latest", "turns": 1})
+        m = sc.agent_manifest(self.root, agent={"cli": "none", "model": "probe", "turns": 1})
         m["limits"] = {"mem_gb": 0.5, "wall_clock_s": 60}
         self.control(return_text={sc.AGENT_D: sc.AGENT_TEXT + "// changed\n"}, return_extra=["stray.txt"])
         code, rec = self.live(m, probe=True)
@@ -198,7 +200,7 @@ class Live(unittest.TestCase):
         self.assertNotIn("_returned", json.loads((dest / "run.json").read_text()))
 
     def test_a_credential_shaped_string_withholds_the_returned_file(self):
-        m = sc.agent_manifest(self.root, agent={"cli": "none", "model": "qwen3.8:latest", "turns": 1})
+        m = sc.agent_manifest(self.root, agent={"cli": "none", "model": "probe", "turns": 1})
         m["limits"] = {"mem_gb": 0.5, "wall_clock_s": 60}
         planted = "// sk-ant-oat01-" + "Q" * 40 + "\n"
         self.control(return_text={sc.AGENT_D: sc.AGENT_TEXT + planted})
@@ -218,7 +220,7 @@ class Live(unittest.TestCase):
     def test_the_fallback_forms_exact_value_withholds_a_returned_file(self):
         """DV4-PLAN §5.7's fallback form (DV5d): the exact value a run was given
         withholds a returned file that holds it; without it the file is kept."""
-        m = sc.agent_manifest(self.root, agent={"cli": "none", "model": "qwen3.8:latest", "turns": 1})
+        m = sc.agent_manifest(self.root, agent={"cli": "none", "model": "probe", "turns": 1})
         m["limits"] = {"mem_gb": 0.5, "wall_clock_s": 60}
         self.control(return_text={sc.AGENT_D: sc.AGENT_TEXT + f"// {self.EXACT}\n"})
         code, rec = self.live(m, probe=True)
@@ -261,11 +263,12 @@ class Live(unittest.TestCase):
                 self.live(self.vmanifest(), exact_secrets=bad)
 
     def test_what_the_live_run_refuses(self):
-        # an opencode run needs the apparatus pins (step 3a); this root has none
+        # an opencode run needs the apparatus pins (step 3a) and a model server (Δ505):
+        # this root has no pins, and CI's sterile pins name no server that answers
         m = sc.agent_manifest(self.root)
-        with self.assertRaisesRegex(sandbox.SandboxError, "apparatus"):
+        with self.assertRaisesRegex(sandbox.SandboxError, "apparatus|no OpenAI-compatible model server"):
             self.live(m)
-        p = sc.agent_manifest(self.root, agent={"cli": "none", "model": "qwen3.8:latest", "turns": 1})
+        p = sc.agent_manifest(self.root, agent={"cli": "none", "model": "probe", "turns": 1})
         with self.assertRaisesRegex(sandbox.SandboxError, "only under --probe"):
             self.live(p)
         d = self.vmanifest()

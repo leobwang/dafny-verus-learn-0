@@ -1156,7 +1156,8 @@ job_harness() {   # QPLAN §11.8: the fvh core, the learner Python files, the Py
   fi
   sterile_env=(env -u CLAUDECODE -u CLAUDE_CODE_ENTRYPOINT -u CLAUDE_CODE_SESSION_ID
                -u CLAUDE_CODE_OAUTH_TOKEN -u ANTHROPIC_API_KEY -u ANTHROPIC_BASE_URL
-               -u OLLAMA_HOST -u DOCKER_HOST
+               -u OLLAMA_HOST -u OPENAI_BASE_URL -u OPENAI_API_KEY -u DVL_MODEL -u DOCKER_HOST
+               DVL_MODEL_URL="http://127.0.0.1:9/v1"
                HOME="$sterile/home" XDG_CONFIG_HOME="$sterile/config" XDG_CACHE_HOME="$sterile/cache"
                XDG_DATA_HOME="$sterile/data" XDG_STATE_HOME="$sterile/state"
                XDG_RUNTIME_DIR="$sterile/runtime" CLAUDE_CONFIG_DIR="$sterile/claude"

@@ -90,6 +90,8 @@ class ContractLocal(unittest.TestCase):
         env["PATH"] = f"{self.bin}:{env.get('PATH', '/usr/bin:/bin')}"
         env["XDG_RUNTIME_DIR"] = str(self.xdg)
         env["GIT_CEILING_DIRECTORIES"] = str(self.root.parent)
+        env["DVL_MODEL_URL"] = "http://127.0.0.1:9/v1"      # no server: nothing reaches a model
+        env.pop("DVL_MODEL", None)
         return subprocess.run(["bash", str(CL), *args, "--root", str(self.root)], capture_output=True,
                               text=True, env=env, timeout=300)
 
@@ -108,7 +110,7 @@ class ContractLocal(unittest.TestCase):
         self.assertIn(f"starting state: {self.first}", p.stdout)
         self.assertIn("the commit that last changed the snapshot", p.stdout)
         raw = cl.build_manifest(self.root, cl.record(self.root, "Q98"), cl.parse_header(self.start),
-                                self.first, SNAP, "qwen3.8:latest")
+                                self.first, SNAP, "fake-served-model")
         ed = next(f for f in raw["file"] if f["role"] == "editable")
         self.assertEqual((ed["src"], ed["rev"], ed["sha256"]), (sc.AGENT_D, self.first, sc.sha(self.start)))
         snap = next(f for f in raw["file"] if f["role"] == "snapshot")
@@ -205,10 +207,12 @@ class ContractLocal(unittest.TestCase):
         self.assertEqual(p.returncode, 3)
         self.assertIn("did not exist at the starting commit", p.stderr)
 
-    def test_only_a_pinned_model_tag(self):
-        p = self.cl("Q98", "--file", sc.AGENT_D, "--dry-run", "--model", "qwen3.8-flash-next:UD-Q4_K_XL")
-        self.assertEqual(p.returncode, 3)
-        self.assertIn("not a pinned tag", p.stderr)
+    def test_the_model_is_the_servers_and_none_answering_is_named(self):
+        p = self.cl("Q98", "--file", sc.AGENT_D, "--dry-run", "--model", "some-model")
+        self.assertIn("agent: opencode, some-model,", p.stdout)
+        self.assertIn("not yet available: model server:", p.stdout)
+        p = self.cl("Q98", "--file", sc.AGENT_D, "--dry-run")
+        self.assertIn("agent: opencode, (the served model),", p.stdout)
 
     def test_available_reports_every_reason_and_the_live_run_refuses_on_the_first(self):
         p = self.cl("Q98", "--available")

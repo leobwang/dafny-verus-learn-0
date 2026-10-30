@@ -116,7 +116,7 @@ class SourceClasses(Base):
 class Manifests(Base):
     def test_a_well_formed_agent_manifest_validates(self):
         m = sandbox.validate(sc.agent_manifest(self.root), self.root)
-        self.assertEqual((m.kind, m.network, m.returns), ("agent", "ollama", (sc.AGENT_D,)))
+        self.assertEqual((m.kind, m.network, m.returns), ("agent", "model", (sc.AGENT_D,)))
         self.assertEqual(m.limits["mem_gb"], 15.5)       # Dafny 8 + 1 + 2.5 + 4
         v = sandbox.validate(sc.verify_manifest(self.root), self.root)
         self.assertEqual(v.limits["mem_gb"], 11.5)       # Dafny 8 + 1 + 2.5
@@ -148,7 +148,7 @@ class Manifests(Base):
         self.refused(m, "unknown key(s) ['mode']")
 
     def test_networks(self):
-        self.refused(sc.verify_manifest(self.root, network="ollama"), "always network = \"none\"")
+        self.refused(sc.verify_manifest(self.root, network="model"), "always network = \"none\"")
         self.refused(sc.agent_manifest(self.root, network="none"), "reaches its model")
         self.refused(sc.agent_manifest(self.root, network="host"), "network must be one of")
         m = sc.agent_manifest(self.root)
@@ -212,6 +212,27 @@ class Manifests(Base):
         with self.assertRaises(sandbox.ManifestError) as cm:
             sandbox.validate(sc.agent_manifest(bare), bare)
         self.assertIn("not in sandbox/images.lock", str(cm.exception))
+
+
+class ImagesLockArch(Base):
+    """DELTAS Δ504: schema 2 has an entry per name and architecture; a host is
+    offered (and accepts) only its own architecture's, and a schema-1 entry
+    without an arch is amd64's."""
+
+    def test_only_this_hosts_architecture(self):
+        d = "sha256:" + "ab" * 32
+        e = "sha256:" + "ef" * 32
+        sc.write(self.root, "sandbox/images.lock",
+                 f'schema = 2\n\n[[image]]\nname = "dvl-toolchain"\narch = "amd64"\ndigest = "{d}"\n\n'
+                 f'[[image]]\nname = "dvl-toolchain"\narch = "arm64"\ndigest = "{e}"\n')
+        self.assertEqual(list(sandbox.read_images_lock(self.root, "amd64")), [f"dvl-toolchain@{d}"])
+        self.assertEqual(list(sandbox.read_images_lock(self.root, "arm64")), [f"dvl-toolchain@{e}"])
+        mine = f"dvl-toolchain@{d if sandbox.host.docker_arch() == 'amd64' else e}"
+        self.assertEqual(list(sandbox.read_images_lock(self.root)), [mine])
+        sc.write(self.root, "sandbox/images.lock",
+                 f'schema = 1\n\n[[image]]\nname = "dvl-toolchain"\ndigest = "{d}"\n')
+        self.assertEqual(list(sandbox.read_images_lock(self.root, "amd64")), [f"dvl-toolchain@{d}"])
+        self.assertEqual(list(sandbox.read_images_lock(self.root, "arm64")), [])
 
 
 class Materialize(Base):
@@ -513,13 +534,25 @@ class Cli(Base):
         lines = [x.strip() for x in p.stdout.splitlines() if x.startswith("  docker ")]
         golden = (GOLDEN / "dry_run_agent.txt").read_text().splitlines()
         self.assertEqual(lines, golden)
-        run = lines[0]
-        for flag in ("--cap-drop ALL", "--read-only", "--network none", "--user 1000:1000",
-                     "--security-opt no-new-privileges", "--memory 15.5g --memory-swap 15.5g", "--init"):
+        run = next(x for x in lines if x.startswith("docker run "))
+        # Route C (DELTAS Δ504): the sandbox's one network is the run's --internal one
+        for flag in ("--cap-drop ALL", "--read-only", "--network dvl-int-q98-run1",
+                     "--user 1000:1000", "--security-opt no-new-privileges",
+                     "--memory 15.5g --memory-swap 15.5g", "--init",
+                     "destination=/run/dvl/relays.json,readonly"):
             self.assertIn(flag, run)
         for never in ("--privileged", "docker.sock", "--network host", "--pid host", "--device",
-                      "--gpus", "--cap-add", str(self.root)):
+                      "--gpus", "--cap-add", str(self.root), ".sock"):
             self.assertNotIn(never, run)
+        nets = [x for x in lines if x.startswith("docker network create ")]
+        self.assertEqual(len(nets), 2)
+        self.assertIn("--internal --opt com.docker.network.bridge.inhibit_ipv4=true", nets[0])
+        gate = next(x for x in lines if x.startswith("docker create --name dvl-gate-q98-run1 "))
+        for flag in ("--cap-drop ALL", "--read-only", "--user 1000:1000", "--network dvl-up-q98-run1",
+                     "--security-opt no-new-privileges", "--memory 128m --memory-swap 128m",
+                     "/opt/dvl/bin/entry gate"):
+            self.assertIn(flag, gate)
+        self.assertLess(lines.index(gate), lines.index(run))
         self.assertEqual(list(Path(self.xdg).glob("dvl-runs/*")), [])    # the run dir is gone
 
     def test_dry_run_of_a_verify_manifest(self):

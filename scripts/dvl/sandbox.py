@@ -42,7 +42,7 @@ Built at DV4 step 2 (Docker, no model):
                   root whose course path is found by suffix), with the module's
                   given chain, project files, tools and pins read-only
   the live run    `live_run`: the memory preflight, one sandbox job at a time,
-                  the gate (model networks, Route B), the watcher, docker run,
+                  the gate (model networks, Route C), the watcher, docker run,
                   the input stream, the in-container controls, the commands,
                   the return stream (agent runs), the removal, the records
   the reaper      `reap`: remove every dvl.run container whose owner is gone
@@ -73,6 +73,7 @@ import os
 import posixpath
 import re
 import secrets
+import shlex
 import shutil
 import stat
 import subprocess
@@ -90,11 +91,11 @@ SCRIPTS = REPO_ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from dvl import host  # noqa: E402
+from dvl import host  # noqa: E402  (the detacher: setsid(1) on Linux, a fork on macOS)
 
 SCHEMA = 1
 KINDS = ("agent", "verify")
-NETWORKS = ("none", "ollama", "anthropic")
+NETWORKS = ("none", "model", "anthropic")   # "model": the run's model gate (Route C; Δ505)
 ROLES = ("editable", "task", "given", "project", "tool", "expected", "snapshot", "contract")
 READ_ONLY_ROLES = tuple(r for r in ROLES if r != "editable")
 # Roles whose content may be written inline (`text`) by the trusted builder
@@ -143,6 +144,10 @@ NOFILE = 4096
 CONTAINER_UID = "1000:1000"
 WORK = "/work"
 RELAY_DIR = "/run/dvl"
+RELAYS_FILE = f"{RELAY_DIR}/relays.json"     # the relays a sandbox's entry starts (Route C)
+GATE_PORT = 8000                             # the gate container's model API port (Δ505)
+# The gate container's own bounds: it holds one forwarder and nothing else.
+GATE_LIMITS = {"memory": "128m", "pids": 64, "cpus": "0.5"}
 ENTRY = "/opt/dvl/bin/entry"        # the image's entry point (sandbox/, step 2a)
 RUNS_DIR_NAME = "dvl-runs"
 
@@ -329,9 +334,9 @@ def source_class(rel):
 
 
 def runs_base():
-    """$XDG_RUNTIME_DIR/dvl-runs (a per-user tmpfs, mode 0700, §5.3)."""
-    base = os.environ.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
-    return Path(base) / RUNS_DIR_NAME
+    """$XDG_RUNTIME_DIR/dvl-runs (a per-user tmpfs, mode 0700, §5.3); on macOS
+    dvl.host's private runtime directory (DELTAS Δ504)."""
+    return Path(host.runtime_dir()) / RUNS_DIR_NAME
 
 
 # --- the registry ---------------------------------------------------------------------------
@@ -619,7 +624,11 @@ def load_manifest(path):
     return raw
 
 
-def read_images_lock(root):
+def read_images_lock(root, arch=None):
+    """{"<name>@<digest>": entry} of sandbox/images.lock for one architecture
+    (default: this host's, dvl.host.docker_arch; DELTAS Δ504: schema 2 has an
+    entry per name and arch, and a schema-1 entry without one is amd64's)."""
+    arch = arch or host.docker_arch()
     path = Path(root) / "sandbox" / "images.lock"
     try:
         data = tomllib.loads(path.read_text(encoding="utf-8"))
@@ -630,6 +639,8 @@ def read_images_lock(root):
     out = {}
     for img in data.get("image", []):
         name, digest = img.get("name"), img.get("digest")
+        if img.get("arch", "amd64") != arch:
+            continue
         if isinstance(name, str) and isinstance(digest, str) \
                 and re.fullmatch(r"sha256:[0-9a-f]{64}", digest):
             out[f"{name}@{digest}"] = img
@@ -887,7 +898,7 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
             if agent.get("cli") not in AGENT_CLIS:
                 bad(f"[agent] cli must be one of {list(AGENT_CLIS)}")
             if not isinstance(agent.get("model"), str) or not agent.get("model"):
-                bad("[agent] model must name a pinned model tag")
+                bad("[agent] model must name a pinned model id")
             t = agent.get("turns")
             if isinstance(t, bool) or not isinstance(t, int) or not 1 <= t <= 200:
                 bad("[agent] turns must be an integer in [1, 200]")
@@ -900,11 +911,11 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
     if kind == "verify" and agent is not None:
         bad("a verify run has no [agent] table")
     if kind == "agent" and network == "none" and not probe_agent:
-        bad("an agent run reaches its model: network = \"ollama\" or \"anthropic\"")
+        bad("an agent run reaches its model: network = \"model\" or \"anthropic\"")
     if probe_agent and network == "anthropic":
-        bad("a probe agent container uses network = \"none\" or \"ollama\"")
-    if agent and agent.get("cli") == "opencode" and network != "ollama":
-        bad("an opencode run uses network = \"ollama\"")
+        bad("a probe agent container uses network = \"none\" or \"model\"")
+    if agent and agent.get("cli") == "opencode" and network != "model":
+        bad("an opencode run uses network = \"model\"")
     if agent and agent.get("cli") == "claude" and network != "anthropic":
         bad("a Claude Code run uses network = \"anthropic\"")
 
@@ -2520,6 +2531,66 @@ def container_name(manifest):
     return f"dvl-{manifest.run_id}"
 
 
+# --- Route C: the run's internal network and its gate container (DELTAS Δ504) -----------
+#
+# A model network run (network "model") puts its sandbox on a per-run Docker
+# network created --internal with com.docker.network.bridge.inhibit_ipv4: no
+# route out, no external name resolution, and no host address on its bridge,
+# so the sandbox's one reachable peer is the run's gate container. The gate
+# container is on that network and on a per-run upstream bridge; its entry
+# (`entry gate HOST PORT`) forwards the model API port to the host-side model
+# gate (sandbox/hostside/model_gate.py), which keeps every policy of Route B:
+# on Linux it listens on the upstream bridge's gateway address, which only
+# this run's gate container reaches; on macOS (Docker Desktop) on 127.0.0.1,
+# reached as host.docker.internal. The sandbox's relay (127.0.0.1:8000 inside
+# it since Δ505) forwards to the gate container by name (the network's own
+# resolver answers container names only). Route B's host Unix socket mounts
+# are gone: they do not cross Docker Desktop's VM. A plain (network "none")
+# run is unchanged: --network none.
+
+def gate_container_name(manifest):
+    return f"dvl-gate-{manifest.run_id}"
+
+
+def run_networks(manifest):
+    """(internal network, upstream network) of a model network run."""
+    return f"dvl-int-{manifest.run_id}", f"dvl-up-{manifest.run_id}"
+
+
+def model_network_lines(manifest, owner="$OWNER", target="$GATE_TARGET", port="$GATE_PORT"):
+    """The argv lines that set up a model network run, in order: the internal
+    network, the upstream network, the gate container (created on the upstream
+    network), its connection to the internal network, its start. `target` and
+    `port` are the host gate's address as the gate container reaches it
+    (placeholders in --dry-run's lines)."""
+    intn, up = run_networks(manifest)
+    gate = gate_container_name(manifest)
+    labels = ["--label", f"dvl.run={manifest.run_id}", "--label", f"dvl.owner={owner}"]
+    return [
+        ["docker", "network", "create", "--driver", "bridge", "--internal",
+         "--opt", "com.docker.network.bridge.inhibit_ipv4=true", *labels, intn],
+        ["docker", "network", "create", "--driver", "bridge", *labels, up],
+        ["docker", "create", "--name", gate, *labels, "--user", CONTAINER_UID, "--read-only",
+         "--network", up, "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
+         "--pids-limit", str(GATE_LIMITS["pids"]), "--memory", GATE_LIMITS["memory"],
+         "--memory-swap", GATE_LIMITS["memory"], "--cpus", GATE_LIMITS["cpus"], "--init",
+         manifest.image, ENTRY, "gate", str(target), str(port)],
+        ["docker", "network", "connect", intn, gate],
+        ["docker", "start", gate],
+    ]
+
+
+def model_network_teardown(manifest):
+    intn, up = run_networks(manifest)
+    return [["docker", "rm", "--force", gate_container_name(manifest)],
+            ["docker", "network", "rm", intn, up]]
+
+
+def relays_spec(manifest):
+    """The sandbox's relays.json: its loopback model port to the gate container."""
+    return {str(GATE_PORT): [gate_container_name(manifest), GATE_PORT]}
+
+
 def work_mounts(manifest):
     """[(destination, docker --mount value)] of /work: the /work tmpfs, one
     tmpfs per directory that holds an editable file, and a read-only bind for
@@ -2547,11 +2618,7 @@ def owner_label():
 
 
 def _proc_start(pid):
-    try:
-        with open(f"/proc/{pid}/stat", encoding="ascii") as fh:
-            return fh.read().rsplit(")", 1)[1].split()[19]
-    except (OSError, IndexError):
-        return "0"
+    return host.proc_start(pid)
 
 
 def exec_env(manifest):
@@ -2595,15 +2662,15 @@ def docker_argv(manifest, run_path, owner="$OWNER"):
         if e.role != "editable":
             mounts.append((f"{WORK}/{e.dst}",
                            f"type=bind,source={rp}/in/{e.dst},destination={WORK}/{e.dst},readonly"))
-    if manifest.network != "none":
-        sock = "ollama.sock" if manifest.network == "ollama" else "egress.sock"
-        mounts.append((f"{RELAY_DIR}/{sock}",
-                       f"type=bind,source={rp}/state/{sock},destination={RELAY_DIR}/{sock}"))
+    if manifest.network != "none":       # Route C: the relays to the run's gate container
+        mounts.append((RELAYS_FILE, f"type=bind,source={rp}/state/relays.json,"
+                                    f"destination={RELAYS_FILE},readonly"))
     if manifest.truth:
         mounts.append((TRUTH_DIR, f"type=bind,source={rp}/truth,destination={TRUTH_DIR},readonly"))
     for _, m in sorted(mounts, key=lambda x: (x[0].count("/"), x[0])):
         argv += ["--mount", m]
-    argv += ["--network", "none",
+    net = "none" if manifest.network == "none" else run_networks(manifest)[0]
+    argv += ["--network", net,
              "--cap-drop", "ALL", "--security-opt", "no-new-privileges",
              "--pids-limit", str(lim["pids"]), "--memory", mem, "--memory-swap", mem,
              "--cpus", f"{lim['cpus']:g}", "--ulimit", f"nofile={NOFILE}:{NOFILE}", "--init",
@@ -3000,7 +3067,7 @@ LAB_TASK_DIR = "lab-task"        # fvh.tools.runners.LAB_TASK_DIR: a lab run's s
 
 
 def build_verify(root, target, argv, *, module=None, run_id=None, kind="verify", mem_gb=None,
-                 network="none", model="qwen3.8:latest", audits=(), lab_task=None, rev=None):
+                 network="none", model="probe", audits=(), lab_task=None, rev=None):
     """The raw manifest of one tool command on one target (DV4-PLAN §5.9).
 
     `target` is a course path, or a copy outside the course root (its course
@@ -3221,7 +3288,7 @@ def build_agent(root, task, *, brief, model, turns, module=None, run_id=None, wa
     lock = read_images_lock(root)
     image = next((k for k in lock if k.startswith("dvl-agent@")), "dvl-agent@sha256:" + "0" * 64)
     raw = {"schema": SCHEMA, "run_id": run_id or f"a{os.getpid()}-{secrets.token_hex(4)}",
-           "module": rec["id"], "kind": "agent", "image": image, "network": "ollama",
+           "module": rec["id"], "kind": "agent", "image": image, "network": "model",
            "limits": {"wall_clock_s": int(wall_s)}, "file": files, "return": list(ed),
            "agent": {"cli": "opencode", "model": model, "turns": int(turns)}}
     if gpu_s is not None:
@@ -3241,14 +3308,16 @@ def build_agent(root, task, *, brief, model, turns, module=None, run_id=None, wa
 #     one request per step; with `steps` = N the N-th request carries opencode's
 #     "maximum steps reached" text and the run ends there, so with the title
 #     agent disabled and automatic compaction off, calls == steps <= turns;
-#   - the OpenAI-compatible endpoint ignores num_ctx and top_k (Ollama then
-#     uses its unit's context, OLLAMA_CONTEXT_LENGTH); the gate pins the rest
-#     and flags a prompt past the pinned num_ctx as ctx-saturated.
+#   - since Δ505 the model server is the host's OpenAI-compatible server on
+#     localhost (127.0.0.1) port 8000 or 8001, found at run time; the gate
+#     sets the course's sampling as request fields and flags a prompt past the
+#     served max_model_len less the margin, or one the server refuses for its
+#     length, as ctx-saturated.
 
 OPENCODE = "/opt/dvl/agent/opencode"          # the pinned binary in dvl-agent (sandbox/images/)
 AGENT_HOME = "/home/agent"
 OPENCODE_PROVIDER = "fvhgate"
-OPENCODE_RELAY_URL = "http://127.0.0.1:11434/v1"   # the in-container relay (Route B)
+OPENCODE_RELAY_URL = f"http://127.0.0.1:{GATE_PORT}/v1"   # the in-container relay
 OPENCODE_TOOLS = ("bash", "edit", "glob", "grep", "read", "write")
 # opencode's own external_directory allow rules (its tool-output directory under
 # HOME and its tmp directory); every other external path is denied
@@ -3282,10 +3351,14 @@ def agent_brief(manifest):
     raise SandboxError("an agent run stages its instructions (a contract or a task file)")
 
 
+LOOPBACK_URL = re.compile(r"http://127\.0\.0\.1:\d{1,5}(/[A-Za-z0-9._~/-]*)?")
+
+
 def apparatus_pins(root=REPO_ROOT):
-    """The apparatus file's [model_server] table (the model digests, the unit's
-    settings and the request options), read-only. SandboxError when the file
-    or the table is missing: no model run starts without its pins."""
+    """The apparatus file's [model_gate] table (Δ505: the endpoints where the
+    host's OpenAI-compatible server is looked for, the margin and the request
+    options), read-only. SandboxError when the file or the table is missing:
+    no model run starts without them."""
     p = Path(os.environ.get("FVH_APPARATUS") or Path(root) / APPARATUS_FILE)
     try:
         data = tomllib.loads(p.read_text(encoding="utf-8"))
@@ -3293,55 +3366,79 @@ def apparatus_pins(root=REPO_ROOT):
         raise SandboxError(f"no apparatus file at {p}: no model run starts without its pins") from None
     except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError) as e:
         raise SandboxError(f"{p}: unreadable apparatus file ({type(e).__name__})") from None
-    ms = data.get("model_server")
-    if data.get("schema") != 1 or not isinstance(ms, dict) or not isinstance(ms.get("models"), dict) \
-            or not isinstance(ms.get("options"), dict):
-        raise SandboxError(f"{p}: schema 1 with a [model_server] table (models, options) is needed")
-    return ms
+    mg = data.get("model_gate")
+    if data.get("schema") != 1 or not isinstance(mg, dict) or not isinstance(mg.get("options"), dict) \
+            or not isinstance(mg.get("endpoints"), list):
+        raise SandboxError(f"{p}: schema 1 with a [model_gate] table (endpoints, options) is needed")
+    return mg
+
+
+def _gate_module():
+    """sandbox/hostside/model_gate.py as a module (its discover())."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "dvl_model_gate", REPO_ROOT / "sandbox" / "hostside" / "model_gate.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def discover_server(root=REPO_ROOT, model=None):
+    """The host's model server and model (Δ505; model_gate.discover): the first
+    [model_gate] endpoint whose GET /models answers (DVL_MODEL_URL in their
+    place), its only served model (or `model`, else DVL_MODEL), the served
+    max_model_len (or None) and /version (or None). Observed, never pinned.
+    SandboxError when no server answers or the model cannot be chosen."""
+    mg = _gate_module()
+    try:
+        return mg.discover(apparatus_pins(root)["endpoints"], model=model)
+    except mg.DiscoveryError as e:
+        raise SandboxError(str(e)) from None
+
+
+def model_upstream(root=REPO_ROOT):
+    """The gate's upstream: the host's model server as discover_server finds it."""
+    return discover_server(root)["base_url"]
 
 
 def agent_model(root=REPO_ROOT):
-    """The model tag of an fvh agent-mode session: the apparatus file's
-    [backend.qwen] model, which must have its digest in [model_server] models
-    (as contract_local.sh's pinned tags). SandboxError otherwise."""
-    p = Path(os.environ.get("FVH_APPARATUS") or Path(root) / APPARATUS_FILE)
-    ms = apparatus_pins(root)
-    try:
-        data = tomllib.loads(p.read_text(encoding="utf-8"))
-    except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError) as e:
-        raise SandboxError(f"{p}: unreadable apparatus file ({type(e).__name__})") from None
-    tag = ((data.get("backend") or {}).get("qwen") or {}).get("model")
-    if not isinstance(tag, str) or tag not in ms["models"]:
-        raise SandboxError(f"{p}: [backend.qwen]'s model has no digest in [model_server] models")
-    return tag
+    """The model id of an fvh agent-mode session: DVL_MODEL when set (no request:
+    the run's gate checks it is served before it listens), else the one the
+    host's server serves (discover_server). SandboxError when none can be found."""
+    return os.environ.get("DVL_MODEL") or discover_server(root)["model"]
 
 
 def agent_gate_config(manifest, root=REPO_ROOT):
-    """The gate's config for a model run (DV4-PLAN §5.6.3): the pinned tag and its
-    digest, the pinned request options, and the caps: calls = the run's turns
-    (opencode's step limit, so the two agree), GPU-seconds from [agent] gpu_s;
-    the model leaves the GPU when the gate stops (keep_alive 0, §10)."""
-    ms = apparatus_pins(root)
-    tag = manifest.agent["model"]
-    digest = ms["models"].get(tag)
-    if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
-        raise SandboxError(f"the model {tag} has no digest pin in the apparatus file's "
-                           "[model_server] models")
+    """The gate's config for a model run (DV4-PLAN §5.6.3; Δ505): the host's
+    server as found, with the manifest's model (which it must serve; the gate
+    checks GET /models again before it listens) and its served max_model_len
+    (or None), the apparatus file's request options and margin, and the caps:
+    calls = the run's turns (opencode's step limit, so the two agree),
+    GPU-seconds from [agent] gpu_s."""
+    mg = apparatus_pins(root)
+    found = discover_server(root, model=manifest.agent["model"])
     caps = {"calls": int(manifest.agent["turns"])}
     if manifest.agent.get("gpu_s") is not None:
         caps["gpu_s"] = float(manifest.agent["gpu_s"])
-    return {"model": tag, "digest": digest, "options": dict(ms["options"]), "caps": caps,
-            "margin": int(ms.get("margin", 512)), "unload_on_stop": True}
+    return {"model": found["model"], "max_model_len": found["max_model_len"],
+            "check_served": True, "options": dict(mg["options"]), "caps": caps,
+            "margin": int(mg.get("margin", 512)), "upstream": found["base_url"],
+            "server": found}
 
 
-def opencode_config(manifest, options):
+def opencode_config(manifest, gate_cfg):
     """The agent's opencode config (DV4-PLAN §3.5): the agent tools only (read,
     glob, grep, edit, write, bash), every other tool and the web denied, every
     external directory denied, no MCP, no title request, no automatic
-    compaction, the step limit at the run's turns, and one provider: the relay."""
+    compaction, the step limit at the run's turns, and one provider: the relay,
+    whose model entry states the served max_model_len (when the server reports
+    one) and the course's max_tokens as its limits (Δ505)."""
     tag = manifest.agent["model"]
-    num_ctx = int(options.get("num_ctx", 32768))
-    num_predict = int(options.get("num_predict", 8192))
+    context = gate_cfg.get("max_model_len")
+    output = int((gate_cfg.get("options") or {}).get("max_tokens", 8192))
+    entry = {"name": tag}
+    if isinstance(context, int) and not isinstance(context, bool) and context > 0:
+        entry["limit"] = {"context": context, "output": output}
     perm = {"*": "deny", "read": "allow", "glob": "allow", "grep": "allow", "edit": "allow",
             "bash": "allow", "external_directory": "deny", "webfetch": "deny", "task": "deny",
             "skill": "deny", "todowrite": "deny", "question": "deny", "doom_loop": "deny"}
@@ -3353,7 +3450,7 @@ def opencode_config(manifest, options):
             "provider": {OPENCODE_PROVIDER: {
                 "npm": "@ai-sdk/openai-compatible", "name": "the run's model gate (relay)",
                 "options": {"baseURL": OPENCODE_RELAY_URL},
-                "models": {tag: {"name": tag, "limit": {"context": num_ctx, "output": num_predict}}}}}}
+                "models": {tag: entry}}}}
 
 
 def opencode_env(manifest):
@@ -3486,7 +3583,7 @@ def calendar_held_by(fd):
     not (an fvh agent-mode batch passes the fd it locked to the live run of each
     session, `mksandbox-run --agent-session --calendar-fd N`, DV5d)."""
     import fcntl
-    base = os.environ.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
+    base = host.runtime_dir()
     try:
         st, want = os.fstat(fd), os.stat(os.path.join(base, GPU_LOCK))
         if (st.st_dev, st.st_ino) != (want.st_dev, want.st_ino):
@@ -3506,7 +3603,7 @@ class _GpuCalendar:
 
     def __enter__(self):
         import fcntl
-        base = os.environ.get("XDG_RUNTIME_DIR") or f"/run/user/{os.getuid()}"
+        base = host.runtime_dir()
         fd = os.open(os.path.join(base, GPU_LOCK), os.O_RDWR | os.O_CREAT, 0o600)
         try:
             fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -3534,6 +3631,8 @@ class Deferred(Exception):
 
 
 def mem_available_gb():
+    if host.is_macos():
+        return host.mem_available_gb()
     try:
         with open("/proc/meminfo", encoding="ascii") as fh:
             for line in fh:
@@ -3576,9 +3675,11 @@ class _SandboxSlot:
 
 
 _WATCH_SH = r"""
-name="$1"; gate="$2"; rundir="$3"
+name="$1"; gate="$2"; rundir="$3"; gatebox="$4"; nets="$5"; docker="$6"
 IFS= read -r line
-docker rm --force "$name" >/dev/null 2>&1
+"$docker" rm --force "$name" >/dev/null 2>&1
+if [ "$gatebox" != "-" ]; then "$docker" rm --force "$gatebox" >/dev/null 2>&1; fi
+if [ "$nets" != "-" ]; then "$docker" network rm $nets >/dev/null 2>&1; fi
 if [ "$gate" != "-" ]; then kill "$gate" >/dev/null 2>&1; fi
 if [ -z "$line" ] && [ "$rundir" != "-" ] && [ -d "$rundir" ]; then
   chmod -R u+rwx "$rundir" >/dev/null 2>&1; rm -rf "$rundir"
@@ -3587,15 +3688,20 @@ exit 0
 """
 
 
-def start_watcher(name, gate_pid=None, run_path=None):
+def start_watcher(name, gate_pid=None, run_path=None, extra=(), networks=()):
     """A detached watcher (DV4-PLAN §5.10): when this process writes `done`, the
     watcher removes the container (a no-op by then) and stops the run's gate;
     when this process dies first (the pipe closes with nothing written), it
-    also removes the run directory. Returns the pipe's write end."""
+    also removes the run directory. Returns the pipe's write end. The docker
+    binary is resolved here, once: the watcher acts later, and must call the
+    run's own docker, never whatever PATH finds by then."""
+    import shutil
+    docker = shutil.which("docker") or "docker"
     r, w = os.pipe()
     try:
-        subprocess.run(["setsid", "-f", "sh", "-c", _WATCH_SH, "dvl-watch", name,
-                        str(gate_pid) if gate_pid else "-", str(run_path) if run_path else "-"],
+        subprocess.run(host.detach_argv() + ["sh", "-c", _WATCH_SH, "dvl-watch", name,
+                        str(gate_pid) if gate_pid else "-", str(run_path) if run_path else "-",
+                        " ".join(extra) or "-", " ".join(networks) or "-", docker],
                        stdin=r, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
                        close_fds=True, check=True, timeout=30)
     finally:
@@ -3613,24 +3719,10 @@ def stop_watcher(w):
 
 def host_targets(limit=256):
     """[(address, port)] for control C6: every TCP port the host listens on, at
-    every non-loopback address it holds (IPv4 and IPv6), read from `ss -ltn`
-    and `ip -o addr` at run start."""
-    ports = set()
-    out = _cmd_out(["ss", "-ltnH"]) or ""
-    for line in out.splitlines():
-        cols = line.split()
-        if len(cols) >= 4:
-            port = cols[3].rsplit(":", 1)[-1]
-            if port.isdigit():
-                ports.add(int(port))
-    addrs = []
-    for line in (_cmd_out(["ip", "-o", "addr", "show"]) or "").splitlines():
-        cols = line.split()
-        if len(cols) >= 4 and cols[2] in ("inet", "inet6"):
-            a = cols[3].split("/")[0]
-            if a in ("127.0.0.1", "::1") or a.startswith("fe80:"):
-                continue
-            addrs.append(a)
+    every non-loopback address it holds (IPv4 and IPv6), read at run start
+    (dvl.host: `ss` and `ip` on Linux, `lsof` and `ifconfig` on macOS)."""
+    ports = host.listening_tcp_ports()
+    addrs = host.host_addresses()
     pairs = [(a, p) for a in sorted(set(addrs)) for p in sorted(ports)]
     return pairs[:limit], {"ports": sorted(ports), "addresses": sorted(set(addrs)),
                            "pairs": len(pairs), "tried": min(len(pairs), limit)}
@@ -3642,7 +3734,7 @@ def controls_request(manifest, targets):
             "editable_dirs": manifest.editable_dirs(),
             "host_targets": [list(t) for t in targets],
             "public": [["1.1.1.1", 443], ["2606:4700:4700::1111", 443]],
-            "public_name": "example.com", "relay_port": 11434, "relay_path": "/api/version",
+            "public_name": "example.com", "relay_port": GATE_PORT, "relay_path": "/v1/models",
             "timeout_s": 1}
 
 
@@ -3655,28 +3747,31 @@ def _clip(b, cap=4 << 20):
     return t if len(t) <= cap else t[:cap] + "\n[clipped]\n"
 
 
-GATE_UPSTREAM = "http://127.0.0.1:11434"     # Ollama listens on loopback only (Δ146)
-
-
 def start_gate(manifest, run, cfg=None, upstream=None, out=None):
-    """The Ollama gate on the run's socket (Route B). Without a config no
+    """The model gate of the run, on TCP (Route C, DELTAS Δ504): at the address
+    model_network_up wrote to the run's state/gate.bind (the upstream bridge's
+    gateway on Linux, 127.0.0.1 on macOS; 127.0.0.1 without one), on a free
+    port, which gate_address reads back from state/gate.ready. Without a config no
     inference is forwarded (calls cap 0); an opencode run passes
     agent_gate_config's pins and caps (step 3a). A probe may pass its own
-    config and a loopback upstream (the doors' fake server). `out`: where the
+    config and a loopback upstream (the doors' fake server); else the
+    upstream is the config's, else the host's server as found (Δ505). `out`: where the
     gate writes its log and its running counts (default: the run's out/; an
     fvh agent-mode attempt passes its own run directory, so that a runner
     killed outright leaves the counts `fvh resume` settles the attempt by)."""
     cfg = dict(cfg) if cfg else {"model": manifest.agent["model"], "options": {},
                                  "caps": {"calls": 0}, "margin": 512}
-    upstream = upstream or GATE_UPSTREAM
-    if not re.fullmatch(r"http://127\.0\.0\.1:\d{1,5}", upstream):
+    upstream = (upstream or cfg.get("upstream") or model_upstream()).rstrip("/")
+    if not LOOPBACK_URL.fullmatch(upstream):
         raise SandboxError(f"the gate's upstream must be a loopback http address, not {upstream!r}")
     out = Path(out) if out is not None else run.out
     out.mkdir(parents=True, exist_ok=True)
     (run.state / "gate.json").write_text(json.dumps(cfg), encoding="utf-8")
     ready = run.state / "gate.ready"
-    p = subprocess.Popen([sys.executable, "-B", str(REPO_ROOT / "sandbox" / "hostside" / "ollama_gate.py"),
-                          "--socket", str(run.state / "ollama.sock"), "--config",
+    bind_file = run.state / "gate.bind"
+    bind = bind_file.read_text(encoding="utf-8").strip() if bind_file.is_file() else "127.0.0.1"
+    p = subprocess.Popen([sys.executable, "-B", str(REPO_ROOT / "sandbox" / "hostside" / "model_gate.py"),
+                          "--port", "0", "--bind", bind, "--config",
                           str(run.state / "gate.json"), "--log", str(out / "gate.log"),
                           "--counts", str(out / "gate-counts.json"), "--ready", str(ready),
                           "--upstream", upstream],
@@ -3693,8 +3788,56 @@ def start_gate(manifest, run, cfg=None, upstream=None, out=None):
         why = (run.out / "gate.stderr").read_text(encoding="utf-8", errors="replace").strip()
     except OSError:
         why = ""
-    raise SandboxError("the Ollama gate did not start" + (f": {why.splitlines()[-1]}" if why
+    raise SandboxError("the model gate did not start" + (f": {why.splitlines()[-1]}" if why
                                                             else " (see gate.stderr)"))
+
+
+def gate_address(run):
+    """(address, port) the host gate listens on, from its ready file (None: none yet)."""
+    try:
+        text = (run.state / "gate.ready").read_text(encoding="utf-8").strip()
+    except OSError:
+        return None
+    m = re.fullmatch(r"http://([0-9.]+):(\d+)", text)
+    return (m.group(1), int(m.group(2))) if m else None
+
+
+def model_network_up(manifest, run, owner):
+    """Create the run's internal and upstream networks (Route C) and write the
+    host gate's bind address to state/gate.bind. Returns the address the gate
+    container reaches the host gate at. SandboxError when Docker refuses."""
+    lines = model_network_lines(manifest, owner)
+    for line in lines[:2]:
+        p = _docker(line)
+        if p.returncode != 0:
+            raise SandboxError(f"{shlex.join(line[:4])} failed: {_clip(p.stderr)[-500:]}")
+    if host.is_macos():
+        bind, target = "127.0.0.1", "host.docker.internal"   # Docker Desktop's host route
+    else:
+        up = run_networks(manifest)[1]
+        p = _docker(["docker", "network", "inspect", up, "--format",
+                     "{{range .IPAM.Config}}{{.Gateway}} {{end}}"])
+        gws = [g for g in p.stdout.decode().split() if re.fullmatch(r"[0-9.]+", g)]
+        if p.returncode != 0 or not gws:
+            raise SandboxError(f"the upstream network {up} has no IPv4 gateway")
+        bind = target = gws[0]
+    (run.state / "gate.bind").write_text(bind + "\n", encoding="utf-8")
+    return target
+
+
+def model_gate_up(manifest, run, owner, target, port):
+    """Create, connect and start the run's gate container; write the sandbox's
+    relays.json. SandboxError when Docker refuses."""
+    for line in model_network_lines(manifest, owner, target, port)[2:]:
+        p = _docker(line)
+        if p.returncode != 0:
+            raise SandboxError(f"{shlex.join(line[:3])} failed: {_clip(p.stderr)[-500:]}")
+    (run.state / "relays.json").write_text(json.dumps(relays_spec(manifest)), encoding="utf-8")
+
+
+def model_network_down(manifest):
+    for line in model_network_teardown(manifest):
+        _docker(line)
 
 
 def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstream=None,
@@ -3779,6 +3922,8 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
 
     if cli == "opencode" and gate_cfg is None:
         gate_cfg = agent_gate_config(manifest, root)
+    if gate_cfg and isinstance(gate_cfg.get("server"), dict):
+        rec["model_server_found"] = dict(gate_cfg["server"])   # observed, never pinned (Δ505)
     if seeds is not None:
         gate_cfg = dict(gate_cfg, seeds=[int(x) for x in seeds])
         rec["seeds"] = [int(x) for x in seeds]
@@ -3790,9 +3935,16 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
             hold.enter_context(_GpuCalendar())
         hold.enter_context(_SandboxSlot())
         rec["started"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        gate = start_gate(manifest, run, gate_cfg, gate_upstream, out=gate_out) \
-            if manifest.network == "ollama" else None
-        watcher = start_watcher(name, gate.pid if gate else None, run.path)
+        gate = None
+        if manifest.network == "model":      # Route C (DELTAS Δ504)
+            hold.callback(model_network_down, manifest)
+            target = model_network_up(manifest, run, owner_label())
+            gate = start_gate(manifest, run, gate_cfg, gate_upstream, out=gate_out)
+            addr = gate_address(run)
+            model_gate_up(manifest, run, owner_label(), target, addr[1] if addr else 0)
+        watcher = start_watcher(name, gate.pid if gate else None, run.path,
+                                extra=(gate_container_name(manifest),) if gate else (),
+                                networks=run_networks(manifest) if gate else ())
         lines = docker_argv(manifest, run.path, owner_label())
         try:
             p = _docker(lines[0])
@@ -3846,7 +3998,7 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
                     rec["ended_by"] = "wall-clock"
                     _docker(["docker", "kill", name], timeout=60)
                     return 124, rec
-                st = _inspect(name)
+                st = _oom_state(name, rc, oom_before)
                 if st and st.get("OOMKilled") and not oom_before:
                     entry["oom_event"] = True       # the container's OOM killer took a process
                     if rc != 0:
@@ -3923,7 +4075,7 @@ def _run_agent(manifest, rec, lines, gate_cfg, left, say, exact=()):
     name = container_name(manifest)
     ag = rec["agent"] = {"cli": "opencode", "model": manifest.agent["model"],
                          "turns": manifest.agent["turns"], "binary": OPENCODE}
-    conf = opencode_config(manifest, gate_cfg.get("options") or {})
+    conf = opencode_config(manifest, gate_cfg)
     ag["config_sha256"] = sha256_bytes((json.dumps(conf, indent=1, sort_keys=True) + "\n").encode())
     p = _docker(lines[0], input=config_stream(conf), timeout=min(left(), 120))
     if p.returncode != 0:
@@ -3982,6 +4134,28 @@ def _run_agent(manifest, rec, lines, gate_cfg, left, say, exact=()):
     return 0
 
 
+OOM_SETTLE_TRIES = 10      # C13 (Δ506): docker can report the exec's exit before it
+OOM_SETTLE_DELAY_S = 0.2   # sets State.OOMKilled; a 137 waits up to 2 s for the flag
+
+
+def _oom_state(name, rc, oom_before, inspect=None, tries=OOM_SETTLE_TRIES,
+               delay=OOM_SETTLE_DELAY_S, sleep=time.sleep):
+    """The container's state after a command. When the command exited 137 (SIGKILL,
+    the OOM killer's signal) and OOMKilled is not yet newly set, the inspect is
+    repeated, at most `tries` times `delay` apart, so the kill is attributed to
+    this command and not to the next one (one read raced on a loaded host)."""
+    inspect = inspect or _inspect
+    st = inspect(name)
+    if rc != 137 or oom_before:
+        return st
+    for _ in range(max(0, tries - 1)):
+        if st is None or st.get("OOMKilled") or not st.get("Running", True):
+            break
+        sleep(delay)
+        st = inspect(name)
+    return st
+
+
 def _inspect(name):
     try:
         p = _docker(["docker", "inspect", "--format", "{{json .State}}", name], timeout=60)
@@ -4033,6 +4207,18 @@ def reap(log=None):
             gone.append(name)
             if log:
                 log(f"reaped {name} (owner {owner or 'unknown'} is gone)")
+    # Route C's per-run networks (DELTAS Δ504), once their containers are gone
+    p = _docker(["docker", "network", "ls", "--filter", "label=dvl.run", "--format",
+                 '{{.Name}}\t{{.Label "dvl.owner"}}'])
+    for line in p.stdout.decode().splitlines():
+        name, _, owner = line.partition("\t")
+        pid, _, start = owner.partition(":")
+        alive = pid.isdigit() and _proc_start(int(pid)) == start and start != "0"
+        if not alive and name:
+            _docker(["docker", "network", "rm", name])
+            gone.append(name)
+            if log:
+                log(f"reaped network {name} (owner {owner or 'unknown'} is gone)")
     return gone
 
 

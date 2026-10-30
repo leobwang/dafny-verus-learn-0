@@ -23,21 +23,19 @@ import sandbox_common as sc  # noqa: E402
 from dvl import sandbox  # noqa: E402
 from dvl import contract_local as cl  # noqa: E402
 
-DIGEST = "ab" * 32
-APPARATUS = f"""schema = 1
+MODEL = "fake-served-model"
+FOUND = {"base_url": "http://127.0.0.1:8001/v1", "model": MODEL, "max_model_len": 262144,
+         "served": [MODEL], "version": "fake-1"}
+APPARATUS = """schema = 1
 [backend.qwen]
 version = "0.0.0-fake"
 binary = "~/fake-opencode"
-sha256 = "{{sha}}"
-model = "qwen3.8:latest"
-num_ctx = 262144
-num_predict = 32768
+sha256 = "{sha}"
 external_ok = []
-[model_server]
-version = "0.0.0-fake"
-models = {{{{ "qwen3.8:latest" = "{DIGEST}" }}}}
+[model_gate]
+endpoints = ["http://127.0.0.1:9/v1"]
 margin = 512
-options = {{{{ temperature = 0.6, seed = 1, num_predict = 32768, num_ctx = 262144 }}}}
+options = {{ temperature = 0.6, top_p = 0.95, top_k = 20, seed = 1, max_tokens = 32768 }}
 """
 
 FAKE_DOCKER = r'''#!/usr/bin/env python3
@@ -114,6 +112,8 @@ if cmd == "exec":
     if tool.endswith("vcheck"):
         print("vcheck: x [dafny, gate]: verified — 1 verified, 0 holes, 0 errors"); sys.exit(beh.get("gate_exit", 0))
     print("tool: 0 finding(s)"); sys.exit(beh.get("other_exit", 0))
+if cmd == "network" and args[1] == "inspect":     # Route C: the upstream gateway
+    print("172.30.0.1 "); sys.exit(0)
 if cmd == "inspect":
     p = os.path.join(st, args[-1] + ".json")
     if not os.path.exists(p):
@@ -161,6 +161,10 @@ class FakeHost(unittest.TestCase):
         g = mock.patch.object(sandbox, "start_gate", side_effect=self.fake_gate)
         g.start()
         self.addCleanup(g.stop)
+        d = mock.patch.object(sandbox, "discover_server",          # no network (Δ505)
+                              side_effect=lambda root=None, model=None: dict(FOUND, model=model or MODEL))
+        d.start()
+        self.addCleanup(d.stop)
 
     def fake_gate(self, manifest, run, cfg=None, upstream=None, out=None):
         self.gate_cfgs.append(cfg)
@@ -200,7 +204,7 @@ class AgentRun(FakeHost):
     def manifest(self):
         m = sc.agent_manifest(self.root)
         m["limits"] = {"mem_gb": 0.5, "wall_clock_s": 600}
-        m["agent"] = {"cli": "opencode", "model": "qwen3.8:latest", "turns": 12, "gpu_s": 900}
+        m["agent"] = {"cli": "opencode", "model": MODEL, "turns": 12, "gpu_s": 900}
         return m
 
     def test_an_opencode_run_is_configured_gated_run_and_returned(self):
@@ -209,13 +213,20 @@ class AgentRun(FakeHost):
         self.assertEqual((code, rec["ended_by"]), (0, "done"), rec.get("agent"))
         cfg = self.gate_cfgs[0]
         self.assertEqual(cfg["caps"], {"calls": 12, "gpu_s": 900.0})       # calls == turns
-        self.assertEqual((cfg["digest"], cfg["unload_on_stop"]), (DIGEST, True))
-        self.assertEqual(cfg["options"]["num_predict"], 32768)
+        self.assertEqual((cfg["model"], cfg["max_model_len"], cfg["check_served"]),
+                         (MODEL, 262144, True))
+        self.assertEqual(cfg["upstream"], "http://127.0.0.1:8001/v1")
+        self.assertEqual(rec["model_server_found"], FOUND)          # observed, recorded
+        self.assertNotIn("unload_on_stop", cfg)
+        self.assertEqual(cfg["options"]["max_tokens"], 32768)
         with tarfile.open(self.state / "dvl-q98-run1.home.tar") as tf:
             conf = json.load(tf.extractfile("opencode.json"))
         self.assertEqual(conf["agent"], {"build": {"steps": 12}, "title": {"disable": True}})
         self.assertEqual(conf["compaction"], {"auto": False})
         self.assertEqual(conf["provider"]["fvhgate"]["options"]["baseURL"], sandbox.OPENCODE_RELAY_URL)
+        self.assertEqual(sandbox.OPENCODE_RELAY_URL, "http://127.0.0.1:8000/v1")
+        self.assertEqual(conf["provider"]["fvhgate"]["models"][cfg["model"]]["limit"],
+                         {"context": 262144, "output": 32768})
         self.assertEqual(sorted(t for t, v in conf["tools"].items() if v), sorted(sandbox.OPENCODE_TOOLS))
         self.assertEqual(conf["permission"]["external_directory"], "deny")
         self.assertTrue(rec["agent"]["precheck"]["ok"])
@@ -231,6 +242,38 @@ class AgentRun(FakeHost):
         self.assertEqual(json.loads(events[-1])["part"]["reason"], "stop")
         self.assertIn("+// the agent's edit", (dest / "patch.diff").read_text())
         self.assertNotIn("_transcript", json.loads((dest / "sandbox.json").read_text()))
+
+    def test_route_c_sets_up_the_internal_network_and_gate_and_tears_them_down(self):
+        """DELTAS Δ504: the sandbox's one network is the run's --internal one (no
+        host address on its bridge), its one peer the gate container, which the
+        host gate is reached through; everything is removed after the run."""
+        self.control(return_text={sc.AGENT_D: sc.AGENT_TEXT})
+        code, rec = self.live(self.manifest())
+        self.assertEqual((code, rec["ended_by"]), (0, "done"), rec.get("agent"))
+        calls = self.calls()
+        idx = {i: c for i, c in enumerate(calls)}
+        first = lambda pred: next(i for i, c in idx.items() if pred(c))  # noqa: E731
+        i_int = first(lambda c: c[:3] == ["network", "create", "--driver"] and "--internal" in c)
+        self.assertIn("com.docker.network.bridge.inhibit_ipv4=true", calls[i_int])
+        self.assertEqual(calls[i_int][-1], "dvl-int-q98-run1")
+        i_up = first(lambda c: c[:2] == ["network", "create"] and c[-1] == "dvl-up-q98-run1")
+        i_gate = first(lambda c: c[:1] == ["create"] and "dvl-gate-q98-run1" in c)
+        gate = calls[i_gate]
+        self.assertEqual(gate[-3:], ["gate", "172.30.0.1", "0"])   # the upstream gateway, the gate port
+        for flag in ("--read-only", "--cap-drop", "--memory", "--pids-limit"):
+            self.assertIn(flag, gate)
+        i_conn = first(lambda c: c == ["network", "connect", "dvl-int-q98-run1", "dvl-gate-q98-run1"])
+        i_start = first(lambda c: c == ["start", "dvl-gate-q98-run1"])
+        i_run = first(lambda c: c[:1] == ["run"])
+        run = calls[i_run]
+        self.assertEqual(run[run.index("--network") + 1], "dvl-int-q98-run1")
+        self.assertFalse(any(".sock" in x for x in run))
+        self.assertLess(max(i_int, i_up, i_gate, i_conn, i_start), i_run)
+        i_rm = first(lambda c: c == ["rm", "--force", "dvl-gate-q98-run1"])
+        i_net_rm = first(lambda c: c[:2] == ["network", "rm"])
+        self.assertEqual(calls[i_net_rm][2:], ["dvl-int-q98-run1", "dvl-up-q98-run1"])
+        self.assertLess(i_run, i_rm)
+        self.assertLess(i_rm, i_net_rm)
 
     def test_a_failed_per_run_gate_stops_before_the_agent_runs(self):
         for kw, match in (({"tools_extra": {"webfetch": True}}, "tools on"),
@@ -298,7 +341,8 @@ class Precheck(unittest.TestCase):
         self.man = sandbox.validate(m, self.root, check_image=False)
 
     def views(self, **over):
-        conf = sandbox.opencode_config(self.man, {"num_ctx": 1000, "num_predict": 100})
+        conf = sandbox.opencode_config(self.man, {"max_model_len": 1000,
+                                                  "options": {"max_tokens": 100}})
         agent = {"tools": {**{t: True for t in sandbox.OPENCODE_TOOLS}, "webfetch": False,
                            "task": False}, "steps": 7, "permission": []}
         conf.update(over.pop("conf", {}))
