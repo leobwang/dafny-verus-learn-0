@@ -67,9 +67,9 @@ if str(SCRIPTS) not in sys.path:
 from dvl import sandbox  # noqa: E402
 
 HARNESS = REPO_ROOT / "harness"
-# The default model tag (Δ65); a replay may use only a tag the apparatus file
-# pins ([backend.qwen] model, with its digest in [model_server] models).
-DEFAULT_MODEL = "qwen3.8:latest"
+# The model is the one the host's server serves (Δ505: --model, else DVL_MODEL,
+# else the server's only model; dvl.sandbox.discover_server).
+NO_MODEL = "(the served model)"   # the dry run's stand-in when no server answers
 TURN_CAP = 40            # [A] DV4-PLAN §4.1: Q07's replay, at most its qwen_calls
 WALL_CLOCK_S = 2700      # [A] 45 minutes
 VERIFY_WALL_CLOCK_S = 1800   # [A] the verification container's acceptance commands
@@ -271,34 +271,33 @@ def ledger_checks(root, rec):
     return []
 
 
-def pinned_models(root):
-    """The model tags the apparatus file pins for the replay (with a digest)."""
-    apparatus, _, _ = _fvh()
-    try:
-        app = apparatus.load(root=root)
-        tag = app.backend("qwen").get("model")
-    except apparatus.ApparatusError:
-        return ()
-    return (tag,) if tag in (app.model_server().get("models") or {}) else ()
-
-
 def apparatus_checks(root):
     """`fvh apparatus --check` (the pinned opencode binary, the toolchain and
-    images pins) and the replay's pins: a [backend.qwen] model with its
-    digest and the request options in [model_server]."""
+    images pins) and the replay's settings: a [backend.qwen] table and the
+    [model_gate] request options and endpoints."""
     apparatus, _, _ = _fvh()
     try:
         app = apparatus.load(root=root)
     except apparatus.ApparatusError as e:
         return [str(e)]
     if "qwen" not in app.families():
-        return [f"{app.path}: no [backend.qwen] table: the replay's opencode and model are not pinned"]
+        return [f"{app.path}: no [backend.qwen] table: the replay's opencode is not pinned"]
     out = [f"apparatus drift: {d.line()}" for d in apparatus.check(app, root)]
-    if not pinned_models(root):
-        out.append(f"{app.path}: [backend.qwen]'s model has no digest in [model_server] models")
-    if not isinstance(app.model_server().get("options"), dict):
-        out.append(f"{app.path}: [model_server] pins no request options")
+    if not isinstance(app.model_gate().get("options"), dict):
+        out.append(f"{app.path}: [model_gate] has no request options")
+    if not isinstance(app.model_gate().get("endpoints"), list):
+        out.append(f"{app.path}: [model_gate] has no endpoints")
     return out
+
+
+def server_checks(root, model=None):
+    """The host's model server (Δ505): [] when one answers and its model can be
+    chosen, else the reason."""
+    try:
+        sandbox.discover_server(root, model=model)
+    except sandbox.SandboxError as e:
+        return [f"model server: {e}"]
+    return []
 
 
 def image_checks(root, *, local=True):
@@ -327,8 +326,9 @@ def docker_checks():
     return [] if ok else [msg]
 
 
-def availability(root, rec):
-    out = module_checks(rec) + ledger_checks(root, rec) + apparatus_checks(root)
+def availability(root, rec, model=None):
+    out = module_checks(rec) + ledger_checks(root, rec) + apparatus_checks(root) \
+        + server_checks(root, model)
     docker = docker_checks()
     return out + docker + image_checks(root, local=not docker)
 
@@ -438,7 +438,7 @@ def build_manifest(root, rec, contract, rev, snap, model, run_id="contract-local
     # so the turn cap and the registry's qwen_calls agree
     turns = min(TURN_CAP, int(rec.get("budget", {}).get("qwen_calls") or TURN_CAP))
     return {"schema": 1, "run_id": run_id, "module": mid, "kind": "agent", "image": image,
-            "network": "ollama", "limits": {"wall_clock_s": WALL_CLOCK_S},
+            "network": "model", "limits": {"wall_clock_s": WALL_CLOCK_S},
             "file": files, "return": list(allowed),
             "agent": {"cli": "opencode", "model": model, "turns": turns}}
 
@@ -548,10 +548,14 @@ def replay(root, rec, contract, target, rev, snap, raw):
     apparatus, budget, runlog = _fvh()
     mid = rec["id"]
     docker = docker_checks()
-    problems = ledger_checks(root, rec) + apparatus_checks(root) + docker \
+    model = raw["agent"]["model"]
+    problems = ledger_checks(root, rec) + apparatus_checks(root) \
+        + server_checks(root, None if model == NO_MODEL else model) + docker \
         + image_checks(root, local=not docker)
     if problems:
         raise Refused(problems[0])
+    if model == NO_MODEL:
+        raise Refused("model server: no model was found (DVL_MODEL or --model names one)")
     task = re.sub(r"[^A-Za-z0-9_.+-]+", "-", PurePosixPath(target).stem).strip("-") or "agent"
     aid = budget.attempt_id(ARM, task, 1, 1)
     ledger = budget.Ledger(budget.ledger_path(root, mid))
@@ -723,7 +727,10 @@ def _replay_run(root, rec, contract, target, rev, manifest, ledger, aid, task, d
                                "wall_s": live.get("wall_s"),
                                "agent_wall_s": ag.get("wall_s"), "steps": (ag.get("summary") or {}).get("steps")},
             apparatus={**apparatus.collect(apparatus.load(root=root), root),
-                       "image": manifest.image, "agent_config_sha256": ag.get("config_sha256")},
+                       "image": manifest.image, "agent_config_sha256": ag.get("config_sha256"),
+                       "model_server_found": dict(live.get("model_server_found") or {}, **(
+                           {"system_fingerprint": counts["system_fingerprint"]}
+                           if counts.get("system_fingerprint") else {}))},
             course_commit=head, course_dirty=bool(dirty),
             inputs_sha256=runlog.inputs_tree_sha256({src_of[k]: v for k, v in staged.items()
                                                      if k in after}),
@@ -766,7 +773,7 @@ def main(argv=None):
                                              "per-run container (DV4-PLAN §6).")
     ap.add_argument("module")
     ap.add_argument("--file", metavar="AGENTIC_PATH")
-    ap.add_argument("--model", default=DEFAULT_MODEL)
+    ap.add_argument("--model")             # default: DVL_MODEL, else the server's only model
     ap.add_argument("--from", dest="from_rev", metavar="REV")
     mode = ap.add_mutually_exclusive_group()
     mode.add_argument("--available", action="store_true")
@@ -775,12 +782,9 @@ def main(argv=None):
     a = ap.parse_args(argv)
     root = Path(a.root).resolve() if a.root else REPO_ROOT
     try:
-        pinned = pinned_models(root) or (DEFAULT_MODEL,)
-        if a.model not in pinned:
-            raise Refused(f"--model {a.model} is not a pinned tag (pinned: {', '.join(pinned)})")
         rec = record(root, a.module.upper())
         if a.available:
-            problems = availability(root, rec)
+            problems = availability(root, rec, a.model)
             for p in problems:
                 say(f"not available: {p}", err=True)
             if problems:
@@ -808,6 +812,11 @@ def main(argv=None):
             if why:
                 raise Refused(f"allowed file {p}: {why}")
         rev, snap = starting_state(root, contract, a.from_rev)
+        if not a.model:
+            try:
+                a.model = sandbox.discover_server(root)["model"]
+            except sandbox.SandboxError:
+                a.model = NO_MODEL       # the checks below name why (server_checks)
         raw = build_manifest(root, rec, contract, rev, snap, a.model)
         try:
             manifest = sandbox.validate(raw, root, check_image=False)
@@ -829,7 +838,7 @@ def main(argv=None):
             f"{r} {sum(1 for e in manifest.files if e.role == r)}" for r in sandbox.ROLES
             if any(e.role == r for e in manifest.files)) + f"), sha256 {manifest.sha256()[:16]}")
         print(f"agent: opencode, {a.model}, at most {manifest.agent['turns']} turns (one gated "
-              f"call each); network ollama (the run's gate); --memory {manifest.limits['mem_gb']:g}g")
+              f"call each); network model (the run's gate); --memory {manifest.limits['mem_gb']:g}g")
         print("acceptance lines:")
         for line in contract["acceptance"]:
             form, _ = classify_line(line)
@@ -850,7 +859,8 @@ def main(argv=None):
             print("  " + shlex.join(line))
         docker = docker_checks()
         later = image_checks(root, local=not docker) + ledger_checks(root, rec) \
-            + apparatus_checks(root) + docker
+            + apparatus_checks(root) + server_checks(root, None if a.model == NO_MODEL else a.model) \
+            + docker
         for p in later:
             print(f"not yet available: {p}")
         return 0 if report["ok"] else 1

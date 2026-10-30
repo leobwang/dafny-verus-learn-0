@@ -5,8 +5,10 @@
                                               [--units Q01,Q02,...]
 
 Needs Docker (host action H1) and no model: no inference request ever reaches
-Ollama (the one real upstream request is GET /api/version, control C5; the
-gate's other controls run against a fake model server on loopback). Run it
+the model server (the one real upstream request is GET /v1/models, control
+C5, at the host's server on localhost (127.0.0.1) port 8000 or 8001, which
+must answer; the gate's other controls run against a fake OpenAI-compatible
+server on loopback; Δ505). Run it
 before a merge that changes sandbox/, scripts/mksandbox-run,
 scripts/dvl/sandbox.py or an image digest. Never in CI.
 
@@ -19,18 +21,22 @@ Sections (the control ids of the author notes):
   access    Docker access through mksandbox-run --check-access
   images    sandbox/build-images.sh --check: the lock names the local images
   controls  C1-C4, C7, C8 in a verification container; C1-C8 in a probe agent
-            container on the model network (Route B: the relay to the gate,
-            C5 GET /api/version through it, C6 every host listener refused)
-  gate      C9 model management refused, C10 another model refused, C11 the
-            pinned options set and the override logged, the call cap (429),
-            through the relay, against a fake model server
+            container on the model network (Route C, DELTAS Δ504: the run's
+            --internal network and its gate container; C5 GET /v1/models
+            through the relay and the gate container, C6 every host listener
+            refused), and the gate container and both networks gone after it
+  gate      C9 every endpoint but chat completions and the model list
+            refused, C10 another model refused, C11 the pinned options set
+            as OpenAI fields and the overrides logged, the call cap (429),
+            through the relay, against a fake OpenAI-compatible server
   memory    C13: a verification and an agent container allocating past
             --memory are killed(memory); a solver job past a small container's
             memory is reported killed(memory) by vcheck from memory.events
   pids      C14: a spawn past --pids-limit fails and the run goes on
   wall      C15: a run past wall_clock_s is killed (exit 124) and removed
   watcher   C16: mksandbox-run killed mid-run: the watcher removes the
-            container, stops the gate and removes the run directory
+            container, stops the gate and removes the run directory (the
+            gate's upstream is the invented server, as in gate: no model)
   reap      mksandbox-run --reap removes a dvl.run container whose owner is
             gone and keeps one whose owner lives
   return    C17: an unlisted file, a symlink, a FIFO, a hard link and an
@@ -51,9 +57,12 @@ Sections (the control ids of the author notes):
   e2e       DV4 step 2b: fvh's executor with a Scripted and a Mock policy,
             every Verify in a fresh verification container (the work copy
             streamed in over the course's files)
-  exposure  DV4 step 2c's record: from a container on a per-run --internal
-            network (Route A's starting point, no filter), which host
-            listeners answer on the gateway and the host's addresses
+  exposure  Route C's pass condition (DELTAS Δ504): from a container on a
+            network made as a run's (--internal, inhibit_ipv4), no host
+            listener answers on any host address or the subnet's first
+            address, and no public address or name is reachable; beside it,
+            the record of a plain --internal network (Route A's starting
+            point, which DV4 step 2c found exposes the host's listeners)
 
 Memory (CLAUDE.md §Resources): one container at a time, each at its --memory
 cap (Verus parity at 16 GB); the free-memory check of mksandbox-run applies.
@@ -177,22 +186,30 @@ def s_controls():
         note("controls", f"{c['id']} (verify, network none)", c["ok"], c["detail"])
     note("controls", "verify run", code == 0 and rec and rec["ended_by"] == "done" and rec["removed"],
          f"exit {code}, ended_by {(rec or {}).get('ended_by')}, removed {(rec or {}).get('removed')}")
-    m = build(DAFNY_T, gate_argv(DAFNY_T), kind="agent", network="ollama", run_id="doors-controls-agent")
+    m = build(DAFNY_T, gate_argv(DAFNY_T), kind="agent", network="model", run_id="doors-controls-agent")
     code, rec, err = run(m, "controls-agent")
     ctl = (rec or {}).get("controls", {}).get("controls", [])
     for c in ctl:
-        note("controls", f"{c['id']} (probe agent, network ollama, Route B)", c["ok"], c["detail"])
+        note("controls", f"{c['id']} (probe agent, network model, Route C)", c["ok"], c["detail"])
     ids = {c["id"] for c in ctl}
     note("controls", "C5 and C6 ran", {"C5", "C6"} <= ids, f"controls {sorted(ids)}; host targets "
          f"{(rec or {}).get('host_targets')}")
     log = (rec or {}).get("gate", {}).get("gate.log", "")
     reqs = [json.loads(x) for x in log.splitlines() if x.strip()]
     paths = [(r.get("method"), r.get("path"), r.get("status")) for r in reqs if r["event"] == "request"]
-    note("controls", "C5 the only upstream request", paths == [("GET", "/api/version", 200)],
+    note("controls", "C5 the only upstream request", paths == [("GET", "/v1/models", 200)],
          f"gate.log requests {paths}")
+    left = subprocess.run(["docker", "ps", "--all", "--filter", "label=dvl.run=doors-controls-agent",
+                           "--format", "{{.Names}}"], capture_output=True, text=True).stdout.split()
+    nets = subprocess.run(["docker", "network", "ls", "--filter", "label=dvl.run=doors-controls-agent",
+                           "--format", "{{.Name}}"], capture_output=True, text=True).stdout.split()
+    note("controls", "the gate container and the run's networks are gone", not left and not nets,
+         f"containers {left}, networks {nets}")
 
 
 class FakeModel(http.server.BaseHTTPRequestHandler):
+    """An invented OpenAI-compatible server (Δ505): its model list and chat
+    completions under /v1; nothing else."""
     seen = []
 
     def log_message(self, *a):
@@ -208,21 +225,18 @@ class FakeModel(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         FakeModel.seen.append(("GET", self.path, None))
-        if self.path == "/api/ps":
-            return self._send(200, {"models": [{"name": "door-model:1", "size": 1, "size_vram": 1}]})
-        if self.path == "/api/version":
-            return self._send(200, {"version": "fake"})
+        if self.path == "/v1/models":
+            return self._send(200, {"object": "list", "data": [
+                {"id": "door-model", "root": "door/weights", "max_model_len": 4096}]})
         self._send(404, {"error": "not here"})
 
     def do_POST(self):
         n = int(self.headers.get("Content-Length") or 0)
         body = json.loads(self.rfile.read(n) or b"{}")
         FakeModel.seen.append(("POST", self.path, body))
-        if self.path == "/api/chat":
-            return self._send(200, {"model": body.get("model"), "done": True, "prompt_eval_count": 5,
-                                    "eval_count": 2, "message": {"role": "assistant", "content": "ok"}})
         if self.path == "/v1/chat/completions":
-            return self._send(200, {"choices": [{"message": {"role": "assistant", "content": "ok"}}],
+            return self._send(200, {"choices": [{"message": {"role": "assistant", "content": "ok"},
+                                                 "finish_reason": "stop"}],
                                     "usage": {"prompt_tokens": 5, "completion_tokens": 2}})
         self._send(404, {"error": "not here"})
 
@@ -232,53 +246,55 @@ def s_gate():
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     FakeModel.seen = []
     try:
-        cfg = {"model": "door-model:1", "margin": 512, "caps": {"calls": 2},
-               "options": {"temperature": 0, "seed": 7, "num_predict": 64, "num_ctx": 4096,
-                           "top_k": 20, "top_p": 0.9}}
+        cfg = {"model": "door-model", "margin": 512, "caps": {"calls": 2}, "max_model_len": 4096,
+               "options": {"temperature": 0, "seed": 7, "max_tokens": 64, "top_k": 20,
+                           "top_p": 0.9}}
         cf = Path(TMP) / "gate-config.json"
         cf.write_text(json.dumps(cfg))
-        m = build(DAFNY_T, gate_argv(DAFNY_T), kind="agent", network="ollama", run_id="doors-gate")
-        m["command"] = [{"argv": door("http", "POST", "/api/pull", "door-model:1")},
-                        {"argv": door("http", "POST", "/api/delete", "door-model:1")},
-                        {"argv": door("http", "POST", "/api/create", "door-model:1")},
-                        {"argv": door("http", "GET", "/api/tags", "door-model:1")},
-                        {"argv": door("http", "POST", "/api/chat", "other-model:1")},
-                        {"argv": door("http", "POST", "/api/chat", "door-model:1", "temperature=0.8",
-                                      "num_ctx=999999")},
-                        {"argv": door("http", "POST", "/v1/chat/completions", "door-model:1",
-                                      "temperature=0.5")},
-                        {"argv": door("http", "POST", "/api/chat", "door-model:1")}]
+        m = build(DAFNY_T, gate_argv(DAFNY_T), kind="agent", network="model", run_id="doors-gate")
+        m["command"] = [{"argv": door("http", "GET", "/v1/models", "door-model")},
+                        {"argv": door("http", "POST", "/v1/completions", "door-model")},
+                        {"argv": door("http", "POST", "/v1/embeddings", "door-model")},
+                        {"argv": door("http", "GET", "/version", "door-model")},
+                        {"argv": door("http", "POST", "/api/chat", "door-model")},
+                        {"argv": door("http", "POST", "/v1/chat/completions", "other-model")},
+                        {"argv": door("http", "POST", "/v1/chat/completions", "door-model",
+                                      "temperature=0.8", "max_tokens=999999")},
+                        {"argv": door("http", "POST", "/v1/chat/completions", "door-model",
+                                      "max_completion_tokens=5")},
+                        {"argv": door("http", "POST", "/v1/chat/completions", "door-model")}]
         code, rec, err = run(m, "gate", extra=["--gate-config", str(cf), "--gate-upstream",
-                                               f"http://127.0.0.1:{srv.server_address[1]}"])
+                                               f"http://127.0.0.1:{srv.server_address[1]}/v1"])
     finally:
         srv.shutdown()
     outs = [json.loads(c["stdout"]) for c in (rec or {}).get("commands", []) if c["stdout"].strip()]
     st = [o["status"] for o in outs]
-    note("gate", "run", code == 0 and len(outs) == 8, f"exit {code}, {len(outs)} door results; {err[-300:]}")
-    if len(outs) != 8:
+    note("gate", "run", code == 0 and len(outs) == 9, f"exit {code}, {len(outs)} door results; {err[-300:]}")
+    if len(outs) != 9:
         return
-    note("gate", "C9 model management refused", st[:4] == [403, 403, 403, 403],
-         f"pull, delete, create, tags -> {st[:4]}")
-    note("gate", "C10 another model refused", st[4] == 403, f"other-model:1 -> {st[4]}")
+    note("gate", "the model list passes", st[0] == 200, f"GET /v1/models -> {st[0]}")
+    note("gate", "C9 every other endpoint refused", st[1:5] == [403, 403, 403, 403],
+         f"completions, embeddings, /version, /api/chat -> {st[1:5]}")
+    note("gate", "C10 another model refused", st[5] == 403, f"other-model -> {st[5]}")
     upstream_posts = [(p, b) for meth, p, b in FakeModel.seen if meth == "POST"]
     note("gate", "C9/C10 never reach the model server",
-         [p for p, _ in upstream_posts] == ["/api/chat", "/v1/chat/completions"],
+         [p for p, _ in upstream_posts] == ["/v1/chat/completions"] * 2,
          f"upstream POSTs {[p for p, _ in upstream_posts]}")
     if len(upstream_posts) == 2:
-        o1, o2 = upstream_posts[0][1].get("options", {}), upstream_posts[1][1]
-        note("gate", "C11 pinned options on /api/chat",
-             st[5] == 200 and o1 == cfg["options"], f"status {st[5]}; options sent upstream {o1}")
-        note("gate", "C11 pinned options on /v1/chat/completions",
-             st[6] == 200 and o2.get("temperature") == 0 and o2.get("max_tokens") == 64
-             and o2.get("seed") == 7 and o2.get("top_p") == 0.9,
-             f"status {st[6]}; temperature {o2.get('temperature')}, max_tokens {o2.get('max_tokens')}")
+        o1, o2 = upstream_posts[0][1], upstream_posts[1][1]
+        note("gate", "C11 pinned options as OpenAI fields",
+             st[6] == 200 and st[7] == 200
+             and all({k: o.get(k) for k in cfg["options"]} == cfg["options"] for o in (o1, o2))
+             and "max_completion_tokens" not in o2,
+             f"status {st[6]}, {st[7]}; sent upstream {[{k: o.get(k) for k in cfg['options']} for o in (o1, o2)]}")
     log = [json.loads(x) for x in (rec or {}).get("gate", {}).get("gate.log", "").splitlines() if x]
     over = [o for r in log for o in r.get("overrides", [])]
     note("gate", "C11 overrides logged",
          any(o.get("option") == "temperature" and o.get("sent") == 0.8 for o in over)
-         and any(o.get("option") == "num_ctx" and o.get("sent") == 999999 for o in over)
-         and any(o.get("note") for o in over), f"{len(over)} override records")
-    note("gate", "call cap", st[7] == 429, f"third inference call -> {st[7]}")
+         and any(o.get("option") == "max_tokens" and o.get("sent") == 999999 for o in over)
+         and any(o.get("option") == "max_completion_tokens" and o.get("note") for o in over),
+         f"{len(over)} override records")
+    note("gate", "call cap", st[8] == 429, f"third inference call -> {st[8]}")
     refused = [r for r in log if r.get("event") == "refused"]
     note("gate", "refusals logged", len(refused) == 6, f"{len(refused)} refusal lines in gate.log")
     counts = json.loads((rec or {}).get("gate", {}).get("gate-counts.json", "{}"))
@@ -357,13 +373,40 @@ def s_wall():
          f"{took:.0f} s")
 
 
+def gate_stopped(gate_pids, alive=None):
+    """(ok, alive): C16's "gate stopped" check. It passes only when a gate was
+    found and none of its processes is still alive. Liveness is
+    dvl.host.pid_alive (signal 0), which also holds on macOS, where there is no
+    /proc (Δ506's open item: a /proc test there saw every gate as gone)."""
+    alive = alive or sandbox.host.pid_alive
+    left = [x for x in gate_pids if alive(x)]
+    return bool(gate_pids) and not left, left
+
+
 def s_watcher():
-    m = build(DAFNY_T, gate_argv(DAFNY_T), kind="agent", network="ollama", run_id="doors-watcher")
+    # The upstream is the invented server of s_gate (Δ506): C16 is the watcher's
+    # teardown, which needs a gate but no model, so the section runs on a host
+    # without a model server too.
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), FakeModel)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        _watcher(f"http://127.0.0.1:{srv.server_address[1]}/v1")
+    finally:
+        srv.shutdown()
+
+
+def _watcher(upstream):
+    cfg = {"model": "door-model", "margin": 512, "caps": {"calls": 2}, "max_model_len": 4096,
+           "options": {"temperature": 0, "seed": 7, "max_tokens": 64, "top_k": 20, "top_p": 0.9}}
+    m = build(DAFNY_T, gate_argv(DAFNY_T), kind="agent", network="model", run_id="doors-watcher")
     m["command"] = [{"argv": door("sleep", "300")}]
     d = Path(tempfile.mkdtemp(prefix="watcher-", dir=TMP))
     (d / "manifest.json").write_text(json.dumps(m))
+    cf = d / "gate-config.json"
+    cf.write_text(json.dumps(cfg))
     before = set(sandbox.runs_base().glob("*"))
-    p = subprocess.Popen([sys.executable, "-B", str(MK), "--probe", str(d / "manifest.json")],
+    p = subprocess.Popen([sys.executable, "-B", str(MK), "--probe", "--gate-config", str(cf),
+                          "--gate-upstream", upstream, str(d / "manifest.json")],
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=ROOT)
     name = "dvl-doors-watcher"
     for _ in range(120):
@@ -372,7 +415,8 @@ def s_watcher():
         time.sleep(0.5)
     started = not container_gone(name)
     runs = [x for x in set(sandbox.runs_base().glob("*")) - before if x.is_dir()]
-    gate_pids = subprocess.run(["pgrep", "-f", "ollama_gate.py --socket " + (str(runs[0]) if runs else "x")],
+    # the host gate of Route C (DELTAS Δ504): TCP, its config in the run's state/
+    gate_pids = subprocess.run(["pgrep", "-f", "model_gate.py .*--config " + (str(runs[0]) if runs else "x")],
                                capture_output=True, text=True).stdout.split()
     time.sleep(3)
     p.send_signal(signal.SIGKILL)
@@ -383,14 +427,23 @@ def s_watcher():
             gone = True
             break
         time.sleep(0.5)
-    time.sleep(2)
-    gate_alive = [x for x in gate_pids if Path(f"/proc/{x}").exists()]
+    stopped, gate_alive = False, list(gate_pids)
+    for _ in range(20):
+        stopped, gate_alive = gate_stopped(gate_pids)
+        if stopped or not gate_pids:
+            break
+        time.sleep(0.5)
     note("watcher", "C16 container removed after the owner's SIGKILL", started and gone,
          f"started {started}, removed {gone}")
-    note("watcher", "C16 gate stopped", bool(gate_pids) and not gate_alive,
-         f"gate pids {gate_pids}, alive after {gate_alive}")
+    note("watcher", "C16 gate stopped", stopped, f"gate pids {gate_pids}, alive after {gate_alive}")
     note("watcher", "C16 run directory removed", bool(runs) and not any(r.exists() for r in runs),
          f"run dirs {[str(r) for r in runs]}")
+    left = subprocess.run(["docker", "ps", "--all", "--filter", "label=dvl.run=doors-watcher",
+                           "--format", "{{.Names}}"], capture_output=True, text=True).stdout.split()
+    nets = subprocess.run(["docker", "network", "ls", "--filter", "label=dvl.run=doors-watcher",
+                           "--format", "{{.Name}}"], capture_output=True, text=True).stdout.split()
+    note("watcher", "C16 the gate container and the run's networks removed", not left and not nets,
+         f"containers {left}, networks {nets}")
 
 
 def s_reap():
@@ -672,42 +725,61 @@ def s_e2e():
          f"outcome {res2.outcome}, ended_by {res2.ended_by}")
 
 
+def _probe_pairs(img, net, pairs):
+    """[[address, port, outcome]] of connecting to each pair from a container on `net`."""
+    code = ("import json,socket,sys\nres=[]\n"
+            "for a,p in json.loads(sys.argv[1]):\n"
+            " s=socket.socket(socket.AF_INET6 if ':' in a else socket.AF_INET); s.settimeout(1)\n"
+            " try:\n  s.connect((a,p)); res.append([a,p,'answered'])\n"
+            " except OSError as e: res.append([a,p,type(e).__name__])\n"
+            " finally: s.close()\n"
+            "try:\n socket.getaddrinfo('example.com', 443); res.append(['example.com',443,'resolved'])\n"
+            "except OSError as e: res.append(['example.com',443,type(e).__name__])\n"
+            "print(json.dumps(res))\n")
+    p = subprocess.run(["docker", "run", "--rm", "--network", net, "--memory", "256m",
+                        "--memory-swap", "256m", "--cap-drop", "ALL", "--read-only", "--user",
+                        "1000:1000", "--security-opt", "no-new-privileges", img, sandbox.CONTAINER_PYTHON,
+                        "-c", code, json.dumps(pairs)], capture_output=True, text=True, timeout=900)
+    return json.loads(p.stdout or "[]")
+
+
 def s_exposure():
+    import ipaddress
     lock = sandbox.read_images_lock(ROOT)
     img = next(k for k in lock if k.startswith("dvl-toolchain@"))
-    net = f"dvl-exposure-{os.getpid()}"
     targets, info = sandbox.host_targets(limit=512)
-    subprocess.run(["docker", "network", "create", "--internal", "--label", "dvl.run=doors-exposure",
-                    net], capture_output=True, check=True)
-    try:
-        insp = json.loads(subprocess.run(["docker", "network", "inspect", net], capture_output=True,
-                                         text=True, check=True).stdout)[0]
-        gw = insp["IPAM"]["Config"][0].get("Gateway")
-        ports = info["ports"]
-        pairs = [(gw, p) for p in ports] + [t for t in targets]
-        code = ("import json,socket,sys\nres=[]\n"
-                "for a,p in json.loads(sys.argv[1]):\n"
-                " s=socket.socket(socket.AF_INET6 if ':' in a else socket.AF_INET); s.settimeout(1)\n"
-                " try:\n  s.connect((a,p)); res.append([a,p,'answered'])\n"
-                " except OSError as e: res.append([a,p,type(e).__name__])\n"
-                " finally: s.close()\n"
-                "print(json.dumps(res))\n")
-        p = subprocess.run(["docker", "run", "--rm", "--network", net, "--memory", "256m",
-                            "--memory-swap", "256m", "--cap-drop", "ALL", "--read-only", "--user",
-                            "1000:1000", "--security-opt", "no-new-privileges", img, sandbox.CONTAINER_PYTHON,
-                            "-c", code, json.dumps(pairs)], capture_output=True, text=True, timeout=900)
-        res = json.loads(p.stdout or "[]")
-    finally:
-        subprocess.run(["docker", "network", "rm", net], capture_output=True)
-    answered = sorted({f"{a}:{p}" for a, p, r in res if r == "answered"})
-    gw_open = sorted({p for a, p, r in res if a == gw and r == "answered"})
+    ports = info["ports"]
+    public = [["1.1.1.1", 443], ["8.8.8.8", 53]]
+    results = {}
+    for kind, opts in (("route-c", ["--opt", "com.docker.network.bridge.inhibit_ipv4=true"]),
+                       ("plain-internal", [])):
+        net = f"dvl-exposure-{kind}-{os.getpid()}"
+        subprocess.run(["docker", "network", "create", "--internal", *opts, "--label",
+                        "dvl.run=doors-exposure", net], capture_output=True, check=True)
+        try:
+            insp = json.loads(subprocess.run(["docker", "network", "inspect", net],
+                                             capture_output=True, text=True, check=True).stdout)[0]
+            cfg = insp["IPAM"]["Config"][0]
+            first = str(next(ipaddress.ip_network(cfg["Subnet"]).hosts()))   # the bridge's address
+            pairs = [(first, p) for p in ports] + [list(t) for t in targets] + public
+            res = _probe_pairs(img, net, pairs)
+        finally:
+            subprocess.run(["docker", "network", "rm", net], capture_output=True)
+        results[kind] = {"subnet": cfg["Subnet"], "first": first, "results": res}
     if ARCHIVE:
         (ARCHIVE / "exposure.json").write_text(json.dumps(
-            {"gateway": gw, "host_listeners": info, "results": res}, indent=1))
-    # a record, not a pass condition: Route B (the plan of record) has no network at all
-    note("exposure", "recorded", bool(res), f"internal network gateway {gw}: host ports answering "
-         f"there {gw_open}; {len(answered)} of {len(res)} address:port pairs answered in all; IPv6 "
-         f"is off on the network (EnableIPv6 {insp.get('EnableIPv6')})")
+            {"host_listeners": info, **results}, indent=1))
+    rc = results["route-c"]["results"]
+    answered = sorted({f"{a}:{p}" for a, p, r in rc if r in ("answered", "resolved")})
+    note("exposure", "Route C: no host listener, public address or public name answers",
+         bool(rc) and not answered,
+         f"{len(rc)} probes from a network made as a run's (subnet {results['route-c']['subnet']}): "
+         f"answered {answered or 'none'}")
+    pi = results["plain-internal"]["results"]
+    gw_open = sorted({p for a, p, r in pi if a == results["plain-internal"]["first"] and r == "answered"})
+    # a record, not a pass condition: why Route C inhibits the bridge's address
+    note("exposure", "recorded (plain --internal)", bool(pi),
+         f"host ports answering on its bridge address {results['plain-internal']['first']}: {gw_open}")
 
 
 def main(argv=None):

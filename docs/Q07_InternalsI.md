@@ -840,7 +840,7 @@ Your steps (15 minutes, after the exercise files are done):
 
 **Step 3: review (5 minutes).** From `git diff` against the snapshot's commit, fill `REVIEW`: every changed line; every `API` statement (weaker? a conjunct dropped? an attribute added?); every new helper (strong enough for its callers? a `requires` no caller can establish?).
 
-**Step 4: the replay (A2d; 5 minutes).** The same Dafny contract, replayed by opencode with the local Qwen model in a per-run container from the snapshot's commit, in your own terminal: `scripts/contract_local.sh Q07 --file dafny/Q/Q07_InternalsI/agent/Q07_AgentRefactor.dfy`. The run itself takes the machine about ten minutes, outside your budget like the contractor's time. Its patch and run record land in `research/runs/Q07/<run>/` and are **never applied**. Q07's budget allows one replay (`qwen_runs = 1`, at most 40 model calls), and the module's ledger `research/runs/Q07/ledger.jsonl` counts it. It needs Docker with the course images and Ollama with the pinned model (`README.md`'s Setup, step 5, installs and checks both), so ask first whether it can run on your machine:
+**Step 4: the replay (A2d; 5 minutes).** The same Dafny contract, replayed by opencode with the local Qwen model in a per-run container from the snapshot's commit, in your own terminal: `scripts/contract_local.sh Q07 --file dafny/Q/Q07_InternalsI/agent/Q07_AgentRefactor.dfy`. The run itself takes the machine about ten minutes, outside your budget like the contractor's time. Its patch and run record land in `research/runs/Q07/<run>/` and are **never applied**. Q07's budget allows one replay (`qwen_runs = 1`, at most 40 model calls), and the module's ledger `research/runs/Q07/ledger.jsonl` counts it. It needs Docker with the course images and an OpenAI-compatible model server of your own on localhost (127.0.0.1) port 8000 or 8001 (`README.md`'s Setup, step 5, checks both), so ask first whether it can run on your machine:
 
 <!-- pin: replay-available -->
 ```
@@ -850,7 +850,7 @@ $ echo $?
 0
 ```
 
-That is the author's machine on 2026-10-11 (a recorded quote). The author's replay, the same day, printed this (a recorded quote; the run directory's name is the run's start time):
+That is the author's machine on 2026-10-11 (a recorded quote, made on Ollama's `qwen3.8:latest` before Δ505). The author's replay, the same day, printed this (a recorded quote; the run directory's name is the run's start time):
 
 <!-- pin: replay-run -->
 ```

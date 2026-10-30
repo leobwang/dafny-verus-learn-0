@@ -1,6 +1,8 @@
 """fvh.apparatus — the apparatus pins, the apparatus facts, and the refusal on
 drift (DV4-PLAN §3.6; design §11.1: "records carry CLI version, model id,
-prompt hash, Ollama digest and sandbox manifest").
+prompt hash, Ollama digest and sandbox manifest"; since Δ505 the model
+server is the host's, not pinned: each run records the server's URL, model id
+and identity as found, in place of the Ollama digest).
 
 The apparatus file is the file FVH_APPARATUS names, else sandbox/apparatus.toml
 (guard rule 2g). Every binary path and upstream address fvh uses comes from
@@ -14,8 +16,11 @@ it, never from a default in code (DV4-PLAN §9). Its schema 1:
                       binary (a path written "~/...", relative to HOME, so
                       that under CI's empty HOME it does not exist), sha256,
                       version, and the transport's own keys (fvh.backends)
-  [model_server]      the local model server's pins: version, models (tag ->
-                      full digest), the unit's settings, the request options
+  [model_gate]        the course's model gate (Δ505): endpoints (the base
+                      URLs where the host's OpenAI-compatible server is
+                      looked for, in order), margin, and the request options
+                      (the course's experimental settings); the server
+                      itself is not pinned
   [pins]              optional sha256 pins of course files the apparatus
                       depends on: toolchain (scripts/dvl/pins.toml),
                       images_lock (sandbox/images.lock)
@@ -54,7 +59,7 @@ ENV = "FVH_APPARATUS"
 DEFAULT = "sandbox/apparatus.toml"
 SCHEMA = 1
 ROOT = Path(__file__).resolve().parents[2]
-_TOP = {"schema", "defaults", "window", "backend", "model_server", "pins"}
+_TOP = {"schema", "defaults", "window", "backend", "model_gate", "pins"}
 _PIN_FILES = {"toolchain": "scripts/dvl/pins.toml", "images_lock": "sandbox/images.lock"}
 REPROBE = {
     "binary": "the pinned binary changed or is missing (an auto-update?): re-run the policy "
@@ -121,8 +126,8 @@ class Apparatus:
         except (TypeError, ValueError) as e:
             raise ApparatusError(f"{self.path}: [window]: {e}") from None
 
-    def model_server(self) -> dict:
-        t = self.data.get("model_server")
+    def model_gate(self) -> dict:
+        t = self.data.get("model_gate")
         return dict(t) if isinstance(t, dict) else {}
 
 
@@ -217,7 +222,7 @@ def collect(app: Apparatus, root=None) -> dict:
     """The apparatus facts every record carries (DV4-PLAN §3.6)."""
     root = Path(root if root is not None else ROOT)
     facts = {"apparatus_file": str(app.path), "apparatus_sha256": app.sha256,
-             **git_facts(root), "backend": {}, "model_server": app.model_server(), "pins": {}}
+             **git_facts(root), "backend": {}, "model_gate": app.model_gate(), "pins": {}}
     for fam in app.families():
         t = app.backend(fam)
         entry = {"binary": t.get("binary"), "version": t.get("version"),

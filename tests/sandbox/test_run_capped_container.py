@@ -129,6 +129,30 @@ class ContainerModes(unittest.TestCase):
             self.assertEqual(common.cap_mode(), "host")
 
 
+class ContainerLifeline(unittest.TestCase):
+    """The container lifeline kills the job's process group when the parent's
+    pipe closes, under /bin/sh (dash on Ubuntu, the image's shell): it once ran
+    `kill -KILL -- "-$pgid"`, which dash rejects (DELTAS Δ504)."""
+
+    def test_a_closed_pipe_kills_the_whole_group_under_dash(self):
+        import subprocess
+        job = subprocess.Popen(["sh", "-c", "sleep 300 & exec sleep 300"], start_new_session=True)
+        try:
+            w = common._container_lifeline(job.pid)
+            os.close(w)                       # the parent "died": EOF, nothing written
+            t0 = time.monotonic()
+            while job.poll() is None:
+                self.assertLess(time.monotonic() - t0, 10, "the lifeline left the job running")
+                time.sleep(0.05)
+            r = subprocess.run(["pgrep", "-g", str(job.pid)], capture_output=True)
+            self.assertNotEqual(r.returncode, 0, "a process of the group survived")
+        finally:
+            try:
+                os.killpg(job.pid, 9)
+            except ProcessLookupError:
+                pass
+
+
 class NoLeftovers(unittest.TestCase):
     """The suite above leaves nothing in its temporary base: every directory a test
     makes (the cgroup and scratch fixtures, each job's output directory) is removed

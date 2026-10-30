@@ -34,7 +34,7 @@ def test_the_fake_apparatus_file_loads():
     app = A.load(FAKE)
     assert app.families() == tuple(sorted(budget.FAMILIES))
     assert app.defaults().calls == 40 and app.window().allowed_overage == ("rejected",)
-    assert app.model_server()["version"] == "0.0.0-fake"
+    assert app.model_gate()["endpoints"] == ["http://127.0.0.1:9/v1"]
 
 
 def test_the_default_location_and_the_environment(tmp_path, monkeypatch):

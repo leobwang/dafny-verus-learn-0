@@ -50,8 +50,6 @@ max_turns = 2
 version = "0.0.0-fake"
 binary = "~/no/qwen-cli"
 sha256 = "0000000000000000000000000000000000000000000000000000000000000000"
-model = "fake:latest"
-num_ctx = 32768
 """
 ARMS_SRC = '''
 class Sampler:
@@ -621,14 +619,23 @@ def test_a_transcript_with_a_credential_shape_is_withheld(root):
 
 def test_the_gate_config_carries_the_runs_seeds(root):
     from fvh.backends import gate as G
-    app_text = APP + ('[model_server]\nmodels = { "fake:latest" = "' + "a" * 64 + '" }\n'
-                      'options = { temperature = 0.6, seed = 1 }\nmargin = 512\n')
+    app_text = APP + ('[model_gate]\nendpoints = ["http://127.0.0.1:8000/v1"]\n'
+                      'options = { temperature = 0.6, seed = 1, max_tokens = 64 }\nmargin = 512\n')
     (root / "app2.toml").write_text(app_text)
-    cfg = G.gate_config(apparatus.load(root / "app2.toml"), seeds=[5, 6], calls=2, gpu_s=30)
+    app = apparatus.load(root / "app2.toml")
+    found = {"base_url": "http://127.0.0.1:8001/v1", "model": "fake:latest", "max_model_len": 4096,
+             "served": ["fake:latest"], "version": None}
+    cfg = G.gate_config(app, found, seeds=[5, 6], calls=2, gpu_s=30)
     assert cfg["seeds"] == [5, 6] and cfg["caps"] == {"calls": 2, "gpu_s": 30.0}
-    assert cfg["digest"] == "a" * 64 and cfg["unload_on_stop"] is False
+    assert (cfg["model"], cfg["max_model_len"], cfg["check_served"]) == ("fake:latest", 4096, True)
+    assert cfg["upstream"] == "http://127.0.0.1:8001/v1" and cfg["options"]["max_tokens"] == 64
+    assert G.gate_config(app, {**found, "max_model_len": None}, seeds=[1], calls=1)[
+        "max_model_len"] is None                       # margin-free: the server's own refusal
+    for bad in ("http://localhost:8000/v1", "http://10.0.0.2:8000/v1", "https://127.0.0.1/v1"):
+        with pytest.raises(G.GateError, match="loopback"):
+            G.gate_config(app, {**found, "base_url": bad}, seeds=[1], calls=1)
     with pytest.raises(G.GateError):
-        G.gate_config(apparatus.load(root / "app2.toml"), seeds=[], calls=1)
+        G.gate_config(app, found, seeds=[], calls=1)
 
 
 def test_the_gpu_calendar_lock_defers_a_second_batch(tmp_path):
@@ -768,31 +775,25 @@ def test_resume_refuses_on_drift_and_a_changed_apparatus_file(root, monkeypatch,
     assert "apparatus drift" in capsys.readouterr().err and "r" not in reached
 
 
-def test_the_model_server_is_checked_against_its_pins(root, monkeypatch):
+def test_the_model_server_is_found_never_pinned(root, monkeypatch):
+    """Δ505: the batch finds the host's server before its first attempt; none
+    answering refuses it, nothing moved; the server is never pinned."""
     from fvh.backends import gate as G
-    app_text = APP + ('[model_server]\nversion = "0.33.2"\nmodels = { "fake:latest" = "'
-                      + "a" * 64 + '" }\nunit = { OLLAMA_KV_CACHE_TYPE = "q8_0" }\n'
-                      'options = { seed = 1 }\n')
-    (root / "app.toml").write_text(app_text)
-    app = apparatus.load(root / "app.toml")
-    good = {"reachable": True, "version": "0.33.2", "models": {"fake:latest": "a" * 64},
-            "unit": {"OLLAMA_KV_CACHE_TYPE": "q8_0"}}
-    assert G.server_drift(app, good) == []
-    bad = {**good, "version": "0.34.0", "unit": {"OLLAMA_KV_CACHE_TYPE": "f16"},
-           "models": {"fake:latest": "b" * 64}}
-    assert {d.field for d in G.server_drift(app, bad)} == {
-        "model_server.version", "model_server.unit.OLLAMA_KV_CACHE_TYPE",
-        "model_server.models.fake:latest"}
-    assert [d.field for d in G.server_drift(app, {"reachable": False})] == [
-        "model_server.reachable"]
-    # a live Qwen batch refuses before its first attempt, nothing moved
     p = write_plan(root, arms=[("a", "qwen", 1, f"{root.mod}:Sampler", "sampler")])
     b = batch.Batch(root, "Q98", batch.load_plan(p, root), runners=lambda t, l: Gate(),
-                    log=lambda m: None, app=app)
-    monkeypatch.setattr(G, "server_facts", lambda app, **k: bad)
+                    log=lambda m: None, app=apparatus.load(root / "app.toml"))
+
+    def nothing(app, **k):
+        raise G.GateError("no OpenAI-compatible model server answers GET /models at "
+                          "http://127.0.0.1:8000/v1, http://127.0.0.1:8001/v1")
+    monkeypatch.setattr(G, "discover", nothing)
     b.open()
-    assert b.run() == 3 and "model_server.version" in b.stop
+    assert b.run() == 3 and "no model server" in b.stop
     assert states(root) == {"a/t1/1/1": ("planned", None)}
+    found = {"base_url": "http://127.0.0.1:8001/v1", "model": "m", "max_model_len": None,
+             "served": ["m"], "version": None}
+    monkeypatch.setattr(G, "discover", lambda app, **k: found)
+    assert b.server_check() is None and b.server == found
 
 
 def test_a_gate_that_does_not_start_stops_the_batch(root, monkeypatch):
@@ -801,7 +802,7 @@ def test_a_gate_that_does_not_start_stops_the_batch(root, monkeypatch):
                    tasks=("t1", "t2"))
 
     def boom(family, rd, seeds, caps):
-        raise G.GateError("the model gate did not start: fake:latest has digest None")
+        raise G.GateError("the model gate did not start: fake:latest is not a model the server lists")
     b = make(root, p, boom)
     b.open()
     assert b.run() == 3 and "apparatus mismatch" in b.stop
@@ -1372,12 +1373,12 @@ def test_a_settled_lab_run_keeps_the_plans_lever_check(root):
 
 # --- DV5d review fixes: the live flag, a killed session's counts, the refusal's brief --
 
-def test_a_live_agent_batch_holds_the_calendar_lock_and_unloads(root, monkeypatch):
+def test_a_live_agent_batch_holds_the_calendar_lock(root, monkeypatch):
     """`fvh run` builds the live agent route in open()'s preflight: the batch stays live
-    (the calendar lock for the whole batch, its fd in every session, the server check,
-    the state reap and the unload)."""
+    (the calendar lock for the whole batch, its fd in every session, the server check
+    and the state reap; since Δ505 no unload: an OpenAI-compatible server has none)."""
     from fvh.backends import gate as G
-    seen = {"lock": 0, "unlock": 0, "server": 0, "reap": 0, "unload": 0}
+    seen = {"lock": 0, "unlock": 0, "server": 0, "reap": 0, "gate": 0}
     agent = ScriptedAgent([{"returned": {TASK_PATH.format(t="t1"): GOOD}, "calls": 2}])
     monkeypatch.setattr(AG, "LiveAgent", lambda *a, **k: agent)
 
@@ -1393,12 +1394,12 @@ def test_a_live_agent_batch_holds_the_calendar_lock_and_unloads(root, monkeypatc
             seen["unlock"] += 1
             self.fh.close()
 
-    class Unload:
+    class NoGate:
         def __init__(self, *a, **k):
             pass
 
         def start(self):
-            seen["unload"] += 1
+            seen["gate"] += 1
 
         def stop(self):
             pass
@@ -1408,7 +1409,7 @@ def test_a_live_agent_batch_holds_the_calendar_lock_and_unloads(root, monkeypatc
         self.server = {"version": "fake"}
 
     monkeypatch.setattr(G, "GpuCalendar", Lock)
-    monkeypatch.setattr(G, "HostGate", Unload)
+    monkeypatch.setattr(G, "HostGate", NoGate)
     monkeypatch.setattr(G, "gate_config", lambda *a, **k: {})
     monkeypatch.setattr(batch.Batch, "server_check", server)
     monkeypatch.setattr(batch, "_reap_state", lambda app: seen.__setitem__("reap", 1))
@@ -1419,7 +1420,7 @@ def test_a_live_agent_batch_holds_the_calendar_lock_and_unloads(root, monkeypatc
     b.open()
     assert b.agent is agent and b.live          # the preflight built the route: still live
     assert b.run() == 0
-    assert seen == {"lock": 1, "unlock": 1, "server": 1, "reap": 1, "unload": 1}
+    assert seen == {"lock": 1, "unlock": 1, "server": 1, "reap": 1, "gate": 0}
     assert agent.specs[0].calendar_fd is not None
     [(m, d)] = agent_runs(root).values()
     assert m.apparatus["model_server_found"] == {"version": "fake"}

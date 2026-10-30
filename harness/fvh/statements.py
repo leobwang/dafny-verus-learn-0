@@ -90,6 +90,8 @@ def _platform():
         return "linux-x86_64"
     if u.sysname == "Darwin" and u.machine == "arm64":
         return "macos-arm64"
+    if u.sysname == "Linux" and u.machine == "aarch64":
+        return "linux-aarch64"
     return f"unsupported-{u.sysname.lower()}-{u.machine}"
 
 

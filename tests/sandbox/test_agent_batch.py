@@ -56,7 +56,7 @@ class BuildAgent(unittest.TestCase):
 
     def build(self, task, **kw):
         kw.setdefault("brief", "# Task\n\nA decoy brief.\n")
-        return sandbox.build_agent(self.root, task, model="qwen3.8:latest", turns=7, **kw)
+        return sandbox.build_agent(self.root, task, model="fake-served-model", turns=7, **kw)
 
     def test_a_crate_task_stages_its_sources_editable_and_its_companions_read_only(self):
         raw = self.build(CARD, wall_s=900, gpu_s=600, mem_gb=16, run_id="fvh-x-s1")
@@ -71,10 +71,10 @@ class BuildAgent(unittest.TestCase):
             self.assertEqual(files[f"{CARD}/{r}"]["role"], "task", r)
         self.assertEqual(sorted(raw["return"]), [f"{CARD}/src/extra/more.rs", f"{CARD}/src/lib.rs"])
         self.assertEqual(files["verus/Cargo.toml"]["role"], "project")
-        self.assertEqual(raw["agent"], {"cli": "opencode", "model": "qwen3.8:latest", "turns": 7,
+        self.assertEqual(raw["agent"], {"cli": "opencode", "model": "fake-served-model", "turns": 7,
                                         "gpu_s": 600})
         self.assertEqual((raw["network"], raw["kind"], raw["limits"]["wall_clock_s"]),
-                         ("ollama", "agent", 900))
+                         ("model", "agent", 900))
         m = sandbox.validate(raw, self.root)
         self.assertEqual(m.limits["mem_gb"], 16.0)                # the share, below Verus's 23.5
         self.assertEqual(sandbox.agent_brief(m), sandbox.AGENT_BRIEF)
@@ -145,7 +145,7 @@ class AgentSession(FakeHost):
 
     def manifest(self, turns=5):
         return sandbox.build_agent(self.root, CARD, brief="# decoy brief\n",
-                                   model="qwen3.8:latest", turns=turns, wall_s=600, gpu_s=300,
+                                   model="fake-served-model", turns=turns, wall_s=600, gpu_s=300,
                                    mem_gb=0.5, run_id="fvh-decoy-s1")
 
     def live(self, raw, **kw):
@@ -223,6 +223,8 @@ class Cli(unittest.TestCase):
         env.start()                                     # CI's sterile FVH_APPARATUS
         self.addCleanup(env.stop)
         os.environ.pop("FVH_APPARATUS", None)
+        os.environ["DVL_MODEL"] = "fake-served-model"   # the model, named: no server asked
+        os.environ["DVL_MODEL_URL"] = "http://127.0.0.1:9/v1"
 
     def test_build_agent_prints_a_manifest_that_validates(self):
         brief = sc.write(self.tmp, "TASK.md", "# decoy brief\n")
@@ -234,8 +236,8 @@ class Cli(unittest.TestCase):
                       runtime=self.tmp)
         self.assertEqual(p.returncode, 0, p.stderr)
         raw = json.loads(p.stdout)
-        self.assertEqual((raw["agent"]["turns"], raw["agent"]["gpu_s"], raw["run_id"]),
-                         (6, 120, "fvh-cli-s2"))
+        self.assertEqual((raw["agent"]["turns"], raw["agent"]["gpu_s"], raw["run_id"],
+                          raw["agent"]["model"]), (6, 120, "fvh-cli-s2", "fake-served-model"))
         self.assertEqual({f["dst"]: f.get("text") for f in raw["file"]
                           if f["role"] == "editable"},
                          {f"{CARD}/src/lib.rs": "// w\n", f"{CARD}/src/extra/more.rs": "// m\n"})

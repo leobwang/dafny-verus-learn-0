@@ -133,9 +133,11 @@ def make_root(git=False, lock=True):
     write(root, "sandbox/canaries.sha256", "# none\n")
     write(root, "sandbox/attested.toml", "schema = 1\n")
     if lock:
+        from dvl import host          # schema 2 (DELTAS Δ504): this host's architecture
+        arch = host.docker_arch()
         write(root, "sandbox/images.lock",
-              f'schema = 1\n\n[[image]]\nname = "dvl-agent"\ndigest = "{DIGEST}"\n\n'
-              f'[[image]]\nname = "dvl-toolchain"\ndigest = "sha256:{"cd" * 32}"\n')
+              f'schema = 2\n\n[[image]]\nname = "dvl-agent"\narch = "{arch}"\ndigest = "{DIGEST}"\n\n'
+              f'[[image]]\nname = "dvl-toolchain"\narch = "{arch}"\ndigest = "sha256:{"cd" * 32}"\n')
     else:
         write(root, "sandbox/images.lock", "schema = 1\n")
     if git:
@@ -159,14 +161,14 @@ def text_entry(dst, role, text):
 
 def agent_manifest(root, **over):
     m = {"schema": 1, "run_id": "q98-run1", "module": "Q98", "kind": "agent", "image": IMAGE,
-         "network": "ollama",
+         "network": "model",
          "limits": {"cpus": 2, "pids": 256, "wall_clock_s": 2700, "work_mb": 256, "tmp_mb": 512},
          "file": [entry(root, AGENT_D, "editable"), entry(root, GIVEN_D, "given"),
                   entry(root, PROJ_D, "project"), entry(root, "scripts/vcheck", "tool"),
                   entry(root, "expected/Q98.counts", "expected"),
                   text_entry("CONTRACT.md", "contract", "# decoy contract text\n")],
          "return": [AGENT_D],
-         "agent": {"cli": "opencode", "model": "qwen3.8:latest", "turns": 40}}
+         "agent": {"cli": "opencode", "model": "fake-served-model", "turns": 40}}
     m.update(over)
     return m
 
