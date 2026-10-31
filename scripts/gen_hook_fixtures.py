@@ -91,10 +91,11 @@ GLOBAL = {
     "AHELD": "Hidden/Agentic/Q31/heldout.tar.age",
     "ACHEATS": "Hidden/Agentic/Q31/cheats.tar.age",
     "ABENCHARC": "Hidden/Agentic/Q31/bench.tar.age",
+    "APARARC": "Hidden/Agentic/Q31/par-agent.tar.age",
     "ASTRATUM": "bench/local/q/agentic/q31-heldout/STRATUM.toml",
 }
 ARMED = ("AMAN", "AEXD", "AEXV", "AGATE", "ABENCH", "ATEST", "AREC", "ASTMTD", "ASTMTV",
-         "ATWIN", "AHELD", "ACHEATS", "ABENCHARC", "ASTRATUM")
+         "ATWIN", "AHELD", "ACHEATS", "ABENCHARC", "APARARC", "ASTRATUM")
 
 TRACK = {
     "Q": {

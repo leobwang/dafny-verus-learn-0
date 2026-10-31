@@ -42,6 +42,14 @@ re-issued under the same id at most MAX_REISSUE times (the pre-registration
 may set fewer); resume_order() lists what `fvh resume` re-issues, in plan
 order, and never a scored id.
 
+Par (D68; DELTAS Δ419): the course's frozen par agent runs on the learner's
+unsealed part in the grader container (fvh.sealed, `fvh par`), and its calls count in
+the module's budget. A `par` line (kind "par") reserves them before the run: event
+"planned" with the family, the calls (par's call cap, its census included) and runs
+(its attempts), counted by used() as planned attempts are; event "done" records what
+came back (counts only, the user's D103). Par's ids are never attempts of the learner's
+plan, so resume never re-issues them.
+
 The anchors research/ledger-heads.jsonl: at each batch's start and end one
 line {module, event ("open"|"close"), seq, head, planned, date,
 course_commit}. check_anchors() refuses (AnchorError: exit 3, naming the
@@ -100,6 +108,7 @@ TRANSITIONS = {"planned": ("running", "deferred"),
                "infra-failed": ("running",),
                "scored": ()}
 MAX_REISSUE = 3               # [A] re-issues of one infra-failed id (§4.3 rule 3)
+PAR_EVENTS = ("planned", "done")      # a par line's events (module docstring; Δ419)
 GENESIS = "0" * 64
 HEADS = "research/ledger-heads.jsonl"
 WINDOW_FILE = "research/runs/claude-window.json"
@@ -500,6 +509,10 @@ class Ledger:
                 if before is not None and st not in TRANSITIONS[before]:
                     raise LedgerError(f"{self.path}:{n}: {aid} cannot move {before} -> {st}")
                 states[aid] = st
+            elif kind == "par":
+                if rec.get("event") not in PAR_EVENTS:
+                    raise LedgerError(f"{self.path}:{n}: a par line's event is one of "
+                                      + ", ".join(PAR_EVENTS))
             elif kind not in ("sentinel", "note"):
                 raise LedgerError(f"{self.path}:{n}: kind {kind!r}")
             out.append(rec)
@@ -534,7 +547,8 @@ class Ledger:
     def used(self) -> dict:
         """family -> {"calls": planned calls, sentinel calls and the calls spent by
         attempts that ended infra-failed or deferred (their id runs again, so what
-        they spent is spent on top of the plan), "runs": planned ids}."""
+        they spent is spent on top of the plan), and par's reserved calls, "runs":
+        planned ids and par's reserved runs}."""
         tot = {f: {"calls": 0, "runs": 0} for f in FAMILIES}
         family = {}
         for rec in self.read():
@@ -549,7 +563,27 @@ class Ledger:
                     tot[family[rec["id"]]]["calls"] += n
             elif rec["kind"] == "sentinel":
                 tot[rec["family"]]["calls"] += rec["calls"]
+            elif rec["kind"] == "par" and rec.get("event") == "planned" \
+                    and rec.get("family") in tot:
+                for unit in ("calls", "runs"):
+                    v = rec.get(unit)
+                    if isinstance(v, int) and not isinstance(v, bool) and v > 0:
+                        tot[rec["family"]][unit] += v
         return tot
+
+    def par_lines(self, part=None) -> list[dict]:
+        """The ledger's par lines (module docstring), of one part when named."""
+        return [r for r in self.read() if r.get("kind") == "par"
+                and (part is None or r.get("part") == part)]
+
+    def par(self, event: str, *, family: str = QWEN, **info) -> dict:
+        """Append a par line: "planned" reserves `calls` and `runs` against the
+        module's budget (used()); "done" records the run's counts."""
+        if event not in PAR_EVENTS:
+            raise LedgerError(f"a par line's event is one of {', '.join(PAR_EVENTS)}")
+        rec = {"kind": "par", "event": event, "family": family}
+        rec.update(info)
+        return self.append(rec)
 
     def notes(self, name: str) -> list[dict]:
         """The ledger's `note` lines of one name, in order."""

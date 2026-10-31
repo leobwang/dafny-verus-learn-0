@@ -232,7 +232,8 @@ from fvh import apparatus, backends, budget, executor, prereg, protocol, runlog,
 from fvh.records import VERDICTS as VERDICT_WORDS
 
 __all__ = ["ArmPlan", "Batch", "BatchError", "CONSTRUCTS", "Interrupted", "Plan", "derive_seed",
-           "load_plan", "reconcile", "resume", "scan_run_dir", "secret_hits"]
+           "load_plan", "reconcile", "resume", "scan_run_dir", "sealed_note", "sealed_part_of",
+           "secret_hits"]
 
 CONSTRUCTS = ("sampler", "seeded", "model", "agent")
 AGENT_ARM_CAPS = ("wall_s", "gpu_s")
@@ -378,8 +379,21 @@ def _course_text(root, rel, what):
         raise BatchError(f"{what} {rel}: unreadable ({type(e).__name__})") from None
 
 
-def load_plan(path, root) -> Plan:
-    """The plan of a batch, checked (BatchError naming the problem)."""
+def _task_where(root, rel, tasks_at):
+    """(base, rel) where a plan's task path is read: under the course root, or, for a
+    path inside a course directory `tasks_at` maps ({course dir: directory}), under that
+    directory (a sealed run's host side reads the learner's unsealed part there; Δ419)."""
+    for pre, d in (tasks_at or {}).items():
+        pre = str(pre).rstrip("/")
+        if isinstance(rel, str) and rel.startswith(pre + "/"):
+            return Path(d), rel[len(pre) + 1:]
+    return Path(root), rel
+
+
+def load_plan(path, root, *, tasks_at=None) -> Plan:
+    """The plan of a batch, checked (BatchError naming the problem). `tasks_at` maps a
+    course directory to the directory its task files are read from (fvh.sealed: a sealed
+    part's stratum to the learner's single-use unsealed copy)."""
     path = Path(path)
     try:
         raw = path.read_bytes()
@@ -408,12 +422,16 @@ def load_plan(path, root) -> Plan:
             raise BatchError(f"{path}: task {t} needs a [task.{t}] table with a path (and "
                              "optionally a statement)")
         rel = entry["path"]
+        base, sub = _task_where(root, rel, tasks_at)
         if isinstance(rel, str) and rel and not rel.startswith("/") \
-                and ".." not in rel.split("/") and (Path(root) / rel).is_dir():
-            crate_files(root, rel)                      # refuses a directory that is no crate
+                and ".." not in rel.split("/") and (base / sub).is_dir():
+            crate_files(base, sub)                      # refuses a directory that is no crate
             lang = "verus"
         else:
-            _course_text(root, rel, f"task {t}'s path")
+            if isinstance(rel, str) and ".." not in rel.split("/"):
+                _course_text(base, sub, f"task {t}'s path")
+            else:
+                _course_text(root, rel, f"task {t}'s path")
             lang = LANGS.get(Path(rel).suffix)
             if lang is None:
                 raise BatchError(f"{path}: task {t}'s path {rel} is not a .dfy or .rs file or "
@@ -601,16 +619,37 @@ def crate_files(root, rel) -> tuple:
     return tuple(ed), tuple(co)
 
 
+def _stratum_of(root, rel):
+    """The STRATUM.toml data of the local stratum a task path lies in (Lab 3's
+    bench/local/<t>/<lab>/ or a challenge's bench/local/<t>/agentic/<stratum>/), or None."""
+    for rx in (r"^(bench/local/[qr]/agentic/[^/]+)/", r"^(bench/local/[qr]/[^/]+)/"):
+        m = re.match(rx, rel)
+        if not m:
+            continue
+        p = Path(root) / m.group(1) / "STRATUM.toml"
+        try:
+            return tomllib.loads(p.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+    return None
+
+
 def _in_sealed_stratum(root, rel) -> bool:
-    """A task path inside a local stratum whose STRATUM.toml names a sealed archive."""
-    m = re.match(r"^bench/local/([qr])/([^/]+)/", rel)
-    if not m:
-        return False
-    p = Path(root) / "bench" / "local" / m.group(1) / m.group(2) / "STRATUM.toml"
-    try:
-        return bool(tomllib.loads(p.read_text(encoding="utf-8")).get("archive"))
-    except (OSError, ValueError):
-        return False
+    """A task path inside a local stratum whose STRATUM.toml names a sealed archive and
+    no challenge part: a challenge's sealed part (a stratum with `part`) is frozen by its
+    single-use unseal instead (research/unseals.jsonl, QPLAN §31.3; Δ419), and its tasks
+    run only in a sealed run (fvh.sealed)."""
+    data = _stratum_of(root, rel)
+    return bool(data and data.get("archive") and not data.get("part"))
+
+
+def sealed_part_of(root, rel):
+    """(stratum course dir, part) of a task path in a challenge's sealed part, or None."""
+    data = _stratum_of(root, rel)
+    if not (data and data.get("archive") and isinstance(data.get("part"), str)):
+        return None
+    m = re.match(r"^(bench/local/[qr]/(?:agentic/)?[^/]+)/", rel)
+    return (m.group(1), data["part"]) if m else None
 
 
 _AGENT_PKG = re.compile(r"q(19|2[0-9]|3[0-3])_[a-z0-9_]+")
@@ -832,8 +871,18 @@ class Batch:
         (the live agent route built later by open() does not change it)."""
         return self._live
 
+    sealed_route = False              # fvh.sealed's host side opens a sealed batch
+
     def open(self) -> int:
         """Check, plan, anchor; keep the plan's copy and its note (returns the ids)."""
+        if not self.sealed_route:
+            sealed = sorted({p for t, (rel, _l) in self.plan.tasks.items()
+                             for p in [sealed_part_of(self.root, rel)] if p})
+            if sealed:
+                raise BatchError("task(s) of a challenge's sealed part ("
+                                 + ", ".join(f"{d} part {q}" for d, q in sealed)
+                                 + ") run only in a sealed run, in the agent container (D102): "
+                                 "fvh run <ID> --plan PLAN --sealed P --unsealed DIR")
         for arm in self.plan.arms:                    # an arm that cannot be built refuses
             if not arm.agent:                         # the batch before anything is written
                 _import_policy(self.root, arm.policy, self.module)
@@ -1020,6 +1069,11 @@ class Batch:
                              overage=self.watch, state_base=_state_base("fvh-claude-state"))
         return RecordingTransport(inner, run_dir, seeds=seeds)
 
+    def _collect_facts(self) -> dict:
+        """The apparatus facts of a run record (a sealed run's batch, inside its
+        container, records the host's facts and its transport instead; fvh.sealed)."""
+        return apparatus.collect(self.app, self.root)
+
     def _runner(self, task_rel, lang, arm=None):
         if self.runners is not None:
             return self.runners(task_rel, lang)
@@ -1187,7 +1241,7 @@ class Batch:
                      f"{', '.join(scan['withheld'])}: withheld (name, size and sha256 kept). "
                      "Rotate the credential: log the pinned CLI out, then in again "
                      "(DV4-PLAN §5.7 names the two commands)")
-        facts = apparatus.collect(self.app, self.root)
+        facts = self._collect_facts()
         if self.server is not None:
             facts["model_server_found"] = self.server
         facts.update(seeds=list(seeds), plan_sha256=self.plan.sha256, arm_policy=arm.policy,
@@ -1901,6 +1955,18 @@ def batch_note(ledger) -> dict | None:
     return out
 
 
+def sealed_note(ledger) -> dict | None:
+    """The `sealed-run` note of the newest batch, when that batch is a sealed run
+    (fvh.sealed: its attempts run only in its container, never by resume), else None."""
+    note = batch_note(ledger)
+    if note is None:
+        return None
+    for rec in ledger.notes("sealed-run"):
+        if rec.get("batch") == note.get("batch"):
+            return rec
+    return None
+
+
 def reconcile(root, module, ledger, plan=None, *, log=None) -> list:
     """Settle every `running` id a killed runner left (module docstring)."""
     say = log or (lambda m: None)
@@ -2040,6 +2106,9 @@ def resume(root, module, *, transports=None, runners=None, log=None, mem_gb=None
     if note is None:
         raise BatchError(f"{module}'s open batch has no plan note: it was not opened by "
                          "`fvh run` (a contract replay resumes through scripts/contract_local.sh)")
+    if sealed_note(ledger) is not None:
+        raise BatchError(f"{module}'s open batch is a sealed run (fvh.sealed): it continues "
+                         "with the line that opened it, never by resume")
     copy = ledger.path.parent / note["plan_file"]
     try:
         data = copy.read_bytes()

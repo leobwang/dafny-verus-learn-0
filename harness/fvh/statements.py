@@ -34,6 +34,8 @@ manifest's sha256 and the file count.
   unseal(root, module, *, dry_run=False, age=None, identity=None, part=None,
          once=False, into=None) -> dict
   unseal_ledger(root) -> list[dict]                         research/unseals.jsonl, checked
+  tree_sha256(files) -> str          the digest of {path: bytes}: the sha256 of its
+                                     sorted "<sha256>  <path>" lines
 
 Single use (the challenge tier: QPLAN §31.3, the coordinator's D-6, DELTAS Δ402).
 With `part`, only the strata whose STRATUM.toml names `part = "<part>"` are unsealed.
@@ -44,7 +46,10 @@ same module, part and archive_sha256, or the unseal is refused; the entry it app
 marks the part consumed and retired (its plaintext is in the run's records; a new
 seal is the author's only override). With `into` (a directory outside the course
 tree, required with `once`), the cards are written there and not into the stratum
-directory, and no UNSEALED.toml is written (the ledger is the record).
+directory, and no UNSEALED.toml is written (the ledger is the record). The entry also
+records `files_sha256`, tree_sha256 of what was written there (each file's path under
+DIR, `<card>/tasks/...`, with its sha256): the sealed run stages the part from DIR and
+checks it against this digest first (fvh.sealed, DELTAS Δ419).
 
 Public cards (D76; QPLAN §33.4, DELTAS Δ411). A card with `source = "public"` names its
 public task in its sealed form's second line (`// Source: <set> <task file> (...)`), and is
@@ -74,7 +79,7 @@ import tomllib
 from pathlib import Path, PurePosixPath
 
 __all__ = ["LEDGER", "PIN_DIR", "StatementsRefused", "check", "read_pins", "sealed_strata",
-           "unseal", "unseal_ledger"]
+           "tree_sha256", "unseal", "unseal_ledger"]
 
 PIN_DIR = "expected"
 LEDGER = "research/unseals.jsonl"
@@ -118,6 +123,13 @@ class StatementsRefused(RuntimeError):
 
 def _sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def tree_sha256(files) -> str:
+    """The digest of a file tree {path: bytes}: the sha256 of its "<sha256>  <path>"
+    lines, sorted by path, each ending in a newline (an unsealed part's, Δ419)."""
+    lines = "".join(f"{_sha(files[k])}  {k}\n" for k in sorted(files))
+    return _sha(lines.encode("utf-8"))
 
 
 def _git(root, *args) -> subprocess.CompletedProcess:
@@ -462,6 +474,8 @@ def unseal(root, module, *, dry_run=False, age=None, identity=None, part=None, o
                      "date": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
                      "module": module, "part": part, "stratum": sp.relative_to(root).as_posix(),
                      "archive_sha256": arc_sha, "manifest_sha256": man_sha, "files": len(writes),
+                     "files_sha256": tree_sha256({dest.relative_to(into).as_posix(): body
+                                                  for dest, body in writes}),
                      "statements": dict(sorted(committed.items()))}
             if replaced:
                 entry["public_replaced"] = [list(x) for x in replaced]

@@ -382,7 +382,66 @@ class GateSeeds(Gate):
     test_another_model_is_refused = None
 
 
+class GateSeedPool(Gate):
+    """A sealed run's gate (DELTAS Δ419): one gate for a batch's many attempts, whose
+    requests carry their own pre-registered seeds; each runs once, and nothing runs on a
+    seed outside the pool."""
+
+    CFG = {**Base.CFG, "caps": {"calls": 5}, "seed_pool": [101, 202, 303]}
+
+    def test_each_seed_of_the_pool_runs_once_and_no_other(self):
+        self.assertEqual(self.chat(seed=202)[0], 200)
+        self.assertEqual(self.chat(seed=101)[0], 200)
+        status, data = self.chat(seed=202)
+        self.assertEqual(status, 429)
+        self.assertIn("used already", json.loads(data)["error"])
+        for bad in ({"seed": 7}, {}, {"seed": "101"}, {"seed": True}):
+            status, data = self.chat(**bad)
+            self.assertEqual(status, 403, bad)
+            self.assertIn("pre-registered seeds", json.loads(data)["error"])
+        sent = [b for m, p, b in Upstream.seen if m == "POST"]
+        self.assertEqual([s["seed"] for s in sent], [202, 101])
+        reqs = [r for r in self.log() if r["event"] == "request"]
+        self.assertEqual([r["seed"] for r in reqs], [202, 101])
+        self.assertEqual((self.counts()["admitted"], self.counts()["calls"]), (2, 2))
+        self.assertEqual(self.chat(seed=303)[0], 200)
+        start = [r for r in self.log() if r["event"] == "start"][0]
+        self.assertEqual(start["seed_pool"], 3)       # its size, not its seeds
+
+    test_calls_tokens_and_the_cap = None
+    test_the_pinned_options_are_set_as_openai_fields_and_every_override_logged = None
+    test_a_prompt_near_max_model_len_is_ctx_saturated = None
+    test_the_servers_context_refusal_is_ctx_saturated = None
+    test_a_streamed_request_gets_include_usage_and_is_counted = None
+    test_the_model_list_passes_and_nothing_else_reaches_the_server = None
+    test_another_model_is_refused = None
+
+
+class GateSeedPoolCap(GateSeedPool):
+    CFG = {**GateSeedPool.CFG, "caps": {"calls": 1}}
+    test_each_seed_of_the_pool_runs_once_and_no_other = None
+
+    def test_the_call_cap_still_holds(self):
+        self.assertEqual(self.chat(seed=101)[0], 200)
+        status, data = self.chat(seed=202)
+        self.assertEqual(status, 429)
+        self.assertIn("calls cap", json.loads(data)["error"])
+
+
 class GateConfig(unittest.TestCase):
+    def test_a_malformed_seed_pool_is_refused_before_listening(self):
+        d = Path(tempfile.mkdtemp(prefix="dvl0-gate-"))
+        self.addCleanup(lambda: shutil.rmtree(d, ignore_errors=True))
+        for cfg in ({"seed_pool": []}, {"seed_pool": [1, 1]}, {"seed_pool": [1, -2]},
+                    {"seed_pool": [1], "seeds": [1]}, {"seed_pool": "1"}):
+            (d / "cfg.json").write_text(json.dumps({"model": "m", "options": {}, **cfg}))
+            p = subprocess.run([sys.executable, "-B", str(GATE), "--port", "0", "--config",
+                                str(d / "cfg.json"), "--log", str(d / "gate.log"),
+                                "--upstream", "http://127.0.0.1:9/v1"],
+                               capture_output=True, text=True, timeout=30)
+            self.assertEqual(p.returncode, 2, cfg)
+            self.assertIn("seed_pool", p.stderr)
+
     def test_a_malformed_seeds_list_is_refused_before_listening(self):
         d = Path(tempfile.mkdtemp(prefix="dvl0-gate-"))
         self.addCleanup(lambda: shutil.rmtree(d, ignore_errors=True))

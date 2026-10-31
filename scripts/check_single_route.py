@@ -41,6 +41,8 @@ ALLOWLIST = {
     "harness/fvh/backends/": "the fvh model transports (DV4-PLAN §3.4)",
     "harness/fvh/executor.py": "the fvh executor: verification through mksandbox-run",
     "harness/fvh/tools/": "the fvh instrument runners: ContainerRunner calls mksandbox-run",
+    "harness/fvh/sealed.py": "the sealed run (Δ419): mksandbox-run's --sealed-run and par-run, and "
+                             "the agent image's own CLI as the in-container transport",
     ".claude/hooks/spoiler-guard.sh": "the guard: rule 1f names every word it refuses",
     "scripts/test_hooks.sh": "the hook-test harness",
     "scripts/gen_hook_fixtures.py": "the hook fixtures' generator and decoy trees",

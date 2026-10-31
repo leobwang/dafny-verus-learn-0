@@ -27,7 +27,8 @@ front of it:
                  "options": {...}, "caps": {"calls": n, "tokens": n, "gpu_s": s},
                  "margin": 512, "max_model_len": <the served one, or null>,
                  "check_served": <bool, optional>, "upstream": <base URL>,
-                 "seeds": <the run's per-request seeds, optional>}
+                 "seeds": <the run's per-request seeds, optional>,
+                 "seed_pool": <a sealed run's pre-registered seeds, optional>}
   --log          one JSON line per request and response, prompts and replies
                  included (gate.log in the run directory)
   --counts       the running totals (JSON), rewritten after every request
@@ -65,6 +66,18 @@ its run:
     derivation), never chosen by the client;
   - --owner-pid PID: the gate stops once that process is gone, so a runner
     killed mid-batch leaves no gate.
+
+A sealed run (one fvh batch inside the run's agent container, DELTAS Δ419, the
+user's D102: the learner's sealed challenge arm and the course's par agent) has
+one gate for many attempts, whose requests do not arrive in a fixed order, so
+in place of "seeds" its config carries
+  - "seed_pool": [s0, s1, ...]: every seed the batch's plan pre-registers for
+    the attempts the run may make (fvh.batch's derivation, over the plan's
+    attempt ids). An inference request must carry a `seed` field that is in
+    the pool and not used before: it is admitted with that seed, which is
+    then spent; a request without one, or with a seed outside the pool, is
+    refused (403), and a seed used already is answered 429. So no request
+    runs on a seed the plan did not fix, and none on a seed twice.
 
 Two of the gate's own upstream requests at start, never a client's, both
 read only, with "check_served": GET <base>/models (the run's model id must
@@ -127,6 +140,15 @@ class Gate:
                 isinstance(x, int) and not isinstance(x, bool) and x >= 0 for x in seeds)):
             raise ValueError("the config's seeds must be a list of integers >= 0")
         self.seeds = seeds
+        pool = cfg.get("seed_pool")
+        if pool is not None and (seeds is not None or not isinstance(pool, list) or not pool
+                                 or not all(isinstance(x, int) and not isinstance(x, bool)
+                                            and x >= 0 for x in pool)
+                                 or len(set(pool)) != len(pool)):
+            raise ValueError("the config's seed_pool must be a non-empty list of distinct "
+                             "integers >= 0, and a config has seeds or seed_pool, not both")
+        self.pool = set(pool) if pool is not None else None
+        self.spent = set()
         mml = cfg.get("max_model_len")
         self.max_model_len = mml if isinstance(mml, int) and not isinstance(mml, bool) else None
         self.write_counts()
@@ -364,11 +386,23 @@ def make_handler(gate):
             if cap:
                 return self.refuse(429, f"the run's {cap} cap is reached")
             with gate.lock:
-                seed = gate.next_seed()
-                if gate.seeds is not None and seed is None:
-                    return self.refuse(429, "the run's seeds are used up")
+                if gate.pool is not None:            # a sealed run (module docstring)
+                    seed = body.get("seed")
+                    if isinstance(seed, bool) or not isinstance(seed, int) \
+                            or seed not in gate.pool:
+                        return self.refuse(403, "the request's seed is not one of the run's "
+                                                "pre-registered seeds", seed=seed)
+                    if seed in gate.spent:
+                        return self.refuse(429, "the request's seed was used already",
+                                           seed=seed)
+                    gate.spent.add(seed)
+                else:
+                    seed = gate.next_seed()
+                    if gate.seeds is not None and seed is None:
+                        return self.refuse(429, "the run's seeds are used up")
                 gate.counts["admitted"] += 1
-            over = gate.pin(body, seed=seed if gate.seeds is not None else None)
+            over = gate.pin(body, seed=seed if (gate.seeds is not None or gate.pool is not None)
+                            else None)
             if over:
                 gate.counts["overrides"] += len(over)
             self.forward(body, True, path, over, seed=seed)
@@ -537,7 +571,8 @@ def main(argv=None):
         addr = f"http://{a.bind}:{srv.server_address[1]}"
     gate.log({"event": "start", "listen": addr, "upstream": upstream, "model": cfg["model"],
               "options": cfg.get("options") or {}, "caps": cfg.get("caps") or {},
-              "max_model_len": gate.max_model_len, "seeds": cfg.get("seeds")})
+              "max_model_len": gate.max_model_len, "seeds": cfg.get("seeds"),
+              **({"seed_pool": len(cfg["seed_pool"])} if cfg.get("seed_pool") else {})})
     if a.ready:
         with open(a.ready, "w", encoding="utf-8") as fh:
             fh.write(addr + "\n")

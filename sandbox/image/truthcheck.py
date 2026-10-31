@@ -7,9 +7,11 @@ QPLAN §30 Q49, design §10.3).
     truthcheck judge <LAB>
     truthcheck gate-agree <LAB> dafny|verus
     truthcheck bench-agree <LAB>
+    truthcheck par-run <LAB> <part>
 
 Run only by scripts/mksandbox-run, as a [[command]] of a verify manifest that
-carries a [truth] table, inside a network-less verification container. The
+carries a [truth] table, inside a network-less verification container (par-run:
+the one agent container of a truth run, below). The
 host binds the sealed archive and the grader's key read-only at
 /run/dvl-truth/ (archive.tar.age, identity); this program is the only reader
 of either, and the plaintext exists only here:
@@ -95,7 +97,24 @@ of either, and the plaintext exists only here:
      bench's render, and compares them cell for cell (a row is keyed by its
      first `keys.<kind>` cells). Output: per table kind, the rows and cells
      matched, the cells mismatched, the rows missing and extra, and the
-     tables the learner's bench could not compute.
+     tables the learner's bench could not compute;
+  7. `par-run` (a challenge's sealed `par-agent` part: the course's frozen par agent,
+     labs/<LAB>/par/agent/<package>/ and its plan fragment labs/<LAB>/par/PLAN.toml;
+     QPLAN §31.3, §32.5; DELTAS Δ419; the user's D68, D102, D103) is the one truth run
+     in an agent container (dvl-agent, the run's model network, no agent CLI): the
+     host stages the learner's single-use unsealed part at its stratum's course paths
+     and its spec at /work/grader-in/spec.json (the part's tasks, the learner's base
+     seed and the B, repeats and attempts par runs at, the ids, the model). This
+     process writes par's package under /tmp, makes par's plan from the fragment
+     (fvh.sealed.par_plan_text) and runs it in a child (`_par-child`, its output
+     discarded) with fvh.sealed.inside: one fvh batch, every Qwen call through the
+     image's opencode and the run's own Route C gate, every Verify in this container,
+     for a census module the Δ412 census first. Each run's directory under
+     /work/grader/runs/ is then reduced to counts only (fvh.sealed.strip_counts_only:
+     run.json's counts, outcome and verification, the staged inputs, the verified
+     files; never a transcript, a call log, a proposal or anything of par's prompts),
+     here, after the child, whatever the child left. Output: the runs, the solved,
+     the calls, the census's tasks and drops, the ids left.
 
 Output is one JSON object on stdout with verdict-level fields only (counts,
 verdict words, card ids, which the public stratum already names); no file
@@ -108,7 +127,8 @@ result file's words (PASS, FAIL, UNKNOWN classes; rendered table lines, which
 this process reduces to counts) are read back. Exit: 0 every check passed
 (judge: every candidate judged, whatever its verdict; gate-agree: every
 delivery agreed, no control rejected, no grader-only class passed;
-bench-agree: every cell matched), 1 one failed (judge: a candidate could not be
+bench-agree: every cell matched; par-run: every id of the spec ran), 1 one failed
+(par-run: ids are left, which the host runs in another chunk) (judge: a candidate could not be
 judged), 2 usage, 3 refused (no truth bound, the archive does not unseal or
 does not match its manifest, the archive is not the mode's part).
 
@@ -884,19 +904,132 @@ def bench_agree(lab, files):
     return out, None
 
 
+# --- par-run (QPLAN §31.3, §32.5; DELTAS Δ419) ------------------------------------------
+
+PAR_TMP = "/tmp/dvl-par"
+PART_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9-]{0,31}")
+PAR_PKG = re.compile(r"par_[a-z0-9_]+")
+
+
+def _fvh(work):
+    for d in (f"{work}/harness/r", f"{work}/harness/q", f"{work}/harness", f"{work}/agents"):
+        if d not in sys.path:
+            sys.path.insert(0, d)
+    from fvh import sealed
+    return sealed
+
+
+def par_child(spec_path, result_path):
+    """The child of par-run: par's batch (fvh.sealed.inside) on the spec's ids, par's
+    package importable from the spec's directory; its result's counts only."""
+    with open(spec_path, encoding="utf-8") as fh:
+        spec = json.load(fh)
+    os.chdir(spec["work"])
+    sealed = _fvh(spec["work"])
+    if spec["pkg"] not in sys.path:
+        sys.path.insert(0, spec["pkg"])
+    try:
+        res = sealed.inside(spec["work"], plan_path=spec["plan"])
+        got = {"ran": len(res["ran"]), "left": len(res["left"])}
+    except BaseException:  # noqa: BLE001 — par's code: nothing of it is read back
+        got = {"error": True}
+    with open(result_path, "w", encoding="utf-8") as fh:
+        json.dump(got, fh)
+    return 0
+
+
+def par_run(lab, files, part):
+    """The counts of par's run on the learner's part (module docstring, item 7), or
+    (None, why)."""
+    pre = f"labs/{lab}/par/"
+    raw = files.get(pre + "PLAN.toml")
+    if raw is None:
+        return None, "the archive holds no par/PLAN.toml (not a par-agent part)"
+    try:
+        fragment = tomllib.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, tomllib.TOMLDecodeError):
+        return None, "par/PLAN.toml is unreadable"
+    pkg = {k[len(pre) + len("agent/"):]: v for k, v in files.items()
+           if k.startswith(pre + "agent/")}
+    if not pkg or not all(_rel_ok(k) and PAR_PKG.fullmatch(k.split("/", 1)[0]) for k in pkg):
+        return None, "the archive's par/agent/ holds no par_<name> package"
+    try:
+        with open(os.path.join(WORK, GRADER_IN, "spec.json"), "rb") as fh:
+            spec = json.loads(fh.read())
+        par = spec["par"]
+        if spec.get("kind") != "par-run" or spec.get("module") != lab \
+                or spec.get("part") != part or not isinstance(par, dict):
+            raise ValueError
+    except (OSError, ValueError, KeyError, TypeError):
+        return None, "no par-run spec of this module and part is staged (grader-in/spec.json)"
+    grader = os.path.join(WORK, GRADER)
+    if not os.path.isdir(grader) or not os.access(grader, os.W_OK):
+        return None, "the grader's work directory (/work/grader) is not writable here"
+    for f in os.listdir(grader):
+        shutil.rmtree(os.path.join(grader, f), ignore_errors=True)
+    sealed = _fvh(WORK)
+    try:
+        text = sealed.par_plan_text(
+            fragment, seed=par["seed"], tasks=par["tasks"], rounds=par["rounds"],
+            repeats=par["repeats"], attempts=par["attempts"], lab=par.get("lab", ""),
+            lever_check=bool(par.get("lever_check")), gate=par.get("gate", ""),
+            gate_sha256=par.get("gate_sha256", ""), census=bool(par.get("census")))
+    except (ValueError, KeyError, TypeError):
+        return None, "par/PLAN.toml is not a par fragment ([arm] with a policy; [census])"
+    os.makedirs(PAR_TMP, mode=0o700, exist_ok=True)
+    try:
+        for rel, data in pkg.items():
+            path = os.path.join(PAR_TMP, "pkg", rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "wb") as fh:
+                fh.write(data)
+        plan = os.path.join(PAR_TMP, "plan.toml")
+        with open(plan, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        files.clear()
+        result = _child("_par-child", {"work": WORK, "pkg": os.path.join(PAR_TMP, "pkg"),
+                                       "plan": plan})
+    finally:
+        shutil.rmtree(PAR_TMP, ignore_errors=True)
+    kept = sealed.strip_counts_only(WORK, part=part, archive_sha256=par.get("archive_sha256", ""))
+    runs = os.path.join(WORK, GRADER, "runs")
+    counts = {"runs": 0, "solved": 0, "calls": 0, "census_tasks": 0, "census_dropped": 0}
+    for d in sorted(os.listdir(runs)) if os.path.isdir(runs) else []:
+        try:
+            with open(os.path.join(runs, d, "run.json"), encoding="utf-8") as fh:
+                m = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        closed = m.get("outcome") == "verified" and not (m.get("verify") or {}).get("holes")
+        census = m.get("arm") == sealed.CENSUS_ARM
+        counts["census_tasks" if census else "runs"] += 1
+        counts["census_dropped" if census else "solved"] += bool(closed)
+        calls = (m.get("usage") or {}).get("calls")
+        counts["calls"] += calls if isinstance(calls, int) and not isinstance(calls, bool) else 0
+    ok = isinstance(result, dict) and not result.get("error")
+    left = result.get("left") if ok and isinstance(result.get("left"), int) else None
+    report = {"part": part, "returned": kept, **counts, "left": left, "ran": ok}
+    report["agreed"] = ok and left == 0
+    return report, None
+
+
 def main(argv):
-    if argv and argv[0] in ("_gate-child", "_bench-child"):
+    if argv and argv[0] in ("_gate-child", "_bench-child", "_par-child"):
         if len(argv) != 3:
             return 2
-        return (gate_child if argv[0] == "_gate-child" else bench_child)(argv[1], argv[2])
-    modes = ("manifest", "validate", "judge", "gate-agree", "bench-agree")
+        return {"_gate-child": gate_child, "_bench-child": bench_child,
+                "_par-child": par_child}[argv[0]](argv[1], argv[2])
+    modes = ("manifest", "validate", "judge", "gate-agree", "bench-agree", "par-run")
     if len(argv) < 2 or argv[0] not in modes or not LAB.fullmatch(argv[1]):
-        return out({"error": "usage: truthcheck manifest|validate|judge|gate-agree|bench-agree "
-                             "<LAB> [<card> ...]"}, 2)
+        return out({"error": "usage: truthcheck manifest|validate|judge|gate-agree|bench-agree|"
+                             "par-run <LAB> [<card> ...]"}, 2)
     mode, lab, only = argv[0], argv[1], argv[2:]
     if mode == "gate-agree":
         if only not in (["dafny"], ["verus"]):
             return out({"error": "usage: truthcheck gate-agree <LAB> dafny|verus"}, 2)
+    elif mode == "par-run":
+        if len(only) != 1 or not PART_NAME.fullmatch(only[0]):
+            return out({"error": "usage: truthcheck par-run <LAB> <part>"}, 2)
     elif any(not CARD.fullmatch(c) for c in only) or (only and mode != "validate"):
         return out({"error": "card ids are lower-case words, for validate only"}, 2)
     files, why = unseal(lab)
@@ -906,9 +1039,9 @@ def main(argv):
                "files": len(files) - 1}
     if mode == "manifest":
         return out(summary, 0)
-    if mode in ("gate-agree", "bench-agree"):
+    if mode in ("gate-agree", "bench-agree", "par-run"):
         rep, why = gate_agree(lab, files, only[0]) if mode == "gate-agree" else \
-            bench_agree(lab, files)
+            par_run(lab, files, only[0]) if mode == "par-run" else bench_agree(lab, files)
         files.clear()
         if rep is None:
             return out({**summary, "error": why}, 3)

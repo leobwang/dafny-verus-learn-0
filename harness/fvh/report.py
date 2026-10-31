@@ -31,6 +31,12 @@ DV5 confirmed it: the analysis tables are the learner's).
   verification itself is repeated by --reverify (a crate task's on the crate,
   with the lab gate's lever check for a lab run, as for harness-executed runs).
 
+  A counts-only run (the course's par agent, `fvh par`: apparatus `counts_only`, the
+  user's D103; DELTAS Δ419) carries no proposals and no transcript: it is re-derived
+  from what it holds, its staged inputs checked against inputs.sha256, every returned
+  file a file the run staged, and its recorded verification's verdict equal to its
+  outcome. --reverify repeats the verification on its returned files, as for any run.
+
   reverify(root, module, run_id, *, runner=None, mem_gb=None) -> Reverified
       `fvh report --reverify <run>` (DV4-PLAN §3.6; Docker needed): the run's
       inputs re-materialized from inputs.tar.gz (checked against
@@ -125,6 +131,28 @@ def _rederive_agent(run_dir, meta, staged) -> RunCheck:
                     "an agent run: verify.json's gate document differs from run.json")
 
 
+def _rederive_counts_only(run_dir, meta, staged) -> RunCheck:
+    """A counts-only run's records checked against each other (module docstring)."""
+    try:
+        ret = _returned(run_dir)
+    except (OSError, ValueError) as e:
+        return RunCheck(meta.run_id, meta.outcome, "unreadable", False, f"returned: {e}")
+    extra = sorted(set(ret) - set(staged))
+    if extra:
+        return RunCheck(meta.run_id, meta.outcome, "unreadable", False,
+                        "returned files the run never staged: " + ", ".join(extra))
+    if meta.outcome not in VERDICTS:
+        return RunCheck(meta.run_id, meta.outcome, meta.outcome, True,
+                        "a counts-only run whose outcome is not a verdict")
+    derived = (meta.verify or {}).get("verdict") if isinstance(meta.verify, dict) else None
+    derived = derived if derived in VERDICTS else "error"
+    ok = derived == meta.outcome
+    return RunCheck(meta.run_id, meta.outcome, derived, ok,
+                    "a counts-only run (D103): its recorded verification agrees with its "
+                    "outcome (--reverify repeats it)" if ok else
+                    "a counts-only run: its recorded verification differs from its outcome")
+
+
 def rederive(run_dir, meta: runlog.RunMeta) -> RunCheck:
     """Re-derive one run's outcome from its logs (module docstring)."""
     run_dir = Path(run_dir)
@@ -140,6 +168,8 @@ def rederive(run_dir, meta: runlog.RunMeta) -> RunCheck:
         raise ValueError(f"{meta.run_id}: invalid recorded lab_code {lab_code!r}")
     if meta.mode == "agent":
         return _rederive_agent(run_dir, meta, staged)
+    if (meta.apparatus or {}).get("counts_only") is True:
+        return _rederive_counts_only(run_dir, meta, staged)
     crate = (meta.apparatus or {}).get("crate") or ""
     support = {}
     if crate:                       # a crate task: its sources editable, its companions not

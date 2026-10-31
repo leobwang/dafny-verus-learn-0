@@ -26,8 +26,9 @@
 #                  the pinned uv and age Linux releases for the architecture (by
 #                  asset and binary sha256); user agent (uid 1000);
 #                  /opt/dvl/bin/entry (the relays and the gate container's
-#                  forwarder), /opt/dvl/bin/controls and /opt/dvl/bin/truthcheck
-#                  from sandbox/image/; a uv cache seeded from harness/uv.lock.
+#                  forwarder), /opt/dvl/bin/controls, /opt/dvl/bin/truthcheck and
+#                  /opt/dvl/bin/batchrun (a sealed run's batch runner, Δ419) from
+#                  sandbox/image/; a uv cache seeded from harness/uv.lock.
 #   dvl-agent      dvl-toolchain plus the pinned opencode Linux release for the
 #                  architecture (asset and binary sha256).
 # and writes this architecture's entries of sandbox/images.lock (schema 2: one
@@ -147,6 +148,7 @@ BASE=$(sed -n 's/^BASE=//p' <<<"$PINS")
 pins_sha=$(printf '%s\n' "$PINS" | sha_stdin)
 uv_lock_sha=$(sha "$ROOT/harness/uv.lock")
 image_src_digest=$(cd "$HERE" && "${SHA[@]}" image/entry.py image/controls.py image/truthcheck.py \
+                   image/batchrun.py \
                    image/install-toolchain.sh image/install-tools.sh image/z3fp.py \
                    images/toolchain.Dockerfile | sha_stdin)
 fp_digest=$(cd "$ROOT/tests/fingerprint/z3" && find . -type f | LC_ALL=C sort | xargs "${SHA[@]}" | sha_stdin)
@@ -201,7 +203,7 @@ printf '%s\n' "$PINS" >"$ctx/install/pins.env"
 for f in install-toolchain.sh install-tools.sh z3fp.py; do cp "$HERE/image/$f" "$ctx/install/$f"; done
 cp -R "$ROOT/tests/fingerprint/z3/queries" "$ROOT/tests/fingerprint/z3/expected" "$ctx/install/fp/"
 cp "$ROOT/scripts/get_toolchain.sh" "$ctx/check/get_toolchain.sh"
-for f in entry controls truthcheck; do cp "$HERE/image/$f.py" "$ctx/bin/$f"; chmod 0555 "$ctx/bin/$f"; done
+for f in entry controls truthcheck batchrun; do cp "$HERE/image/$f.py" "$ctx/bin/$f"; chmod 0555 "$ctx/bin/$f"; done
 cp "$ROOT/harness/pyproject.toml" "$ROOT/harness/uv.lock" "$ctx/py/"
 cp "$HERE/images/toolchain.Dockerfile" "$ctx/Dockerfile"
 

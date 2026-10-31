@@ -31,6 +31,14 @@ tool-less (DV4-PLAN §3.4; Δ64, Δ65, Δ146; an OpenAI-compatible server, Δ505
     (checked in the 1.18.25 binary, Δ505), never as text; a server that
     leaves `<think>` in the text has it stripped.
 
+Inside a sealed run's agent container (fvh.sealed; DELTAS Δ419, the user's D102: the
+learner's sealed challenge arm and the course's par agent run in the same container
+form) the transport is the same, with two differences: the binary is the agent image's
+own opencode (`binary=`, /opt/dvl/agent/opencode), which the image digest in
+sandbox/images.lock pins (`pinned_by=`, recorded in every call's apparatus), so no
+second transport is pinned in the apparatus file; and the gate URL is the container's
+relay (127.0.0.1:8000, Route C to the run's host gate). Every other step above holds.
+
 As probed at DV4 step 3c on 1.18.25 through a host gate (the author probe
 archive's dv5b/dv4s3/3c-policy/): the `run --format json` stream holds
 step_start, text (the reply in `part.text`) and step_finish events (`part.tokens`
@@ -178,8 +186,17 @@ class Transport:
     def __init__(self, table: Mapping, *, gate_url: str, model: str | None = None,
                  context: int | None = None, options: Mapping | None = None, window=None,
                  state_base=None, timeout_s: float | None = None, cwd_base: str = "/tmp",
-                 clock=time.monotonic):
+                 clock=time.monotonic, binary=None, pinned_by: str | None = None):
         refuse_if_disabled()
+        if binary is not None:
+            # the agent image's binary (module docstring): the image digest pins it
+            if not isinstance(pinned_by, str) or not pinned_by.startswith("dvl-agent@sha256:"):
+                raise ValueError("an image's binary names the image digest that pins it "
+                                 "(pinned_by = dvl-agent@sha256:...)")
+            if not os.path.isabs(str(binary)):
+                raise ValueError("an image's binary is an absolute path")
+        self.binary = Path(binary) if binary is not None else None
+        self.pinned_by = pinned_by
         if not isinstance(gate_url, str) or not gate_url.startswith(("http://", "https://")):
             raise ValueError("gate_url is the run's model gate (an http URL)")
         self.table = dict(table)
@@ -199,7 +216,13 @@ class Transport:
 
     def complete(self, message: str, *, system: str = "", seed=None) -> Completion:
         refuse_if_disabled()
-        binary = apparatus.check_binary(self.table)
+        if self.binary is not None:
+            if not self.binary.is_file() or not os.access(self.binary, os.X_OK):
+                raise ApparatusMismatch(f"the image's binary {self.binary} is missing or not "
+                                        "executable")
+            binary = self.binary
+        else:
+            binary = apparatus.check_binary(self.table)
         state = Path(tempfile.mkdtemp(dir=self.state_base)) if self.state_base else \
             Path(tempfile.mkdtemp())
         cwd = Path(tempfile.mkdtemp(dir=self.cwd_base))
@@ -241,8 +264,12 @@ class Transport:
         return Completion(text=strip_think(text), structured=None, usage=usage, turns=1,
                           wall_s=round(wall, 3),
                           apparatus={"family": NAME, "version": self.table.get("version"),
-                                     "binary": self.table.get("binary"),
-                                     "sha256": self.table.get("sha256"),
+                                     "binary": str(self.binary) if self.binary is not None
+                                     else self.table.get("binary"),
+                                     "sha256": None if self.binary is not None
+                                     else self.table.get("sha256"),
+                                     **({"pinned_by": self.pinned_by}
+                                        if self.binary is not None else {}),
                                      "model": self.model,
                                      "max_model_len": self.context, "seed": seed,
                                      "gate": self.gate_url},

@@ -129,16 +129,32 @@ TRUTH_FILE = "sandbox/truth.toml"
 TRUTH_DIR = "/run/dvl-truth"
 TRUTH_KEYS = {"lab", "archive", "sha256"}
 TRUTH_OPTIONAL = {"part"}           # a challenge's sealed part (truth.toml's `part`, Δ418)
-TRUTH_MODES = ("manifest", "validate", "judge", "gate-agree", "bench-agree")
+TRUTH_MODES = ("manifest", "validate", "judge", "gate-agree", "bench-agree", "par-run")
 # judge: dvl.judge builds its manifest. gate-agree and bench-agree (QPLAN §31.3, Δ418)
 # grade the learner's frozen work against a challenge's sealed part: the learner's gate on
 # the sealed cheats and controls, and the learner's bench against the sealed reference
 # bench over the same run records. They are the GRADED_MODES; each runs only on an archive
 # pinned with the part PART_MODES names for it. A part archive runs its mode and the round
 # trip (manifest) and nothing else; a part-less lab archive runs LAB_MODES.
-GRADED_MODES = ("gate-agree", "bench-agree")
-PART_MODES = {"cheats": "gate-agree", "bench": "bench-agree"}
+# par-run (QPLAN §31.3, §32.5; DELTAS Δ419; the user's D68, D102, D103): the course's
+# frozen par agent (part "par-agent") on the learner's single-use unsealed part, the one
+# truth run in an agent container on the model network (build_sealed; [agent] cli
+# "none": no agent CLI is the session, the grader drives the batch). It grades nothing
+# of the learner's but stages the learner's committed work par shares (the gate of a
+# gated arm), so it is a graded mode too.
+GRADED_MODES = ("gate-agree", "bench-agree", "par-run")
+PART_MODES = {"cheats": "gate-agree", "bench": "bench-agree", "par-agent": "par-run"}
 LAB_MODES = ("manifest", "validate", "judge")
+# The learner's sealed challenge arm in the same container form (D102; Δ419): an agent
+# run on the model network with no agent CLI and no [truth], whose one command is the
+# image's batch runner; it stages the learner's committed work as role graded.
+BATCHRUN = "/opt/dvl/bin/batchrun"
+SEALED_RUN = "sealed-run"
+SEALED_MODES = ("par-run", SEALED_RUN)
+SEALED_PART = re.compile(r"[A-Za-z0-9][A-Za-z0-9-]{0,31}")   # a STRATUM.toml part (T1, heldout)
+GATE_VIEW_DIR = "/run/dvl/gate"              # a sealed run's read-only view of its gate's counts
+GRADER_RETURN_CAP = 256 << 20                 # a sealed run's returned run records, in all
+GRADER_FILE_CAP = 16 << 20                    # and per file
 PART_RX = re.compile(r"[a-z0-9][a-z0-9-]{0,31}")
 GRADER_DIR = "grader"    # a graded truth run's writable directory under /work (work_mounts)
 GRADER_IN = "grader-in"  # its host-built inline input (bench-agree's strata map)
@@ -146,7 +162,9 @@ DOORS = ("alloc", "pids", "sleep", "stage-return", "secret", "http")
 CONTAINER_SCRATCH = "/tmp/dvl-scratch"      # DVL_SCRATCH inside a container (fvh redacts it)
 CONTAINER_PYTHON = "/usr/bin/python3"
 FILE_KEYS = {"src", "dst", "role", "sha256", "rev", "text"}
-AGENT_KEYS = {"cli", "model", "turns", "gpu_s"}     # gpu_s: optional, the run's GPU-seconds cap
+AGENT_KEYS = {"cli", "model", "turns", "gpu_s", "calls"}
+# gpu_s: optional, the run's GPU-seconds cap; calls: a sealed run's call cap (its gate's;
+# a cli "none" run has no turns of its own)
 # [limits]: name -> (type, lowest, highest). mem_gb is bounded by the pins
 # instead (memory_bound_gb).
 LIMITS = {
@@ -532,26 +550,41 @@ def learner_ok(rel, rec):
     return any(rel.startswith(u + "/") for u in unit_dirs(rec))
 
 
+BENCH_TASK = re.compile(r"^bench/(public/[^/]+|local/[qr]/agentic/[^/]+/[^/]+"
+                        r"|local/[qr]/[^/]+(/[^/]+)?)/tasks(/|$)")
+
+
 def bench_task(rel):
     """A benchmark task path: `bench/public/<set>/tasks/…`, `bench/local/<q|r>/<lab>/tasks/…`
     or a lab card's `bench/local/<q|r>/<lab>/<card>/tasks/…` (Lab 1's and Lab 2's layout),
-    or a crate card's `…/tasks` directory itself (Lab 3's layout: the crate is the task)."""
-    return re.match(r"^bench/(public/[^/]+|local/[qr]/[^/]+(/[^/]+)?)/tasks(/|$)", rel) is not None
+    a challenge card's `bench/local/<q|r>/agentic/<stratum>/<card>/tasks/…` (topic (e)'s
+    strata, Δ409; Δ419), or a crate card's `…/tasks` directory itself (Lab 3's layout:
+    the crate is the task)."""
+    return isinstance(rel, str) and BENCH_TASK.match(rel) is not None
 
 
 def stratum_module(root, rel):
     """The module a local benchmark task belongs to: the `lab` field of its
-    stratum's `bench/local/<q|r>/<lab>/STRATUM.toml`, or None (a public task,
-    no stratum file, no field)."""
-    m = re.match(r"^bench/local/([qr])/([^/]+)/", rel)
-    if not m or not bench_task(rel):
+    stratum's `bench/local/<q|r>/<lab>/STRATUM.toml` (a challenge stratum's
+    `bench/local/<q|r>/agentic/<stratum>/STRATUM.toml`: its `lab`, else its
+    `module`), or None (a public task, no stratum file, no field)."""
+    if not bench_task(rel):
         return None
-    p = Path(root) / "bench" / "local" / m.group(1) / m.group(2) / "STRATUM.toml"
+    m = re.match(r"^bench/local/([qr])/agentic/([^/]+)/", rel)
+    keys = ("lab", "module") if m else ("lab",)
+    m = m or re.match(r"^bench/local/([qr])/([^/]+)/", rel)
+    if not m:
+        return None
+    sub = ("agentic", m.group(2)) if keys == ("lab", "module") else (m.group(2),)
+    p = Path(root, "bench", "local", m.group(1), *sub, "STRATUM.toml")
     try:
-        lab = tomllib.loads(p.read_text(encoding="utf-8")).get("lab")
+        data = tomllib.loads(p.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return None
-    return lab if isinstance(lab, str) and lab else None
+    for k in keys:
+        if isinstance(data.get(k), str) and data[k]:
+            return data[k]
+    return None
 
 
 def lab_card(rel):
@@ -819,6 +852,7 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
                    and raw["agent"].get("cli") == "none")
     rule = "verify" if probe_agent else kind      # whose editable rule applies
     graded = graded_mode(raw)                     # a graded truth run's mode (Δ418), or None
+    sealed = sealed_mode(raw)                     # a sealed run (Δ419), or None
     files, seen_dst, snapshots = [], set(), 0
     raw_files = raw.get("file", [])
     if not isinstance(raw_files, list) or not raw_files:
@@ -874,6 +908,11 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
                 continue
             if role == "project" and PurePosixPath(dst).name not in PROJECT_NAMES:
                 bad(f"{where}: a generated project file is one of {list(PROJECT_NAMES)}")
+                continue
+            if sealed and role == "task" and not (bench_task(dst)
+                                                  or dst.startswith(GRADER_IN + "/")):
+                bad(f"{where}: a sealed run's inline task is a task file of its part (at its "
+                    f"stratum's course path) or a host input under {GRADER_IN}/")
                 continue
             if verify_text:
                 if len(text.encode("utf-8")) > RETURN_CAP_BYTES:
@@ -942,7 +981,12 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
     editable = {e.dst for e in files if e.role == "editable"}
     if kind == "verify" and paths:
         bad("a verify run returns nothing ([[return]] must be empty)")
-    if kind == "agent":
+    if sealed:
+        # a sealed run's return is its grader directory's run records (Δ419), never a file
+        if paths or editable:
+            bad("a sealed run stages no editable file and names no [[return]] path: it "
+                f"returns the run records under /work/{GRADER_DIR}/runs/")
+    elif kind == "agent":
         if not paths and not probe_agent:
             bad("an agent run names its [[return]] paths (the allowed files)")
         for p in paths:
@@ -972,6 +1016,13 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
             if g is not None and (isinstance(g, bool) or not isinstance(g, (int, float))
                                   or not 1 <= g <= 10 * 3600):
                 bad("[agent] gpu_s (the run's GPU-seconds cap) must be a number in [1, 36000]")
+            n = agent.get("calls")
+            if n is not None and (not sealed or isinstance(n, bool) or not isinstance(n, int)
+                                  or not 1 <= n <= 100000):
+                bad("[agent] calls (a sealed run's call cap) is an integer in [1, 100000], and "
+                    "only a sealed run's")
+            if sealed and n is None:
+                bad("a sealed run's [agent] names its call cap (calls)")
     if kind == "agent" and agent is None:
         bad("an agent run has an [agent] table (cli, model, turns)")
     if kind == "verify" and agent is not None:
@@ -987,7 +1038,8 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
 
     truth = raw.get("truth")
     if truth is not None:
-        why = truth_problem(truth, root, kind, network, read=read)
+        why = truth_problem(truth, root, kind, network, read=read, mode=graded,
+                            sealed=sealed)
         if why:
             bad(f"[truth]: {why}")
             truth = None
@@ -1050,15 +1102,32 @@ _ARG = re.compile(r"[A-Za-z0-9_./=:-]{1,200}")
 
 def graded_mode(raw):
     """The grader mode of a graded truth run (a [truth] table and one grader command whose
-    mode is in GRADED_MODES), or None."""
+    mode is in GRADED_MODES), SEALED_RUN for a sealed run (no [truth], one command, the
+    image's batch runner; Δ419), or None."""
     cmds = raw.get("command") if isinstance(raw, dict) else None
-    if not isinstance(raw.get("truth"), dict) or not isinstance(cmds, list) or len(cmds) != 1:
+    if not isinstance(cmds, list) or len(cmds) != 1:
         return None
     argv = cmds[0].get("argv") if isinstance(cmds[0], dict) else None
+    if not isinstance(raw.get("truth"), dict):
+        if isinstance(argv, list) and argv and argv[0] == BATCHRUN:
+            return SEALED_RUN
+        return None
     if isinstance(argv, list) and len(argv) >= 2 and argv[0] == TRUTHCHECK \
             and argv[1] in GRADED_MODES:
         return argv[1]
     return None
+
+
+def sealed_mode(manifest):
+    """"par-run" or "sealed-run" for a sealed run's manifest (a Manifest or a raw dict:
+    an agent run on the model network with no agent CLI, whose one command is the
+    grader's par-run or the batch runner; Δ419), else None."""
+    raw = manifest.raw if isinstance(manifest, Manifest) else manifest
+    if not isinstance(raw, dict) or raw.get("kind") != "agent" or raw.get("network") != "model" \
+            or not isinstance(raw.get("agent"), dict) or raw["agent"].get("cli") != "none":
+        return None
+    mode = graded_mode(raw)
+    return mode if mode in SEALED_MODES else None
 
 
 def command_problem(argv, staged, tools, truth=None):
@@ -1082,6 +1151,11 @@ def command_problem(argv, staged, tools, truth=None):
         if mode not in modes:
             what = f"part {part!r} of {truth.get('lab')}" if part else f"{truth.get('lab')}'s lab archive"
             return f"the grader runs {', '.join(modes)} on {what}, not {mode}"
+        if mode == "par-run":
+            if len(argv) != 4 or not SEALED_PART.fullmatch(argv[3]):
+                return (f"the grader runs as `{TRUTHCHECK} par-run {truth.get('lab')} <part>` "
+                        "(the learner's unsealed part)")
+            return None
         if mode == "gate-agree":
             if argv[3:] not in (["dafny"], ["verus"]):
                 return f"the grader runs as `{TRUTHCHECK} gate-agree {truth.get('lab')} dafny|verus`"
@@ -1092,6 +1166,13 @@ def command_problem(argv, staged, tools, truth=None):
         if argv[3:] and (argv[1] != "validate" or not all(
                 re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", a) for a in argv[3:])):
             return "card ids are lower-case words, for validate only"
+        return None
+    if argv[0] == BATCHRUN:
+        if truth:
+            return f"a truth run's command is the grader's ({TRUTHCHECK}), not {BATCHRUN}"
+        if len(argv) != 3 or not re.fullmatch(r"Q(19|2[0-9]|3[0-3])", argv[1]) \
+                or not SEALED_PART.fullmatch(argv[2]):
+            return f"the batch runner runs as `{BATCHRUN} <challenge ID> <part>`"
         return None
     if argv[0] == CONTROLS:
         if len(argv) < 3 or argv[1] != "door" or argv[2] not in DOORS:
@@ -1134,9 +1215,9 @@ def _role_problem(role, src, rev, rec, mid, kind=None, mode=None):
     """Why `src` may not enter in `role` for module `rec`, or None. `mode` is a graded
     truth run's grader mode (graded_mode), which alone admits the graded role."""
     if role == "graded":
-        if mode not in GRADED_MODES:
+        if mode not in GRADED_MODES + (SEALED_RUN,):
             return ("a graded file enters only a truth run of a graded mode "
-                    f"({', '.join(GRADED_MODES)})")
+                    f"({', '.join(GRADED_MODES)}) or a sealed run")
         if not isinstance(rev, str) or not re.fullmatch(r"[0-9a-f]{40}", rev):
             return "a graded file is read at a commit (rev: the commit's 40-hex id)"
         return None if graded_ok(src, rec, mode) else f"{src} is not a file {mid}'s {mode} grades"
@@ -1274,9 +1355,16 @@ def truth_pins(root=REPO_ROOT):
     return out
 
 
-def truth_problem(truth, root, kind, network, *, read=True):
-    """Why a manifest's [truth] table is refused, or None."""
-    if kind != "verify" or network != "none":
+def truth_problem(truth, root, kind, network, *, read=True, mode=None, sealed=None):
+    """Why a manifest's [truth] table is refused, or None. The one exception to "only a
+    verification container unseals truth" (Δ419): par-run, an agent container on the
+    model network with no agent CLI (sealed_mode), on the part "par-agent"."""
+    if mode == "par-run":
+        if sealed != "par-run" or not isinstance(truth, dict) \
+                or truth.get("part") != "par-agent":
+            return ("par-run unseals the part \"par-agent\" in an agent container on the model "
+                    "network with no agent CLI ([agent] cli = \"none\"), and nowhere else")
+    elif kind != "verify" or network != "none":
         return "only a verification container (kind verify, network none) unseals truth"
     if not isinstance(truth, dict) or not TRUTH_KEYS <= set(truth) <= TRUTH_KEYS | TRUTH_OPTIONAL:
         return (f"the table has the keys {sorted(TRUTH_KEYS)} and, for a challenge's sealed "
@@ -1351,6 +1439,9 @@ def build_truth(root, lab, mode, *, cards=(), mem_gb=None, run_id=None, lang=Non
     if mode == "judge":
         raise ManifestError("a judging run's manifest is dvl.judge.build_judge's (it stages "
                             "the candidates)")
+    if mode == "par-run":
+        raise ManifestError("a par run's manifest is build_sealed's (it stages the learner's "
+                            "unsealed part; `python -m fvh par` builds its spec)")
     if mode in GRADED_MODES:
         if cards:
             raise ManifestError(f"{mode} names no cards")
@@ -1565,6 +1656,156 @@ def build_graded(root, lab, part, mode, *, lang=None, mem_gb=None, run_id=None):
     bound = memory_bound_gb("verify", manifest_pools(files, [argv]))
     raw["limits"]["mem_gb"] = min(float(mem_gb), bound) if mem_gb is not None else bound
     return raw
+
+
+SEALED_SPEC_KEYS = {"schema", "kind", "module", "part", "stratum", "files_sha256", "ids",
+                    "seed_pool", "calls", "prereg_sha256", "statements_sha256", "facts",
+                    "course", "server", "model", "max_model_len", "options",
+                    "apparatus_text", "plan_sha256", "deadline_s", "plan_text", "par",
+                    "unsealed"}
+
+
+def _fvh_sealed():
+    """fvh.sealed (the frozen core, standard library only), imported from this checkout:
+    the one implementation of the unsealed part's check."""
+    h = str(REPO_ROOT / "harness")
+    if h not in sys.path:
+        sys.path.insert(0, h)
+    from fvh import sealed
+    return sealed
+
+
+def build_sealed(root, spec, *, mem_gb=None, run_id=None, archive=None):
+    """The raw manifest of one sealed run (QPLAN §31.3; DELTAS Δ419; the user's D102):
+    an agent run in dvl-agent on the run's model network with [agent] cli "none", from
+    the spec fvh.sealed writes (`kind` "sealed-run", the learner's arm, or "par-run", the
+    course's par agent, with `archive` its par-agent part). It stages:
+      - the learner's single-use unsealed part from the spec's `unsealed` directory,
+        checked against its research/unseals.jsonl entry first (fvh.sealed.unsealed_part:
+        the file count and files_sha256), inline (role task) at its stratum's course paths;
+      - the learner's committed work at HEAD (graded_files: agents/ and harness/<t>/
+        fvh_<t>/, role graded; uncommitted work refuses the run);
+      - the frozen core harness/fvh/ (given), the trusted tools, pins and both languages'
+        project files (the module's chain), the generated Verus workspace;
+      - grader-in/spec.json (the spec without the host's `unsealed` path or the plan
+        text), grader-in/plan.toml (a sealed-run's plan, the bytes the host opened) and
+        grader-in/apparatus.toml (the apparatus file), inline.
+    The one command is the image's batch runner (sealed-run) or the grader's `truthcheck
+    par-run <ID> <part>` with the [truth] table of the par-agent archive. The [agent]
+    table's `calls` is the run's call cap; the gate takes the spec's seed_pool."""
+    root = Path(root).resolve()
+    if not isinstance(spec, dict) or set(spec) - SEALED_SPEC_KEYS \
+            or spec.get("kind") not in SEALED_MODES or spec.get("schema") != 1:
+        raise ManifestError("a sealed run's spec is fvh.sealed's (schema 1, kind sealed-run "
+                            "or par-run)")
+    kind, mid, part = spec["kind"], spec.get("module"), spec.get("part")
+    if not isinstance(part, str) or not SEALED_PART.fullmatch(part):
+        raise ManifestError(f"part {part!r} is not a part name")
+    if (kind == "par-run") != bool(archive):
+        raise ManifestError("a par run names its par-agent archive, a sealed run none")
+    rec = registry_record(root, mid)
+    if not rec.get("solo"):
+        raise ManifestError(f"{mid} is not a challenge module (solo)")
+    S = _fvh_sealed()
+    try:
+        up = S.unsealed_part(root, mid, part, spec.get("unsealed") or "")
+    except S.SealedRefused as e:
+        raise ManifestError(str(e)) from None
+    if up.files_sha256 != spec.get("files_sha256") or up.stratum != spec.get("stratum"):
+        raise ManifestError("the spec's part is not the unsealed copy (files_sha256, stratum)")
+    ids, pool, calls = spec.get("ids"), spec.get("seed_pool"), spec.get("calls")
+    if not isinstance(ids, list) or not ids or not all(isinstance(x, str) for x in ids) \
+            or not isinstance(pool, list) or not pool or len(set(pool)) != len(pool) \
+            or not all(isinstance(x, int) and not isinstance(x, bool) and x >= 0 for x in pool) \
+            or isinstance(calls, bool) or not isinstance(calls, int) or not 1 <= calls <= 100000:
+        raise ManifestError("the spec's ids, seed_pool and calls are malformed")
+    if not isinstance(spec.get("model"), str) or not spec["model"]:
+        raise ManifestError("the spec names the served model (fvh.sealed's discovery)")
+    files, seen = [], set()
+
+    def inline(dst, text, role="task"):
+        seen.add(dst)
+        files.append({"dst": dst, "role": role, "text": text,
+                      "sha256": sha256_bytes(text.encode("utf-8"))})
+
+    langs = set()
+    for path, data in sorted(up.files.items()):
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            raise ManifestError(f"{path}: an unsealed task file is UTF-8 text") from None
+        inline(path, text)
+        if lang_pool(path) in ("dafny", "verus"):
+            langs.add(lang_pool(path))
+    mode = SEALED_RUN if kind == SEALED_RUN else "par-run"
+    commit, paths = graded_files(root, rec, mode)
+    for src in paths:
+        seen.add(src)
+        files.append({"src": src, "dst": src, "role": "graded", "rev": commit,
+                      "sha256": sha256_bytes(git_blob(root, commit, src)[0])})
+
+    def add(src, role):
+        if src in seen:
+            return
+        seen.add(src)
+        data = read_source(root, Entry(src, src, role, "0" * 64))
+        files.append({"src": src, "dst": src, "role": role, "sha256": sha256_bytes(data)})
+    for src in sorted(_tree_files(root, "harness/fvh")):
+        if PY_GIVEN[0].match(src):
+            add(src, "given")
+    for src, role in readonly_inputs(root, rec, langs or {"dafny"}):
+        if src != "verus/Cargo.toml":
+            add(src, role)
+    if "verus" in langs:
+        seen.add("verus/Cargo.toml")
+        text = verus_workspace(root, rec)
+        files.append({"dst": "verus/Cargo.toml", "role": "project", "text": text,
+                      "sha256": sha256_bytes(text.encode("utf-8"))})
+    lock = read_images_lock(root)
+    image = next((k for k in lock if k.startswith("dvl-agent@")), "dvl-agent@sha256:" + "0" * 64)
+    staged = {k: v for k, v in spec.items() if k not in ("unsealed", "plan_text")}
+    staged.update(image=image, opencode=OPENCODE)
+    inline(f"{GRADER_IN}/spec.json", json.dumps(staged, sort_keys=True, indent=1) + "\n")
+    if kind == SEALED_RUN:
+        if not isinstance(spec.get("plan_text"), str):
+            raise ManifestError("a sealed run's spec carries the learner's plan (plan_text)")
+        inline(f"{GRADER_IN}/plan.toml", spec["plan_text"])
+    if not isinstance(spec.get("apparatus_text"), str):
+        raise ManifestError("the spec carries the apparatus file (apparatus_text)")
+    inline(f"{GRADER_IN}/apparatus.toml", spec["apparatus_text"])
+    argv = [BATCHRUN, mid, part] if kind == SEALED_RUN else [TRUTHCHECK, "par-run", mid, part]
+    raw = {"schema": SCHEMA, "run_id": run_id or f"s{os.getpid()}-{secrets.token_hex(4)}",
+           "module": rec["id"], "kind": "agent", "image": image, "network": "model",
+           "limits": {"wall_clock_s": 4 * 3600}, "file": files, "return": [],
+           "agent": {"cli": "none", "model": spec["model"], "turns": 1, "calls": int(calls)},
+           "command": [{"argv": argv}]}
+    if kind == "par-run":
+        pins = [v for v in truth_pins(root).values() if v.get("archive") == archive]
+        if len(pins) != 1 or pins[0].get("id") != mid or pins[0].get("part") != "par-agent":
+            raise ManifestError(f"{archive} is not {mid}'s par-agent part in {TRUTH_FILE}")
+        raw["truth"] = {"lab": mid, "part": "par-agent", "archive": pins[0]["archive"],
+                        "sha256": pins[0]["sha256"]}
+    bound = memory_bound_gb("agent", run_pools(files))
+    raw["limits"]["mem_gb"] = min(float(mem_gb), bound) if mem_gb is not None else bound
+    return raw
+
+
+def sealed_gate_config(manifest, run, root=REPO_ROOT):
+    """The gate's config of a sealed run (Δ419): agent_gate_config's server, model,
+    options and margin, the call cap from [agent] calls, and the staged spec's seed
+    pool (every seed the run's ids may use, each once)."""
+    mg = apparatus_pins(root)
+    found = discover_server(root, model=manifest.agent["model"])
+    try:
+        spec = json.loads((run.inp / GRADER_IN / "spec.json").read_text(encoding="utf-8"))
+        pool = [int(x) for x in spec["seed_pool"]]
+    except (OSError, ValueError, KeyError, TypeError):
+        raise SandboxError("a sealed run stages its spec with its seed pool") from None
+    return {"model": found["model"], "max_model_len": found["max_model_len"],
+            "check_served": True, "options": dict(mg["options"]),
+            "caps": {"calls": int(manifest.agent["calls"])}, "seed_pool": pool,
+            "margin": int(mg.get("margin", 512)), "upstream": found["base_url"],
+            "server": found}
 
 
 def _read_only(top, executable=()):
@@ -1893,6 +2134,9 @@ def selftest(manifest, run, root=REPO_ROOT, *, author=False, answers=None):
             shipped = shipped_form(root, rel)
             if shipped is None and bench_task(rel) and (Path(root) / rel).is_file():
                 shipped = (Path(root) / rel).read_bytes()
+            if shipped is None and e.role == "task" and bench_task(rel) and sealed_mode(manifest):
+                shipped = data      # a sealed run's unsealed task form, checked against its
+                                    # unseal record (build_sealed): its own shipped form
             if shipped is not None:
                 exclude.append((rel, shipped))
     ans = public_answer_files(root) if answers is None else answers
@@ -2883,9 +3127,10 @@ def work_mounts(manifest):
     for d in sub:
         out.append((f"{WORK}/{d}", f"type=tmpfs,destination={WORK}/{d},"
                                    f"tmpfs-size={share * 1024 * 1024},tmpfs-mode=1777"))
-    if any(len(c) >= 2 and c[0] == TRUTHCHECK and c[1] == "gate-agree" for c in manifest.commands):
-        # the grader writes the unsealed deliveries here (Δ418); validate keeps every
-        # input out of it
+    if any(len(c) >= 2 and c[0] == TRUTHCHECK and c[1] == "gate-agree" for c in manifest.commands) \
+            or sealed_mode(manifest):
+        # the grader writes the unsealed deliveries here (Δ418), a sealed run its run
+        # records and work copies (Δ419); validate keeps every input out of it
         out.append((f"{WORK}/{GRADER_DIR}", f"type=tmpfs,destination={WORK}/{GRADER_DIR},"
                                             f"tmpfs-size={lim['work_mb'] * 1024 * 1024},"
                                             "tmpfs-mode=1777"))
@@ -2914,7 +3159,7 @@ def command_argv(manifest, argv):
     name = container_name(manifest)
     if argv[0] == CONTROLS:
         return ["docker", "exec", name, CONTAINER_PYTHON, "-B", *argv]
-    if argv[0] == TRUTHCHECK:
+    if argv[0] in (TRUTHCHECK, BATCHRUN):
         return ["docker", "exec", *exec_env(manifest), name, CONTAINER_PYTHON, "-B", *argv]
     return ["docker", "exec", *exec_env(manifest), name, CONTAINER_PYTHON, "-B",
             f"{WORK}/{argv[0]}", *argv[1:]]
@@ -2945,6 +3190,9 @@ def docker_argv(manifest, run_path, owner="$OWNER"):
     if manifest.network != "none":       # Route C: the relays to the run's gate container
         mounts.append((RELAYS_FILE, f"type=bind,source={rp}/state/relays.json,"
                                     f"destination={RELAYS_FILE},readonly"))
+    if sealed_mode(manifest):            # the run's gate's running counts, read-only (Δ419)
+        mounts.append((GATE_VIEW_DIR, f"type=bind,source={rp}/gate-view,"
+                                      f"destination={GATE_VIEW_DIR},readonly"))
     if manifest.truth:
         mounts.append((TRUTH_DIR, f"type=bind,source={rp}/truth,destination={TRUTH_DIR},readonly"))
     for _, m in sorted(mounts, key=lambda x: (x[0].count("/"), x[0])):
@@ -2963,7 +3211,10 @@ def docker_argv(manifest, run_path, owner="$OWNER"):
         lines.append(command_argv(manifest, c))
     if manifest.kind == "agent" and (manifest.agent or {}).get("cli") == "opencode":
         lines += agent_lines(manifest, lim["wall_clock_s"])
-    if manifest.kind == "agent":
+    if sealed_mode(manifest):            # the run records (Δ419): /work/grader/runs/
+        lines.append(["docker", "exec", name, "/usr/bin/tar", "--create", "--directory",
+                      f"{WORK}/{GRADER_DIR}", "--file", "-", "runs"])
+    elif manifest.kind == "agent":
         lines.append(["docker", "exec", name, "/usr/bin/tar", "--create", "--directory", WORK,
                       "--file", "-", *[d or "." for d in manifest.editable_dirs()]])
     lines.append(["docker", "rm", "--force", name])
@@ -3094,6 +3345,56 @@ def parse_return(stream, manifest, staged, *, cap=RETURN_CAP_BYTES):
             res.deleted.append(p)
     res.diff = unified_patch(res, staged, src_of)
     return res
+
+
+def parse_grader_return(stream, *, cap=GRADER_RETURN_CAP, file_cap=GRADER_FILE_CAP):
+    """A sealed run's return (Δ419): the `tar --create -C /work/grader runs` stream parsed
+    member by member, never extracted: regular files under runs/ only, each at most
+    `file_cap` bytes and all at most `cap`. Returns {"files": {path: bytes}, "rejected":
+    [{name, size, sha256, why}], "bytes": total}."""
+    out = {"files": {}, "rejected": [], "bytes": 0}
+
+    def reject(name, size, digest, why):
+        out["rejected"].append({"name": name, "size": size, "sha256": digest, "why": why})
+    try:
+        tf = tarfile.open(fileobj=stream, mode="r|")
+    except tarfile.TarError as e:
+        raise SandboxError(f"the return stream is not a tar stream: {e}") from None
+    with tf:
+        try:
+            for m in tf:
+                raw = m.name
+                name = _member_name(raw)
+                if name in ("", ".", "runs"):
+                    continue
+                if raw.startswith("/") or ".." in name.split("/") or "\0" in name \
+                        or not name.startswith("runs/") or not rel_ok(name):
+                    reject(raw, m.size, None, "a path outside runs/")
+                    continue
+                if name in out["files"]:
+                    reject(name, m.size, None, "a repeated member")
+                    continue
+                if m.isdir():
+                    continue
+                if not m.isreg():
+                    reject(name, m.size, None, "not a regular file (only regular files return)")
+                    continue
+                fobj = tf.extractfile(m)
+                if fobj is None:
+                    reject(name, m.size, None, "unreadable member")
+                    continue
+                data, size, digest = _drain(fobj, file_cap)
+                if data is None:
+                    reject(name, size, digest, f"over the per-file cap ({file_cap} bytes)")
+                    continue
+                if out["bytes"] + size > cap:
+                    reject(name, size, digest, f"over the return's cap ({cap} bytes)")
+                    continue
+                out["bytes"] += size
+                out["files"][name] = data
+        except tarfile.TarError as e:
+            raise SandboxError(f"the return stream broke off: {e}") from None
+    return out
 
 
 def unified_patch(res, staged, src_of):
@@ -4027,7 +4328,7 @@ def _clip(b, cap=4 << 20):
     return t if len(t) <= cap else t[:cap] + "\n[clipped]\n"
 
 
-def start_gate(manifest, run, cfg=None, upstream=None, out=None):
+def start_gate(manifest, run, cfg=None, upstream=None, out=None, counts=None):
     """The model gate of the run, on TCP (Route C, DELTAS Δ504): at the address
     model_network_up wrote to the run's state/gate.bind (the upstream bridge's
     gateway on Linux, 127.0.0.1 on macOS; 127.0.0.1 without one), on a free
@@ -4038,7 +4339,8 @@ def start_gate(manifest, run, cfg=None, upstream=None, out=None):
     upstream is the config's, else the host's server as found (Δ505). `out`: where the
     gate writes its log and its running counts (default: the run's out/; an
     fvh agent-mode attempt passes its own run directory, so that a runner
-    killed outright leaves the counts `fvh resume` settles the attempt by)."""
+    killed outright leaves the counts `fvh resume` settles the attempt by). `counts`: where
+    the running counts go instead (a sealed run's read-only gate view, Δ419)."""
     cfg = dict(cfg) if cfg else {"model": manifest.agent["model"], "options": {},
                                  "caps": {"calls": 0}, "margin": 512}
     upstream = (upstream or cfg.get("upstream") or model_upstream()).rstrip("/")
@@ -4053,7 +4355,7 @@ def start_gate(manifest, run, cfg=None, upstream=None, out=None):
     p = subprocess.Popen([sys.executable, "-B", str(REPO_ROOT / "sandbox" / "hostside" / "model_gate.py"),
                           "--port", "0", "--bind", bind, "--config",
                           str(run.state / "gate.json"), "--log", str(out / "gate.log"),
-                          "--counts", str(out / "gate-counts.json"), "--ready", str(ready),
+                          "--counts", str(counts or out / "gate-counts.json"), "--ready", str(ready),
                           "--upstream", upstream],
                          stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                          stderr=open(run.out / "gate.stderr", "wb"), start_new_session=True)
@@ -4172,8 +4474,11 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
     if cli == "claude":
         raise SandboxError("Claude Code in a container is DV4 step 4c's (harness-executed runs "
                            "until then)")
-    if not probe and cli == "none":
+    sealed = sealed_mode(manifest)
+    if not probe and cli == "none" and not sealed:
         raise SandboxError("a probe agent container (cli \"none\") runs only under --probe")
+    if probe and sealed:
+        raise SandboxError("a sealed run is never a probe")
     if not probe and any(c[0] == CONTROLS for c in manifest.commands):
         raise SandboxError("a door of the controls runs only under --probe")
     if not probe and (gate_cfg or gate_upstream):
@@ -4202,6 +4507,12 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
 
     if cli == "opencode" and gate_cfg is None:
         gate_cfg = agent_gate_config(manifest, root)
+    view = None
+    if sealed:                           # Δ419: its gate's pins, caps and seed pool
+        gate_cfg = sealed_gate_config(manifest, run, root)
+        view = run.path / "gate-view"
+        view.mkdir(mode=0o755, exist_ok=True)
+        os.chmod(view, 0o755)
     if gate_cfg and isinstance(gate_cfg.get("server"), dict):
         rec["model_server_found"] = dict(gate_cfg["server"])   # observed, never pinned (Δ505)
     if seeds is not None:
@@ -4211,7 +4522,7 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
     log_withheld = []                    # command outputs withheld by the secret scan
     import contextlib
     with contextlib.ExitStack() as hold:
-        if cli == "opencode" and not calendar_held:
+        if (cli == "opencode" or sealed) and not calendar_held:
             hold.enter_context(_GpuCalendar())
         hold.enter_context(_SandboxSlot())
         rec["started"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -4219,7 +4530,8 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
         if manifest.network == "model":      # Route C (DELTAS Δ504)
             hold.callback(model_network_down, manifest)
             target = model_network_up(manifest, run, owner_label())
-            gate = start_gate(manifest, run, gate_cfg, gate_upstream, out=gate_out)
+            gate = start_gate(manifest, run, gate_cfg, gate_upstream, out=gate_out,
+                              **({"counts": view / "gate-counts.json"} if view else {}))
             addr = gate_address(run)
             model_gate_up(manifest, run, owner_label(), target, addr[1] if addr else 0)
         watcher = start_watcher(name, gate.pid if gate else None, run.path,
@@ -4294,7 +4606,26 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
                                   left, say, exact)
                 if code:
                     return code, rec
-            if manifest.kind == "agent" and manifest.returns:
+            if sealed:                    # the run records under /work/grader/runs/ (Δ419)
+                p = subprocess.Popen(lines[-2], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+                try:
+                    got = parse_grader_return(p.stdout)
+                finally:
+                    p.stdout.close()
+                    rc = p.wait(timeout=left())
+                kept, withheld = {}, []
+                for fname, data in sorted(got["files"].items()):
+                    hits = secret_scan(data, exact)
+                    if hits:
+                        withheld.append(withheld_record(fname, data, hits))
+                    else:
+                        kept[fname] = data
+                rec["secret_scan"] = {"withheld": log_withheld + withheld,
+                                      "scanned": len(got["files"]), "exact_values": len(exact)}
+                rec["grader_return"] = {"files": len(kept), "bytes": got["bytes"],
+                                        "rejected": got["rejected"], "tar_exit": rc}
+                rec["_grader"] = kept
+            elif manifest.kind == "agent" and manifest.returns:
                 staged = {e.dst: (run.inp / e.dst).read_bytes() for e in manifest.files}
                 p = subprocess.Popen(lines[-2], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
                 try:
@@ -4334,7 +4665,16 @@ def live_run(manifest, run, *, probe=False, log=None, gate_cfg=None, gate_upstre
                     gate.wait(timeout=10)
                 except subprocess.TimeoutExpired:
                     gate.kill()
+                if sealed == "par-run":
+                    # D103: the gate's log holds par's prompts and replies; only its
+                    # counts leave the run
+                    (gate_out / "gate.log").unlink(missing_ok=True)
+                if view is not None and (view / "gate-counts.json").is_file():
+                    rec.setdefault("gate", {})["gate-counts.json"] = \
+                        (view / "gate-counts.json").read_text(encoding="utf-8")
                 for f in ("gate.log", "gate-counts.json"):
+                    if view is not None and f == "gate-counts.json":
+                        continue
                     if gate_dir is not None:
                         # the files stay in the caller's directory (its own scan)
                         if (gate_out / f).is_file():
@@ -4460,6 +4800,13 @@ def write_live_records(dest, rec, name="run.json"):
     tr = rec.pop("_transcript", None)
     if tr is not None:
         (dest / "transcript.jsonl.gz").write_bytes(gzip.compress(tr, mtime=0))
+    grader = rec.pop("_grader", None)
+    if grader is not None:
+        # a sealed run's run records (Δ419), after live_run's secret scan
+        for fname, data in grader.items():
+            p = dest / GRADER_DIR / fname
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(data)
     res = rec.pop("_returned", None)
     if res is not None:
         # live_run has run the secret scan: res.returned holds only the kept files

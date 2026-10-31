@@ -639,6 +639,9 @@ def test_a_single_use_part_is_unsealed_once_outside_the_tree(root, tmp_path):
     led = statements.unseal_ledger(root)
     assert [(e["seq"], e["module"], e["part"], e["files"]) for e in led] == [(1, "Q98", "T1", 3)]
     assert led[0]["prev"] == statements.GENESIS
+    written = {f.relative_to(out).as_posix(): f.read_bytes() for f in out.rglob("*") if f.is_file()}
+    assert len(written) == 3                     # the sealed run checks the copy by this (Δ419)
+    assert led[0]["files_sha256"] == statements.tree_sha256(written)
     with pytest.raises(statements.StatementsRefused, match="unsealed once already"):
         statements.unseal(root, "Q98", age=age, identity=key, part="T1", once=True,
                           into=tmp_path / "again")

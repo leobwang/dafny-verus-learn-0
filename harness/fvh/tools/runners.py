@@ -661,7 +661,8 @@ class ContainerRunner(Runner):
     file), whose course path is the longest suffix of it that the registry
     declares (or a benchmark task: `bench/public/<set>/tasks/…`,
     `bench/local/<q|r>/<lab>/tasks/…` or a lab card's
-    `bench/local/<q|r>/<lab>/<card>/tasks/…`, or a crate card's `…/tasks` directory
+    `bench/local/<q|r>/<lab>/<card>/tasks/…`, a challenge card's
+    `bench/local/<q|r>/agentic/<stratum>/<card>/tasks/…`, or a crate card's `…/tasks` directory
     itself; mksandbox-run takes a local
     card's module from its stratum's STRATUM.toml when none is named). `mksandbox-run --build-verify` writes the verify manifest: the
     instrument's command (as HostRunner runs it, with --json where the tool
@@ -722,7 +723,8 @@ class ContainerRunner(Runner):
         for i in range(1, len(parts)):
             cand = "/".join(parts[i:])
             if _under(cand, course) or _under(cand, learner) or \
-                    re.match(r"^bench/(public/[^/]+|local/[qr]/[^/]+(/[^/]+)?)/tasks(/|$)", cand):
+                    re.match(r"^bench/(public/[^/]+|local/[qr]/agentic/[^/]+/[^/]+"
+                             r"|local/[qr]/[^/]+(/[^/]+)?)/tasks(/|$)", cand):
                 return cand
         raise RunnerUnavailable(f"{target}: no suffix of the path is a course file the registry "
                                 "declares, so no verification container can be built for it")

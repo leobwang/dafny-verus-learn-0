@@ -11,6 +11,24 @@ Run from harness/ (`uv run --offline --frozen --directory harness python -m fvh 
       when every id is settled. --dry-run stops after the checks and prints
       the plan's arithmetic. --mem-gb caps each verification container
       (a lane whose memory share is below the pinned bound).
+  run <ID> --plan PLAN.toml --sealed P --unsealed DIR [--mem-gb N]
+      a challenge's sealed part (fvh.sealed; QPLAN §31.3, DELTAS Δ419, the user's
+      D102): the learner's single-use unsealed copy (DIR, the --into of `unseal
+      --once`) checked against research/unseals.jsonl; the batch opened in the
+      ledger as above (the apparatus check leaves out the host's Qwen binary: a
+      sealed run's transport is the agent image's own CLI); its attempts run in
+      the run's agent container (scripts/mksandbox-run --sealed-run), every Verify
+      there, the model through its Route C gate, in chunks of at most 4 h until
+      every id is settled; run again to continue an open sealed batch. A plan whose
+      tasks lie in a sealed part runs only this way.
+  par <ID> --truth ARCHIVE --sealed P --unsealed DIR --plan PLAN.toml [--beside ARM]
+          [--mem-gb N]
+      the course's frozen par agent (ARCHIVE: the module's par-agent part, which
+      sandbox/truth.toml pins) on the same unsealed part, beside the plan's arm ARM
+      (its only Qwen arm by default): the learner's base seed, B, repeats and
+      attempts; its calls reserved in the ledger first (a `par` line); for Q32 the
+      census of Δ412 first. Its runs come back counts only (D103) into
+      research/runs/<ID>/par-<P>-<run id>/; `report --reverify all` re-verifies them.
   resume <ID> [--dry-run] [--mem-gb N] [--after-overage-check] [--new-apparatus]
       the open batch: the apparatus checked as for run (and the apparatus
       file the batch opened on), every id a killed runner left running
@@ -165,7 +183,24 @@ def _checks(root, rec, *, lab, server=False):
     return full
 
 
+def _sealed(fn, *args, **kw):
+    from fvh import sealed
+    try:
+        return fn(sealed)(*args, **kw)
+    except sealed.SealedRefused as e:
+        raise Refusal(str(e)) from None
+
+
 def cmd_run(a, root):
+    if bool(a.sealed) != bool(a.unsealed):
+        raise Refusal("--sealed P and --unsealed DIR go together (a challenge's sealed part)")
+    if a.sealed:
+        if a.dry_run:
+            raise Refusal("a sealed run has no dry run: its part is single use")
+        _module(root, a.module)
+        _live_ok()
+        return _sealed(lambda S: S.run_sealed, root, a.module.upper(), a.plan, a.sealed,
+                       a.unsealed, mem_gb=a.mem_gb, log=say)
     rec = _module(root, a.module)
     plan, items = _load_plan(a.plan, root)
     full = _checks(root, rec, lab=bool(plan.lab), server=budget.QWEN in plan.families())
@@ -195,6 +230,15 @@ def cmd_run(a, root):
         raise Refusal(str(e)) from None
 
 
+def cmd_par(a, root):
+    if a.dry_run:
+        raise Refusal("par has no dry run: it runs once, on a single-use part")
+    _module(root, a.module)
+    _live_ok()
+    return _sealed(lambda S: S.run_par, root, a.module.upper(), a.truth, a.sealed, a.unsealed,
+                   a.plan, beside=a.beside, mem_gb=a.mem_gb, log=say)
+
+
 def cmd_resume(a, root):
     rec = _module(root, a.module)
     try:
@@ -205,6 +249,9 @@ def cmd_resume(a, root):
     if last is None or last["event"] != "open":
         raise Refusal(f"{rec['id']} has no open batch to resume")
     ledger = budget.Ledger(budget.ledger_path(root, rec["id"]))
+    if batch.sealed_note(ledger) is not None:
+        raise Refusal(f"{rec['id']}'s open batch is a sealed run: continue it with the line "
+                      "that opened it (fvh run <ID> --plan PLAN --sealed P --unsealed DIR)")
     if a.dry_run and batch.batch_note(ledger) is not None:
         try:                                      # the plan's own max_reissue (DV5c)
             return batch.resume(root, rec["id"], dry_run=True, check_apparatus=False)
@@ -393,6 +440,17 @@ def main(argv=None) -> int:
     p.add_argument("--plan", required=True)
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--mem-gb", type=float)
+    p.add_argument("--sealed", metavar="PART")
+    p.add_argument("--unsealed", metavar="DIR")
+    p = sub.add_parser("par", allow_abbrev=False)
+    p.add_argument("module")
+    p.add_argument("--truth", required=True, metavar="ARCHIVE")
+    p.add_argument("--sealed", required=True, metavar="PART")
+    p.add_argument("--unsealed", required=True, metavar="DIR")
+    p.add_argument("--plan", required=True)
+    p.add_argument("--beside", metavar="ARM")
+    p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--mem-gb", type=float)
     p = sub.add_parser("resume", allow_abbrev=False)
     p.add_argument("module")
     p.add_argument("--dry-run", action="store_true")
@@ -422,7 +480,8 @@ def main(argv=None) -> int:
     p.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
     root = Path(a.root).resolve() if a.root else ROOT
-    fn = {"run": cmd_run, "resume": cmd_resume, "ledger": cmd_ledger, "report": cmd_report,
+    fn = {"run": cmd_run, "par": cmd_par, "resume": cmd_resume, "ledger": cmd_ledger,
+          "report": cmd_report,
           "apparatus": cmd_apparatus, "unseal": cmd_unseal,
           "contract-local": cmd_contract_local}[a.cmd]
     try:

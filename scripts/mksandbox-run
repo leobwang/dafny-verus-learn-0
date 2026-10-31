@@ -125,6 +125,26 @@ Usage:
                                                   sealed reference bench over the
                                                   committed run records,
                                                   per-cell match counts)
+  scripts/mksandbox-run --sealed-run SPEC --records DIR [--mem-gb N] [--calendar-fd N]
+  scripts/mksandbox-run --truth ARCHIVE --truth-check par-run --par SPEC --records DIR
+                [--mem-gb N] [--calendar-fd N]
+                                                  a sealed run (QPLAN §31.3; DELTAS
+                                                  Δ419, the user's D102): one fvh
+                                                  batch in an agent container on the
+                                                  run's model network with no agent
+                                                  CLI, the learner's arm (the
+                                                  image's batchrun) or the course's
+                                                  par agent (the grader's par-run on
+                                                  the par-agent part), from the spec
+                                                  `python -m fvh run --sealed` and
+                                                  `python -m fvh par` write: the
+                                                  learner's single-use unsealed part
+                                                  (checked against its unseal record),
+                                                  the committed work, the frozen core;
+                                                  the gate's call cap and seed pool;
+                                                  DIR/grader/runs/ gets the run
+                                                  records (par's counts only, D103;
+                                                  its gate log never leaves the run)
   scripts/mksandbox-run --reap                    remove every dvl.run container
                                                   whose owner process is gone
   scripts/mksandbox-run --check-access            the read-only Docker access
@@ -254,6 +274,7 @@ def main(argv=None):
     mode.add_argument("--probe", action="store_true")
     mode.add_argument("--build-agent", action="store_true")
     mode.add_argument("--agent-session", action="store_true")
+    mode.add_argument("--sealed-run", metavar="SPEC")
     ap.add_argument("--task")
     ap.add_argument("--brief", metavar="FILE")
     ap.add_argument("--turns", type=int)
@@ -278,6 +299,7 @@ def main(argv=None):
     ap.add_argument("--cards", metavar="ID,...")
     ap.add_argument("--truth-lang", choices=("dafny", "verus"))
     ap.add_argument("--judge", metavar="SPEC")
+    ap.add_argument("--par", metavar="SPEC")
     ap.add_argument("--gate-config", metavar="JSON_FILE")
     ap.add_argument("--gate-upstream", metavar="URL")
     ap.add_argument("--root", help=argparse.SUPPRESS)
@@ -329,8 +351,16 @@ def main(argv=None):
     if (args.task or args.brief or args.turns is not None or args.texts or args.run_id
             or args.gpu_s is not None) and not args.build_agent:
         ap.error("--task, --brief, --turns, --texts, --run-id and --gpu-s go with --build-agent")
-    if (args.seeds or args.calendar_fd is not None) and not args.agent_session:
-        ap.error("--seeds and --calendar-fd go with --agent-session")
+    sealed_live = bool(args.sealed_run) or args.truth_check == "par-run"
+    if args.seeds and not args.agent_session:
+        ap.error("--seeds goes with --agent-session")
+    if args.calendar_fd is not None and not (args.agent_session or sealed_live):
+        ap.error("--calendar-fd goes with --agent-session, --sealed-run and par-run")
+    if args.par and args.truth_check != "par-run":
+        ap.error("--par SPEC goes with --truth-check par-run")
+    if sealed_live and not args.records:
+        ap.error("a sealed run (--sealed-run, par-run) takes --records DIR: its run records "
+                 "come back there")
     if args.agent_session and (not args.records or not args.seeds or not args.manifest):
         ap.error("--agent-session takes --records DIR, --seeds FILE and a manifest")
 
@@ -352,6 +382,10 @@ def main(argv=None):
                      "deliveries per run) and no --cards")
         if args.truth_check == "bench-agree" and (args.cards or args.truth_lang):
             ap.error("--truth-check bench-agree takes neither --cards nor --truth-lang")
+        if (args.truth_check == "par-run") != bool(args.par) or \
+                (args.par and (args.cards or args.truth_lang)):
+            ap.error("--truth-check par-run takes --par SPEC (fvh par's) and neither --cards "
+                     "nor --truth-lang")
         try:
             pins = [v for v in sandbox.truth_pins(root).values() if v.get("archive") == args.truth]
             if len(pins) != 1:
@@ -363,7 +397,13 @@ def main(argv=None):
                 return refuse(f"{args.truth} is {what}: the grader runs "
                               f"{', '.join(m for m in modes if m)} on it, not {args.truth_check}")
             cards = tuple(c for c in (args.cards or "").split(",") if c)
-            if args.judge:
+            if args.par:
+                try:
+                    spec = json.loads(Path(args.par).read_text(encoding="utf-8"))
+                except (OSError, ValueError) as e:
+                    return refuse(f"--par {args.par}: {e}")
+                raw = sandbox.build_sealed(root, spec, mem_gb=args.mem_gb, archive=args.truth)
+            elif args.judge:
                 from dvl import judge as judging
                 try:
                     cands, jlang = judging.candidates(root, lab, judging.load_spec(args.judge))
@@ -380,6 +420,26 @@ def main(argv=None):
             return refuse("no truth run")
         import tempfile
         fd, truth_tmp = tempfile.mkstemp(prefix="dvl-truth-", suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(raw, fh)
+        args.manifest = truth_tmp
+        import atexit
+        atexit.register(lambda: os.path.exists(truth_tmp) and os.unlink(truth_tmp))
+
+    if args.sealed_run:
+        if args.manifest or args.truth:
+            ap.error("--sealed-run SPEC takes no manifest and no --truth")
+        try:
+            spec = json.loads(Path(args.sealed_run).read_text(encoding="utf-8"))
+            raw = sandbox.build_sealed(root, spec, mem_gb=args.mem_gb)
+        except (OSError, ValueError) as e:
+            return refuse(f"--sealed-run {args.sealed_run}: {e}")
+        except sandbox.ManifestError as e:
+            for p_ in e.problems:
+                say(f"sealed: {p_}", err=True)
+            return refuse("no sealed run")
+        import tempfile
+        fd, truth_tmp = tempfile.mkstemp(prefix="dvl-sealed-", suffix=".json")
         with os.fdopen(fd, "w", encoding="utf-8") as fh:
             json.dump(raw, fh)
         args.manifest = truth_tmp
@@ -518,6 +578,13 @@ def main(argv=None):
                                   "calendar lock")
                 held = True
             session = {"seeds": seeds, "gate_dir": args.records, "calendar_held": held}
+        elif args.calendar_fd is not None:      # a sealed run's batch holds the lock (Δ419)
+            if not sandbox.sealed_mode(manifest):
+                return refuse("--calendar-fd goes with a sealed run's manifest")
+            if not sandbox.calendar_held_by(args.calendar_fd):
+                return refuse(f"--calendar-fd {args.calendar_fd} does not hold the GPU "
+                              "calendar lock")
+            session = {"calendar_held": True}
         try:
             gcfg = json.loads(Path(args.gate_config).read_text(encoding="utf-8")) \
                 if args.gate_config else None
@@ -535,9 +602,11 @@ def main(argv=None):
         else:
             rec.pop("_returned", None)
             rec.pop("_transcript", None)
-        if manifest.truth and rec.get("commands"):
+        if (manifest.truth or sandbox.sealed_mode(manifest)) and rec.get("commands"):
             out = rec["commands"][0].get("stdout") or ""
-            print(out.strip() if isinstance(out, str) else out)
+            out = out.strip() if isinstance(out, str) else out
+            # a sealed run's batch log is in the record; its summary is the last line
+            print(out.splitlines()[-1] if sandbox.sealed_mode(manifest) and out else out)
             if code == 0 and rec["commands"][0].get("exit_code") not in (0, None):
                 code = 1
         say(f"run {manifest.run_id}: {rec.get('ended_by')} in {rec.get('wall_s')} s; "
