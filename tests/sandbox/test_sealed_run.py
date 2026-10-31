@@ -457,9 +457,23 @@ class CountsOnly(Base):
         self.assertEqual(runlog.load_meta(dest).run_id, dest.name)    # reverify finds it so
         self.assert_counts_only(dest)
 
+    def test_a_par_record_keeps_only_its_staged_paths_and_the_parts_own_inputs(self):
+        rd = par_run_dir(self.tmp / "returned")
+        (rd / "returned" / "notes.txt").write_text(PAR_CANARY)       # not a staged path
+        up = sealed.unsealed_part(self.root, "Q31", "probe", self.into)
+        dest = sealed.import_par(self.root, "Q31", rd, part="probe", archive_sha256="9" * 64,
+                                 staged=up.files)
+        self.assert_counts_only(dest)
+        rd2 = par_run_dir(self.tmp / "returned2")
+        runlog.write_inputs(rd2, {f"{STRATUM}/c1/tasks/c1.dfy": (TASK + PAR_CANARY).encode()})
+        with self.assertRaisesRegex(sealed.SealedRefused, "not the unsealed part's"):
+            sealed.import_par(self.root, "Q31", rd2, part="probe", archive_sha256="9" * 64,
+                              staged=up.files)
+
     def test_and_in_the_container_before_the_return(self):
         work = self.tmp / "work"
         rd = par_run_dir(work / "grader" / "runs")
+        (rd / "returned" / "notes.txt").write_text(PAR_CANARY)
         (work / "grader" / "runs" / "ledger.jsonl").write_text("{}\n")
         (work / "grader" / "runs" / "stray.txt").write_text(PAR_CANARY)
         self.assertEqual(sealed.strip_counts_only(work, part="probe", archive_sha256="9" * 64), 1)
@@ -606,6 +620,27 @@ class Routes(Base):
                                  "probe", self.into, launch=launch, app=app_of(self.root),
                                  found=found(), calendar=Calendar(), log=lambda m: None)
         self.assertEqual(code, 0)                 # the same line continues the open batch
+
+    def test_a_deferred_attempt_stops_the_route_as_a_batch_stops(self):
+        plan = self.plan()
+        aid = plan.items()[0].id
+
+        def deferred(spec, recs, fd):
+            arm, task, rep, att = aid.split("/")
+            d = Path(recs) / "grader" / "runs" / "r-deferred"
+            d.mkdir(parents=True)
+            runlog.write_meta(d, runlog.RunMeta(
+                run_id="r-deferred", module="Q31", arm=arm, task_id=task, lang="dafny",
+                attempt=int(att), repeat=int(rep), mode="harness-executed", backend="qwen",
+                outcome="deferred", ended_by="deferred"))
+            return 1
+        code = sealed.run_sealed(self.root, "Q31", self.root / "research/plans/sealed.toml",
+                                 "probe", self.into, launch=deferred, app=app_of(self.root),
+                                 found=found(), calendar=Calendar(), log=lambda m: None)
+        self.assertEqual(code, 3)
+        led = budget.Ledger(budget.ledger_path(self.root, "Q31"))
+        self.assertEqual(led.attempts()[aid].state, "deferred")
+        self.assertEqual(budget.last_anchor(self.root, "Q31")["event"], "open")
 
     def test_a_plan_beyond_its_part_or_with_an_agent_arm_is_refused(self):
         p = self.root / "research/plans/agent.toml"

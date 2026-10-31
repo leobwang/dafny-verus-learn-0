@@ -405,19 +405,44 @@ def returned_runs(records) -> list:
     return out
 
 
-def import_par(root, module, d: Path, *, part, archive_sha256) -> Path:
+def _returned_ok(d: Path, inputs: dict):
+    """The returned/ files of a run directory that are staged inputs' paths (its final work
+    copy), as {path: bytes}; any other file under returned/ is dropped."""
+    base = d / "returned"
+    out = {}
+    for f in sorted(base.rglob("*")) if base.is_dir() else []:
+        if f.is_file() and not f.is_symlink():
+            rel = f.relative_to(base).as_posix()
+            if rel in inputs:
+                out[rel] = f.read_bytes()
+    return out
+
+
+def import_par(root, module, d: Path, *, part, archive_sha256, staged=None) -> Path:
     """One par run directory into research/runs/<ID>/par-<part>-<run id>/, counts only
-    (D103): run.json rewritten by counts_only, then inputs.tar.gz, inputs.sha256 and
-    returned/ and nothing else. Returns the new directory."""
+    (D103): run.json rewritten by counts_only, then inputs.tar.gz and inputs.sha256, which
+    must be the learner's own unsealed files (`staged`, {course path: bytes}: the run's
+    inputs are a subset, byte for byte, and nothing else), and returned/ held to those
+    paths; nothing else. Returns the new directory; SealedRefused for inputs that are not
+    the part's."""
     meta = json.loads((d / "run.json").read_text(encoding="utf-8"))
     rec = counts_only(meta, part=part, archive_sha256=archive_sha256)
+    try:
+        inputs = runlog.read_inputs(d)
+    except (OSError, ValueError):
+        raise SealedRefused(f"returned run {d.name}: its inputs are unreadable") from None
+    if staged is not None and any(staged.get(k) != v for k, v in inputs.items()):
+        raise SealedRefused(f"returned run {d.name}: its inputs are not the unsealed part's")
     name = rec["run_id"]                  # par-<part>-<run id>: fvh report finds it by it
     dest = Path(root) / "research" / "runs" / module / name
     if dest.exists():
         raise SealedRefused(f"research/runs/{module}/{name} exists already")
     dest.mkdir(parents=True)
-    _copy_tree(d, dest, allowed=(tuple(f for f in COUNTS_ONLY_FILES if f != "run.json"),
-                                 COUNTS_ONLY_DIRS))
+    _copy_tree(d, dest, allowed=(tuple(f for f in COUNTS_ONLY_FILES if f != "run.json"), ()))
+    for rel, data in _returned_ok(d, inputs).items():
+        t = dest / "returned" / rel
+        t.parent.mkdir(parents=True, exist_ok=True)
+        t.write_bytes(data)
     (dest / "run.json").write_text(json.dumps(rec, sort_keys=True, indent=1, ensure_ascii=False)
                                    + "\n", encoding="utf-8")
     return dest
@@ -553,10 +578,14 @@ def run_sealed(root, module, plan_path, part, into, *, mem_gb=None, log=None, la
                 code = launch(spec, recs, fh.fileno() if fh is not None else None)
                 bid = note.get("batch", "b")
                 _save_sandbox_record(root, module, recs, f"{bid}-{part}-{k:02d}")
-                moved = _settle(root, module, ledger, plan, recs, set(ids), say)
+                moved, stop = _settle(root, module, ledger, plan, recs, set(ids), say)
             finally:
                 shutil.rmtree(recs, ignore_errors=True)
             say(f"chunk {k}: container exit {code}; {moved} of {len(ids)} id(s) came back")
+            if stop:
+                say(f"stopped: {stop}; the batch stays open (run the same line again once "
+                    "the cause is fixed)")
+                return 3
             if not moved:
                 say("no id came back from the last container run: the batch stays open "
                     "(run the same line again once the cause is fixed)")
@@ -572,11 +601,13 @@ def run_sealed(root, module, plan_path, part, into, *, mem_gb=None, log=None, la
     return 0
 
 
-def _settle(root, module, ledger, plan, recs, sent, say) -> int:
+def _settle(root, module, ledger, plan, recs, sent, say):
     """Each returned run of a learner chunk into research/runs/<ID>/<run id>/ and its
-    ledger id moved to the state its outcome gives; the number settled."""
+    ledger id moved to the state its outcome gives; (the number settled, why the route
+    stops: an attempt ended deferred or apparatus-mismatch, as fvh.batch stops a batch
+    between attempts, or "")."""
     att = ledger.attempts()
-    n = 0
+    n, stop = 0, ""
     for d, meta in returned_runs(recs):
         aid = budget.attempt_id(meta.arm, meta.task_id, meta.repeat, meta.attempt)
         a = att.get(aid)
@@ -597,7 +628,9 @@ def _settle(root, module, ledger, plan, recs, sent, say) -> int:
         ledger.move(aid, batch._scored_state(meta.outcome), **info)
         att = ledger.attempts()
         n += 1
-    return n
+        if meta.outcome in ("deferred", "apparatus-mismatch") and not stop:
+            stop = f"{aid} ended {meta.outcome}"
+    return n, stop
 
 
 # =====================================================================================
@@ -807,16 +840,26 @@ def run_par(root, module, archive, part, into, plan_path, *, beside=None, mem_gb
                 fh = getattr(cal, "fh", None)
                 code = launch(spec, recs, fh.fileno() if fh is not None else None)
                 _save_sandbox_record(root, module, recs, f"par-{part}-{k:02d}")
-                moved = 0
+                moved, stop = 0, ""
                 for d, meta in returned_runs(recs):
                     aid = budget.attempt_id(meta.arm, meta.task_id, meta.repeat, meta.attempt)
                     if aid not in todo or aid in done:
                         continue
-                    import_par(root, module, d, part=part, archive_sha256=pin["sha256"])
+                    if not runlog.scored(meta.outcome):
+                        # an attempt that never ran to an outcome (infra-failed, deferred,
+                        # an apparatus mismatch) is not par's result: it runs again
+                        stop = stop or f"{aid} ended {meta.outcome}"
+                        continue
+                    import_par(root, module, d, part=part, archive_sha256=pin["sha256"],
+                               staged=up.files)
                     moved += 1
             finally:
                 shutil.rmtree(recs, ignore_errors=True)
             say(f"par chunk {k}: container exit {code}; {moved} of {len(todo)} id(s) came back")
+            if stop:
+                say(f"par stopped: {stop}; its reservation stays: run the same line again "
+                    "once the cause is fixed")
+                return 3
             if not moved:
                 say("no par id came back from the last container run: par's reservation "
                     "stays; run the same line again once the cause is fixed")
@@ -1080,11 +1123,20 @@ def strip_counts_only(work="/work", *, part, archive_sha256) -> int:
         except (OSError, ValueError, TypeError):
             _rm(d)
             continue
+        try:
+            inputs = runlog.read_inputs(d)
+        except (OSError, ValueError):
+            _rm(d)
+            continue
+        keep = _returned_ok(d, inputs)
         for p in list(d.iterdir()):
-            if p.name in COUNTS_ONLY_FILES or (p.name in COUNTS_ONLY_DIRS and p.is_dir()
-                                               and not p.is_symlink()):
+            if p.name in COUNTS_ONLY_FILES and p.is_file() and not p.is_symlink():
                 continue
             _rm(p)
+        for rel, data in keep.items():
+            t = d / "returned" / rel
+            t.parent.mkdir(parents=True, exist_ok=True)
+            t.write_bytes(data)
         (d / "run.json").write_text(json.dumps(rec, sort_keys=True, indent=1) + "\n",
                                     encoding="utf-8")
         n += 1
