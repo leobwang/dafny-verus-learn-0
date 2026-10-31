@@ -226,3 +226,19 @@ def test_report_rederives_a_counts_only_run_without_proposals(tmp_path):
     (rd / "returned" / "stray.dfy").unlink()
     bad = runlog.RunMeta(**{**rec, "outcome": "failed"})
     assert not report.rederive(rd, bad).ok
+
+
+def test_the_command_line_names_the_sealed_route_for_a_sealed_part(tmp_path, capsys):
+    from fvh import __main__ as cli
+    root, into = part_root(tmp_path)
+    (root / "MODULES.toml").write_text('[[module]]\nid = "Q98"\nstatus = "authoring"\nsolo = true\n'
+                                       'budget = { qwen_calls = 9, qwen_runs = 9 }\n')
+    plan = tmp_path / "plan.toml"
+    plan.write_text(f'seed = 7\ntasks = ["c1"]\n[task.c1]\npath = "{STRATUM}/c1/tasks/c1.dfy"\n'
+                    '[[arm]]\nname = "a"\nfamily = "qwen"\nrounds = 2\nconstruct = "model"\n'
+                    'policy = "fvh:smoke"\n')
+    assert cli.main(["--root", str(root), "run", "Q98", "--plan", str(plan), "--dry-run"]) == 3
+    assert "--sealed probe --unsealed DIR" in capsys.readouterr().err
+    assert cli.main(["--root", str(root), "run", "Q98", "--plan", str(plan), "--sealed",
+                     "probe"]) == 3
+    assert "go together" in capsys.readouterr().err

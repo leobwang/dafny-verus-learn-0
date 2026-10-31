@@ -191,6 +191,23 @@ def _sealed(fn, *args, **kw):
         raise Refusal(str(e)) from None
 
 
+def _not_sealed(root, plan_path):
+    """A plan with a task of a challenge's sealed part runs only as a sealed run (D102):
+    named before the plan's task files are looked for (its part is outside the tree)."""
+    import tomllib
+    try:
+        data = tomllib.loads(Path(plan_path).read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError):
+        return
+    for t in (data.get("task") or {}).values():
+        rel = t.get("path") if isinstance(t, dict) else None
+        got = batch.sealed_part_of(root, rel) if isinstance(rel, str) else None
+        if got:
+            raise Refusal(f"{rel} is a task of {got[0]}'s sealed part {got[1]}: it runs only in "
+                          "a sealed run, in the agent container (D102): fvh run <ID> --plan "
+                          f"PLAN --sealed {got[1]} --unsealed DIR")
+
+
 def cmd_run(a, root):
     if bool(a.sealed) != bool(a.unsealed):
         raise Refusal("--sealed P and --unsealed DIR go together (a challenge's sealed part)")
@@ -202,6 +219,7 @@ def cmd_run(a, root):
         return _sealed(lambda S: S.run_sealed, root, a.module.upper(), a.plan, a.sealed,
                        a.unsealed, mem_gb=a.mem_gb, log=say)
     rec = _module(root, a.module)
+    _not_sealed(root, a.plan)
     plan, items = _load_plan(a.plan, root)
     full = _checks(root, rec, lab=bool(plan.lab), server=budget.QWEN in plan.families())
     last = budget.last_anchor(root, rec["id"])
