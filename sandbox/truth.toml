@@ -23,8 +23,12 @@
 # one grader mode its part names: part "cheats" (Hidden/Agentic/<ID>/cheats.tar.age, the
 # sealed deliveries and controls with their labels) `gate-agree`, part "bench"
 # (Hidden/Agentic/<ID>/bench.tar.age, the sealed reference bench and its table spec)
-# `bench-agree`; `seal_hidden.py <ID> --part <part>` seals it. None is pinned yet: the
-# sealed cheats are deferred (Δ415), and the reference bench is sealed with W4's par work.
+# `bench-agree`, part "par-agent" (Hidden/Agentic/<ID>/par-agent.tar.age, the course's
+# frozen par agent: labs/<ID>/par/agent/par_<id>/ and its plan fragment labs/<ID>/par/
+# PLAN.toml, no task; Δ419) `par-run`, the one truth run in an agent container on the
+# model network (`python -m fvh par`); `seal_hidden.py <ID> --part <part>` seals it.
+# None is pinned yet: the sealed cheats are deferred (Δ415), and the reference bench and
+# the par agents are sealed with W4's par work.
 schema = 1
 
 [[lab]]

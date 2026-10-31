@@ -67,7 +67,11 @@ builtin_skills = ["deep-research", "dataviz", "update-config", "verify", "debug"
 # opencode 1.18.25, the host binary DV0 probed (Δ64). Since Δ504 dvl-agent
 # carries the upstream Linux release of the same version for its architecture
 # (opencode-linux-x64.tar.gz, binary sha256 d91e0d33…, pinned in
-# sandbox/build-images.sh), not this file: no release asset has this sha256
+# sandbox/build-images.sh), not this file: no release asset has this sha256.
+# Since the user's D102 (Δ419) a challenge's sealed run (the learner's arm and the
+# course's par agent alike) uses the image's binary inside the run's agent container,
+# pinned by the dvl-agent digest in sandbox/images.lock (pins.images_lock_sha256); this
+# table serves the host's policy runs only, and no second transport is pinned
 version = "1.18.25"
 binary = "~/.opencode/bin/opencode"
 sha256 = "5750524bbdd592157a3e1b4451038c1d05075365336cd74b8ec573f92b2924c0"
