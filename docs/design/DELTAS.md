@@ -4324,7 +4324,7 @@
   - an invented learner renderer and plan committed as the learner's work;
   - the model an invented OpenAI-compatible server on loopback (`bin/fake_server.py`, reached through `DVL_MODEL_URL`, streaming one stop action);
   - one container at a time, the containers capped at 10 GB.
-  The runs, in order (`run-probe2.out`):
+  The runs, in order (`run-probe3.out`, on `2128e4bf`; `run-probe2.out` on `9bb99d02` gave the same results):
   - a tampered copy of the part: refused before anything was written;
   - `fvh run` without `--sealed`: refused, naming the sealed route;
   - the learner's sealed run: batch opened, one chunk, 2 of 2 back, batch closed. The image's opencode sent each attempt's pre-registered seed, streamed, through Route C (`fake-seen.jsonl`), and the real Dafny in the container verified `p-ok` and failed `p-bad`;
@@ -4332,7 +4332,10 @@
   - a second par on the part: refused;
   - `fvh report`: 4 runs reproduced, the apparatus line `qwen (sealed run, in its container): /opt/dvl/agent/opencode, pinned by dvl-agent@sha256:3eff2087…`;
   - `fvh report --reverify all` in fresh verification containers: 4/4 re-verified to their recorded verdicts, par's two included.
-- **Doors and CI:** below, in this entry's second commit.
+- **Doors on the rebuilt image** (`sandbox_doors.py access images controls gate memory pids wall watcher reap return secret e2e exposure parity`, `author-probes/dv7-parrun/doors/`, the worktree's pinned toolchain on PATH, one container at a time): 70 PASS. access 1, images 2, controls 8 (the verification container's C1–C4, C7, C8, the run, the teardown), gate 10, memory 6, pids 2, wall 1, watcher 4, reap 1, return 4, secret 2, e2e 6, exposure 2, parity 21 (12 Dafny and Verus units and 9 Python files: host, verification container and agent container equal).
+  - **Deferred, not failed (2):** the agent half of controls (C1–C8 on the model network, C5, C6) and "C5 the only upstream request". They need the host's own model server, and discovery found none on 127.0.0.1:8000 or 8001 (`refused: no OpenAI-compatible model server answers GET /models`), as in Δ506.
+  - The probe's sealed runs pass the same controls on the model network against the invented server: four container runs, controls `ok`, C5's `GET /v1/models` through Route C.
+- **CI:** below, in this entry's second commit.
 - **Residuals, recorded.**
   - Par's child runs as the grader's user and could read the bound key, as in gate-agree (Δ418): a separation of what par is given, not a sandbox.
   - The learner's code shares its container with the relay, so it could send a raw request to the gate. The gate admits only pool seeds, each once, and only up to the cap, so a raw request spends a pre-registered call, and the run's records show it (`unattributed-calls`).
