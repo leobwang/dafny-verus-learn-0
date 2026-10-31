@@ -267,14 +267,20 @@ def _server(app):
 
 
 def _spec_base(root, module, kind, up, app, found, *, ids, seed_pool, calls, prereg, stmts,
-               plan_sha256):
+               plan_sha256, course=None):
+    """The spec of one chunk. `course`: the checkout's git facts as the route found them
+    before it wrote anything (as fvh.batch.Batch takes them at its start), so the
+    route's own ledger lines never read as uncommitted changes."""
+    course = dict(course) if course is not None else apparatus.git_facts(root)
     facts = apparatus.collect(app, root)
+    facts.update(course)
+    facts.pop("backend", None)           # the host's transports: a sealed run uses neither
     facts["model_server_found"] = found
     return {"schema": 1, "kind": kind, "module": module, "part": up.part,
             "stratum": up.stratum, "files_sha256": up.files_sha256, "ids": list(ids),
             "seed_pool": sorted(seed_pool), "calls": int(calls), "prereg_sha256": prereg or "",
             "statements_sha256": dict(stmts or {}), "facts": facts,
-            "course": apparatus.git_facts(root), "server": found, "model": found["model"],
+            "course": course, "server": found, "model": found["model"],
             "max_model_len": found.get("max_model_len"),
             "options": dict(app.model_gate().get("options") or {}),
             "apparatus_text": Path(app.path).read_text(encoding="utf-8"),
@@ -305,9 +311,9 @@ def default_launch(root, spec, records, *, archive=None, mem_gb=None, calendar_f
                            timeout=WALL_S + 1800)
         for line in (p.stderr or "").strip().splitlines()[-12:]:
             say(line)
-        if archive:                      # the grader's verdict line: counts only (D103)
-            for line in (p.stdout or "").strip().splitlines()[-1:]:
-                say(f"par-run: {line}")
+        for line in (p.stdout or "").strip().splitlines():
+            if line.startswith("{"):     # the grader's or the batch runner's summary line
+                say(("par-run: " if archive else "sealed run: ") + line)
         return p.returncode
     finally:
         os.unlink(sp)
@@ -337,7 +343,8 @@ def counts_only(meta: dict, *, part: str, archive_sha256: str) -> dict:
     COUNTS_ONLY_APPARATUS (never the prompt hashes, the policy's name or source digest,
     the plan's digest or the calls' records), the usage to its counts, the findings to
     their fixed words; marked counts_only, with par's part and sealed archive. The result
-    loads as a RunMeta (ValueError otherwise)."""
+    loads as a RunMeta (ValueError otherwise). Its run_id becomes par-<part>-<run id>, the
+    name of its directory under research/runs/<ID>/."""
     if not isinstance(meta, dict):
         raise ValueError("a run record is a JSON object")
     out = {k: meta[k] for k in COUNTS_ONLY_META if k in meta}
@@ -357,6 +364,9 @@ def counts_only(meta: dict, *, part: str, archive_sha256: str) -> dict:
     sc = meta.get("secret_scan") if isinstance(meta.get("secret_scan"), dict) else {}
     out["secret_scan"] = {k: sc[k] for k in ("withheld", "hits", "scanned") if k in sc}
     out["manifest_sha256"], out["selftest"], out["ledger_seq"] = "", {}, 0
+    rid = str(out.get("run_id", ""))
+    if not rid.startswith(f"par-{part}-"):  # its directory's name under research/runs/<ID>/
+        out["run_id"] = re.sub(r"[^A-Za-z0-9_.+-]+", "-", f"par-{part}-{rid}")
     rm = runlog.RunMeta(**out)            # it must still be a run record
     return rm.to_dict()
 
@@ -401,7 +411,7 @@ def import_par(root, module, d: Path, *, part, archive_sha256) -> Path:
     returned/ and nothing else. Returns the new directory."""
     meta = json.loads((d / "run.json").read_text(encoding="utf-8"))
     rec = counts_only(meta, part=part, archive_sha256=archive_sha256)
-    name = re.sub(r"[^A-Za-z0-9_.+-]+", "-", f"par-{part}-{rec['run_id']}")
+    name = rec["run_id"]                  # par-<part>-<run id>: fvh report finds it by it
     dest = Path(root) / "research" / "runs" / module / name
     if dest.exists():
         raise SealedRefused(f"research/runs/{module}/{name} exists already")
@@ -481,6 +491,7 @@ def run_sealed(root, module, plan_path, part, into, *, mem_gb=None, log=None, la
     except (budget.AnchorError, budget.LedgerError) as e:
         raise SealedRefused(str(e)) from None
     ledger = budget.Ledger(budget.ledger_path(root, module))
+    course = apparatus.git_facts(root)       # before this route writes a ledger line
     last = budget.last_anchor(root, module)
     note = batch.batch_note(ledger) if last is not None and last["event"] == "open" else None
     if note is not None:
@@ -534,7 +545,7 @@ def run_sealed(root, module, plan_path, part, into, *, mem_gb=None, log=None, la
             calls = sum(plan.arm(aid.split("/")[0]).rounds for aid in ids)
             spec = _spec_base(root, module, "sealed-run", up, app, found, ids=ids,
                               seed_pool=pool, calls=calls, prereg=prereg, stmts=stmts,
-                              plan_sha256=plan.sha256)
+                              plan_sha256=plan.sha256, course=course)
             spec.update(plan_text=plan_text, unsealed=str(Path(into).expanduser().resolve()))
             recs = Path(tempfile.mkdtemp(prefix="fvh-sealed-records-"))
             try:
@@ -730,6 +741,7 @@ def run_par(root, module, archive, part, into, plan_path, *, beside=None, mem_gb
     except (budget.AnchorError, budget.LedgerError) as e:
         raise SealedRefused(str(e)) from None
     ledger = budget.Ledger(budget.ledger_path(root, module))
+    course = apparatus.git_facts(root)       # before this route writes a ledger line
     mine = [r for r in ledger.par_lines(part) if r.get("archive_sha256") == pin["sha256"]]
     if any(r.get("event") == "done" for r in mine):
         raise SealedRefused(f"par ran on part {part} already (ledger seq "
@@ -787,7 +799,7 @@ def run_par(root, module, archive, part, into, plan_path, *, beside=None, mem_gb
             spec = _spec_base(root, module, "par-run", up, app, found, ids=todo,
                               seed_pool=[s for aid in todo for s in seeds[aid]],
                               calls=sum(len(seeds[aid]) for aid in todo), prereg=note_prereg(
-                                  ledger), stmts={}, plan_sha256="")
+                                  ledger), stmts={}, plan_sha256="", course=course)
             spec.update(par=dict(par, dropped=dropped),
                         unsealed=str(Path(into).expanduser().resolve()))
             recs = Path(tempfile.mkdtemp(prefix="fvh-par-records-"))

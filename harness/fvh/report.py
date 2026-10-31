@@ -416,14 +416,23 @@ def build(root, module: str) -> Report:
 
 
 def _apparatus_lines(metas):
-    seen = {}
+    seen, sealed = {}, {}
     for m in metas:
+        tr = m.apparatus.get("transport")
+        if isinstance(tr, dict):
+            # a sealed run (fvh.sealed; D102): the agent image's own CLI, pinned by the image
+            key = (m.backend, tr.get("binary"), tr.get("pinned_by"),
+                   (m.apparatus.get("model_server_found") or {}).get("model"))
+            sealed[key] = sealed.get(key, 0) + 1
+            continue
         for fam, e in sorted((m.apparatus.get("backend") or {}).items()):
             key = (fam, e.get("version"), e.get("model"), e.get("pinned_sha256"))
             seen.setdefault(key, 0)
             seen[key] += 1
     return [f"  {fam}: version {v}, model {mod}, binary sha256 {str(sha)[:16]}… ({n} run(s))"
-            for (fam, v, mod, sha), n in sorted(seen.items(), key=str)]
+            for (fam, v, mod, sha), n in sorted(seen.items(), key=str)] + \
+        [f"  {fam} (sealed run, in its container): {b}, pinned by {img}, model {mod} ({n} run(s))"
+         for (fam, b, img, mod), n in sorted(sealed.items(), key=str)]
 
 
 def format_report(rep: Report) -> str:

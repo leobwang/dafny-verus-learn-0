@@ -454,6 +454,7 @@ class CountsOnly(Base):
         rd = par_run_dir(self.tmp / "returned")
         dest = sealed.import_par(self.root, "Q31", rd, part="probe", archive_sha256="9" * 64)
         self.assertEqual(dest.name, f"par-probe-{rd.name}")
+        self.assertEqual(runlog.load_meta(dest).run_id, dest.name)    # reverify finds it so
         self.assert_counts_only(dest)
 
     def test_and_in_the_container_before_the_return(self):
