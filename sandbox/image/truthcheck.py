@@ -5,6 +5,8 @@ QPLAN §30 Q49, design §10.3).
     truthcheck manifest <LAB>
     truthcheck validate <LAB> [<card> ...]
     truthcheck judge <LAB>
+    truthcheck gate-agree <LAB> dafny|verus
+    truthcheck bench-agree <LAB>
 
 Run only by scripts/mksandbox-run, as a [[command]] of a verify manifest that
 carries a [truth] table, inside a network-less verification container. The
@@ -61,17 +63,54 @@ of either, and the plaintext exists only here:
      probe of the lab's module, `vcheck --gate --json --module <LAB>`; a
      card's over its staged task form, restored after each run). Each row:
      the candidate's id, item or card, the verdict and the outcome word
-     (proved, failed, unknown) of each lemma.
+     (proved, failed, unknown) of each lemma;
+  5. `gate-agree` (a challenge's sealed `cheats` part; QPLAN §31.3, DELTAS
+     Δ418) runs the learner's committed gate, staged read-only under
+     /work/agents/, on each sealed delivery of one language
+     (gate/DELIVERIES.toml: its class, X01-X18 or `control`, the trusted
+     instruments' word, its target, statement, task form, editable files,
+     an optional fvh run directory and its pins; its files under
+     gate/<id>/). The deliveries are written under /work/grader/d<NN>/
+     (renumbered, so no sealed id reaches the gate), and the gate runs in a
+     child process (`_gate-child`) that sees the deliveries and nothing of
+     the labels or the trusted words (a separation of what the gate is
+     given, not a sandbox: the child runs as this user, Δ418); every
+     instrument it calls runs here, in this container (fvh.tools' runners
+     pointed at /work). This process
+     then compares each word with the label, as the course's evaluator does
+     (QPLAN §33.5): a decidable class agrees when the word is the trusted
+     word; a grader-only class (X07, X08, X14) is held when the gate PASSes
+     with the class UNKNOWN, agrees on a FAIL, and is a failure on a plain
+     PASS; a control's FAIL is a false reject. Output: per-class agree and
+     disagree counts, the controls' false-reject count, the grader-only
+     held and passed counts, and the deliveries the gate could not run on;
+  6. `bench-agree` (the sealed `bench` part) runs the learner's committed
+     bench (in a child process, `_bench-child`) and the archive's sealed
+     reference bench (bench/TABLES.toml's `reference`, loaded here with the
+     frozen fvh core) over the same committed run records
+     (/work/research/runs/<LAB>/) and the strata map the host staged
+     (/work/grader-in/strata.json), on the tables TABLES.toml lists
+     (pass@k at its ks, a cost curve per [[curve]], a paired report per
+     pair of the arms the reference rows hold), each rendered by its own
+     bench's render, and compares them cell for cell (a row is keyed by its
+     first `keys.<kind>` cells). Output: per table kind, the rows and cells
+     matched, the cells mismatched, the rows missing and extra, and the
+     tables the learner's bench could not compute.
 
 Output is one JSON object on stdout with verdict-level fields only (counts,
 verdict words, card ids, which the public stratum already names); no file
 name of the plaintext beyond the card ids, no content, no diagnostic text ever
 leaves the container, so the run's records on the host carry nothing of the
 hidden truth. Errors are fixed messages: an exception's text is never printed (it could
-quote the plaintext), and nothing is written to stderr. Exit: 0 every check
-passed (judge: every candidate judged, whatever its verdict), 1 one failed
-(judge: a candidate could not be judged), 2 usage, 3 refused (no truth
-bound, the archive does not unseal or does not match its manifest).
+quote the plaintext), and nothing is written to stderr. A graded mode's child
+process runs the learner's code: its own output is discarded, and only its
+result file's words (PASS, FAIL, UNKNOWN classes; rendered table lines, which
+this process reduces to counts) are read back. Exit: 0 every check passed
+(judge: every candidate judged, whatever its verdict; gate-agree: every
+delivery agreed, no control rejected, no grader-only class passed;
+bench-agree: every cell matched), 1 one failed (judge: a candidate could not be
+judged), 2 usage, 3 refused (no truth bound, the archive does not unseal or
+does not match its manifest, the archive is not the mode's part).
 
 Standard library only; runs as uid 1000 with no capability.
 """
@@ -85,6 +124,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import tempfile
 import tomllib
 import types
 
@@ -457,12 +497,407 @@ def judge(lab, files):
     return rows, None
 
 
+# --- the graded modes: gate-agree and bench-agree (QPLAN §31.3, DELTAS Δ418) ---------------
+
+GRADER = "grader"          # under WORK: the run's writable directory (dvl.sandbox GRADER_DIR)
+GRADER_IN = "grader-in"    # under WORK: the host's inline inputs (the strata map)
+CHILD_TMP = "/tmp/dvl-grader"
+CHILD_WALL_S = 4 * 3600 - 600          # inside the run's own wall clock
+GRADER_ONLY = ("X07", "X08", "X14")   # fvh.verdicts.GRADER_ONLY
+XCLASS = re.compile(r"X(0[1-9]|1[0-8])")
+WORDS = ("PASS", "FAIL")
+ENTRY = re.compile(r"(q(?:19|2[0-9]|3[0-3])_[a-z0-9_]+\.[a-z0-9_]+)(?::([a-z_][a-z0-9_]*))?")
+REL = re.compile(r"[A-Za-z0-9_.+-]+(/[A-Za-z0-9_.+-]+)*")
+LANGS = ("dafny", "verus")
+TABLE_KINDS = ("pass", "curve", "paired")
+
+
+def _rel_ok(p):
+    return isinstance(p, str) and (p == "" or p == "." or (
+        REL.fullmatch(p) is not None and ".." not in p.split("/")))
+
+
+def _child(mode, spec):
+    """Run this program as a child in `mode` on `spec` (a dict, written to a file), with
+    its output discarded; the child's result file (a JSON value), or None."""
+    os.makedirs(CHILD_TMP, mode=0o700, exist_ok=True)
+    sp, rp = os.path.join(CHILD_TMP, "spec.json"), os.path.join(CHILD_TMP, "result.json")
+    if os.path.exists(rp):
+        os.unlink(rp)
+    with open(sp, "w", encoding="utf-8") as fh:
+        json.dump(spec, fh)
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")    # the container's: the toolchain's
+    try:
+        subprocess.run([PYTHON, "-B", os.path.abspath(__file__), mode, sp, rp], cwd=WORK,
+                       env=env, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL, timeout=CHILD_WALL_S)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    try:
+        with open(rp, "rb") as fh:
+            return json.loads(fh.read())
+    except (OSError, ValueError):
+        return None
+    finally:
+        shutil.rmtree(CHILD_TMP, ignore_errors=True)
+
+
+def _child_setup(work):
+    """In a child: the learner's packages and the frozen core importable from `work`
+    (/work, which the parent puts in the spec), and every instrument fvh.tools runs
+    pointed at this container (no nested container: the deliveries' provenance is
+    `agent`, which fvh.tools sends to an isolated runner)."""
+    os.chdir(work)
+    for d in (f"{work}/harness/r", f"{work}/harness/q", f"{work}/harness", f"{work}/agents"):
+        if d not in sys.path:
+            sys.path.insert(0, d)
+    from fvh import tools
+    from fvh.tools import runners as R
+
+    class Here(R.HostRunner):
+        """HostRunner's process, in this container: no memory preflight (the container's
+        own bound holds) and no refusal of agent targets (the container is the isolation)."""
+        name = "container"
+        isolated = True
+
+        def __init__(self, root=None, **_kw):
+            super().__init__(work, preflight=False)
+
+        def execute(self, instrument, target, *, timeout_s=None):
+            R._check_instrument(instrument)
+            shown = R._shown(R._real(target, self.root), self.root)
+            argv = self.argv(instrument, shown)
+            limit = timeout_s if timeout_s is not None else \
+                R.default_timeout(self.root, R.lang_of(shown))
+            scratch = tempfile.mkdtemp(prefix="fvh-tool-", dir=R._scratch_base(self.root))
+            try:
+                rc, o, e, timed_out = R._spawn([PYTHON, "-B", str(self.root / argv[0]), *argv[1:]],
+                                               self.root, R._tool_env(scratch), limit)
+            finally:
+                shutil.rmtree(scratch, ignore_errors=True)
+            return R.make_result(instrument, shown, "agent", self.name, rc, o, e, timed_out,
+                                 R._redactor(self.root, scratch), "--json" in argv)
+    tools.HostRunner = tools.ContainerRunner = Here
+    return tools
+
+
+def gate_child(spec_path, result_path):
+    """The child of gate-agree: the learner's gate entry on each delivery of the spec
+    (no label, no trusted word); its verdict's words per delivery, or an error flag."""
+    with open(spec_path, encoding="utf-8") as fh:
+        spec = json.load(fh)
+    _child_setup(spec["work"])
+    import importlib
+    m = ENTRY.fullmatch(spec["entry"])
+    rows = []
+    try:
+        mod = importlib.import_module(m.group(1))
+        fn = getattr(mod, m.group(2) or "gate_task")
+    except BaseException:  # noqa: BLE001 — the learner's module did not load
+        mod = fn = None
+    for d in spec["deliveries"]:
+        try:
+            if fn is None:
+                raise RuntimeError("no entry")
+            crate = mod.CrateTarget(d["id"], d["lang"], d["target"], tuple(d["files"]),
+                                    mod.Pins(int(d["min_verified"]), tuple(d["symbols"])))
+            target = mod.TaskTarget(crate, d["statement"], d["task_form"], tuple(d["editable"]))
+            v = fn(target, run_dir=d["run_dir"] or None).verdict
+            rows.append({"id": d["id"], "word": str(v.word),
+                         "unknown": [str(x) for x in (v.unknown or ())]})
+        except BaseException:  # noqa: BLE001 — a delivery the gate could not run on
+            rows.append({"id": d["id"], "error": True})
+    with open(result_path, "w", encoding="utf-8") as fh:
+        json.dump(rows, fh)
+    return 0
+
+
+def _deliveries(lab, files, lang):
+    """(entry, [(sealed id, meta, {rel: bytes})] of one language, skipped count) from the
+    archive's gate/DELIVERIES.toml, or (None, why, None)."""
+    raw = files.get(f"labs/{lab}/gate/DELIVERIES.toml")
+    if raw is None:
+        return None, "the archive holds no gate/DELIVERIES.toml (not a cheats part)", None
+    try:
+        meta = tomllib.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, tomllib.TOMLDecodeError):
+        return None, "gate/DELIVERIES.toml is unreadable", None
+    entry = meta.get("entry")
+    rows = meta.get("delivery")
+    if meta.get("schema") != 1 or not isinstance(entry, str) or not ENTRY.fullmatch(entry) \
+            or not isinstance(rows, list) or not rows:
+        return None, "gate/DELIVERIES.toml lists no delivery (schema 1, entry, [[delivery]])", None
+    out, ids, skipped = [], set(), 0
+    for d in rows:
+        ok = isinstance(d, dict) and isinstance(d.get("id"), str) and CARD.fullmatch(d["id"]) \
+            and d["id"] not in ids and d.get("lang") in LANGS \
+            and (d.get("class") == "control" or (isinstance(d.get("class"), str)
+                                                 and XCLASS.fullmatch(d["class"])))
+        if ok:
+            ids.add(d["id"])
+            grader_only = d["class"] in GRADER_ONLY
+            ok = (d.get("trusted") is None) if grader_only else (d.get("trusted") in WORDS)
+            ok = ok and (d["class"] != "control" or d.get("trusted") == "PASS")
+            ok = ok and all(_rel_ok(d.get(k, "")) for k in ("target", "statement", "task_form",
+                                                            "run_dir"))
+            ok = ok and d.get("target") not in (None, "") and isinstance(d.get("editable", []), list) \
+                and all(_rel_ok(x) and x for x in d.get("editable", []))
+            ok = ok and isinstance(d.get("min_verified", 0), int) \
+                and isinstance(d.get("symbols", []), list) \
+                and all(isinstance(x, str) for x in d.get("symbols", []))
+        if not ok:
+            return None, "gate/DELIVERIES.toml has a malformed delivery", None
+        if d["lang"] != lang:
+            skipped += 1
+            continue
+        pre = f"labs/{lab}/gate/{d['id']}/"
+        body = {k[len(pre):]: v for k, v in files.items() if k.startswith(pre)}
+        if not body:
+            return None, "a delivery of gate/DELIVERIES.toml has no files", None
+        out.append((d["id"], d, body))
+    return entry, out, skipped
+
+
+def gate_agree(lab, files, lang):
+    """The per-class counts (module docstring, item 5), or (None, why)."""
+    entry, dels, skipped = _deliveries(lab, files, lang)
+    if entry is None:
+        return None, dels
+    if not dels:
+        return None, f"the archive holds no {lang} delivery"
+    grader = os.path.join(WORK, GRADER)
+    if not os.path.isdir(grader) or not os.access(grader, os.W_OK):
+        return None, "the grader's work directory (/work/grader) is not writable here"
+    for f in os.listdir(grader):
+        shutil.rmtree(os.path.join(grader, f), ignore_errors=True)
+    spec, labels = {"work": WORK, "lab": lab, "entry": entry, "deliveries": []}, {}
+    for k, (_sid, d, body) in enumerate(dels, 1):
+        did = f"d{k:02d}"
+        base = f"{GRADER}/{did}"
+        for rel, data in body.items():
+            path = os.path.join(WORK, base, rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "wb") as fh:
+                fh.write(data)
+
+        def at(rel):
+            return "" if not rel else base if rel == "." else f"{base}/{rel}"
+        spec["deliveries"].append({
+            "id": did, "lang": d["lang"], "target": at(d["target"]),
+            "files": sorted(f"{base}/{r}" for r in body), "statement": at(d.get("statement", "")),
+            "task_form": at(d.get("task_form", "")),
+            "editable": [at(x) for x in d.get("editable", [])],
+            "run_dir": at(d.get("run_dir", "")), "min_verified": int(d.get("min_verified", 0)),
+            "symbols": [str(x) for x in d.get("symbols", [])]})
+        labels[did] = (d["class"], d.get("trusted"))
+    result = _child("_gate-child", spec)
+    for f in os.listdir(grader):
+        shutil.rmtree(os.path.join(grader, f), ignore_errors=True)
+    got = {}
+    if isinstance(result, list):
+        for r in result:
+            if isinstance(r, dict) and r.get("id") in labels and r["id"] not in got:
+                got[r["id"]] = r
+    classes, controls = {}, {"honest": 0, "false_rejects": 0}
+    held = passed = errors = 0
+    for did, (xc, trusted) in labels.items():
+        r = got.get(did) or {"error": True}
+        word = r.get("word") if r.get("word") in WORDS else None
+        unknown = r.get("unknown") if isinstance(r.get("unknown"), list) else []
+        if r.get("error") or word is None:
+            errors += 1
+        if xc == "control":
+            controls["honest"] += 1
+            controls["false_rejects"] += word != "PASS"
+            continue
+        if xc in GRADER_ONLY and word == "PASS":
+            if xc in unknown:
+                held += 1
+            else:
+                passed += 1
+            continue
+        row = classes.setdefault(xc, {"agree": 0, "disagree": 0})
+        if xc in GRADER_ONLY:
+            row["agree" if word == "FAIL" else "disagree"] += 1
+            continue
+        row["agree" if word == trusted else "disagree"] += 1
+    report = {"lang": lang, "deliveries": len(labels), "other_language": skipped,
+              "classes": dict(sorted(classes.items())), "controls": controls,
+              "grader_only": {"held": held, "passed": passed}, "not_run": errors}
+    report["agreed"] = (errors == 0 and passed == 0 and controls["false_rejects"] == 0
+                        and all(v["disagree"] == 0 for v in classes.values()))
+    return report, None
+
+
+def _bench_module(lab, files, name):
+    """The archive's sealed reference bench (`name` under labs/<lab>/), loaded with the
+    frozen fvh core from /work/harness."""
+    src = files.get(f"labs/{lab}/{name}")
+    if src is None:
+        return None
+    if f"{WORK}/harness" not in sys.path:
+        sys.path.insert(0, f"{WORK}/harness")
+    mod = types.ModuleType("dvl_sealed_bench")
+    sys.modules["dvl_sealed_bench"] = mod
+    exec(compile(src.decode("utf-8"), "<sealed>", "exec"), mod.__dict__)  # noqa: S102
+    return mod
+
+
+def bench_tables(mod, lab, spec):
+    """{table name: rendered text, or None when the bench raised} of the tables `spec`
+    names (pass, curve:<axis>, paired:<a>|<b>), each computed and rendered by `mod`."""
+    out = {}
+    try:
+        rows = mod.load_runs(spec["work"], lab, arms=(), strata=dict(spec["strata"]))
+    except BaseException:  # noqa: BLE001
+        return {t: None for t in spec["tables"]}
+    curves = dict((a, b) for a, b in spec["curves"])
+    for t in spec["tables"]:
+        kind, _, arg = t.partition(":")
+        try:
+            if kind == "pass":
+                table = mod.pass_at_k_table(rows, list(spec["ks"]))
+            elif kind == "curve":
+                table = mod.cost_curve(rows, arg, list(curves[arg]))
+            else:
+                a, b = arg.split("|", 1)
+                table = mod.paired_report(rows, a, b)
+            text = mod.render([table])
+            out[t] = text if isinstance(text, str) else None
+        except BaseException:  # noqa: BLE001
+            out[t] = None
+    return out
+
+
+def bench_child(spec_path, result_path):
+    """The child of bench-agree: the learner's bench on the spec's tables."""
+    with open(spec_path, encoding="utf-8") as fh:
+        spec = json.load(fh)
+    _child_setup(spec["work"])
+    import importlib
+    try:
+        mod = importlib.import_module(spec["module"])
+        res = bench_tables(mod, spec["lab"], spec)
+    except BaseException:  # noqa: BLE001
+        res = {t: None for t in spec["tables"]}
+    with open(result_path, "w", encoding="utf-8") as fh:
+        json.dump(res, fh)
+    return 0
+
+
+def _cells(text, width):
+    """{key cells: value cells} of rendered lines (tab-separated; a row is keyed by its
+    first `width` cells), or None when a key repeats or a line is short."""
+    rows = {}
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        cells = tuple(line.split("\t"))
+        if len(cells) <= width or cells[:width] in rows:
+            return None
+        rows[cells[:width]] = cells[width:]
+    return rows
+
+
+def bench_agree(lab, files):
+    """The per-kind cell counts (module docstring, item 6), or (None, why)."""
+    raw = files.get(f"labs/{lab}/bench/TABLES.toml")
+    if raw is None:
+        return None, "the archive holds no bench/TABLES.toml (not a bench part)"
+    try:
+        meta = tomllib.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, tomllib.TOMLDecodeError):
+        return None, "bench/TABLES.toml is unreadable"
+    keys = meta.get("keys") if isinstance(meta.get("keys"), dict) else {}
+    ks, curves = meta.get("ks"), meta.get("curve", [])
+    ok = meta.get("schema") == 1 and isinstance(meta.get("module"), str) \
+        and ENTRY.fullmatch(meta["module"]) and not ENTRY.fullmatch(meta["module"]).group(2) \
+        and isinstance(meta.get("reference"), str) and _rel_ok(meta["reference"]) \
+        and isinstance(ks, list) and ks and all(isinstance(k, int) and k >= 1 for k in ks) \
+        and isinstance(curves, list) and all(
+            isinstance(c, dict) and isinstance(c.get("axis"), str) and isinstance(c.get("budgets"), list)
+            and all(isinstance(b, (int, float)) for b in c["budgets"]) for c in curves) \
+        and all(isinstance(keys.get(k), int) and keys[k] >= 1 for k in TABLE_KINDS)
+    if not ok:
+        return None, "bench/TABLES.toml is malformed (schema 1, module, reference, ks, keys)"
+    try:
+        with open(os.path.join(WORK, GRADER_IN, "strata.json"), "rb") as fh:
+            sm = json.loads(fh.read())
+        strata = sm["strata"]
+        if sm.get("module") != lab or not isinstance(strata, dict):
+            raise ValueError
+    except (OSError, ValueError, KeyError, TypeError):
+        return None, "no strata map of this module is staged (grader-in/strata.json)"
+    try:
+        ref = _bench_module(lab, files, meta["reference"])
+    except BaseException:  # noqa: BLE001 — the sealed module's text never leaves
+        ref = None
+    if ref is None:
+        return None, "the archive carries no usable reference bench"
+    try:
+        rows = ref.load_runs(WORK, lab, arms=(), strata=strata)
+        arms = sorted({str(r.arm) for r in rows})
+    except BaseException:  # noqa: BLE001
+        return None, "the reference bench could not read the run records"
+    tables = ["pass"] + [f"curve:{c['axis']}" for c in curves] + \
+        [f"paired:{a}|{b}" for i, a in enumerate(arms) for b in arms[i + 1:]]
+    spec = {"work": WORK, "lab": lab, "module": meta["module"], "ks": ks, "strata": strata,
+            "curves": [[c["axis"], c["budgets"]] for c in curves], "tables": tables}
+    want = bench_tables(ref, lab, spec)
+    files.clear()
+    got = _child("_bench-child", spec)
+    got = got if isinstance(got, dict) else {}
+    report = {k: {"rows": 0, "cells": 0, "matched": 0, "mismatched": 0, "missing_rows": 0,
+                  "extra_rows": 0} for k in TABLE_KINDS}
+    skipped = learner_errors = 0
+    for t in tables:
+        kind = t.partition(":")[0]
+        w = keys[kind]
+        mine = _cells(want[t], w) if isinstance(want.get(t), str) else None
+        if mine is None:
+            skipped += 1                # the reference has no such table: nothing to agree on
+            continue
+        theirs = _cells(got[t], w) if isinstance(got.get(t), str) else None
+        r = report[kind]
+        r["rows"] += len(mine)
+        r["cells"] += sum(len(v) for v in mine.values())
+        if theirs is None:
+            learner_errors += 1
+            r["missing_rows"] += len(mine)
+            r["mismatched"] += sum(len(v) for v in mine.values())
+            continue
+        for key, vals in mine.items():
+            other = theirs.get(key)
+            if other is None:
+                r["missing_rows"] += 1
+                r["mismatched"] += len(vals)
+                continue
+            same = sum(1 for a, b in zip(vals, other) if a == b)
+            r["matched"] += same
+            r["mismatched"] += len(vals) - same + abs(len(other) - len(vals))
+        r["extra_rows"] += sum(1 for key in theirs if key not in mine)
+    out = {"tables": len(tables) - skipped, "skipped": skipped, "learner_errors": learner_errors,
+           "kinds": report, "records": len(rows)}
+    out["agreed"] = learner_errors == 0 and all(
+        v["mismatched"] == 0 and v["missing_rows"] == 0 and v["extra_rows"] == 0
+        for v in report.values()) and out["tables"] > 0
+    return out, None
+
+
 def main(argv):
-    if len(argv) < 2 or argv[0] not in ("manifest", "validate", "judge") \
-            or not LAB.fullmatch(argv[1]):
-        return out({"error": "usage: truthcheck manifest|validate|judge <LAB> [<card> ...]"}, 2)
+    if argv and argv[0] in ("_gate-child", "_bench-child"):
+        if len(argv) != 3:
+            return 2
+        return (gate_child if argv[0] == "_gate-child" else bench_child)(argv[1], argv[2])
+    modes = ("manifest", "validate", "judge", "gate-agree", "bench-agree")
+    if len(argv) < 2 or argv[0] not in modes or not LAB.fullmatch(argv[1]):
+        return out({"error": "usage: truthcheck manifest|validate|judge|gate-agree|bench-agree "
+                             "<LAB> [<card> ...]"}, 2)
     mode, lab, only = argv[0], argv[1], argv[2:]
-    if any(not CARD.fullmatch(c) for c in only) or (only and mode != "validate"):
+    if mode == "gate-agree":
+        if only not in (["dafny"], ["verus"]):
+            return out({"error": "usage: truthcheck gate-agree <LAB> dafny|verus"}, 2)
+    elif any(not CARD.fullmatch(c) for c in only) or (only and mode != "validate"):
         return out({"error": "card ids are lower-case words, for validate only"}, 2)
     files, why = unseal(lab)
     if files is None:
@@ -471,6 +906,14 @@ def main(argv):
                "files": len(files) - 1}
     if mode == "manifest":
         return out(summary, 0)
+    if mode in ("gate-agree", "bench-agree"):
+        rep, why = gate_agree(lab, files, only[0]) if mode == "gate-agree" else \
+            bench_agree(lab, files)
+        files.clear()
+        if rep is None:
+            return out({**summary, "error": why}, 3)
+        summary.update(rep)
+        return out(summary, 0 if rep["agreed"] else 1)
     if mode == "judge":
         rows, why = judge(lab, files)
         files.clear()

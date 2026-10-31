@@ -482,3 +482,8 @@
 {"why": "Firecrawl parses a learner exercise [R verus]", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/verus/r/r07_library/src/lib.rs"}, "cwd": "@ROOT@"}
 {"why": "Firecrawl parses a learner exercise [R python]", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/harness/r/fvh_r/extract.py"}, "cwd": "@ROOT@"}
 {"why": "Firecrawl parses a public task during a contract", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/bench/public/dafnybench/tasks/task001.dfy"}, "cwd": "@ROOT@", "contract": true}
+{"why": "Read an armed challenge's agents file", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/agents/q31_gate_bench/gate.py"}, "cwd": "@ROOT@"}
+{"why": "Read an armed challenge's statement manifest", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/Challenges/Agentic/Q31_GateBench/Q31_Statement.toml"}, "cwd": "@ROOT@"}
+{"why": "Read an armed challenge's sealed stratum's public card list", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/bench/local/q/agentic/q31-heldout/STRATUM.toml"}, "cwd": "@ROOT@"}
+{"why": "run the challenge gate on an armed challenge", "tool_name": "Bash", "tool_input": {"command": "scripts/challenge_gate.sh Q31"}, "cwd": "@ROOT@"}
+{"why": "vcheck an armed challenge's agents file", "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck agents/q31_gate_bench/gate.py"}, "cwd": "@ROOT@"}

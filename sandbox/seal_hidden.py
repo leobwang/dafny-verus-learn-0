@@ -5,6 +5,7 @@ test of Δ103, dvl.sandbox.author_gate); guard rule 1c refuses it in a study
 session (it names the sealed archive).
 
     python3 sandbox/seal_hidden.py <LAB> --src DIR [--dry-run]
+    python3 sandbox/seal_hidden.py <LAB> --part <P> --src DIR [--dry-run]
     python3 sandbox/seal_hidden.py <LAB> --src DIR --stratum bench/local/q/<s> [--dry-run]
     python3 sandbox/seal_hidden.py <LAB> --src DIR --tasks bench/local/q/agentic/<s> [--dry-run]
 
@@ -12,6 +13,12 @@ With --tasks (topic (e)'s sealed task parts, DELTAS Δ409), the tree is the stra
 forms (labs/<LAB>/<card>/tasks/<file>, the layout fvh.statements.unseal reads): it is
 sealed to the stratum's recipient into the path its STRATUM.toml names as `archive`, and
 archive_sha256, files and manifest_sha256 are written back into that STRATUM.toml.
+
+With --part (a challenge's sealed part, QPLAN §31.3, DELTAS Δ418: Q31's `cheats` for
+`truthcheck gate-agree`, its `bench` for `bench-agree`), the pin is the [[lab]] of
+sandbox/truth.toml with that `id` and that `part`, and its archive, sha256, files and
+manifest_sha256 are written there; the tree is still labs/<LAB>/ of DIR, one tree per
+part. Without --part only a part-less [[lab]] is sealed.
 
 With --stratum, the tree is a sealed stratum's reference deliveries (labs/<LAB>/refs/
 <card>/<path>; Lab 3's, DV6 fix round): it is sealed to the stratum's own recipient into
@@ -105,14 +112,23 @@ def tar_stream(files):
     return buf.getvalue()
 
 
-def update_pins(lab, digest, count, man_sha):
-    """Rewrite the lab's sha256, files and manifest_sha256 lines in sandbox/truth.toml."""
-    lines = TRUTH.read_text(encoding="utf-8").splitlines(keepends=True)
+def update_pins(lab, digest, count, man_sha, part=None, truth=None):
+    """Rewrite the sha256, files and manifest_sha256 lines of the [[lab]] with this id (and
+    this part, or no part) in sandbox/truth.toml (`truth`: another file, for the tests)."""
+    truth = Path(truth) if truth is not None else TRUTH
+    lines = truth.read_text(encoding="utf-8").splitlines(keepends=True)
     starts = [i for i, x in enumerate(lines) if x.strip() == "[[lab]]"]
     blocks = [(a, (starts + [len(lines)])[k + 1]) for k, a in enumerate(starts)]
-    mine = [(a, b) for a, b in blocks if any(x.strip() == f'id = "{lab}"' for x in lines[a:b])]
+
+    def part_of(a, b):
+        got = [x.split("=", 1)[1].strip().strip('"') for x in lines[a:b]
+               if x.split("=", 1)[0].strip() == "part" and "=" in x]
+        return got[0] if got else None
+    mine = [(a, b) for a, b in blocks if any(x.strip() == f'id = "{lab}"' for x in lines[a:b])
+            and part_of(a, b) == part]
     if len(mine) != 1:
-        raise ValueError(f"{sandbox.TRUTH_FILE} has no single [[lab]] {lab}")
+        raise ValueError(f"{sandbox.TRUTH_FILE} has no single [[lab]] {lab}"
+                         + (f" part {part}" if part else " without a part"))
     a, b = mine[0]
     vals = {"sha256": f'"{digest}"', "files": str(count), "manifest_sha256": f'"{man_sha}"'}
     for i in range(a, b):
@@ -121,8 +137,8 @@ def update_pins(lab, digest, count, man_sha):
             lines[i] = f"{key} = {vals.pop(key)}\n"
     if vals:
         raise ValueError(f"{sandbox.TRUTH_FILE}: [[lab]] {lab} lacks {sorted(vals)}")
-    TRUTH.write_text("".join(lines), encoding="utf-8")
-    tomllib.loads(TRUTH.read_text(encoding="utf-8"))
+    truth.write_text("".join(lines), encoding="utf-8")
+    tomllib.loads(truth.read_text(encoding="utf-8"))
 
 
 def update_stratum_pins(stratum_toml, digest, count, man_sha, prefix="refs_"):
@@ -156,9 +172,15 @@ def main(argv=None):
                                       "STRATUM.toml's refs_archive)")
     ap.add_argument("--tasks", help="seal a topic (e) stratum's task forms (its STRATUM.toml's "
                                     "archive)")
+    ap.add_argument("--part", help="seal a challenge's part (the [[lab]] of truth.toml with "
+                                   "this id and this part)")
     a = ap.parse_args(argv)
     if a.stratum and a.tasks:
         say("refused: --stratum or --tasks, not both", err=True)
+        return 2
+    if a.part is not None and (a.stratum or a.tasks or not sandbox.PART_RX.fullmatch(a.part)):
+        say("refused: --part names a truth.toml part (a lower-case word), without --stratum "
+            "or --tasks", err=True)
         return 2
     why = sandbox.author_gate(ROOT)
     if why:
@@ -186,9 +208,10 @@ def main(argv=None):
             say("refused: the stratum's recipient or the pinned age's sha256 is missing", err=True)
             return 3
     else:
-        pin = sandbox.truth_pins(ROOT).get(a.lab)
+        pin = sandbox.truth_pins(ROOT).get(sandbox.truth_key(a.lab, a.part))
     if pin is None:
-        say(f"refused: no [[lab]] {a.lab} in {sandbox.TRUTH_FILE}", err=True)
+        say(f"refused: no [[lab]] {a.lab}" + (f" part {a.part}" if a.part else "")
+            + f" in {sandbox.TRUTH_FILE}", err=True)
         return 3
     age = Path(os.path.expanduser("~/.local/bin/age"))
     want = sandbox.age_sha256(pin)
@@ -222,7 +245,7 @@ def main(argv=None):
                             prefix="" if key == "archive" else "refs_")
         where = stoml.relative_to(ROOT).as_posix()
     else:
-        update_pins(a.lab, digest, len(files) - 1, man_sha)
+        update_pins(a.lab, digest, len(files) - 1, man_sha, part=a.part)
         where = sandbox.TRUTH_FILE
     say(f"sealed {pin['archive']} ({out.stat().st_size} B, sha256 {digest}); pinned in {where}")
     return 0

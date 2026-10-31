@@ -1,8 +1,12 @@
 """sandbox/seal_hidden.py's pure parts (Δ409): the plaintext tree's manifest check, the
 deterministic tar stream, and the pins written back into a STRATUM.toml for a refs archive
-and (new, --tasks) for a topic (e) stratum's task archive. No age binary runs here."""
+and (new, --tasks) for a topic (e) stratum's task archive; and (Δ418, --part) the pins of a
+challenge's sealed part written into its own [[lab]] of truth.toml, never a sibling's. No
+age binary runs here."""
+import contextlib
 import hashlib
 import importlib.util
+import io
 import sys
 import tempfile
 import tomllib
@@ -57,6 +61,31 @@ class SealHidden(unittest.TestCase):
         self.assertEqual((d["archive_sha256"], d["files"], d["manifest_sha256"]), ("a" * 64, 36, "b" * 64))
         self.assertEqual((d["refs_sha256"], d["refs_files"]), ("c" * 64, 36))
         self.assertEqual(d["card"][0]["files"], 9)          # tables below are never touched
+
+    def test_a_part_pin_is_written_into_its_own_lab_table(self):
+        truth = self.d / "truth.toml"
+        block = ('[[lab]]\nid = "{id}"\n{part}archive = "{arc}"\nrecipient = "age1x"\n'
+                 'sha256 = "PENDING"\nfiles = 0\nmanifest_sha256 = "PENDING"\n\n')
+        truth.write_text("schema = 1\n\n" + block.format(id="Q15", part="", arc="a.age")
+                         + block.format(id="Q31", part='part = "cheats"\n', arc="c.age")
+                         + block.format(id="Q31", part='part = "bench"\n', arc="b.age"))
+        seal.update_pins("Q31", "e" * 64, 7, "f" * 64, part="bench", truth=truth)
+        labs = {(x["id"], x.get("part")): x for x in tomllib.loads(truth.read_text())["lab"]}
+        self.assertEqual((labs[("Q31", "bench")]["sha256"], labs[("Q31", "bench")]["files"]),
+                         ("e" * 64, 7))
+        self.assertEqual(labs[("Q31", "cheats")]["sha256"], "PENDING")
+        self.assertEqual(labs[("Q15", None)]["sha256"], "PENDING")
+        with self.assertRaises(ValueError):           # Q31 has no part-less pin
+            seal.update_pins("Q31", "e" * 64, 7, "f" * 64, truth=truth)
+        with self.assertRaises(ValueError):
+            seal.update_pins("Q15", "e" * 64, 7, "f" * 64, part="cheats", truth=truth)
+
+    def test_part_usage_is_refused_before_anything_runs(self):
+        for argv in (["Q31", "--src", "x", "--part", "Cheats"],
+                     ["Q31", "--src", "x", "--part", "cheats", "--tasks", "bench/local/q/x"],
+                     ["Q31", "--src", "x", "--part", "cheats", "--stratum", "bench/local/q/x"]):
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(seal.main(argv), 2, argv)
 
 
 if __name__ == "__main__":

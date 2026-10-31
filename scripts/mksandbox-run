@@ -86,6 +86,9 @@ Usage:
                 [--records DIR]
   scripts/mksandbox-run --truth ARCHIVE --truth-check judge --judge SPEC
                 [--mem-gb N] [--records DIR]
+  scripts/mksandbox-run --truth ARCHIVE --truth-check gate-agree --truth-lang dafny|verus
+                [--mem-gb N] [--records DIR]
+  scripts/mksandbox-run --truth ARCHIVE --truth-check bench-agree [--mem-gb N] [--records DIR]
                                                   the grader container's truth
                                                   mode (DV4-PLAN §5.9, QPLAN §30
                                                   Q49): a verification container
@@ -110,7 +113,18 @@ Usage:
                                                   against its sealed reference
                                                   (scripts/dvl/judge.py; one
                                                   language per run): a verdict
-                                                  word per candidate)
+                                                  word per candidate; gate-agree
+                                                  and bench-agree, a challenge's
+                                                  sealed part (truth.toml's
+                                                  `part`, Δ418): the learner's
+                                                  committed gate on the sealed
+                                                  cheats and controls, per-class
+                                                  agree/disagree counts, one
+                                                  language per run; the learner's
+                                                  committed bench against the
+                                                  sealed reference bench over the
+                                                  committed run records,
+                                                  per-cell match counts)
   scripts/mksandbox-run --reap                    remove every dvl.run container
                                                   whose owner process is gone
   scripts/mksandbox-run --check-access            the read-only Docker access
@@ -333,22 +347,33 @@ def main(argv=None):
             # the archive outside the key's cache directory (DV5c fix round)
             ap.error("the truth mode stages the archive and the grader's key only for a live "
                      "run: --materialize and --selftest-only are refused with --truth")
+        if args.truth_check == "gate-agree" and (args.cards or not args.truth_lang):
+            ap.error("--truth-check gate-agree takes --truth-lang dafny|verus (one language's "
+                     "deliveries per run) and no --cards")
+        if args.truth_check == "bench-agree" and (args.cards or args.truth_lang):
+            ap.error("--truth-check bench-agree takes neither --cards nor --truth-lang")
         try:
-            labs = [k for k, v in sandbox.truth_pins(root).items() if v.get("archive") == args.truth]
-            if len(labs) != 1:
+            pins = [v for v in sandbox.truth_pins(root).values() if v.get("archive") == args.truth]
+            if len(pins) != 1:
                 return refuse(f"{args.truth} is not a sealed archive {sandbox.TRUTH_FILE} pins")
+            lab, part = pins[0]["id"], pins[0].get("part")
+            modes = ("manifest", sandbox.PART_MODES.get(part)) if part else sandbox.LAB_MODES
+            if args.truth_check not in modes:
+                what = f"part {part!r} of {lab}" if part else f"{lab}'s lab archive"
+                return refuse(f"{args.truth} is {what}: the grader runs "
+                              f"{', '.join(m for m in modes if m)} on it, not {args.truth_check}")
             cards = tuple(c for c in (args.cards or "").split(",") if c)
             if args.judge:
                 from dvl import judge as judging
                 try:
-                    cands, jlang = judging.candidates(root, labs[0], judging.load_spec(args.judge))
+                    cands, jlang = judging.candidates(root, lab, judging.load_spec(args.judge))
                 except (OSError, ValueError) as e:
                     say(f"judge: {e}", err=True)
                     return refuse("no judging run")
-                raw = judging.build_judge(root, labs[0], cands, jlang, mem_gb=args.mem_gb)
+                raw = judging.build_judge(root, lab, cands, jlang, mem_gb=args.mem_gb)
             else:
-                raw = sandbox.build_truth(root, labs[0], args.truth_check, cards=cards,
-                                          mem_gb=args.mem_gb, lang=args.truth_lang)
+                raw = sandbox.build_truth(root, lab, args.truth_check, cards=cards,
+                                          mem_gb=args.mem_gb, lang=args.truth_lang, part=part)
         except sandbox.ManifestError as e:
             for p_ in e.problems:
                 say(f"truth: {p_}", err=True)

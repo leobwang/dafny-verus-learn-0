@@ -16,6 +16,15 @@
 # `judge` mode loads (DV5d: they never sit in an image or a learner-visible file). `files` and
 # `manifest_sha256` describe the plaintext tree (its file count and the sha256 of
 # its MANIFEST.sha256), so the grader's check can be compared with the seal.
+#
+# A challenge's sealed part (QPLAN §31.3, DELTAS Δ418) is a [[lab]] with an optional
+# `part` (a lower-case word): `id` and `part` together name the pin, and no two pins
+# share them or an archive. A part's archive serves the round trip (`manifest`) and the
+# one grader mode its part names: part "cheats" (Hidden/Agentic/<ID>/cheats.tar.age, the
+# sealed deliveries and controls with their labels) `gate-agree`, part "bench"
+# (Hidden/Agentic/<ID>/bench.tar.age, the sealed reference bench and its table spec)
+# `bench-agree`; `seal_hidden.py <ID> --part <part>` seals it. None is pinned yet: the
+# sealed cheats are deferred (Δ415), and the reference bench is sealed with W4's par work.
 schema = 1
 
 [[lab]]

@@ -385,3 +385,9 @@
 {"why": "Firecrawl parses the learner's own scratch notes", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "notes.md"}, "cwd": "@ROOT@/instructor/scratch"}
 {"why": "Firecrawl parses a learner exercise", "axes": ["track", "lang"], "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/%EX%"}, "cwd": "@ROOT@"}
 {"why": "Firecrawl parses a public task during a contract", "tool_name": "mcp__firecrawl__firecrawl_parse", "tool_input": {"filePath": "@ROOT@/%PUBTASK%"}, "cwd": "@ROOT@", "contract": true}
+// ---- an armed challenge (DELTAS Δ418): the learner reads and checks their own solo work ----
+{"why": "Read an armed challenge's agents file", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%AGATE%"}, "cwd": "@ROOT@"}
+{"why": "Read an armed challenge's statement manifest", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%AMAN%"}, "cwd": "@ROOT@"}
+{"why": "Read an armed challenge's sealed stratum's public card list", "tool_name": "Read", "tool_input": {"file_path": "@ROOT@/%ASTRATUM%"}, "cwd": "@ROOT@"}
+{"why": "run the challenge gate on an armed challenge", "tool_name": "Bash", "tool_input": {"command": "scripts/challenge_gate.sh Q31"}, "cwd": "@ROOT@"}
+{"why": "vcheck an armed challenge's agents file", "tool_name": "Bash", "tool_input": {"command": "scripts/vcheck %AGATE%"}, "cwd": "@ROOT@"}

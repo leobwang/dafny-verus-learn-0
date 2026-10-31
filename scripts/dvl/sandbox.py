@@ -96,7 +96,12 @@ from dvl import host  # noqa: E402  (the detacher: setsid(1) on Linux, a fork on
 SCHEMA = 1
 KINDS = ("agent", "verify")
 NETWORKS = ("none", "model", "anthropic")   # "model": the run's model gate (Route C; Δ505)
-ROLES = ("editable", "task", "given", "project", "tool", "expected", "snapshot", "contract")
+ROLES = ("editable", "task", "given", "project", "tool", "expected", "snapshot", "contract",
+         "graded")
+# "graded" (DELTAS Δ418): the learner's frozen work a grader mode grades (a challenge's
+# agents/ package, the learner's own fvh_q/fvh_r package it composes, its fvh run
+# records), read at a commit and bound read-only at its course path, only in a truth run
+# of a mode in GRADED_MODES (graded_ok, and validate's graded rule).
 READ_ONLY_ROLES = tuple(r for r in ROLES if r != "editable")
 # Roles whose content may be written inline (`text`) by the trusted builder
 # (fvh or contract_local.sh): a stripped task statement, the contract text, a
@@ -123,7 +128,20 @@ TRUTHCHECK = "/opt/dvl/bin/truthcheck"
 TRUTH_FILE = "sandbox/truth.toml"
 TRUTH_DIR = "/run/dvl-truth"
 TRUTH_KEYS = {"lab", "archive", "sha256"}
-TRUTH_MODES = ("manifest", "validate", "judge")   # judge: dvl.judge builds its manifest
+TRUTH_OPTIONAL = {"part"}           # a challenge's sealed part (truth.toml's `part`, Δ418)
+TRUTH_MODES = ("manifest", "validate", "judge", "gate-agree", "bench-agree")
+# judge: dvl.judge builds its manifest. gate-agree and bench-agree (QPLAN §31.3, Δ418)
+# grade the learner's frozen work against a challenge's sealed part: the learner's gate on
+# the sealed cheats and controls, and the learner's bench against the sealed reference
+# bench over the same run records. They are the GRADED_MODES; each runs only on an archive
+# pinned with the part PART_MODES names for it. A part archive runs its mode and the round
+# trip (manifest) and nothing else; a part-less lab archive runs LAB_MODES.
+GRADED_MODES = ("gate-agree", "bench-agree")
+PART_MODES = {"cheats": "gate-agree", "bench": "bench-agree"}
+LAB_MODES = ("manifest", "validate", "judge")
+PART_RX = re.compile(r"[a-z0-9][a-z0-9-]{0,31}")
+GRADER_DIR = "grader"    # a graded truth run's writable directory under /work (work_mounts)
+GRADER_IN = "grader-in"  # its host-built inline input (bench-agree's strata map)
 DOORS = ("alloc", "pids", "sleep", "stage-return", "secret", "http")
 CONTAINER_SCRATCH = "/tmp/dvl-scratch"      # DVL_SCRATCH inside a container (fvh redacts it)
 CONTAINER_PYTHON = "/usr/bin/python3"
@@ -540,6 +558,33 @@ def lab_card(rel):
     return rel.startswith("bench/local/")
 
 
+GRADED_SOURCE_CLASSES = ("solo", "research")   # what a graded file may be, at a commit
+
+
+def graded_ok(rel, rec, mode):
+    """Is `rel` a file the grader mode `mode` grades for challenge module `rec` (Δ418)?
+    The module's agents/ packages and those of its topic's earlier modules (the py-agents
+    tier, dvl.python), the learner's own fvh_q/fvh_r package (a challenge agent composes
+    it), and for bench-agree the module's fvh run records (research/runs/<ID>/<run>/run.json,
+    fvh.runlog's layout); never a cache, a build output or another refused class."""
+    from dvl import python as P
+    mid = str(rec.get("id", ""))
+    m = re.fullmatch(r"[QR](\d\d)", mid)
+    if not m or not rec.get("solo") or "__pycache__" in rel.split("/"):
+        return False
+    cls = source_class(rel)
+    if cls is not None and cls not in GRADED_SOURCE_CLASSES:
+        return False
+    a = P.AGENT_FILE.fullmatch(rel)
+    if a:
+        return mid[0] == "Q" and a.group("num") in P.agent_packages_allowed(m.group(1))
+    t = mid[0].lower()
+    if re.fullmatch(rf"harness/{t}/fvh_{t}/(?:[A-Za-z0-9_]+/)*[A-Za-z0-9_]+\.py", rel):
+        return True
+    return mode == "bench-agree" and re.fullmatch(
+        rf"research/runs/{re.escape(mid)}/[A-Za-z0-9_.+-]+/run\.json", rel) is not None
+
+
 # --- manifests --------------------------------------------------------------------------------
 
 @dataclass(frozen=True)
@@ -588,7 +633,19 @@ class Manifest:
         return sha256_bytes(canonical_json(self.doc()).encode())
 
     def pools(self):
-        return run_pools(self.files)
+        return manifest_pools(self.files, self.commands)
+
+
+def manifest_pools(files, commands=()):
+    """run_pools, except for a gate-agree run (Δ418): it stages no solver file of its own
+    (the grader writes the unsealed deliveries), so it is sized for the one language its
+    grader command names (`truthcheck gate-agree <lab> dafny|verus`)."""
+    for c in commands or ():
+        c = list(c.get("argv", [])) if isinstance(c, dict) else list(c)
+        if len(c) == 4 and c[0] == TRUTHCHECK and c[1] == "gate-agree" \
+                and c[3] in ("dafny", "verus"):
+            return [c[3]]
+    return run_pools(files)
 
 
 def run_pools(files):
@@ -761,6 +818,7 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
     probe_agent = (kind == "agent" and isinstance(raw.get("agent"), dict)
                    and raw["agent"].get("cli") == "none")
     rule = "verify" if probe_agent else kind      # whose editable rule applies
+    graded = graded_mode(raw)                     # a graded truth run's mode (Δ418), or None
     files, seen_dst, snapshots = [], set(), 0
     raw_files = raw.get("file", [])
     if not isinstance(raw_files, list) or not raw_files:
@@ -782,6 +840,10 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
             continue
         if not rel_ok(dst):
             bad(f"{where}: dst must be a relative path under /work (no '..', no glob)")
+            continue
+        if dst == GRADER_DIR or dst.startswith(GRADER_DIR + "/"):
+            bad(f"{where}: {GRADER_DIR}/ is a graded truth run's own work directory; no input "
+                "is staged there")
             continue
         if dst in seen_dst:
             bad(f"{where}: dst {dst} is staged twice")
@@ -835,11 +897,15 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
                 bad(f"{where}: rev must be a string")
                 continue
             cls = source_class(src)
-            if cls and not (role == "snapshot" and cls in SNAPSHOT_EXEMPT and rev):
+            if cls and not (role == "snapshot" and cls in SNAPSHOT_EXEMPT and rev) \
+                    and not (role == "graded" and cls in GRADED_SOURCE_CLASSES and rev):
                 bad(f"{where}: {src} is in a refused source class ({cls}); it never enters a sandbox")
                 continue
+            if role == "graded" and dst != src:
+                bad(f"{where}: a graded file is bound at its own course path (dst = src)")
+                continue
             if rec is not None:
-                why = _role_problem(role, src, rev, rec, mid, rule)
+                why = _role_problem(role, src, rev, rec, mid, rule, mode=graded)
                 if why:
                     bad(f"{where}: {why}")
                     continue
@@ -958,7 +1024,7 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
                     f"({float(c[pin]) * 1024:g} MiB, scripts/dvl/pins.toml [container] {pin})")
     except SandboxError as err:
         bad(str(err))
-    pools = run_pools(files)
+    pools = manifest_pools(files, commands)
     if kind in KINDS:
         try:
             bound = memory_bound_gb(kind, pools)
@@ -982,6 +1048,19 @@ def validate(raw, root=REPO_ROOT, *, record=None, check_image=True, read=True):
 _ARG = re.compile(r"[A-Za-z0-9_./=:-]{1,200}")
 
 
+def graded_mode(raw):
+    """The grader mode of a graded truth run (a [truth] table and one grader command whose
+    mode is in GRADED_MODES), or None."""
+    cmds = raw.get("command") if isinstance(raw, dict) else None
+    if not isinstance(raw.get("truth"), dict) or not isinstance(cmds, list) or len(cmds) != 1:
+        return None
+    argv = cmds[0].get("argv") if isinstance(cmds[0], dict) else None
+    if isinstance(argv, list) and len(argv) >= 2 and argv[0] == TRUTHCHECK \
+            and argv[1] in GRADED_MODES:
+        return argv[1]
+    return None
+
+
 def command_problem(argv, staged, tools, truth=None):
     """Why a [[command]] argv may not run, or None. A command is a trusted course
     tool from the run's tool copies, with its options from a fixed list and
@@ -997,6 +1076,19 @@ def command_problem(argv, staged, tools, truth=None):
         if len(argv) < 3 or argv[1] not in TRUTH_MODES or argv[2] != truth.get("lab"):
             return (f"the grader runs as `{TRUTHCHECK} <{'|'.join(TRUTH_MODES)}> "
                     f"{truth.get('lab')} [<card> ...]`")
+        mode, part = argv[1], truth.get("part")
+        modes = ("manifest", PART_MODES[part]) if part in PART_MODES else \
+            ("manifest",) if part else LAB_MODES
+        if mode not in modes:
+            what = f"part {part!r} of {truth.get('lab')}" if part else f"{truth.get('lab')}'s lab archive"
+            return f"the grader runs {', '.join(modes)} on {what}, not {mode}"
+        if mode == "gate-agree":
+            if argv[3:] not in (["dafny"], ["verus"]):
+                return f"the grader runs as `{TRUTHCHECK} gate-agree {truth.get('lab')} dafny|verus`"
+            return None
+        if mode == "bench-agree":
+            return None if not argv[3:] else \
+                f"the grader runs as `{TRUTHCHECK} bench-agree {truth.get('lab')}`"
         if argv[3:] and (argv[1] != "validate" or not all(
                 re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", a) for a in argv[3:])):
             return "card ids are lower-case words, for validate only"
@@ -1038,8 +1130,16 @@ def command_problem(argv, staged, tools, truth=None):
     return None
 
 
-def _role_problem(role, src, rev, rec, mid, kind=None):
-    """Why `src` may not enter in `role` for module `rec`, or None."""
+def _role_problem(role, src, rev, rec, mid, kind=None, mode=None):
+    """Why `src` may not enter in `role` for module `rec`, or None. `mode` is a graded
+    truth run's grader mode (graded_mode), which alone admits the graded role."""
+    if role == "graded":
+        if mode not in GRADED_MODES:
+            return ("a graded file enters only a truth run of a graded mode "
+                    f"({', '.join(GRADED_MODES)})")
+        if not isinstance(rev, str) or not re.fullmatch(r"[0-9a-f]{40}", rev):
+            return "a graded file is read at a commit (rev: the commit's 40-hex id)"
+        return None if graded_ok(src, rec, mode) else f"{src} is not a file {mid}'s {mode} grades"
     if role == "editable":
         if agentic_ok(src, rec) or bench_task(src):
             return None
@@ -1139,8 +1239,16 @@ def age_sha256(pin, platform=None):
     return host.pinned(pin.get("age_sha256"), platform)
 
 
+def truth_key(lab, part=None):
+    """The key of a [[lab]] pin in truth_pins: the lab id, or `<id>:<part>` for a part."""
+    return f"{lab}:{part}" if part else str(lab)
+
+
 def truth_pins(root=REPO_ROOT):
-    """{lab: pin} from sandbox/truth.toml (schema 1, [[lab]] tables)."""
+    """{key: pin} from sandbox/truth.toml (schema 1, [[lab]] tables): keyed by the lab id,
+    or by truth_key(id, part) for a challenge's sealed part (an optional `part`, a
+    lower-case word; Δ418). A lab's archive and each of its parts are separate pins, and
+    no two pins share a key or an archive."""
     p = Path(root) / TRUTH_FILE
     try:
         data = tomllib.loads(p.read_text(encoding="utf-8"))
@@ -1150,10 +1258,19 @@ def truth_pins(root=REPO_ROOT):
         raise ManifestError(f"{TRUTH_FILE}: unreadable ({type(e).__name__})") from None
     if data.get("schema") != 1:
         raise ManifestError(f"{TRUTH_FILE}: schema 1 is needed")
-    out = {}
+    out, archives = {}, set()
     for t in data.get("lab", []):
         if isinstance(t, dict) and isinstance(t.get("id"), str):
-            out[t["id"]] = dict(t)
+            part = t.get("part")
+            if part is not None and (not isinstance(part, str) or not PART_RX.fullmatch(part)):
+                raise ManifestError(f"{TRUTH_FILE}: [[lab]] {t['id']}: part is a lower-case "
+                                    "word ([a-z0-9-], at most 32 characters)")
+            key = truth_key(t["id"], part)
+            if key in out or t.get("archive") in archives:
+                raise ManifestError(f"{TRUTH_FILE}: [[lab]] {key} is pinned twice (or its "
+                                    "archive is another pin's)")
+            archives.add(t.get("archive"))
+            out[key] = dict(t)
     return out
 
 
@@ -1161,14 +1278,20 @@ def truth_problem(truth, root, kind, network, *, read=True):
     """Why a manifest's [truth] table is refused, or None."""
     if kind != "verify" or network != "none":
         return "only a verification container (kind verify, network none) unseals truth"
-    if not isinstance(truth, dict) or set(truth) != TRUTH_KEYS:
-        return f"the table has exactly the keys {sorted(TRUTH_KEYS)}"
+    if not isinstance(truth, dict) or not TRUTH_KEYS <= set(truth) <= TRUTH_KEYS | TRUTH_OPTIONAL:
+        return (f"the table has the keys {sorted(TRUTH_KEYS)} and, for a challenge's sealed "
+                f"part, {sorted(TRUTH_OPTIONAL)}")
+    if "part" in truth and (not isinstance(truth["part"], str)
+                            or not PART_RX.fullmatch(truth["part"])):
+        return "part is a lower-case word"
     try:
-        pin = truth_pins(root).get(truth.get("lab"))
+        pin = truth_pins(root).get(truth_key(truth.get("lab"), truth.get("part")))
     except ManifestError as e:
         return str(e)
     if pin is None:
-        return f"no lab {truth.get('lab')!r} is pinned in {TRUTH_FILE}"
+        return (f"no lab {truth.get('lab')!r}"
+                + (f" part {truth['part']!r}" if truth.get("part") else "")
+                + f" is pinned in {TRUTH_FILE}")
     if truth.get("archive") != pin.get("archive") or truth.get("sha256") != pin.get("sha256"):
         return f"the archive and its sha256 must be the ones {TRUTH_FILE} pins"
     if read:
@@ -1192,7 +1315,7 @@ def truth_identity(pin):
 
 def stage_truth(manifest, run, root):
     """Copy the sealed archive and the key, unread, into run/truth/ (0700; 0400 each)."""
-    pin = truth_pins(root)[manifest.truth["lab"]]
+    pin = truth_pins(root)[truth_key(manifest.truth["lab"], manifest.truth.get("part"))]
     d = run.path / "truth"
     d.mkdir(mode=0o700)
     data = (Path(root) / pin["archive"]).read_bytes()
@@ -1207,7 +1330,8 @@ def stage_truth(manifest, run, root):
     os.chmod(d, 0o500)
 
 
-def build_truth(root, lab, mode, *, cards=(), mem_gb=None, run_id=None, lang=None):
+def build_truth(root, lab, mode, *, cards=(), mem_gb=None, run_id=None, lang=None,
+                part=None):
     """The raw manifest of one truth run of `lab` (`mode` manifest or validate):
     for validate, the lab's local task forms (its stratum's STRATUM.toml cards,
     or the named ones) staged as editable files at their course paths, which
@@ -1216,16 +1340,28 @@ def build_truth(root, lab, mode, *, cards=(), mem_gb=None, run_id=None, lang=Non
     and the one grader command. `lang` keeps one language's cards: a
     verification container's memory bound is its language's (container-verify
     mode refuses a Dafny job in a container sized for Verus), so a lab with
-    both languages validates in two runs; `mem_gb` is held to that bound."""
+    both languages validates in two runs; `mem_gb` is held to that bound.
+
+    With `part`, the archive is the challenge part truth.toml pins under that name
+    (Δ418): its round trip (manifest) or its own mode (PART_MODES), a graded mode
+    built by build_graded."""
     root = Path(root).resolve()
     if mode not in TRUTH_MODES:
         raise ManifestError(f"the grader's mode is one of {list(TRUTH_MODES)}")
     if mode == "judge":
         raise ManifestError("a judging run's manifest is dvl.judge.build_judge's (it stages "
                             "the candidates)")
-    pin = truth_pins(root).get(lab)
+    if mode in GRADED_MODES:
+        if cards:
+            raise ManifestError(f"{mode} names no cards")
+        return build_graded(root, lab, part, mode, lang=lang, mem_gb=mem_gb, run_id=run_id)
+    pin = truth_pins(root).get(truth_key(lab, part))
     if pin is None:
-        raise ManifestError(f"no lab {lab!r} is pinned in {TRUTH_FILE}")
+        raise ManifestError(f"no lab {lab!r}" + (f" part {part!r}" if part else "")
+                            + f" is pinned in {TRUTH_FILE}")
+    if part and mode != "manifest":
+        raise ManifestError(f"part {part!r} of {lab} runs manifest and "
+                            f"{PART_MODES.get(part, 'no other mode')}, not {mode}")
     rec = registry_record(root, lab)
     forms = []
     for st in sorted((root / "bench" / "local").glob("*/*/STRATUM.toml")):
@@ -1287,10 +1423,147 @@ def build_truth(root, lab, mode, *, cards=(), mem_gb=None, run_id=None, lang=Non
            "module": rec["id"], "kind": "verify", "image": image, "network": "none",
            "limits": {"wall_clock_s": 4 * 3600}, "file": files, "return": [],
            "command": [{"argv": argv}],
-           "truth": {"lab": lab, "archive": pin["archive"], "sha256": pin["sha256"]}}
+           "truth": {"lab": lab, "archive": pin["archive"], "sha256": pin["sha256"],
+                     **({"part": part} if part else {})}}
     if mem_gb is not None:
         bound = memory_bound_gb("verify", run_pools(files))
         raw["limits"]["mem_gb"] = min(float(mem_gb), bound)
+    return raw
+
+
+def graded_files(root, rec, mode):
+    """(commit, [course paths]) of what `mode` grades for challenge module `rec`, read at
+    HEAD (Δ418): every file graded_ok admits under agents/, the learner's own
+    harness/<t>/fvh_<t>/ and, for bench-agree, research/runs/<ID>/. The learner's frozen
+    work is what is committed, so a changed or untracked file under those trees refuses
+    the run (ManifestError), and so does a module with no committed agents/ file of its
+    own (or, for bench-agree, no committed run record)."""
+    root = Path(root)
+    mid = str(rec["id"])
+    t = mid[0].lower()
+    try:
+        p = subprocess.run(["git", "-C", str(root), "rev-parse", "--verify", "HEAD^{commit}"],
+                           capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired):
+        p = None
+    commit = p.stdout.strip() if p is not None and p.returncode == 0 else ""
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ManifestError("a graded run reads the learner's work at a commit: this checkout "
+                            "has none (git rev-parse HEAD)")
+    prefixes = ["agents", f"harness/{t}/fvh_{t}"]
+    if mode == "bench-agree":
+        prefixes.append(f"research/runs/{mid}")
+    st = subprocess.run(["git", "-C", str(root), "status", "--porcelain", "-z",
+                         "--untracked-files=all", "--", *prefixes],
+                        capture_output=True, text=True, timeout=120)
+    if st.returncode != 0:
+        raise ManifestError("git status failed on the graded trees")
+    changed = sorted({x[3:] for x in st.stdout.split("\0") if len(x) > 3})
+    if changed:
+        raise ManifestError(f"{len(changed)} file(s) under {', '.join(prefixes)} differ from "
+                            f"the commit (first: {changed[0]}): {mode} grades the committed, "
+                            "frozen work, so commit it first")
+    names = set()
+    for pre in prefixes:
+        names |= _tree_files(root, pre, commit)
+    paths = sorted(n for n in names if graded_ok(n, rec, mode))
+    own = re.compile(rf"agents/q{mid[1:]}_[a-z0-9_]+/")
+    if not any(own.match(x) for x in paths):
+        raise ManifestError(f"{mid} has no committed agents/q{mid[1:]}_<name>/ file to grade")
+    if mode == "bench-agree" and not any(x.startswith("research/runs/") for x in paths):
+        raise ManifestError(f"{mid} has no committed run record (research/runs/{mid}/<run>/"
+                            "run.json) for bench-agree")
+    return commit, paths
+
+
+def module_strata(root, mid):
+    """{card id: "course-local" | "public"} over the cards of every local stratum of module
+    `mid` (bench/local/…/STRATUM.toml whose `module` or `lab` is mid): what a bench's
+    load_runs takes as `strata`. Learner-visible: the strata name their cards' sources."""
+    out = {}
+    for st in sorted(Path(root, "bench", "local").rglob("STRATUM.toml")):
+        try:
+            data = tomllib.loads(st.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if mid not in (data.get("module"), data.get("lab")):
+            continue
+        for c in data.get("card", []):
+            if isinstance(c, dict) and isinstance(c.get("id"), str):
+                out[c["id"]] = "course-local" if c.get("source") == "course-local" else "public"
+    return dict(sorted(out.items()))
+
+
+def build_graded(root, lab, part, mode, *, lang=None, mem_gb=None, run_id=None):
+    """The raw manifest of a graded truth run (QPLAN §31.3, Δ418): `mode` gate-agree or
+    bench-agree on the challenge part truth.toml pins as (lab, part), the part PART_MODES
+    names for the mode. It stages the learner's frozen work at HEAD (graded_files: role
+    graded, read-only at its course path), the frozen core harness/fvh/ (given), the
+    trusted tools, pins and, for gate-agree, `lang`'s project files (one language per run:
+    a verification container's memory bound is its language's); for bench-agree the
+    module's strata map inline at grader-in/strata.json. The grader writes a gate-agree
+    run's unsealed deliveries under /work/grader/ (work_mounts). Nothing else enters."""
+    root = Path(root).resolve()
+    if mode not in GRADED_MODES:
+        raise ManifestError(f"a graded run's mode is one of {list(GRADED_MODES)}")
+    if part is None:
+        part = next((p for p, m in PART_MODES.items() if m == mode), None)
+    if PART_MODES.get(part) != mode:
+        want = [p for p, m in PART_MODES.items() if m == mode]
+        raise ManifestError(f"{mode} runs on a part named {' or '.join(map(repr, want))}, "
+                            f"not {part!r}")
+    pin = truth_pins(root).get(truth_key(lab, part))
+    if pin is None:
+        raise ManifestError(f"no lab {lab!r} part {part!r} is pinned in {TRUTH_FILE}")
+    if mode == "gate-agree" and lang not in ("dafny", "verus"):
+        raise ManifestError("gate-agree runs one language's deliveries (name --truth-lang)")
+    if mode == "bench-agree" and lang is not None:
+        raise ManifestError("bench-agree runs no solver: it takes no language")
+    rec = registry_record(root, lab)
+    if not rec.get("solo"):
+        raise ManifestError(f"{lab} is not a challenge module (solo): nothing is graded")
+    commit, paths = graded_files(root, rec, mode)
+    files, seen = [], set()
+    for src in paths:
+        seen.add(src)
+        files.append({"src": src, "dst": src, "role": "graded", "rev": commit,
+                      "sha256": sha256_bytes(git_blob(root, commit, src)[0])})
+
+    def add(src, role):
+        if src in seen:
+            return
+        seen.add(src)
+        data = read_source(root, Entry(src, src, role, "0" * 64))
+        files.append({"src": src, "dst": src, "role": role, "sha256": sha256_bytes(data)})
+    for src in sorted(_tree_files(root, "harness/fvh")):
+        if PY_GIVEN[0].match(src):
+            add(src, "given")
+    langs = {lang} if lang else set()
+    for src, role in readonly_inputs(root, rec, langs):
+        if src != "verus/Cargo.toml":
+            add(src, role)
+    if "verus" in langs:
+        seen.add("verus/Cargo.toml")
+        text = verus_workspace(root, rec)
+        files.append({"dst": "verus/Cargo.toml", "role": "project", "text": text,
+                      "sha256": sha256_bytes(text.encode("utf-8"))})
+    if mode == "bench-agree":
+        text = json.dumps({"schema": 1, "module": rec["id"], "commit": commit,
+                           "strata": module_strata(root, rec["id"])}, sort_keys=True)
+        files.append({"dst": f"{GRADER_IN}/strata.json", "role": "task", "text": text,
+                      "sha256": sha256_bytes(text.encode("utf-8"))})
+    lock = read_images_lock(root)
+    image = next((k for k in lock if k.startswith("dvl-toolchain@")),
+                 "dvl-toolchain@sha256:" + "0" * 64)
+    argv = [TRUTHCHECK, mode, lab] + ([lang] if mode == "gate-agree" else [])
+    raw = {"schema": SCHEMA, "run_id": run_id or f"g{os.getpid()}-{secrets.token_hex(4)}",
+           "module": rec["id"], "kind": "verify", "image": image, "network": "none",
+           "limits": {"wall_clock_s": 4 * 3600}, "file": files, "return": [],
+           "command": [{"argv": argv}],
+           "truth": {"lab": lab, "part": part, "archive": pin["archive"],
+                     "sha256": pin["sha256"]}}
+    bound = memory_bound_gb("verify", manifest_pools(files, [argv]))
+    raw["limits"]["mem_gb"] = min(float(mem_gb), bound) if mem_gb is not None else bound
     return raw
 
 
@@ -2059,7 +2332,8 @@ def sealed_reference_twins(root):
                 truth = tomllib.loads(tp.read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 raise SealedRefsError("sandbox/truth.toml cannot be read") from None
-        pins = {x.get("id"): x for x in truth.get("lab", []) if isinstance(x, dict)}
+        pins = {x.get("id"): x for x in truth.get("lab", [])
+                if isinstance(x, dict) and not x.get("part")}     # a lab's own archive
         for lab in sorted({str(m.get("lab")) for _, m in strata
                            if not m.get("archive") and m.get("lab") in pins}):
             twins += _lab2_twins(root, pins[lab])
@@ -2609,6 +2883,12 @@ def work_mounts(manifest):
     for d in sub:
         out.append((f"{WORK}/{d}", f"type=tmpfs,destination={WORK}/{d},"
                                    f"tmpfs-size={share * 1024 * 1024},tmpfs-mode=1777"))
+    if any(len(c) >= 2 and c[0] == TRUTHCHECK and c[1] == "gate-agree" for c in manifest.commands):
+        # the grader writes the unsealed deliveries here (Δ418); validate keeps every
+        # input out of it
+        out.append((f"{WORK}/{GRADER_DIR}", f"type=tmpfs,destination={WORK}/{GRADER_DIR},"
+                                            f"tmpfs-size={lim['work_mb'] * 1024 * 1024},"
+                                            "tmpfs-mode=1777"))
     return out
 
 

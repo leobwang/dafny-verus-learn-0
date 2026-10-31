@@ -75,7 +75,26 @@ GLOBAL = {
     "PUBTASK": "bench/public/dafnybench/tasks/task001.dfy",
     "STATEMENT": "Challenges/Q19_Algorithms/Q19_Statements.dfy",
     "CHAL": "Challenges/Q19_Algorithms/Q19_Heap.dfy",
+    # An armed challenge's own layout (Q31 and Q33 as dv7 builds them; DELTAS Δ418): the
+    # learner's solo files, the frozen manifest, statements, tests and fixtures, the twin
+    # and the sealed parts, so the fixtures replay the real paths, not stand-ins.
+    "AMAN": "Challenges/Agentic/Q31_GateBench/Q31_Statement.toml",
+    "AEXD": "Challenges/Agentic/Q31_GateBench/Q31_GateBench.dfy",
+    "AEXV": "Challenges/Agentic/Q31_GateBench/q31_gate_bench/src/lib.rs",
+    "AGATE": "agents/q31_gate_bench/gate.py",
+    "ABENCH": "agents/q31_gate_bench/bench.py",
+    "ATEST": "harness/tests/challenges/q31_gate_bench/test_gate.py",
+    "AREC": "harness/tests/challenges/q31_gate_bench/fixtures/rec/dafny/T1/vcheck-gate.json",
+    "ASTMTD": "Challenges/Agentic/Q33_StatementProblem/Q33_StatementProblemStatement.dfy",
+    "ASTMTV": "Challenges/Agentic/Q33_StatementProblem/q33_statement_problem/src/statements.rs",
+    "ATWIN": "Solutions/agents/q31_gate_bench/gate.py",
+    "AHELD": "Hidden/Agentic/Q31/heldout.tar.age",
+    "ACHEATS": "Hidden/Agentic/Q31/cheats.tar.age",
+    "ABENCHARC": "Hidden/Agentic/Q31/bench.tar.age",
+    "ASTRATUM": "bench/local/q/agentic/q31-heldout/STRATUM.toml",
 }
+ARMED = ("AMAN", "AEXD", "AEXV", "AGATE", "ABENCH", "ATEST", "AREC", "ASTMTD", "ASTMTV",
+         "ATWIN", "AHELD", "ACHEATS", "ABENCHARC", "ASTRATUM")
 
 TRACK = {
     "Q": {
@@ -364,6 +383,8 @@ def fake_root(base):
     write(base, GLOBAL["STATEMENT"], "// decoy challenge statements\n")
     write(base, GLOBAL["CHAL"], "// decoy challenge file\n")
     write(base, "agents/prover.py", "def act(state):\n    pass\n")
+    for k in ARMED:
+        write(base, GLOBAL[k], "decoy armed-challenge file\n")
     write(base, "instructor/ledger.md", "- Q04 decoy item due: 2000-01-01\n")
     write(base, "instructor/feedback/Q04.md", "decoy feedback\n")
     write(base, "instructor/records/.keep", "")
@@ -441,7 +462,8 @@ def fake_root(base):
     write(base, ".toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.14.1", "")
     write(base, ".toolchain/dafny-4.11.0/dafny/z3/bin/z3-4.12.1", "")
     write(base, "MODULES.toml", "schema = 1\n\n" + "".join(
-        f'[[module]]\nid = "{i}"\n\n' for i in ("Q01", "Q04", "Q07", "Q12", "Q19", "R01", "R07", "R12")))
+        f'[[module]]\nid = "{i}"\n\n' for i in ("Q01", "Q04", "Q07", "Q12", "Q19", "Q31", "Q33",
+                                                 "R01", "R07", "R12")))
     write(base, "tests/hooks/seeded-allowlist", seeded_allowlist())
 
 
