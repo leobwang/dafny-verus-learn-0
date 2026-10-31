@@ -34,9 +34,12 @@ Run from harness/ (`uv run --offline --frozen --directory harness python -m fvh 
       pins, so a study session's guard refuses the line): one verdict word
       per run, printed, never written into a run directory.
   apparatus [--check]
-      the apparatus facts as JSON; --check compares the host with the pins,
-      and, when the apparatus pins a Qwen backend and models are enabled, the
-      live model server (version, digests, the unit's settings).
+      the apparatus facts as JSON; --check compares the host with the pins
+      (each backend binary's sha256, Claude Code's version, the sha256 of
+      scripts/dvl/pins.toml and sandbox/images.lock) and then, when the
+      apparatus pins a Qwen backend and models are enabled, looks for the
+      host's model server on 127.0.0.1:8000 or :8001 (Δ505) and prints what
+      it found, never pinned; no server answering is drift.
   unseal <ID> [--dry-run]
       the module's sealed lab tasks (fvh.statements; QPLAN §28.6, §30 Q64):
       refused until every statement file expected/<ID>.statements names is
