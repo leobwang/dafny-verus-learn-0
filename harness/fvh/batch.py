@@ -42,7 +42,14 @@ The plan (TOML; `python -m fvh run <ID> --plan PLAN.toml`):
     gate = "<course path>"        the acceptance tool of a gated arm (Lab 3's gate
     gate_sha256 = "<64 hex>"      v2, harness/q/fvh_q/gate/gate_v2.py) and its
                                   pre-registered sha256: the batch refuses to open,
-                                  and an attempt to start, when the file differs
+                                  and an attempt to start, when the file differs.
+                                  A challenge plan may name instead the learner's
+                                  agents/ gate AGENT_GATES lists for its module
+                                  (Q32's and Q33's plans: the learner's Q31 gate,
+                                  agents/q31_gate_bench/gate.py; QPLAN §34.1,
+                                  §35.1), which must also be committed: the graded
+                                  role's rule (Δ418), so a changed or untracked file
+                                  under agents/ or harness/q/fvh_q/ refuses the batch
     [task.<task id>]
     path = "<course path>"        the task form: a benchmark task file (its
                                   language from the suffix) or a crate task's
@@ -221,6 +228,7 @@ import os
 import re
 import shutil
 import signal
+import subprocess
 import sys
 import time
 import tempfile
@@ -231,8 +239,8 @@ from pathlib import Path, PurePosixPath
 from fvh import apparatus, backends, budget, executor, prereg, protocol, runlog, statements, tools
 from fvh.records import VERDICTS as VERDICT_WORDS
 
-__all__ = ["ArmPlan", "Batch", "BatchError", "CONSTRUCTS", "Interrupted", "Plan", "derive_seed",
-           "load_plan", "reconcile", "resume", "scan_run_dir", "sealed_note", "sealed_part_of",
+__all__ = ["AGENT_GATES", "ArmPlan", "Batch", "BatchError", "CONSTRUCTS", "Interrupted", "Plan",
+           "agent_gate_users", "check_agent_gate", "derive_seed", "load_plan", "reconcile", "resume", "scan_run_dir", "sealed_note", "sealed_part_of",
            "secret_hits"]
 
 CONSTRUCTS = ("sampler", "seeded", "model", "agent")
@@ -246,6 +254,13 @@ ARM_KEYS = {"name", "family", "rounds", "policy", "construct", "turns", "wall_s"
             "tokens", "acceptance", "lab_code", "feedback"}
 TASK_KEYS = {"path", "statement", "min_verified", "symbols"}
 ACCEPTANCE = ("verify", "gate")
+# The learner's committed agents/ gates a challenge plan's gated arm may name, with the
+# modules whose plans use each (QPLAN §34.1: Q32's gated arm accepts every candidate
+# through the learner's Q31 gate; §35.1 (B): Q33's pipeline is done only when the
+# learner's Q31 gate passes; Δ402's topic rule in _import_gate holds as well). Such a
+# gate is read as committed: the graded role's rule (dvl.sandbox.graded_files, Δ418).
+AGENT_GATES = {"agents/q31_gate_bench/gate.py": ("Q32", "Q33")}
+GRADED_TREES = ("agents", "harness/q/fvh_q")    # what an agents/ gate is committed with
 CRATE_MAX_FILES = 64
 LANGS = {".dfy": "dafny", ".rs": "verus"}
 SENTINEL_MSG = ('Propose exactly one action: a stop action whose reason is "done" and whose '
@@ -563,13 +578,18 @@ def load_plan(path, root, *, tasks_at=None) -> Plan:
         if not gated:
             raise BatchError(f"{path}: gate and gate_sha256 serve a gated arm "
                              "(acceptance = \"gate\"), and no arm is gated")
-        if not (isinstance(gate, str) and gate.startswith("harness/") and gate.endswith(".py")):
+        if not (isinstance(gate, str) and (gate in AGENT_GATES or (
+                gate.startswith("harness/") and gate.endswith(".py")))):
             raise BatchError(f"{path}: arm(s) {', '.join(gated)} are gated: gate names the "
-                             "acceptance tool, a course path harness/….py")
+                             "acceptance tool, a course path harness/….py or a challenge's "
+                             "agents/ gate (" + ", ".join(sorted(AGENT_GATES)) + ")")
         _course_text(root, gate, "gate")
         if not (isinstance(gate_sha, str) and re.fullmatch(r"[0-9a-f]{64}", gate_sha)):
             raise BatchError(f"{path}: gate_sha256 is the pre-registered sha256 of {gate}")
-        bad = [t for t in order if not (Path(root) / tasks[t][0]).is_dir()]
+        def crate_dir(rel):                     # where the task is read: a sealed part's
+            base, sub = _task_where(root, rel, tasks_at)    # is the learner's unsealed copy
+            return (base / sub).is_dir()
+        bad = [t for t in order if not crate_dir(tasks[t][0])]
         if bad:
             raise BatchError(f"{path}: a gated arm runs a crate-scale gate: task(s) "
                              f"{', '.join(bad)} are not crate tasks")
@@ -667,6 +687,63 @@ def _agent_numbers(module):
     return {f"{k:02d}" for k in range(first, n + 1)}
 
 
+def _git(root, *args):
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    try:
+        return subprocess.run(["git", "-C", str(root), *args], capture_output=True, timeout=120,
+                              env=env)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+
+
+def agent_gate_users(rel) -> tuple:
+    """The modules whose plans may name `rel` as their gated arm's gate (AGENT_GATES),
+    or () for a gate that is no learner agents/ gate."""
+    return AGENT_GATES.get(rel, ())
+
+
+def check_agent_gate(root, module, rel, sha256=None, *, committed=True) -> str | None:
+    """The committed sha256 of the learner's agents/ gate `rel` for a plan of `module`,
+    or BatchError. The module must be one AGENT_GATES names for it, and the gate is read
+    as the graded role reads the learner's frozen work (dvl.sandbox.graded_files, Δ418):
+    at HEAD, with every file under agents/ and harness/q/fvh_q/ (the learner's gate v2,
+    which gate v3 composes) unchanged and tracked, so a changed or untracked file there
+    refuses ("commit it first"). With `sha256`, the committed blob must be that one.
+    committed=False checks the module rule only (None): fvh.sealed's in-container batch,
+    whose gate the graded role staged at the commit under this same rule."""
+    users = agent_gate_users(rel)
+    if not users:
+        raise BatchError(f"gate {rel}: not a learner agents/ gate (" +
+                         ", ".join(sorted(AGENT_GATES)) + ")")
+    if str(module) not in users:
+        raise BatchError(f"gate {rel}: the learner's agents/ gate is the acceptance tool of "
+                         f"{' and '.join(users)}'s plans only (QPLAN §34.1, §35.1), not "
+                         f"{module}'s")
+    if not committed:
+        return None
+    head = _git(root, "rev-parse", "--verify", "HEAD^{commit}")
+    if head is None or head.returncode != 0 or not re.fullmatch(rb"[0-9a-f]{40}\s*", head.stdout):
+        raise BatchError(f"gate {rel}: an agents/ gate is read at a commit, and this checkout "
+                         "has none (git rev-parse HEAD)")
+    st = _git(root, "status", "--porcelain", "-z", "--untracked-files=all", "--", *GRADED_TREES)
+    if st is None or st.returncode != 0:
+        raise BatchError(f"gate {rel}: git status failed on " + ", ".join(GRADED_TREES))
+    changed = sorted({x[3:] for x in st.stdout.decode("utf-8", "replace").split("\0")
+                      if len(x) > 3 and "__pycache__" not in x[3:].split("/")})  # as graded_ok
+    if changed:
+        raise BatchError(f"gate {rel}: {len(changed)} file(s) under " + ", ".join(GRADED_TREES)
+                         + f" differ from the commit (first: {changed[0]}): a gated arm "
+                         "accepts through the committed, frozen gate, so commit it first")
+    blob = _git(root, "show", f"HEAD:{rel}")
+    if blob is None or blob.returncode != 0:
+        raise BatchError(f"gate {rel} is not committed: commit it first")
+    have = hashlib.sha256(blob.stdout).hexdigest()
+    if sha256 is not None and have != sha256:
+        raise BatchError(f"gate {rel} is not the pre-registered one (sha256 {have[:16]}… "
+                         f"committed, {str(sha256)[:16]}… in the plan)")
+    return have
+
+
 def _import_gate(root, rel, module=None):
     """The acceptance tool's module (the plan's gate), imported from harness/ by its
     dotted name (harness/q/fvh_q/gate/gate_v2.py -> fvh_q.gate.gate_v2), or, for a
@@ -680,6 +757,9 @@ def _import_gate(root, rel, module=None):
         base = str(Path(root) / "agents")
         if base not in sys.path:
             sys.path.insert(0, base)
+        q = str(Path(root) / "harness" / "q")     # fvh_q: the learner's gate v2, composed
+        if q not in sys.path:
+            sys.path.append(q)
         try:
             mod = importlib.import_module(".".join(parts[1:]))
         except Exception as e:                        # the learner's file: any failure refuses
@@ -940,10 +1020,19 @@ class Batch:
                              + ", ".join(pins) + ")")
         self.statements = got
 
+    # A learner's agents/ gate is read as committed (check_agent_gate); fvh.sealed's
+    # in-container batch has no git checkout and gets the gate staged at the commit by
+    # the graded role, which applied the same rule on the host (Δ418, Δ419).
+    gate_committed_by_stage = False
+
     def check_gate(self):
-        """A gated arm's tool is the pre-registered file (its sha256), importable."""
+        """A gated arm's tool is the pre-registered file (its sha256), importable; an
+        agents/ gate is one of the plan's module (AGENT_GATES) and committed."""
         if not self.plan.gate:
             return None
+        if agent_gate_users(self.plan.gate):
+            check_agent_gate(self.root, self.module, self.plan.gate, self.plan.gate_sha256,
+                             committed=not self.gate_committed_by_stage)
         f = self.root / self.plan.gate
         try:
             have = apparatus.file_sha256(f)

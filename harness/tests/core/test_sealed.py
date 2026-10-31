@@ -242,3 +242,35 @@ def test_the_command_line_names_the_sealed_route_for_a_sealed_part(tmp_path, cap
     assert cli.main(["--root", str(root), "run", "Q98", "--plan", str(plan), "--sealed",
                      "probe"]) == 3
     assert "go together" in capsys.readouterr().err
+
+
+def test_both_routes_check_the_learners_agents_gate_as_committed_on_the_host(tmp_path):
+    """A gated sealed plan naming the learner's Q31 gate (Q32's gated arm; par shares it)
+    is refused on the host before anything is staged or reserved unless the gate is the
+    committed, pre-registered one; in the container the graded role's staging stands in
+    for git (SealedBatch.gate_committed_by_stage)."""
+    import os
+    import subprocess
+    from types import SimpleNamespace
+    root = tmp_path / "course"
+    gate = root / "agents" / "q31_gate_bench" / "gate.py"
+    gate.parent.mkdir(parents=True)
+    gate.write_text("# the learner's gate v3\n")
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    env.update(GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@example.invalid", GIT_COMMITTER_NAME="t",
+               GIT_COMMITTER_EMAIL="t@example.invalid", GIT_CONFIG_GLOBAL=os.devnull)
+    for args in (["init", "-q"], ["add", "."], ["commit", "-qm", "gate"]):
+        subprocess.run(["git", "-C", str(root), *args], check=True, env=env, capture_output=True)
+    digest = hashlib.sha256(gate.read_bytes()).hexdigest()
+    rel = "agents/q31_gate_bench/gate.py"
+    sealed._check_gate(root, "Q32", SimpleNamespace(gate=rel, gate_sha256=digest))
+    sealed._check_gate(root, "Q32", SimpleNamespace(gate="", gate_sha256=""))   # ungated
+    with pytest.raises(sealed.SealedRefused, match="plans only"):
+        sealed._check_gate(root, "Q31", SimpleNamespace(gate=rel, gate_sha256=digest))
+    with pytest.raises(sealed.SealedRefused, match="pre-registered"):
+        sealed._check_gate(root, "Q32", SimpleNamespace(gate=rel, gate_sha256="0" * 64))
+    gate.write_text("# changed after the freeze\n")
+    with pytest.raises(sealed.SealedRefused, match="commit it first"):
+        sealed._check_gate(root, "Q32", SimpleNamespace(
+            gate=rel, gate_sha256=hashlib.sha256(gate.read_bytes()).hexdigest()))
+    assert sealed.SealedBatch.gate_committed_by_stage and not batch.Batch.gate_committed_by_stage

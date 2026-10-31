@@ -492,6 +492,18 @@ def _check_plan(plan, up):
             raise SealedRefused(f"arm {a.name}: the names {PAR_ARM} and {CENSUS_ARM} are par's")
 
 
+def _check_gate(root, module, plan):
+    """A gated plan's learner agents/ gate (Q32's and Q33's: the learner's Q31 gate) is
+    the committed one, checked on the host before anything is staged or reserved, for
+    the learner's arm and for par, which shares it (QPLAN §32.5: the same gate); the
+    graded role then stages it at HEAD under the same rule (fvh.batch.check_agent_gate)."""
+    if batch.agent_gate_users(plan.gate):
+        try:
+            batch.check_agent_gate(root, module, plan.gate, plan.gate_sha256)
+        except batch.BatchError as e:
+            raise SealedRefused(str(e)) from None
+
+
 def run_sealed(root, module, plan_path, part, into, *, mem_gb=None, log=None, launch=None,
                app=None, found=None, calendar=None) -> int:
     """The learner's sealed arm (module docstring). Exit: 0 every id settled and the batch
@@ -505,6 +517,7 @@ def run_sealed(root, module, plan_path, part, into, *, mem_gb=None, log=None, la
     except batch.BatchError as e:
         raise SealedRefused(str(e)) from None
     _check_plan(plan, up)
+    _check_gate(root, module, plan)
     if app is None:
         try:
             app = apparatus.load(root=root)
@@ -742,6 +755,7 @@ def run_par(root, module, archive, part, into, plan_path, *, beside=None, mem_gb
     except batch.BatchError as e:
         raise SealedRefused(str(e)) from None
     _check_plan(plan, up)
+    _check_gate(root, module, plan)
     qwen = [a for a in plan.arms if a.family == budget.QWEN]
     if beside is None:
         if len(qwen) != 1:
@@ -998,6 +1012,8 @@ class SealedRunner(tools.HostRunner):
 class SealedBatch(batch.Batch):
     """fvh.batch's Batch inside the container: the attempts of the spec's ids, with the
     transport and runner above, a scratch ledger, and the host's facts."""
+
+    gate_committed_by_stage = True    # the graded role staged the learner's gate at HEAD
 
     def __init__(self, root, module, plan, *, spec, app, log=None, view=None):
         super().__init__(root, module, plan, transports=self._make_transport, log=log, app=app)

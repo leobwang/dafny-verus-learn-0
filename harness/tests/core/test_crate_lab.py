@@ -511,6 +511,151 @@ def test_a_gate_that_is_not_the_pre_registered_one_refuses(root):
         batch.load_plan(write_plan(root, arms=[("G", "gate")]), root)
 
 
+# --- a challenge's gated arm on the learner's committed agents/ gate (Q32's, Q33's) ---------
+
+Q31_GATE = "agents/q31_gate_bench/gate.py"
+CHALLENGE_REGISTRY = """
+[[module]]
+id = "Q32"
+status = "authoring"
+agentic = []
+budget = { claude_calls = 30, claude_runs = 10, qwen_calls = 100, qwen_runs = 20, gpu_hours = 1 }
+
+[[module]]
+id = "Q31"
+status = "authoring"
+agentic = []
+budget = { claude_calls = 30, claude_runs = 10, qwen_calls = 100, qwen_runs = 20, gpu_hours = 1 }
+"""
+
+
+@pytest.fixture
+def agents_root(root, monkeypatch):
+    """The root with Q31 and Q32 records, the learner's Q31 gate (the fake crate gate) at
+    its real course path and a learner fvh_q package, all committed; the real
+    q31_gate_bench (pytest's ../agents path) is kept out of sys.modules meanwhile."""
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    for name in [m for m in sys.modules if m == "q31_gate_bench" or m.startswith("q31_gate_bench.")]:
+        monkeypatch.delitem(sys.modules, name)
+    with open(root / "MODULES.toml", "a") as fh:
+        fh.write(CHALLENGE_REGISTRY)
+    g = root / Q31_GATE
+    g.parent.mkdir(parents=True)
+    (g.parent / "__init__.py").write_text("")
+    g.write_text(GATE_SRC)
+    (root / "harness" / "q" / "fvh_q").mkdir()
+    (root / "harness" / "q" / "fvh_q" / "__init__.py").write_text("")
+    put_crate(root)
+    git(root, "add", ".")
+    git(root, "commit", "-qm", "the learner's Q31 gate")
+    yield root
+    for name in [m for m in sys.modules if m == "q31_gate_bench" or m.startswith("q31_gate_bench.")]:
+        del sys.modules[name]
+
+
+def gate_line(root, rel=Q31_GATE, digest=None):
+    return f'gate = "{rel}"\ngate_sha256 = "{digest or sha((root / rel).read_bytes())}"'
+
+
+def make_for(root, plan_path, module):
+    plan = batch.load_plan(plan_path, root)
+    b = batch.Batch(root, module, plan, transports=lambda *a: Fake([GOOD_RS]),
+                    runners=lambda task, lang: CrateGate(), log=lambda m: None,
+                    app=apparatus.load(root / "app.toml"))
+    b._window_ok = lambda ids: True
+    return b
+
+
+def test_q32s_gated_arm_accepts_through_the_learners_committed_q31_gate(agents_root):
+    root = agents_root
+    plan = batch.load_plan(write_plan(root, arms=[("G", "gate")], extra=gate_line(root)), root)
+    assert plan.gate == Q31_GATE
+    b = make_for(root, write_plan(root, arms=[("G", "gate")], extra=gate_line(root)), "Q32")
+    b.open()
+    assert b._gate_mod.__file__ == str(root / Q31_GATE)
+    assert b.run() == 0
+    (m, d), = [(m, d) for p in sorted((root / "research/runs/Q32").glob("*/run.json"))
+               for m, d in [(runlog.load_meta(p.parent), p.parent)]]
+    assert (m.outcome, m.ended_by) == ("verified", "gate-pass")
+    assert m.apparatus["gate"] == Q31_GATE
+    assert m.apparatus["gate_sha256"] == sha((root / Q31_GATE).read_bytes())
+
+
+def test_an_agents_gate_serves_the_plans_of_the_modules_that_use_it_only(agents_root):
+    root = agents_root
+    assert batch.agent_gate_users(Q31_GATE) == ("Q32", "Q33")
+    for module in ("Q31", "Q98"):
+        with pytest.raises(batch.BatchError, match="Q32 and Q33's plans only"):
+            make_for(root, write_plan(root, arms=[("G", "gate")], extra=gate_line(root)),
+                     module).open()
+    # another agents/ file is no gate a plan may name, even of the topic
+    other = root / "agents" / "q32_proof_search" / "gate.py"
+    other.parent.mkdir(parents=True)
+    other.write_text(GATE_SRC)
+    with pytest.raises(batch.BatchError, match="gate names the acceptance tool"):
+        batch.load_plan(write_plan(root, arms=[("G", "gate")],
+                                   extra=gate_line(root, "agents/q32_proof_search/gate.py")), root)
+
+
+def test_an_agents_gate_is_read_as_committed_as_the_graded_role_reads_it(agents_root):
+    root = agents_root
+    g = root / Q31_GATE
+    # a changed gate, pre-registered at its working copy's sha256: commit it first
+    g.write_text(GATE_SRC + "\n# mine, not committed\n")
+    with pytest.raises(batch.BatchError, match="commit it first"):
+        make_for(root, write_plan(root, arms=[("G", "gate")], extra=gate_line(root)), "Q32").open()
+    git(root, "commit", "-qam", "gate v3, committed")
+    make_for(root, write_plan(root, arms=[("G", "gate")], extra=gate_line(root)), "Q32").open()
+    # an untracked file beside the learner's gate v2 refuses as well (the gate composes it)
+    (root / "harness" / "q" / "fvh_q" / "extra.py").write_text("X = 1\n")
+    with pytest.raises(batch.BatchError, match="first: harness/q/fvh_q/extra.py"):
+        batch.check_agent_gate(root, "Q32", Q31_GATE, sha(g.read_bytes()))
+    (root / "harness" / "q" / "fvh_q" / "extra.py").unlink()
+    # bytecode caches are no frozen work (graded_ok skips them too)
+    (g.parent / "__pycache__").mkdir(exist_ok=True)
+    (g.parent / "__pycache__" / "gate.cpython-312.pyc").write_bytes(b"\0")
+    assert batch.check_agent_gate(root, "Q32", Q31_GATE, sha(g.read_bytes())) == sha(g.read_bytes())
+    # the committed blob must be the pre-registered one
+    with pytest.raises(batch.BatchError, match="not the pre-registered one"):
+        batch.check_agent_gate(root, "Q32", Q31_GATE, "0" * 64)
+
+
+def test_a_gate_ignored_by_git_or_outside_a_checkout_is_not_committed(agents_root, tmp_path):
+    root = agents_root
+    (root / ".gitignore").write_text("agents/q31_gate_bench/gate.py\n")
+    git(root, "add", ".gitignore")
+    git(root, "rm", "-q", "--cached", Q31_GATE)
+    git(root, "commit", "-qm", "ignore the gate")
+    with pytest.raises(batch.BatchError, match="is not committed"):
+        batch.check_agent_gate(root, "Q32", Q31_GATE)
+    bare = tmp_path / "bare"
+    (bare / "agents" / "q31_gate_bench").mkdir(parents=True)
+    with pytest.raises(batch.BatchError, match="at a commit"):
+        batch.check_agent_gate(bare, "Q32", Q31_GATE)
+    # the sealed run's container: the module rule only (the graded role staged the commit)
+    assert batch.check_agent_gate(bare, "Q32", Q31_GATE, committed=False) is None
+    with pytest.raises(batch.BatchError, match="plans only"):
+        batch.check_agent_gate(bare, "Q31", Q31_GATE, committed=False)
+
+
+def test_a_sealed_parts_crate_task_is_found_in_the_unsealed_copy(agents_root, tmp_path):
+    root = agents_root
+    stratum = "bench/local/q/agentic/q32-t9"
+    into = tmp_path / "unsealed"
+    src = root / CRATE.format(t="c1")
+    dst = into / "c1" / "tasks"
+    for f in src.rglob("*"):
+        if f.is_file():
+            (dst / f.relative_to(src)).parent.mkdir(parents=True, exist_ok=True)
+            (dst / f.relative_to(src)).write_bytes(f.read_bytes())
+    p = write_plan(root, arms=[("G", "gate")], extra=gate_line(root))
+    p.write_text(p.read_text().replace(CRATE.format(t="c1"), f"{stratum}/c1/tasks"))
+    with pytest.raises(batch.BatchError):
+        batch.load_plan(p, root)                       # not in the course tree
+    plan = batch.load_plan(p, root, tasks_at={stratum: into})
+    assert plan.tasks["c1"] == (f"{stratum}/c1/tasks", "verus") and plan.gate == Q31_GATE
+
+
 def test_a_task_in_a_sealed_stratum_needs_the_statements_pin(root):
     age, key = _seal(root, ["c1"])
     commit_statements(root)
