@@ -27,7 +27,10 @@ container. Two routes, one form:
       baseline's first sample on every task (the fragment's [census] arm); a task it
       closes is dropped from the analysis and counted, never replaced, and par does not
       run on it. Par's calls are reserved in the module's ledger first (a `par` line,
-      fvh.budget) and count in its budget.
+      fvh.budget) and count in its budget. Par shares a gated plan's gate: the fragment
+      is sealed, so its pin's `par_gated` says whether it has a gated arm, and a mismatch
+      with the learner's plan (gated or not) is refused on the host before anything is
+      staged or reserved (Δ421).
       The return is counts only (D103): each par run comes back into research/runs/<ID>/
       par-<part>-<run id>/ as run.json with the outcome, the verification, the call
       counts and the verified files (inputs.tar.gz, inputs.sha256, returned/) and nothing
@@ -76,6 +79,7 @@ __all__ = ["CENSUS_ARM", "COUNTS_ONLY_APPARATUS", "COUNTS_ONLY_FILES", "PAR_ARM"
 
 ROOT = Path(__file__).resolve().parents[2]
 PAR_PART = "par-agent"          # sandbox/truth.toml's part of a module's par agent
+PAR_GATED = "par_gated"         # its pin's key: the sealed fragment has a gated arm (Δ421)
 PAR_ARM = "par"                 # par's arm in its plan and its records
 CENSUS_ARM = "census"           # the Δ412 census's arm (Q32's tranches)
 GRADER = "grader"               # the run's writable /work/grader (dvl.sandbox GRADER_DIR)
@@ -667,6 +671,31 @@ def _par_pin(root, module, archive):
     return pins[0]
 
 
+def _par_gate_check(pin, plan):
+    """Par's plan names the learner's plan's gate (par_plan_text), and fvh.batch.load_plan
+    refuses a plan that names a gate with no gated arm, or a gated arm with no gate. Par's
+    fragment is sealed, so the host reads whether it has a gated arm from its pin
+    (sandbox/truth.toml's `par_gated`, which seal_hidden.py writes from the plaintext
+    fragment; absent reads false) and refuses the mismatch here, before anything is staged
+    or reserved, not in the container after the reservation (Δ421). The container checks
+    the fragment against the pin again (_inside)."""
+    gated = pin.get(PAR_GATED, False)
+    if not isinstance(gated, bool):
+        raise SealedRefused(f"sandbox/truth.toml: the par-agent pin's {PAR_GATED} is true or "
+                            "false")
+    if plan.gate and not gated:
+        raise SealedRefused(f"the learner's plan is gated (gate {plan.gate}) and par's sealed "
+                            f"fragment has no gated arm (its pin's {PAR_GATED} is false or "
+                            "absent): par runs at the learner's gate (QPLAN §32.5), so its "
+                            "fragment's [arm] takes acceptance = \"gate\"; nothing was "
+                            "staged or reserved")
+    if gated and not plan.gate:
+        raise SealedRefused(f"par's sealed fragment has a gated arm (its pin's {PAR_GATED} = "
+                            "true) and the learner's plan names no gate: par shares the "
+                            "learner's gate (QPLAN §32.5); nothing was staged or reserved")
+    return gated
+
+
 def par_plan_text(fragment: dict, *, seed, tasks, rounds, repeats, attempts, lab, lever_check,
                   gate="", gate_sha256="", census=False) -> str:
     """Par's plan (fvh.batch's PLAN.toml) from its sealed fragment (labs/<ID>/par/PLAN.toml:
@@ -756,6 +785,7 @@ def run_par(root, module, archive, part, into, plan_path, *, beside=None, mem_gb
         raise SealedRefused(str(e)) from None
     _check_plan(plan, up)
     _check_gate(root, module, plan)
+    gated = _par_gate_check(pin, plan)
     qwen = [a for a in plan.arms if a.family == budget.QWEN]
     if beside is None:
         if len(qwen) != 1:
@@ -823,7 +853,7 @@ def run_par(root, module, archive, part, into, plan_path, *, beside=None, mem_gb
     par = {"seed": plan.seed, "rounds": arm.rounds, "repeats": plan.repeats,
            "attempts": plan.attempts, "tasks": tasks, "census": census, "lab": plan.lab,
            "lever_check": plan.lever_check, "gate": plan.gate, "gate_sha256": plan.gate_sha256,
-           "archive_sha256": pin["sha256"]}
+           "gated": gated, "archive_sha256": pin["sha256"]}
     cal = calendar if calendar is not None else _calendar()
     try:
         cal.__enter__()
@@ -1079,6 +1109,10 @@ def _inside(work, spec, plan_path, view, say, clock, started, on_attempt):
     plan = batch.load_plan(Path(plan_path) if plan_path else work / PLAN, work)
     if spec.get("kind") == "sealed-run" and plan.sha256 != spec.get("plan_sha256"):
         raise SealedRefused("the staged plan is not the one the host opened")
+    if spec.get("kind") == "par-run" and any(a.acceptance == "gate" for a in plan.arms) \
+            != bool((spec.get("par") or {}).get("gated")):
+        raise SealedRefused(f"par's sealed fragment is not as its pin's {PAR_GATED} says "
+                            "(a gated arm): reseal it (seal_hidden.py writes the pin)")
     b = SealedBatch(work, spec["module"], plan, spec=spec, app=app, log=say, view=view)
     wanted = set(spec["ids"])
     items = [p for p in plan.items() if p.id in wanted]

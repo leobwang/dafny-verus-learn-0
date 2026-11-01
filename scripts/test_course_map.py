@@ -730,7 +730,7 @@ def _challenge(mid, budget, text=BASE):
 
 
 case("a challenge's ceiling may pass 10 inside the pool (D65)",
-     _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 3200, qwen_runs = 400, "
+     _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 3320, qwen_runs = 520, "
                 "gpu_hours = 26 }"), 0, "course map OK")
 case("a challenge has no Claude arm (D66)",
      _challenge("Q31", "{ claude_calls = 90, claude_runs = 0, qwen_calls = 640, qwen_runs = 640, "
@@ -738,7 +738,7 @@ case("a challenge has no Claude arm (D66)",
 case("the challenge pool is separate and capped (D65)",
      _challenge("Q33", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 1410, qwen_runs = 360, "
                 "gpu_hours = 30 }", _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, "
-                "qwen_calls = 3200, qwen_runs = 400, gpu_hours = 26 }")), 1,
+                "qwen_calls = 3320, qwen_runs = 520, gpu_hours = 26 }")), 1,
      "the challenges' gpu_hours sum to 56, above their separate pool of 55")
 case("negative budget",
      setf("Q12", "budget", "{ claude_calls = -1, claude_runs = 0, qwen_calls = 4320, qwen_runs = 0, "

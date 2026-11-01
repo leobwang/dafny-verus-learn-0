@@ -3830,10 +3830,11 @@ Par: the course's frozen searcher (a best-first search with a repair step on the
 | dev development and ablations | 50 × 8 × 3 arms (full and two ablations) × 1 repeat | 1,200 |
 | sealed tranches, learner's agent | 120 × 8 × 1 arm | 960 |
 | sealed tranches, par agent (D68) | 120 × 8 × 1 arm | 960 |
-| **Qwen total** | | **3,200 calls (ceiling) · 64 GPU-h at the ceiling; 18–26 GPU-h expected at 28–40 % spend** (Lab α's pilot spent 28 %) |
+| sealed tranches, the census (§34.4, Δ412: the one-shot baseline's first sample at par-run; D104) | 120 × 1 call × 1 arm | 120 |
+| **Qwen total** | | **3,320 calls (ceiling) · 66.4 GPU-h at the ceiling; 20–28 GPU-h expected** (28–40 % spend on the 3,200 search calls, Lab α's pilot spent 28 %, plus the census's 120 one-shot calls in full, 2.4 GPU-h) |
 | Claude | none (D66) | 0 |
 
-No author par cost (D68). `budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 3200, qwen_runs = 400, gpu_hours = 26 }` from the D65 pool; the GPU ceiling pauses the batch and `fvh resume` continues it (never best-of-n), and a spend that would pass it goes back to the user (D71's 10 % rule). The dev ablations drop from three to two to keep the expected spend inside the ceiling.
+No author par cost (D68). `budget = { claude_calls = 0, claude_runs = 0, qwen_calls = 3320, qwen_runs = 520, gpu_hours = 26 }` from the D65 pool; the GPU ceiling pauses the batch and `fvh resume` continues it (never best-of-n), and a spend that would pass it goes back to the user (D71's 10 % rule). The dev ablations drop from three to two to keep the expected spend inside the ceiling. **The census has its own row (the user's D104, 2026-11-01; DELTAS Δ421):** each tranche's par run starts with its 40 one-shot census calls, so par's ledger reservation per tranche is 40 + 320 = 360 calls and 40 + 40 = 80 runs, and par keeps its full B; the census adds 120 calls and 120 runs (`qwen_calls` 3,200 → 3,320, `qwen_runs` 400 → 520: pilot 10, dev 150, learner 120, par 120 and census 120 runs). At 72 GPU-s per call the census costs 2.4 GPU-h, spent in full (one call per task), so the upper expected spend is 28 GPU-h, 2 above the ceiling (7.7 %, inside D71's 10 %). `gpu_hours` stays 26: D65's pool is full (Q31 13 + Q32 26 + Q33 16 = 55), so a ceiling of 28 needs the pool at 57 or another ceiling lowered, the user's call (Δ421).
 
 ### 34.7 Leak and tier rules (Q32)
 

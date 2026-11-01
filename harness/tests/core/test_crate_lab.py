@@ -2,7 +2,8 @@
 gaps lane): fvh.statements (the statements pin and the unseal of a sealed stratum),
 crate tasks in fvh.batch (a crate's sources editable, its companions read-only and
 staged with every verification), and the gated arm (acceptance = "gate": Lab 3's arm G,
-whose run ends only when the plan's gate passes the work copy). On throwaway git roots
+whose run ends only when the plan's gate passes the work copy; on a Verus crate or, Δ421, a
+one-file Dafny task's root file). On throwaway git roots
 holding an invented module Q98, invented crates and an invented gate; the transports are
 scripted fakes, the verification runner an isolated fake and the age binary a fake that
 passes a plain tar through, so no model, no container and no key is used. One test reads
@@ -106,7 +107,11 @@ def render(v):
     return v.word if v.word != "PASS" else "PASS · UNKNOWN: X07"
 
 
+SEEN = []          # (lang, target, files) of every target the gate ran on
+
+
 def gate_crate(target, *, run=None):
+    SEEN.append((target.lang, target.target, target.files))
     g = run("vcheck --gate", target.target)
     a = run("vaudit", target.target)
     files_ok = all(Path(f).is_file() for f in target.files)
@@ -136,6 +141,28 @@ class CrateGate(R.Runner):
                "diagnostics": [] if ok else [{"severity": "error", "line": 1}]}
         return tools.ToolResult(instrument, str(target), doc, 0 if ok else 1, None, "replay",
                                 "agent", hashlib.sha256(lib.encode()).hexdigest())
+
+
+GOOD_DFY = "// good\nlemma Good() ensures true {}\n"
+STUB_DFY = "// stub\nlemma Good() ensures true\n"
+DFY = "bench/local/q/lab9/{t}/tasks/{t}.dfy"
+
+
+class EitherGate(CrateGate):
+    """CrateGate, and over a one-file Dafny task: the file verifies when it is GOOD_DFY."""
+
+    def execute(self, instrument, target, *, timeout_s=None):
+        t = Path(target)
+        if t.is_dir():
+            return super().execute(instrument, target, timeout_s=timeout_s)
+        text = t.read_text() if t.is_file() else ""
+        ok = t.suffix == ".dfy" and text == GOOD_DFY
+        CrateGate.seen.append((instrument, ok))
+        doc = {"verdict": "verified" if ok else "failed", "holes": [],
+               "verified_count": 1 if ok else 0, "exit_code": 0 if ok else 1, "stage": "verify",
+               "diagnostics": [] if ok else [{"severity": "error", "line": 1}]}
+        return tools.ToolResult(instrument, str(target), doc, 0 if ok else 1, None, "replay",
+                                "agent", hashlib.sha256(text.encode()).hexdigest())
 
 
 class Fake:
@@ -213,11 +240,11 @@ def commit_statements(root, text="// my statements\n"):
     git(root, "commit", "-qm", "statements")
 
 
-def write_plan(root, *, arms, tasks=("c1",), extra="", lab=""):
+def write_plan(root, *, arms, tasks=("c1",), extra="", lab="", paths=None):
     lines = [f'lab = "{lab}"' if lab else "", "seed = 91", f"tasks = {json.dumps(list(tasks))}",
              'system = "sys"', 'instructions = "edit"', extra]
     for t in tasks:
-        lines += [f"[task.{t}]", f'path = "{CRATE.format(t=t)}"']
+        lines += [f"[task.{t}]", f'path = "{(paths or {}).get(t) or CRATE.format(t=t)}"']
     for name, acceptance in arms:
         lines += ["[[arm]]", f'name = "{name}"', 'family = "claude"', "rounds = 2",
                   f'policy = "{root.mod}:StopFirst"', 'construct = "seeded"',
@@ -557,10 +584,19 @@ def gate_line(root, rel=Q31_GATE, digest=None):
     return f'gate = "{rel}"\ngate_sha256 = "{digest or sha((root / rel).read_bytes())}"'
 
 
+class FakeEither(Fake):
+    """Fake, replying GOOD_DFY for a .dfy target and GOOD_RS otherwise."""
+
+    def complete(self, message, *, system="", seed=None):
+        target = message.split("target=", 1)[1].split()[0]
+        self.replies = [GOOD_DFY if target.endswith(".dfy") else GOOD_RS]
+        return super().complete(message, system=system, seed=seed)
+
+
 def make_for(root, plan_path, module):
     plan = batch.load_plan(plan_path, root)
-    b = batch.Batch(root, module, plan, transports=lambda *a: Fake([GOOD_RS]),
-                    runners=lambda task, lang: CrateGate(), log=lambda m: None,
+    b = batch.Batch(root, module, plan, transports=lambda *a: FakeEither([]),
+                    runners=lambda task, lang: EitherGate(), log=lambda m: None,
                     app=apparatus.load(root / "app.toml"))
     b._window_ok = lambda ids: True
     return b
@@ -579,6 +615,63 @@ def test_q32s_gated_arm_accepts_through_the_learners_committed_q31_gate(agents_r
     assert (m.outcome, m.ended_by) == ("verified", "gate-pass")
     assert m.apparatus["gate"] == Q31_GATE
     assert m.apparatus["gate_sha256"] == sha((root / Q31_GATE).read_bytes())
+
+
+def test_q32s_gated_arm_runs_a_one_file_dafny_task_and_a_verus_crate(agents_root):
+    """QPLAN §34.1: every Q32 candidate goes through the learner's Q31 gate, and Q32's
+    tasks are half Dafny (§34.4): the gate's target is the work copy's root .dfy file
+    (lang "dafny") for a one-file Dafny task, the crate (lang "verus") for a crate task
+    (Δ421)."""
+    root = agents_root
+    d = root / DFY.format(t="d1")
+    d.parent.mkdir(parents=True)
+    d.write_text(STUB_DFY)
+    git(root, "add", ".")
+    git(root, "commit", "-qm", "a Dafny task")
+    p = write_plan(root, arms=[("G", "gate")], tasks=("d1", "c1"), extra=gate_line(root),
+                   paths={"d1": DFY.format(t="d1")})
+    plan = batch.load_plan(p, root)
+    assert plan.tasks["d1"] == (DFY.format(t="d1"), "dafny")
+    assert plan.tasks["c1"] == (CRATE.format(t="c1"), "verus")
+    b = make_for(root, p, "Q32")
+    b.open()
+    gate_mod = b._gate_mod
+    gate_mod.SEEN.clear()
+    assert b.run() == 0
+    got = {}
+    for f in sorted((root / "research/runs/Q32").glob("*/run.json")):
+        m = runlog.load_meta(f.parent)
+        got[m.task_id] = (m, f.parent)
+    assert sorted(got) == ["c1", "d1"]
+    for t, lang in (("d1", "dafny"), ("c1", "verus")):
+        m, rd = got[t]
+        assert (m.outcome, m.ended_by, m.lang) == ("verified", "gate-pass", lang), t
+        assert m.apparatus["gate"] == Q31_GATE and m.apparatus["acceptance"] == "gate"
+        assert report.rederive(rd, m).ok
+    assert "crate" not in got["d1"][0].apparatus and got["c1"][0].apparatus["crate"]
+    seen = {lang: (tgt, files) for lang, tgt, files in gate_mod.SEEN}
+    tgt, files = seen["dafny"]
+    assert tgt.endswith("/" + DFY.format(t="d1")) and files == (tgt,)
+    assert Path(seen["verus"][0]).name == "tasks"
+    ret = sorted(x.relative_to(got["d1"][1] / "returned").as_posix()
+                 for x in (got["d1"][1] / "returned").rglob("*") if x.is_file())
+    assert ret == [DFY.format(t="d1")]
+
+
+def test_a_gated_arm_refuses_a_one_file_verus_task(agents_root):
+    """The instruments take a Verus crate, not a one-file Verus task (fvh.tools.command's
+    specfreeze and reach rows), so a gated plan refuses one at load (Δ421)."""
+    root = agents_root
+    rs = root / "bench/local/q/lab9/v1/tasks/v1.rs"
+    rs.parent.mkdir(parents=True)
+    rs.write_text(STUB_RS)
+    p = write_plan(root, arms=[("G", "gate")], tasks=("v1",), extra=gate_line(root),
+                   paths={"v1": "bench/local/q/lab9/v1/tasks/v1.rs"})
+    with pytest.raises(batch.BatchError, match="task.s. v1 are one-file Verus tasks"):
+        batch.load_plan(p, root)
+    p = write_plan(root, arms=[("P", "verify")], tasks=("v1",),
+                   paths={"v1": "bench/local/q/lab9/v1/tasks/v1.rs"})
+    assert batch.load_plan(p, root).tasks["v1"][1] == "verus"     # an ungated arm runs it
 
 
 def test_an_agents_gate_serves_the_plans_of_the_modules_that_use_it_only(agents_root):

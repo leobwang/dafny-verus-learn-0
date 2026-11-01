@@ -1,8 +1,9 @@
 """sandbox/seal_hidden.py's pure parts (Δ409): the plaintext tree's manifest check, the
 deterministic tar stream, and the pins written back into a STRATUM.toml for a refs archive
 and (new, --tasks) for a topic (e) stratum's task archive; and (Δ418, --part) the pins of a
-challenge's sealed part written into its own [[lab]] of truth.toml, never a sibling's. No
-age binary runs here."""
+challenge's sealed part written into its own [[lab]] of truth.toml, never a sibling's; and
+(Δ421) a par-agent pin's par_gated, read from its plaintext fragment. No age binary runs
+here."""
 import contextlib
 import hashlib
 import importlib.util
@@ -79,6 +80,35 @@ class SealHidden(unittest.TestCase):
             seal.update_pins("Q31", "e" * 64, 7, "f" * 64, truth=truth)
         with self.assertRaises(ValueError):
             seal.update_pins("Q15", "e" * 64, 7, "f" * 64, part="cheats", truth=truth)
+
+    def test_a_par_agent_pin_takes_par_gated_from_its_fragment(self):
+        """Δ421: the host cannot read par's sealed fragment, so its pin says whether it has
+        a gated arm (fvh.sealed refuses a mismatch with the learner's plan before staging)."""
+        frag = b'[arm]\nconstruct = "model"\npolicy = "par_q32.policy:render"\n'
+        files = {"labs/Q32/par/PLAN.toml": frag}
+        self.assertFalse(seal.par_gated(files, "Q32"))
+        files["labs/Q32/par/PLAN.toml"] = frag.replace(b"[arm]\n", b'[arm]\nacceptance = "gate"\n')
+        self.assertTrue(seal.par_gated(files, "Q32"))
+        files["labs/Q32/par/PLAN.toml"] = frag + b'[census]\nacceptance = "gate"\n'
+        self.assertTrue(seal.par_gated(files, "Q32"))
+        for bad in ({}, {"labs/Q32/par/PLAN.toml": b"[arm\n"}):
+            with self.assertRaises(ValueError):
+                seal.par_gated(bad, "Q32")
+        truth = self.d / "truth.toml"
+        block = ('[[lab]]\nid = "{id}"\npart = "{part}"\narchive = "{arc}"\nrecipient = "age1x"\n'
+                 'sha256 = "PENDING"\nfiles = 0\nmanifest_sha256 = "PENDING"\n\n')
+        truth.write_text("schema = 1\n\n" + block.format(id="Q32", part="par-agent", arc="p.age")
+                         + block.format(id="Q32", part="bench", arc="b.age"))
+        seal.update_pins("Q32", "e" * 64, 4, "f" * 64, part="par-agent", truth=truth,
+                         extra={"par_gated": "true"})
+        labs = {(x["id"], x.get("part")): x for x in tomllib.loads(truth.read_text())["lab"]}
+        self.assertIs(labs[("Q32", "par-agent")]["par_gated"], True)
+        self.assertNotIn("par_gated", labs[("Q32", "bench")])
+        seal.update_pins("Q32", "e" * 64, 4, "f" * 64, part="par-agent", truth=truth,
+                         extra={"par_gated": "false"})          # rewritten in place, once
+        self.assertEqual(truth.read_text().count("par_gated"), 1)
+        labs = {(x["id"], x.get("part")): x for x in tomllib.loads(truth.read_text())["lab"]}
+        self.assertIs(labs[("Q32", "par-agent")]["par_gated"], False)
 
     def test_part_usage_is_refused_before_anything_runs(self):
         for argv in (["Q31", "--src", "x", "--part", "Cheats"],

@@ -18,7 +18,11 @@ With --part (a challenge's sealed part, QPLAN §31.3, DELTAS Δ418: Q31's `cheat
 `truthcheck gate-agree`, its `bench` for `bench-agree`), the pin is the [[lab]] of
 sandbox/truth.toml with that `id` and that `part`, and its archive, sha256, files and
 manifest_sha256 are written there; the tree is still labs/<LAB>/ of DIR, one tree per
-part. Without --part only a part-less [[lab]] is sealed.
+part. Without --part only a part-less [[lab]] is sealed. For part "par-agent" (the course's
+par agent, Δ419) the pin also takes `par_gated`, written from the plaintext fragment
+labs/<LAB>/par/PLAN.toml: true when its [arm] or [census] is gated (acceptance = "gate").
+The host reads it to refuse a par run whose gating does not match the learner's plan
+before anything is reserved (fvh.sealed, Δ421); the fragment itself stays sealed.
 
 With --stratum, the tree is a sealed stratum's reference deliveries (labs/<LAB>/refs/
 <card>/<path>; Lab 3's, DV6 fix round): it is sealed to the stratum's own recipient into
@@ -112,9 +116,25 @@ def tar_stream(files):
     return buf.getvalue()
 
 
-def update_pins(lab, digest, count, man_sha, part=None, truth=None):
+def par_gated(files, lab):
+    """Whether a par-agent tree's fragment (labs/<lab>/par/PLAN.toml) has a gated arm
+    (an [arm] or [census] table with acceptance = "gate"); ValueError for a tree without
+    a readable fragment."""
+    raw = files.get(f"labs/{lab}/par/PLAN.toml")
+    if raw is None:
+        raise ValueError(f"a par-agent tree holds labs/{lab}/par/PLAN.toml (its fragment)")
+    try:
+        frag = tomllib.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, tomllib.TOMLDecodeError):
+        raise ValueError(f"labs/{lab}/par/PLAN.toml is unreadable") from None
+    return any(isinstance(frag.get(t), dict) and frag[t].get("acceptance") == "gate"
+               for t in ("arm", "census"))
+
+
+def update_pins(lab, digest, count, man_sha, part=None, truth=None, extra=None):
     """Rewrite the sha256, files and manifest_sha256 lines of the [[lab]] with this id (and
-    this part, or no part) in sandbox/truth.toml (`truth`: another file, for the tests)."""
+    this part, or no part) in sandbox/truth.toml (`truth`: another file, for the tests).
+    `extra` ({key: TOML value}) lines are rewritten too, or added at the table's end."""
     truth = Path(truth) if truth is not None else TRUTH
     lines = truth.read_text(encoding="utf-8").splitlines(keepends=True)
     starts = [i for i, x in enumerate(lines) if x.strip() == "[[lab]]"]
@@ -137,6 +157,16 @@ def update_pins(lab, digest, count, man_sha, part=None, truth=None):
             lines[i] = f"{key} = {vals.pop(key)}\n"
     if vals:
         raise ValueError(f"{sandbox.TRUTH_FILE}: [[lab]] {lab} lacks {sorted(vals)}")
+    more = dict(extra or {})
+    for i in range(a, b):
+        key = lines[i].split("=", 1)[0].strip() if "=" in lines[i] else None
+        if key in more:
+            lines[i] = f"{key} = {more.pop(key)}\n"
+    if more:
+        last = max(i for i in range(a, b) if "=" in lines[i])
+        if not lines[last].endswith("\n"):
+            lines[last] += "\n"
+        lines[last + 1:last + 1] = [f"{k} = {v}\n" for k, v in more.items()]
     truth.write_text("".join(lines), encoding="utf-8")
     tomllib.loads(truth.read_text(encoding="utf-8"))
 
@@ -224,9 +254,17 @@ def main(argv=None):
     except (OSError, ValueError) as e:
         say(f"failed: {e}", err=True)
         return 1
+    extra = None
+    if a.part == "par-agent":
+        try:
+            extra = {"par_gated": "true" if par_gated(files, a.lab) else "false"}
+        except ValueError as e:
+            say(f"failed: {e}", err=True)
+            return 1
     stream = tar_stream(files)
     say(f"{a.lab}: {len(files) - 1} files and the manifest, tar {len(stream)} B, plaintext "
-        f"manifest sha256 {man_sha[:16]}")
+        f"manifest sha256 {man_sha[:16]}"
+        + (f"; par_gated = {extra['par_gated']}" if extra else ""))
     if a.dry_run:
         return 0
     out = ROOT / pin["archive"]
@@ -245,7 +283,7 @@ def main(argv=None):
                             prefix="" if key == "archive" else "refs_")
         where = stoml.relative_to(ROOT).as_posix()
     else:
-        update_pins(a.lab, digest, len(files) - 1, man_sha, part=a.part)
+        update_pins(a.lab, digest, len(files) - 1, man_sha, part=a.part, extra=extra)
         where = sandbox.TRUTH_FILE
     say(f"sealed {pin['archive']} ({out.stat().st_size} B, sha256 {digest}); pinned in {where}")
     return 0

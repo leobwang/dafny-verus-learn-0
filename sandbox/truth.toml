@@ -26,7 +26,11 @@
 # `bench-agree`, part "par-agent" (Hidden/Agentic/<ID>/par-agent.tar.age, the course's
 # frozen par agent: labs/<ID>/par/agent/par_<id>/ and its plan fragment labs/<ID>/par/
 # PLAN.toml, no task; Δ419) `par-run`, the one truth run in an agent container on the
-# model network (`python -m fvh par`); `seal_hidden.py <ID> --part <part>` seals it.
+# model network (`python -m fvh par`); `seal_hidden.py <ID> --part <part>` seals it. A
+# par-agent pin also carries `par_gated` (true when the sealed fragment's [arm] or [census]
+# is gated, acceptance = "gate"), which seal_hidden.py writes from the plaintext fragment
+# and the host reads to refuse a par run whose gating does not match the learner's plan
+# before anything is reserved (Δ421).
 # None is pinned yet: the sealed cheats are deferred (Δ415), and the reference bench and
 # the par agents are sealed with W4's par work.
 schema = 1

@@ -60,7 +60,7 @@ The plan (TOML; `python -m fvh run <ID> --plan PLAN.toml`):
                                   verification, the directory the gate's target
     statement = "..."             optional: this task's ctx.statement (the
                                   plan's statement otherwise)
-    min_verified = <n>            a crate task's pins for a gated arm's tool (gate
+    min_verified = <n>            a gated task's pins for a gated arm's tool (gate
     symbols = ["<name>", ...]     v2's Pins; defaults 1 and none)
     [[arm]]
     name = "<arm>"                an id part
@@ -96,7 +96,12 @@ The plan (TOML; `python -m fvh run <ID> --plan PLAN.toml`):
                                   container on agent provenance), a Stop is refused
                                   until the gate passes the current work copy, and
                                   the run ends when it does; "verify" (default, arm
-                                  P and every other arm) the plain lab gate
+                                  P and every other arm) the plain lab gate. A
+                                  gated plan's tasks are crate tasks (the gate's
+                                  target the crate, lang "verus") or one-file Dafny
+                                  tasks (the root file, lang "dafny"; Q32's Dafny
+                                  half, Δ421); a one-file Verus task is refused
+                                  (the instruments take a Verus crate only)
 
 Agent mode (construct = "agent"; the user's decision D8, DV5d; DV4-PLAN §3.5): the
 Qwen family only (a Claude arm runs harness-executed until DV4 step 4c, D10). An
@@ -586,13 +591,15 @@ def load_plan(path, root, *, tasks_at=None) -> Plan:
         _course_text(root, gate, "gate")
         if not (isinstance(gate_sha, str) and re.fullmatch(r"[0-9a-f]{64}", gate_sha)):
             raise BatchError(f"{path}: gate_sha256 is the pre-registered sha256 of {gate}")
-        def crate_dir(rel):                     # where the task is read: a sealed part's
-            base, sub = _task_where(root, rel, tasks_at)    # is the learner's unsealed copy
-            return (base / sub).is_dir()
-        bad = [t for t in order if not crate_dir(tasks[t][0])]
+        def gate_target(t):                     # where the task is read: a sealed part's
+            rel, lang = tasks[t]                    # is the learner's unsealed copy
+            base, sub = _task_where(root, rel, tasks_at)
+            return (base / sub).is_dir() or lang == "dafny"
+        bad = [t for t in order if not gate_target(t)]
         if bad:
-            raise BatchError(f"{path}: a gated arm runs a crate-scale gate: task(s) "
-                             f"{', '.join(bad)} are not crate tasks")
+            raise BatchError(f"{path}: a gated arm's gate runs on a Dafny root file or a Verus "
+                             f"crate (gate v2's CrateTarget): task(s) {', '.join(bad)} are "
+                             "one-file Verus tasks")
     plan = Plan(path=path, sha256=hashlib.sha256(raw).hexdigest(), text=raw.decode("utf-8"),
                 lab=lab, seed=seed, tasks=tasks, order=tuple(order), arms=tuple(arms),
                 repeats=_int(data.get("repeats", 1), "repeats", 1),
@@ -1047,10 +1054,12 @@ class Batch:
 
     def _acceptance(self, task, target, runner):
         """The gated arm's acceptance callable (fvh.executor): the plan's gate_crate on
-        the work copy's crate, each instrument through the attempt's runner (a fresh
-        verification container, provenance agent)."""
+        the work copy's target, a Verus crate task's directory or a one-file Dafny task's
+        root file (gate v2's CrateTarget, either language; Δ421), each instrument through
+        the attempt's runner (a fresh verification container, provenance agent)."""
         mod = self.check_gate()
         mv, syms = self.plan.task_pins.get(task, (1, ()))
+        lang = self.plan.tasks[task][1]
         root = self.root
 
         def accept(work, paths):
@@ -1064,7 +1073,7 @@ class Batch:
                 r = run(instrument, t)
                 ran.append(r)
                 return r
-            tgt = mod.CrateTarget(task, "verus", str(crate),
+            tgt = mod.CrateTarget(task, lang, str(crate),
                                   tuple(str(Path(work) / x) for x in paths),
                                   mod.Pins(int(mv), tuple(syms)))
             res = mod.gate_crate(tgt, run=recording)
