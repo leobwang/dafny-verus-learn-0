@@ -23,7 +23,11 @@ names an instrument and a target, never an argv or an option.
                       (the challenge tier's two instruments, QPLAN §31.4 item 5, Δ402)
 
 <t> is the target (a .dfy file, or a Verus crate directory) and <dir> the Dafny
-target's directory. `command()` returns these argvs; a runner adds `--json`
+target's directory. A one-file Verus target (a .rs file outside any crate's src/, the
+topic (e) task form; the user's D106, Δ422) takes the Dafny rows' layout with .rs names:
+specfreeze --against <dir>/frozen.rs <t>, witness <dir>/witness.rs, swap-to-false
+<dir>/swap.rs, reach --manifest <dir>/reach.toml <t>; vcheck --gate, vaudit and seed-rerun
+as for any target, and no solver-swap (Verus has one solver). `command()` returns these argvs; a runner adds `--json`
 where the tool prints a JSON document (every instrument but specfreeze).
 `command()` is public, and so is the companion layout it encodes (the README
 documents it): a caller may compose it to see which companions an instrument
@@ -230,7 +234,31 @@ def command(instrument: str, target, *, lang: str | None = None) -> list[str]:
         if instrument == "swap-to-false":
             return ["scripts/vcheck", "--gate", f"{t}/swapped"]
         return ["scripts/specfreeze", "--against", f"{t}/frozen.rs", f"{t}/src/lib.rs"]
-    raise ValueError(f"{instrument} needs a Dafny file or a Verus crate directory, not {t!r}")
+    if lang == "verus" and _one_file_verus(t):
+        # a one-file Verus task (topic (e)'s form, Δ408): the Dafny file's companion
+        # layout, in <dir> beside the target, with .rs names (the user's D106, Δ422)
+        d = posixpath.dirname(t)
+
+        def at_rs(name):
+            return posixpath.join(d, name) if d else name
+        if instrument == "reach":
+            return ["scripts/dvl/reach.py", "--manifest", at_rs("reach.toml"), t]
+        if instrument == "witness":
+            return ["scripts/vcheck", "--gate", at_rs("witness.rs")]
+        if instrument == "swap-to-false":
+            return ["scripts/vcheck", "--gate", at_rs("swap.rs")]
+        return ["scripts/specfreeze", "--against", at_rs("frozen.rs"), t]
+    raise ValueError(f"{instrument} needs a Dafny file, a one-file Verus file or a Verus crate "
+                     f"directory, not {t!r}"
+                     + (" (a file of a crate's src/: name the crate's directory)"
+                        if lang == "verus" and t.endswith(".rs") else ""))
+
+
+def _one_file_verus(target) -> bool:
+    """A one-file Verus target: a .rs file that is not a source of a crate (no path
+    component `src`), such as a topic (e) task form <card>/tasks/<card>.rs (Δ408, Δ422)."""
+    t = str(target).rstrip("/")
+    return t.endswith(".rs") and "src" not in t.split("/")[:-1]
 
 
 def _input_paths(instrument: str, target, *, lang: str | None = None) -> list[str]:

@@ -731,15 +731,21 @@ def _challenge(mid, budget, text=BASE):
 
 case("a challenge's ceiling may pass 10 inside the pool (D65)",
      _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 3320, qwen_runs = 520, "
-                "gpu_hours = 26 }"), 0, "course map OK")
+                "gpu_hours = 28 }"), 0, "course map OK")
 case("a challenge has no Claude arm (D66)",
      _challenge("Q31", "{ claude_calls = 90, claude_runs = 0, qwen_calls = 640, qwen_runs = 640, "
                 "gpu_hours = 13 }"), 1, "a challenge has no Claude arm")
-case("the challenge pool is separate and capped (D65)",
+case("the challenge pool is separate and capped (D65, D105)",
      _challenge("Q33", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 1410, qwen_runs = 360, "
                 "gpu_hours = 30 }", _challenge("Q32", "{ claude_calls = 0, claude_runs = 0, "
-                "qwen_calls = 3320, qwen_runs = 520, gpu_hours = 26 }")), 1,
-     "the challenges' gpu_hours sum to 56, above their separate pool of 55")
+                "qwen_calls = 3320, qwen_runs = 520, gpu_hours = 28 }")), 1,
+     "the challenges' gpu_hours sum to 58, above their separate pool of 57")
+case("the pool holds topic (e)'s ceilings exactly (D105: Q31 13, Q32 28, Q33 16 = 57)",
+     _challenge("Q31", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 640, qwen_runs = 640, "
+                "gpu_hours = 13 }", _challenge("Q33", "{ claude_calls = 0, claude_runs = 0, "
+                "qwen_calls = 1410, qwen_runs = 360, gpu_hours = 16 }", _challenge(
+                    "Q32", "{ claude_calls = 0, claude_runs = 0, qwen_calls = 3320, "
+                    "qwen_runs = 520, gpu_hours = 28 }"))), 0, "course map OK")
 case("negative budget",
      setf("Q12", "budget", "{ claude_calls = -1, claude_runs = 0, qwen_calls = 4320, qwen_runs = 0, "
           "gpu_hours = 10 }"), 1, "budget values are non-negative integers")

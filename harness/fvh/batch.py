@@ -98,10 +98,10 @@ The plan (TOML; `python -m fvh run <ID> --plan PLAN.toml`):
                                   the run ends when it does; "verify" (default, arm
                                   P and every other arm) the plain lab gate. A
                                   gated plan's tasks are crate tasks (the gate's
-                                  target the crate, lang "verus") or one-file Dafny
-                                  tasks (the root file, lang "dafny"; Q32's Dafny
-                                  half, Δ421); a one-file Verus task is refused
-                                  (the instruments take a Verus crate only)
+                                  target the crate, lang "verus") or one-file tasks
+                                  of either language (the file itself; Q32's tasks:
+                                  Dafny Δ421, Verus Δ422, whose instrument rows the
+                                  user's D106 added to fvh.tools)
 
 Agent mode (construct = "agent"; the user's decision D8, DV5d; DV4-PLAN §3.5): the
 Qwen family only (a Claude arm runs harness-executed until DV4 step 4c, D10). An
@@ -594,12 +594,18 @@ def load_plan(path, root, *, tasks_at=None) -> Plan:
         def gate_target(t):                     # where the task is read: a sealed part's
             rel, lang = tasks[t]                    # is the learner's unsealed copy
             base, sub = _task_where(root, rel, tasks_at)
-            return (base / sub).is_dir() or lang == "dafny"
+            if (base / sub).is_dir():
+                return True                         # a Verus crate
+            try:                                    # a file the instruments take as a target:
+                tools.command("specfreeze --check", rel, lang=lang)   # a Dafny root file or
+                return True                         # a one-file Verus task (D106, Δ422)
+            except ValueError:
+                return False
         bad = [t for t in order if not gate_target(t)]
         if bad:
-            raise BatchError(f"{path}: a gated arm's gate runs on a Dafny root file or a Verus "
-                             f"crate (gate v2's CrateTarget): task(s) {', '.join(bad)} are "
-                             "one-file Verus tasks")
+            raise BatchError(f"{path}: a gated arm's gate runs on a Dafny root file, a one-file "
+                             f"Verus task or a Verus crate (the instruments' targets): task(s) "
+                             f"{', '.join(bad)} are none of these")
     plan = Plan(path=path, sha256=hashlib.sha256(raw).hexdigest(), text=raw.decode("utf-8"),
                 lab=lab, seed=seed, tasks=tasks, order=tuple(order), arms=tuple(arms),
                 repeats=_int(data.get("repeats", 1), "repeats", 1),
@@ -1054,8 +1060,8 @@ class Batch:
 
     def _acceptance(self, task, target, runner):
         """The gated arm's acceptance callable (fvh.executor): the plan's gate_crate on
-        the work copy's target, a Verus crate task's directory or a one-file Dafny task's
-        root file (gate v2's CrateTarget, either language; Δ421), each instrument through
+        the work copy's target, a Verus crate task's directory or a one-file task's file,
+        either language (gate v2's CrateTarget; Δ421, Δ422), each instrument through
         the attempt's runner (a fresh verification container, provenance agent)."""
         mod = self.check_gate()
         mv, syms = self.plan.task_pins.get(task, (1, ()))

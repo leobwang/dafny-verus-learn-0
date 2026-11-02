@@ -212,6 +212,43 @@ def test_the_host_argv_adds_json_where_the_tool_has_it(tmp_path):
         tools.command("json-completeness", t)
 
 
+def test_a_one_file_verus_target_takes_the_dafny_rows_layout(tmp_path):
+    """The user's D106 (Δ422): a one-file Verus task (topic (e)'s form, Δ408) has its
+    companions beside it, as a Dafny file has, with .rs names; a crate's rows are
+    unchanged, and a file of a crate's src/ is still no target of a companion row."""
+    t = "bench/local/q/agentic/q32-dev/cl-v1/tasks/cl-v1.rs"
+    d = "bench/local/q/agentic/q32-dev/cl-v1/tasks"
+    assert tools.command("specfreeze --check", t) == ["scripts/specfreeze", "--against",
+                                                      f"{d}/frozen.rs", t]
+    assert tools.command("reach", t) == ["scripts/dvl/reach.py", "--manifest",
+                                         f"{d}/reach.toml", t]
+    assert tools.command("witness", t) == ["scripts/vcheck", "--gate", f"{d}/witness.rs"]
+    assert tools.command("swap-to-false", t) == ["scripts/vcheck", "--gate", f"{d}/swap.rs"]
+    assert tools.command("specfreeze --check", "x.rs") == ["scripts/specfreeze", "--against",
+                                                           "frozen.rs", "x.rs"]
+    for inst, want in (("vcheck --gate", ["scripts/vcheck", "--gate", t]),
+                       ("vaudit", ["scripts/vaudit", t]),
+                       ("seed-rerun", ["scripts/vcheck", "--brittleness", t])):
+        assert tools.command(inst, t) == want
+    with pytest.raises(ValueError, match="one solver"):
+        tools.command("solver-swap", t)
+    h = HostRunner(tmp_path, preflight=False)
+    assert h.argv("reach", t) == ["scripts/dvl/reach.py", "--json", "--manifest",
+                                  f"{d}/reach.toml", t]
+    assert h.argv("specfreeze --check", t) == ["scripts/specfreeze", "--against",
+                                               f"{d}/frozen.rs", t]
+    c = "tests/corpus/verus/Y"                               # a crate: byte for byte as before
+    assert tools.command("specfreeze --check", c) == ["scripts/specfreeze", "--against",
+                                                      f"{c}/frozen.rs", f"{c}/src/lib.rs"]
+    assert tools.command("witness", c) == ["scripts/vcheck", "--gate", f"{c}/witness"]
+    assert tools.command("swap-to-false", c) == ["scripts/vcheck", "--gate", f"{c}/swapped"]
+    assert tools.command("reach", c) == ["scripts/dvl/reach.py", "--manifest",
+                                         f"{c}/reach.toml", c]
+    for inst in ("specfreeze --check", "reach", "witness", "swap-to-false"):
+        with pytest.raises(ValueError, match="name the crate's directory"):
+            tools.command(inst, "verus/q/x/src/lib.rs")
+
+
 # ----- the provenance rule ---------------------------------------------------------------
 
 @pytest.mark.parametrize("path,want", [

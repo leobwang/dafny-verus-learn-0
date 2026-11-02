@@ -2,8 +2,8 @@
 gaps lane): fvh.statements (the statements pin and the unseal of a sealed stratum),
 crate tasks in fvh.batch (a crate's sources editable, its companions read-only and
 staged with every verification), and the gated arm (acceptance = "gate": Lab 3's arm G,
-whose run ends only when the plan's gate passes the work copy; on a Verus crate or, Δ421, a
-one-file Dafny task's root file). On throwaway git roots
+whose run ends only when the plan's gate passes the work copy; on a Verus crate or a
+one-file task of either language, Δ421 and Δ422). On throwaway git roots
 holding an invented module Q98, invented crates and an invented gate; the transports are
 scripted fakes, the verification runner an isolated fake and the age binary a fake that
 passes a plain tar through, so no model, no container and no key is used. One test reads
@@ -146,17 +146,19 @@ class CrateGate(R.Runner):
 GOOD_DFY = "// good\nlemma Good() ensures true {}\n"
 STUB_DFY = "// stub\nlemma Good() ensures true\n"
 DFY = "bench/local/q/lab9/{t}/tasks/{t}.dfy"
+RS = "bench/local/q/lab9/{t}/tasks/{t}.rs"
 
 
 class EitherGate(CrateGate):
-    """CrateGate, and over a one-file Dafny task: the file verifies when it is GOOD_DFY."""
+    """CrateGate, and over a one-file task: a .dfy file verifies when it is GOOD_DFY, a
+    .rs file when it is GOOD_RS."""
 
     def execute(self, instrument, target, *, timeout_s=None):
         t = Path(target)
         if t.is_dir():
             return super().execute(instrument, target, timeout_s=timeout_s)
         text = t.read_text() if t.is_file() else ""
-        ok = t.suffix == ".dfy" and text == GOOD_DFY
+        ok = text == {".dfy": GOOD_DFY, ".rs": GOOD_RS}.get(t.suffix)
         CrateGate.seen.append((instrument, ok))
         doc = {"verdict": "verified" if ok else "failed", "holes": [],
                "verified_count": 1 if ok else 0, "exit_code": 0 if ok else 1, "stage": "verify",
@@ -617,22 +619,22 @@ def test_q32s_gated_arm_accepts_through_the_learners_committed_q31_gate(agents_r
     assert m.apparatus["gate_sha256"] == sha((root / Q31_GATE).read_bytes())
 
 
-def test_q32s_gated_arm_runs_a_one_file_dafny_task_and_a_verus_crate(agents_root):
+def test_q32s_gated_arm_runs_one_file_tasks_of_both_languages_and_a_crate(agents_root):
     """QPLAN §34.1: every Q32 candidate goes through the learner's Q31 gate, and Q32's
-    tasks are half Dafny (§34.4): the gate's target is the work copy's root .dfy file
-    (lang "dafny") for a one-file Dafny task, the crate (lang "verus") for a crate task
-    (Δ421)."""
+    tasks are one-file, half Dafny and half Verus (§34.4, Δ408): the gate's target is the
+    work copy's task file, lang "dafny" for a .dfy task (Δ421) and "verus" for a .rs task
+    (the user's D106, Δ422), and the crate (lang "verus") for a crate task, as before."""
     root = agents_root
-    d = root / DFY.format(t="d1")
-    d.parent.mkdir(parents=True)
-    d.write_text(STUB_DFY)
+    for rel, text in ((DFY.format(t="d1"), STUB_DFY), (RS.format(t="v1"), STUB_RS)):
+        (root / rel).parent.mkdir(parents=True)
+        (root / rel).write_text(text)
     git(root, "add", ".")
-    git(root, "commit", "-qm", "a Dafny task")
-    p = write_plan(root, arms=[("G", "gate")], tasks=("d1", "c1"), extra=gate_line(root),
-                   paths={"d1": DFY.format(t="d1")})
+    git(root, "commit", "-qm", "one-file tasks")
+    p = write_plan(root, arms=[("G", "gate")], tasks=("d1", "v1", "c1"), extra=gate_line(root),
+                   paths={"d1": DFY.format(t="d1"), "v1": RS.format(t="v1")})
     plan = batch.load_plan(p, root)
-    assert plan.tasks["d1"] == (DFY.format(t="d1"), "dafny")
-    assert plan.tasks["c1"] == (CRATE.format(t="c1"), "verus")
+    assert plan.tasks == {"d1": (DFY.format(t="d1"), "dafny"), "v1": (RS.format(t="v1"), "verus"),
+                          "c1": (CRATE.format(t="c1"), "verus")}
     b = make_for(root, p, "Q32")
     b.open()
     gate_mod = b._gate_mod
@@ -642,36 +644,39 @@ def test_q32s_gated_arm_runs_a_one_file_dafny_task_and_a_verus_crate(agents_root
     for f in sorted((root / "research/runs/Q32").glob("*/run.json")):
         m = runlog.load_meta(f.parent)
         got[m.task_id] = (m, f.parent)
-    assert sorted(got) == ["c1", "d1"]
-    for t, lang in (("d1", "dafny"), ("c1", "verus")):
+    assert sorted(got) == ["c1", "d1", "v1"]
+    for t, lang in (("d1", "dafny"), ("v1", "verus"), ("c1", "verus")):
         m, rd = got[t]
         assert (m.outcome, m.ended_by, m.lang) == ("verified", "gate-pass", lang), t
         assert m.apparatus["gate"] == Q31_GATE and m.apparatus["acceptance"] == "gate"
         assert report.rederive(rd, m).ok
-    assert "crate" not in got["d1"][0].apparatus and got["c1"][0].apparatus["crate"]
-    seen = {lang: (tgt, files) for lang, tgt, files in gate_mod.SEEN}
-    tgt, files = seen["dafny"]
-    assert tgt.endswith("/" + DFY.format(t="d1")) and files == (tgt,)
-    assert Path(seen["verus"][0]).name == "tasks"
-    ret = sorted(x.relative_to(got["d1"][1] / "returned").as_posix()
-                 for x in (got["d1"][1] / "returned").rglob("*") if x.is_file())
-    assert ret == [DFY.format(t="d1")]
+    assert "crate" not in got["d1"][0].apparatus and "crate" not in got["v1"][0].apparatus
+    assert got["c1"][0].apparatus["crate"]
+    seen = {Path(tgt).name: (lang, tgt, files) for lang, tgt, files in gate_mod.SEEN}
+    for name, rel, lang in (("d1.dfy", DFY.format(t="d1"), "dafny"),
+                            ("v1.rs", RS.format(t="v1"), "verus")):
+        got_lang, tgt, files = seen[name]
+        assert got_lang == lang and tgt.endswith("/" + rel) and files == (tgt,), name
+        ret = sorted(x.relative_to(got[name[:2]][1] / "returned").as_posix()
+                     for x in (got[name[:2]][1] / "returned").rglob("*") if x.is_file())
+        assert ret == [rel]
+    assert seen["tasks"][0] == "verus"
 
 
-def test_a_gated_arm_refuses_a_one_file_verus_task(agents_root):
-    """The instruments take a Verus crate, not a one-file Verus task (fvh.tools.command's
-    specfreeze and reach rows), so a gated plan refuses one at load (Δ421)."""
+def test_a_gated_arm_refuses_a_file_that_is_no_instrument_target(agents_root):
+    """A .rs file inside a crate's src/ is a crate's source, not a one-file task: the
+    instruments name the crate's directory (fvh.tools.command), so a gated plan refuses
+    it at load; an ungated plan still loads it (Δ422)."""
     root = agents_root
-    rs = root / "bench/local/q/lab9/v1/tasks/v1.rs"
-    rs.parent.mkdir(parents=True)
-    rs.write_text(STUB_RS)
-    p = write_plan(root, arms=[("G", "gate")], tasks=("v1",), extra=gate_line(root),
-                   paths={"v1": "bench/local/q/lab9/v1/tasks/v1.rs"})
-    with pytest.raises(batch.BatchError, match="task.s. v1 are one-file Verus tasks"):
+    rel = "bench/local/q/lab9/s1/src/lib.rs"
+    (root / rel).parent.mkdir(parents=True)
+    (root / rel).write_text(STUB_RS)
+    p = write_plan(root, arms=[("G", "gate")], tasks=("s1",), extra=gate_line(root),
+                   paths={"s1": rel})
+    with pytest.raises(batch.BatchError, match="task.s. s1 are none of these"):
         batch.load_plan(p, root)
-    p = write_plan(root, arms=[("P", "verify")], tasks=("v1",),
-                   paths={"v1": "bench/local/q/lab9/v1/tasks/v1.rs"})
-    assert batch.load_plan(p, root).tasks["v1"][1] == "verus"     # an ungated arm runs it
+    p = write_plan(root, arms=[("P", "verify")], tasks=("s1",), paths={"s1": rel})
+    assert batch.load_plan(p, root).tasks["s1"][1] == "verus"
 
 
 def test_an_agents_gate_serves_the_plans_of_the_modules_that_use_it_only(agents_root):

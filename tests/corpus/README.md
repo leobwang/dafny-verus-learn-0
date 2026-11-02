@@ -122,6 +122,17 @@ and only through the course wrappers. `<dir>` is the fixture directory and
 | `json-completeness` | (none) | the plain run's `--output-json` `verification-results` | `success` is not true, `is-verifying-entire-crate` is not true, or `verified` < 1 |
 | `lint` | (none) | (none) | not runnable on its own: the lint runs inside `vaudit` and `vcheck --gate`, so record its rule ids under those tools |
 
+The Verus column is a crate's. A **one-file Verus target** (a `.rs` file outside any
+crate's `src/`, such as a topic (e) task form `<card>/tasks/<card>.rs`; the user's D106,
+DELTAS Δ422) takes the Dafny column's layout with `.rs` names, `<dir>` being the file's
+directory: `specfreeze --check` is `scripts/specfreeze --against <dir>/frozen.rs <target>`,
+`witness` is `scripts/vcheck --gate <dir>/witness.rs`, `swap-to-false` is
+`scripts/vcheck --gate <dir>/swap.rs` and `reach` is `scripts/dvl/reach.py --manifest
+<dir>/reach.toml <target>`; `vcheck --gate`, `vaudit` and `seed-rerun` run on the file as on
+any target, and there is no `solver-swap`. A file of a crate's `src/` is no target of a
+companion row: name the crate's directory. `fvh.tools.command` encodes both layouts; no
+corpus fixture is a one-file Verus target.
+
 `specfreeze --check <ID>` compares a registry module with its pin. A corpus
 fixture is not a registry module, so the corpus spells the instrument
 `specfreeze --check` and runs `--against` on the fixture's frozen file. A

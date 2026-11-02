@@ -317,7 +317,8 @@ GPU_HOURS_PER_MODULE = 10   # design §3: ≤ 10 GPU-h per lab [A]
 GPU_HOURS_TOTAL = 45        # design §11.3: the six labs' Qwen work in ≤ 45 GPU-h [A]
 # The challenges' separate pool (the user's D65, DELTAS Δ401/Δ402): Q19–Q33 draw on it,
 # never on the 45 above; a challenge's ceiling may pass 10 (it pauses and resumes).
-CHALLENGE_GPU_HOURS_TOTAL = 55
+# 55 under D65; 57 under the user's D105 (Q32's ceiling 26 -> 28 for D104's census, Δ422).
+CHALLENGE_GPU_HOURS_TOTAL = 57
 # The spoiler-guard's solo (2s) and frozen (2f) path patterns this registry must
 # feed (.claude/hooks/spoiler-guard.sh, class_of): R16's trust-report, Q's gate,
 # and challenge statements. Matched from the start of a repo-relative path. The
@@ -1189,7 +1190,7 @@ def check_registry(root, data, modules, good):
     cgpu = sum(m["budget"]["gpu_hours"] for m in good if not is_core_module(m["id"]))
     if cgpu > CHALLENGE_GPU_HOURS_TOTAL:
         errs.append(f"budget: the challenges' gpu_hours sum to {cgpu}, above their separate "
-                    f"pool of {CHALLENGE_GPU_HOURS_TOTAL} (the user's D65)")
+                    f"pool of {CHALLENGE_GPU_HOURS_TOTAL} (the user's D65, D105)")
     if gpu > GPU_HOURS_TOTAL:
         errs.append(f"budget: gpu_hours sum to {gpu} over the registry, above the course cap of "
                     f"{GPU_HOURS_TOTAL} (design §11.3: the six labs' Qwen work in ≤ "

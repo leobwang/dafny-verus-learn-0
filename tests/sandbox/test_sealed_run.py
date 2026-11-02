@@ -25,8 +25,8 @@ opencode (the backend tests' fake, which opens no connection) and a stub vcheck:
   - `fvh par` end to end with truthcheck par-run in-process (its child a real
     subprocess): par's calls reserved in the ledger, its runs back counts only, the
     verdict counts only, fvh.report re-deriving them;
-  - Q32's gated arm (Δ421) on an invented Q32 record with a stand-in for the learner's
-    committed Q31 gate: a one-file Dafny card and a Verus crate card through the gate on
+  - Q32's gated arm (Δ421, Δ422) on an invented Q32 record with a stand-in for the learner's
+    committed Q31 gate: one-file Dafny and Verus cards and a Verus crate card through the gate on
     the learner's sealed route and on par's in-container batch; a par fragment whose
     gating (its pin's par_gated) does not match the learner's plan refused on the host,
     nothing staged or reserved;
@@ -177,7 +177,7 @@ def render(v):
 
 def gate_crate(target, *, run=None):
     t = Path(target.target)
-    shape = (target.lang == "dafny" and t.suffix == ".dfy" and t.is_file()
+    shape = (t.suffix == {"dafny": ".dfy", "verus": ".rs"}.get(target.lang) and t.is_file()
              and target.files == (target.target,)) \\
         or (target.lang == "verus" and (t / "Cargo.toml").is_file()
             and str(t / "src" / "lib.rs") in target.files)
@@ -258,7 +258,7 @@ def make_root(tmp, tasks=None):
 def make_q32_root(tmp, *, par_gated=None, gated_plan=True):
     """make_root's form for Q32 (Δ421): the learner's agent agents/q32_proof_search/, the
     learner's Q31 gate (GATE32) and fvh_q, committed; a sealed part "probe" of a one-file
-    Dafny card c1 and a Verus crate card v1; a gated plan of one arm (B = 2) naming the
+    Dafny card c1, a Verus crate card v1 and a one-file Verus card w1; a gated plan of one arm (B = 2) naming the
     gate; the par-agent pin, with `par_gated` when given. Returns (root, into, plan)."""
     root = tmp / "course"
     for rel in ("scripts", "dafny/options", "sandbox/images.lock", "sandbox/apparatus.toml",
@@ -272,12 +272,13 @@ def make_q32_root(tmp, *, par_gated=None, gated_plan=True):
     (root / "MODULES.toml").write_text(REGISTRY.replace('id = "Q31"', 'id = "Q32"').replace(
         "agents/q31_gate_bench/baselines.py", "agents/q32_proof_search/agent.py"))
     gate = "agents/q31_gate_bench/gate.py"
-    head = f"seed = 32\ntasks = [\"c1\", \"v1\"]\n"
+    head = f"seed = 32\ntasks = [\"c1\", \"v1\", \"w1\"]\n"
     if gated_plan:
         head += (f'gate = "{gate}"\n'
                  f'gate_sha256 = "{hashlib.sha256(GATE32.encode()).hexdigest()}"\n')
     plan = (head + f'[task.c1]\npath = "{STRATUM32}/c1/tasks/c1.dfy"\n'
             f'[task.v1]\npath = "{STRATUM32}/v1/tasks"\n'
+            f'[task.w1]\npath = "{STRATUM32}/w1/tasks/w1.rs"\n'
             '[[arm]]\nname = "agent"\nfamily = "qwen"\nrounds = 2\nconstruct = "model"\n'
             'policy = "q32_proof_search.agent:one_shot_render"\n'
             + ('acceptance = "gate"\n' if gated_plan else ""))
@@ -293,14 +294,15 @@ def make_q32_root(tmp, *, par_gated=None, gated_plan=True):
             'role = "held-out"\nsealed = true\narchive = "Hidden/Agentic/Q32/probe.tar.age"\n'
             f'archive_sha256 = "{"b" * 64}"\n'
             '[[card]]\nid = "c1"\nlang = "dafny"\nsource = "course-local"\n'
-            '[[card]]\nid = "v1"\nlang = "verus"\nsource = "course-local"\n',
+            '[[card]]\nid = "v1"\nlang = "verus"\nsource = "course-local"\n'
+            '[[card]]\nid = "w1"\nlang = "verus"\nsource = "course-local"\n',
     }
     for rel, text in files.items():
         (root / rel).parent.mkdir(parents=True, exist_ok=True)
         (root / rel).write_text(text)
     into = tmp / "unsealed" / "Q32" / "probe"
     written = {"c1/tasks/c1.dfy": TASK, "v1/tasks/Cargo.toml": CRATE_TOML,
-               "v1/tasks/src/lib.rs": CRATE_LIB}
+               "v1/tasks/src/lib.rs": CRATE_LIB, "w1/tasks/w1.rs": CRATE_LIB}
     for rel, text in written.items():
         (into / rel).parent.mkdir(parents=True, exist_ok=True)
         (into / rel).write_text(text)
@@ -908,8 +910,8 @@ def accept_verdicts(run_dir):
 
 
 class GatedQ32(Base):
-    """Q32's gated arm on the sealed route (Δ421): a one-file Dafny card and a Verus crate
-    card through the learner's committed Q31 gate, for the learner's arm and for par; and
+    """Q32's gated arm on the sealed route (Δ421, Δ422): one-file Dafny and Verus cards and a
+    Verus crate card through the learner's committed Q31 gate, for the learner's arm and for par; and
     a par fragment whose gating does not match the learner's plan, refused on the host."""
 
     def q32(self, name="q32", **kw):
@@ -921,7 +923,8 @@ class GatedQ32(Base):
         exe = fake_opencode(self.tmp / "q32", reply=VERIFY_STOP)
         plan = batch.load_plan(plan_path, root, tasks_at={STRATUM32: into})
         self.assertEqual(plan.tasks, {"c1": (f"{STRATUM32}/c1/tasks/c1.dfy", "dafny"),
-                                      "v1": (f"{STRATUM32}/v1/tasks", "verus")})
+                                      "v1": (f"{STRATUM32}/v1/tasks", "verus"),
+                                      "w1": (f"{STRATUM32}/w1/tasks/w1.rs", "verus")})
         chunks = []
 
         def launch(spec, recs, fd):
@@ -945,8 +948,9 @@ class GatedQ32(Base):
         for f in sorted((root / "research/runs/Q32").glob("*/run.json")):
             m = runlog.load_meta(f.parent)
             got[m.task_id] = (m, f.parent)
-        self.assertEqual(sorted(got), ["c1", "v1"])
-        for t, lang, note in (("c1", "dafny", "dafny:c1.dfy"), ("v1", "verus", "verus:tasks")):
+        self.assertEqual(sorted(got), ["c1", "v1", "w1"])
+        for t, lang, note in (("c1", "dafny", "dafny:c1.dfy"), ("v1", "verus", "verus:tasks"),
+                              ("w1", "verus", "verus:w1.rs")):
             m, d = got[t]
             self.assertEqual((m.outcome, m.ended_by, m.lang), ("verified", "gate-pass", lang))
             self.assertEqual((m.apparatus["acceptance"], m.apparatus["gate"]),
@@ -969,7 +973,7 @@ class GatedQ32(Base):
                                     gate_sha256=hashlib.sha256(GATE32.encode()).hexdigest(),
                                     census=True)
         spec = sealed._spec_base(root, "Q32", "par-run", up, app_of(root), found(), ids=ids,
-                                 seed_pool=list(range(1, 9)), calls=4, prereg="", stmts={},
+                                 seed_pool=list(range(1, 9)), calls=6, prereg="", stmts={},
                                  plan_sha256="")
         spec.update(par={"seed": 32, "dropped": [], "gated": gated_spec}, unsealed=str(into))
         raw = sandbox.build_sealed(root, spec, archive=PAR_ARCHIVE32)
@@ -994,7 +998,7 @@ class GatedQ32(Base):
             if d.is_dir():
                 m = runlog.load_meta(d)
                 runs[m.task_id] = (m, d)
-        for t, note in (("c1", "dafny:c1.dfy"), ("v1", "verus:tasks")):
+        for t, note in (("c1", "dafny:c1.dfy"), ("v1", "verus:tasks"), ("w1", "verus:w1.rs")):
             m, d = runs[t]
             self.assertEqual((m.arm, m.outcome, m.ended_by), ("par", "verified", "gate-pass"))
             self.assertEqual(accept_verdicts(d), [f"PASS on {note}"])
