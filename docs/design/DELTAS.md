@@ -4436,9 +4436,11 @@
   - `harness/tests/core/test_crate_lab.py`: Δ421's two tests become (1) a Q32 plan of a one-file Dafny task, a one-file Verus task and a crate, all three `gate-pass` through the committed Q31 gate, the gate's targets `dafny`/`verus` on the work copy's files and `verus` on the crate, `fvh report` re-deriving each; and (2) a gated `src/lib.rs` task refused, an ungated one loaded.
   - `tests/sandbox/test_sealed_run.py`: the Q32 fixture gains a one-file Verus card. The learner's sealed route and par's in-container batch end `gate-pass` on all three cards (`PASS on dafny:c1.dfy`, `verus:tasks`, `verus:w1.rs`).
   - `harness/tests/core`: 593 passed, 1 skipped (Δ421: 592). `tests/sandbox`: 259 OK. `scripts/test_course_map.py`: 402 passed, 0 failed (Δ421: 401). `scripts/test_hooks.sh`: 7265 passed, 0 failed.
-- **CI:** CI_LINE
+- **CI** (`scripts/ci.sh --author` on `ed5a41f9`, a clean tree, 12 GB scope, `DVL_VERUS_JOBS=1`, the worktree's pinned toolchain on PATH, `vcheck --versions` pinned): `ci.sh: PASS — 14 passed, 0 failed, 0 skipped, 0 absent, in 16486 s (author run; dv7 @ ed5a41f9, clean tree)`.
+  - A first run on `3477d50e` was stopped by the lane in its first minutes, before `static` finished: Q09's `py-shipped` pin lists `harness/fvh/tools/runners.py` as an input, as in Δ419, so `chapter_lint` would have found it stale. It was re-captured (`pins.py --update --chapter Q09 --entry py-shipped`, `ed5a41f9`); only the input's hash changed, the fence body is the same. `--job static,harness` then passed (2 of 2, 540 s) before the full run.
+  - No image source changed, so no image was rebuilt and no arm64 build is owed. Logs: `author-probes/dv7-d106/ci-full.log`, `ci-quick/`.
 - **A memory-rule slip, recorded.** The last of the probe's three runs started at 19 GB available, under the lane's 20 GB rule. It ran in its 6 GB scope under `solver.lock` and finished normally.
-- **Touches:** QPLAN §31.6, §32.4, §34.6, §36.5, §40; `scripts/check_course_map.py`, `scripts/test_course_map.py`; `harness/fvh/tools/runners.py`, `harness/fvh/batch.py`; `tests/corpus/README.md`; the tests above; Δ401 (D65), Δ408, Δ421.
+- **Touches:** QPLAN §31.6, §32.4, §34.6, §36.5, §40; `expected/Q09.chapter.toml` (the pin's input hash); `scripts/check_course_map.py`, `scripts/test_course_map.py`; `harness/fvh/tools/runners.py`, `harness/fvh/batch.py`; `tests/corpus/README.md`; the tests above; Δ401 (D65), Δ408, Δ421.
 - **Owner:** DV7's W1b lane.
 
 ### Δ500 · The course's own copy of the pinned Claude Code version file, and the re-pin to 2.1.306 — adopted (basic fix lane, 2026-10-20)
